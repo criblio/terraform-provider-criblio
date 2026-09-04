@@ -69,6 +69,13 @@ func (r *CommitResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
+			"items": schema.ListAttribute{
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `The commits created by this action.`,
+				ElementType: types.ObjectType{AttrTypes: CommitItemsAttrTypes()},
+			},
 			"message": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
@@ -193,6 +200,16 @@ func applyCommitAPIToState(api *CommitModel, state *CommitModel, preserveInputs 
 		if !api.Group.IsNull() && !api.Group.IsUnknown() {
 			state.Group = api.Group
 		}
+	}
+	if !api.Items.IsNull() && !api.Items.IsUnknown() {
+		state.Items = api.Items
+	} else if state.Items.IsNull() || state.Items.IsUnknown() {
+		state.Items = types.ListValueMust(types.ObjectType{AttrTypes: CommitItemsAttrTypes()}, nil)
+	}
+	if state.Items.IsNull() || state.Items.IsUnknown() {
+		state.Items = types.ListNull(types.ObjectType{AttrTypes: CommitItemsAttrTypes()})
+	} else if len(state.Items.Elements()) == 0 {
+		state.Items = types.ListValueMust(types.ObjectType{AttrTypes: CommitItemsAttrTypes()}, nil)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Message.IsNull() || state.Message.IsUnknown())) {
 		if !api.Message.IsNull() && !api.Message.IsUnknown() {

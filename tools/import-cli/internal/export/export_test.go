@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -35,6 +36,20 @@ func TestToResourceItems_empty_results(t *testing.T) {
 	assert.Empty(t, result.Items)
 }
 
+func TestOrderedTaskGroupsUsesReverseDiscoveryOrder(t *testing.T) {
+	tasks := map[string][]conversionTask{
+		"":        {{idMap: map[string]string{"id": "global"}}},
+		"fleet-a": {{idMap: map[string]string{"group_id": "fleet-a", "id": "a"}}},
+		"fleet-b": {{idMap: map[string]string{"group_id": "fleet-b", "id": "b"}}},
+		"unknown": {{idMap: map[string]string{"group_id": "unknown", "id": "u"}}},
+	}
+
+	assert.Equal(t,
+		[]string{"fleet-b", "fleet-a", "", "unknown"},
+		orderedTaskGroups(tasks, []string{"fleet-a", "fleet-b"}),
+	)
+}
+
 func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	ctx := context.Background()
 	reg := buildTestRegistry(t)
@@ -48,6 +63,72 @@ func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	// List fails (e.g. nil client) → recorded as list skip, not as returned error.
 	assert.Len(t, result.ListSkipped, 1, "list failure should be recorded in ListSkipped")
 	assert.Equal(t, "criblio_source", result.ListSkipped[0].TypeName)
+}
+
+func TestToResourceItemsDoesNotRelistCompletedEmptyInventory(t *testing.T) {
+	reg := buildTestRegistry(t)
+	results := []discovery.Result{
+		{
+			TypeName:          "criblio_source",
+			Count:             1,
+			Identifiers:       []map[string]string{},
+			InventoryComplete: true,
+		},
+	}
+
+	result, err := ToResourceItems(context.Background(), nil, reg, results, []string{"default"}, nil, 1, false, IncludeOverride{}, nil)
+	require.NoError(t, err)
+	require.Len(t, result.ListSkipped, 1)
+	assert.Equal(t, "list returned 0 identifiers", result.ListSkipped[0].Reason)
+}
+
+func TestToResourceItemsBootstrapsGroupBeforeConcurrentExport(t *testing.T) {
+	var bootstrapRequests atomic.Int32
+	var prematureRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/fleet-a/pipelines/bootstrap":
+			if bootstrapRequests.Add(1) == 1 {
+				w.Header().Set("Retry-After", "0")
+				w.WriteHeader(http.StatusTooManyRequests)
+				_, _ = w.Write([]byte(`{"error":{"reason":"memory"}}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"items":[{"id":"bootstrap","conf":{}}]}`))
+		case "/api/v1/m/fleet-a/pipelines/other":
+			if bootstrapRequests.Load() < 2 {
+				prematureRequests.Add(1)
+			}
+			_, _ = w.Write([]byte(`{"items":[{"id":"other","conf":{}}]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	client := &importclient.Client{REST: restclient.New(restclient.Config{
+		BaseURL:     server.URL,
+		BearerToken: "mock",
+		HTTPClient:  server.Client(),
+	})}
+	results := []discovery.Result{{
+		TypeName: "criblio_pipeline",
+		Count:    3,
+		Identifiers: []map[string]string{
+			{"group_id": "fleet-a", "id": "metrics_ingest"},
+			{"group_id": "fleet-a", "id": "bootstrap"},
+			{"group_id": "fleet-a", "id": "other"},
+		},
+		InventoryComplete: true,
+	}}
+
+	result, err := ToResourceItems(context.Background(), client, buildTestRegistry(t), results,
+		[]string{"fleet-a"}, nil, 4, false, IncludeOverride{}, nil)
+	require.NoError(t, err)
+	assert.Equal(t, int32(2), bootstrapRequests.Load())
+	assert.Zero(t, prematureRequests.Load())
+	require.Len(t, result.Items, 2)
 }
 
 func TestToResourceItemsLookupFileFetchesContentFromGet(t *testing.T) {
@@ -698,6 +779,17 @@ func TestAppendResourceItemFromModel_skipsSearchWorkerGroup(t *testing.T) {
 	assert.Empty(t, out.Items)
 }
 
+func TestSkipResourceByIDSkipsResourcesInInternalSearchWorkerGroup(t *testing.T) {
+	assert.True(t, skipResourceByID("criblio_pipeline", map[string]string{
+		"group_id": "search",
+		"id":       "user-visible-looking-pipeline",
+	}))
+	assert.False(t, skipResourceByID("criblio_search_pipeline", map[string]string{
+		"group_id": "default_search",
+		"id":       "user-search-pipeline",
+	}))
+}
+
 func TestLifecycleIgnoreChangesForConvertedResource_certificateUsesProviderStatePreservation(t *testing.T) {
 	ignored := lifecycleIgnoreChangesForConvertedResource("criblio_certificate", map[string]hcl.Value{
 		"cert":     {Kind: hcl.KindVariableRef, VarName: "certificate_cert"},
@@ -768,6 +860,12 @@ func TestSkipResourceByID(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"id": "in_syslog"}))
 		assert.True(t, skipResourceByID("criblio_group", map[string]string{"group_id": "search", "product": "stream"}))
+		assert.True(t, skipResourceByID("criblio_pipeline", map[string]string{"id": "metrics_ingest"}))
+		assert.True(t, skipResourceByID("criblio_pack_pipeline", map[string]string{"id": "metrics_ingest", "pack": "custom-pack"}))
+		assert.True(t, skipResourceByID("criblio_project_pipeline", map[string]string{"id": "metrics_ingest", "project_id": "custom-project"}))
+		for _, id := range []string{"in_cribl_http", "in_prometheus_rw", "in_splunk_hec"} {
+			assert.True(t, skipResourceByID("criblio_search_source", map[string]string{"id": id}))
+		}
 	})
 	t.Run("skip non singleton resource when id equals group_id", func(t *testing.T) {
 		idMap := map[string]string{"group_id": "default", "id": "default"}

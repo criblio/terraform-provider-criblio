@@ -4,11 +4,16 @@ package client
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
+)
+
+const (
+	requestTimeout = time.Minute
 )
 
 // Client carries the REST client used by import-cli discovery and export paths.
@@ -22,7 +27,10 @@ type Client struct {
 func NewFromConfig(cfg *config.Config) (*Client, error) {
 	applyConfigToEnv(cfg)
 	transport := &custom.SearchListTransport{Base: http.DefaultTransport}
-	httpClient := &http.Client{Transport: transport}
+	httpClient := &http.Client{
+		Transport: transport,
+		Timeout:   requestTimeout,
+	}
 	userAgent := BulkExporterUserAgent()
 
 	restClient := restclient.New(restclient.Config{

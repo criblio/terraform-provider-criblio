@@ -13,11 +13,17 @@ var NoExportTypes = []string{
 	"criblio_workspace",                    // No list/get API in SDK; workspace is implicit from config.
 }
 
+// InternalGroupIDs are product-managed worker groups that must never be exported.
+// This does not include default_search, which backs user-managed Search resources.
+var InternalGroupIDs = map[string]bool{
+	"search": true,
+}
+
 // SkipExportIDs lists resource IDs to never export, by type.
 // Use for resources that fail apply (e.g. missing required attrs, API restrictions).
 var SkipExportIDs = map[string]map[string]bool{
 	"criblio_group": {
-		"search": true, // Local Search worker group: GetGroupsByID returns 400 / entity missing in many tenants; skip export.
+		"search": true, // Defense in depth for the internal Local Search worker group.
 	},
 	"criblio_notification_target": {
 		"system_email":         true, // smtp_target requires host/port; system_email is built-in placeholder
@@ -27,8 +33,22 @@ var SkipExportIDs = map[string]map[string]bool{
 		"default": true, // read-only in Pack context
 		"devnull": true, // read-only in Pack context
 	},
+	"criblio_pack_pipeline": {
+		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
+	},
 	"criblio_pack_source": {
 		"test_pack_source": true, // provider marshal fails: union type Input all fields null
+	},
+	"criblio_pipeline": {
+		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
+	},
+	"criblio_project_pipeline": {
+		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
+	},
+	"criblio_search_source": {
+		"in_cribl_http":    true, // Product-managed default Search source.
+		"in_prometheus_rw": true, // Product-managed default Search source.
+		"in_splunk_hec":    true, // Product-managed default with a write-only required token.
 	},
 	"criblio_source": {
 		"in_syslog":         true, // provider marshal fails: union type Input all fields null

@@ -3521,6 +3521,7 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: Commit
       x-terraform-action: true
+      x-terraform-action-response: true
 
   - target: "$.components.examples.VersionCommitExamplesCommitAll.value"
     update:
@@ -3534,6 +3535,15 @@ actions:
       group:
         type: string
         description: Worker Group to commit changes for.
+      items:
+        type: array
+        description: The commits created by this action.
+        x-terraform-computed: true
+        x-terraform-computed-recursive: true
+        # Terraform 1.1 cannot index protocol-v6 nested attributes during planning.
+        x-terraform-list-attribute: true
+        items:
+          $ref: "#/components/schemas/GitCommitSummary"
 
   - target: "$.paths./master/groups/{id}/deploy.patch"
     update:

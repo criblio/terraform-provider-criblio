@@ -590,6 +590,35 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, noReadClient, "restclient.PatchNoResponse(ctx, a.client")
 	assertNotContains(t, noReadClient, "response envelope")
 
+	actionResponse := parser.ResourceDef{
+		StructName:     "Commit",
+		Action:         true,
+		ActionResponse: true,
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/version/commit",
+		},
+	}
+	actionResponseClient := renderTemplate(t, "client", actionResponse)
+	assertContains(t, actionResponseClient, "return restclient.PostFullResponse[CommitModel, CommitModel]")
+
+	legacyList := parser.ResourceDef{
+		StructName: "Commit",
+		Fields: []parser.FieldDef{{
+			TerraformName:   "items",
+			GoName:          "Items",
+			Type:            "array",
+			ElementType:     "object",
+			NestedAttrTypes: "CommitItemsAttrTypes",
+			Computed:        true,
+			ListAttribute:   true,
+			Fields:          []parser.FieldDef{{TerraformName: "commit", Type: "string", Computed: true}},
+		}},
+	}
+	legacyListResource := renderTemplate(t, "resource", legacyList)
+	assertContains(t, legacyListResource, `"items": schema.ListAttribute{`)
+	assertContains(t, legacyListResource, `ElementType: types.ObjectType{AttrTypes: CommitItemsAttrTypes()}`)
+
 	mappingRulesetResource = renderTemplate(t, "resource", mappingRuleset)
 	assertContains(t, mappingRulesetResource, `state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())`)
 

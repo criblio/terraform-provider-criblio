@@ -20,6 +20,7 @@ type ResourceDef struct {
 	OneOfVariants  []OneOfVariantDef
 	Outputs        []OutputFile
 	Action         bool
+	ActionResponse bool
 	NoRead         bool
 }
 
@@ -80,6 +81,7 @@ type FieldDef struct {
 	ApplyStrategy      string
 	PlanModifierHook   string
 	UseStateForUnknown bool
+	ListAttribute      bool
 	EmitEmpty          bool
 	FixedValue         string
 	DefaultValue       string

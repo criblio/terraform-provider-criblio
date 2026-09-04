@@ -2,6 +2,9 @@ package provider
 
 import (
 	"context"
+	"net/http"
+	"os"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -14,8 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"net/http"
-	"os"
 )
 
 var _ provider.Provider = (*CriblioProvider)(nil)
@@ -193,7 +194,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	}
 
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
-
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
 			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
@@ -203,6 +203,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 			Credentials:         restCredentials,
 			BearerToken:         data.BearerAuth.ValueString(),
 			HTTPClient:          httpClient,
+			GroupCreateTimeout:  5 * time.Minute,
 		}),
 	}
 	resp.ActionData = clients

@@ -1269,8 +1269,12 @@ func searchDatasetProviderID(model SearchDatasetProviderModel) string {
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
+	{{- if .ActionResponse }}
+	return restclient.{{ restWriteCall .Create }}FullResponse[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
+	{{- else }}
 	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
+	{{- end }}
 {{- else if .NoRead }}
 	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err

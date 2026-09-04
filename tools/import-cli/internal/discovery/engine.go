@@ -10,21 +10,41 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/exclusions"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 )
 
 // Result holds the discovery result for one resource type.
 type Result struct {
-	TypeName       string
-	Count          int
-	Err            error
-	Details        []string
-	PerGroupCounts map[string]int
+	TypeName          string
+	Count             int
+	Err               error
+	GroupErrors       map[string]error
+	Identifiers       []map[string]string
+	InventoryComplete bool
+	Details           []string
+	PerGroupCounts    map[string]int
 }
+
+type groupDiscovery struct {
+	entry       registry.Entry
+	resultIndex int
+	packRoutes  bool
+}
+
+const groupDiscoveryParallel = 8
+
+// DefaultAdmissionTimeout bounds how long discovery waits for Config Helpers
+// to become admissible across the complete discovery run.
+const DefaultAdmissionTimeout = 5 * time.Minute
+
+var errAdmissionBudgetExhausted = errors.New("config helper admission retry budget exhausted")
 
 // IsRecoverableListDecodeError reports whether err should not abort export.
 func IsRecoverableListDecodeError(err error) bool {
@@ -39,8 +59,16 @@ func IsRecoverableListDecodeError(err error) bool {
 
 // Discover enumerates resources through REST list endpoints.
 func Discover(ctx context.Context, client *importclient.Client, reg *registry.Registry, include, exclude, groupFilter []string, onPrem bool) ([]Result, error) {
+	return DiscoverWithProgress(ctx, client, reg, include, exclude, groupFilter, onPrem, groupDiscoveryParallel, DefaultAdmissionTimeout, nil)
+}
+
+// DiscoverWithProgress enumerates resources and reports group-level progress.
+func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg *registry.Registry, include, exclude, groupFilter []string, onPrem bool, parallel int, admissionTimeout time.Duration, progress func(string, ...any)) ([]Result, error) {
 	if client == nil || client.REST == nil {
 		return nil, fmt.Errorf("REST client is nil")
+	}
+	if parallel < 1 {
+		parallel = 1
 	}
 
 	includeSet := sliceToSet(include)
@@ -54,6 +82,8 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 	if edgeErr != nil {
 		return nil, fmt.Errorf("fetch edge groups: %w", edgeErr)
 	}
+	streamIDs, streamNames = filterInternalGroups(streamIDs, streamNames)
+	edgeIDs, edgeNames = filterInternalGroups(edgeIDs, edgeNames)
 
 	streamIDs, streamNames = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
 	edgeIDs, edgeNames = filterGroups(edgeIDs, edgeNames, " (edge)", groupFilter)
@@ -87,6 +117,7 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 	}
 
 	var results []Result
+	var groupDiscoveries []groupDiscovery
 	for _, e := range reg.Entries() {
 		if !matchesFilter(e.TypeName, includeSet, excludeSet) {
 			continue
@@ -96,6 +127,7 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 			continue
 		}
 
+		resultIndex := len(results)
 		res := Result{TypeName: e.TypeName}
 		switch {
 		case e.TypeName == "criblio_group":
@@ -105,30 +137,44 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 			_, err := restclient.Get[map[string]json.RawMessage](ctx, client.REST, "/system/banners/custom-banner")
 			if restclient.IsNotFound(err) {
 				res.Count = 0
+				res.Identifiers = []map[string]string{}
+				res.InventoryComplete = true
 			} else if err != nil {
 				res.Err = err
 			} else {
 				res.Count = 1
+				res.Identifiers = []map[string]string{{"id": "custom-banner"}}
+				res.InventoryComplete = true
 			}
 		case e.TypeName == "criblio_lakehouse_dataset_connection":
 			ids, err := listLakehouseDatasetConnectionIdentifiers(ctx, client)
 			res.Count = len(ids)
+			res.Identifiers = ids
+			res.InventoryComplete = err == nil
 			res.Err = err
 		case e.TypeName == "criblio_pack_routes":
-			ids, err := listPackRoutesIdentifiers(ctx, client, groupIDs)
-			res.Count = len(ids)
-			res.Err = err
+			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex, packRoutes: true})
 		case e.TypeName == "criblio_search_dataset_ruleset":
+			res.InventoryComplete = true
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 2
+				res.Identifiers = []map[string]string{{"id": "default", "group_id": "default_search"}, {"id": "metrics", "group_id": "default_search"}}
+				res.InventoryComplete = true
 			}
 		case e.TypeName == "criblio_search_datatype_ruleset":
+			res.InventoryComplete = true
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 1
+				res.Identifiers = []map[string]string{{"id": "default", "group_id": "default_search"}}
+				res.InventoryComplete = true
 			}
+		case e.RESTListPath != "" && pathUsesRESTParam(e.RESTListPath, "group_id"):
+			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex})
 		case e.RESTListPath != "":
-			count, perGroup, err := listOneREST(ctx, client, e, groupIDs)
-			res.Count = count
+			ids, perGroup, err := listRESTIdentifiers(ctx, client, e, groupIDs)
+			res.Count = len(ids)
+			res.Identifiers = ids
+			res.InventoryComplete = err == nil
 			res.Err = err
 			if len(perGroup) > 0 {
 				res.PerGroupCounts = make(map[string]int)
@@ -146,7 +192,161 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 		}
 		results = append(results, res)
 	}
+
+	// Process one group completely before moving to the next. Iterating resource
+	// types first repeatedly touches every group and keeps all Config Helpers
+	// active, which can prevent the leader from admitting another helper boot.
+	if admissionTimeout <= 0 {
+		admissionTimeout = DefaultAdmissionTimeout
+	}
+	admissionCtx, cancelAdmission := context.WithTimeout(ctx, admissionTimeout)
+	defer cancelAdmission()
+
+	for groupIndex, gid := range groupIDs {
+		label := gid
+		if groupLabel, ok := idToLabel[gid]; ok {
+			label = groupLabel
+		}
+		if progress != nil {
+			progress("group %s (%d/%d)", label, groupIndex+1, len(groupIDs))
+		}
+		pending := eligibleGroupDiscoveries(groupDiscoveries, results, gid)
+		if len(pending) == 0 {
+			continue
+		}
+		if admissionCtx.Err() != nil {
+			for _, discovery := range pending {
+				addGroupError(&results[discovery.resultIndex], gid, errAdmissionBudgetExhausted)
+			}
+			if progress != nil {
+				progress("group %s unavailable: shared admission retry budget exhausted", label)
+			}
+			continue
+		}
+
+		// Bootstrap the Config Helper with one request before issuing concurrent
+		// reads for this group. This preserves one-at-a-time helper admission.
+		bootstrapErr := bootstrapGroup(admissionCtx, client, &results[pending[0].resultIndex], pending[0], gid, label, admissionTimeout, progress)
+		if bootstrapErr != nil {
+			if ctx.Err() != nil {
+				return nil, ctx.Err()
+			}
+			groupErr := bootstrapErr
+			if admissionCtx.Err() != nil {
+				groupErr = errAdmissionBudgetExhausted
+				results[pending[0].resultIndex].Err = nil
+			}
+			for _, discovery := range pending {
+				addGroupError(&results[discovery.resultIndex], gid, groupErr)
+			}
+			if progress != nil {
+				progress("group %s unavailable after bootstrap: %v", label, groupErr)
+			}
+			continue
+		}
+
+		sem := make(chan struct{}, parallel)
+		var wg sync.WaitGroup
+		for _, discovery := range pending[1:] {
+			discovery := discovery
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				sem <- struct{}{}
+				defer func() { <-sem }()
+				res := &results[discovery.resultIndex]
+				if err := discoverGroupResource(ctx, client, res, discovery, gid, label); isTooManyRequests(err) {
+					addGroupError(res, gid, err)
+				}
+			}()
+		}
+		wg.Wait()
+	}
 	return results, nil
+}
+
+func eligibleGroupDiscoveries(discoveries []groupDiscovery, results []Result, groupID string) []groupDiscovery {
+	pending := make([]groupDiscovery, 0, len(discoveries))
+	for _, discovery := range discoveries {
+		if results[discovery.resultIndex].Err == nil && !skipGroupScopedSingleton(discovery.entry.TypeName, groupID) {
+			pending = append(pending, discovery)
+		}
+	}
+	return pending
+}
+
+func bootstrapGroup(ctx context.Context, client *importclient.Client, result *Result, discovery groupDiscovery, groupID, groupLabel string, timeout time.Duration, progress func(string, ...any)) error {
+	var lastAdmissionErr error
+	for attempt := 1; ; attempt++ {
+		err := discoverGroupResource(ctx, client, result, discovery, groupID, groupLabel)
+		if err == nil || !isTooManyRequests(err) {
+			if ctx.Err() != nil && lastAdmissionErr != nil {
+				result.Err = nil
+				return lastAdmissionErr
+			}
+			return err
+		}
+		lastAdmissionErr = err
+		if progress != nil {
+			progress("group %s is admission-limited; retrying bootstrap (round %d, timeout %s)", groupLabel, attempt, timeout)
+		}
+		delay, ok := restclient.RetryAfter(err)
+		if !ok {
+			delay = time.Second
+		}
+		timer := time.NewTimer(delay)
+		select {
+		case <-timer.C:
+		case <-ctx.Done():
+			if !timer.Stop() {
+				select {
+				case <-timer.C:
+				default:
+				}
+			}
+			return lastAdmissionErr
+		}
+	}
+}
+
+func discoverGroupResource(ctx context.Context, client *importclient.Client, result *Result, discovery groupDiscovery, groupID, groupLabel string) error {
+	var ids []map[string]string
+	var perGroup map[string]int
+	var err error
+	if discovery.packRoutes {
+		ids, err = listPackRoutesIdentifiers(ctx, client, []string{groupID})
+	} else {
+		ids, perGroup, err = listRESTIdentifiers(ctx, client, discovery.entry, []string{groupID})
+	}
+	if err != nil {
+		if !isTooManyRequests(err) {
+			result.Err = fmt.Errorf("%s: %w", discovery.entry.TypeName, err)
+		}
+		return err
+	}
+
+	result.Count += len(ids)
+	result.Identifiers = append(result.Identifiers, ids...)
+	result.InventoryComplete = true
+	if len(perGroup) > 0 {
+		if result.PerGroupCounts == nil {
+			result.PerGroupCounts = make(map[string]int)
+		}
+		result.PerGroupCounts[groupLabel] = perGroup[groupID]
+	}
+	return nil
+}
+
+func addGroupError(result *Result, groupID string, err error) {
+	if result.GroupErrors == nil {
+		result.GroupErrors = make(map[string]error)
+	}
+	result.GroupErrors[groupID] = err
+}
+
+func isTooManyRequests(err error) bool {
+	var httpErr *restclient.HTTPError
+	return errors.As(err, &httpErr) && httpErr.StatusCode == 429
 }
 
 // GetGroupIDs returns group IDs used for list/export.
@@ -159,6 +359,8 @@ func GetGroupIDs(ctx context.Context, client *importclient.Client, groupFilter [
 	if err != nil {
 		return nil, fmt.Errorf("fetch edge groups: %w", err)
 	}
+	streamIDs, streamNames = filterInternalGroups(streamIDs, streamNames)
+	edgeIDs, edgeNames = filterInternalGroups(edgeIDs, edgeNames)
 	streamIDs, _ = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
 	edgeIDs, _ = filterGroups(edgeIDs, edgeNames, " (edge)", groupFilter)
 
@@ -261,14 +463,6 @@ func fetchGroupsByProduct(ctx context.Context, client *importclient.Client, prod
 		}
 	}
 	return ids, names, nil
-}
-
-func listOneREST(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) (int, map[string]int, error) {
-	ids, perGroup, err := listRESTIdentifiers(ctx, client, e, groupIDs)
-	if err != nil {
-		return 0, nil, err
-	}
-	return len(ids), perGroup, nil
 }
 
 func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) ([]map[string]string, map[string]int, error) {
@@ -539,6 +733,13 @@ func getRESTItems(ctx context.Context, client *importclient.Client, path string)
 	if errors.As(err, &notFound) {
 		return nil, err
 	}
+	var httpErr *restclient.HTTPError
+	if errors.As(err, &httpErr) {
+		return nil, err
+	}
+	if !IsRecoverableListDecodeError(err) {
+		return nil, err
+	}
 	item, itemErr := restclient.Get[map[string]json.RawMessage](ctx, client.REST, path)
 	if itemErr != nil {
 		return nil, err
@@ -620,6 +821,17 @@ func filterGroups(ids, names []string, suffix string, filter []string) (filtered
 			filteredIDs = append(filteredIDs, id)
 			filteredNames = append(filteredNames, names[i])
 		}
+	}
+	return filteredIDs, filteredNames
+}
+
+func filterInternalGroups(ids, names []string) (filteredIDs, filteredNames []string) {
+	for i, id := range ids {
+		if exclusions.InternalGroupIDs[id] {
+			continue
+		}
+		filteredIDs = append(filteredIDs, id)
+		filteredNames = append(filteredNames, names[i])
 	}
 	return filteredIDs, filteredNames
 }

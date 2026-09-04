@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -191,6 +194,222 @@ func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
 	results, err := Discover(ctx, client, reg, []string{"criblio_nonexistent"}, nil, nil, false)
 	require.NoError(t, err)
 	assert.Empty(t, results)
+}
+
+func TestDiscoverProcessesGroupScopedResourcesOneGroupAtATime(t *testing.T) {
+	var groupPaths []string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"},{"id":"fleet-b"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			if strings.Contains(r.URL.Path, "/m/fleet-") {
+				groupPaths = append(groupPaths, r.URL.Path)
+			}
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	_, err := Discover(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a", "fleet-b"}, false)
+	require.NoError(t, err)
+	require.NotEmpty(t, groupPaths)
+
+	seenFleetB := false
+	for _, path := range groupPaths {
+		if strings.Contains(path, "/m/fleet-b/") {
+			seenFleetB = true
+			continue
+		}
+		if seenFleetB && strings.Contains(path, "/m/fleet-a/") {
+			t.Fatalf("fleet-a request %q occurred after fleet-b discovery began: %v", path, groupPaths)
+		}
+	}
+}
+
+func TestGetGroupIDsExcludesInternalSearchWorkerGroup(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"default","name":"default"},{"id":"search","name":"search"},{"id":"worker-a","name":"Worker A"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	groupIDs, err := GetGroupIDs(context.Background(), criblMockClient(server), nil, false)
+	require.NoError(t, err)
+	assert.Equal(t, []string{"default_search", "default", "worker-a"}, groupIDs)
+}
+
+func TestGetGroupIDsCannotExplicitlySelectInternalSearchWorkerGroup(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if strings.HasSuffix(r.URL.Path, "/products/stream/groups") {
+			_, _ = w.Write([]byte(`{"items":[{"id":"search","name":"search"}]}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"items":[]}`))
+	}))
+	defer server.Close()
+
+	groupIDs, err := GetGroupIDs(context.Background(), criblMockClient(server), []string{"search"}, false)
+	require.NoError(t, err)
+	assert.Empty(t, groupIDs)
+}
+
+func TestDiscoverDoesNotRestartAdmissionBudgetForLaterGroups(t *testing.T) {
+	var groupRequests atomic.Int32
+	var fleetAPaths sync.Map
+	var fleetBRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"},{"id":"fleet-b"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			groupRequests.Add(1)
+			if strings.Contains(r.URL.Path, "/m/fleet-a/") {
+				fleetAPaths.Store(r.URL.Path, true)
+				w.Header().Set("Retry-After", "0")
+				w.WriteHeader(http.StatusTooManyRequests)
+				_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted"}`))
+				return
+			}
+			fleetBRequests.Add(1)
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a", "fleet-b"}, false, 2, 20*time.Millisecond, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	assert.NoError(t, results[0].Err)
+	assert.NoError(t, results[1].Err)
+	assert.Error(t, results[0].GroupErrors["fleet-a"])
+	assert.Error(t, results[1].GroupErrors["fleet-a"])
+	assert.ErrorIs(t, results[0].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
+	assert.ErrorIs(t, results[1].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
+	assert.Zero(t, fleetBRequests.Load(), "later fleet must not start another admission window")
+	assert.GreaterOrEqual(t, groupRequests.Load(), int32(defaultRetryRequestCount))
+	uniquePaths := 0
+	fleetAPaths.Range(func(_, _ any) bool {
+		uniquePaths++
+		return true
+	})
+	assert.Equal(t, 1, uniquePaths, "only the bootstrap request should be retried")
+}
+
+const defaultRetryRequestCount = 4
+
+func TestDiscoverRetriesBootstrapUntilGroupBecomesAvailable(t *testing.T) {
+	var groupRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			requestNumber := groupRequests.Add(1)
+			if requestNumber <= defaultRetryRequestCount {
+				w.Header().Set("Retry-After", "0")
+				w.WriteHeader(http.StatusTooManyRequests)
+				return
+			}
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a"}, false, 2, time.Second, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	assert.Empty(t, results[0].GroupErrors)
+	assert.Empty(t, results[1].GroupErrors)
+	assert.Greater(t, groupRequests.Load(), int32(defaultRetryRequestCount))
+}
+
+func TestDiscoverSharesAdmissionTimeoutAcrossGroups(t *testing.T) {
+	var fleetARequests atomic.Int32
+	var fleetBRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"},{"id":"fleet-b"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			if strings.Contains(r.URL.Path, "/m/fleet-a/") {
+				fleetARequests.Add(1)
+			} else if strings.Contains(r.URL.Path, "/m/fleet-b/") {
+				fleetBRequests.Add(1)
+			}
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"error":{"reason":"memory"}}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	started := time.Now()
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source"}, nil, []string{"fleet-a", "fleet-b"}, false, 1, 30*time.Millisecond, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	assert.Less(t, time.Since(started), 500*time.Millisecond)
+	assert.Positive(t, fleetARequests.Load())
+	assert.Zero(t, fleetBRequests.Load(), "later groups must not start a new admission window")
+	assert.ErrorIs(t, results[0].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
+}
+
+func TestDiscoverDoesNotFanOutAfterAdmissionDeadline(t *testing.T) {
+	var groupRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		case strings.Contains(r.URL.Path, "/m/fleet-a/"):
+			groupRequests.Add(1)
+			w.Header().Set("Retry-After", "1")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"error":{"reason":"memory"}}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), mustBuildRegistry(t, context.Background()),
+		[]string{"criblio_pipeline", "criblio_source"}, nil, []string{"fleet-a"}, false, 2, 20*time.Millisecond, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	assert.Equal(t, int32(1), groupRequests.Load(), "resource requests must not fan out after bootstrap deadline")
+	for _, result := range results {
+		assert.ErrorIs(t, result.GroupErrors["fleet-a"], errAdmissionBudgetExhausted)
+	}
 }
 
 func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {

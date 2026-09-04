@@ -118,7 +118,7 @@ func NewExportCommand() *cobra.Command {
 			if verbose {
 				printResolvedConfig(c, cfg)
 			}
-			ctx := context.Background()
+			ctx := c.Context()
 			reg, err := buildRegistry(ctx)
 			if err != nil {
 				return fmt.Errorf("build registry: %w", err)
@@ -135,7 +135,10 @@ func NewExportCommand() *cobra.Command {
 				}
 			}
 			fmt.Fprintln(c.ErrOrStderr(), "Discovering resources...")
-			results, err := discovery.Discover(ctx, apiClient, reg, include, excludeMerged, group, onPrem)
+			discoveryProgress := func(format string, args ...any) {
+				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
+			}
+			results, err := discovery.DiscoverWithProgress(ctx, apiClient, reg, include, excludeMerged, group, onPrem, parallel, discovery.DefaultAdmissionTimeout, discoveryProgress)
 			if err != nil {
 				return fmt.Errorf("discovery: %w", err)
 			}
@@ -143,6 +146,11 @@ func NewExportCommand() *cobra.Command {
 				// Preview only: print resource counts and types. No file writes, no Get*ByID (discovery uses List* only).
 				printDryRunPreview(c, results, group)
 				var firstErr error
+				for _, groupErr := range discoveryGroupErrors(results) {
+					if firstErr == nil {
+						firstErr = groupErr.err
+					}
+				}
 				for _, r := range results {
 					if r.Err != nil && firstErr == nil {
 						if onPrem && isContextualDiscoveryError(r.Err, onPremToCloud) {
@@ -164,6 +172,12 @@ func NewExportCommand() *cobra.Command {
 			// Surface API errors with resource context; fail if any discovery failed.
 			// On-prem: "not supported for on-prem" errors are expected (search, lake, etc.) and are skipped.
 			var firstErr error
+			for _, groupErr := range discoveryGroupErrors(results) {
+				fmt.Fprintf(c.ErrOrStderr(), "group %s unavailable: %v\n", groupErr.groupID, groupErr.err)
+				if firstErr == nil {
+					firstErr = groupErr.err
+				}
+			}
 			for _, r := range results {
 				if r.Err != nil {
 					if onPrem && isContextualDiscoveryError(r.Err, onPremToCloud) {
@@ -380,6 +394,39 @@ func printDryRunPreview(cmd *cobra.Command, results []discovery.Result, groupFil
 		fmt.Fprintf(out, " (%d with errors)", typesWithErr)
 	}
 	fmt.Fprintf(out, ", %d resources\n", totalResources)
+	groupErrors := discoveryGroupErrors(results)
+	if len(groupErrors) > 0 {
+		fmt.Fprintln(out, "Unavailable groups:")
+		for _, groupErr := range groupErrors {
+			fmt.Fprintf(out, "  %s: %s\n", groupErr.groupID, shortenError(groupErr.err, 160))
+		}
+	}
+}
+
+type discoveryGroupError struct {
+	groupID string
+	err     error
+}
+
+func discoveryGroupErrors(results []discovery.Result) []discoveryGroupError {
+	byGroup := make(map[string]error)
+	for _, result := range results {
+		for groupID, err := range result.GroupErrors {
+			if _, exists := byGroup[groupID]; !exists {
+				byGroup[groupID] = err
+			}
+		}
+	}
+	groupIDs := make([]string, 0, len(byGroup))
+	for groupID := range byGroup {
+		groupIDs = append(groupIDs, groupID)
+	}
+	sort.Strings(groupIDs)
+	errs := make([]discoveryGroupError, 0, len(groupIDs))
+	for _, groupID := range groupIDs {
+		errs = append(errs, discoveryGroupError{groupID: groupID, err: byGroup[groupID]})
+	}
+	return errs
 }
 
 // printExportSummary prints why some resources were not exported (list skips and convert skips).

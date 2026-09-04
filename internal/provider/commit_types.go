@@ -20,6 +20,7 @@ type CommitModel struct {
 	Effective types.Bool   `tfsdk:"effective" json:"effective,omitempty"`
 	Files     types.List   `tfsdk:"files" json:"files,omitempty"`
 	Group     types.String `tfsdk:"group" json:"group,omitempty"`
+	Items     types.List   `tfsdk:"items" json:"items,omitempty"`
 	Message   types.String `tfsdk:"message" json:"message,omitempty"`
 }
 
@@ -27,6 +28,7 @@ type CommitResourceModel struct {
 	Effective types.Bool     `tfsdk:"effective" json:"effective,omitempty"`
 	Files     []types.String `tfsdk:"files" json:"files,omitempty"`
 	Group     types.String   `tfsdk:"group" json:"group,omitempty"`
+	Items     types.List     `tfsdk:"items" json:"items,omitempty"`
 	Message   types.String   `tfsdk:"message" json:"message,omitempty"`
 }
 
@@ -34,6 +36,7 @@ type CommitDataSourceModel struct {
 	Effective types.Bool     `tfsdk:"effective" json:"effective,omitempty"`
 	Files     []types.String `tfsdk:"files" json:"files,omitempty"`
 	Group     types.String   `tfsdk:"group" json:"group,omitempty"`
+	Items     types.List     `tfsdk:"items" json:"items,omitempty"`
 	Message   types.String   `tfsdk:"message" json:"message,omitempty"`
 }
 
@@ -41,7 +44,111 @@ type CommitAPIModel struct {
 	Effective *bool    `json:"effective,omitempty"`
 	Files     []string `json:"files,omitempty"`
 	Group     *string  `json:"group,omitempty"`
+	Items     any      `json:"items,omitempty"`
 	Message   *string  `json:"message,omitempty"`
+}
+
+type CommitItemsModel struct {
+	Author  types.Object `tfsdk:"author" json:"author,omitempty"`
+	Branch  types.String `tfsdk:"branch" json:"branch,omitempty"`
+	Commit  types.String `tfsdk:"commit" json:"commit,omitempty"`
+	Files   types.Object `tfsdk:"files" json:"files,omitempty"`
+	Summary types.Object `tfsdk:"summary" json:"summary,omitempty"`
+}
+
+type CommitItemsAPIModel struct {
+	Author  any     `json:"author,omitempty"`
+	Branch  *string `json:"branch,omitempty"`
+	Commit  *string `json:"commit,omitempty"`
+	Files   any     `json:"files,omitempty"`
+	Summary any     `json:"summary,omitempty"`
+}
+
+func CommitItemsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"author":  types.ObjectType{AttrTypes: CommitItemsAuthorAttrTypes()},
+		"branch":  types.StringType,
+		"commit":  types.StringType,
+		"files":   types.ObjectType{AttrTypes: CommitItemsFilesAttrTypes()},
+		"summary": types.ObjectType{AttrTypes: CommitItemsSummaryAttrTypes()},
+	}
+}
+
+type CommitItemsAuthorModel struct {
+	Email types.String `tfsdk:"email" json:"email,omitempty"`
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+}
+
+type CommitItemsAuthorAPIModel struct {
+	Email *string `json:"email,omitempty"`
+	Name  *string `json:"name,omitempty"`
+}
+
+func CommitItemsAuthorAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"email": types.StringType,
+		"name":  types.StringType,
+	}
+}
+
+type CommitItemsFilesModel struct {
+	Created  types.List `tfsdk:"created" json:"created,omitempty"`
+	Deleted  types.List `tfsdk:"deleted" json:"deleted,omitempty"`
+	Modified types.List `tfsdk:"modified" json:"modified,omitempty"`
+	Renamed  types.List `tfsdk:"renamed" json:"renamed,omitempty"`
+}
+
+type CommitItemsFilesAPIModel struct {
+	Created  []string `json:"created,omitempty"`
+	Deleted  []string `json:"deleted,omitempty"`
+	Modified []string `json:"modified,omitempty"`
+	Renamed  any      `json:"renamed,omitempty"`
+}
+
+func CommitItemsFilesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"created":  types.ListType{ElemType: types.StringType},
+		"deleted":  types.ListType{ElemType: types.StringType},
+		"modified": types.ListType{ElemType: types.StringType},
+		"renamed":  types.ListType{ElemType: types.ObjectType{AttrTypes: CommitItemsFilesRenamedAttrTypes()}},
+	}
+}
+
+type CommitItemsFilesRenamedModel struct {
+	From types.String `tfsdk:"from" json:"from,omitempty"`
+	To   types.String `tfsdk:"to" json:"to,omitempty"`
+}
+
+type CommitItemsFilesRenamedAPIModel struct {
+	From *string `json:"from,omitempty"`
+	To   *string `json:"to,omitempty"`
+}
+
+func CommitItemsFilesRenamedAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"from": types.StringType,
+		"to":   types.StringType,
+	}
+}
+
+type CommitItemsSummaryModel struct {
+	Changes    types.Int64 `tfsdk:"changes" json:"changes,omitempty"`
+	Deletions  types.Int64 `tfsdk:"deletions" json:"deletions,omitempty"`
+	Insertions types.Int64 `tfsdk:"insertions" json:"insertions,omitempty"`
+}
+
+type CommitItemsSummaryAPIModel struct {
+	Changes    *int64 `json:"changes,omitempty"`
+	Deletions  *int64 `json:"deletions,omitempty"`
+	Insertions *int64 `json:"insertions,omitempty"`
+}
+
+func CommitItemsSummaryAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"changes":    types.Int64Type,
+		"deletions":  types.Int64Type,
+		"insertions": types.Int64Type,
+	}
 }
 
 func CommitTerraformValueToJSON(value attr.Value) (any, error) {
@@ -311,6 +418,15 @@ func (m *CommitModel) UnmarshalJSON(data []byte) error {
 		m.Group = types.StringValue(*input.Group)
 	} else {
 		m.Group = types.StringNull()
+	}
+	if input.Items != nil {
+		value, err := CommitAPIValueToTerraformValue(input.Items, types.ListType{ElemType: types.ObjectType{AttrTypes: CommitItemsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert items from API value: %v", err)
+		}
+		m.Items = value.(types.List)
+	} else {
+		m.Items = types.ListNull(types.ObjectType{AttrTypes: CommitItemsAttrTypes()})
 	}
 	if input.Message != nil {
 		m.Message = types.StringValue(*input.Message)

@@ -8,6 +8,13 @@ commit history, and tag-to-tag diffs.
 
 ## [Unreleased]
 
+### Changed
+- Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
+
+### Fixed
+- Retried HTTP 429 responses using server-provided `Retry-After` delays up to 60 seconds, including Config Helper admission throttling during bulk group and fleet operations, while preserving command cancellation and bounding cumulative import CLI retry waits.
+- Excluded the internal `metrics_ingest` pipeline from import CLI exports.
+
 ## [1.25.55] - 2026-08-19
 
 ### Fixed

@@ -11,7 +11,7 @@ resource "criblio_commit" "my_commit" {
 
 resource "criblio_deploy" "my_deploy" {
   id      = "default"
-  version = data.criblio_config_version.my_configversion.items[0]
+  version = criblio_commit.my_commit.items[0].commit
 }
 
 output "deploy" {

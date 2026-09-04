@@ -37,6 +37,56 @@ resource "criblio_commit" "my_commit" {
 - `files` (List of String) Array of file paths to include in the commit, relative to the configuration root. If omitted, all pending changes are committed.
 - `group` (String) Worker Group to commit changes for.
 
+### Read-Only
+
+- `items` (Attributes List) The commits created by this action. (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `author` (Attributes) Author of the Git commit, including email and display name. (see [below for nested schema](#nestedatt--items--author))
+- `branch` (String) Name of the Git branch the commit was made on.
+- `commit` (String) Full SHA-1 hash of the new commit.
+- `files` (Attributes) Files affected by the commit, grouped by change type. (see [below for nested schema](#nestedatt--items--files))
+- `summary` (Attributes) Summary of line changes in the commit. (see [below for nested schema](#nestedatt--items--summary))
+
+<a id="nestedatt--items--author"></a>
+### Nested Schema for `items.author`
+
+Read-Only:
+
+- `email` (String) Email address of the commit author.
+- `name` (String) Display name of the commit author.
+
+<a id="nestedatt--items--files"></a>
+### Nested Schema for `items.files`
+
+Read-Only:
+
+- `created` (List of String) Array of file paths that were created in the commit.
+- `deleted` (List of String) Array of file paths that were deleted in the commit.
+- `modified` (List of String) Array of file paths that were modified in the commit.
+- `renamed` (Attributes List) Array of file rename operations, each containing the original path and the new path. (see [below for nested schema](#nestedatt--items--files--renamed))
+
+<a id="nestedatt--items--files--renamed"></a>
+### Nested Schema for `items.files.renamed`
+
+Read-Only:
+
+- `from` (String) Original file path before the rename.
+- `to` (String) New file path after the rename.
+
+<a id="nestedatt--items--summary"></a>
+### Nested Schema for `items.summary`
+
+Read-Only:
+
+- `changes` (Integer) Total number of lines changed (insertions plus deletions).
+- `deletions` (Integer) Number of lines deleted.
+- `insertions` (Integer) Number of lines inserted.
+
 ## Import
 
 Import is not supported for this action resource.

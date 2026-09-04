@@ -7,6 +7,7 @@ package integration
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -17,10 +18,34 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/stretchr/testify/require"
 )
+
+const integrationCommandDeadlineMargin = 15 * time.Second
+
+func testCommand(t *testing.T, name string, args ...string) *exec.Cmd {
+	t.Helper()
+
+	deadline, ok := t.Deadline()
+	if !ok {
+		cmd := exec.CommandContext(context.Background(), name, args...)
+		configureTestCommand(cmd)
+		return cmd
+	}
+	remaining := time.Until(deadline)
+	margin := integrationCommandDeadlineMargin
+	if remaining < margin {
+		margin = remaining / 2
+	}
+	ctx, cancel := context.WithDeadline(context.Background(), deadline.Add(-margin))
+	t.Cleanup(cancel)
+	cmd := exec.CommandContext(ctx, name, args...)
+	configureTestCommand(cmd)
+	return cmd
+}
 
 // buildLocalProvider builds the criblio terraform provider into pluginDir and returns the path.
 // Uses the same layout as e2e: registry.terraform.io/criblio/criblio/999.99.9/<os>_<arch>/terraform-provider-criblio_v999.99.9
@@ -30,7 +55,7 @@ func buildLocalProvider(t *testing.T, pluginDir string) string {
 	providerPath := filepath.Join(pluginDir, "registry.terraform.io", "criblio", "criblio", "999.99.9", osArch)
 	require.NoError(t, os.MkdirAll(providerPath, 0755))
 	binaryPath := filepath.Join(providerPath, "terraform-provider-criblio_v999.99.9")
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, ".")
+	buildCmd := testCommand(t, "go", "build", "-o", binaryPath, ".")
 	buildCmd.Dir = repoRoot(t)
 	buildCmd.Env = os.Environ()
 	var buf bytes.Buffer
@@ -121,7 +146,7 @@ func TestIntegration_FullFlow_Cloud(t *testing.T) {
 
 	// Step 1: Build goatify
 	t.Log("Step 1: Build goatify")
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "./tools/import-cli")
+	buildCmd := testCommand(t, "go", "build", "-o", binaryPath, "./tools/import-cli")
 	buildCmd.Dir = repoRoot(t)
 	buildCmd.Env = env
 	var buildBuf bytes.Buffer
@@ -134,7 +159,7 @@ func TestIntegration_FullFlow_Cloud(t *testing.T) {
 
 	// Step 2: export --dry-run
 	t.Log("Step 2: export --dry-run")
-	dryRunCmd := exec.Command(binaryPath, "export", "--dry-run", "--include", "criblio_group",
+	dryRunCmd := testCommand(t, binaryPath, "export", "--dry-run", "--include", "criblio_group",
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
 	dryRunCmd.Dir = tmpDir
 	dryRunCmd.Env = env
@@ -148,7 +173,7 @@ func TestIntegration_FullFlow_Cloud(t *testing.T) {
 
 	// Step 3: export (criblio_group only)
 	t.Log("Step 3: export (criblio_group)")
-	exportCmd := exec.Command(binaryPath, "export", "--include", "criblio_group", "--output-dir", outputDir,
+	exportCmd := testCommand(t, binaryPath, "export", "--include", "criblio_group", "--output-dir", outputDir,
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
 	exportCmd.Dir = tmpDir
 	exportCmd.Env = env
@@ -199,7 +224,7 @@ func TestIntegration_FullFlow_Cloud(t *testing.T) {
 	require.NoError(t, err)
 
 	runTerraform := func(args ...string) ([]byte, error) {
-		cmd := exec.Command("terraform", args...)
+		cmd := testCommand(t, "terraform", args...)
 		cmd.Dir = outputDir
 		cmd.Env = env
 		var buf bytes.Buffer
@@ -263,7 +288,7 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 
 	// Step 1: Build goatify
 	t.Log("Step 1: Build goatify")
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "./tools/import-cli")
+	buildCmd := testCommand(t, "go", "build", "-o", binaryPath, "./tools/import-cli")
 	buildCmd.Dir = repoRoot(t)
 	buildCmd.Env = env
 	var buildBuf bytes.Buffer
@@ -274,7 +299,7 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 
 	// Step 2: export --dry-run (full, no --include)
 	t.Log("Step 2: export --dry-run (full export)")
-	dryRunCmd := exec.Command(binaryPath, "export", "--dry-run",
+	dryRunCmd := testCommand(t, binaryPath, "export", "--dry-run",
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
 	dryRunCmd.Dir = tmpDir
 	dryRunCmd.Env = env
@@ -287,7 +312,7 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 
 	// Step 3: export (full export, no --include)
 	t.Log("Step 3: export (full export)")
-	exportCmd := exec.Command(binaryPath, "export", "--output-dir", outputDir,
+	exportCmd := testCommand(t, binaryPath, "export", "--output-dir", outputDir,
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
 	exportCmd.Dir = tmpDir
 	exportCmd.Env = env
@@ -335,7 +360,7 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 	pluginDirAbs, err := filepath.Abs(pluginDir)
 	require.NoError(t, err)
 
-	tfInit := exec.Command("terraform", "init", "-plugin-dir", pluginDirAbs)
+	tfInit := testCommand(t, "terraform", "init", "-plugin-dir", pluginDirAbs)
 	tfInit.Dir = outputDir
 	tfInit.Env = env
 	var initBuf bytes.Buffer
@@ -345,7 +370,7 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 	require.NoError(t, err, "terraform init should succeed: %s", initBuf.String())
 
 	runTerraform := func(args ...string) ([]byte, error) {
-		cmd := exec.Command("terraform", args...)
+		cmd := testCommand(t, "terraform", args...)
 		cmd.Dir = outputDir
 		cmd.Env = env
 		var buf bytes.Buffer

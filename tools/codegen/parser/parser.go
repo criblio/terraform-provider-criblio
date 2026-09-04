@@ -108,6 +108,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.Create = operationDef(method, path, operation, examples)
 			resource.SchemaName = resource.Create.RequestSchema
 			resource.Action = boolAnnotation(operation, "x-terraform-action")
+			resource.ActionResponse = boolAnnotation(operation, "x-terraform-action-response")
 			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
@@ -747,6 +748,9 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.Optional = true
 		field.OptionalComputed = true
 	}
+	if boolAnnotation(property, "x-terraform-computed-recursive") {
+		makeFieldsComputed(field.Fields)
+	}
 	if boolAnnotation(property, "writeOnly") {
 		field.Sensitive = true
 		field.PreferState = true
@@ -789,6 +793,17 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.ApplyStrategy = "stringFromAPIOrPrior"
 	} else if field.PreferState {
 		field.ApplyStrategy = "preferState"
+	}
+}
+
+func makeFieldsComputed(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		field.Required = false
+		field.Optional = false
+		field.Computed = true
+		field.OptionalComputed = false
+		makeFieldsComputed(field.Fields)
 	}
 }
 
@@ -870,15 +885,16 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			property,
 			"x-terraform-use-state-for-unknown",
 		),
-		EmitEmpty:    boolAnnotation(property, "x-terraform-emit-empty"),
-		FixedValue:   fixedValueAnnotation(property),
-		DefaultValue: scalarValue(property, "x-terraform-default-value"),
-		ObjectAsJSON: boolAnnotation(property, "x-terraform-object-as-json"),
-		NotNull:      boolAnnotation(property, "x-terraform-not-null"),
-		ValidJSON:    boolAnnotation(property, "x-terraform-valid-json"),
-		ReadOnly:     boolAnnotation(property, "readOnly"),
-		WriteOnly:    boolAnnotation(property, "writeOnly"),
-		Enum:         enumValues(schemaForType),
+		ListAttribute: boolAnnotation(property, "x-terraform-list-attribute"),
+		EmitEmpty:     boolAnnotation(property, "x-terraform-emit-empty"),
+		FixedValue:    fixedValueAnnotation(property),
+		DefaultValue:  scalarValue(property, "x-terraform-default-value"),
+		ObjectAsJSON:  boolAnnotation(property, "x-terraform-object-as-json"),
+		NotNull:       boolAnnotation(property, "x-terraform-not-null"),
+		ValidJSON:     boolAnnotation(property, "x-terraform-valid-json"),
+		ReadOnly:      boolAnnotation(property, "readOnly"),
+		WriteOnly:     boolAnnotation(property, "writeOnly"),
+		Enum:          enumValues(schemaForType),
 		ValidateEnum: boolAnnotation(
 			property,
 			"x-terraform-enum-validator",
