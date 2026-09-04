@@ -267,7 +267,7 @@ func TestGetGroupIDsCannotExplicitlySelectInternalSearchWorkerGroup(t *testing.T
 	assert.Empty(t, groupIDs)
 }
 
-func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
+func TestDiscoverDoesNotRestartAdmissionBudgetForLaterGroups(t *testing.T) {
 	var groupRequests atomic.Int32
 	var fleetAPaths sync.Map
 	var fleetBRequests atomic.Int32
@@ -302,9 +302,9 @@ func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 	assert.NoError(t, results[1].Err)
 	assert.Error(t, results[0].GroupErrors["fleet-a"])
 	assert.Error(t, results[1].GroupErrors["fleet-a"])
-	assert.NoError(t, results[0].GroupErrors["fleet-b"])
-	assert.NoError(t, results[1].GroupErrors["fleet-b"])
-	assert.Positive(t, fleetBRequests.Load(), "healthy later fleet should still be discovered")
+	assert.ErrorIs(t, results[0].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
+	assert.ErrorIs(t, results[1].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
+	assert.Zero(t, fleetBRequests.Load(), "later fleet must not start another admission window")
 	assert.GreaterOrEqual(t, groupRequests.Load(), int32(defaultRetryRequestCount))
 	uniquePaths := 0
 	fleetAPaths.Range(func(_, _ any) bool {
@@ -345,6 +345,41 @@ func TestDiscoverRetriesBootstrapUntilGroupBecomesAvailable(t *testing.T) {
 	assert.Empty(t, results[0].GroupErrors)
 	assert.Empty(t, results[1].GroupErrors)
 	assert.Greater(t, groupRequests.Load(), int32(defaultRetryRequestCount))
+}
+
+func TestDiscoverSharesAdmissionTimeoutAcrossGroups(t *testing.T) {
+	var fleetARequests atomic.Int32
+	var fleetBRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"},{"id":"fleet-b"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			if strings.Contains(r.URL.Path, "/m/fleet-a/") {
+				fleetARequests.Add(1)
+			} else if strings.Contains(r.URL.Path, "/m/fleet-b/") {
+				fleetBRequests.Add(1)
+			}
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"error":{"reason":"memory"}}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	started := time.Now()
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source"}, nil, []string{"fleet-a", "fleet-b"}, false, 1, 30*time.Millisecond, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	assert.Less(t, time.Since(started), 500*time.Millisecond)
+	assert.Positive(t, fleetARequests.Load())
+	assert.Zero(t, fleetBRequests.Load(), "later groups must not start a new admission window")
+	assert.ErrorIs(t, results[0].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
 }
 
 func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {

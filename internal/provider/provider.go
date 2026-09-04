@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -202,6 +203,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 			Credentials:         restCredentials,
 			BearerToken:         data.BearerAuth.ValueString(),
 			HTTPClient:          httpClient,
+			GroupCreateTimeout:  5 * time.Minute,
 		}),
 	}
 	resp.ActionData = clients

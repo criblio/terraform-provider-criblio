@@ -452,6 +452,118 @@ func TestReplaySafeRequestsRetryTooManyRequests(t *testing.T) {
 	}
 }
 
+func TestGroupCreateRetriesMessageOnlyTooManyRequests(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	for _, path := range []string{"/products/stream/groups", "/master/groups"} {
+		t.Run(path, func(t *testing.T) {
+			requestCount := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				requestCount++
+				if requestCount == 1 {
+					w.Header().Set("Retry-After", "0")
+					w.WriteHeader(http.StatusTooManyRequests)
+					_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted"}`))
+					return
+				}
+				writeJSON(t, w, testItem{ID: "created"})
+			}))
+			defer server.Close()
+
+			client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+			if _, err := Post[testItem, testItem](context.Background(), client, path, testItem{Name: "group"}); err != nil {
+				t.Fatalf("Post returned error: %v", err)
+			}
+			if requestCount != 2 {
+				t.Fatalf("request count = %d, expected 2", requestCount)
+			}
+		})
+	}
+}
+
+func TestGroupCreateTimeoutAllowsRetriesBeyondRetryMax(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCount++
+		if requestCount <= defaultAPIRetryMax+1 {
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		writeJSON(t, w, testItem{ID: "created"})
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:            server.URL,
+		BearerToken:        "test-token",
+		GroupCreateTimeout: time.Second,
+	})
+	if _, err := Post[testItem, testItem](context.Background(), client, "/products/stream/groups", testItem{Name: "group"}); err != nil {
+		t.Fatalf("Post returned error: %v", err)
+	}
+	if requestCount != defaultAPIRetryMax+2 {
+		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+2)
+	}
+}
+
+func TestGroupCreateTimeoutReturnsLastTooManyRequests(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "1")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"message":"admission limited"}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:            server.URL,
+		BearerToken:        "test-token",
+		GroupCreateTimeout: 10 * time.Millisecond,
+	})
+	_, err := Post[testItem, testItem](context.Background(), client, "/products/stream/groups", testItem{Name: "group"})
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("Post error = %v, expected last HTTP 429", err)
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+}
+
+func TestGetDoesNotUseGroupCreateTimeout(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:            server.URL,
+		BearerToken:        "test-token",
+		GroupCreateTimeout: time.Second,
+	})
+	_, err := Get[testItem](context.Background(), client, "/m/fleet-id/pipelines")
+	if err == nil {
+		t.Fatal("Get returned nil error, expected HTTP 429")
+	}
+	if requestCount != defaultAPIRetryMax+1 {
+		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+1)
+	}
+}
+
 func TestUnsafePostDoesNotRetryTooManyRequests(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 	fastAPIRetry(t)

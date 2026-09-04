@@ -40,9 +40,11 @@ type groupDiscovery struct {
 
 const groupDiscoveryParallel = 8
 
-// DefaultAdmissionTimeout bounds how long discovery waits for one Config
-// Helper to become admissible before reporting the group as unavailable.
+// DefaultAdmissionTimeout bounds how long discovery waits for Config Helpers
+// to become admissible across the complete discovery run.
 const DefaultAdmissionTimeout = 5 * time.Minute
+
+var errAdmissionBudgetExhausted = errors.New("Config Helper admission retry budget exhausted")
 
 // IsRecoverableListDecodeError reports whether err should not abort export.
 func IsRecoverableListDecodeError(err error) bool {
@@ -194,6 +196,12 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 	// Process one group completely before moving to the next. Iterating resource
 	// types first repeatedly touches every group and keeps all Config Helpers
 	// active, which can prevent the leader from admitting another helper boot.
+	if admissionTimeout <= 0 {
+		admissionTimeout = DefaultAdmissionTimeout
+	}
+	admissionCtx, cancelAdmission := context.WithTimeout(ctx, admissionTimeout)
+	defer cancelAdmission()
+
 	for groupIndex, gid := range groupIDs {
 		label := gid
 		if groupLabel, ok := idToLabel[gid]; ok {
@@ -206,10 +214,19 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 		if len(pending) == 0 {
 			continue
 		}
+		if admissionCtx.Err() != nil {
+			for _, discovery := range pending {
+				addGroupError(&results[discovery.resultIndex], gid, errAdmissionBudgetExhausted)
+			}
+			if progress != nil {
+				progress("group %s unavailable: shared admission retry budget exhausted", label)
+			}
+			continue
+		}
 
 		// Bootstrap the Config Helper with one request before issuing concurrent
 		// reads for this group. This preserves one-at-a-time helper admission.
-		bootstrapErr := bootstrapGroup(ctx, client, &results[pending[0].resultIndex], pending[0], gid, label, admissionTimeout, progress)
+		bootstrapErr := bootstrapGroup(admissionCtx, client, &results[pending[0].resultIndex], pending[0], gid, label, admissionTimeout, progress)
 		if isTooManyRequests(bootstrapErr) {
 			for _, discovery := range pending {
 				addGroupError(&results[discovery.resultIndex], gid, bootstrapErr)
@@ -251,17 +268,11 @@ func eligibleGroupDiscoveries(discoveries []groupDiscovery, results []Result, gr
 }
 
 func bootstrapGroup(ctx context.Context, client *importclient.Client, result *Result, discovery groupDiscovery, groupID, groupLabel string, timeout time.Duration, progress func(string, ...any)) error {
-	if timeout <= 0 {
-		timeout = DefaultAdmissionTimeout
-	}
-	bootstrapCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
 	var lastAdmissionErr error
 	for attempt := 1; ; attempt++ {
-		err := discoverGroupResource(bootstrapCtx, client, result, discovery, groupID, groupLabel)
+		err := discoverGroupResource(ctx, client, result, discovery, groupID, groupLabel)
 		if err == nil || !isTooManyRequests(err) {
-			if bootstrapCtx.Err() != nil && lastAdmissionErr != nil {
+			if ctx.Err() != nil && lastAdmissionErr != nil {
 				result.Err = nil
 				return lastAdmissionErr
 			}
@@ -278,7 +289,7 @@ func bootstrapGroup(ctx context.Context, client *importclient.Client, result *Re
 		timer := time.NewTimer(delay)
 		select {
 		case <-timer.C:
-		case <-bootstrapCtx.Done():
+		case <-ctx.Done():
 			if !timer.Stop() {
 				select {
 				case <-timer.C:

@@ -47,6 +47,7 @@ type Config struct {
 	UserAgent           string
 	RetryWaitBudget     time.Duration
 	RetryMax            int
+	GroupCreateTimeout  time.Duration
 }
 
 // Client sends authenticated requests to Cribl APIs.
@@ -58,6 +59,7 @@ type Client struct {
 	httpClient           *http.Client
 	userAgent            string
 	retryMax             int
+	groupCreateTimeout   time.Duration
 	retryWaitBudget      time.Duration
 	retryWaitRemaining   time.Duration
 	retryWaitActive      int
@@ -123,6 +125,7 @@ func New(config Config) *Client {
 		httpClient:          httpClient,
 		userAgent:           agent,
 		retryMax:            retryMax,
+		groupCreateTimeout:  config.GroupCreateTimeout,
 		retryWaitBudget:     config.RetryWaitBudget,
 		retryWaitRemaining:  config.RetryWaitBudget,
 	}
@@ -278,11 +281,19 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
+	retryCtx := ctx
+	cancelRetry := func() {}
+	hasGroupCreateWindow := isGroupCreatePath(method, path) && c.groupCreateTimeout > 0
+	if hasGroupCreateWindow {
+		retryCtx, cancelRetry = context.WithTimeout(ctx, c.groupCreateTimeout)
+	}
+	defer cancelRetry()
+
 	for attempt := 0; ; attempt++ {
-		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
+		responseBody, statusCode, responseHeader, token, err := c.send(retryCtx, method, path, contentType, body)
 		if err != nil {
-			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax) {
-				if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
+			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax, false) {
+				if waitErr := waitBeforeAPIRetry(retryCtx, c, attempt, ""); waitErr != nil {
 					if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 						return nil, err
 					}
@@ -295,10 +306,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 
 		if statusCode == http.StatusUnauthorized && c.bearerToken == "" && os.Getenv("CRIBL_BEARER_TOKEN") == "" && c.credentials != nil {
 			auth.InvalidateTokenValue(c.credentials, token)
-			responseBody, statusCode, responseHeader, _, err = c.send(ctx, method, path, contentType, body)
+			responseBody, statusCode, responseHeader, _, err = c.send(retryCtx, method, path, contentType, body)
 			if err != nil {
-				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax) {
-					if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
+				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax, false) {
+					if waitErr := waitBeforeAPIRetry(retryCtx, c, attempt, ""); waitErr != nil {
 						if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 							return nil, err
 						}
@@ -324,15 +335,17 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 				}
 			}
 		}
-		shouldRetry := shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax)
+		withinCreateWindow := hasGroupCreateWindow && retryCtx.Err() == nil
+		shouldRetry := shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax, withinCreateWindow)
 		if shouldRetry {
 			retryAfter := ""
 			if statusCode == http.StatusTooManyRequests && responseHeader != nil {
 				retryAfter = responseHeader.Get("Retry-After")
 			}
-			waitErr := waitBeforeAPIRetry(ctx, c, attempt, retryAfter)
+			waitErr := waitBeforeAPIRetry(retryCtx, c, attempt, retryAfter)
 			if waitErr != nil {
-				if errors.Is(waitErr, errRetryAfterExceedsLimit) || errors.Is(waitErr, errRetryWaitBudgetExhausted) {
+				if errors.Is(waitErr, errRetryAfterExceedsLimit) || errors.Is(waitErr, errRetryWaitBudgetExhausted) ||
+					(errors.Is(waitErr, context.DeadlineExceeded) && hasGroupCreateWindow) {
 					return responseBody, err
 				}
 				return nil, waitErr
@@ -445,13 +458,14 @@ func responseError(path string, statusCode int, body []byte) error {
 	}
 }
 
-func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err error, attempt, retryMax int) bool {
-	if attempt >= retryMax {
+func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err error, attempt, retryMax int, beyondRetryMax bool) bool {
+	if attempt >= retryMax && !beyondRetryMax {
 		return false
 	}
 	if statusCode == http.StatusTooManyRequests {
 		return isIdempotentAPIMethod(method) ||
-			(isConfigHelperAdmissionPath(method, path) && isConfigHelperAdmissionResponse(body))
+			isGroupCreatePath(method, path) ||
+			(isConfigHelperProxyPath(path) && isConfigHelperAdmissionResponse(body))
 	}
 	if !isRetryableAPIMethod(method) {
 		return false
@@ -480,18 +494,21 @@ func isIdempotentAPIMethod(method string) bool {
 	}
 }
 
-func isConfigHelperAdmissionPath(method, path string) bool {
+func isGroupCreatePath(method, path string) bool {
 	cleanPath := strings.SplitN(auth.TrimPath(path), "?", 2)[0]
 	parts := strings.Split(strings.Trim(cleanPath, "/"), "/")
 
-	if method == http.MethodPost {
-		if len(parts) == 2 && parts[0] == "master" && parts[1] == "groups" {
-			return true
-		}
-		if len(parts) == 3 && parts[0] == "products" && parts[2] == "groups" {
-			return true
-		}
+	if method != http.MethodPost {
+		return false
 	}
+	return (len(parts) == 2 && parts[0] == "master" && parts[1] == "groups") ||
+		(len(parts) == 3 && parts[0] == "products" && parts[2] == "groups")
+}
+
+func isConfigHelperProxyPath(path string) bool {
+	cleanPath := strings.SplitN(auth.TrimPath(path), "?", 2)[0]
+	parts := strings.Split(strings.Trim(cleanPath, "/"), "/")
+
 	if len(parts) >= 2 && parts[0] == "m" {
 		return true
 	}
