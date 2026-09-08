@@ -21,13 +21,12 @@ type migrationExclusion struct {
 
 func migrationPolicy(reg *registry.Registry) []migrationExclusion {
 	reasons := map[string]string{
-		"criblio_commit":                       "action-only resource",
-		"criblio_deploy":                       "action-only resource",
-		"criblio_group_system_settings":        "Cloud-managed settings are not portable",
-		"criblio_group":                        "target Cloud groups must be provisioned separately and selected with --group-map",
-		"criblio_key":                          "sensitive key material cannot be exported safely",
-		"criblio_lakehouse_dataset_connection": "Cloud-managed relationship without a portable read API",
-		"criblio_workspace":                    "target Cloud workspace is selected through provider configuration",
+		"criblio_commit":                "action-only resource",
+		"criblio_deploy":                "action-only resource",
+		"criblio_group_system_settings": "Cloud-managed settings are not portable",
+		"criblio_group":                 "target Cloud groups must be provisioned separately and selected with --group-map",
+		"criblio_key":                   "sensitive key material cannot be exported safely",
+		"criblio_workspace":             "target Cloud workspace is selected through provider configuration",
 	}
 	for _, entry := range reg.Entries() {
 		switch {

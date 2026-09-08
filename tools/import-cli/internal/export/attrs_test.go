@@ -94,26 +94,6 @@ func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 	assert.Equal(t, "small", attrs["tier_size"].String)
 }
 
-func TestHclOptionsForType_criblLakeHouseSkipsStatus(t *testing.T) {
-	opts := hclOptionsForType("criblio_cribl_lake_house", registry.Entry{})
-	require.NotNil(t, opts)
-
-	model := &provider.CriblLakeHouseResourceModel{
-		Description: types.StringValue("Lakehouse"),
-		ID:          types.StringValue("test-lakehouse"),
-		Status:      types.StringValue("provisioning"),
-		TierSize:    types.StringValue("medium"),
-	}
-
-	attrs, err := hcl.ModelToValue(model, opts)
-	require.NoError(t, err)
-
-	assert.NotContains(t, attrs, "status")
-	assert.Equal(t, "test-lakehouse", attrs["id"].String)
-	assert.Equal(t, "Lakehouse", attrs["description"].String)
-	assert.Equal(t, "medium", attrs["tier_size"].String)
-}
-
 func TestHclOptionsForType_certificateSkipsComputedExpiryDate(t *testing.T) {
 	opts := hclOptionsForType("criblio_certificate", registry.Entry{})
 	require.NotNil(t, opts)

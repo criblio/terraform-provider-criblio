@@ -92,8 +92,6 @@ terraform apply
 ### Lake Storage (`lake.tf`)
 - **Dataset creation with 30-day retention**
 - **JSON format with gzip compression**
-- **Lakehouse deployment (medium tier)**
-- **Automatic dataset-lakehouse connection**
 
 ### Search Capabilities (`search.tf`)
 - **S3 dataset provider with AssumeRole authentication**
@@ -169,9 +167,7 @@ workspace-ops/
 
 ### Lake Setup
 1. Dataset created with retention policy
-2. Lakehouse provisioned (10-minute wait)
-3. Dataset connected to lakehouse
-4. Search queries configured
+2. Search queries configured
 
 ## 🔌 Integration Points
 

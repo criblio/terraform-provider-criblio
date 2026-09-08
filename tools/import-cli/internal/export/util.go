@@ -18,13 +18,9 @@ func groupIDFromIDMap(idMap map[string]string) string {
 }
 
 // groupIDForOutput returns the output group/folder for module layout.
-// - criblio_cribl_lake_house: always "global" (Lake API is not group-scoped)
 // - default_search -> "search" (rename for clarity)
 // - criblio_search_* types (search_dataset, search_dataset_provider, etc.) -> "search" so they live under search/
 func groupIDForOutput(typeName string, gid string) string {
-	if typeName == "criblio_cribl_lake_house" {
-		return "global"
-	}
 	if gid == "default_search" {
 		return "search"
 	}

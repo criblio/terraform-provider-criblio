@@ -566,22 +566,22 @@ func TestRenderedSnippets(t *testing.T) {
 	assertNotContains(t, jsonStringTypes, `convert schema to API value`)
 
 	noRead := parser.ResourceDef{
-		StructName: "LakehouseDatasetConnection",
+		StructName: "NoReadConnection",
 		NoRead:     true,
 		Create: parser.OperationDef{
 			Method: "POST",
-			Path:   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections",
+			Path:   "/parents/{parent_id}/children/{child_id}/connections",
 			PathParams: []parser.FieldDef{
-				{APIName: "lakehouse_id", GoName: "LakehouseID"},
-				{APIName: "lake_dataset_id", GoName: "LakeDatasetID"},
+				{APIName: "parent_id", GoName: "ParentID"},
+				{APIName: "child_id", GoName: "ChildID"},
 			},
 		},
 		Update: parser.OperationDef{
 			Method: "PATCH",
-			Path:   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections",
+			Path:   "/parents/{parent_id}/children/{child_id}/connections",
 			PathParams: []parser.FieldDef{
-				{APIName: "lakehouse_id", GoName: "LakehouseID"},
-				{APIName: "lake_dataset_id", GoName: "LakeDatasetID"},
+				{APIName: "parent_id", GoName: "ParentID"},
+				{APIName: "child_id", GoName: "ChildID"},
 			},
 		},
 	}
@@ -1063,23 +1063,23 @@ func TestExampleUsagePrefersCuratedPackExample(t *testing.T) {
 
 func TestGeneratedImportUsesPathParams(t *testing.T) {
 	resource := parser.ResourceDef{
-		FileStem: "lakehouse_dataset_connection",
-		TypeName: "criblio_lakehouse_dataset_connection",
+		FileStem: "parent_child_connection",
+		TypeName: "criblio_parent_child_connection",
 		Fields: []parser.FieldDef{
-			{TerraformName: "lakehouse_id", PathParam: true},
-			{TerraformName: "lake_dataset_id", PathParam: true},
+			{TerraformName: "parent_id", PathParam: true},
+			{TerraformName: "child_id", PathParam: true},
 		},
 	}
 
 	block := generatedImportBlock(resource)
-	assertContains(t, block, `lakehouse_id = "lakehouse-01"`)
-	assertContains(t, block, `lake_dataset_id = "web-logs"`)
+	assertContains(t, block, `parent_id = "example"`)
+	assertContains(t, block, `child_id = "example"`)
 	assertNotContains(t, block, `group_id`)
 	assertNotContains(t, block, `cert-001`)
 
 	command := generatedImportCommand(resource)
-	assertContains(t, command, `"lakehouse_id": "lakehouse-01"`)
-	assertContains(t, command, `"lake_dataset_id": "web-logs"`)
+	assertContains(t, command, `"parent_id": "example"`)
+	assertContains(t, command, `"child_id": "example"`)
 	assertNotContains(t, command, `cert-001`)
 }
 

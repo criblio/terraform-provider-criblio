@@ -1,1 +1,0 @@
-terraform import criblio_cribl_lake_house.my_criblio_cribl_lake_house "lakehouse-01"

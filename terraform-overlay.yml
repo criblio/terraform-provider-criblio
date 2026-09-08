@@ -2274,8 +2274,6 @@ actions:
       /products/lake/lakes/default/lakehouses:
         post:
           operationId: createDefaultLakeLakehouse
-          x-terraform-resource: true
-          x-terraform-resource-name: CriblLakeHouse
           requestBody:
             required: true
             content:
@@ -2299,7 +2297,6 @@ actions:
       /products/lake/lakes/default/lakehouses/{id}:
         get:
           operationId: getDefaultLakeLakehouseById
-          x-terraform-read: CriblLakeHouse
           parameters:
             - name: id
               in: path
@@ -2315,7 +2312,6 @@ actions:
                     $ref: "#/components/schemas/CountedCriblLakeHouse"
         patch:
           operationId: updateDefaultLakeLakehouseById
-          x-terraform-update: CriblLakeHouse
           parameters:
             - name: id
               in: path
@@ -2337,7 +2333,6 @@ actions:
                     $ref: "#/components/schemas/CountedCriblLakeHouse"
         delete:
           operationId: deleteDefaultLakeLakehouseById
-          x-terraform-delete: CriblLakeHouse
           parameters:
             - name: id
               in: path
@@ -2354,9 +2349,6 @@ actions:
       /products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections:
         post:
           operationId: createLakehouseDatasetConnections
-          x-terraform-resource: true
-          x-terraform-resource-name: LakehouseDatasetConnection
-          x-terraform-no-read: true
           parameters:
             - name: lakehouse_id
               in: path
@@ -2384,7 +2376,6 @@ actions:
                     $ref: "#/components/schemas/LakehouseDatasetConnection"
         patch:
           operationId: updateLakehouseDatasetConnections
-          x-terraform-update: LakehouseDatasetConnection
           parameters:
             - name: lakehouse_id
               in: path
@@ -2412,7 +2403,6 @@ actions:
                     $ref: "#/components/schemas/LakehouseDatasetConnection"
         delete:
           operationId: deleteLakehouseDatasetConnections
-          x-terraform-delete: LakehouseDatasetConnection
           parameters:
             - name: lakehouse_id
               in: path

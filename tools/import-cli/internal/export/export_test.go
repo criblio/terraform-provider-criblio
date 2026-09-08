@@ -1079,9 +1079,6 @@ func TestSkipExportForGroupFilter(t *testing.T) {
 }
 
 func TestGroupIDForOutput(t *testing.T) {
-	t.Run("criblio_cribl_lake_house returns global", func(t *testing.T) {
-		assert.Equal(t, "global", groupIDForOutput("criblio_cribl_lake_house", "my-lake"))
-	})
 	t.Run("default_search returns search", func(t *testing.T) {
 		assert.Equal(t, "search", groupIDForOutput("criblio_default_search", "default_search"))
 	})
