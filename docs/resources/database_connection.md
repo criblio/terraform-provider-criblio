@@ -84,26 +84,8 @@ Optional:
 - `user` (String) Database username for authentication. Used with Oracle connections.
 
 <a id="nestedatt--items--tls"></a>
-### Nested Schema for `items.tls`
-
-Required:
-
-- `disabled` (Boolean) If <code>true</code>, TLS is disabled for the connection.
-
-Optional:
-
-- `ca_path` (String) Path to the Certificate Authority (CA) certificate file in PEM format.
-- `cert_path` (String) Path to the client certificate file in PEM format.
-- `certificate_name` (String) Name of a certificate stored in Cribl.
-- `max_version` (String) Maximum TLS version to allow for the connection.
-- `min_version` (String) Minimum TLS version to allow for the connection.
-- `passphrase` (String) Passphrase for the private key.
-- `priv_key_path` (String) Path to the private key file in PEM format.
-- `reject_unauthorized` (Boolean) If <code>true</code>, reject connections to servers with unverified TLS certificates.
-- `servername` (String) Server name for TLS Server Name Indication (SNI) extension.
-
 <a id="nestedatt--tls"></a>
-### Nested Schema for `tls`
+### Nested Schema for `items.tls`
 
 Required:
 

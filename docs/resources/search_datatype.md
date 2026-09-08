@@ -61,6 +61,7 @@ resource "criblio_search_datatype" "example" {
 - `tags` (String) Comma-separated tags for the Datatype.
 
 <a id="nestedatt--add_fields"></a>
+<a id="nestedatt--schema_map"></a>
 ### Nested Schema for `add_fields`
 
 Required:
@@ -102,14 +103,6 @@ Required:
 
 - `log_type` (String) Log type for the FuzzKit generator.
 - `vendor` (String) Vendor name for the FuzzKit generator.
-
-<a id="nestedatt--schema_map"></a>
-### Nested Schema for `schema_map`
-
-Required:
-
-- `field_name` (String) Target field name to populate.
-- `source` (String) Kusto expression or field name that provides the value.
 
 <a id="nestedatt--timestamp_extraction"></a>
 ### Nested Schema for `timestamp_extraction`

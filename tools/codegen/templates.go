@@ -1942,21 +1942,15 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 {{- if .Create.ReadAfterWrite }}
-{{- if eq .StructName "Source" }}
-	requestModel := sourceRequestModelWithHoistedIdentity(model)
-	_, err := r.api.Create(ctx, requestModel)
-{{- else if eq .StructName "PackSource" }}
-	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	_, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	_, err := r.api.Create(ctx, model)
 {{- end }}
 {{- else }}
-{{- if eq .StructName "Source" }}
-	requestModel := sourceRequestModelWithHoistedIdentity(model)
-	apiModel, err := r.api.Create(ctx, requestModel)
-{{- else if eq .StructName "PackSource" }}
-	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Create(ctx, model)
@@ -2041,11 +2035,8 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
-{{- if eq .StructName "Source" }}
-	requestModel := sourceRequestModelWithHoistedIdentity(model)
-	apiModel, err := r.api.Update(ctx, requestModel)
-{{- else if eq .StructName "PackSource" }}
-	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Update(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Update(ctx, model)

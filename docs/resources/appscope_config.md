@@ -298,6 +298,7 @@ Optional:
 - `tags` (Attributes List) (see [below for nested schema](#nestedatt--config--tags))
 
 <a id="nestedatt--config--cribl"></a>
+<a id="nestedatt--config--custom--config--cribl"></a>
 ### Nested Schema for `config.cribl`
 
 Optional:
@@ -308,6 +309,13 @@ Optional:
 - `use_scope_source_transport` (Boolean)
 
 <a id="nestedatt--config--cribl--transport"></a>
+<a id="nestedatt--config--custom--config--cribl--transport"></a>
+<a id="nestedatt--config--custom--config--event--transport"></a>
+<a id="nestedatt--config--custom--config--libscope--log--transport"></a>
+<a id="nestedatt--config--custom--config--metric--transport"></a>
+<a id="nestedatt--config--event--transport"></a>
+<a id="nestedatt--config--libscope--log--transport"></a>
+<a id="nestedatt--config--metric--transport"></a>
 ### Nested Schema for `config.cribl.transport`
 
 Optional:
@@ -320,6 +328,13 @@ Optional:
 - `type` (String)
 
 <a id="nestedatt--config--cribl--transport--tls"></a>
+<a id="nestedatt--config--custom--config--cribl--transport--tls"></a>
+<a id="nestedatt--config--custom--config--event--transport--tls"></a>
+<a id="nestedatt--config--custom--config--libscope--log--transport--tls"></a>
+<a id="nestedatt--config--custom--config--metric--transport--tls"></a>
+<a id="nestedatt--config--event--transport--tls"></a>
+<a id="nestedatt--config--libscope--log--transport--tls"></a>
+<a id="nestedatt--config--metric--transport--tls"></a>
 ### Nested Schema for `config.cribl.transport.tls`
 
 Optional:
@@ -357,38 +372,10 @@ Optional:
 - `protocol` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--protocol))
 - `tags` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--tags))
 
-<a id="nestedatt--config--custom--config--cribl"></a>
-### Nested Schema for `config.custom.config.cribl`
-
-Optional:
-
-- `authtoken` (String)
-- `enable` (Boolean)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--cribl--transport))
-- `use_scope_source_transport` (Boolean)
-
-<a id="nestedatt--config--custom--config--cribl--transport"></a>
-### Nested Schema for `config.custom.config.cribl.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--cribl--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--custom--config--cribl--transport--tls"></a>
-### Nested Schema for `config.custom.config.cribl.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
 <a id="nestedatt--config--custom--config--event"></a>
+<a id="nestedatt--config--custom--config--metric"></a>
+<a id="nestedatt--config--event"></a>
+<a id="nestedatt--config--metric"></a>
 ### Nested Schema for `config.custom.config.event`
 
 Required:
@@ -399,6 +386,7 @@ Required:
 - `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--event--watch))
 
 <a id="nestedatt--config--custom--config--event--format"></a>
+<a id="nestedatt--config--event--format"></a>
 ### Nested Schema for `config.custom.config.event.format`
 
 Required:
@@ -406,28 +394,8 @@ Required:
 - `enhancefs` (Boolean)
 - `maxeventpersec` (Number)
 
-<a id="nestedatt--config--custom--config--event--transport"></a>
-### Nested Schema for `config.custom.config.event.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--custom--config--event--transport--tls"></a>
-### Nested Schema for `config.custom.config.event.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
 <a id="nestedatt--config--custom--config--event--watch"></a>
+<a id="nestedatt--config--event--watch"></a>
 ### Nested Schema for `config.custom.config.event.watch`
 
 Required:
@@ -444,6 +412,7 @@ Optional:
 - `value` (String)
 
 <a id="nestedatt--config--custom--config--libscope"></a>
+<a id="nestedatt--config--libscope"></a>
 ### Nested Schema for `config.custom.config.libscope`
 
 Optional:
@@ -454,6 +423,7 @@ Optional:
 - `summaryperiod` (Number)
 
 <a id="nestedatt--config--custom--config--libscope--log"></a>
+<a id="nestedatt--config--libscope--log"></a>
 ### Nested Schema for `config.custom.config.libscope.log`
 
 Optional:
@@ -461,38 +431,8 @@ Optional:
 - `level` (String)
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log--transport))
 
-<a id="nestedatt--config--custom--config--libscope--log--transport"></a>
-### Nested Schema for `config.custom.config.libscope.log.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--custom--config--libscope--log--transport--tls"></a>
-### Nested Schema for `config.custom.config.libscope.log.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
-<a id="nestedatt--config--custom--config--metric"></a>
-### Nested Schema for `config.custom.config.metric`
-
-Required:
-
-- `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--metric--watch))
-
 <a id="nestedatt--config--custom--config--metric--format"></a>
+<a id="nestedatt--config--metric--format"></a>
 ### Nested Schema for `config.custom.config.metric.format`
 
 Optional:
@@ -502,28 +442,8 @@ Optional:
 - `type` (String)
 - `verbosity` (Number)
 
-<a id="nestedatt--config--custom--config--metric--transport"></a>
-### Nested Schema for `config.custom.config.metric.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--custom--config--metric--transport--tls"></a>
-### Nested Schema for `config.custom.config.metric.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
 <a id="nestedatt--config--custom--config--metric--watch"></a>
+<a id="nestedatt--config--metric--watch"></a>
 ### Nested Schema for `config.custom.config.metric.watch`
 
 Optional:
@@ -531,6 +451,7 @@ Optional:
 - `type` (String)
 
 <a id="nestedatt--config--custom--config--payload"></a>
+<a id="nestedatt--config--payload"></a>
 ### Nested Schema for `config.custom.config.payload`
 
 Required:
@@ -539,6 +460,7 @@ Required:
 - `enable` (Boolean)
 
 <a id="nestedatt--config--custom--config--protocol"></a>
+<a id="nestedatt--config--protocol"></a>
 ### Nested Schema for `config.custom.config.protocol`
 
 Required:
@@ -551,177 +473,8 @@ Required:
 - `regex` (String)
 
 <a id="nestedatt--config--custom--config--tags"></a>
-### Nested Schema for `config.custom.config.tags`
-
-Required:
-
-- `key` (String)
-- `value` (String)
-
-<a id="nestedatt--config--event"></a>
-### Nested Schema for `config.event`
-
-Required:
-
-- `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--event--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--event--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--event--watch))
-
-<a id="nestedatt--config--event--format"></a>
-### Nested Schema for `config.event.format`
-
-Required:
-
-- `enhancefs` (Boolean)
-- `maxeventpersec` (Number)
-
-<a id="nestedatt--config--event--transport"></a>
-### Nested Schema for `config.event.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--event--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--event--transport--tls"></a>
-### Nested Schema for `config.event.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
-<a id="nestedatt--config--event--watch"></a>
-### Nested Schema for `config.event.watch`
-
-Required:
-
-- `type` (String)
-
-Optional:
-
-- `allowbinary` (Boolean)
-- `enabled` (Boolean)
-- `field` (String)
-- `headers` (List of String)
-- `name` (String)
-- `value` (String)
-
-<a id="nestedatt--config--libscope"></a>
-### Nested Schema for `config.libscope`
-
-Optional:
-
-- `commanddir` (String)
-- `configevent` (Boolean)
-- `log` (Attributes) (see [below for nested schema](#nestedatt--config--libscope--log))
-- `summaryperiod` (Number)
-
-<a id="nestedatt--config--libscope--log"></a>
-### Nested Schema for `config.libscope.log`
-
-Optional:
-
-- `level` (String)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--libscope--log--transport))
-
-<a id="nestedatt--config--libscope--log--transport"></a>
-### Nested Schema for `config.libscope.log.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--libscope--log--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--libscope--log--transport--tls"></a>
-### Nested Schema for `config.libscope.log.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
-<a id="nestedatt--config--metric"></a>
-### Nested Schema for `config.metric`
-
-Required:
-
-- `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--metric--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--metric--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--metric--watch))
-
-<a id="nestedatt--config--metric--format"></a>
-### Nested Schema for `config.metric.format`
-
-Optional:
-
-- `statsdmaxlen` (Number)
-- `statsdprefix` (String)
-- `type` (String)
-- `verbosity` (Number)
-
-<a id="nestedatt--config--metric--transport"></a>
-### Nested Schema for `config.metric.transport`
-
-Optional:
-
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--metric--transport--tls))
-- `type` (String)
-
-<a id="nestedatt--config--metric--transport--tls"></a>
-### Nested Schema for `config.metric.transport.tls`
-
-Optional:
-
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
-
-<a id="nestedatt--config--metric--watch"></a>
-### Nested Schema for `config.metric.watch`
-
-Optional:
-
-- `type` (String)
-
-<a id="nestedatt--config--payload"></a>
-### Nested Schema for `config.payload`
-
-Required:
-
-- `dir` (String)
-- `enable` (Boolean)
-
-<a id="nestedatt--config--protocol"></a>
-### Nested Schema for `config.protocol`
-
-Required:
-
-- `binary` (Boolean)
-- `detect` (Boolean)
-- `len` (Number)
-- `name` (String)
-- `payload` (Boolean)
-- `regex` (String)
-
 <a id="nestedatt--config--tags"></a>
-### Nested Schema for `config.tags`
+### Nested Schema for `config.custom.config.tags`
 
 Required:
 

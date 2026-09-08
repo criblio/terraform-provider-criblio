@@ -856,6 +856,76 @@ func TestOneOfPreferStatePreservesConfiguredValue(t *testing.T) {
 	assertContains(t, content, "} else if state.OutputRouter.Rules.IsUnknown() {")
 }
 
+func TestDocSchemaDeduplicatesNestedSectionsAndPreservesAnchors(t *testing.T) {
+	sharedFields := []parser.FieldDef{{
+		TerraformName: "enabled",
+		Type:          "boolean",
+		Required:      true,
+		Description:   "Resume processing after an interruption.",
+	}}
+	resource := parser.ResourceDef{OneOfVariants: []parser.OneOfVariantDef{
+		{
+			TerraformName: "input_one",
+			Fields: []parser.FieldDef{{
+				TerraformName: "checkpointing",
+				Type:          "object",
+				Optional:      true,
+				Fields:        sharedFields,
+			}},
+		},
+		{
+			TerraformName: "input_two",
+			Fields: []parser.FieldDef{{
+				TerraformName: "checkpointing",
+				Type:          "object",
+				Optional:      true,
+				Fields:        sharedFields,
+			}},
+		},
+	}}
+
+	doc := docSchema(resource)
+	assertContains(t, doc, `<a id="nestedatt--input_one--checkpointing"></a>`)
+	assertContains(t, doc, `<a id="nestedatt--input_two--checkpointing"></a>`)
+	if got := strings.Count(doc, "- `enabled` (Boolean)"); got != 1 {
+		t.Fatalf("nested schema body rendered %d times, want 1", got)
+	}
+	if got := strings.Count(doc, "Resume processing after an interruption."); got != 1 {
+		t.Fatalf("deduplicated schema description rendered %d times, want 1", got)
+	}
+}
+
+func TestDocSchemaPreservesRepeatedDescriptionsInSmallDocuments(t *testing.T) {
+	resource := parser.ResourceDef{Fields: []parser.FieldDef{
+		{TerraformName: "first", Type: "string", Optional: true, Description: "Shared description."},
+		{TerraformName: "second", Type: "string", Optional: true, Description: "Shared description."},
+	}}
+
+	if got := strings.Count(docSchema(resource), "Shared description."); got != 2 {
+		t.Fatalf("shared description rendered %d times, want 2", got)
+	}
+}
+
+func TestRendererRejectsOversizedRegistryDocument(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "oversized",
+		FileStem: "oversized",
+		TypeName: "criblio_oversized",
+		Fields: []parser.FieldDef{{
+			TerraformName: "value",
+			Type:          "string",
+			Optional:      true,
+			Description:   strings.Repeat("x", terraformRegistryDocMaxBytes),
+		}},
+		Create: parser.OperationDef{Path: "/oversized"},
+	}
+
+	_, err := newRenderer(t.TempDir(), nil).render([]parser.ResourceDef{resource})
+	if err == nil || !strings.Contains(err.Error(), "Terraform Registry truncates documents") {
+		t.Fatalf("render error = %v, want Terraform Registry size error", err)
+	}
+}
+
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
 	resource := parser.ResourceDef{
 		Name:     "searchmacro",

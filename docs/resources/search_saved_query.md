@@ -205,6 +205,7 @@ Optional:
 - `type` (String) Axis type.
 
 <a id="nestedatt--chart_config--x_axis--format"></a>
+<a id="nestedatt--chart_config--y_axis--format"></a>
 ### Nested Schema for `chart_config.x_axis.format`
 
 Required:
@@ -230,18 +231,6 @@ Optional:
 - `scale` (String) Scale type.
 - `split_line` (Boolean) If <code>true</code>, show horizontal grid lines.
 - `type` (String) Axis type.
-
-<a id="nestedatt--chart_config--y_axis--format"></a>
-### Nested Schema for `chart_config.y_axis.format`
-
-Required:
-
-- `format` (String) Numeric format token. Unknown tokens are rendered as-is.
-
-Optional:
-
-- `prefix` (String) String prepended to the formatted numeric value.
-- `suffix` (String) String appended to the formatted numeric value.
 
 <a id="nestedatt--schedule"></a>
 ### Nested Schema for `schedule`

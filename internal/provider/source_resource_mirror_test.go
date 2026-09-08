@@ -44,6 +44,49 @@ func TestSourceRequestModelWithHoistedIdentity(t *testing.T) {
 	}
 }
 
+func TestDestinationRequestModelWithHoistedIdentity(t *testing.T) {
+	model := DestinationModel{
+		ID:       types.StringValue("destination-id"),
+		OutputS3: &OutputS3Model{Type: types.StringValue("s3")},
+	}
+
+	request := oneOfRequestModelWithHoistedIdentity(model)
+
+	if request.OutputS3.ID.ValueString() != "destination-id" {
+		t.Fatalf("expected active output id to be hoisted, got %q", request.OutputS3.ID.ValueString())
+	}
+	if !model.OutputS3.ID.IsNull() {
+		t.Fatalf("expected planned model to remain unchanged, got %q", model.OutputS3.ID.ValueString())
+	}
+}
+
+func TestCollectorRequestModelWithHoistedIdentity(t *testing.T) {
+	model := CollectorModel{
+		ID:                   types.StringValue("collector-id"),
+		InputCollectorSplunk: &InputCollectorSplunkModel{},
+	}
+
+	request := oneOfRequestModelWithHoistedIdentity(model)
+
+	if request.InputCollectorSplunk.ID.ValueString() != "collector-id" {
+		t.Fatalf("expected active collector id to be hoisted, got %q", request.InputCollectorSplunk.ID.ValueString())
+	}
+}
+
+func TestOneOfRequestModelHoistsIdentityIntoEveryActiveVariant(t *testing.T) {
+	model := DestinationModel{
+		ID:            types.StringValue("destination-id"),
+		OutputDefault: &OutputDefaultModel{ID: types.StringValue("destination-id")},
+		OutputS3:      &OutputS3Model{},
+	}
+
+	request := oneOfRequestModelWithHoistedIdentity(model)
+
+	if request.OutputS3.ID.ValueString() != "destination-id" {
+		t.Fatalf("expected later active output id to be hoisted, got %q", request.OutputS3.ID.ValueString())
+	}
+}
+
 func TestSyncSourceLikeActiveInputClearsZeroValueInactiveVariant(t *testing.T) {
 	api := SourceModel{InputCloudflareHec: &InputCloudflareHecModel{}}
 	state := SourceModel{

@@ -52784,7 +52784,7 @@ func (r *SourceResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Create(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -52829,7 +52829,7 @@ func (r *SourceResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Update(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())

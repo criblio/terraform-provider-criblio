@@ -34808,7 +34808,8 @@ func (r *PackDestinationResource) Create(ctx context.Context, req resource.Creat
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Create(ctx, model)
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Create(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
@@ -34850,7 +34851,8 @@ func (r *PackDestinationResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Update(ctx, model)
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Update(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
