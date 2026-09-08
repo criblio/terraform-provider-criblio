@@ -286,10 +286,6 @@ func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {
 	return oneOfRequestModelWithHoistedIdentity(model)
 }
 
-func packSourceRequestModelWithHoistedIdentity(model PackSourceModel) PackSourceModel {
-	return oneOfRequestModelWithHoistedIdentity(model)
-}
-
 func oneOfRequestModelWithHoistedIdentity[T any](model T) T {
 	request := model
 	rv := reflect.ValueOf(&request).Elem()
