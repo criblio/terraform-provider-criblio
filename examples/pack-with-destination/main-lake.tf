@@ -32,7 +32,7 @@ resource "criblio_pack_destination" "my_packdest" {
     partition_expr                    = "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
     format                            = "json"
     base_file_name                    = "`CriblOut`"
-    file_name_suffix                  = "test"
+    file_name_suffix                  = "`.json.gz`"
     max_file_size_mb                  = 32
     max_open_files                    = 100
     header_line                       = ""
@@ -52,6 +52,5 @@ resource "criblio_pack_destination" "my_packdest" {
     bucket                            = "test"
   }
 }
-
 
 

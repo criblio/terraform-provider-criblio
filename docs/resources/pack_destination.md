@@ -707,7 +707,7 @@ Optional:
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `format` (String) Format of the output data
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant). The `__format` variable refers to the value of the `Data format` field (`json` or `raw`). The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
+- `file_name_suffix` (String) JavaScript expression defining the output filename suffix. Constant suffixes must be JavaScript string literals, for example `'.json.gz'` or the template literal `` `.json.gz` ``; a bare value such as `.gz` is invalid.
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
@@ -770,7 +770,7 @@ Optional:
 - `partition_expr` (String)
 - `format` (String)
 - `base_file_name` (String)
-- `file_name_suffix` (String)
+- `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant). The `__format` variable refers to the value of the `Data format` field (`json` or `raw`). The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `max_file_size_mb` (Number)
 - `max_file_open_time_sec` (Number)
 - `max_file_idle_time_sec` (Number)

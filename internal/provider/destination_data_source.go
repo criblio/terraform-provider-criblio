@@ -2912,7 +2912,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"file_name_suffix": schema.StringAttribute{
 						Computed:    true,
-						Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+						Description: "JavaScript expression defining the output filename suffix. Constant suffixes must be JavaScript string literals, for example `'.json.gz'` or the template literal `` `.json.gz` ``; a bare value such as `.gz` is invalid.",
 					},
 					"max_file_size_mb": schema.Float64Attribute{
 						Computed:    true,
