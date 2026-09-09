@@ -110,6 +110,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.Action = boolAnnotation(operation, "x-terraform-action")
 			resource.ActionResponse = boolAnnotation(operation, "x-terraform-action-response")
 			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
+			resource.CreateDisabledMessage = scalarValue(operation, "x-terraform-create-disabled-message")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
 			resource := ensureResource(resources, name)

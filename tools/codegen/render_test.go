@@ -566,22 +566,22 @@ func TestRenderedSnippets(t *testing.T) {
 	assertNotContains(t, jsonStringTypes, `convert schema to API value`)
 
 	noRead := parser.ResourceDef{
-		StructName: "NoReadConnection",
+		StructName: "LakehouseDatasetConnection",
 		NoRead:     true,
 		Create: parser.OperationDef{
 			Method: "POST",
-			Path:   "/parents/{parent_id}/children/{child_id}/connections",
+			Path:   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections",
 			PathParams: []parser.FieldDef{
-				{APIName: "parent_id", GoName: "ParentID"},
-				{APIName: "child_id", GoName: "ChildID"},
+				{APIName: "lakehouse_id", GoName: "LakehouseID"},
+				{APIName: "lake_dataset_id", GoName: "LakeDatasetID"},
 			},
 		},
 		Update: parser.OperationDef{
 			Method: "PATCH",
-			Path:   "/parents/{parent_id}/children/{child_id}/connections",
+			Path:   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections",
 			PathParams: []parser.FieldDef{
-				{APIName: "parent_id", GoName: "ParentID"},
-				{APIName: "child_id", GoName: "ChildID"},
+				{APIName: "lakehouse_id", GoName: "LakehouseID"},
+				{APIName: "lake_dataset_id", GoName: "LakeDatasetID"},
 			},
 		},
 	}
@@ -1063,24 +1063,38 @@ func TestExampleUsagePrefersCuratedPackExample(t *testing.T) {
 
 func TestGeneratedImportUsesPathParams(t *testing.T) {
 	resource := parser.ResourceDef{
-		FileStem: "parent_child_connection",
-		TypeName: "criblio_parent_child_connection",
+		FileStem: "lakehouse_dataset_connection",
+		TypeName: "criblio_lakehouse_dataset_connection",
 		Fields: []parser.FieldDef{
-			{TerraformName: "parent_id", PathParam: true},
-			{TerraformName: "child_id", PathParam: true},
+			{TerraformName: "lakehouse_id", PathParam: true},
+			{TerraformName: "lake_dataset_id", PathParam: true},
 		},
 	}
 
 	block := generatedImportBlock(resource)
-	assertContains(t, block, `parent_id = "example"`)
-	assertContains(t, block, `child_id = "example"`)
+	assertContains(t, block, `lakehouse_id = "lakehouse-01"`)
+	assertContains(t, block, `lake_dataset_id = "web-logs"`)
 	assertNotContains(t, block, `group_id`)
 	assertNotContains(t, block, `cert-001`)
 
 	command := generatedImportCommand(resource)
-	assertContains(t, command, `"parent_id": "example"`)
-	assertContains(t, command, `"child_id": "example"`)
+	assertContains(t, command, `"lakehouse_id": "lakehouse-01"`)
+	assertContains(t, command, `"lake_dataset_id": "web-logs"`)
 	assertNotContains(t, command, `cert-001`)
+}
+
+func TestResourceCreateCanBeDisabled(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName:            "DeprecatedResource",
+		CreateDisabledMessage: "New resources are disabled; import an existing resource instead.",
+	}
+
+	content := renderTemplate(t, "resource", resource)
+
+	assertContains(t, content, `resp.Diagnostics.AddError("Resource creation is disabled", "New resources are disabled; import an existing resource instead.")`)
+	assertNotContains(t, content, `r.api.Create(ctx, model)`)
+	assertContains(t, content, `func (r *DeprecatedResourceResource) Update`)
+	assertContains(t, content, `func (r *DeprecatedResourceResource) Delete`)
 }
 
 func TestSearchResourcePathUsesInternalDefaultSearchGroup(t *testing.T) {

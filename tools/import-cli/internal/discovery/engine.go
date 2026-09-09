@@ -146,6 +146,12 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 				res.Identifiers = []map[string]string{{"id": "custom-banner"}}
 				res.InventoryComplete = true
 			}
+		case e.TypeName == "criblio_lakehouse_dataset_connection":
+			ids, err := listLakehouseDatasetConnectionIdentifiers(ctx, client)
+			res.Count = len(ids)
+			res.Identifiers = ids
+			res.InventoryComplete = err == nil
+			res.Err = err
 		case e.TypeName == "criblio_pack_routes":
 			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex, packRoutes: true})
 		case e.TypeName == "criblio_search_dataset_ruleset":
@@ -383,6 +389,8 @@ func ListItemIdentifiers(ctx context.Context, client *importclient.Client, e reg
 	case "criblio_group":
 		idMaps, _, err := ListGroupIdentifiersAndItems(ctx, client, groupIDs)
 		return idMaps, err
+	case "criblio_lakehouse_dataset_connection":
+		return listLakehouseDatasetConnectionIdentifiers(ctx, client)
 	case "criblio_search_dataset_ruleset":
 		if slices.Contains(groupIDs, "default_search") {
 			return []map[string]string{
@@ -616,6 +624,46 @@ func isLookupFileType(typeName string) bool {
 	return typeName == "criblio_lookup_file" || typeName == "criblio_pack_lookups"
 }
 
+func listLakehouseDatasetConnectionIdentifiers(ctx context.Context, client *importclient.Client) ([]map[string]string, error) {
+	lakehouses, err := getRESTItems(ctx, client, "/products/lake/lakes/default/lakehouses")
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	datasets, err := getRESTItems(ctx, client, "/products/lake/lakes/default/datasets")
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	out := make([]map[string]string, 0, len(lakehouses)*len(datasets))
+	for _, lhRaw := range lakehouses {
+		lh, err := rawMap(lhRaw)
+		if err != nil {
+			return nil, err
+		}
+		lakehouseID := rawString(lh, "id", "ID", "name")
+		if lakehouseID == "" {
+			continue
+		}
+		for _, dsRaw := range datasets {
+			ds, err := rawMap(dsRaw)
+			if err != nil {
+				return nil, err
+			}
+			datasetID := rawString(ds, "id", "ID", "name")
+			if datasetID == "" {
+				continue
+			}
+			out = append(out, map[string]string{"lakehouse_id": lakehouseID, "lake_dataset_id": datasetID})
+		}
+	}
+	return out, nil
+}
+
 func listPackRoutesIdentifiers(ctx context.Context, client *importclient.Client, groupIDs []string) ([]map[string]string, error) {
 	var out []map[string]string
 	for _, gid := range groupIDs {
@@ -817,7 +865,7 @@ func skipDiscoveryForGroupFilter(typeName string, groupIDs []string) bool {
 		return !hasDefaultSearch
 	}
 	switch typeName {
-	case "criblio_cribl_lake_dataset", "criblio_notification_target":
+	case "criblio_cribl_lake_dataset", "criblio_cribl_lake_house", "criblio_lakehouse_dataset_connection", "criblio_notification_target":
 		return true
 	}
 	return false

@@ -17,6 +17,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 )
 
@@ -94,7 +95,7 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: "no GetMethod or ImportIDFormat", Count: r.Count})
 			continue
 		}
-		if e.RESTGetPath == "" {
+		if e.RESTGetPath == "" && r.TypeName != "criblio_lakehouse_dataset_connection" {
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: "no GetMethod or ImportIDFormat", Count: r.Count})
 			continue
 		}
@@ -126,6 +127,48 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 						out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(appendErr)))
 					}
 				}
+			}
+			continue
+		}
+		// criblio_lakehouse_dataset_connection: no Get API; build minimal HCL from identifiers only.
+		if r.TypeName == "criblio_lakehouse_dataset_connection" && e.GetMethod == "" {
+			if progress != nil {
+				progress("criblio_lakehouse_dataset_connection: %d items", r.Count)
+			}
+			idMaps := r.Identifiers
+			var listErr error
+			if !r.InventoryComplete {
+				idMaps, listErr = discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
+			}
+			if listErr != nil {
+				out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: listErr.Error(), Count: r.Count})
+				continue
+			}
+			if len(idMaps) == 0 {
+				out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: "list returned 0 identifiers", Count: 0})
+				continue
+			}
+			for _, idMap := range idMaps {
+				if skipExportForGroupFilter(r.TypeName, idMap, groupFilter, groupIDs) {
+					continue
+				}
+				importID, idErr := generator.BuildImportID(e.ImportIDFormat, idMap)
+				if idErr != nil {
+					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: import ID: %s", r.TypeName, idMap, sanitizeConvertError(idErr)))
+					continue
+				}
+				attrs := map[string]hcl.Value{
+					"lakehouse_id":    {Kind: hcl.KindString, String: idMap["lakehouse_id"]},
+					"lake_dataset_id": {Kind: hcl.KindString, String: idMap["lake_dataset_id"]},
+				}
+				name := generator.StableResourceNameFromMap(e.TypeName, idMap)
+				out.Items = append(out.Items, generator.ResourceItem{
+					TypeName: e.TypeName,
+					Name:     name,
+					Attrs:    attrs,
+					ImportID: importID,
+					GroupID:  "global", // lakehouse_dataset_connection has no group_id
+				})
 			}
 			continue
 		}

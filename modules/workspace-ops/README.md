@@ -92,6 +92,7 @@ terraform apply
 ### Lake Storage (`lake.tf`)
 - **Dataset creation with 30-day retention**
 - **JSON format with gzip compression**
+- **Connection to an existing Lakehouse**
 
 ### Search Capabilities (`search.tf`)
 - **S3 dataset provider with AssumeRole authentication**
@@ -167,7 +168,8 @@ workspace-ops/
 
 ### Lake Setup
 1. Dataset created with retention policy
-2. Search queries configured
+2. Dataset connected to an existing Lakehouse
+3. Search queries configured
 
 ## 🔌 Integration Points
 

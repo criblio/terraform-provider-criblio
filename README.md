@@ -230,6 +230,7 @@ provider "criblio" {
 ❌ **Not Supported:**
 - `criblio_search_*` - All Search resources
 - `criblio_cribl_lake_*` - All Lake resources
+- `criblio_cribl_lake_house` - Lakehouse resources
 - `criblio_workspace` - Workspace management (only available via gateway/cloud)
 - `criblio_notification_target` - Part of Search feature set
 
@@ -290,6 +291,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_collector](docs/resources/collector.md)
 * [criblio_commit](docs/resources/commit.md)
 * [criblio_cribl_lake_dataset](docs/resources/cribl_lake_dataset.md)
+* [criblio_cribl_lake_house](docs/resources/cribl_lake_house.md)
 * [criblio_custom_banner](docs/resources/custom_banner.md)
 * [criblio_database_connection](docs/resources/database_connection.md)
 * [criblio_deploy](docs/resources/deploy.md)
@@ -301,6 +303,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_group_system_settings](docs/resources/group_system_settings.md)
 * [criblio_hmac_function](docs/resources/hmac_function.md)
 * [criblio_key](docs/resources/key.md)
+* [criblio_lakehouse_dataset_connection](docs/resources/lakehouse_dataset_connection.md)
 * [criblio_lookup_file](docs/resources/lookup_file.md)
 * [criblio_mapping_ruleset](docs/resources/mapping_ruleset.md)
 * [criblio_notification](docs/resources/notification.md)
@@ -346,6 +349,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_collectors](docs/data-sources/collectors.md)
 * [criblio_config_version](docs/data-sources/config_version.md)
 * [criblio_cribl_lake_dataset](docs/data-sources/cribl_lake_dataset.md)
+* [criblio_cribl_lake_house](docs/data-sources/cribl_lake_house.md)
 * [criblio_custom_banner](docs/data-sources/custom_banner.md)
 * [criblio_database_connection](docs/data-sources/database_connection.md)
 * [criblio_destination](docs/data-sources/destination.md)

@@ -34,3 +34,13 @@ resource "criblio_destination" "cribl_lake" {
     create_before_destroy = true
   }
 }
+
+
+data "criblio_cribl_lake_house" "existing" {
+  id = var.existing_lakehouse_id
+}
+
+resource "criblio_lakehouse_dataset_connection" "my_cribllakehouse_dataset_connection" {
+  lake_dataset_id = criblio_cribl_lake_dataset.my_cribllakedataset.id
+  lakehouse_id    = data.criblio_cribl_lake_house.existing.id
+}

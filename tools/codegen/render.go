@@ -2224,6 +2224,12 @@ func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 	if field.TerraformName == "lake_id" {
 		return "default"
 	}
+	if field.TerraformName == "lakehouse_id" {
+		return "lakehouse-01"
+	}
+	if field.TerraformName == "lake_dataset_id" {
+		return "web-logs"
+	}
 	return "example"
 }
 

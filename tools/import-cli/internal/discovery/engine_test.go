@@ -468,7 +468,7 @@ func TestIdentifiersFromRawItems_skipsBuiltInLookupFiles(t *testing.T) {
 
 func TestRegistryImportableEntriesHaveRESTGetPath(t *testing.T) {
 	for _, e := range mustBuildRegistry(t, context.Background()).Entries() {
-		if e.ImportIDFormat == "" {
+		if e.ImportIDFormat == "" || e.TypeName == "criblio_lakehouse_dataset_connection" {
 			continue
 		}
 		assert.NotEmpty(t, e.RESTGetPath, "registry entry %q must have RESTGetPath", e.TypeName)

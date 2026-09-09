@@ -1892,7 +1892,11 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		{{- if eq .StructName "Collector" }}
 		Version: 1,
 		{{- end }}
+		{{- if .CreateDisabledMessage }}
+		MarkdownDescription: {{ printf "%q" .CreateDisabledMessage }},
+		{{- else }}
 		MarkdownDescription: "{{ .StructName }} Resource",
+		{{- end }}
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
@@ -1928,6 +1932,10 @@ func (r *{{ .StructName }}Resource) Configure(_ context.Context, req resource.Co
 }
 
 func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	{{- if .CreateDisabledMessage }}
+	resp.Diagnostics.AddError("Resource creation is disabled", {{ printf "%q" .CreateDisabledMessage }})
+	return
+	{{- else }}
 	var model {{ .StructName }}Model
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -1975,6 +1983,7 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+	{{- end }}
 }
 
 func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
@@ -2969,12 +2978,12 @@ const docTemplate = `---
 page_title: "{{ resourceType . }} Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  {{ .StructName }} Resource
+  {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else }}{{ .StructName }} Resource{{ end }}
 ---
 
 # {{ resourceType . }} (Resource)
 
-{{ .StructName }} Resource
+{{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else }}{{ .StructName }} Resource{{ end }}
 
 ## Example Usage
 
