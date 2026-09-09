@@ -118,9 +118,6 @@ func (r *SubscriptionResource) Schema(_ context.Context, _ resource.SchemaReques
 				Required: true,
 				Optional: false,
 				Computed: false,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
 			},
 		},
 	}

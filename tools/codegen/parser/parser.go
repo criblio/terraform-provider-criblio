@@ -1383,7 +1383,9 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 						fields[index].Optional = true
 						fields[index].Computed = true
 					}
-					fields[index].ForceNew = true
+					// A create-time query parameter is not necessarily resource identity.
+					// If PATCH accepts the same field, Terraform can update it in place.
+					fields[index].ForceNew = fields[index].ForceNew || !fields[index].UpdateField
 					fields[index].QueryParam = true
 				}
 			}

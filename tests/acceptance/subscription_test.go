@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestSubscription(t *testing.T) {
@@ -19,7 +20,7 @@ func TestSubscription(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: subscriptionConfig("test subscription", true, "test"),
+				Config: subscriptionConfig("test subscription", true, "test", "passthru"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "id", "test_lifecycle_subscription"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test subscription"),
@@ -30,15 +31,21 @@ func TestSubscription(t *testing.T) {
 				),
 			},
 			{
-				Config: subscriptionConfig("updated subscription", false, "updated"),
+				Config: subscriptionConfig("updated subscription", false, "updated", "main"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionUpdate),
+					},
+				},
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "description", "updated subscription"),
 					resource.TestCheckResourceAttr(resourceName, "disabled", "false"),
 					resource.TestCheckResourceAttr(resourceName, "filter", "updated"),
+					resource.TestCheckResourceAttr(resourceName, "pipeline", "main"),
 				),
 			},
 			{
-				Config:   subscriptionConfig("updated subscription", false, "updated"),
+				Config:   subscriptionConfig("updated subscription", false, "updated", "main"),
 				PlanOnly: true,
 			},
 			{
@@ -51,7 +58,7 @@ func TestSubscription(t *testing.T) {
 	})
 }
 
-func subscriptionConfig(description string, disabled bool, filter string) string {
+func subscriptionConfig(description string, disabled bool, filter, pipeline string) string {
 	disabledValue := "false"
 	if disabled {
 		disabledValue = "true"
@@ -62,7 +69,7 @@ func subscriptionConfig(description string, disabled bool, filter string) string
   filter      = "` + filter + `"
   group_id    = "default"
   id          = "test_lifecycle_subscription"
-  pipeline    = "passthru"
+  pipeline    = "` + pipeline + `"
 }
 `
 }
