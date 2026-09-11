@@ -18,6 +18,23 @@ resource "criblio_destination" "my_destination" {
   }
 }
 
+resource "criblio_destination" "filesystem" {
+  group_id = "default"
+  id       = "out-filesystem-main"
+
+  output_filesystem = {
+    id               = "out-filesystem-main"
+    type             = "filesystem"
+    dest_path        = "/var/log/cribl/out"
+    stage_path       = "/var/log/cribl/stage"
+    partition_expr   = "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
+    base_file_name   = "`CriblOut`"
+    file_name_suffix = "`.json.gz`"
+    format           = "json"
+    compress         = "gzip"
+  }
+}
+
 variable "aws_secret_key" {
   type      = string
   sensitive = true

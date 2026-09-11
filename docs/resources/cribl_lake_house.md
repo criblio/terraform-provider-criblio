@@ -3,20 +3,19 @@
 page_title: "criblio_cribl_lake_house Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  CriblLakeHouse Resource
+  Cribl Lake Lakehouses are deprecated and new Lakehouses can no longer be created. Existing Lakehouses may still be imported, read, updated, and deleted while you migrate to Lakehouse engines in Cribl Search.
 ---
 
 # criblio_cribl_lake_house (Resource)
 
-CriblLakeHouse Resource
+Cribl Lake Lakehouses are deprecated and new Lakehouses can no longer be created. Existing Lakehouses may still be imported, read, updated, and deleted while you migrate to Lakehouse engines in Cribl Search.
 
 ## Example Usage
 
 ```terraform
-resource "criblio_cribl_lake_house" "my_cribllakehouse" {
-  description = "My Lakehouse description"
-  id          = "MyLakehouseId"
-  tier_size   = "small"
+# This resource must be imported because new Cribl Lake Lakehouses can no longer be created.
+resource "criblio_cribl_lake_house" "my_criblio_cribl_lake_house" {
+  id = "lakehouse-01"
 }
 ```
 

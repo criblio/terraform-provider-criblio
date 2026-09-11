@@ -4863,7 +4863,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+						Description: "JavaScript expression defining the output filename suffix. Constant suffixes must be JavaScript string literals, for example `'.json.gz'` or the template literal `` `.json.gz` ``; a bare value such as `.gz` is invalid.",
 					},
 					"max_file_size_mb": schema.Float64Attribute{
 						Required:    false,
@@ -34799,7 +34799,8 @@ func (r *DestinationResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Create(ctx, model)
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Create(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
@@ -34841,7 +34842,8 @@ func (r *DestinationResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Update(ctx, model)
+	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Update(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

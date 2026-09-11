@@ -2,26 +2,27 @@ package parser
 
 // ResourceDef describes one Terraform resource discovered from OpenAPI annotations.
 type ResourceDef struct {
-	Name           string
-	FileStem       string
-	TypeName       string
-	StructName     string
-	SchemaName     string
-	Create         OperationDef
-	Read           OperationDef
-	Update         OperationDef
-	Delete         OperationDef
-	List           OperationDef
-	ListName       string
-	ListFileStem   string
-	ListStructName string
-	ListTypeName   string
-	Fields         []FieldDef
-	OneOfVariants  []OneOfVariantDef
-	Outputs        []OutputFile
-	Action         bool
-	ActionResponse bool
-	NoRead         bool
+	Name                  string
+	FileStem              string
+	TypeName              string
+	StructName            string
+	SchemaName            string
+	Create                OperationDef
+	Read                  OperationDef
+	Update                OperationDef
+	Delete                OperationDef
+	List                  OperationDef
+	ListName              string
+	ListFileStem          string
+	ListStructName        string
+	ListTypeName          string
+	Fields                []FieldDef
+	OneOfVariants         []OneOfVariantDef
+	Outputs               []OutputFile
+	Action                bool
+	ActionResponse        bool
+	NoRead                bool
+	CreateDisabledMessage string
 }
 
 // OperationDef describes one annotated OpenAPI operation.

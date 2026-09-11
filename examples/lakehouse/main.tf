@@ -1,5 +1,8 @@
-resource "criblio_cribl_lake_house" "my_cribllakehouse" {
-  description = "My Lakehouse"
-  tier_size   = "medium"
-  id          = "my_lakehouse"
+variable "existing_lakehouse_id" {
+  description = "ID of an existing Cribl Lake Lakehouse. New Lakehouses can no longer be created."
+  type        = string
+}
+
+data "criblio_cribl_lake_house" "existing" {
+  id = var.existing_lakehouse_id
 }

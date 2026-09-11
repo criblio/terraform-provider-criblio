@@ -62,6 +62,33 @@ func TestMakeCollectorVariantsOptionalComputedPreservesRequiredInput(t *testing.
 	}
 }
 
+func TestAppendQueryParamsDoesNotForceReplaceUpdateableField(t *testing.T) {
+	fields := []FieldDef{
+		{TerraformName: "pipeline", UpdateField: true},
+		{TerraformName: "id", UpdateField: true, ForceNew: true},
+	}
+	params := []FieldDef{
+		{TerraformName: "pipeline", ForceNew: true, QueryParam: true},
+		{TerraformName: "id", ForceNew: true, QueryParam: true},
+		{TerraformName: "create_token", ForceNew: true, QueryParam: true},
+	}
+
+	got := appendQueryParams(fields, params)
+
+	pipeline := fieldByTFName(t, got, "pipeline")
+	if pipeline.ForceNew || !pipeline.QueryParam {
+		t.Fatalf("updateable query field flags = forceNew:%v query:%v", pipeline.ForceNew, pipeline.QueryParam)
+	}
+	id := fieldByTFName(t, got, "id")
+	if !id.ForceNew {
+		t.Fatal("existing identity field must remain force-new")
+	}
+	createToken := fieldByTFName(t, got, "create_token")
+	if !createToken.ForceNew {
+		t.Fatal("query-only create field must remain force-new")
+	}
+}
+
 func TestParseCertificateResource(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {

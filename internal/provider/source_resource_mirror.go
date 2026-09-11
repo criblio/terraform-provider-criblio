@@ -3,9 +3,12 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -280,14 +283,10 @@ func sourceLegacyItemsNull(attrTypes map[string]attr.Type) types.List {
 }
 
 func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {
-	return sourceLikeRequestModelWithHoistedIdentity(model)
+	return oneOfRequestModelWithHoistedIdentity(model)
 }
 
-func packSourceRequestModelWithHoistedIdentity(model PackSourceModel) PackSourceModel {
-	return sourceLikeRequestModelWithHoistedIdentity(model)
-}
-
-func sourceLikeRequestModelWithHoistedIdentity[T any](model T) T {
+func oneOfRequestModelWithHoistedIdentity[T any](model T) T {
 	request := model
 	rv := reflect.ValueOf(&request).Elem()
 	idField := rv.FieldByName("ID")
@@ -300,7 +299,7 @@ func sourceLikeRequestModelWithHoistedIdentity[T any](model T) T {
 	}
 	for i := 0; i < rv.NumField(); i++ {
 		fieldInfo := rv.Type().Field(i)
-		if !isSourceInputField(fieldInfo.Name) {
+		if !isOneOfVariantField(fieldInfo.Name) {
 			continue
 		}
 		field := rv.Field(i)
@@ -319,9 +318,74 @@ func sourceLikeRequestModelWithHoistedIdentity[T any](model T) T {
 		if id.IsNull() || id.IsUnknown() {
 			idField.Set(reflect.ValueOf(modelID))
 		}
-		return request
 	}
 	return request
+}
+
+func (r *SourceResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[SourceModel](ctx, req, resp)
+}
+
+func (r *CollectorResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[CollectorModel](ctx, req, resp)
+}
+
+func (r *PackSourceResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[PackSourceModel](ctx, req, resp)
+}
+
+func (r *DestinationResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[DestinationModel](ctx, req, resp)
+}
+
+func (r *PackDestinationResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[PackDestinationModel](ctx, req, resp)
+}
+
+func validateOneOfIdentity[T any](ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var rootID types.String
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, path.Root("id"), &rootID)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if rootID.IsNull() || rootID.IsUnknown() {
+		return
+	}
+
+	modelType := reflect.TypeOf((*T)(nil)).Elem()
+	for i := 0; i < modelType.NumField(); i++ {
+		fieldInfo := modelType.Field(i)
+		if !isOneOfVariantField(fieldInfo.Name) {
+			continue
+		}
+		blockName := fieldInfo.Tag.Get("tfsdk")
+		var block types.Object
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, path.Root(blockName), &block)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		if block.IsNull() || block.IsUnknown() {
+			continue
+		}
+		var variantID types.String
+		idPath := path.Root(blockName).AtName("id")
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, idPath, &variantID)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		if variantID.IsNull() || variantID.IsUnknown() || variantID.Equal(rootID) {
+			continue
+		}
+		resp.Diagnostics.AddAttributeError(
+			idPath,
+			"Conflicting resource IDs",
+			fmt.Sprintf("The nested %s.id value must match the top-level id. Remove the nested id to let the provider set it automatically, or use %q.", blockName, rootID.ValueString()),
+		)
+	}
+}
+
+func isOneOfVariantField(name string) bool {
+	return isSourceInputField(name) || (len(name) > len("Output") && name[:len("Output")] == "Output")
 }
 
 // normalizeSourceRootInputEmptyLists converts empty API list values on imported

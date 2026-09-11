@@ -49,7 +49,7 @@ resource "criblio_event_breaker_ruleset" "my_event_breaker_ruleset" {
 
 - `description` (String) Brief description of the Event Breaker Ruleset.
 - `lib` (String) Library classification for the Event Breaker Ruleset.
-- `min_raw_length` (Integer) The  minimum number of characters in _raw to determine which rule to use
+- `min_raw_length` (Integer) The minimum number of characters in _raw to determine which rule to use
 - `rules` (Attributes List) A list of rules that will be applied, in order, to the input data stream (see [below for nested schema](#nestedatt--rules))
 - `tags` (String) Tags for filtering and grouping Event Breaker Rulesets.
 

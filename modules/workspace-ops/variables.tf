@@ -62,6 +62,11 @@ variable "cloud_region" {
   default     = "ca-central-1"
 }
 
+variable "existing_lakehouse_id" {
+  description = "ID of an existing Cribl Lake Lakehouse used for the dataset connection. New Lakehouses can no longer be created."
+  type        = string
+}
+
 # Sensitive variables (no defaults for security)
 variable "cribl_client_id" {
   description = "Cribl OAuth2 client ID"
@@ -78,4 +83,3 @@ variable "cribl_client_secret" {
   default     = "youcandancehavingthetimeofyourlife"
   # No default - must be provided
 }
-

@@ -16,6 +16,10 @@ schema_imports:
       - SmtpTarget
 
 actions:
+  - target: "$.components.schemas.OutputFilesystem.properties.fileNameSuffix"
+    update:
+      description: JavaScript expression defining the output filename suffix. Constant suffixes must be JavaScript string literals, for example `'.json.gz'` or the template literal `` `.json.gz` ``; a bare value such as `.gz` is invalid.
+      example: "`.json.gz`"
   # Avoid raw <s> and <e> placeholders, which Markdown renders as unclosed HTML
   # tags and causes subsequent Registry documentation to appear struck through.
   - target: "$.components.schemas.InputDatadogAgent.properties.samplingRules"
@@ -2276,6 +2280,7 @@ actions:
           operationId: createDefaultLakeLakehouse
           x-terraform-resource: true
           x-terraform-resource-name: CriblLakeHouse
+          x-terraform-create-disabled-message: "Cribl Lake Lakehouses are deprecated and new Lakehouses can no longer be created. Existing Lakehouses may still be imported, read, updated, and deleted while you migrate to Lakehouse engines in Cribl Search."
           requestBody:
             required: true
             content:

@@ -66,6 +66,8 @@ Optional:
 - `type` (String)
 
 <a id="nestedatt--elements--dashboard_element_visualization--layout"></a>
+<a id="nestedatt--elements--dashboard_element_input--layout"></a>
+<a id="nestedatt--elements--dashboard_element--layout"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.layout`
 
 Required:
@@ -76,6 +78,7 @@ Required:
 - `y` (Number)
 
 <a id="nestedatt--elements--dashboard_element_visualization--search"></a>
+<a id="nestedatt--elements--dashboard_element_input--search"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search`
 
 Optional:
@@ -86,6 +89,7 @@ Optional:
 - `search_query_metric` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric))
 
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_saved"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_saved"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search.search_query_saved`
 
 Optional:
@@ -96,6 +100,7 @@ Optional:
 - `type` (String)
 
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search.search_query_inline`
 
 Optional:
@@ -109,6 +114,13 @@ Optional:
 - `type` (String)
 
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline--earliest"></a>
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline--latest"></a>
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--earliest"></a>
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--latest"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline--earliest"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline--latest"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--earliest"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--latest"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search.search_query_inline.earliest`
 
 Optional:
@@ -116,15 +128,8 @@ Optional:
 - `str` (String)
 - `number` (Number)
 
-<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline--latest"></a>
-### Nested Schema for `elements.dashboard_element_visualization.search.search_query_inline.latest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_values"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_values"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search.search_query_values`
 
 Optional:
@@ -133,6 +138,7 @@ Optional:
 - `values` (List of String)
 
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric`
 
 Optional:
@@ -142,23 +148,9 @@ Optional:
 - `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries))
 - `type` (String)
 
-<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--earliest"></a>
-### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.earliest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
-<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--latest"></a>
-### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.latest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries"></a>
+<a id="nestedatt--elements--dashboard_element--search"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.queries`
 
 Optional:
@@ -168,6 +160,7 @@ Optional:
 - `query` (String)
 
 <a id="nestedatt--elements--dashboard_element_visualization--title_action"></a>
+<a id="nestedatt--elements--dashboard_element--title_action"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.title_action`
 
 Required:
@@ -194,108 +187,6 @@ Optional:
 - `title` (String)
 - `type` (String)
 
-<a id="nestedatt--elements--dashboard_element_input--layout"></a>
-### Nested Schema for `elements.dashboard_element_input.layout`
-
-Required:
-
-- `h` (Number)
-- `w` (Number)
-- `x` (Number)
-- `y` (Number)
-
-<a id="nestedatt--elements--dashboard_element_input--search"></a>
-### Nested Schema for `elements.dashboard_element_input.search`
-
-Optional:
-
-- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_saved))
-- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline))
-- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_values))
-- `search_query_metric` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric))
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_saved"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_saved`
-
-Optional:
-
-- `query` (String)
-- `query_id` (String)
-- `run_mode` (String)
-- `type` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_inline`
-
-Optional:
-
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline--latest))
-- `parent_search_id` (String)
-- `query` (String)
-- `sample_rate` (Number)
-- `timezone` (String)
-- `type` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline--earliest"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_inline.earliest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline--latest"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_inline.latest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_values"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_values`
-
-Optional:
-
-- `type` (String)
-- `values` (List of String)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_metric`
-
-Optional:
-
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--latest))
-- `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--queries))
-- `type` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--earliest"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.earliest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--latest"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.latest`
-
-Optional:
-
-- `str` (String)
-- `number` (Number)
-
-<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries"></a>
-### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.queries`
-
-Optional:
-
-- `alias` (String)
-- `local_id` (String)
-- `query` (String)
-
 <a id="nestedatt--elements--dashboard_element"></a>
 ### Nested Schema for `elements.dashboard_element`
 
@@ -310,37 +201,6 @@ Optional:
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--title_action))
 - `type` (String)
 - `variant` (String)
-
-<a id="nestedatt--elements--dashboard_element--layout"></a>
-### Nested Schema for `elements.dashboard_element.layout`
-
-Required:
-
-- `h` (Number)
-- `w` (Number)
-- `x` (Number)
-- `y` (Number)
-
-<a id="nestedatt--elements--dashboard_element--search"></a>
-### Nested Schema for `elements.dashboard_element.search`
-
-Optional:
-
-- `alias` (String)
-- `local_id` (String)
-- `query` (String)
-
-<a id="nestedatt--elements--dashboard_element--title_action"></a>
-### Nested Schema for `elements.dashboard_element.title_action`
-
-Required:
-
-- `label` (String) Display text for the action link.
-- `url` (String) Target URL for the action.
-
-Optional:
-
-- `open_in_new_tab` (Boolean) If <code>true</code>, opens the link in a new browser tab.
 
 <a id="nestedatt--groups"></a>
 ### Nested Schema for `groups`

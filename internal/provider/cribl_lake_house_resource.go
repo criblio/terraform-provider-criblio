@@ -39,7 +39,7 @@ func (r *CriblLakeHouseResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *CriblLakeHouseResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "CriblLakeHouse Resource",
+		MarkdownDescription: "Cribl Lake Lakehouses are deprecated and new Lakehouses can no longer be created. Existing Lakehouses may still be imported, read, updated, and deleted while you migrate to Lakehouse engines in Cribl Search.",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Required:    false,
@@ -90,26 +90,8 @@ func (r *CriblLakeHouseResource) Configure(_ context.Context, req resource.Confi
 }
 
 func (r *CriblLakeHouseResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var model CriblLakeHouseModel
-	var plan types.Object
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	resp.Diagnostics.Append(plan.As(ctx, &model, basetypes.ObjectAsOptions{
-		UnhandledNullAsEmpty:    true,
-		UnhandledUnknownAsEmpty: true,
-	})...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	apiModel, err := r.api.Create(ctx, model)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		return
-	}
-	applyCriblLakeHouseAPIToState(apiModel, &model, true, false)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+	resp.Diagnostics.AddError("Resource creation is disabled", "Cribl Lake Lakehouses are deprecated and new Lakehouses can no longer be created. Existing Lakehouses may still be imported, read, updated, and deleted while you migrate to Lakehouse engines in Cribl Search.")
+	return
 }
 
 func (r *CriblLakeHouseResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {

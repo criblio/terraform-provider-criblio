@@ -110,6 +110,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.Action = boolAnnotation(operation, "x-terraform-action")
 			resource.ActionResponse = boolAnnotation(operation, "x-terraform-action-response")
 			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
+			resource.CreateDisabledMessage = scalarValue(operation, "x-terraform-create-disabled-message")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
 			resource := ensureResource(resources, name)
@@ -1382,7 +1383,9 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 						fields[index].Optional = true
 						fields[index].Computed = true
 					}
-					fields[index].ForceNew = true
+					// A create-time query parameter is not necessarily resource identity.
+					// If PATCH accepts the same field, Terraform can update it in place.
+					fields[index].ForceNew = fields[index].ForceNew || !fields[index].UpdateField
 					fields[index].QueryParam = true
 				}
 			}

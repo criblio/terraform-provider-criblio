@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
@@ -9,9 +8,7 @@ import (
 )
 
 func TestCriblLakeHouse(t *testing.T) {
-	if os.Getenv("DEPLOYMENT") == "onprem" {
-		t.Skip("Skipping resource for On-Prem deployments as it is not supported")
-	}
+	t.Skip("Lakehouses are deprecated and the API no longer permits creating them")
 
 	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
 	id := "tf_lakehouse_" + suffix
