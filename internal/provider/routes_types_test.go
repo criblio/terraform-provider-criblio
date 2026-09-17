@@ -244,6 +244,7 @@ func TestRoutesModelUpdateBodyNormalizesCommentsGroupsAndRouteGroupID(t *testing
 		"name":        types.StringValue("second"),
 	}
 	routeAttrs := map[string]attr.Value{
+		"auto_parse":               types.BoolNull(),
 		"clones":                   types.ListNull(types.MapType{ElemType: types.StringType}),
 		"context":                  types.StringNull(),
 		"description":              types.StringNull(),
@@ -327,6 +328,7 @@ func TestRoutesModelUpdateBodyNormalizesCommentsGroupsAndRouteGroupID(t *testing
 func TestApplyRoutesAPIToStateImportDefaultsMissingRouteGroupID(t *testing.T) {
 	routeTypes := RoutesRoutesAttrTypes()
 	apiRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
+		"auto_parse":               types.BoolValue(false),
 		"clones":                   types.ListValueMust(types.MapType{ElemType: types.StringType}, nil),
 		"context":                  types.StringNull(),
 		"description":              types.StringNull(),
@@ -657,6 +659,7 @@ func TestPackRoutesModelUpdateBodyUsesRoutesNormalization(t *testing.T) {
 		}),
 		Routes: types.ListValueMust(types.ObjectType{AttrTypes: routeTypes}, []attr.Value{
 			types.ObjectValueMust(routeTypes, map[string]attr.Value{
+				"auto_parse":               types.BoolNull(),
 				"clones":                   types.ListNull(types.MapType{ElemType: types.StringType}),
 				"context":                  types.StringNull(),
 				"description":              types.StringNull(),
@@ -705,6 +708,7 @@ func TestRoutesListWithDefaultGroupIDSetsDefaultForNullAndUnknown(t *testing.T) 
 	routeTypes := RoutesRoutesAttrTypes()
 	routes := types.ListValueMust(types.ObjectType{AttrTypes: routeTypes}, []attr.Value{
 		types.ObjectValueMust(routeTypes, map[string]attr.Value{
+			"auto_parse":               types.BoolNull(),
 			"clones":                   types.ListNull(types.MapType{ElemType: types.StringType}),
 			"context":                  types.StringNull(),
 			"description":              types.StringNull(),
@@ -721,6 +725,7 @@ func TestRoutesListWithDefaultGroupIDSetsDefaultForNullAndUnknown(t *testing.T) 
 			"id":                       types.StringNull(),
 		}),
 		types.ObjectValueMust(routeTypes, map[string]attr.Value{
+			"auto_parse":               types.BoolNull(),
 			"clones":                   types.ListNull(types.MapType{ElemType: types.StringType}),
 			"context":                  types.StringNull(),
 			"description":              types.StringNull(),

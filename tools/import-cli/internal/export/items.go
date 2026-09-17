@@ -67,6 +67,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if r.TypeName == "criblio_subscription" {
 		custom.ApplySubscriptionDefaults(attrs)
 	}
+	if r.TypeName == "criblio_notification" {
+		pruneNotificationTargetConfigs(attrs)
+	}
 	if r.TypeName == "criblio_pack" {
 		custom.ApplyPackDefaults(attrs)
 	}
