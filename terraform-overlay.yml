@@ -3674,3 +3674,146 @@ actions:
       x-terraform-optional-computed: true
       x-terraform-use-state-for-unknown: true
       x-terraform-force-new-always: true
+
+  # MON-762: criblio_monitor -- Aetos alert monitors.
+  # Backend route is /products/lakehouse_engine_metrics/monitors (AETOS_PREFIX). Requests and
+  # responses both reference upstream's native AetosMonitorConf; annotated in place rather than
+  # duplicated, so new upstream fields arrive for free.
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors.get"
+    update:
+      x-terraform-list: Monitor
+      x-terraform-list-name: Monitors
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.get"
+    update:
+      x-terraform-read: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.patch"
+    update:
+      x-terraform-update: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.delete"
+    update:
+      x-terraform-delete: Monitor
+
+  # $profileRef is UI-only linkage to a shared monitor profile; no criblio_monitor_profile
+  # resource exists yet to create the IDs it references. $configRefs is the equivalent linkage
+  # surface on the shared Inheritable schema used by every profile-linkable field below. Both
+  # excluded until profile-linked resources exist -- not a permanent limitation.
+  - target: "$.components.schemas.AetosMonitorConf.properties"
+    update:
+      "$profileRef":
+        x-terraform-ignore: true
+  - target: "$.components.schemas.Inheritable.properties"
+    update:
+      "$configRefs":
+        x-terraform-ignore: true
+
+  # managedBy is stamped by the backend, never user-set; fix it at the schema level (not just
+  # Computed) so Terraform rejects any config attempt to set it to something else.
+  - target: "$.components.schemas.AetosMonitorConf.properties.managedBy"
+    update:
+      const: terraform
+      default: terraform
+      x-terraform-fixed-value: terraform
+
+  # notification and silence are both listed in AetosMonitorConf.required upstream, but a live
+  # probe against a real backend (POST with neither field present) returned 200 -- the backend
+  # does not actually enforce either. Restate required without both so codegen renders them as
+  # genuinely optional instead of forcing every monitor (including plain threshold monitors) to
+  # fabricate a throwaway notification block or an empty silence list.
+  - target: "$.components.schemas.AetosMonitorConf"
+    update:
+      required:
+        - datasetId
+        - enabled
+        - expr
+        - firingCondition
+        - firingRule
+        - id
+        - metadata
+        - name
+        - priority
+        - query
+        - team
+        - type
+
+  # notification is a real 2-branch discriminated union (policy-based routing vs direct
+  # target delivery), but both branches are anonymous inline schemas upstream -- codegen needs
+  # named schemas to expose them as distinct Terraform sub-blocks. Name them here, each with its
+  # own self-contained `type: const` discriminator, then narrow NotificationConfig /
+  # InheritableINotificationConfig to reference the named pair (+ Inheritable for profile
+  # linkage, excluded above but the branch itself is harmless to keep for shape completeness).
+  - target: "$.components.schemas"
+    update:
+      MonitorPolicyNotificationConfig:
+        type: object
+        properties:
+          config:
+            type: array
+            items:
+              $ref: "#/components/schemas/NotificationPolicy"
+            description: Notification policy entries for policy-based routing.
+          enabled:
+            type: boolean
+            description: Whether notifications are enabled for this monitor.
+          type:
+            type: string
+            const: policy
+            description: "Type of notification configuration: policy-based routing."
+        required:
+          - config
+          - enabled
+          - type
+      MonitorTargetNotificationConfig:
+        type: object
+        properties:
+          config:
+            type: array
+            items:
+              $ref: "#/components/schemas/TemplateTargetPair"
+            description: Template and target pairs for direct target-based delivery.
+          enabled:
+            type: boolean
+            description: Whether notifications are enabled for this monitor.
+          type:
+            type: string
+            const: target
+            description: "Type of notification configuration: direct target-based delivery."
+        required:
+          - config
+          - enabled
+          - type
+  - target: "$.components.schemas.NotificationConfig"
+    replace:
+      oneOf:
+        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
+        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+      description: Notification settings for a monitor.
+      title: NotificationConfig
+  - target: "$.components.schemas.InheritableINotificationConfig"
+    replace:
+      oneOf:
+        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
+        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+        - $ref: "#/components/schemas/Inheritable"
+
+  # detectionConfig is a real 4-branch oneOf (anomaly/change/outlier/forecast) with no
+  # discriminator declared upstream. Without one, codegen falls back to shape-matching
+  # (OneOfShapeMatches), which is unsafe here: AnomalyConfig has no strictly-required fields, so
+  # it greedily matches almost any object on read -- including forecast's payload (live-verified:
+  # a forecast monitor round-tripped back as anomaly_config with algorithm="linear"/
+  # seasonality="hourly" copied verbatim from the forecast fields, caught only by Terraform's own
+  # post-apply consistency check). Add the real discriminator -- the sibling `type` field on
+  # AetosMonitorConf itself -- so read-path dispatch is unambiguous.
+  - target: "$.components.schemas.DetectionConfigTypeAetosMonitorConf"
+    update:
+      x-terraform-discriminator-at-parent: true
+      discriminator:
+        propertyName: type
+        mapping:
+          anomaly: "#/components/schemas/AnomalyConfig"
+          change: "#/components/schemas/ChangeConfig"
+          outlier: "#/components/schemas/OutlierConfig"
+          forecast: "#/components/schemas/ForecastConfig"
