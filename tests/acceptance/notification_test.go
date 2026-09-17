@@ -22,8 +22,9 @@ func TestNotification(t *testing.T) {
 				// A non-email target may provide an empty override object. This
 				// guards against making the SMTP-only email_recipient field
 				// mandatory for every notification target type.
-				Config:   notificationConfigWithoutEmailRecipient(),
-				PlanOnly: true,
+				Config:             notificationConfigWithoutEmailRecipient(),
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: true,
 			},
 			{
 				Config: notificationConfig(false, "60s"),
