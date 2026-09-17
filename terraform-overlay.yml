@@ -3725,6 +3725,21 @@ actions:
       default: terraform
       x-terraform-fixed-value: terraform
 
+  # templateParams' value is a map-of-map once narrowed (Record<label, Record<string,string>>).
+  # tools/codegen/parser.go's map-detection only recurses one level -- a value schema that's
+  # itself additionalProperties (no `properties` key) silently falls back to a flat
+  # string-valued map, losing the inner nesting. Left as opaque JSON until fixed -- a real
+  # codegen limitation (INFRA-12649), not a design choice. Confirmed both this build and the
+  # implement_monitor_resource branch (PR #225) missed this and ship the silent-flattening bug
+  # (schema.MapAttribute{ElementType: types.StringType}) instead -- this override prevents it.
+  - target: "$.components.schemas.AetosMonitorConf.properties.templateParams"
+    replace:
+      type: object
+      additionalProperties: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
+      description: "Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } })."
+
   # notification and silence are both listed in AetosMonitorConf.required upstream, but a live
   # probe against a real backend (POST with neither field present) returned 200 -- the backend
   # does not actually enforce either. Restate required without both so codegen renders them as

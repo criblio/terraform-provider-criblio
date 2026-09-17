@@ -27,7 +27,7 @@ type MonitorModel struct {
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         types.List                            `tfsdk:"silence" json:"silence,omitempty"`
-	TemplateParams                  types.Map                             `tfsdk:"template_params" json:"templateParams,omitempty"`
+	TemplateParams                  jsontypes.Normalized                  `tfsdk:"template_params" json:"templateParams,omitempty"`
 	Type                            types.String                          `tfsdk:"type" json:"type,omitempty"`
 	Unit                            types.String                          `tfsdk:"unit" json:"unit,omitempty"`
 	AnomalyConfig                   *AnomalyConfigModel                   `tfsdk:"anomaly_config" json:"AnomalyConfig,omitempty"`
@@ -60,7 +60,7 @@ type MonitorResourceModel struct {
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
-	TemplateParams                  types.Map                             `tfsdk:"template_params" json:"templateParams,omitempty"`
+	TemplateParams                  jsontypes.Normalized                  `tfsdk:"template_params" json:"templateParams,omitempty"`
 	Type                            types.String                          `tfsdk:"type" json:"type,omitempty"`
 	Unit                            types.String                          `tfsdk:"unit" json:"unit,omitempty"`
 	AnomalyConfig                   *AnomalyConfigModel                   `tfsdk:"anomaly_config" json:"AnomalyConfig,omitempty"`
@@ -93,7 +93,7 @@ type MonitorDataSourceModel struct {
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
-	TemplateParams                  types.Map                             `tfsdk:"template_params" json:"templateParams,omitempty"`
+	TemplateParams                  jsontypes.Normalized                  `tfsdk:"template_params" json:"templateParams,omitempty"`
 	Type                            types.String                          `tfsdk:"type" json:"type,omitempty"`
 	Unit                            types.String                          `tfsdk:"unit" json:"unit,omitempty"`
 	AnomalyConfig                   *AnomalyConfigModel                   `tfsdk:"anomaly_config" json:"AnomalyConfig,omitempty"`
@@ -116,19 +116,19 @@ type MonitorDataSourceModel struct {
 }
 
 type MonitorAPIModel struct {
-	DatasetID      *string           `json:"datasetId,omitempty"`
-	Description    *string           `json:"description,omitempty"`
-	Enabled        *bool             `json:"enabled,omitempty"`
-	Expr           any               `json:"expr,omitempty"`
-	ID             *string           `json:"id,omitempty"`
-	ManagedBy      *string           `json:"managedBy,omitempty"`
-	Name           *string           `json:"name,omitempty"`
-	Query          any               `json:"query,omitempty"`
-	SearchMode     *string           `json:"searchMode,omitempty"`
-	Silence        []string          `json:"silence,omitempty"`
-	TemplateParams map[string]string `json:"templateParams,omitempty"`
-	Type           *string           `json:"type,omitempty"`
-	Unit           *string           `json:"unit,omitempty"`
+	DatasetID      *string  `json:"datasetId,omitempty"`
+	Description    *string  `json:"description,omitempty"`
+	Enabled        *bool    `json:"enabled,omitempty"`
+	Expr           any      `json:"expr,omitempty"`
+	ID             *string  `json:"id,omitempty"`
+	ManagedBy      *string  `json:"managedBy,omitempty"`
+	Name           *string  `json:"name,omitempty"`
+	Query          any      `json:"query,omitempty"`
+	SearchMode     *string  `json:"searchMode,omitempty"`
+	Silence        []string `json:"silence,omitempty"`
+	TemplateParams any      `json:"templateParams,omitempty"`
+	Type           *string  `json:"type,omitempty"`
+	Unit           *string  `json:"unit,omitempty"`
 }
 
 type MonitorExprModel struct {
@@ -486,6 +486,16 @@ func MonitorTerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
+	case jsontypes.Normalized:
+		raw := typed.ValueString()
+		if raw == "" {
+			return map[string]any{}, nil
+		}
+		var output any
+		if err := json.Unmarshal([]byte(raw), &output); err != nil {
+			return nil, err
+		}
+		return output, nil
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:
@@ -513,9 +523,16 @@ func MonitorTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
+		attributeTypes := typed.AttributeTypes(context.Background())
 		attributes := typed.Attributes()
 		for key, attribute := range attributes {
-			value, err := MonitorTerraformValueToJSON(attribute)
+			var value any
+			var err error
+			if attributeType, ok := attributeTypes[key]; ok && attributeType.Equal(jsontypes.NormalizedType{}) {
+				value, err = MonitorObjectJSONFromTerraformValue(attribute)
+			} else {
+				value, err = MonitorTerraformValueToJSON(attribute)
+			}
 			if err != nil {
 				return nil, err
 			}
@@ -531,6 +548,24 @@ func MonitorTerraformValueToJSON(value attr.Value) (any, error) {
 	default:
 		return nil, fmt.Errorf("unsupported Terraform value %T", value)
 	}
+}
+func MonitorObjectJSONFromTerraformValue(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	typed, ok := value.(interface{ ValueString() string })
+	if !ok {
+		return nil, fmt.Errorf("expected normalized JSON string, got %T", value)
+	}
+	raw := typed.ValueString()
+	if raw == "" {
+		return map[string]any{}, nil
+	}
+	var output any
+	if err := json.Unmarshal([]byte(raw), &output); err != nil {
+		return nil, err
+	}
+	return output, nil
 }
 
 func MonitorTerraformNameToAPIName(name string) string {
@@ -593,6 +628,16 @@ func MonitorAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, erro
 			return nil, fmt.Errorf("expected string, got %T", value)
 		}
 		return types.StringValue(typed), nil
+	}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		if typed, ok := value.(string); ok {
+			return jsontypes.NewNormalizedValue(typed), nil
+		}
+		raw, err := json.Marshal(value)
+		if err != nil {
+			return nil, err
+		}
+		return jsontypes.NewNormalizedValue(string(raw)), nil
 	}
 	switch typed := typ.(type) {
 	case types.ListType:
@@ -680,6 +725,9 @@ func MonitorTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
 	}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		return jsontypes.NewNormalizedNull(), nil
+	}
 	switch typed := typ.(type) {
 	case types.ListType:
 		return types.ListNull(typed.ElemType), nil
@@ -758,7 +806,7 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 		output["silence"] = value
 	}
 	if !m.TemplateParams.IsNull() && !m.TemplateParams.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.TemplateParams)
+		value, err := MonitorObjectJSONFromTerraformValue(m.TemplateParams)
 		if err != nil {
 			return nil, fmt.Errorf("convert template_params to API value: %v", err)
 		}
@@ -1038,13 +1086,13 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 		m.Silence = types.ListNull(types.StringType)
 	}
 	if input.TemplateParams != nil {
-		value, diags := types.MapValueFrom(context.Background(), types.StringType, input.TemplateParams)
-		if diags.HasError() {
-			return fmt.Errorf("convert templateParams from API value: %v", diags)
+		raw, err := json.Marshal(input.TemplateParams)
+		if err != nil {
+			return fmt.Errorf("convert templateParams from API value: %v", err)
 		}
-		m.TemplateParams = value
+		m.TemplateParams = jsontypes.NewNormalizedValue(string(raw))
 	} else {
-		m.TemplateParams = types.MapNull(types.StringType)
+		m.TemplateParams = jsontypes.NewNormalizedNull()
 	}
 	if input.Type != nil {
 		m.Type = types.StringValue(*input.Type)

@@ -345,12 +345,12 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Description: `IDs of silence windows that suppress this monitor's alerts.`,
 				ElementType: types.StringType,
 			},
-			"template_params": schema.MapAttribute{
+			"template_params": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Template parameter bindings keyed by query label. Baseline values come from the query's shared configs; non-empty values act as user overrides.`,
-				ElementType: types.StringType,
+				Description: `Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).`,
+				CustomType:  jsontypes.NormalizedType{},
 			},
 			"type": schema.StringAttribute{
 				Required:    true,
@@ -1072,13 +1072,6 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 	if !preserveInputs || (fillMissingInputs && (state.TemplateParams.IsNull() || state.TemplateParams.IsUnknown())) {
 		if !api.TemplateParams.IsNull() && !api.TemplateParams.IsUnknown() {
 			state.TemplateParams = api.TemplateParams
-		}
-	}
-	if state.TemplateParams.IsNull() || state.TemplateParams.IsUnknown() {
-		state.TemplateParams = types.MapNull(types.StringType)
-	} else if elementType := state.TemplateParams.ElementType(context.Background()); elementType == nil || !elementType.Equal(types.StringType) {
-		if len(state.TemplateParams.Elements()) == 0 {
-			state.TemplateParams = types.MapNull(types.StringType)
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Type.IsNull() || state.Type.IsUnknown())) {
