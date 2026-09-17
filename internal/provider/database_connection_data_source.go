@@ -53,10 +53,18 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 				Computed:    true,
 				Description: `Maximum time (in milliseconds) to wait when establishing the database connection.`,
 			},
+			"credentials_secret": schema.StringAttribute{
+				Computed:    true,
+				Description: `Name of the stored credentials secret containing username and password for SQL Server configObj authentication.`,
+			},
 			"creds_secrets": schema.StringAttribute{
 				Computed:    true,
 				Sensitive:   true,
 				Description: `Name of the stored credentials secret containing username and password. Used with Oracle connections.`,
+			},
+			"database": schema.StringAttribute{
+				Computed:    true,
+				Description: `Database to connect to instead of the server default.`,
 			},
 			"database_type": schema.StringAttribute{
 				Computed:    true,
@@ -69,6 +77,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
+			},
+			"host": schema.StringAttribute{
+				Computed:    true,
+				Description: `Hostname of the server to connect to.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -97,10 +109,18 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 							Computed:    true,
 							Description: `Maximum time (in milliseconds) to wait when establishing the database connection.`,
 						},
+						"credentials_secret": schema.StringAttribute{
+							Computed:    true,
+							Description: `Name of the stored credentials secret containing username and password for SQL Server configObj authentication.`,
+						},
 						"creds_secrets": schema.StringAttribute{
 							Computed:    true,
 							Sensitive:   true,
 							Description: `Name of the stored credentials secret containing username and password. Used with Oracle connections.`,
+						},
+						"database": schema.StringAttribute{
+							Computed:    true,
+							Description: `Database to connect to instead of the server default.`,
 						},
 						"database_type": schema.StringAttribute{
 							Computed:    true,
@@ -110,9 +130,17 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 							Computed:    true,
 							Description: `Brief description of the Database Connection.`,
 						},
+						"host": schema.StringAttribute{
+							Computed:    true,
+							Description: `Hostname of the server to connect to.`,
+						},
 						"id": schema.StringAttribute{
 							Computed:    true,
 							Description: `Unique identifier for the Database Connection.`,
+						},
+						"log_on_mechanism": schema.StringAttribute{
+							Computed:    true,
+							Description: `Log On Mechanism for databases that support multiple, like Teradata.`,
 						},
 						"password": schema.StringAttribute{
 							Computed:    true,
@@ -122,6 +150,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 						"request_timeout": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+						},
+						"sslmode": schema.StringAttribute{
+							Computed:    true,
+							Description: `HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.`,
 						},
 						"tags": schema.StringAttribute{
 							Computed:    true,
@@ -184,6 +216,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 					},
 				},
 			},
+			"log_on_mechanism": schema.StringAttribute{
+				Computed:    true,
+				Description: `Log On Mechanism for databases that support multiple, like Teradata.`,
+			},
 			"password": schema.StringAttribute{
 				Computed:    true,
 				Sensitive:   true,
@@ -192,6 +228,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 			"request_timeout": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+			},
+			"sslmode": schema.StringAttribute{
+				Computed:    true,
+				Description: `HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.`,
 			},
 			"tags": schema.StringAttribute{
 				Computed:    true,

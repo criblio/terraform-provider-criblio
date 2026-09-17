@@ -48,7 +48,7 @@ resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
 
 ### Optional
 
-- `active` (Boolean) If <code>true</code>, the Mapping Ruleset is active. Otherwise, <code>false</code>.
+- `active` (Boolean) Whether the Mapping Ruleset is active.
 - `conf` (Attributes) Configuration for the Mapping Ruleset. (see [below for nested schema](#nestedatt--conf))
 - `id` (String) Unique identifier for the Mapping Ruleset.
 
@@ -68,10 +68,10 @@ Required:
 
 Optional:
 
-- `id` (String) Function type. Always <code>eval</code> for Mapping Rules.
+- `id` (String) Function type for the Mapping Rule.
 - `filter` (String) Boolean filter expression used to determine whether the Mapping Rule applies. Evaluated against the Worker or Edge Node context.
-- `disabled` (Boolean) If <code>true</code>, the function is disabled. Otherwise, <code>false</code>.
-- `final` (Boolean) Always <code>true</code> to ensure that every Mapping Rule is final. Once a Mapping Rule matches (its <code>filter</code> evaluates to <code>true</code>), no further Mapping Rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.
+- `disabled` (Boolean) Disable this Mapping Rule.
+- `final` (Boolean) When a Mapping Rule matches, no further rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.
 - `description` (String) Brief description of the function.
 - `group_id` (String) The Worker Group to map matching events to.
 
@@ -87,11 +87,11 @@ Required:
 
 Required:
 
-- `value` (String) The <code>id</code> of the group to assign the Worker or Edge Node to if the Mapping Rule applies.
+- `value` (String) The group to assign the Worker or Edge Node to when the Mapping Rule matches.
 
 Optional:
 
-- `name` (String) Always <code>groupId</code> to specify the assignment type.
+- `name` (String) Assignment type for the Mapping Rule.
 
 ## Import
 

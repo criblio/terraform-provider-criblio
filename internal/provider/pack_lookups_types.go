@@ -17,51 +17,55 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type PackLookupsModel struct {
-	Content     types.String `tfsdk:"content" json:"content,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID          types.String `tfsdk:"id" json:"id,omitempty"`
-	Mode        types.String `tfsdk:"mode" json:"mode,omitempty"`
-	Pack        types.String `tfsdk:"pack" json:"pack,omitempty"`
-	PendingTask types.Object `tfsdk:"pending_task" json:"pendingTask,omitempty"`
-	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
-	Version     types.String `tfsdk:"version" json:"version,omitempty"`
+	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
+	Mode        types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	Modified    types.Float64 `tfsdk:"modified" json:"modified,omitempty"`
+	Pack        types.String  `tfsdk:"pack" json:"pack,omitempty"`
+	PendingTask types.Object  `tfsdk:"pending_task" json:"pendingTask,omitempty"`
+	Tags        types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Version     types.String  `tfsdk:"version" json:"version,omitempty"`
 }
 
 type PackLookupsResourceModel struct {
-	Content     types.String `tfsdk:"content" json:"content,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID          types.String `tfsdk:"id" json:"id,omitempty"`
-	Mode        types.String `tfsdk:"mode" json:"mode,omitempty"`
-	Pack        types.String `tfsdk:"pack" json:"pack,omitempty"`
-	PendingTask types.Object `tfsdk:"pending_task" json:"pendingTask,omitempty"`
-	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
-	Version     types.String `tfsdk:"version" json:"version,omitempty"`
+	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
+	Mode        types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	Modified    types.Float64 `tfsdk:"modified" json:"modified,omitempty"`
+	Pack        types.String  `tfsdk:"pack" json:"pack,omitempty"`
+	PendingTask types.Object  `tfsdk:"pending_task" json:"pendingTask,omitempty"`
+	Tags        types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Version     types.String  `tfsdk:"version" json:"version,omitempty"`
 }
 
 type PackLookupsDataSourceModel struct {
-	Content     types.String `tfsdk:"content" json:"content,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID          types.String `tfsdk:"id" json:"id,omitempty"`
-	Mode        types.String `tfsdk:"mode" json:"mode,omitempty"`
-	Pack        types.String `tfsdk:"pack" json:"pack,omitempty"`
-	PendingTask types.Object `tfsdk:"pending_task" json:"pendingTask,omitempty"`
-	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
-	Version     types.String `tfsdk:"version" json:"version,omitempty"`
+	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
+	Mode        types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	Modified    types.Float64 `tfsdk:"modified" json:"modified,omitempty"`
+	Pack        types.String  `tfsdk:"pack" json:"pack,omitempty"`
+	PendingTask types.Object  `tfsdk:"pending_task" json:"pendingTask,omitempty"`
+	Tags        types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Version     types.String  `tfsdk:"version" json:"version,omitempty"`
 }
 
 type PackLookupsAPIModel struct {
-	Content     *string `json:"content,omitempty"`
-	Description *string `json:"description,omitempty"`
-	GroupID     *string `json:"groupId,omitempty"`
-	ID          *string `json:"id,omitempty"`
-	Mode        *string `json:"mode,omitempty"`
-	Pack        *string `json:"pack,omitempty"`
-	PendingTask any     `json:"pendingTask,omitempty"`
-	Tags        *string `json:"tags,omitempty"`
-	Version     *string `json:"version,omitempty"`
+	Content     *string  `json:"content,omitempty"`
+	Description *string  `json:"description,omitempty"`
+	GroupID     *string  `json:"groupId,omitempty"`
+	ID          *string  `json:"id,omitempty"`
+	Mode        *string  `json:"mode,omitempty"`
+	Modified    *float64 `json:"modified,omitempty"`
+	Pack        *string  `json:"pack,omitempty"`
+	PendingTask any      `json:"pendingTask,omitempty"`
+	Tags        *string  `json:"tags,omitempty"`
+	Version     *string  `json:"version,omitempty"`
 }
 
 type PackLookupsPendingTaskModel struct {
@@ -364,6 +368,11 @@ func (m *PackLookupsModel) UnmarshalJSON(data []byte) error {
 		m.Mode = types.StringValue(*input.Mode)
 	} else {
 		m.Mode = types.StringNull()
+	}
+	if input.Modified != nil {
+		m.Modified = types.Float64Value(*input.Modified)
+	} else {
+		m.Modified = types.Float64Null()
 	}
 	if input.Pack != nil {
 		m.Pack = types.StringValue(*input.Pack)

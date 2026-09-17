@@ -54,6 +54,10 @@ func (d *PackLookupsDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 				Computed:    true,
 				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
 			},
+			"modified": schema.Float64Attribute{
+				Computed:    true,
+				Description: `Last modification time of the Lookup file, in milliseconds since the Unix epoch.`,
+			},
 			"pack": schema.StringAttribute{
 				Required: true,
 			},

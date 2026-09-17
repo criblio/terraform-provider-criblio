@@ -77,7 +77,7 @@ func (d *GlobalVarDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 			},
 			"value": schema.StringAttribute{
 				Computed:    true,
-				Description: `Value of the Global Variable. For <code>type: expression</code>, the value is a JavaScript expression.`,
+				Description: `Value of the Global Variable. When the type is expression, enter a JavaScript expression.`,
 			},
 		},
 	}

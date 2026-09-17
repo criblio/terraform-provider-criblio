@@ -244,7 +244,7 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique identifier for the Instance Settings entry.`,
+									Description: `Unique identifier for the Instance Settings entry. Always <code>distributed</code>.`,
 								},
 								"master": schema.SingleNestedAttribute{
 									Computed:    true,
@@ -448,7 +448,7 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique identifier for the bootstrap settings entry.`,
+									Description: `Unique identifier for the bootstrap settings entry. Always <code>bootstrap</code>.`,
 								},
 							},
 						},

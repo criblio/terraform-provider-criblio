@@ -153,42 +153,66 @@ func GroupSystemSettingsAPIFieldAttrTypes() map[string]attr.Type {
 }
 
 type GroupSystemSettingsAPISslModel struct {
-	CaPath      types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
-	CertPath    types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	Disabled    types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
-	Passphrase  types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
-	PrivKeyPath types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	CaPath          types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	CertPath        types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	CertificateName types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	Disabled        types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Passphrase      types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	PrivKeyPath     types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 }
 
 type GroupSystemSettingsAPISslAPIModel struct {
-	CaPath      *string `json:"caPath,omitempty"`
-	CertPath    *string `json:"certPath,omitempty"`
-	Disabled    *bool   `json:"disabled,omitempty"`
-	Passphrase  *string `json:"passphrase,omitempty"`
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
+	CaPath          *string `json:"caPath,omitempty"`
+	CertPath        *string `json:"certPath,omitempty"`
+	CertificateName *string `json:"certificateName,omitempty"`
+	Disabled        *bool   `json:"disabled,omitempty"`
+	Passphrase      *string `json:"passphrase,omitempty"`
+	PrivKeyPath     *string `json:"privKeyPath,omitempty"`
 }
 
 func GroupSystemSettingsAPISslAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"ca_path":       types.StringType,
-		"cert_path":     types.StringType,
-		"disabled":      types.BoolType,
-		"passphrase":    types.StringType,
-		"priv_key_path": types.StringType,
+		"ca_path":          types.StringType,
+		"cert_path":        types.StringType,
+		"certificate_name": types.StringType,
+		"disabled":         types.BoolType,
+		"passphrase":       types.StringType,
+		"priv_key_path":    types.StringType,
 	}
 }
 
 type GroupSystemSettingsAppsModel struct {
-	Enabled types.Bool `tfsdk:"enabled" json:"enabled,omitempty"`
+	AppBackendBrokerOrigin                types.String `tfsdk:"app_backend_broker_origin" json:"appBackendBrokerOrigin,omitempty"`
+	AppBackendMaxCallbacksPerInstallation types.Int64  `tfsdk:"app_backend_max_callbacks_per_installation" json:"appBackendMaxCallbacksPerInstallation,omitempty"`
+	AppBackendMaxCallbacksTotal           types.Int64  `tfsdk:"app_backend_max_callbacks_total" json:"appBackendMaxCallbacksTotal,omitempty"`
+	AppBackendMaxInFlight                 types.Int64  `tfsdk:"app_backend_max_in_flight" json:"appBackendMaxInFlight,omitempty"`
+	AppScheduleBodyExpressionMaxLength    types.Int64  `tfsdk:"app_schedule_body_expression_max_length" json:"appScheduleBodyExpressionMaxLength,omitempty"`
+	AppScheduledConcurrentJobLimit        types.Int64  `tfsdk:"app_scheduled_concurrent_job_limit" json:"appScheduledConcurrentJobLimit,omitempty"`
+	AppSchedulesMax                       types.Int64  `tfsdk:"app_schedules_max" json:"appSchedulesMax,omitempty"`
+	Enabled                               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
 }
 
 type GroupSystemSettingsAppsAPIModel struct {
-	Enabled *bool `json:"enabled,omitempty"`
+	AppBackendBrokerOrigin                *string `json:"appBackendBrokerOrigin,omitempty"`
+	AppBackendMaxCallbacksPerInstallation *int64  `json:"appBackendMaxCallbacksPerInstallation,omitempty"`
+	AppBackendMaxCallbacksTotal           *int64  `json:"appBackendMaxCallbacksTotal,omitempty"`
+	AppBackendMaxInFlight                 *int64  `json:"appBackendMaxInFlight,omitempty"`
+	AppScheduleBodyExpressionMaxLength    *int64  `json:"appScheduleBodyExpressionMaxLength,omitempty"`
+	AppScheduledConcurrentJobLimit        *int64  `json:"appScheduledConcurrentJobLimit,omitempty"`
+	AppSchedulesMax                       *int64  `json:"appSchedulesMax,omitempty"`
+	Enabled                               *bool   `json:"enabled,omitempty"`
 }
 
 func GroupSystemSettingsAppsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"enabled": types.BoolType,
+		"app_backend_broker_origin":                  types.StringType,
+		"app_backend_max_callbacks_per_installation": types.Int64Type,
+		"app_backend_max_callbacks_total":            types.Int64Type,
+		"app_backend_max_in_flight":                  types.Int64Type,
+		"app_schedule_body_expression_max_length":    types.Int64Type,
+		"app_scheduled_concurrent_job_limit":         types.Int64Type,
+		"app_schedules_max":                          types.Int64Type,
+		"enabled":                                    types.BoolType,
 	}
 }
 

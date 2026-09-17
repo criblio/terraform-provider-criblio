@@ -1065,12 +1065,24 @@ actions:
     update:
       x-terraform-list: InstanceSettings
       x-terraform-list-name: InstanceSettings
-  - target: "$.components.schemas.InstanceSettings"
+  # Upstream 4.20 renamed these oneOf branches to InstanceSettingsResponse and
+  # BootstrapSettingsResponse. Keep the legacy schema names in the merged spec
+  # so generated model names and the existing Terraform schema stay stable.
+  - target: "$.components.schemas"
     update:
-      x-terraform-name: instance_settings_schema1
-  - target: "$.components.schemas.BootstrapSettings"
+      InstanceSettings:
+        allOf:
+          - $ref: "#/components/schemas/InstanceSettingsResponse"
+        x-terraform-name: instance_settings_schema1
+      BootstrapSettings:
+        allOf:
+          - $ref: "#/components/schemas/BootstrapSettingsResponse"
+        x-terraform-name: instance_settings_schema2
+  - target: "$.components.schemas.InstanceSettingsSchema"
     update:
-      x-terraform-name: instance_settings_schema2
+      oneOf:
+        - $ref: "#/components/schemas/InstanceSettings"
+        - $ref: "#/components/schemas/BootstrapSettings"
   - target: "$.components.schemas.CloudWorkspaceSchema.properties.disableSNIRouting"
     update:
       x-terraform-name: disable_sni_routing
@@ -2182,44 +2194,44 @@ actions:
   - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.delete"
     update:
       x-terraform-delete: SearchEngine
-  - target: "$.components.schemas.LocalSearchEngine.properties.id"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.id"
     update:
       x-terraform-force-new: true
       x-terraform-suppress-diff: explicit
-  - target: "$.components.schemas.LocalSearchEngine.properties.description"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.description"
     update:
       x-terraform-optional-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.activeWorkflow"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.activeWorkflow"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.datasets"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.datasets"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.deletionStartedAt"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.deletionStartedAt"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.effectiveStatus"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.effectiveStatus"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.engineType"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.engineType"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.hasMain"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.hasMain"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.isComputeDeprovisioned"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.isComputeDeprovisioned"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.isStorageDeprovisioned"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.isStorageDeprovisioned"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.lastProvisionedMs"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.lastProvisionedMs"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.metricsLastPublishedAt"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.metricsLastPublishedAt"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.LocalSearchEngine.properties.status"
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.status"
     update:
       x-terraform-computed: true
 
@@ -3466,6 +3478,9 @@ actions:
     update:
       x-terraform-optional-computed: true
   - target: "$.components.schemas.Notification.properties.targetConfigs"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.NotificationTargetConfig.properties.conf"
     update:
       x-terraform-optional-computed: true
   - target: "$.components.schemas.Notification.properties.conf"

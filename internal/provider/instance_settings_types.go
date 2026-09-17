@@ -881,7 +881,7 @@ func InstanceSettingsOneOfDiscriminator(input map[string]any) string {
 }
 
 func (m *InstanceSettingsModel) unmarshalInstanceSettingsOneOfByShape(raw map[string]any) (bool, error) {
-	if InstanceSettingsOneOfShapeMatches(raw, []string{"id", "mode"}, []string{"cloudWorkspace", "envRegex", "group", "id", "master", "mode", "reportedDeploymentId", "tags"}) {
+	if InstanceSettingsOneOfShapeMatches(raw, []string{"mode"}, []string{"cloudWorkspace", "envRegex", "group", "id", "master", "mode", "reportedDeploymentId", "tags"}) {
 		m.InstanceSettings = &InstanceSettingsVariantModel{}
 		if err := m.InstanceSettings.unmarshalPayload(raw); err != nil {
 			return true, err

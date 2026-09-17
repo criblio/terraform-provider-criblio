@@ -142,6 +142,7 @@ variable "aws_secret_key" {
 - `output_netflow` (Attributes) (see [below for nested schema](#nestedatt--output_netflow))
 - `output_dynatrace_http` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http))
 - `output_dynatrace_otlp` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp))
+- `output_traversal_otlp` (Attributes) (see [below for nested schema](#nestedatt--output_traversal_otlp))
 - `output_sentinel_one_ai_siem` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem))
 - `output_chronicle` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle))
 - `output_databricks` (Attributes) (see [below for nested schema](#nestedatt--output_databricks))
@@ -156,6 +157,7 @@ variable "aws_secret_key" {
 - `output_scality_s3` (Attributes) (see [below for nested schema](#nestedatt--output_scality_s3))
 - `output_alibaba_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_alibaba_cloud_s3))
 - `output_ibm_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_ibm_cloud_s3))
+- `output_databricks_zerobus` (Attributes) (see [below for nested schema](#nestedatt--output_databricks_zerobus))
 
 <a id="nestedatt--output_default"></a>
 ### Nested Schema for `output_default`
@@ -278,11 +280,11 @@ Optional:
 - `on_backpressure` (String)
 - `auth_type` (String) Discriminator value.
 - `login_url` (String)
-- `secret` (String, Sensitive)
 - `refresh_token_field` (String)
 - `rotate_refresh_token` (Boolean)
 - `refresh_url` (String)
 - `refresh_request_params` (Attributes List) (see [below for nested schema](#nestedatt--output_sentinel--refresh_request_params))
+- `oauth_secret_source` (String) Enter the OAuth secret directly, or select a stored text secret
 - `client_id` (String) JavaScript expression to compute the Client ID for the Azure application. Can be a constant.
 - `scope` (String) Scope to pass in the OAuth request
 - `endpoint_urlconfiguration` (String) Enter the data collection endpoint URL or the individual ID
@@ -309,6 +311,8 @@ Optional:
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String)
 - `pq_controls` (Map of String)
+- `secret` (String, Sensitive)
+- `oauth_text_secret` (String) Select or create a stored text secret for the OAuth secret value
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
 - `dcr_id` (String) Immutable ID for the Data Collection Rule (DCR)
 - `dce_endpoint` (String) Data collection endpoint (DCE) URL. In the format: `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com`
@@ -549,11 +553,13 @@ Optional:
 - `wiz_connector_id` (String) The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration.
 - `wiz_environment` (String) Your Wiz deployment environment
 - `data_center` (String) Your Wiz deployment data center (such as us1, us8, or eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.
-- `wiz_sourcetype` (String) Wiz Defend Source type
+- `wiz_sourcetype` (String) The Wiz log source type. Select a predefined type or enter a custom value.
 - `on_backpressure` (String)
 - `description` (String)
 - `token` (String, Sensitive) Wiz Defend Auth token
 - `text_secret` (String)
+- `wiz_vpc_event_format` (String) The format of the VPC Flow Log events
+- `wiz_vpc_flow_log_format` (String) The format string for VPC Flow Log fields
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -1509,9 +1515,14 @@ Optional:
 - `max_file_size_mb` (Number)
 - `encoded_configuration` (String) Enter an encoded string containing Exabeam configurations
 - `collector_instance_id` (String) ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888
+- `aws_authentication_method` (String)
 - `site_name` (String) Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.
 - `site_id` (String) Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.
 - `timezone_offset` (String) Timezone offset
+- `hostname` (String) JavaScript expression for the host from which the log was ingested into the SIEM, evaluated per event. Static values must be quoted or backticked (for example, 'collector-1.example.com'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${host}`. Emitted as the "hostname" metadata field; omitted when empty or not a usable scalar.
+- `forwarder` (String) JavaScript expression for the host that forwarded the log, evaluated per event. Static values must be quoted or backticked (for example, 'fwd-1'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${__forwarder}`. Emitted as the "forwarder" metadata field; omitted when empty or not a usable scalar.
+- `origin` (String) JavaScript expression that must resolve to an object describing the interim agent collector, such as {hostname: origin_host, '@timestamp': _time, path: source}. Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "origin" metadata field; omitted when the result is not a non-empty object.
+- `logtags` (String) JavaScript expression that must resolve to an object of custom metadata key/value pairs (searchable in Exabeam as m_c_logtags_<name>). Assemble the object upstream and reference it here (example: __exabeam_logtags), or build it inline (example: {department: dept, servertype: stype}). Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "logtags" metadata field; omitted when the result is not a non-empty object.
 - `aws_api_key` (String) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String, Sensitive) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `description` (String)
@@ -1519,6 +1530,7 @@ Optional:
 - `directory_batch_size` (Number)
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
+- `aws_secret` (String)
 
 <a id="nestedatt--output_kafka"></a>
 ### Nested Schema for `output_kafka`
@@ -2151,6 +2163,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `report_branch_metrics` (Boolean) Report per-rule event counts and percentages as internal metrics (router.out_events, router.out_events_pct, router.in_events, router.unmatched_events, router.unmatched_events_pct). Adds metric series per rule.
 - `rules` (Attributes List) Event routing rules (see [below for nested schema](#nestedatt--output_router--rules))
 - `description` (String)
 
@@ -2901,6 +2914,7 @@ Optional:
 - `response_honor_retry_after_header` (Boolean)
 - `auth_tokens` (Attributes List) Shared secrets to be used by connected environments to authorize connections. These tokens should also be installed in Cribl Search Source in Cribl.Cloud. (see [below for nested schema](#nestedatt--output_cribl_search_engine--auth_tokens))
 - `on_backpressure` (String)
+- `send_as` (String) Which signals this Destination carries. Logs sends everything to log search, including metric events. Metrics routes metric events to the metric store and drops everything else. Logs and Metrics routes metric events to the metric store and sends the rest to log search. Metric routing requires the receiving Cribl Search Source to be enabled for metrics storage; if it is not, metric events are discarded rather than stored as logs.
 - `use_round_robin_dns` (Boolean)
 - `description` (String)
 - `url` (String)
@@ -3183,6 +3197,7 @@ Optional:
 - `dynamic_dataset` (Boolean)
 - `max_closing_files_to_backpressure` (Number)
 - `max_concurrent_file_parts` (Number)
+- `freshness_grace_period_sec` (Number)
 - `description` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -3564,6 +3579,69 @@ Optional:
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
+- `pq_strict_ordering` (Boolean)
+- `pq_rate_per_sec` (Number)
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number)
+- `pq_max_backpressure_sec` (Number)
+- `pq_max_file_size` (String)
+- `pq_max_size` (String)
+- `pq_path` (String)
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String)
+- `pq_controls` (Map of String)
+
+<a id="nestedatt--output_traversal_otlp"></a>
+### Nested Schema for `output_traversal_otlp`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `auth_type` (String)
+- `endpoint` (String) The endpoint where OTel log events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets).
+- `protocol` (String)
+- `preserve_native_any_value` (Boolean)
+- `compress` (String)
+- `http_compress` (String)
+- `http_logs_endpoint_override` (String)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_traversal_otlp--metadata))
+- `dynamic_headers_enabled` (Boolean)
+- `dynamic_headers_field` (String)
+- `concurrency` (Number)
+- `max_payload_size_kb` (Number)
+- `timeout_sec` (Number)
+- `max_connection_reuse_sec` (Number)
+- `flush_period_sec` (Number)
+- `failed_request_logging_mode` (String)
+- `connection_timeout` (Number)
+- `keep_alive_time` (Number)
+- `keep_alive` (Boolean)
+- `on_backpressure` (String)
+- `description` (String)
+- `credentials_secret` (String)
+- `text_secret` (String)
+- `login_url` (String)
+- `secret_param_name` (String)
+- `oauth_text_secret` (String)
+- `token_attribute_name` (String)
+- `auth_header_expr` (String)
+- `token_timeout_secs` (Number)
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_traversal_otlp--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_traversal_otlp--oauth_headers))
+- `reject_unauthorized` (Boolean)
+- `use_round_robin_dns` (Boolean)
+- `extra_http_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_traversal_otlp--extra_http_headers))
+- `safe_headers` (List of String)
+- `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_traversal_otlp--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_traversal_otlp--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--output_traversal_otlp--tls))
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -4392,6 +4470,45 @@ Optional:
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
 
+<a id="nestedatt--output_databricks_zerobus"></a>
+### Nested Schema for `output_databricks_zerobus`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `workspace_url` (String) HTTPS URL of the Databricks Workspace, used for OAuth token exchange (example: https://dbc-1234abcd-5e6f.cloud.databricks.com). Must start with https://
+- `workspace_id` (String) Unique identifier for the Databricks Workspace. Scopes the OAuth token to this Workspace.
+- `zerobus_endpoint` (String) Hostname of the Workspace Zerobus ingest endpoint. Omit the scheme, port, and path (example: 1234567890.zerobus.us-west-2.cloud.databricks.com).
+- `client_id` (String) OAuth client ID of the service principal authorized to write to the target table
+- `client_text_secret` (String) OAuth client secret of the service principal
+- `table_name` (String) Three-part Unity Catalog name of the target table: catalog.schema.table
+- `max_batch_size_kb` (Integer) Maximum size, in KB, of the serialized records in a single ingest batch
+- `max_batch_records` (Integer) Maximum number of records to include in a single ingest batch
+- `max_buffered_kb` (Integer) Maximum size, in KB, of unacknowledged records per Worker Process before blocking. Must be at least the configured Batch size limit. Records larger than this limit are dropped.
+- `max_inflight_batches` (Integer) Maximum number of unacknowledged batches per Worker Process before blocking
+- `flush_period_sec` (Integer) Maximum time, in seconds, to hold a batch before sending it
+- `ack_timeout_sec` (Integer) Amount of time, in seconds, to wait for Databricks to acknowledge sent batches before reconnecting
+- `connection_timeout_sec` (Integer) Amount of time, in seconds, to wait for a new ingest stream to open before canceling it
+- `on_backpressure` (String)
+- `description` (String)
+- `pq_strict_ordering` (Boolean)
+- `pq_rate_per_sec` (Number)
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number)
+- `pq_max_backpressure_sec` (Number)
+- `pq_max_file_size` (String)
+- `pq_max_size` (String)
+- `pq_path` (String)
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String)
+- `pq_controls` (Map of String)
+
 <a id="nestedatt--output_webhook--extra_http_headers"></a>
 <a id="nestedatt--output_sentinel--extra_http_headers"></a>
 <a id="nestedatt--output_splunk_hec--extra_http_headers"></a>
@@ -4429,6 +4546,7 @@ Optional:
 <a id="nestedatt--output_xsiam--extra_http_headers"></a>
 <a id="nestedatt--output_dynatrace_http--extra_http_headers"></a>
 <a id="nestedatt--output_dynatrace_otlp--extra_http_headers"></a>
+<a id="nestedatt--output_traversal_otlp--extra_http_headers"></a>
 <a id="nestedatt--output_sentinel_one_ai_siem--extra_http_headers"></a>
 <a id="nestedatt--output_chronicle--extra_http_headers"></a>
 <a id="nestedatt--output_snowflake_streaming--extra_http_headers"></a>
@@ -4473,6 +4591,7 @@ Optional:
 <a id="nestedatt--output_xsiam--response_retry_settings"></a>
 <a id="nestedatt--output_dynatrace_http--response_retry_settings"></a>
 <a id="nestedatt--output_dynatrace_otlp--response_retry_settings"></a>
+<a id="nestedatt--output_traversal_otlp--response_retry_settings"></a>
 <a id="nestedatt--output_sentinel_one_ai_siem--response_retry_settings"></a>
 <a id="nestedatt--output_chronicle--response_retry_settings"></a>
 <a id="nestedatt--output_snowflake_streaming--response_retry_settings"></a>
@@ -4519,6 +4638,7 @@ Optional:
 <a id="nestedatt--output_xsiam--timeout_retry_settings"></a>
 <a id="nestedatt--output_dynatrace_http--timeout_retry_settings"></a>
 <a id="nestedatt--output_dynatrace_otlp--timeout_retry_settings"></a>
+<a id="nestedatt--output_traversal_otlp--timeout_retry_settings"></a>
 <a id="nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings"></a>
 <a id="nestedatt--output_chronicle--timeout_retry_settings"></a>
 <a id="nestedatt--output_snowflake_streaming--timeout_retry_settings"></a>
@@ -4553,6 +4673,7 @@ Optional:
 
 <a id="nestedatt--output_webhook--oauth_params"></a>
 <a id="nestedatt--output_open_telemetry--oauth_params"></a>
+<a id="nestedatt--output_traversal_otlp--oauth_params"></a>
 ### Nested Schema for `output_webhook.oauth_params`
 
 Optional:
@@ -4562,6 +4683,7 @@ Optional:
 
 <a id="nestedatt--output_webhook--oauth_headers"></a>
 <a id="nestedatt--output_open_telemetry--oauth_headers"></a>
+<a id="nestedatt--output_traversal_otlp--oauth_headers"></a>
 ### Nested Schema for `output_webhook.oauth_headers`
 
 Optional:
@@ -4733,6 +4855,7 @@ Optional:
 <a id="nestedatt--output_security_lake--key_value_metadata"></a>
 <a id="nestedatt--output_cribl_lake--key_value_metadata"></a>
 <a id="nestedatt--output_dynatrace_otlp--metadata"></a>
+<a id="nestedatt--output_traversal_otlp--metadata"></a>
 <a id="nestedatt--output_databricks--key_value_metadata"></a>
 <a id="nestedatt--output_cloudflare_r2--key_value_metadata"></a>
 <a id="nestedatt--output_nutanix_objects--key_value_metadata"></a>
@@ -4825,6 +4948,7 @@ Optional:
 <a id="nestedatt--output_google_cloud_observability--tls"></a>
 <a id="nestedatt--output_open_telemetry--tls"></a>
 <a id="nestedatt--output_service_now--tls"></a>
+<a id="nestedatt--output_traversal_otlp--tls"></a>
 ### Nested Schema for `output_google_cloud_observability.tls`
 
 Optional:

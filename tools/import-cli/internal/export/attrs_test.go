@@ -1,6 +1,7 @@
 package export
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -47,6 +48,145 @@ func TestHclOptionsForType_searchMacroSkipsComputedOnlyAttrs(t *testing.T) {
 	assert.NotContains(t, attrs, "group_id")
 	assert.Equal(t, "test_macro_2", attrs["id"].String)
 	assert.Equal(t, `severity >= "Error"`, attrs["replacement"].String)
+}
+
+func TestPruneNotificationTargetConfigsRemovesEmptyConf(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"target_configs": {
+			Kind: hcl.KindList,
+			List: []hcl.Value{{
+				Kind: hcl.KindMap,
+				Map: map[string]hcl.Value{
+					"id":   {Kind: hcl.KindString, String: "slack-target"},
+					"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{}},
+				},
+			}},
+		},
+	}
+
+	pruneNotificationTargetConfigs(attrs)
+
+	item := attrs["target_configs"].List[0]
+	assert.NotContains(t, item.Map, "conf")
+	assert.Equal(t, "slack-target", item.Map["id"].String)
+}
+
+func TestPruneNotificationTargetConfigsRemovesConfContainingOnlyNulls(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"target_configs": {
+			Kind: hcl.KindList,
+			List: []hcl.Value{{
+				Kind: hcl.KindMap,
+				Map: map[string]hcl.Value{
+					"id": {Kind: hcl.KindString, String: "slack-target"},
+					"conf": {
+						Kind: hcl.KindMap,
+						Map: map[string]hcl.Value{
+							"body":    {Kind: hcl.KindNull},
+							"subject": {Kind: hcl.KindNull},
+							"email_recipient": {
+								Kind: hcl.KindMap,
+								Map: map[string]hcl.Value{
+									"bcc": {Kind: hcl.KindNull},
+									"cc":  {Kind: hcl.KindNull},
+									"to":  {Kind: hcl.KindNull},
+								},
+							},
+						},
+					},
+				},
+			}},
+		},
+	}
+
+	pruneNotificationTargetConfigs(attrs)
+
+	item := attrs["target_configs"].List[0]
+	assert.NotContains(t, item.Map, "conf")
+}
+
+func TestPruneNotificationTargetConfigsPreservesConfiguredConf(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"target_configs": {
+			Kind: hcl.KindList,
+			List: []hcl.Value{{
+				Kind: hcl.KindMap,
+				Map: map[string]hcl.Value{
+					"conf": {
+						Kind: hcl.KindMap,
+						Map: map[string]hcl.Value{
+							"body": {Kind: hcl.KindString, String: "Alert"},
+						},
+					},
+				},
+			}},
+		},
+	}
+
+	pruneNotificationTargetConfigs(attrs)
+
+	item := attrs["target_configs"].List[0]
+	assert.Contains(t, item.Map, "conf")
+}
+
+func TestPruneNotificationTargetConfigsFromProviderModel(t *testing.T) {
+	var model provider.NotificationModel
+	require.NoError(t, json.Unmarshal([]byte(`{
+		"id":"notification-1",
+		"targetConfigs":[{"id":"slack-target","conf":{}}]
+	}`), &model))
+
+	attrs, err := hcl.ModelToValue(&model, nil)
+	require.NoError(t, err)
+	pruneNotificationTargetConfigs(attrs)
+
+	targetConfigs := attrs["target_configs"]
+	require.Len(t, targetConfigs.List, 1)
+	assert.NotContains(t, targetConfigs.List[0].Map, "conf")
+}
+
+func TestPruneNotificationTargetConfigsNestedInSearchDashboard(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"schedule": {
+			Kind: hcl.KindMap,
+			Map: map[string]hcl.Value{
+				"notifications": {
+					Kind: hcl.KindMap,
+					Map: map[string]hcl.Value{
+						"items": {
+							Kind: hcl.KindList,
+							List: []hcl.Value{{
+								Kind: hcl.KindMap,
+								Map: map[string]hcl.Value{
+									"target_configs": {
+										Kind: hcl.KindList,
+										List: []hcl.Value{{
+											Kind: hcl.KindMap,
+											Map: map[string]hcl.Value{
+												"id": {Kind: hcl.KindString, String: "slack-target"},
+												"conf": {
+													Kind: hcl.KindMap,
+													Map: map[string]hcl.Value{
+														"email_recipient": {Kind: hcl.KindNull},
+													},
+												},
+											},
+										}},
+									},
+								},
+							}},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	pruneNotificationTargetConfigs(attrs)
+
+	targetConfigs := attrs["schedule"].Map["notifications"].Map["items"].List[0].Map["target_configs"]
+	require.Len(t, targetConfigs.List, 1)
+	assert.NotContains(t, targetConfigs.List[0].Map, "conf")
 }
 
 func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {

@@ -696,11 +696,6 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `URL for OAuth`,
 								},
-								"secret": schema.StringAttribute{
-									Computed:    true,
-									Sensitive:   true,
-									Description: `Secret parameter value to pass in request body`,
-								},
 								"refresh_token_field": schema.StringAttribute{
 									Computed:    true,
 									Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
@@ -728,6 +723,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 											},
 										},
 									},
+								},
+								"oauth_secret_source": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter the OAuth secret directly, or select a stored text secret`,
 								},
 								"client_id": schema.StringAttribute{
 									Computed:    true,
@@ -832,6 +831,15 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Persistent queue controls.`,
 									ElementType: types.StringType,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Sensitive:   true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"oauth_text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret for the OAuth secret value`,
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -2126,7 +2134,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"wiz_sourcetype": schema.StringAttribute{
 									Computed:    true,
-									Description: `Wiz Defend Source type`,
+									Description: `The Wiz log source type. Select a predefined type or enter a custom value.`,
 								},
 								"on_backpressure": schema.StringAttribute{
 									Computed:    true,
@@ -2144,6 +2152,14 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
+								},
+								"wiz_vpc_event_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `The format of the VPC Flow Log events`,
+								},
+								"wiz_vpc_flow_log_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `The format string for VPC Flow Log fields`,
 								},
 								"pq_strict_ordering": schema.BoolAttribute{
 									Computed:    true,
@@ -6521,6 +6537,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888
 `,
 								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method`,
+								},
 								"site_name": schema.StringAttribute{
 									Computed:    true,
 									Description: `Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.`,
@@ -6532,6 +6552,22 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"timezone_offset": schema.StringAttribute{
 									Computed:    true,
 									Description: `Timezone offset`,
+								},
+								"hostname": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression for the host from which the log was ingested into the SIEM, evaluated per event. Static values must be quoted or backticked (for example, 'collector-1.example.com'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${host}`. Emitted as the \"hostname\" metadata field; omitted when empty or not a usable scalar.",
+								},
+								"forwarder": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression for the host that forwarded the log, evaluated per event. Static values must be quoted or backticked (for example, 'fwd-1'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${__forwarder}`. Emitted as the \"forwarder\" metadata field; omitted when empty or not a usable scalar.",
+								},
+								"origin": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression that must resolve to an object describing the interim agent collector, such as {hostname: origin_host, '@timestamp': _time, path: source}. Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "origin" metadata field; omitted when the result is not a non-empty object.`,
+								},
+								"logtags": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression that must resolve to an object of custom metadata key/value pairs (searchable in Exabeam as m_c_logtags_<name>). Assemble the object upstream and reference it here (example: __exabeam_logtags), or build it inline (example: {department: dept, servertype: stype}). Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "logtags" metadata field; omitted when the result is not a non-empty object.`,
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
@@ -6561,6 +6597,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"max_retry_num": schema.Float64Attribute{
 									Computed:    true,
 									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
 								},
 							},
 						},
@@ -9999,6 +10039,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"report_branch_metrics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Report per-rule event counts and percentages as internal metrics (router.out_events, router.out_events_pct, router.in_events, router.unmatched_events, router.unmatched_events_pct). Adds metric series per rule.`,
 								},
 								"rules": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13781,6 +13825,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `How to handle events when all receivers are exerting backpressure`,
 								},
+								"send_as": schema.StringAttribute{
+									Computed:    true,
+									Description: `Which signals this Destination carries. Logs sends everything to log search, including metric events. Metrics routes metric events to the metric store and drops everything else. Logs and Metrics routes metric events to the metric store and sends the rest to log search. Metric routing requires the receiving Cribl Search Source to be enabled for metrics storage; if it is not, metric events are discarded rather than stored as logs.`,
+								},
 								"use_round_robin_dns": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
@@ -15060,6 +15108,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed: true,
 								},
 								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed: true,
+								},
+								"freshness_grace_period_sec": schema.Float64Attribute{
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
@@ -17012,6 +17063,370 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								"response_honor_retry_after_header": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_max_buffer_size_bytes": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								},
+								"pq_controls": schema.MapAttribute{
+									Computed:    true,
+									Description: `Persistent queue controls.`,
+									ElementType: types.StringType,
+								},
+							},
+						},
+						"output_traversal_otlp": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication type`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint where OTel log events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets).`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a transport option for OpenTelemetry`,
+								},
+								"preserve_native_any_value": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"http_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"http_logs_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: "If you want to send logs to the default `{endpoint}/v1/logs` endpoint, leave this field empty; otherwise, specify the desired endpoint",
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"dynamic_headers_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Batch event data upon dynamic metadata (whether presented or not)`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"max_connection_reuse_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the sender should ping the peer to keep the connection open`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"secret_param_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter name to pass in request body`,
+								},
+								"oauth_text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret for the OAuth secret parameter value to pass in request body`,
+								},
+								"token_attribute_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+								},
+								"auth_header_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.",
+								},
+								"token_timeout_secs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the OAuth token should be refreshed.`,
+								},
+								"oauth_params": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter value`,
+											},
+										},
+									},
+								},
+								"oauth_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header value`,
+											},
+										},
+									},
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Headers to add to all events`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Value`,
+											},
+										},
+									},
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `List of headers that are safe to log in plain text`,
+									ElementType: types.StringType,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"timeout_retry": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Retry timed-out HTTP requests`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+									},
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (client side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version`,
+										},
+									},
 								},
 								"pq_strict_ordering": schema.BoolAttribute{
 									Computed:    true,
@@ -20766,6 +21181,146 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 							},
 						},
+						"output_databricks_zerobus": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"workspace_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `HTTPS URL of the Databricks Workspace, used for OAuth token exchange (example: https://dbc-1234abcd-5e6f.cloud.databricks.com). Must start with https://`,
+								},
+								"workspace_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the Databricks Workspace. Scopes the OAuth token to this Workspace.`,
+								},
+								"zerobus_endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Hostname of the Workspace Zerobus ingest endpoint. Omit the scheme, port, and path (example: 1234567890.zerobus.us-west-2.cloud.databricks.com).`,
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `OAuth client ID of the service principal authorized to write to the target table`,
+								},
+								"client_text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `OAuth client secret of the service principal`,
+								},
+								"table_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Three-part Unity Catalog name of the target table: catalog.schema.table`,
+								},
+								"max_batch_size_kb": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the serialized records in a single ingest batch`,
+								},
+								"max_batch_records": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of records to include in a single ingest batch`,
+								},
+								"max_buffered_kb": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of unacknowledged records per Worker Process before blocking. Must be at least the configured Batch size limit. Records larger than this limit are dropped.`,
+								},
+								"max_inflight_batches": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of unacknowledged batches per Worker Process before blocking`,
+								},
+								"flush_period_sec": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum time, in seconds, to hold a batch before sending it`,
+								},
+								"ack_timeout_sec": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for Databricks to acknowledge sent batches before reconnecting`,
+								},
+								"connection_timeout_sec": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a new ingest stream to open before canceling it`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_max_buffer_size_bytes": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								},
+								"pq_controls": schema.MapAttribute{
+									Computed:    true,
+									Description: `Persistent queue controls.`,
+									ElementType: types.StringType,
+								},
+							},
+						},
 					},
 				},
 			},
@@ -20803,7 +21358,7 @@ func (d *DestinationsDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(DestinationsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "id": item.ID, "pipeline": item.Pipeline, "type": item.Type, "output_default": DestinationsOutputDefaultObjectValue(item.OutputDefault), "output_webhook": DestinationsOutputWebhookObjectValue(item.OutputWebhook), "output_sentinel": DestinationsOutputSentinelObjectValue(item.OutputSentinel), "output_devnull": DestinationsOutputDevnullObjectValue(item.OutputDevnull), "output_syslog": DestinationsOutputSyslogObjectValue(item.OutputSyslog), "output_splunk": DestinationsOutputSplunkObjectValue(item.OutputSplunk), "output_splunk_lb": DestinationsOutputSplunkLbObjectValue(item.OutputSplunkLb), "output_splunk_hec": DestinationsOutputSplunkHecObjectValue(item.OutputSplunkHec), "output_wiz_hec": DestinationsOutputWizHecObjectValue(item.OutputWizHec), "output_tcpjson": DestinationsOutputTcpjsonObjectValue(item.OutputTcpjson), "output_wavefront": DestinationsOutputWavefrontObjectValue(item.OutputWavefront), "output_signalfx": DestinationsOutputSignalfxObjectValue(item.OutputSignalfx), "output_filesystem": DestinationsOutputFilesystemObjectValue(item.OutputFilesystem), "output_s3": DestinationsOutputS3ObjectValue(item.OutputS3), "output_azure_blob": DestinationsOutputAzureBlobObjectValue(item.OutputAzureBlob), "output_azure_data_explorer": DestinationsOutputAzureDataExplorerObjectValue(item.OutputAzureDataExplorer), "output_azure_logs": DestinationsOutputAzureLogsObjectValue(item.OutputAzureLogs), "output_kinesis": DestinationsOutputKinesisObjectValue(item.OutputKinesis), "output_honeycomb": DestinationsOutputHoneycombObjectValue(item.OutputHoneycomb), "output_azure_eventhub": DestinationsOutputAzureEventhubObjectValue(item.OutputAzureEventhub), "output_google_bigquery": DestinationsOutputGoogleBigqueryObjectValue(item.OutputGoogleBigquery), "output_google_chronicle": DestinationsOutputGoogleChronicleObjectValue(item.OutputGoogleChronicle), "output_google_cloud_storage": DestinationsOutputGoogleCloudStorageObjectValue(item.OutputGoogleCloudStorage), "output_google_cloud_logging": DestinationsOutputGoogleCloudLoggingObjectValue(item.OutputGoogleCloudLogging), "output_google_cloud_observability": DestinationsOutputGoogleCloudObservabilityObjectValue(item.OutputGoogleCloudObservability), "output_google_pubsub": DestinationsOutputGooglePubsubObjectValue(item.OutputGooglePubsub), "output_exabeam": DestinationsOutputExabeamObjectValue(item.OutputExabeam), "output_kafka": DestinationsOutputKafkaObjectValue(item.OutputKafka), "output_confluent_cloud": DestinationsOutputConfluentCloudObjectValue(item.OutputConfluentCloud), "output_msk": DestinationsOutputMskObjectValue(item.OutputMsk), "output_elastic": DestinationsOutputElasticObjectValue(item.OutputElastic), "output_elastic_cloud": DestinationsOutputElasticCloudObjectValue(item.OutputElasticCloud), "output_newrelic": DestinationsOutputNewrelicObjectValue(item.OutputNewrelic), "output_newrelic_events": DestinationsOutputNewrelicEventsObjectValue(item.OutputNewrelicEvents), "output_influxdb": DestinationsOutputInfluxdbObjectValue(item.OutputInfluxdb), "output_cloudwatch": DestinationsOutputCloudwatchObjectValue(item.OutputCloudwatch), "output_minio": DestinationsOutputMinioObjectValue(item.OutputMinio), "output_statsd": DestinationsOutputStatsdObjectValue(item.OutputStatsd), "output_statsd_ext": DestinationsOutputStatsdExtObjectValue(item.OutputStatsdExt), "output_graphite": DestinationsOutputGraphiteObjectValue(item.OutputGraphite), "output_router": DestinationsOutputRouterObjectValue(item.OutputRouter), "output_sns": DestinationsOutputSnsObjectValue(item.OutputSns), "output_sqs": DestinationsOutputSqsObjectValue(item.OutputSqs), "output_snmp": DestinationsOutputSnmpObjectValue(item.OutputSnmp), "output_sumo_logic": DestinationsOutputSumoLogicObjectValue(item.OutputSumoLogic), "output_datadog": DestinationsOutputDatadogObjectValue(item.OutputDatadog), "output_grafana_cloud": DestinationsOutputGrafanaCloudObjectValue(item.OutputGrafanaCloud), "output_loki": DestinationsOutputLokiObjectValue(item.OutputLoki), "output_amazon_managed_prometheus": DestinationsOutputAmazonManagedPrometheusObjectValue(item.OutputAmazonManagedPrometheus), "output_prometheus": DestinationsOutputPrometheusObjectValue(item.OutputPrometheus), "output_ring": DestinationsOutputRingObjectValue(item.OutputRing), "output_open_telemetry": DestinationsOutputOpenTelemetryObjectValue(item.OutputOpenTelemetry), "output_service_now": DestinationsOutputServiceNowObjectValue(item.OutputServiceNow), "output_dataset": DestinationsOutputDatasetObjectValue(item.OutputDataset), "output_cribl_tcp": DestinationsOutputCriblTcpObjectValue(item.OutputCriblTcp), "output_cribl_http": DestinationsOutputCriblHttpObjectValue(item.OutputCriblHttp), "output_cribl_search_engine": DestinationsOutputCriblSearchEngineObjectValue(item.OutputCriblSearchEngine), "output_humio_hec": DestinationsOutputHumioHecObjectValue(item.OutputHumioHec), "output_crowdstrike_next_gen_siem": DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item.OutputCrowdstrikeNextGenSiem), "output_dl_s3": DestinationsOutputDlS3ObjectValue(item.OutputDlS3), "output_security_lake": DestinationsOutputSecurityLakeObjectValue(item.OutputSecurityLake), "output_cribl_lake": DestinationsOutputCriblLakeObjectValue(item.OutputCriblLake), "output_disk_spool": DestinationsOutputDiskSpoolObjectValue(item.OutputDiskSpool), "output_click_house": DestinationsOutputClickHouseObjectValue(item.OutputClickHouse), "output_customer_metrics_storage": DestinationsOutputCustomerMetricsStorageObjectValue(item.OutputCustomerMetricsStorage), "output_local_search_storage": DestinationsOutputLocalSearchStorageObjectValue(item.OutputLocalSearchStorage), "output_xsiam": DestinationsOutputXsiamObjectValue(item.OutputXsiam), "output_netflow": DestinationsOutputNetflowObjectValue(item.OutputNetflow), "output_dynatrace_http": DestinationsOutputDynatraceHttpObjectValue(item.OutputDynatraceHttp), "output_dynatrace_otlp": DestinationsOutputDynatraceOtlpObjectValue(item.OutputDynatraceOtlp), "output_sentinel_one_ai_siem": DestinationsOutputSentinelOneAiSiemObjectValue(item.OutputSentinelOneAiSiem), "output_chronicle": DestinationsOutputChronicleObjectValue(item.OutputChronicle), "output_databricks": DestinationsOutputDatabricksObjectValue(item.OutputDatabricks), "output_snowflake_streaming": DestinationsOutputSnowflakeStreamingObjectValue(item.OutputSnowflakeStreaming), "output_microsoft_fabric": DestinationsOutputMicrosoftFabricObjectValue(item.OutputMicrosoftFabric), "output_cloudflare_r2": DestinationsOutputCloudflareR2ObjectValue(item.OutputCloudflareR2), "output_nutanix_objects": DestinationsOutputNutanixObjectsObjectValue(item.OutputNutanixObjects), "output_storj_s3": DestinationsOutputStorjS3ObjectValue(item.OutputStorjS3), "output_alphasoc_s3": DestinationsOutputAlphasocS3ObjectValue(item.OutputAlphasocS3), "output_dell_s3": DestinationsOutputDellS3ObjectValue(item.OutputDellS3), "output_cloudian_s3": DestinationsOutputCloudianS3ObjectValue(item.OutputCloudianS3), "output_scality_s3": DestinationsOutputScalityS3ObjectValue(item.OutputScalityS3), "output_alibaba_cloud_s3": DestinationsOutputAlibabaCloudS3ObjectValue(item.OutputAlibabaCloudS3), "output_ibm_cloud_s3": DestinationsOutputIbmCloudS3ObjectValue(item.OutputIbmCloudS3)}))
+			values = append(values, types.ObjectValueMust(DestinationsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "id": item.ID, "pipeline": item.Pipeline, "type": item.Type, "output_default": DestinationsOutputDefaultObjectValue(item.OutputDefault), "output_webhook": DestinationsOutputWebhookObjectValue(item.OutputWebhook), "output_sentinel": DestinationsOutputSentinelObjectValue(item.OutputSentinel), "output_devnull": DestinationsOutputDevnullObjectValue(item.OutputDevnull), "output_syslog": DestinationsOutputSyslogObjectValue(item.OutputSyslog), "output_splunk": DestinationsOutputSplunkObjectValue(item.OutputSplunk), "output_splunk_lb": DestinationsOutputSplunkLbObjectValue(item.OutputSplunkLb), "output_splunk_hec": DestinationsOutputSplunkHecObjectValue(item.OutputSplunkHec), "output_wiz_hec": DestinationsOutputWizHecObjectValue(item.OutputWizHec), "output_tcpjson": DestinationsOutputTcpjsonObjectValue(item.OutputTcpjson), "output_wavefront": DestinationsOutputWavefrontObjectValue(item.OutputWavefront), "output_signalfx": DestinationsOutputSignalfxObjectValue(item.OutputSignalfx), "output_filesystem": DestinationsOutputFilesystemObjectValue(item.OutputFilesystem), "output_s3": DestinationsOutputS3ObjectValue(item.OutputS3), "output_azure_blob": DestinationsOutputAzureBlobObjectValue(item.OutputAzureBlob), "output_azure_data_explorer": DestinationsOutputAzureDataExplorerObjectValue(item.OutputAzureDataExplorer), "output_azure_logs": DestinationsOutputAzureLogsObjectValue(item.OutputAzureLogs), "output_kinesis": DestinationsOutputKinesisObjectValue(item.OutputKinesis), "output_honeycomb": DestinationsOutputHoneycombObjectValue(item.OutputHoneycomb), "output_azure_eventhub": DestinationsOutputAzureEventhubObjectValue(item.OutputAzureEventhub), "output_google_bigquery": DestinationsOutputGoogleBigqueryObjectValue(item.OutputGoogleBigquery), "output_google_chronicle": DestinationsOutputGoogleChronicleObjectValue(item.OutputGoogleChronicle), "output_google_cloud_storage": DestinationsOutputGoogleCloudStorageObjectValue(item.OutputGoogleCloudStorage), "output_google_cloud_logging": DestinationsOutputGoogleCloudLoggingObjectValue(item.OutputGoogleCloudLogging), "output_google_cloud_observability": DestinationsOutputGoogleCloudObservabilityObjectValue(item.OutputGoogleCloudObservability), "output_google_pubsub": DestinationsOutputGooglePubsubObjectValue(item.OutputGooglePubsub), "output_exabeam": DestinationsOutputExabeamObjectValue(item.OutputExabeam), "output_kafka": DestinationsOutputKafkaObjectValue(item.OutputKafka), "output_confluent_cloud": DestinationsOutputConfluentCloudObjectValue(item.OutputConfluentCloud), "output_msk": DestinationsOutputMskObjectValue(item.OutputMsk), "output_elastic": DestinationsOutputElasticObjectValue(item.OutputElastic), "output_elastic_cloud": DestinationsOutputElasticCloudObjectValue(item.OutputElasticCloud), "output_newrelic": DestinationsOutputNewrelicObjectValue(item.OutputNewrelic), "output_newrelic_events": DestinationsOutputNewrelicEventsObjectValue(item.OutputNewrelicEvents), "output_influxdb": DestinationsOutputInfluxdbObjectValue(item.OutputInfluxdb), "output_cloudwatch": DestinationsOutputCloudwatchObjectValue(item.OutputCloudwatch), "output_minio": DestinationsOutputMinioObjectValue(item.OutputMinio), "output_statsd": DestinationsOutputStatsdObjectValue(item.OutputStatsd), "output_statsd_ext": DestinationsOutputStatsdExtObjectValue(item.OutputStatsdExt), "output_graphite": DestinationsOutputGraphiteObjectValue(item.OutputGraphite), "output_router": DestinationsOutputRouterObjectValue(item.OutputRouter), "output_sns": DestinationsOutputSnsObjectValue(item.OutputSns), "output_sqs": DestinationsOutputSqsObjectValue(item.OutputSqs), "output_snmp": DestinationsOutputSnmpObjectValue(item.OutputSnmp), "output_sumo_logic": DestinationsOutputSumoLogicObjectValue(item.OutputSumoLogic), "output_datadog": DestinationsOutputDatadogObjectValue(item.OutputDatadog), "output_grafana_cloud": DestinationsOutputGrafanaCloudObjectValue(item.OutputGrafanaCloud), "output_loki": DestinationsOutputLokiObjectValue(item.OutputLoki), "output_amazon_managed_prometheus": DestinationsOutputAmazonManagedPrometheusObjectValue(item.OutputAmazonManagedPrometheus), "output_prometheus": DestinationsOutputPrometheusObjectValue(item.OutputPrometheus), "output_ring": DestinationsOutputRingObjectValue(item.OutputRing), "output_open_telemetry": DestinationsOutputOpenTelemetryObjectValue(item.OutputOpenTelemetry), "output_service_now": DestinationsOutputServiceNowObjectValue(item.OutputServiceNow), "output_dataset": DestinationsOutputDatasetObjectValue(item.OutputDataset), "output_cribl_tcp": DestinationsOutputCriblTcpObjectValue(item.OutputCriblTcp), "output_cribl_http": DestinationsOutputCriblHttpObjectValue(item.OutputCriblHttp), "output_cribl_search_engine": DestinationsOutputCriblSearchEngineObjectValue(item.OutputCriblSearchEngine), "output_humio_hec": DestinationsOutputHumioHecObjectValue(item.OutputHumioHec), "output_crowdstrike_next_gen_siem": DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item.OutputCrowdstrikeNextGenSiem), "output_dl_s3": DestinationsOutputDlS3ObjectValue(item.OutputDlS3), "output_security_lake": DestinationsOutputSecurityLakeObjectValue(item.OutputSecurityLake), "output_cribl_lake": DestinationsOutputCriblLakeObjectValue(item.OutputCriblLake), "output_disk_spool": DestinationsOutputDiskSpoolObjectValue(item.OutputDiskSpool), "output_click_house": DestinationsOutputClickHouseObjectValue(item.OutputClickHouse), "output_customer_metrics_storage": DestinationsOutputCustomerMetricsStorageObjectValue(item.OutputCustomerMetricsStorage), "output_local_search_storage": DestinationsOutputLocalSearchStorageObjectValue(item.OutputLocalSearchStorage), "output_xsiam": DestinationsOutputXsiamObjectValue(item.OutputXsiam), "output_netflow": DestinationsOutputNetflowObjectValue(item.OutputNetflow), "output_dynatrace_http": DestinationsOutputDynatraceHttpObjectValue(item.OutputDynatraceHttp), "output_dynatrace_otlp": DestinationsOutputDynatraceOtlpObjectValue(item.OutputDynatraceOtlp), "output_traversal_otlp": DestinationsOutputTraversalOtlpObjectValue(item.OutputTraversalOtlp), "output_sentinel_one_ai_siem": DestinationsOutputSentinelOneAiSiemObjectValue(item.OutputSentinelOneAiSiem), "output_chronicle": DestinationsOutputChronicleObjectValue(item.OutputChronicle), "output_databricks": DestinationsOutputDatabricksObjectValue(item.OutputDatabricks), "output_snowflake_streaming": DestinationsOutputSnowflakeStreamingObjectValue(item.OutputSnowflakeStreaming), "output_microsoft_fabric": DestinationsOutputMicrosoftFabricObjectValue(item.OutputMicrosoftFabric), "output_cloudflare_r2": DestinationsOutputCloudflareR2ObjectValue(item.OutputCloudflareR2), "output_nutanix_objects": DestinationsOutputNutanixObjectsObjectValue(item.OutputNutanixObjects), "output_storj_s3": DestinationsOutputStorjS3ObjectValue(item.OutputStorjS3), "output_alphasoc_s3": DestinationsOutputAlphasocS3ObjectValue(item.OutputAlphasocS3), "output_dell_s3": DestinationsOutputDellS3ObjectValue(item.OutputDellS3), "output_cloudian_s3": DestinationsOutputCloudianS3ObjectValue(item.OutputCloudianS3), "output_scality_s3": DestinationsOutputScalityS3ObjectValue(item.OutputScalityS3), "output_alibaba_cloud_s3": DestinationsOutputAlibabaCloudS3ObjectValue(item.OutputAlibabaCloudS3), "output_ibm_cloud_s3": DestinationsOutputIbmCloudS3ObjectValue(item.OutputIbmCloudS3), "output_databricks_zerobus": DestinationsOutputDatabricksZerobusObjectValue(item.OutputDatabricksZerobus)}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: DestinationsItemAttrTypes()}, values)
@@ -20886,6 +21441,7 @@ func DestinationsItemAttrTypes() map[string]attr.Type {
 		"output_netflow":                    types.ObjectType{AttrTypes: OutputNetflowModelAttrTypes()},
 		"output_dynatrace_http":             types.ObjectType{AttrTypes: OutputDynatraceHttpModelAttrTypes()},
 		"output_dynatrace_otlp":             types.ObjectType{AttrTypes: OutputDynatraceOtlpModelAttrTypes()},
+		"output_traversal_otlp":             types.ObjectType{AttrTypes: OutputTraversalOtlpModelAttrTypes()},
 		"output_sentinel_one_ai_siem":       types.ObjectType{AttrTypes: OutputSentinelOneAiSiemModelAttrTypes()},
 		"output_chronicle":                  types.ObjectType{AttrTypes: OutputChronicleModelAttrTypes()},
 		"output_databricks":                 types.ObjectType{AttrTypes: OutputDatabricksModelAttrTypes()},
@@ -20900,6 +21456,7 @@ func DestinationsItemAttrTypes() map[string]attr.Type {
 		"output_scality_s3":                 types.ObjectType{AttrTypes: OutputScalityS3ModelAttrTypes()},
 		"output_alibaba_cloud_s3":           types.ObjectType{AttrTypes: OutputAlibabaCloudS3ModelAttrTypes()},
 		"output_ibm_cloud_s3":               types.ObjectType{AttrTypes: OutputIbmCloudS3ModelAttrTypes()},
+		"output_databricks_zerobus":         types.ObjectType{AttrTypes: OutputDatabricksZerobusModelAttrTypes()},
 	}
 }
 
@@ -21028,11 +21585,11 @@ func DestinationsOutputSentinelObjectValue(item *OutputSentinelModel) attr.Value
 		"on_backpressure":                   item.OnBackpressure,
 		"auth_type":                         item.AuthType,
 		"login_url":                         item.LoginURL,
-		"secret":                            item.Secret,
 		"refresh_token_field":               item.RefreshTokenField,
 		"rotate_refresh_token":              item.RotateRefreshToken,
 		"refresh_url":                       item.RefreshURL,
 		"refresh_request_params":            item.RefreshRequestParams,
+		"oauth_secret_source":               item.OauthSecretSource,
 		"client_id":                         item.ClientID,
 		"scope":                             item.Scope,
 		"endpoint_urlconfiguration":         item.EndpointURLConfiguration,
@@ -21059,6 +21616,8 @@ func DestinationsOutputSentinelObjectValue(item *OutputSentinelModel) attr.Value
 		"pq_on_backpressure":                item.PqOnBackpressure,
 		"pq_max_buffer_size_bytes":          item.PqMaxBufferSizeBytes,
 		"pq_controls":                       item.PqControls,
+		"secret":                            item.Secret,
+		"oauth_text_secret":                 item.OauthTextSecret,
 		"url":                               item.URL,
 		"dcr_id":                            item.DcrID,
 		"dce_endpoint":                      item.DceEndpoint,
@@ -21316,6 +21875,8 @@ func DestinationsOutputWizHecObjectValue(item *OutputWizHecModel) attr.Value {
 		"description":                       item.Description,
 		"token":                             item.Token,
 		"text_secret":                       item.TextSecret,
+		"wiz_vpc_event_format":              item.WizVpcEventFormat,
+		"wiz_vpc_flow_log_format":           item.WizVpcFlowLogFormat,
 		"pq_strict_ordering":                item.PqStrictOrdering,
 		"pq_rate_per_sec":                   item.PqRatePerSec,
 		"pq_mode":                           item.PqMode,
@@ -22307,9 +22868,14 @@ func DestinationsOutputExabeamObjectValue(item *OutputExabeamModel) attr.Value {
 		"max_file_size_mb":          item.MaxFileSizeMB,
 		"encoded_configuration":     item.EncodedConfiguration,
 		"collector_instance_id":     item.CollectorInstanceID,
+		"aws_authentication_method": item.AwsAuthenticationMethod,
 		"site_name":                 item.SiteName,
 		"site_id":                   item.SiteID,
 		"timezone_offset":           item.TimezoneOffset,
+		"hostname":                  item.Hostname,
+		"forwarder":                 item.Forwarder,
+		"origin":                    item.Origin,
+		"logtags":                   item.Logtags,
 		"aws_api_key":               item.AwsAPIKey,
 		"aws_secret_key":            item.AwsSecretKey,
 		"description":               item.Description,
@@ -22317,6 +22883,7 @@ func DestinationsOutputExabeamObjectValue(item *OutputExabeamModel) attr.Value {
 		"directory_batch_size":      item.DirectoryBatchSize,
 		"deadletter_path":           item.DeadletterPath,
 		"max_retry_num":             item.MaxRetryNum,
+		"aws_secret":                item.AwsSecret,
 	})
 }
 
@@ -22971,14 +23538,15 @@ func DestinationsOutputRouterObjectValue(item *OutputRouterModel) attr.Value {
 		return types.ObjectNull(OutputRouterModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputRouterModelAttrTypes(), map[string]attr.Value{
-		"id":            item.ID,
-		"type":          item.Type,
-		"pipeline":      item.Pipeline,
-		"system_fields": item.SystemFields,
-		"environment":   item.Environment,
-		"streamtags":    item.Streamtags,
-		"rules":         item.Rules,
-		"description":   item.Description,
+		"id":                    item.ID,
+		"type":                  item.Type,
+		"pipeline":              item.Pipeline,
+		"system_fields":         item.SystemFields,
+		"environment":           item.Environment,
+		"streamtags":            item.Streamtags,
+		"report_branch_metrics": item.ReportBranchMetrics,
+		"rules":                 item.Rules,
+		"description":           item.Description,
 	})
 }
 
@@ -23759,6 +24327,7 @@ func DestinationsOutputCriblSearchEngineObjectValue(item *OutputCriblSearchEngin
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
 		"auth_tokens":                       item.AuthTokens,
 		"on_backpressure":                   item.OnBackpressure,
+		"send_as":                           item.SendAs,
 		"use_round_robin_dns":               item.UseRoundRobinDns,
 		"description":                       item.Description,
 		"url":                               item.URL,
@@ -24051,6 +24620,7 @@ func DestinationsOutputCriblLakeObjectValue(item *OutputCriblLakeModel) attr.Val
 		"dynamic_dataset":                   item.DynamicDataset,
 		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
 		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"freshness_grace_period_sec":        item.FreshnessGracePeriodSec,
 		"description":                       item.Description,
 		"compress":                          item.Compress,
 		"compression_level":                 item.CompressionLevel,
@@ -24448,6 +25018,71 @@ func DestinationsOutputDynatraceOtlpObjectValue(item *OutputDynatraceOtlpModel) 
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"pq_strict_ordering":                item.PqStrictOrdering,
+		"pq_rate_per_sec":                   item.PqRatePerSec,
+		"pq_mode":                           item.PqMode,
+		"pq_max_buffer_size":                item.PqMaxBufferSize,
+		"pq_max_backpressure_sec":           item.PqMaxBackpressureSec,
+		"pq_max_file_size":                  item.PqMaxFileSize,
+		"pq_max_size":                       item.PqMaxSize,
+		"pq_path":                           item.PqPath,
+		"pq_compress":                       item.PqCompress,
+		"pq_on_backpressure":                item.PqOnBackpressure,
+		"pq_max_buffer_size_bytes":          item.PqMaxBufferSizeBytes,
+		"pq_controls":                       item.PqControls,
+	})
+}
+
+func DestinationsOutputTraversalOtlpObjectValue(item *OutputTraversalOtlpModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputTraversalOtlpModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputTraversalOtlpModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"auth_type":                         item.AuthType,
+		"endpoint":                          item.Endpoint,
+		"protocol":                          item.Protocol,
+		"preserve_native_any_value":         item.PreserveNativeAnyValue,
+		"compress":                          item.Compress,
+		"http_compress":                     item.HttpCompress,
+		"http_logs_endpoint_override":       item.HttpLogsEndpointOverride,
+		"metadata":                          item.Metadata,
+		"dynamic_headers_enabled":           item.DynamicHeadersEnabled,
+		"dynamic_headers_field":             item.DynamicHeadersField,
+		"concurrency":                       item.Concurrency,
+		"max_payload_size_kb":               item.MaxPayloadSizeKB,
+		"timeout_sec":                       item.TimeoutSec,
+		"max_connection_reuse_sec":          item.MaxConnectionReuseSec,
+		"flush_period_sec":                  item.FlushPeriodSec,
+		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
+		"connection_timeout":                item.ConnectionTimeout,
+		"keep_alive_time":                   item.KeepAliveTime,
+		"keep_alive":                        item.KeepAlive,
+		"on_backpressure":                   item.OnBackpressure,
+		"description":                       item.Description,
+		"credentials_secret":                item.CredentialsSecret,
+		"text_secret":                       item.TextSecret,
+		"login_url":                         item.LoginURL,
+		"secret_param_name":                 item.SecretParamName,
+		"oauth_text_secret":                 item.OauthTextSecret,
+		"token_attribute_name":              item.TokenAttributeName,
+		"auth_header_expr":                  item.AuthHeaderExpr,
+		"token_timeout_secs":                item.TokenTimeoutSecs,
+		"oauth_params":                      item.OauthParams,
+		"oauth_headers":                     item.OauthHeaders,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"use_round_robin_dns":               item.UseRoundRobinDns,
+		"extra_http_headers":                item.ExtraHttpHeaders,
+		"safe_headers":                      item.SafeHeaders,
+		"response_retry_settings":           item.ResponseRetrySettings,
+		"timeout_retry_settings":            item.TimeoutRetrySettings,
+		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"tls":                               item.TLS,
 		"pq_strict_ordering":                item.PqStrictOrdering,
 		"pq_rate_per_sec":                   item.PqRatePerSec,
 		"pq_mode":                           item.PqMode,
@@ -25303,5 +25938,46 @@ func DestinationsOutputIbmCloudS3ObjectValue(item *OutputIbmCloudS3Model) attr.V
 		"directory_batch_size":              item.DirectoryBatchSize,
 		"deadletter_path":                   item.DeadletterPath,
 		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputDatabricksZerobusObjectValue(item *OutputDatabricksZerobusModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputDatabricksZerobusModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputDatabricksZerobusModelAttrTypes(), map[string]attr.Value{
+		"id":                       item.ID,
+		"type":                     item.Type,
+		"pipeline":                 item.Pipeline,
+		"system_fields":            item.SystemFields,
+		"environment":              item.Environment,
+		"streamtags":               item.Streamtags,
+		"workspace_url":            item.WorkspaceURL,
+		"workspace_id":             item.WorkspaceID,
+		"zerobus_endpoint":         item.ZerobusEndpoint,
+		"client_id":                item.ClientID,
+		"client_text_secret":       item.ClientTextSecret,
+		"table_name":               item.TableName,
+		"max_batch_size_kb":        item.MaxBatchSizeKB,
+		"max_batch_records":        item.MaxBatchRecords,
+		"max_buffered_kb":          item.MaxBufferedKB,
+		"max_inflight_batches":     item.MaxInflightBatches,
+		"flush_period_sec":         item.FlushPeriodSec,
+		"ack_timeout_sec":          item.AckTimeoutSec,
+		"connection_timeout_sec":   item.ConnectionTimeoutSec,
+		"on_backpressure":          item.OnBackpressure,
+		"description":              item.Description,
+		"pq_strict_ordering":       item.PqStrictOrdering,
+		"pq_rate_per_sec":          item.PqRatePerSec,
+		"pq_mode":                  item.PqMode,
+		"pq_max_buffer_size":       item.PqMaxBufferSize,
+		"pq_max_backpressure_sec":  item.PqMaxBackpressureSec,
+		"pq_max_file_size":         item.PqMaxFileSize,
+		"pq_max_size":              item.PqMaxSize,
+		"pq_path":                  item.PqPath,
+		"pq_compress":              item.PqCompress,
+		"pq_on_backpressure":       item.PqOnBackpressure,
+		"pq_max_buffer_size_bytes": item.PqMaxBufferSizeBytes,
+		"pq_controls":              item.PqControls,
 	})
 }

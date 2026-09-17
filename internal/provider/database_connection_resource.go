@@ -76,12 +76,24 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 					int64validator.Between(1000, 60000),
 				},
 			},
+			"credentials_secret": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Name of the stored credentials secret containing username and password for SQL Server configObj authentication.`,
+			},
 			"creds_secrets": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
 				Sensitive:   true,
 				Description: `Name of the stored credentials secret containing username and password. Used with Oracle connections.`,
+			},
+			"database": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Database to connect to instead of the server default.`,
 			},
 			"database_type": schema.StringAttribute{
 				Required:    true,
@@ -103,6 +115,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+			},
+			"host": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Hostname of the server to connect to.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -153,12 +171,24 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 								int64validator.Between(1000, 60000),
 							},
 						},
+						"credentials_secret": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Name of the stored credentials secret containing username and password for SQL Server configObj authentication.`,
+						},
 						"creds_secrets": schema.StringAttribute{
 							Required:    false,
 							Optional:    true,
 							Computed:    false,
 							Sensitive:   true,
 							Description: `Name of the stored credentials secret containing username and password. Used with Oracle connections.`,
+						},
+						"database": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Database to connect to instead of the server default.`,
 						},
 						"database_type": schema.StringAttribute{
 							Required:    true,
@@ -172,6 +202,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Computed:    false,
 							Description: `Brief description of the Database Connection.`,
 						},
+						"host": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Hostname of the server to connect to.`,
+						},
 						"id": schema.StringAttribute{
 							Required:    true,
 							Optional:    false,
@@ -183,6 +219,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_\\-]+$`), "must match pattern ^[a-zA-Z0-9_\\\\-]+$"),
 							},
+						},
+						"log_on_mechanism": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Log On Mechanism for databases that support multiple, like Teradata.`,
 						},
 						"password": schema.StringAttribute{
 							Required:    false,
@@ -199,6 +241,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Validators: []validator.Int64{
 								int64validator.AtLeast(1000),
 							},
+						},
+						"sslmode": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.`,
 						},
 						"tags": schema.StringAttribute{
 							Required:    false,
@@ -289,6 +337,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 					},
 				},
 			},
+			"log_on_mechanism": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Log On Mechanism for databases that support multiple, like Teradata.`,
+			},
 			"password": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
@@ -304,6 +358,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Validators: []validator.Int64{
 					int64validator.AtLeast(1000),
 				},
+			},
+			"sslmode": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.`,
 			},
 			"tags": schema.StringAttribute{
 				Required:    false,
@@ -563,9 +623,19 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 			state.ConnectionTimeout = api.ConnectionTimeout
 		}
 	}
+	if !preserveInputs || (fillMissingInputs && (state.CredentialsSecret.IsNull() || state.CredentialsSecret.IsUnknown())) {
+		if !api.CredentialsSecret.IsNull() && !api.CredentialsSecret.IsUnknown() {
+			state.CredentialsSecret = api.CredentialsSecret
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.CredsSecrets.IsNull() || state.CredsSecrets.IsUnknown())) {
 		if !api.CredsSecrets.IsNull() && !api.CredsSecrets.IsUnknown() {
 			state.CredsSecrets = stringFromAPIOrPrior(api.CredsSecrets.ValueString(), state.CredsSecrets)
+		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Database.IsNull() || state.Database.IsUnknown())) {
+		if !api.Database.IsNull() && !api.Database.IsUnknown() {
+			state.Database = api.Database
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.DatabaseType.IsNull() || state.DatabaseType.IsUnknown())) {
@@ -583,6 +653,11 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 			state.GroupID = api.GroupID
 		}
 	}
+	if !preserveInputs || (fillMissingInputs && (state.Host.IsNull() || state.Host.IsUnknown())) {
+		if !api.Host.IsNull() && !api.Host.IsUnknown() {
+			state.Host = api.Host
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
@@ -598,6 +673,11 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 	} else if len(state.Items.Elements()) == 0 {
 		state.Items = types.ListValueMust(types.ObjectType{AttrTypes: DatabaseConnectionItemsAttrTypes()}, nil)
 	}
+	if !preserveInputs || (fillMissingInputs && (state.LogOnMechanism.IsNull() || state.LogOnMechanism.IsUnknown())) {
+		if !api.LogOnMechanism.IsNull() && !api.LogOnMechanism.IsUnknown() {
+			state.LogOnMechanism = api.LogOnMechanism
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Password.IsNull() || state.Password.IsUnknown())) {
 		if !api.Password.IsNull() && !api.Password.IsUnknown() {
 			state.Password = stringFromAPIOrPrior(api.Password.ValueString(), state.Password)
@@ -606,6 +686,11 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 	if !preserveInputs || (fillMissingInputs && (state.RequestTimeout.IsNull() || state.RequestTimeout.IsUnknown())) {
 		if !api.RequestTimeout.IsNull() && !api.RequestTimeout.IsUnknown() {
 			state.RequestTimeout = api.RequestTimeout
+		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Sslmode.IsNull() || state.Sslmode.IsUnknown())) {
+		if !api.Sslmode.IsNull() && !api.Sslmode.IsUnknown() {
+			state.Sslmode = api.Sslmode
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {

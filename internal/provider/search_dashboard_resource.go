@@ -4,18 +4,15 @@ package provider
 import (
 	"context"
 	"fmt"
-	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -336,7 +333,7 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 											Required:    true,
 											Optional:    false,
 											Computed:    false,
-											Description: `Target URL for the action.`,
+											Description: `Target URL for the action. Relative, protocol-relative, and <code>http</code>/<code>https</code> URLs are supported, along with benign schemes such as <code>mailto</code> and <code>tel</code>. Executable schemes (<code>javascript</code>, <code>vbscript</code>, and <code>data</code>) are rejected on create and update; any such value already stored is made inert and is never navigated to.`,
 										},
 									},
 								},
@@ -705,7 +702,7 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 											Required:    true,
 											Optional:    false,
 											Computed:    false,
-											Description: `Target URL for the action.`,
+											Description: `Target URL for the action. Relative, protocol-relative, and <code>http</code>/<code>https</code> URLs are supported, along with benign schemes such as <code>mailto</code> and <code>tel</code>. Executable schemes (<code>javascript</code>, <code>vbscript</code>, and <code>data</code>) are rejected on create and update; any such value already stored is made inert and is never navigated to.`,
 										},
 									},
 								},
@@ -828,62 +825,17 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: false,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
-										"id": schema.StringAttribute{
-											Required:    true,
-											Optional:    false,
-											Computed:    false,
-											Description: `Unique identifier for the Notification.`,
-											PlanModifiers: []planmodifier.String{
-												stringplanmodifier.RequiresReplaceIfConfigured(),
-												custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
-											},
-											Validators: []validator.String{
-												stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
-											},
-										},
-										"disabled": schema.BoolAttribute{
-											Required:    false,
-											Optional:    true,
-											Computed:    true,
-											Description: `If true, the Notification is disabled and the specified condition will not trigger it.`,
-										},
 										"condition": schema.StringAttribute{
 											Required:    true,
 											Optional:    false,
 											Computed:    false,
-											Description: `The condition that triggers the Notification.`,
-										},
-										"targets": schema.ListAttribute{
-											Required:    false,
-											Optional:    true,
-											Computed:    true,
-											Description: `List of the IDs for the Notification targets to send the Notification to.`,
-											ElementType: types.StringType,
-										},
-										"target_configs": schema.ListNestedAttribute{
-											Required:    false,
-											Optional:    true,
-											Computed:    true,
-											Description: `Override settings to apply for each referenced Notification target.`,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"id": schema.StringAttribute{
-														Required:    true,
-														Optional:    false,
-														Computed:    false,
-														Description: `The <code>id</code> of the Notification target.`,
-														Validators: []validator.String{
-															stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
-														},
-													},
-												},
-											},
+											Description: `The condition that triggers the Notification. Use <code>GET /conditions</code> for a list of supported <code>condition</code> values.`,
 										},
 										"conf": schema.SingleNestedAttribute{
 											Required:    false,
 											Optional:    true,
 											Computed:    true,
-											Description: `Configuration for the condition that triggers the Notification. Supported fields vary depending on the condition.`,
+											Description: `Configuration for the <code>condition</code> that triggers the Notification. Supported fields vary depending on the <code>condition</code>. Use <code>GET /conditions/{id}</code> to review the configuration for a specific <code>condition</code>.`,
 											Attributes: map[string]schema.Attribute{
 												"saved_query_id": schema.StringAttribute{
 													Required:    false,
@@ -947,11 +899,33 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 												},
 											},
 										},
+										"disabled": schema.BoolAttribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `If <code>true</code>, the Notification is disabled and the specified condition will not trigger it.`,
+										},
+										"group": schema.StringAttribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `The <code>id</code> of the Worker Group or Edge Fleet that the Notification applies to.`,
+										},
+										"id": schema.StringAttribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Unique identifier.`,
+											PlanModifiers: []planmodifier.String{
+												stringplanmodifier.RequiresReplaceIfConfigured(),
+												custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
+											},
+										},
 										"metadata": schema.ListNestedAttribute{
 											Required:    false,
 											Optional:    true,
 											Computed:    true,
-											Description: `Fields to add to events from this input`,
+											Description: `Metadata tags for the Notification.`,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
@@ -964,47 +938,132 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 														Required:    true,
 														Optional:    false,
 														Computed:    false,
-														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														Description: `JavaScript expression to compute the metadata field's value, enclosed in quotes or backticks. Can evaluate to a constant.`,
 													},
 												},
 											},
-										},
-										"group": schema.StringAttribute{
-											Required:    false,
-											Optional:    true,
-											Computed:    true,
-											Description: `The worker group/fleet this notification belongs to`,
-										},
-										"pack": schema.StringAttribute{
-											Required:    false,
-											Optional:    false,
-											Computed:    true,
-											Description: `The pack this notification belongs to`,
 										},
 										"mode": schema.StringAttribute{
 											Required:    false,
 											Optional:    false,
 											Computed:    true,
-											Description: `Notification mode: direct or policy-based`,
+											Description: `Delivery mode for Notifications.<br/><br/> <code>direct</code>: Notification is sent directly to Notification targets that are defined in <code>templateTargetPairs</code>.<br/><br/> <code>policy</code>: Notification is routed through Notification Policies, which match alerts by labels and route them to Notification targets without relying on <code>templateTargetPairs</code>.`,
+										},
+										"pack": schema.StringAttribute{
+											Required:    false,
+											Optional:    false,
+											Computed:    true,
+											Description: `The <code>id</code> of the Pack the Notification belongs to. Automatically populated and returned in responses.`,
+										},
+										"target_configs": schema.ListNestedAttribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Override settings to apply for each referenced Notification target.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"conf": schema.SingleNestedAttribute{
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Simple Mail Transfer Protocol (SMTP) configuration for the Notification target.`,
+														Attributes: map[string]schema.Attribute{
+															"body": schema.StringAttribute{
+																Required:    false,
+																Optional:    true,
+																Computed:    false,
+																Description: `Email body.`,
+															},
+															"email_recipient": schema.SingleNestedAttribute{
+																Required:    true,
+																Optional:    false,
+																Computed:    false,
+																Description: `Email recipient settings for the Notification target.`,
+																Attributes: map[string]schema.Attribute{
+																	"bcc": schema.StringAttribute{
+																		Required:    false,
+																		Optional:    true,
+																		Computed:    false,
+																		Description: `Bcc: Recipients' email addresses.`,
+																	},
+																	"cc": schema.StringAttribute{
+																		Required:    false,
+																		Optional:    true,
+																		Computed:    false,
+																		Description: `Cc: Recipients' email addresses.`,
+																	},
+																	"to": schema.StringAttribute{
+																		Required:    true,
+																		Optional:    false,
+																		Computed:    false,
+																		Description: `Recipients' email addresses.`,
+																	},
+																},
+															},
+															"subject": schema.StringAttribute{
+																Required:    false,
+																Optional:    true,
+																Computed:    false,
+																Description: `Email subject.`,
+															},
+														},
+													},
+													"id": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `The <code>id</code> of the Notification target.`,
+													},
+												},
+											},
+										},
+										"target_details": schema.ListNestedAttribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `Additional details about referenced Notification targets. Optionally populated on request.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `The <code>id</code> of the Notification target.`,
+													},
+													"type": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `The type of the Notification target.`,
+													},
+												},
+											},
+										},
+										"targets": schema.ListAttribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `List of the <code>id</code> values for the Notification targets to send the Notification to.`,
+											ElementType: types.StringType,
 										},
 										"template_target_pairs": schema.ListNestedAttribute{
 											Required:    false,
 											Optional:    false,
 											Computed:    true,
-											Description: `Pairs of templates and targets for notification routing`,
+											Description: `If <code>mode</code> is <code>direct</code>, the key-value pairs that define the Notification templates and targets to use for sending Notifications.`,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
-													"template_id": schema.StringAttribute{
-														Required:    true,
-														Optional:    false,
-														Computed:    false,
-														Description: `ID of the notification template to use`,
-													},
 													"target_id": schema.StringAttribute{
 														Required:    true,
 														Optional:    false,
 														Computed:    false,
-														Description: `ID of the notification target (output)`,
+														Description: `The <code>id</code> of the Notification target to send the Notification to.`,
+													},
+													"template_id": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `The <code>id</code> of the Notification template to use.`,
 													},
 												},
 											},

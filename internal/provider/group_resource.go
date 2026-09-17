@@ -193,10 +193,26 @@ type groupCloudAPI struct {
 	Region   string  `json:"region,omitempty"`
 }
 
+type groupGitCommitAPI struct {
+	AuthorEmail *string `json:"author_email,omitempty"`
+	AuthorName  *string `json:"author_name,omitempty"`
+	Date        *string `json:"date,omitempty"`
+	Hash        *string `json:"hash,omitempty"`
+	Message     *string `json:"message,omitempty"`
+	Short       *string `json:"short,omitempty"`
+}
+
+type groupGitAPI struct {
+	Commit       *string             `json:"commit,omitempty"`
+	LocalChanges *int64              `json:"localChanges,omitempty"`
+	Log          []groupGitCommitAPI `json:"log,omitempty"`
+}
+
 type groupAPIModel struct {
 	Cloud               *groupCloudAPI `json:"cloud,omitempty"`
 	Description         *string        `json:"description,omitempty"`
 	EstimatedIngestRate *float64       `json:"estimatedIngestRate,omitempty"`
+	Git                 *groupGitAPI   `json:"git,omitempty"`
 	ID                  string         `json:"id,omitempty"`
 	Inherits            *string        `json:"inherits,omitempty"`
 	IsFleet             *bool          `json:"isFleet,omitempty"`

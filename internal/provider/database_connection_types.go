@@ -21,14 +21,19 @@ type DatabaseConnectionModel struct {
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
 	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	Database          types.String `tfsdk:"database" json:"database,omitempty"`
 	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
 	Description       types.String `tfsdk:"description" json:"description,omitempty"`
 	GroupID           types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	Host              types.String `tfsdk:"host" json:"host,omitempty"`
 	ID                types.String `tfsdk:"id" json:"id,omitempty"`
 	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
+	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
@@ -40,14 +45,19 @@ type DatabaseConnectionResourceModel struct {
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
 	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	Database          types.String `tfsdk:"database" json:"database,omitempty"`
 	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
 	Description       types.String `tfsdk:"description" json:"description,omitempty"`
 	GroupID           types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	Host              types.String `tfsdk:"host" json:"host,omitempty"`
 	ID                types.String `tfsdk:"id" json:"id,omitempty"`
 	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
+	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
@@ -59,14 +69,19 @@ type DatabaseConnectionDataSourceModel struct {
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
 	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	Database          types.String `tfsdk:"database" json:"database,omitempty"`
 	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
 	Description       types.String `tfsdk:"description" json:"description,omitempty"`
 	GroupID           types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	Host              types.String `tfsdk:"host" json:"host,omitempty"`
 	ID                types.String `tfsdk:"id" json:"id,omitempty"`
 	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
+	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
@@ -78,14 +93,19 @@ type DatabaseConnectionAPIModel struct {
 	ConfigObj         *string `json:"configObj,omitempty"`
 	ConnectionString  *string `json:"connectionString,omitempty"`
 	ConnectionTimeout *int64  `json:"connectionTimeout,omitempty"`
+	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	CredsSecrets      *string `json:"credsSecrets,omitempty"`
+	Database          *string `json:"database,omitempty"`
 	DatabaseType      *string `json:"databaseType,omitempty"`
 	Description       *string `json:"description,omitempty"`
 	GroupID           *string `json:"groupId,omitempty"`
+	Host              *string `json:"host,omitempty"`
 	ID                *string `json:"id,omitempty"`
 	Items             any     `json:"items,omitempty"`
+	LogOnMechanism    *string `json:"logOnMechanism,omitempty"`
 	Password          *string `json:"password,omitempty"`
 	RequestTimeout    *int64  `json:"requestTimeout,omitempty"`
+	Sslmode           *string `json:"sslmode,omitempty"`
 	Tags              *string `json:"tags,omitempty"`
 	TextSecret        *string `json:"textSecret,omitempty"`
 	TLS               any     `json:"tls,omitempty"`
@@ -97,12 +117,17 @@ type DatabaseConnectionItemsModel struct {
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
 	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	Database          types.String `tfsdk:"database" json:"database,omitempty"`
 	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
 	Description       types.String `tfsdk:"description" json:"description,omitempty"`
+	Host              types.String `tfsdk:"host" json:"host,omitempty"`
 	ID                types.String `tfsdk:"id" json:"id,omitempty"`
+	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
@@ -114,12 +139,17 @@ type DatabaseConnectionItemsAPIModel struct {
 	ConfigObj         *string `json:"configObj,omitempty"`
 	ConnectionString  *string `json:"connectionString,omitempty"`
 	ConnectionTimeout *int64  `json:"connectionTimeout,omitempty"`
+	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	CredsSecrets      *string `json:"credsSecrets,omitempty"`
+	Database          *string `json:"database,omitempty"`
 	DatabaseType      *string `json:"databaseType,omitempty"`
 	Description       *string `json:"description,omitempty"`
+	Host              *string `json:"host,omitempty"`
 	ID                *string `json:"id,omitempty"`
+	LogOnMechanism    *string `json:"logOnMechanism,omitempty"`
 	Password          *string `json:"password,omitempty"`
 	RequestTimeout    *int64  `json:"requestTimeout,omitempty"`
+	Sslmode           *string `json:"sslmode,omitempty"`
 	Tags              *string `json:"tags,omitempty"`
 	TextSecret        *string `json:"textSecret,omitempty"`
 	TLS               any     `json:"tls,omitempty"`
@@ -132,12 +162,17 @@ func DatabaseConnectionItemsAttrTypes() map[string]attr.Type {
 		"config_obj":         types.StringType,
 		"connection_string":  types.StringType,
 		"connection_timeout": types.Int64Type,
+		"credentials_secret": types.StringType,
 		"creds_secrets":      types.StringType,
+		"database":           types.StringType,
 		"database_type":      types.StringType,
 		"description":        types.StringType,
+		"host":               types.StringType,
 		"id":                 types.StringType,
+		"log_on_mechanism":   types.StringType,
 		"password":           types.StringType,
 		"request_timeout":    types.Int64Type,
+		"sslmode":            types.StringType,
 		"tags":               types.StringType,
 		"text_secret":        types.StringType,
 		"tls":                types.ObjectType{AttrTypes: DatabaseConnectionItemsTLSAttrTypes()},
@@ -468,12 +503,26 @@ func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 		}
 		output["connectionTimeout"] = value
 	}
+	if !m.CredentialsSecret.IsNull() && !m.CredentialsSecret.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.CredentialsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert credentials_secret to API value: %v", err)
+		}
+		output["credentialsSecret"] = value
+	}
 	if !m.CredsSecrets.IsNull() && !m.CredsSecrets.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.CredsSecrets)
 		if err != nil {
 			return nil, fmt.Errorf("convert creds_secrets to API value: %v", err)
 		}
 		output["credsSecrets"] = value
+	}
+	if !m.Database.IsNull() && !m.Database.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.Database)
+		if err != nil {
+			return nil, fmt.Errorf("convert database to API value: %v", err)
+		}
+		output["database"] = value
 	}
 	if !m.DatabaseType.IsNull() && !m.DatabaseType.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.DatabaseType)
@@ -489,12 +538,26 @@ func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 		}
 		output["description"] = value
 	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.ID)
 		if err != nil {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.LogOnMechanism.IsNull() && !m.LogOnMechanism.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.LogOnMechanism)
+		if err != nil {
+			return nil, fmt.Errorf("convert log_on_mechanism to API value: %v", err)
+		}
+		output["logOnMechanism"] = value
 	}
 	if !m.Password.IsNull() && !m.Password.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.Password)
@@ -509,6 +572,13 @@ func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
 		}
 		output["requestTimeout"] = value
+	}
+	if !m.Sslmode.IsNull() && !m.Sslmode.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.Sslmode)
+		if err != nil {
+			return nil, fmt.Errorf("convert sslmode to API value: %v", err)
+		}
+		output["sslmode"] = value
 	}
 	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.Tags)
@@ -566,10 +636,20 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.ConnectionTimeout = types.Int64Null()
 	}
+	if input.CredentialsSecret != nil {
+		m.CredentialsSecret = types.StringValue(*input.CredentialsSecret)
+	} else {
+		m.CredentialsSecret = types.StringNull()
+	}
 	if input.CredsSecrets != nil {
 		m.CredsSecrets = types.StringValue(*input.CredsSecrets)
 	} else {
 		m.CredsSecrets = types.StringNull()
+	}
+	if input.Database != nil {
+		m.Database = types.StringValue(*input.Database)
+	} else {
+		m.Database = types.StringNull()
 	}
 	if input.DatabaseType != nil {
 		m.DatabaseType = types.StringValue(*input.DatabaseType)
@@ -586,6 +666,11 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.GroupID = types.StringNull()
 	}
+	if input.Host != nil {
+		m.Host = types.StringValue(*input.Host)
+	} else {
+		m.Host = types.StringNull()
+	}
 	if input.ID != nil {
 		m.ID = types.StringValue(*input.ID)
 	} else {
@@ -600,6 +685,11 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Items = types.ListNull(types.ObjectType{AttrTypes: DatabaseConnectionItemsAttrTypes()})
 	}
+	if input.LogOnMechanism != nil {
+		m.LogOnMechanism = types.StringValue(*input.LogOnMechanism)
+	} else {
+		m.LogOnMechanism = types.StringNull()
+	}
 	if input.Password != nil {
 		m.Password = types.StringValue(*input.Password)
 	} else {
@@ -609,6 +699,11 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 		m.RequestTimeout = types.Int64Value(*input.RequestTimeout)
 	} else {
 		m.RequestTimeout = types.Int64Null()
+	}
+	if input.Sslmode != nil {
+		m.Sslmode = types.StringValue(*input.Sslmode)
+	} else {
+		m.Sslmode = types.StringNull()
 	}
 	if input.Tags != nil {
 		m.Tags = types.StringValue(*input.Tags)

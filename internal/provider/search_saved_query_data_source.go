@@ -439,9 +439,9 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 								Computed:    true,
 								Description: `Maximum value for the axis range.`,
 							},
-							"min": schema.Float64Attribute{
+							"min": schema.StringAttribute{
 								Computed:    true,
-								Description: `Minimum value for the axis range.`,
+								Description: `Minimum value for the axis range. Use <code>auto</code> to scale the axis to the data range instead of anchoring it at zero.`,
 							},
 							"position": schema.StringAttribute{
 								Computed:    true,

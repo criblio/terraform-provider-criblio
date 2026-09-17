@@ -699,16 +699,32 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
 {{- end }}
 {{- end }}
+{{- range nestedOneOfGroups .OneOfVariants }}
+{{- if and .Required .RequestField }}
+	if {{ range .Variants }}m.{{ .GoName }} == nil && {{ end }}true {
+		return nil, fmt.Errorf("exactly one oneOf variant must be configured for {{ .APIName }}")
+	}
+{{- end }}
+{{- end }}
 {{- range .OneOfVariants }}
+	{{- if or (not .NestUnder) .RequestField }}
 	if m.{{ .GoName }} != nil {
 		value, err := m.{{ .GoName }}.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
+		{{- if .NestUnder }}
+		if _, exists := output["{{ .NestUnder }}"]; exists {
+			return nil, fmt.Errorf("multiple oneOf variants configured for {{ .NestUnder }}")
+		}
+		output["{{ .NestUnder }}"] = value
+		{{- else }}
 		for key, item := range value {
 			output[key] = item
 		}
+		{{- end }}
 	}
+	{{- end }}
 {{- end }}
 {{- if eq .StructName "MappingRuleset" }}
 	output["id"] = mappingRulesetID(m)
@@ -749,6 +765,20 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 {{- end }}
 {{- else if .EmitEmpty }}
 	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
+{{- end }}
+{{- end }}
+{{- range .OneOfVariants }}
+{{- if and .NestUnder .UpdateField }}
+	if m.{{ .GoName }} != nil {
+		value, err := m.{{ .GoName }}.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		if _, exists := output["{{ .NestUnder }}"]; exists {
+			return nil, fmt.Errorf("multiple oneOf variants configured for {{ .NestUnder }}")
+		}
+		output["{{ .NestUnder }}"] = value
+	}
 {{- end }}
 {{- end }}
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
@@ -1006,15 +1036,26 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		m.KeyID = m.ID
 	}
 {{- end }}
-{{- if .OneOfVariants }}
+{{- if hasRootOneOf . }}
 	switch {{ .StructName }}OneOfDiscriminator(raw) {
-{{- range .OneOfVariants }}
+{{- range rootOneOfVariants .OneOfVariants }}
 {{- if .DiscriminatorValue }}
 	case {{ range $i, $value := discriminatorCaseValues $ . }}{{ if $i }}, {{ end }}"{{ $value }}"{{ end }}:
+		{{- if .NestUnder }}
+		nested, ok := raw["{{ .NestUnder }}"].(map[string]any)
+		if !ok {
+			break
+		}
+		m.{{ .GoName }} = &{{ .ModelName }}{}
+		if err := m.{{ .GoName }}.unmarshalPayload(nested); err != nil {
+			return err
+		}
+		{{- else }}
 		m.{{ .GoName }} = &{{ .ModelName }}{}
 		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
 			return err
 		}
+		{{- end }}
 {{- end }}
 {{- end }}
 {{- if noDiscriminatorVariants . }}
@@ -1023,6 +1064,47 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 			return err
 		}
 {{- end }}
+	}
+{{- end }}
+{{- range nestedOneOfGroups .OneOfVariants }}
+	{
+		nested, ok := raw["{{ .APIName }}"].(map[string]any)
+		if ok {
+			{{- if .DiscriminatorField }}
+			discriminator := ""
+			{{- if .DiscriminatorAtParent }}
+			if value, ok := raw["{{ .DiscriminatorField }}"].(string); ok {
+				discriminator = value
+			}
+			{{- else }}
+			if value, ok := nested["{{ .DiscriminatorField }}"].(string); ok {
+				discriminator = value
+			}
+			{{- end }}
+			switch discriminator {
+			{{- range .Variants }}
+			{{- if .DiscriminatorValue }}
+			case "{{ .DiscriminatorValue }}":
+				m.{{ .GoName }} = &{{ .ModelName }}{}
+				if err := m.{{ .GoName }}.unmarshalPayload(nested); err != nil {
+					return err
+				}
+			{{- end }}
+			{{- end }}
+			}
+			{{- else }}
+			matched := false
+			{{- range .Variants }}
+			if !matched && {{ $.StructName }}OneOfShapeMatches(nested, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
+				m.{{ .GoName }} = &{{ .ModelName }}{}
+				if err := m.{{ .GoName }}.unmarshalPayload(nested); err != nil {
+					return err
+				}
+				matched = true
+			}
+			{{- end }}
+			{{- end }}
+		}
 	}
 {{- end }}
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
@@ -1123,7 +1205,7 @@ func (m *{{ .ModelName }}) unmarshalPayload(input map[string]any) error {
 }
 {{ end }}
 {{- end }}
-{{- if .OneOfVariants }}
+{{- if hasRootOneOf . }}
 
 func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 	if collector, ok := input["collector"].(map[string]any); ok {
@@ -1152,6 +1234,16 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 
 func (m *{{ .StructName }}Model) unmarshal{{ .StructName }}OneOfByShape(raw map[string]any) (bool, error) {
 {{- range noDiscriminatorVariants . }}
+	{{- if .NestUnder }}
+	nested, ok := raw["{{ .NestUnder }}"].(map[string]any)
+	if ok && {{ $.StructName }}OneOfShapeMatches(nested, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
+		m.{{ .GoName }} = &{{ .ModelName }}{}
+		if err := m.{{ .GoName }}.unmarshalPayload(nested); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	{{- else }}
 	if {{ $.StructName }}OneOfShapeMatches(raw, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
 		m.{{ .GoName }} = &{{ .ModelName }}{}
 		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
@@ -1159,6 +1251,7 @@ func (m *{{ .StructName }}Model) unmarshal{{ .StructName }}OneOfByShape(raw map[
 		}
 		return true, nil
 	}
+	{{- end }}
 {{- end }}
 	return false, nil
 }
@@ -1180,6 +1273,25 @@ func {{ .StructName }}OneOfShapeMatches(raw map[string]any, required []string, k
 	return false
 }
 {{- end }}
+{{- end }}
+{{- if needsNestedShapeMatcher . }}
+
+func {{ .StructName }}OneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
+	for _, name := range required {
+		if _, ok := raw[name]; !ok {
+			return false
+		}
+	}
+	if len(required) > 0 {
+		return true
+	}
+	for _, name := range known {
+		if _, ok := raw[name]; ok {
+			return true
+		}
+	}
+	return false
+}
 {{- end }}
 `
 

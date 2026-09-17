@@ -53,7 +53,7 @@ resource "criblio_source" "syslog_source" {
     octet_counting        = false
     pipeline              = "palo_alto_traffic"
     pq = {
-      commit_frequency = 5
+      commit_frequency = 42
       compress         = "none"
       max_buffer_size  = 50
       max_file_size    = "1 MB"

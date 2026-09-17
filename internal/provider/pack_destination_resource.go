@@ -1144,13 +1144,6 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
 						},
 					},
-					"secret": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Sensitive:   true,
-						Description: `Secret parameter value to pass in request body`,
-					},
 					"refresh_token_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -1193,6 +1186,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								},
 							},
 						},
+					},
+					"oauth_secret_source": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Enter the OAuth secret directly, or select a stored text secret`,
 					},
 					"client_id": schema.StringAttribute{
 						Required:    false,
@@ -1370,6 +1369,19 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
+					},
+					"secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret parameter value to pass in request body`,
+					},
+					"oauth_text_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored text secret for the OAuth secret value`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -3523,7 +3535,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Wiz Defend Source type`,
+						Description: `The Wiz log source type. Select a predefined type or enter a custom value.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required:    false,
@@ -3549,6 +3561,21 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Optional:    true,
 						Computed:    true,
 						Description: `Select or create a stored text secret`,
+					},
+					"wiz_vpc_event_format": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The format of the VPC Flow Log events`,
+					},
+					"wiz_vpc_flow_log_format": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The format string for VPC Flow Log fields`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -10889,6 +10916,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888
 `,
 					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
+					},
 					"site_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -10906,6 +10939,30 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Optional:    true,
 						Computed:    true,
 						Description: `Timezone offset`,
+					},
+					"hostname": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "JavaScript expression for the host from which the log was ingested into the SIEM, evaluated per event. Static values must be quoted or backticked (for example, 'collector-1.example.com'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${host}`. Emitted as the \"hostname\" metadata field; omitted when empty or not a usable scalar.",
+					},
+					"forwarder": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "JavaScript expression for the host that forwarded the log, evaluated per event. Static values must be quoted or backticked (for example, 'fwd-1'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${__forwarder}`. Emitted as the \"forwarder\" metadata field; omitted when empty or not a usable scalar.",
+					},
+					"origin": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression that must resolve to an object describing the interim agent collector, such as {hostname: origin_host, '@timestamp': _time, path: source}. Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "origin" metadata field; omitted when the result is not a non-empty object.`,
+					},
+					"logtags": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression that must resolve to an object of custom metadata key/value pairs (searchable in Exabeam as m_c_logtags_<name>). Assemble the object upstream and reference it here (example: __exabeam_logtags), or build it inline (example: {department: dept, servertype: stype}). Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "logtags" metadata field; omitted when the result is not a non-empty object.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -10955,6 +11012,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Validators: []validator.Float64{
 							float64validator.AtLeast(1),
 						},
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 				},
 			},
@@ -16687,6 +16750,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
+					},
+					"report_branch_metrics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Report per-rule event counts and percentages as internal metrics (router.out_events, router.out_events_pct, router.in_events, router.unmatched_events, router.unmatched_events_pct). Adds metric series per rule.`,
 					},
 					"rules": schema.ListNestedAttribute{
 						Required:    false,
@@ -23065,6 +23134,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
+					"send_as": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Which signals this Destination carries. Logs sends everything to log search, including metric events. Metrics routes metric events to the metric store and drops everything else. Logs and Metrics routes metric events to the metric store and sends the rest to log search. Metric routing requires the receiving Cribl Search Source to be enabled for metrics storage; if it is not, metric events are discarded rather than stored as logs.`,
+					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
@@ -25235,6 +25310,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 10),
+						},
+					},
+					"freshness_grace_period_sec": schema.Float64Attribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(5),
 						},
 					},
 					"description": schema.StringAttribute{
@@ -28512,6 +28595,603 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"pq_mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_traversal_otlp": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("traversal_otlp"),
+						},
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"auth_type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication type`,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The endpoint where OTel log events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets).`,
+					},
+					"protocol": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select a transport option for OpenTelemetry`,
+					},
+					"preserve_native_any_value": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps`,
+					},
+					"compress": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+					},
+					"http_compress": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+					},
+					"http_logs_endpoint_override": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "If you want to send logs to the default `{endpoint}/v1/logs` endpoint, leave this field empty; otherwise, specify the desired endpoint",
+					},
+					"metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"dynamic_headers_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Batch event data upon dynamic metadata (whether presented or not)`,
+					},
+					"dynamic_headers_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
+					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+					},
+					"connection_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+					},
+					"keep_alive_time": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How often the sender should ping the peer to keep the connection open`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
+					},
+					"keep_alive": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Disable to close the connection immediately after sending the outgoing request`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"credentials_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a secret that references your credentials`,
+					},
+					"text_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored text secret`,
+					},
+					"login_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
+					},
+					"secret_param_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Secret parameter name to pass in request body`,
+					},
+					"oauth_text_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored text secret for the OAuth secret parameter value to pass in request body`,
+					},
+					"token_attribute_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+					},
+					"auth_header_expr": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.",
+					},
+					"token_timeout_secs": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
+					},
+					"oauth_params": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `OAuth parameter name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `OAuth parameter value`,
+								},
+							},
+						},
+					},
+					"oauth_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `OAuth header name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `OAuth header value`,
+								},
+							},
+						},
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+								Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"ca_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"min_version": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
+							},
+							"max_version": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
+							},
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -34774,6 +35454,263 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 				},
 			},
+			"output_databricks_zerobus": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("databricks_zerobus"),
+						},
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"workspace_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `HTTPS URL of the Databricks Workspace, used for OAuth token exchange (example: https://dbc-1234abcd-5e6f.cloud.databricks.com). Must start with https://`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https://.+$`), "must match pattern ^https://.+$"),
+						},
+					},
+					"workspace_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique identifier for the Databricks Workspace. Scopes the OAuth token to this Workspace.`,
+					},
+					"zerobus_endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Hostname of the Workspace Zerobus ingest endpoint. Omit the scheme, port, and path (example: 1234567890.zerobus.us-west-2.cloud.databricks.com).`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[^:/\s]+$`), "must match pattern ^[^:/\\s]+$"),
+						},
+					},
+					"client_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `OAuth client ID of the service principal authorized to write to the target table`,
+					},
+					"client_text_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `OAuth client secret of the service principal`,
+					},
+					"table_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Three-part Unity Catalog name of the target table: catalog.schema.table`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[^.]+\.[^.]+\.[^.]+$`), "must match pattern ^[^.]+\\.[^.]+\\.[^.]+$"),
+						},
+					},
+					"max_batch_size_kb": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the serialized records in a single ingest batch`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 10176),
+						},
+					},
+					"max_batch_records": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of records to include in a single ingest batch`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 2000),
+						},
+					},
+					"max_buffered_kb": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of unacknowledged records per Worker Process before blocking. Must be at least the configured Batch size limit. Records larger than this limit are dropped.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1024),
+						},
+					},
+					"max_inflight_batches": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of unacknowledged batches per Worker Process before blocking`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 1000),
+						},
+					},
+					"flush_period_sec": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time, in seconds, to hold a batch before sending it`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
+					},
+					"ack_timeout_sec": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for Databricks to acknowledge sent batches before reconnecting`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
+					},
+					"connection_timeout_sec": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a new ingest stream to open before canceling it`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 300),
+						},
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"pq_mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
 		},
 	}
 }
@@ -35131,6 +36068,9 @@ func isPackDestinationImportState(state *PackDestinationModel) bool {
 	if state.OutputDynatraceOtlp != nil {
 		return false
 	}
+	if state.OutputTraversalOtlp != nil {
+		return false
+	}
 	if state.OutputSentinelOneAiSiem != nil {
 		return false
 	}
@@ -35171,6 +36111,9 @@ func isPackDestinationImportState(state *PackDestinationModel) bool {
 		return false
 	}
 	if state.OutputIbmCloudS3 != nil {
+		return false
+	}
+	if state.OutputDatabricksZerobus != nil {
 		return false
 	}
 	return true
@@ -35817,11 +36760,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputSentinel.LoginURL.IsNull() || state.OutputSentinel.LoginURL.IsUnknown() {
 			state.OutputSentinel.LoginURL = types.StringNull()
 		}
-		if !api.OutputSentinel.Secret.IsNull() && !api.OutputSentinel.Secret.IsUnknown() {
-			state.OutputSentinel.Secret = stringFromAPIOrPrior(api.OutputSentinel.Secret.ValueString(), state.OutputSentinel.Secret)
-		} else if state.OutputSentinel.Secret.IsNull() || state.OutputSentinel.Secret.IsUnknown() {
-			state.OutputSentinel.Secret = types.StringNull()
-		}
 		if !api.OutputSentinel.RefreshTokenField.IsNull() && !api.OutputSentinel.RefreshTokenField.IsUnknown() {
 			state.OutputSentinel.RefreshTokenField = api.OutputSentinel.RefreshTokenField
 		} else if state.OutputSentinel.RefreshTokenField.IsNull() || state.OutputSentinel.RefreshTokenField.IsUnknown() {
@@ -35846,6 +36784,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputSentinel.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()})
 		} else if len(state.OutputSentinel.RefreshRequestParams.Elements()) == 0 {
 			state.OutputSentinel.RefreshRequestParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()}, nil)
+		}
+		if !api.OutputSentinel.OauthSecretSource.IsNull() && !api.OutputSentinel.OauthSecretSource.IsUnknown() {
+			state.OutputSentinel.OauthSecretSource = api.OutputSentinel.OauthSecretSource
+		} else if state.OutputSentinel.OauthSecretSource.IsNull() || state.OutputSentinel.OauthSecretSource.IsUnknown() {
+			state.OutputSentinel.OauthSecretSource = types.StringNull()
 		}
 		if !api.OutputSentinel.ClientID.IsNull() && !api.OutputSentinel.ClientID.IsUnknown() {
 			state.OutputSentinel.ClientID = api.OutputSentinel.ClientID
@@ -35976,6 +36919,16 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputSentinel.PqControls = api.OutputSentinel.PqControls
 		} else if state.OutputSentinel.PqControls.IsNull() || state.OutputSentinel.PqControls.IsUnknown() {
 			state.OutputSentinel.PqControls = types.MapNull(types.StringType)
+		}
+		if !api.OutputSentinel.Secret.IsNull() && !api.OutputSentinel.Secret.IsUnknown() {
+			state.OutputSentinel.Secret = stringFromAPIOrPrior(api.OutputSentinel.Secret.ValueString(), state.OutputSentinel.Secret)
+		} else if state.OutputSentinel.Secret.IsNull() || state.OutputSentinel.Secret.IsUnknown() {
+			state.OutputSentinel.Secret = types.StringNull()
+		}
+		if !api.OutputSentinel.OauthTextSecret.IsNull() && !api.OutputSentinel.OauthTextSecret.IsUnknown() {
+			state.OutputSentinel.OauthTextSecret = api.OutputSentinel.OauthTextSecret
+		} else if state.OutputSentinel.OauthTextSecret.IsNull() || state.OutputSentinel.OauthTextSecret.IsUnknown() {
+			state.OutputSentinel.OauthTextSecret = types.StringNull()
 		}
 		if !api.OutputSentinel.URL.IsNull() && !api.OutputSentinel.URL.IsUnknown() {
 			state.OutputSentinel.URL = api.OutputSentinel.URL
@@ -37152,6 +38105,16 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputWizHec.TextSecret = api.OutputWizHec.TextSecret
 		} else if state.OutputWizHec.TextSecret.IsNull() || state.OutputWizHec.TextSecret.IsUnknown() {
 			state.OutputWizHec.TextSecret = types.StringNull()
+		}
+		if !api.OutputWizHec.WizVpcEventFormat.IsNull() && !api.OutputWizHec.WizVpcEventFormat.IsUnknown() {
+			state.OutputWizHec.WizVpcEventFormat = api.OutputWizHec.WizVpcEventFormat
+		} else if state.OutputWizHec.WizVpcEventFormat.IsNull() || state.OutputWizHec.WizVpcEventFormat.IsUnknown() {
+			state.OutputWizHec.WizVpcEventFormat = types.StringNull()
+		}
+		if !api.OutputWizHec.WizVpcFlowLogFormat.IsNull() && !api.OutputWizHec.WizVpcFlowLogFormat.IsUnknown() {
+			state.OutputWizHec.WizVpcFlowLogFormat = api.OutputWizHec.WizVpcFlowLogFormat
+		} else if state.OutputWizHec.WizVpcFlowLogFormat.IsNull() || state.OutputWizHec.WizVpcFlowLogFormat.IsUnknown() {
+			state.OutputWizHec.WizVpcFlowLogFormat = types.StringNull()
 		}
 		if !api.OutputWizHec.PqStrictOrdering.IsNull() && !api.OutputWizHec.PqStrictOrdering.IsUnknown() {
 			state.OutputWizHec.PqStrictOrdering = api.OutputWizHec.PqStrictOrdering
@@ -41801,6 +42764,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputExabeam.CollectorInstanceID.IsNull() || state.OutputExabeam.CollectorInstanceID.IsUnknown() {
 			state.OutputExabeam.CollectorInstanceID = types.StringNull()
 		}
+		if !api.OutputExabeam.AwsAuthenticationMethod.IsNull() && !api.OutputExabeam.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputExabeam.AwsAuthenticationMethod = api.OutputExabeam.AwsAuthenticationMethod
+		} else if state.OutputExabeam.AwsAuthenticationMethod.IsNull() || state.OutputExabeam.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputExabeam.AwsAuthenticationMethod = types.StringNull()
+		}
 		if !api.OutputExabeam.SiteName.IsNull() && !api.OutputExabeam.SiteName.IsUnknown() {
 			state.OutputExabeam.SiteName = api.OutputExabeam.SiteName
 		} else if state.OutputExabeam.SiteName.IsNull() || state.OutputExabeam.SiteName.IsUnknown() {
@@ -41815,6 +42783,26 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputExabeam.TimezoneOffset = api.OutputExabeam.TimezoneOffset
 		} else if state.OutputExabeam.TimezoneOffset.IsNull() || state.OutputExabeam.TimezoneOffset.IsUnknown() {
 			state.OutputExabeam.TimezoneOffset = types.StringNull()
+		}
+		if !api.OutputExabeam.Hostname.IsNull() && !api.OutputExabeam.Hostname.IsUnknown() {
+			state.OutputExabeam.Hostname = api.OutputExabeam.Hostname
+		} else if state.OutputExabeam.Hostname.IsNull() || state.OutputExabeam.Hostname.IsUnknown() {
+			state.OutputExabeam.Hostname = types.StringNull()
+		}
+		if !api.OutputExabeam.Forwarder.IsNull() && !api.OutputExabeam.Forwarder.IsUnknown() {
+			state.OutputExabeam.Forwarder = api.OutputExabeam.Forwarder
+		} else if state.OutputExabeam.Forwarder.IsNull() || state.OutputExabeam.Forwarder.IsUnknown() {
+			state.OutputExabeam.Forwarder = types.StringNull()
+		}
+		if !api.OutputExabeam.Origin.IsNull() && !api.OutputExabeam.Origin.IsUnknown() {
+			state.OutputExabeam.Origin = api.OutputExabeam.Origin
+		} else if state.OutputExabeam.Origin.IsNull() || state.OutputExabeam.Origin.IsUnknown() {
+			state.OutputExabeam.Origin = types.StringNull()
+		}
+		if !api.OutputExabeam.Logtags.IsNull() && !api.OutputExabeam.Logtags.IsUnknown() {
+			state.OutputExabeam.Logtags = api.OutputExabeam.Logtags
+		} else if state.OutputExabeam.Logtags.IsNull() || state.OutputExabeam.Logtags.IsUnknown() {
+			state.OutputExabeam.Logtags = types.StringNull()
 		}
 		if !api.OutputExabeam.AwsAPIKey.IsNull() && !api.OutputExabeam.AwsAPIKey.IsUnknown() {
 			state.OutputExabeam.AwsAPIKey = api.OutputExabeam.AwsAPIKey
@@ -41850,6 +42838,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputExabeam.MaxRetryNum = api.OutputExabeam.MaxRetryNum
 		} else if state.OutputExabeam.MaxRetryNum.IsNull() || state.OutputExabeam.MaxRetryNum.IsUnknown() {
 			state.OutputExabeam.MaxRetryNum = types.Float64Null()
+		}
+		if !api.OutputExabeam.AwsSecret.IsNull() && !api.OutputExabeam.AwsSecret.IsUnknown() {
+			state.OutputExabeam.AwsSecret = api.OutputExabeam.AwsSecret
+		} else if state.OutputExabeam.AwsSecret.IsNull() || state.OutputExabeam.AwsSecret.IsUnknown() {
+			state.OutputExabeam.AwsSecret = types.StringNull()
 		}
 	}
 	if api.OutputKafka != nil {
@@ -44894,6 +45887,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		}
 		if elementType := state.OutputRouter.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputRouter.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputRouter.ReportBranchMetrics.IsNull() && !api.OutputRouter.ReportBranchMetrics.IsUnknown() {
+			state.OutputRouter.ReportBranchMetrics = api.OutputRouter.ReportBranchMetrics
+		} else if state.OutputRouter.ReportBranchMetrics.IsNull() || state.OutputRouter.ReportBranchMetrics.IsUnknown() {
+			state.OutputRouter.ReportBranchMetrics = types.BoolNull()
 		}
 		if !preserveInputs || state.OutputRouter.Rules.IsUnknown() || (fillMissingInputs && state.OutputRouter.Rules.IsNull()) {
 			if !api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() {
@@ -48620,6 +49618,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputCriblSearchEngine.OnBackpressure.IsNull() || state.OutputCriblSearchEngine.OnBackpressure.IsUnknown() {
 			state.OutputCriblSearchEngine.OnBackpressure = types.StringNull()
 		}
+		if !api.OutputCriblSearchEngine.SendAs.IsNull() && !api.OutputCriblSearchEngine.SendAs.IsUnknown() {
+			state.OutputCriblSearchEngine.SendAs = api.OutputCriblSearchEngine.SendAs
+		} else if state.OutputCriblSearchEngine.SendAs.IsNull() || state.OutputCriblSearchEngine.SendAs.IsUnknown() {
+			state.OutputCriblSearchEngine.SendAs = types.StringNull()
+		}
 		if !api.OutputCriblSearchEngine.UseRoundRobinDns.IsNull() && !api.OutputCriblSearchEngine.UseRoundRobinDns.IsUnknown() {
 			state.OutputCriblSearchEngine.UseRoundRobinDns = api.OutputCriblSearchEngine.UseRoundRobinDns
 		} else if state.OutputCriblSearchEngine.UseRoundRobinDns.IsNull() || state.OutputCriblSearchEngine.UseRoundRobinDns.IsUnknown() {
@@ -50002,6 +51005,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputCriblLake.MaxConcurrentFileParts = api.OutputCriblLake.MaxConcurrentFileParts
 		} else if state.OutputCriblLake.MaxConcurrentFileParts.IsNull() || state.OutputCriblLake.MaxConcurrentFileParts.IsUnknown() {
 			state.OutputCriblLake.MaxConcurrentFileParts = types.Float64Null()
+		}
+		if !api.OutputCriblLake.FreshnessGracePeriodSec.IsNull() && !api.OutputCriblLake.FreshnessGracePeriodSec.IsUnknown() {
+			state.OutputCriblLake.FreshnessGracePeriodSec = api.OutputCriblLake.FreshnessGracePeriodSec
+		} else if state.OutputCriblLake.FreshnessGracePeriodSec.IsNull() || state.OutputCriblLake.FreshnessGracePeriodSec.IsUnknown() {
+			state.OutputCriblLake.FreshnessGracePeriodSec = types.Float64Null()
 		}
 		if !api.OutputCriblLake.Description.IsNull() && !api.OutputCriblLake.Description.IsUnknown() {
 			state.OutputCriblLake.Description = api.OutputCriblLake.Description
@@ -51967,6 +52975,336 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputDynatraceOtlp.PqControls = api.OutputDynatraceOtlp.PqControls
 		} else if state.OutputDynatraceOtlp.PqControls.IsNull() || state.OutputDynatraceOtlp.PqControls.IsUnknown() {
 			state.OutputDynatraceOtlp.PqControls = types.MapNull(types.StringType)
+		}
+	}
+	if api.OutputTraversalOtlp != nil {
+		if state.OutputTraversalOtlp == nil {
+			state.OutputTraversalOtlp = &OutputTraversalOtlpModel{}
+		}
+		if !api.OutputTraversalOtlp.ID.IsNull() && !api.OutputTraversalOtlp.ID.IsUnknown() {
+			state.OutputTraversalOtlp.ID = api.OutputTraversalOtlp.ID
+		} else if state.OutputTraversalOtlp.ID.IsNull() || state.OutputTraversalOtlp.ID.IsUnknown() {
+			state.OutputTraversalOtlp.ID = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Type.IsNull() && !api.OutputTraversalOtlp.Type.IsUnknown() {
+			state.OutputTraversalOtlp.Type = api.OutputTraversalOtlp.Type
+		} else if state.OutputTraversalOtlp.Type.IsNull() || state.OutputTraversalOtlp.Type.IsUnknown() {
+			state.OutputTraversalOtlp.Type = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Pipeline.IsNull() && !api.OutputTraversalOtlp.Pipeline.IsUnknown() {
+			state.OutputTraversalOtlp.Pipeline = api.OutputTraversalOtlp.Pipeline
+		} else if state.OutputTraversalOtlp.Pipeline.IsNull() || state.OutputTraversalOtlp.Pipeline.IsUnknown() {
+			state.OutputTraversalOtlp.Pipeline = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.SystemFields.IsNull() && !api.OutputTraversalOtlp.SystemFields.IsUnknown() {
+			state.OutputTraversalOtlp.SystemFields = api.OutputTraversalOtlp.SystemFields
+		} else if state.OutputTraversalOtlp.SystemFields.IsNull() || state.OutputTraversalOtlp.SystemFields.IsUnknown() {
+			state.OutputTraversalOtlp.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputTraversalOtlp.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputTraversalOtlp.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputTraversalOtlp.Environment.IsNull() && !api.OutputTraversalOtlp.Environment.IsUnknown() {
+			state.OutputTraversalOtlp.Environment = api.OutputTraversalOtlp.Environment
+		} else if state.OutputTraversalOtlp.Environment.IsNull() || state.OutputTraversalOtlp.Environment.IsUnknown() {
+			state.OutputTraversalOtlp.Environment = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Streamtags.IsNull() && !api.OutputTraversalOtlp.Streamtags.IsUnknown() {
+			state.OutputTraversalOtlp.Streamtags = api.OutputTraversalOtlp.Streamtags
+		} else if state.OutputTraversalOtlp.Streamtags.IsNull() || state.OutputTraversalOtlp.Streamtags.IsUnknown() {
+			state.OutputTraversalOtlp.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputTraversalOtlp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputTraversalOtlp.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputTraversalOtlp.AuthType.IsNull() && !api.OutputTraversalOtlp.AuthType.IsUnknown() {
+			state.OutputTraversalOtlp.AuthType = api.OutputTraversalOtlp.AuthType
+		} else if state.OutputTraversalOtlp.AuthType.IsNull() || state.OutputTraversalOtlp.AuthType.IsUnknown() {
+			state.OutputTraversalOtlp.AuthType = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Endpoint.IsNull() && !api.OutputTraversalOtlp.Endpoint.IsUnknown() {
+			state.OutputTraversalOtlp.Endpoint = api.OutputTraversalOtlp.Endpoint
+		} else if state.OutputTraversalOtlp.Endpoint.IsNull() || state.OutputTraversalOtlp.Endpoint.IsUnknown() {
+			state.OutputTraversalOtlp.Endpoint = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Protocol.IsNull() && !api.OutputTraversalOtlp.Protocol.IsUnknown() {
+			state.OutputTraversalOtlp.Protocol = api.OutputTraversalOtlp.Protocol
+		} else if state.OutputTraversalOtlp.Protocol.IsNull() || state.OutputTraversalOtlp.Protocol.IsUnknown() {
+			state.OutputTraversalOtlp.Protocol = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PreserveNativeAnyValue.IsNull() && !api.OutputTraversalOtlp.PreserveNativeAnyValue.IsUnknown() {
+			state.OutputTraversalOtlp.PreserveNativeAnyValue = api.OutputTraversalOtlp.PreserveNativeAnyValue
+		} else if state.OutputTraversalOtlp.PreserveNativeAnyValue.IsNull() || state.OutputTraversalOtlp.PreserveNativeAnyValue.IsUnknown() {
+			state.OutputTraversalOtlp.PreserveNativeAnyValue = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.Compress.IsNull() && !api.OutputTraversalOtlp.Compress.IsUnknown() {
+			state.OutputTraversalOtlp.Compress = api.OutputTraversalOtlp.Compress
+		} else if state.OutputTraversalOtlp.Compress.IsNull() || state.OutputTraversalOtlp.Compress.IsUnknown() {
+			state.OutputTraversalOtlp.Compress = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.HttpCompress.IsNull() && !api.OutputTraversalOtlp.HttpCompress.IsUnknown() {
+			state.OutputTraversalOtlp.HttpCompress = api.OutputTraversalOtlp.HttpCompress
+		} else if state.OutputTraversalOtlp.HttpCompress.IsNull() || state.OutputTraversalOtlp.HttpCompress.IsUnknown() {
+			state.OutputTraversalOtlp.HttpCompress = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.HttpLogsEndpointOverride.IsNull() && !api.OutputTraversalOtlp.HttpLogsEndpointOverride.IsUnknown() {
+			state.OutputTraversalOtlp.HttpLogsEndpointOverride = api.OutputTraversalOtlp.HttpLogsEndpointOverride
+		} else if state.OutputTraversalOtlp.HttpLogsEndpointOverride.IsNull() || state.OutputTraversalOtlp.HttpLogsEndpointOverride.IsUnknown() {
+			state.OutputTraversalOtlp.HttpLogsEndpointOverride = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Metadata.IsNull() && !api.OutputTraversalOtlp.Metadata.IsUnknown() {
+			state.OutputTraversalOtlp.Metadata = api.OutputTraversalOtlp.Metadata
+		} else if state.OutputTraversalOtlp.Metadata.IsNull() || state.OutputTraversalOtlp.Metadata.IsUnknown() {
+			state.OutputTraversalOtlp.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpMetadataAttrTypes()})
+		}
+		if state.OutputTraversalOtlp.Metadata.IsNull() || state.OutputTraversalOtlp.Metadata.IsUnknown() {
+			state.OutputTraversalOtlp.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpMetadataAttrTypes()})
+		} else if len(state.OutputTraversalOtlp.Metadata.Elements()) == 0 {
+			state.OutputTraversalOtlp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputTraversalOtlpMetadataAttrTypes()}, nil)
+		}
+		if !api.OutputTraversalOtlp.DynamicHeadersEnabled.IsNull() && !api.OutputTraversalOtlp.DynamicHeadersEnabled.IsUnknown() {
+			state.OutputTraversalOtlp.DynamicHeadersEnabled = api.OutputTraversalOtlp.DynamicHeadersEnabled
+		} else if state.OutputTraversalOtlp.DynamicHeadersEnabled.IsNull() || state.OutputTraversalOtlp.DynamicHeadersEnabled.IsUnknown() {
+			state.OutputTraversalOtlp.DynamicHeadersEnabled = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.DynamicHeadersField.IsNull() && !api.OutputTraversalOtlp.DynamicHeadersField.IsUnknown() {
+			state.OutputTraversalOtlp.DynamicHeadersField = api.OutputTraversalOtlp.DynamicHeadersField
+		} else if state.OutputTraversalOtlp.DynamicHeadersField.IsNull() || state.OutputTraversalOtlp.DynamicHeadersField.IsUnknown() {
+			state.OutputTraversalOtlp.DynamicHeadersField = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Concurrency.IsNull() && !api.OutputTraversalOtlp.Concurrency.IsUnknown() {
+			state.OutputTraversalOtlp.Concurrency = api.OutputTraversalOtlp.Concurrency
+		} else if state.OutputTraversalOtlp.Concurrency.IsNull() || state.OutputTraversalOtlp.Concurrency.IsUnknown() {
+			state.OutputTraversalOtlp.Concurrency = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.MaxPayloadSizeKB.IsNull() && !api.OutputTraversalOtlp.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputTraversalOtlp.MaxPayloadSizeKB = api.OutputTraversalOtlp.MaxPayloadSizeKB
+		} else if state.OutputTraversalOtlp.MaxPayloadSizeKB.IsNull() || state.OutputTraversalOtlp.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputTraversalOtlp.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.TimeoutSec.IsNull() && !api.OutputTraversalOtlp.TimeoutSec.IsUnknown() {
+			state.OutputTraversalOtlp.TimeoutSec = api.OutputTraversalOtlp.TimeoutSec
+		} else if state.OutputTraversalOtlp.TimeoutSec.IsNull() || state.OutputTraversalOtlp.TimeoutSec.IsUnknown() {
+			state.OutputTraversalOtlp.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.MaxConnectionReuseSec.IsNull() && !api.OutputTraversalOtlp.MaxConnectionReuseSec.IsUnknown() {
+			state.OutputTraversalOtlp.MaxConnectionReuseSec = api.OutputTraversalOtlp.MaxConnectionReuseSec
+		} else if state.OutputTraversalOtlp.MaxConnectionReuseSec.IsNull() || state.OutputTraversalOtlp.MaxConnectionReuseSec.IsUnknown() {
+			state.OutputTraversalOtlp.MaxConnectionReuseSec = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.FlushPeriodSec.IsNull() && !api.OutputTraversalOtlp.FlushPeriodSec.IsUnknown() {
+			state.OutputTraversalOtlp.FlushPeriodSec = api.OutputTraversalOtlp.FlushPeriodSec
+		} else if state.OutputTraversalOtlp.FlushPeriodSec.IsNull() || state.OutputTraversalOtlp.FlushPeriodSec.IsUnknown() {
+			state.OutputTraversalOtlp.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.FailedRequestLoggingMode.IsNull() && !api.OutputTraversalOtlp.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputTraversalOtlp.FailedRequestLoggingMode = api.OutputTraversalOtlp.FailedRequestLoggingMode
+		} else if state.OutputTraversalOtlp.FailedRequestLoggingMode.IsNull() || state.OutputTraversalOtlp.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputTraversalOtlp.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.ConnectionTimeout.IsNull() && !api.OutputTraversalOtlp.ConnectionTimeout.IsUnknown() {
+			state.OutputTraversalOtlp.ConnectionTimeout = api.OutputTraversalOtlp.ConnectionTimeout
+		} else if state.OutputTraversalOtlp.ConnectionTimeout.IsNull() || state.OutputTraversalOtlp.ConnectionTimeout.IsUnknown() {
+			state.OutputTraversalOtlp.ConnectionTimeout = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.KeepAliveTime.IsNull() && !api.OutputTraversalOtlp.KeepAliveTime.IsUnknown() {
+			state.OutputTraversalOtlp.KeepAliveTime = api.OutputTraversalOtlp.KeepAliveTime
+		} else if state.OutputTraversalOtlp.KeepAliveTime.IsNull() || state.OutputTraversalOtlp.KeepAliveTime.IsUnknown() {
+			state.OutputTraversalOtlp.KeepAliveTime = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.KeepAlive.IsNull() && !api.OutputTraversalOtlp.KeepAlive.IsUnknown() {
+			state.OutputTraversalOtlp.KeepAlive = api.OutputTraversalOtlp.KeepAlive
+		} else if state.OutputTraversalOtlp.KeepAlive.IsNull() || state.OutputTraversalOtlp.KeepAlive.IsUnknown() {
+			state.OutputTraversalOtlp.KeepAlive = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.OnBackpressure.IsNull() && !api.OutputTraversalOtlp.OnBackpressure.IsUnknown() {
+			state.OutputTraversalOtlp.OnBackpressure = api.OutputTraversalOtlp.OnBackpressure
+		} else if state.OutputTraversalOtlp.OnBackpressure.IsNull() || state.OutputTraversalOtlp.OnBackpressure.IsUnknown() {
+			state.OutputTraversalOtlp.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.Description.IsNull() && !api.OutputTraversalOtlp.Description.IsUnknown() {
+			state.OutputTraversalOtlp.Description = api.OutputTraversalOtlp.Description
+		} else if state.OutputTraversalOtlp.Description.IsNull() || state.OutputTraversalOtlp.Description.IsUnknown() {
+			state.OutputTraversalOtlp.Description = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.CredentialsSecret.IsNull() && !api.OutputTraversalOtlp.CredentialsSecret.IsUnknown() {
+			state.OutputTraversalOtlp.CredentialsSecret = api.OutputTraversalOtlp.CredentialsSecret
+		} else if state.OutputTraversalOtlp.CredentialsSecret.IsNull() || state.OutputTraversalOtlp.CredentialsSecret.IsUnknown() {
+			state.OutputTraversalOtlp.CredentialsSecret = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.TextSecret.IsNull() && !api.OutputTraversalOtlp.TextSecret.IsUnknown() {
+			state.OutputTraversalOtlp.TextSecret = api.OutputTraversalOtlp.TextSecret
+		} else if state.OutputTraversalOtlp.TextSecret.IsNull() || state.OutputTraversalOtlp.TextSecret.IsUnknown() {
+			state.OutputTraversalOtlp.TextSecret = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.LoginURL.IsNull() && !api.OutputTraversalOtlp.LoginURL.IsUnknown() {
+			state.OutputTraversalOtlp.LoginURL = api.OutputTraversalOtlp.LoginURL
+		} else if state.OutputTraversalOtlp.LoginURL.IsNull() || state.OutputTraversalOtlp.LoginURL.IsUnknown() {
+			state.OutputTraversalOtlp.LoginURL = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.SecretParamName.IsNull() && !api.OutputTraversalOtlp.SecretParamName.IsUnknown() {
+			state.OutputTraversalOtlp.SecretParamName = api.OutputTraversalOtlp.SecretParamName
+		} else if state.OutputTraversalOtlp.SecretParamName.IsNull() || state.OutputTraversalOtlp.SecretParamName.IsUnknown() {
+			state.OutputTraversalOtlp.SecretParamName = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.OauthTextSecret.IsNull() && !api.OutputTraversalOtlp.OauthTextSecret.IsUnknown() {
+			state.OutputTraversalOtlp.OauthTextSecret = api.OutputTraversalOtlp.OauthTextSecret
+		} else if state.OutputTraversalOtlp.OauthTextSecret.IsNull() || state.OutputTraversalOtlp.OauthTextSecret.IsUnknown() {
+			state.OutputTraversalOtlp.OauthTextSecret = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.TokenAttributeName.IsNull() && !api.OutputTraversalOtlp.TokenAttributeName.IsUnknown() {
+			state.OutputTraversalOtlp.TokenAttributeName = api.OutputTraversalOtlp.TokenAttributeName
+		} else if state.OutputTraversalOtlp.TokenAttributeName.IsNull() || state.OutputTraversalOtlp.TokenAttributeName.IsUnknown() {
+			state.OutputTraversalOtlp.TokenAttributeName = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.AuthHeaderExpr.IsNull() && !api.OutputTraversalOtlp.AuthHeaderExpr.IsUnknown() {
+			state.OutputTraversalOtlp.AuthHeaderExpr = api.OutputTraversalOtlp.AuthHeaderExpr
+		} else if state.OutputTraversalOtlp.AuthHeaderExpr.IsNull() || state.OutputTraversalOtlp.AuthHeaderExpr.IsUnknown() {
+			state.OutputTraversalOtlp.AuthHeaderExpr = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.TokenTimeoutSecs.IsNull() && !api.OutputTraversalOtlp.TokenTimeoutSecs.IsUnknown() {
+			state.OutputTraversalOtlp.TokenTimeoutSecs = api.OutputTraversalOtlp.TokenTimeoutSecs
+		} else if state.OutputTraversalOtlp.TokenTimeoutSecs.IsNull() || state.OutputTraversalOtlp.TokenTimeoutSecs.IsUnknown() {
+			state.OutputTraversalOtlp.TokenTimeoutSecs = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.OauthParams.IsNull() && !api.OutputTraversalOtlp.OauthParams.IsUnknown() {
+			state.OutputTraversalOtlp.OauthParams = api.OutputTraversalOtlp.OauthParams
+		} else if state.OutputTraversalOtlp.OauthParams.IsNull() || state.OutputTraversalOtlp.OauthParams.IsUnknown() {
+			state.OutputTraversalOtlp.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthParamsAttrTypes()})
+		}
+		if state.OutputTraversalOtlp.OauthParams.IsNull() || state.OutputTraversalOtlp.OauthParams.IsUnknown() {
+			state.OutputTraversalOtlp.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthParamsAttrTypes()})
+		} else if len(state.OutputTraversalOtlp.OauthParams.Elements()) == 0 {
+			state.OutputTraversalOtlp.OauthParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthParamsAttrTypes()}, nil)
+		}
+		if !api.OutputTraversalOtlp.OauthHeaders.IsNull() && !api.OutputTraversalOtlp.OauthHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.OauthHeaders = api.OutputTraversalOtlp.OauthHeaders
+		} else if state.OutputTraversalOtlp.OauthHeaders.IsNull() || state.OutputTraversalOtlp.OauthHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthHeadersAttrTypes()})
+		}
+		if state.OutputTraversalOtlp.OauthHeaders.IsNull() || state.OutputTraversalOtlp.OauthHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthHeadersAttrTypes()})
+		} else if len(state.OutputTraversalOtlp.OauthHeaders.Elements()) == 0 {
+			state.OutputTraversalOtlp.OauthHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthHeadersAttrTypes()}, nil)
+		}
+		if !api.OutputTraversalOtlp.RejectUnauthorized.IsNull() && !api.OutputTraversalOtlp.RejectUnauthorized.IsUnknown() {
+			state.OutputTraversalOtlp.RejectUnauthorized = api.OutputTraversalOtlp.RejectUnauthorized
+		} else if state.OutputTraversalOtlp.RejectUnauthorized.IsNull() || state.OutputTraversalOtlp.RejectUnauthorized.IsUnknown() {
+			state.OutputTraversalOtlp.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.UseRoundRobinDns.IsNull() && !api.OutputTraversalOtlp.UseRoundRobinDns.IsUnknown() {
+			state.OutputTraversalOtlp.UseRoundRobinDns = api.OutputTraversalOtlp.UseRoundRobinDns
+		} else if state.OutputTraversalOtlp.UseRoundRobinDns.IsNull() || state.OutputTraversalOtlp.UseRoundRobinDns.IsUnknown() {
+			state.OutputTraversalOtlp.UseRoundRobinDns = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.ExtraHttpHeaders.IsNull() && !api.OutputTraversalOtlp.ExtraHttpHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.ExtraHttpHeaders = api.OutputTraversalOtlp.ExtraHttpHeaders
+		} else if state.OutputTraversalOtlp.ExtraHttpHeaders.IsNull() || state.OutputTraversalOtlp.ExtraHttpHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpExtraHttpHeadersAttrTypes()})
+		}
+		if state.OutputTraversalOtlp.ExtraHttpHeaders.IsNull() || state.OutputTraversalOtlp.ExtraHttpHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputTraversalOtlp.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputTraversalOtlp.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputTraversalOtlpExtraHttpHeadersAttrTypes()}, nil)
+		}
+		if !api.OutputTraversalOtlp.SafeHeaders.IsNull() && !api.OutputTraversalOtlp.SafeHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.SafeHeaders = api.OutputTraversalOtlp.SafeHeaders
+		} else if state.OutputTraversalOtlp.SafeHeaders.IsNull() || state.OutputTraversalOtlp.SafeHeaders.IsUnknown() {
+			state.OutputTraversalOtlp.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputTraversalOtlp.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputTraversalOtlp.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputTraversalOtlp.ResponseRetrySettings.IsNull() && !api.OutputTraversalOtlp.ResponseRetrySettings.IsUnknown() {
+			state.OutputTraversalOtlp.ResponseRetrySettings = api.OutputTraversalOtlp.ResponseRetrySettings
+		} else if state.OutputTraversalOtlp.ResponseRetrySettings.IsNull() || state.OutputTraversalOtlp.ResponseRetrySettings.IsUnknown() {
+			state.OutputTraversalOtlp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpResponseRetrySettingsAttrTypes()})
+		}
+		if state.OutputTraversalOtlp.ResponseRetrySettings.IsNull() || state.OutputTraversalOtlp.ResponseRetrySettings.IsUnknown() {
+			state.OutputTraversalOtlp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputTraversalOtlp.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputTraversalOtlp.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputTraversalOtlpResponseRetrySettingsAttrTypes()}, nil)
+		}
+		if !api.OutputTraversalOtlp.TimeoutRetrySettings.IsNull() && !api.OutputTraversalOtlp.TimeoutRetrySettings.IsUnknown() {
+			state.OutputTraversalOtlp.TimeoutRetrySettings = api.OutputTraversalOtlp.TimeoutRetrySettings
+		} else if state.OutputTraversalOtlp.TimeoutRetrySettings.IsNull() || state.OutputTraversalOtlp.TimeoutRetrySettings.IsUnknown() {
+			state.OutputTraversalOtlp.TimeoutRetrySettings = types.ObjectNull(OutputTraversalOtlpTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputTraversalOtlp.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputTraversalOtlp.TimeoutRetrySettings = types.ObjectNull(OutputTraversalOtlpTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputTraversalOtlp.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputTraversalOtlp.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputTraversalOtlp.ResponseHonorRetryAfterHeader = api.OutputTraversalOtlp.ResponseHonorRetryAfterHeader
+		} else if state.OutputTraversalOtlp.ResponseHonorRetryAfterHeader.IsNull() || state.OutputTraversalOtlp.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputTraversalOtlp.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.TLS.IsNull() && !api.OutputTraversalOtlp.TLS.IsUnknown() {
+			state.OutputTraversalOtlp.TLS = api.OutputTraversalOtlp.TLS
+		} else if state.OutputTraversalOtlp.TLS.IsNull() || state.OutputTraversalOtlp.TLS.IsUnknown() {
+			state.OutputTraversalOtlp.TLS = types.ObjectNull(OutputTraversalOtlpTLSAttrTypes())
+		}
+		if len(state.OutputTraversalOtlp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputTraversalOtlp.TLS = types.ObjectNull(OutputTraversalOtlpTLSAttrTypes())
+		}
+		if !api.OutputTraversalOtlp.PqStrictOrdering.IsNull() && !api.OutputTraversalOtlp.PqStrictOrdering.IsUnknown() {
+			state.OutputTraversalOtlp.PqStrictOrdering = api.OutputTraversalOtlp.PqStrictOrdering
+		} else if state.OutputTraversalOtlp.PqStrictOrdering.IsNull() || state.OutputTraversalOtlp.PqStrictOrdering.IsUnknown() {
+			state.OutputTraversalOtlp.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputTraversalOtlp.PqRatePerSec.IsNull() && !api.OutputTraversalOtlp.PqRatePerSec.IsUnknown() {
+			state.OutputTraversalOtlp.PqRatePerSec = api.OutputTraversalOtlp.PqRatePerSec
+		} else if state.OutputTraversalOtlp.PqRatePerSec.IsNull() || state.OutputTraversalOtlp.PqRatePerSec.IsUnknown() {
+			state.OutputTraversalOtlp.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.PqMode.IsNull() && !api.OutputTraversalOtlp.PqMode.IsUnknown() {
+			state.OutputTraversalOtlp.PqMode = api.OutputTraversalOtlp.PqMode
+		} else if state.OutputTraversalOtlp.PqMode.IsNull() || state.OutputTraversalOtlp.PqMode.IsUnknown() {
+			state.OutputTraversalOtlp.PqMode = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqMaxBufferSize.IsNull() && !api.OutputTraversalOtlp.PqMaxBufferSize.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxBufferSize = api.OutputTraversalOtlp.PqMaxBufferSize
+		} else if state.OutputTraversalOtlp.PqMaxBufferSize.IsNull() || state.OutputTraversalOtlp.PqMaxBufferSize.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.PqMaxBackpressureSec.IsNull() && !api.OutputTraversalOtlp.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxBackpressureSec = api.OutputTraversalOtlp.PqMaxBackpressureSec
+		} else if state.OutputTraversalOtlp.PqMaxBackpressureSec.IsNull() || state.OutputTraversalOtlp.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputTraversalOtlp.PqMaxFileSize.IsNull() && !api.OutputTraversalOtlp.PqMaxFileSize.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxFileSize = api.OutputTraversalOtlp.PqMaxFileSize
+		} else if state.OutputTraversalOtlp.PqMaxFileSize.IsNull() || state.OutputTraversalOtlp.PqMaxFileSize.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqMaxSize.IsNull() && !api.OutputTraversalOtlp.PqMaxSize.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxSize = api.OutputTraversalOtlp.PqMaxSize
+		} else if state.OutputTraversalOtlp.PqMaxSize.IsNull() || state.OutputTraversalOtlp.PqMaxSize.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqPath.IsNull() && !api.OutputTraversalOtlp.PqPath.IsUnknown() {
+			state.OutputTraversalOtlp.PqPath = api.OutputTraversalOtlp.PqPath
+		} else if state.OutputTraversalOtlp.PqPath.IsNull() || state.OutputTraversalOtlp.PqPath.IsUnknown() {
+			state.OutputTraversalOtlp.PqPath = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqCompress.IsNull() && !api.OutputTraversalOtlp.PqCompress.IsUnknown() {
+			state.OutputTraversalOtlp.PqCompress = api.OutputTraversalOtlp.PqCompress
+		} else if state.OutputTraversalOtlp.PqCompress.IsNull() || state.OutputTraversalOtlp.PqCompress.IsUnknown() {
+			state.OutputTraversalOtlp.PqCompress = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqOnBackpressure.IsNull() && !api.OutputTraversalOtlp.PqOnBackpressure.IsUnknown() {
+			state.OutputTraversalOtlp.PqOnBackpressure = api.OutputTraversalOtlp.PqOnBackpressure
+		} else if state.OutputTraversalOtlp.PqOnBackpressure.IsNull() || state.OutputTraversalOtlp.PqOnBackpressure.IsUnknown() {
+			state.OutputTraversalOtlp.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqMaxBufferSizeBytes.IsNull() && !api.OutputTraversalOtlp.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxBufferSizeBytes = api.OutputTraversalOtlp.PqMaxBufferSizeBytes
+		} else if state.OutputTraversalOtlp.PqMaxBufferSizeBytes.IsNull() || state.OutputTraversalOtlp.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputTraversalOtlp.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputTraversalOtlp.PqControls.IsNull() && !api.OutputTraversalOtlp.PqControls.IsUnknown() {
+			state.OutputTraversalOtlp.PqControls = api.OutputTraversalOtlp.PqControls
+		} else if state.OutputTraversalOtlp.PqControls.IsNull() || state.OutputTraversalOtlp.PqControls.IsUnknown() {
+			state.OutputTraversalOtlp.PqControls = types.MapNull(types.StringType)
 		}
 	}
 	if api.OutputSentinelOneAiSiem != nil {
@@ -55948,6 +57286,182 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputIbmCloudS3.MaxRetryNum = api.OutputIbmCloudS3.MaxRetryNum
 		} else if state.OutputIbmCloudS3.MaxRetryNum.IsNull() || state.OutputIbmCloudS3.MaxRetryNum.IsUnknown() {
 			state.OutputIbmCloudS3.MaxRetryNum = types.Float64Null()
+		}
+	}
+	if api.OutputDatabricksZerobus != nil {
+		if state.OutputDatabricksZerobus == nil {
+			state.OutputDatabricksZerobus = &OutputDatabricksZerobusModel{}
+		}
+		if !api.OutputDatabricksZerobus.ID.IsNull() && !api.OutputDatabricksZerobus.ID.IsUnknown() {
+			state.OutputDatabricksZerobus.ID = api.OutputDatabricksZerobus.ID
+		} else if state.OutputDatabricksZerobus.ID.IsNull() || state.OutputDatabricksZerobus.ID.IsUnknown() {
+			state.OutputDatabricksZerobus.ID = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.Type.IsNull() && !api.OutputDatabricksZerobus.Type.IsUnknown() {
+			state.OutputDatabricksZerobus.Type = api.OutputDatabricksZerobus.Type
+		} else if state.OutputDatabricksZerobus.Type.IsNull() || state.OutputDatabricksZerobus.Type.IsUnknown() {
+			state.OutputDatabricksZerobus.Type = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.Pipeline.IsNull() && !api.OutputDatabricksZerobus.Pipeline.IsUnknown() {
+			state.OutputDatabricksZerobus.Pipeline = api.OutputDatabricksZerobus.Pipeline
+		} else if state.OutputDatabricksZerobus.Pipeline.IsNull() || state.OutputDatabricksZerobus.Pipeline.IsUnknown() {
+			state.OutputDatabricksZerobus.Pipeline = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.SystemFields.IsNull() && !api.OutputDatabricksZerobus.SystemFields.IsUnknown() {
+			state.OutputDatabricksZerobus.SystemFields = api.OutputDatabricksZerobus.SystemFields
+		} else if state.OutputDatabricksZerobus.SystemFields.IsNull() || state.OutputDatabricksZerobus.SystemFields.IsUnknown() {
+			state.OutputDatabricksZerobus.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDatabricksZerobus.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDatabricksZerobus.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputDatabricksZerobus.Environment.IsNull() && !api.OutputDatabricksZerobus.Environment.IsUnknown() {
+			state.OutputDatabricksZerobus.Environment = api.OutputDatabricksZerobus.Environment
+		} else if state.OutputDatabricksZerobus.Environment.IsNull() || state.OutputDatabricksZerobus.Environment.IsUnknown() {
+			state.OutputDatabricksZerobus.Environment = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.Streamtags.IsNull() && !api.OutputDatabricksZerobus.Streamtags.IsUnknown() {
+			state.OutputDatabricksZerobus.Streamtags = api.OutputDatabricksZerobus.Streamtags
+		} else if state.OutputDatabricksZerobus.Streamtags.IsNull() || state.OutputDatabricksZerobus.Streamtags.IsUnknown() {
+			state.OutputDatabricksZerobus.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDatabricksZerobus.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputDatabricksZerobus.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputDatabricksZerobus.WorkspaceURL.IsNull() && !api.OutputDatabricksZerobus.WorkspaceURL.IsUnknown() {
+			state.OutputDatabricksZerobus.WorkspaceURL = api.OutputDatabricksZerobus.WorkspaceURL
+		} else if state.OutputDatabricksZerobus.WorkspaceURL.IsNull() || state.OutputDatabricksZerobus.WorkspaceURL.IsUnknown() {
+			state.OutputDatabricksZerobus.WorkspaceURL = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.WorkspaceID.IsNull() && !api.OutputDatabricksZerobus.WorkspaceID.IsUnknown() {
+			state.OutputDatabricksZerobus.WorkspaceID = api.OutputDatabricksZerobus.WorkspaceID
+		} else if state.OutputDatabricksZerobus.WorkspaceID.IsNull() || state.OutputDatabricksZerobus.WorkspaceID.IsUnknown() {
+			state.OutputDatabricksZerobus.WorkspaceID = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.ZerobusEndpoint.IsNull() && !api.OutputDatabricksZerobus.ZerobusEndpoint.IsUnknown() {
+			state.OutputDatabricksZerobus.ZerobusEndpoint = api.OutputDatabricksZerobus.ZerobusEndpoint
+		} else if state.OutputDatabricksZerobus.ZerobusEndpoint.IsNull() || state.OutputDatabricksZerobus.ZerobusEndpoint.IsUnknown() {
+			state.OutputDatabricksZerobus.ZerobusEndpoint = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.ClientID.IsNull() && !api.OutputDatabricksZerobus.ClientID.IsUnknown() {
+			state.OutputDatabricksZerobus.ClientID = api.OutputDatabricksZerobus.ClientID
+		} else if state.OutputDatabricksZerobus.ClientID.IsNull() || state.OutputDatabricksZerobus.ClientID.IsUnknown() {
+			state.OutputDatabricksZerobus.ClientID = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.ClientTextSecret.IsNull() && !api.OutputDatabricksZerobus.ClientTextSecret.IsUnknown() {
+			state.OutputDatabricksZerobus.ClientTextSecret = api.OutputDatabricksZerobus.ClientTextSecret
+		} else if state.OutputDatabricksZerobus.ClientTextSecret.IsNull() || state.OutputDatabricksZerobus.ClientTextSecret.IsUnknown() {
+			state.OutputDatabricksZerobus.ClientTextSecret = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.TableName.IsNull() && !api.OutputDatabricksZerobus.TableName.IsUnknown() {
+			state.OutputDatabricksZerobus.TableName = api.OutputDatabricksZerobus.TableName
+		} else if state.OutputDatabricksZerobus.TableName.IsNull() || state.OutputDatabricksZerobus.TableName.IsUnknown() {
+			state.OutputDatabricksZerobus.TableName = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.MaxBatchSizeKB.IsNull() && !api.OutputDatabricksZerobus.MaxBatchSizeKB.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxBatchSizeKB = api.OutputDatabricksZerobus.MaxBatchSizeKB
+		} else if state.OutputDatabricksZerobus.MaxBatchSizeKB.IsNull() || state.OutputDatabricksZerobus.MaxBatchSizeKB.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxBatchSizeKB = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.MaxBatchRecords.IsNull() && !api.OutputDatabricksZerobus.MaxBatchRecords.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxBatchRecords = api.OutputDatabricksZerobus.MaxBatchRecords
+		} else if state.OutputDatabricksZerobus.MaxBatchRecords.IsNull() || state.OutputDatabricksZerobus.MaxBatchRecords.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxBatchRecords = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.MaxBufferedKB.IsNull() && !api.OutputDatabricksZerobus.MaxBufferedKB.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxBufferedKB = api.OutputDatabricksZerobus.MaxBufferedKB
+		} else if state.OutputDatabricksZerobus.MaxBufferedKB.IsNull() || state.OutputDatabricksZerobus.MaxBufferedKB.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxBufferedKB = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.MaxInflightBatches.IsNull() && !api.OutputDatabricksZerobus.MaxInflightBatches.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxInflightBatches = api.OutputDatabricksZerobus.MaxInflightBatches
+		} else if state.OutputDatabricksZerobus.MaxInflightBatches.IsNull() || state.OutputDatabricksZerobus.MaxInflightBatches.IsUnknown() {
+			state.OutputDatabricksZerobus.MaxInflightBatches = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.FlushPeriodSec.IsNull() && !api.OutputDatabricksZerobus.FlushPeriodSec.IsUnknown() {
+			state.OutputDatabricksZerobus.FlushPeriodSec = api.OutputDatabricksZerobus.FlushPeriodSec
+		} else if state.OutputDatabricksZerobus.FlushPeriodSec.IsNull() || state.OutputDatabricksZerobus.FlushPeriodSec.IsUnknown() {
+			state.OutputDatabricksZerobus.FlushPeriodSec = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.AckTimeoutSec.IsNull() && !api.OutputDatabricksZerobus.AckTimeoutSec.IsUnknown() {
+			state.OutputDatabricksZerobus.AckTimeoutSec = api.OutputDatabricksZerobus.AckTimeoutSec
+		} else if state.OutputDatabricksZerobus.AckTimeoutSec.IsNull() || state.OutputDatabricksZerobus.AckTimeoutSec.IsUnknown() {
+			state.OutputDatabricksZerobus.AckTimeoutSec = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.ConnectionTimeoutSec.IsNull() && !api.OutputDatabricksZerobus.ConnectionTimeoutSec.IsUnknown() {
+			state.OutputDatabricksZerobus.ConnectionTimeoutSec = api.OutputDatabricksZerobus.ConnectionTimeoutSec
+		} else if state.OutputDatabricksZerobus.ConnectionTimeoutSec.IsNull() || state.OutputDatabricksZerobus.ConnectionTimeoutSec.IsUnknown() {
+			state.OutputDatabricksZerobus.ConnectionTimeoutSec = types.Int64Null()
+		}
+		if !api.OutputDatabricksZerobus.OnBackpressure.IsNull() && !api.OutputDatabricksZerobus.OnBackpressure.IsUnknown() {
+			state.OutputDatabricksZerobus.OnBackpressure = api.OutputDatabricksZerobus.OnBackpressure
+		} else if state.OutputDatabricksZerobus.OnBackpressure.IsNull() || state.OutputDatabricksZerobus.OnBackpressure.IsUnknown() {
+			state.OutputDatabricksZerobus.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.Description.IsNull() && !api.OutputDatabricksZerobus.Description.IsUnknown() {
+			state.OutputDatabricksZerobus.Description = api.OutputDatabricksZerobus.Description
+		} else if state.OutputDatabricksZerobus.Description.IsNull() || state.OutputDatabricksZerobus.Description.IsUnknown() {
+			state.OutputDatabricksZerobus.Description = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqStrictOrdering.IsNull() && !api.OutputDatabricksZerobus.PqStrictOrdering.IsUnknown() {
+			state.OutputDatabricksZerobus.PqStrictOrdering = api.OutputDatabricksZerobus.PqStrictOrdering
+		} else if state.OutputDatabricksZerobus.PqStrictOrdering.IsNull() || state.OutputDatabricksZerobus.PqStrictOrdering.IsUnknown() {
+			state.OutputDatabricksZerobus.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputDatabricksZerobus.PqRatePerSec.IsNull() && !api.OutputDatabricksZerobus.PqRatePerSec.IsUnknown() {
+			state.OutputDatabricksZerobus.PqRatePerSec = api.OutputDatabricksZerobus.PqRatePerSec
+		} else if state.OutputDatabricksZerobus.PqRatePerSec.IsNull() || state.OutputDatabricksZerobus.PqRatePerSec.IsUnknown() {
+			state.OutputDatabricksZerobus.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputDatabricksZerobus.PqMode.IsNull() && !api.OutputDatabricksZerobus.PqMode.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMode = api.OutputDatabricksZerobus.PqMode
+		} else if state.OutputDatabricksZerobus.PqMode.IsNull() || state.OutputDatabricksZerobus.PqMode.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMode = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqMaxBufferSize.IsNull() && !api.OutputDatabricksZerobus.PqMaxBufferSize.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxBufferSize = api.OutputDatabricksZerobus.PqMaxBufferSize
+		} else if state.OutputDatabricksZerobus.PqMaxBufferSize.IsNull() || state.OutputDatabricksZerobus.PqMaxBufferSize.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputDatabricksZerobus.PqMaxBackpressureSec.IsNull() && !api.OutputDatabricksZerobus.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxBackpressureSec = api.OutputDatabricksZerobus.PqMaxBackpressureSec
+		} else if state.OutputDatabricksZerobus.PqMaxBackpressureSec.IsNull() || state.OutputDatabricksZerobus.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputDatabricksZerobus.PqMaxFileSize.IsNull() && !api.OutputDatabricksZerobus.PqMaxFileSize.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxFileSize = api.OutputDatabricksZerobus.PqMaxFileSize
+		} else if state.OutputDatabricksZerobus.PqMaxFileSize.IsNull() || state.OutputDatabricksZerobus.PqMaxFileSize.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqMaxSize.IsNull() && !api.OutputDatabricksZerobus.PqMaxSize.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxSize = api.OutputDatabricksZerobus.PqMaxSize
+		} else if state.OutputDatabricksZerobus.PqMaxSize.IsNull() || state.OutputDatabricksZerobus.PqMaxSize.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqPath.IsNull() && !api.OutputDatabricksZerobus.PqPath.IsUnknown() {
+			state.OutputDatabricksZerobus.PqPath = api.OutputDatabricksZerobus.PqPath
+		} else if state.OutputDatabricksZerobus.PqPath.IsNull() || state.OutputDatabricksZerobus.PqPath.IsUnknown() {
+			state.OutputDatabricksZerobus.PqPath = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqCompress.IsNull() && !api.OutputDatabricksZerobus.PqCompress.IsUnknown() {
+			state.OutputDatabricksZerobus.PqCompress = api.OutputDatabricksZerobus.PqCompress
+		} else if state.OutputDatabricksZerobus.PqCompress.IsNull() || state.OutputDatabricksZerobus.PqCompress.IsUnknown() {
+			state.OutputDatabricksZerobus.PqCompress = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqOnBackpressure.IsNull() && !api.OutputDatabricksZerobus.PqOnBackpressure.IsUnknown() {
+			state.OutputDatabricksZerobus.PqOnBackpressure = api.OutputDatabricksZerobus.PqOnBackpressure
+		} else if state.OutputDatabricksZerobus.PqOnBackpressure.IsNull() || state.OutputDatabricksZerobus.PqOnBackpressure.IsUnknown() {
+			state.OutputDatabricksZerobus.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqMaxBufferSizeBytes.IsNull() && !api.OutputDatabricksZerobus.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxBufferSizeBytes = api.OutputDatabricksZerobus.PqMaxBufferSizeBytes
+		} else if state.OutputDatabricksZerobus.PqMaxBufferSizeBytes.IsNull() || state.OutputDatabricksZerobus.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputDatabricksZerobus.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputDatabricksZerobus.PqControls.IsNull() && !api.OutputDatabricksZerobus.PqControls.IsUnknown() {
+			state.OutputDatabricksZerobus.PqControls = api.OutputDatabricksZerobus.PqControls
+		} else if state.OutputDatabricksZerobus.PqControls.IsNull() || state.OutputDatabricksZerobus.PqControls.IsUnknown() {
+			state.OutputDatabricksZerobus.PqControls = types.MapNull(types.StringType)
 		}
 	}
 	if api.OutputRouter != nil && state.OutputRouter != nil &&

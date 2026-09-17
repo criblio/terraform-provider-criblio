@@ -86,6 +86,12 @@ func (r *LookupFileResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Computed:    false,
 				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
 			},
+			"modified": schema.Float64Attribute{
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Last modification time of the Lookup file, in milliseconds since the Unix epoch.`,
+			},
 			"pending_task": schema.SingleNestedAttribute{
 				Required:    false,
 				Optional:    false,
@@ -303,6 +309,11 @@ func applyLookupFileAPIToState(api *LookupFileModel, state *LookupFileModel, pre
 		if !api.Mode.IsNull() && !api.Mode.IsUnknown() {
 			state.Mode = api.Mode
 		}
+	}
+	if !api.Modified.IsNull() && !api.Modified.IsUnknown() {
+		state.Modified = api.Modified
+	} else if state.Modified.IsNull() || state.Modified.IsUnknown() {
+		state.Modified = types.Float64Value(0)
 	}
 	if !api.PendingTask.IsNull() && !api.PendingTask.IsUnknown() {
 		state.PendingTask = api.PendingTask

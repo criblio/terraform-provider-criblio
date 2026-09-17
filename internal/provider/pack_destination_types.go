@@ -93,6 +93,7 @@ type PackDestinationModel struct {
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
 	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
 	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputTraversalOtlp            *OutputTraversalOtlpModel            `tfsdk:"output_traversal_otlp" json:"OutputTraversalOtlp,omitempty"`
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
@@ -107,6 +108,7 @@ type PackDestinationModel struct {
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
 }
 
 type PackDestinationResourceModel struct {
@@ -186,6 +188,7 @@ type PackDestinationResourceModel struct {
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
 	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
 	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputTraversalOtlp            *OutputTraversalOtlpModel            `tfsdk:"output_traversal_otlp" json:"OutputTraversalOtlp,omitempty"`
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
@@ -200,6 +203,7 @@ type PackDestinationResourceModel struct {
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
 }
 
 type PackDestinationDataSourceModel struct {
@@ -279,6 +283,7 @@ type PackDestinationDataSourceModel struct {
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
 	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
 	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputTraversalOtlp            *OutputTraversalOtlpModel            `tfsdk:"output_traversal_otlp" json:"OutputTraversalOtlp,omitempty"`
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
@@ -293,6 +298,7 @@ type PackDestinationDataSourceModel struct {
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
 }
 
 type PackDestinationAPIModel struct {
@@ -390,6 +396,10 @@ func PackDestinationTerraformNameToAPIName(name string) string {
 		return prefix + "endpointURLConfiguration"
 	case "manual_apikey":
 		return prefix + "manualAPIKey"
+	case "max_batch_size_kb":
+		return prefix + "maxBatchSizeKB"
+	case "max_buffered_kb":
+		return prefix + "maxBufferedKB"
 	case "max_file_size_mb":
 		return prefix + "maxFileSizeMB"
 	case "max_payload_size_kb":
@@ -412,6 +422,10 @@ func PackDestinationTerraformNameToAPIName(name string) string {
 		return prefix + "wiz_environment"
 	case "wiz_sourcetype":
 		return prefix + "wiz_sourcetype"
+	case "wiz_vpc_event_format":
+		return prefix + "wiz_vpc_event_format"
+	case "wiz_vpc_flow_log_format":
+		return prefix + "wiz_vpc_flow_log_format"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -1206,6 +1220,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputTraversalOtlp != nil {
+		value, err := m.OutputTraversalOtlp.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputSentinelOneAiSiem != nil {
 		value, err := m.OutputSentinelOneAiSiem.terraformPayload()
 		if err != nil {
@@ -1325,6 +1348,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.OutputIbmCloudS3 != nil {
 		value, err := m.OutputIbmCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputDatabricksZerobus != nil {
+		value, err := m.OutputDatabricksZerobus.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1725,6 +1757,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputDynatraceOtlp.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "traversal_otlp":
+		m.OutputTraversalOtlp = &OutputTraversalOtlpModel{}
+		if err := m.OutputTraversalOtlp.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "sentinel_one_ai_siem":
 		m.OutputSentinelOneAiSiem = &OutputSentinelOneAiSiemModel{}
 		if err := m.OutputSentinelOneAiSiem.unmarshalPayload(raw); err != nil {
@@ -1793,6 +1830,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "ibm_cloud_s3":
 		m.OutputIbmCloudS3 = &OutputIbmCloudS3Model{}
 		if err := m.OutputIbmCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "databricks_zerobus":
+		m.OutputDatabricksZerobus = &OutputDatabricksZerobusModel{}
+		if err := m.OutputDatabricksZerobus.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}

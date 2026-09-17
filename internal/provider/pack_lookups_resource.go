@@ -85,6 +85,12 @@ func (r *PackLookupsResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Computed:    false,
 				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
 			},
+			"modified": schema.Float64Attribute{
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Last modification time of the Lookup file, in milliseconds since the Unix epoch.`,
+			},
 			"pack": schema.StringAttribute{
 				Required: true,
 				Optional: false,
@@ -317,6 +323,11 @@ func applyPackLookupsAPIToState(api *PackLookupsModel, state *PackLookupsModel, 
 		if !api.Mode.IsNull() && !api.Mode.IsUnknown() {
 			state.Mode = api.Mode
 		}
+	}
+	if !api.Modified.IsNull() && !api.Modified.IsUnknown() {
+		state.Modified = api.Modified
+	} else if state.Modified.IsNull() || state.Modified.IsUnknown() {
+		state.Modified = types.Float64Value(0)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Pack.IsNull() || state.Pack.IsUnknown())) {
 		if !api.Pack.IsNull() && !api.Pack.IsUnknown() {

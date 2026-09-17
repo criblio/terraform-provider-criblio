@@ -489,7 +489,7 @@ type SearchSavedQueryChartConfigYAxisModel struct {
 	Format    types.Object  `tfsdk:"format" json:"format,omitempty"`
 	Interval  types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
 	Max       types.Float64 `tfsdk:"max" json:"max,omitempty"`
-	Min       types.Float64 `tfsdk:"min" json:"min,omitempty"`
+	Min       types.String  `tfsdk:"min" json:"min,omitempty"`
 	Position  types.String  `tfsdk:"position" json:"position,omitempty"`
 	Scale     types.String  `tfsdk:"scale" json:"scale,omitempty"`
 	SplitLine types.Bool    `tfsdk:"split_line" json:"splitLine,omitempty"`
@@ -501,7 +501,7 @@ type SearchSavedQueryChartConfigYAxisAPIModel struct {
 	Format    any      `json:"format,omitempty"`
 	Interval  *float64 `json:"interval,omitempty"`
 	Max       *float64 `json:"max,omitempty"`
-	Min       *float64 `json:"min,omitempty"`
+	Min       *string  `json:"min,omitempty"`
 	Position  *string  `json:"position,omitempty"`
 	Scale     *string  `json:"scale,omitempty"`
 	SplitLine *bool    `json:"splitLine,omitempty"`
@@ -514,7 +514,7 @@ func SearchSavedQueryChartConfigYAxisAttrTypes() map[string]attr.Type {
 		"format":     types.ObjectType{AttrTypes: SearchSavedQueryChartConfigYAxisFormatAttrTypes()},
 		"interval":   types.Float64Type,
 		"max":        types.Float64Type,
-		"min":        types.Float64Type,
+		"min":        types.StringType,
 		"position":   types.StringType,
 		"scale":      types.StringType,
 		"split_line": types.BoolType,

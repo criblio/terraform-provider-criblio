@@ -33,7 +33,7 @@ resource "criblio_cribl_lake_dataset" "my_cribl_lake_dataset" {
 ### Required
 
 - `id` (String) Unique identifier for the Dataset.
-- `lake_id` (String) The <code>id</code> of the Lake to create the Lake Dataset in.
+- `lake_id` (String) The <code>id</code> of the Lake to create the Lake Datasets in.
 
 ### Optional
 

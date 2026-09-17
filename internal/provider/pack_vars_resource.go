@@ -147,7 +147,7 @@ func (r *PackVarsResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Value of the Global Variable. For <code>type: expression</code>, the value is a JavaScript expression.`,
+				Description: `Value of the Global Variable. When the type is expression, enter a JavaScript expression.`,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},

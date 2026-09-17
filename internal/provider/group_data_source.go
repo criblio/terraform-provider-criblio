@@ -29,6 +29,7 @@ type GroupDataSourceModel struct {
 	Description         types.String      `tfsdk:"description"`
 	EstimatedIngestRate types.Float64     `tfsdk:"estimated_ingest_rate"`
 	Fields              types.String      `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
+	Git                 *groupGitModel    `tfsdk:"git"`
 	ID                  types.String      `tfsdk:"id"`
 	Inherits            types.String      `tfsdk:"inherits"`
 	IsFleet             types.Bool        `tfsdk:"is_fleet"`
@@ -40,6 +41,21 @@ type GroupDataSourceModel struct {
 	Tags                types.String      `tfsdk:"tags"`
 	Type                types.String      `tfsdk:"type"`
 	WorkerRemoteAccess  types.Bool        `tfsdk:"worker_remote_access"`
+}
+
+type groupGitModel struct {
+	Commit       types.String          `tfsdk:"commit"`
+	LocalChanges types.Int64           `tfsdk:"local_changes"`
+	Log          []groupGitCommitModel `tfsdk:"log"`
+}
+
+type groupGitCommitModel struct {
+	AuthorEmail types.String `tfsdk:"author_email"`
+	AuthorName  types.String `tfsdk:"author_name"`
+	Date        types.String `tfsdk:"date"`
+	Hash        types.String `tfsdk:"hash"`
+	Message     types.String `tfsdk:"message"`
+	Short       types.String `tfsdk:"short"`
 }
 
 // Metadata returns the data source type name.
@@ -83,6 +99,34 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"fields": schema.StringAttribute{
 				Optional:    true,
 				Description: `fields to add to results: git.commit, git.localChanges, git.log`,
+			},
+			"git": schema.SingleNestedAttribute{
+				Computed:    true,
+				Description: `Git status fields requested through the fields argument.`,
+				Attributes: map[string]schema.Attribute{
+					"commit": schema.StringAttribute{
+						Computed:    true,
+						Description: `Commit hash of the currently committed configuration version.`,
+					},
+					"local_changes": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Number of local configuration changes not yet committed.`,
+					},
+					"log": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `List of recent configuration commits.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"author_email": schema.StringAttribute{Computed: true},
+								"author_name":  schema.StringAttribute{Computed: true},
+								"date":         schema.StringAttribute{Computed: true},
+								"hash":         schema.StringAttribute{Computed: true},
+								"message":      schema.StringAttribute{Computed: true},
+								"short":        schema.StringAttribute{Computed: true},
+							},
+						},
+					},
+				},
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -184,6 +228,7 @@ func (data *GroupDataSourceModel) applyGroupAPIModel(api *groupAPIModel) {
 	}
 	data.Description = types.StringPointerValue(api.Description)
 	data.EstimatedIngestRate = types.Float64PointerValue(api.EstimatedIngestRate)
+	data.Git = groupGitModelFromAPI(api.Git)
 	if api.ID != "" {
 		data.ID = types.StringValue(api.ID)
 	}
@@ -197,4 +242,31 @@ func (data *GroupDataSourceModel) applyGroupAPIModel(api *groupAPIModel) {
 	data.Tags = types.StringPointerValue(api.Tags)
 	data.Type = types.StringPointerValue(api.Type)
 	data.WorkerRemoteAccess = types.BoolPointerValue(api.WorkerRemoteAccess)
+}
+
+func groupGitModelFromAPI(api *groupGitAPI) *groupGitModel {
+	if api == nil {
+		return nil
+	}
+
+	model := &groupGitModel{
+		Commit:       types.StringPointerValue(api.Commit),
+		LocalChanges: types.Int64PointerValue(api.LocalChanges),
+	}
+	if api.Log == nil {
+		return model
+	}
+
+	model.Log = make([]groupGitCommitModel, 0, len(api.Log))
+	for _, entry := range api.Log {
+		model.Log = append(model.Log, groupGitCommitModel{
+			AuthorEmail: types.StringPointerValue(entry.AuthorEmail),
+			AuthorName:  types.StringPointerValue(entry.AuthorName),
+			Date:        types.StringPointerValue(entry.Date),
+			Hash:        types.StringPointerValue(entry.Hash),
+			Message:     types.StringPointerValue(entry.Message),
+			Short:       types.StringPointerValue(entry.Short),
+		})
+	}
+	return model
 }

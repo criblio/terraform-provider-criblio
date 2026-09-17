@@ -34,23 +34,24 @@ resource "criblio_notification" "my_notification" {
 
 ### Required
 
-- `condition` (String) The condition that triggers the Notification.
-- `id` (String) Unique identifier for the Notification.
+- `condition` (String) The condition that triggers the Notification. Use <code>GET /conditions</code> for a list of supported <code>condition</code> values.
+- `id` (String) Unique identifier.
 
 ### Optional
 
-- `conf` (Attributes) Configuration for the condition that triggers the Notification. Supported fields vary depending on the condition. (see [below for nested schema](#nestedatt--conf))
-- `disabled` (Boolean) If true, the Notification is disabled and the specified condition will not trigger it.
-- `group` (String) The worker group/fleet this notification belongs to
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--metadata))
+- `conf` (Attributes) Configuration for the <code>condition</code> that triggers the Notification. Supported fields vary depending on the <code>condition</code>. Use <code>GET /conditions/{id}</code> to review the configuration for a specific <code>condition</code>. (see [below for nested schema](#nestedatt--conf))
+- `disabled` (Boolean) If <code>true</code>, the Notification is disabled and the specified condition will not trigger it.
+- `group` (String) The <code>id</code> of the Worker Group or Edge Fleet that the Notification applies to.
+- `metadata` (Attributes List) Metadata tags for the Notification. (see [below for nested schema](#nestedatt--metadata))
 - `target_configs` (Attributes List) Override settings to apply for each referenced Notification target. (see [below for nested schema](#nestedatt--target_configs))
-- `targets` (List of String) List of the IDs for the Notification targets to send the Notification to.
+- `target_details` (Attributes List) Additional details about referenced Notification targets. Optionally populated on request. (see [below for nested schema](#nestedatt--target_details))
+- `targets` (List of String) List of the <code>id</code> values for the Notification targets to send the Notification to.
 
 ### Read-Only
 
-- `mode` (String) Notification mode: direct or policy-based
-- `pack` (String) The pack this notification belongs to
-- `template_target_pairs` (Attributes List) Pairs of templates and targets for notification routing (see [below for nested schema](#nestedatt--template_target_pairs))
+- `mode` (String) Delivery mode for Notifications.<br/><br/> <code>direct</code>: Notification is sent directly to Notification targets that are defined in <code>templateTargetPairs</code>.<br/><br/> <code>policy</code>: Notification is routed through Notification Policies, which match alerts by labels and route them to Notification targets without relying on <code>templateTargetPairs</code>.
+- `pack` (String) The <code>id</code> of the Pack the Notification belongs to. Automatically populated and returned in responses.
+- `template_target_pairs` (Attributes List) If <code>mode</code> is <code>direct</code>, the key-value pairs that define the Notification templates and targets to use for sending Notifications. (see [below for nested schema](#nestedatt--template_target_pairs))
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -74,7 +75,7 @@ Optional:
 Required:
 
 - `name` (String) Name of the metadata field.
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `value` (String) JavaScript expression to compute the metadata field's value, enclosed in quotes or backticks. Can evaluate to a constant.
 
 <a id="nestedatt--target_configs"></a>
 ### Nested Schema for `target_configs`
@@ -83,13 +84,49 @@ Required:
 
 - `id` (String) The <code>id</code> of the Notification target.
 
+Optional:
+
+- `conf` (Attributes) Simple Mail Transfer Protocol (SMTP) configuration for the Notification target. (see [below for nested schema](#nestedatt--target_configs--conf))
+
+<a id="nestedatt--target_configs--conf"></a>
+### Nested Schema for `target_configs.conf`
+
+Required:
+
+- `email_recipient` (Attributes) Email recipient settings for the Notification target. (see [below for nested schema](#nestedatt--target_configs--conf--email_recipient))
+
+Optional:
+
+- `body` (String) Email body.
+- `subject` (String) Email subject.
+
+<a id="nestedatt--target_configs--conf--email_recipient"></a>
+### Nested Schema for `target_configs.conf.email_recipient`
+
+Required:
+
+- `to` (String) Recipients' email addresses.
+
+Optional:
+
+- `bcc` (String) Bcc: Recipients' email addresses.
+- `cc` (String) Cc: Recipients' email addresses.
+
+<a id="nestedatt--target_details"></a>
+### Nested Schema for `target_details`
+
+Required:
+
+- `id` (String) The <code>id</code> of the Notification target.
+- `type` (String) The type of the Notification target.
+
 <a id="nestedatt--template_target_pairs"></a>
 ### Nested Schema for `template_target_pairs`
 
 Required:
 
-- `template_id` (String) ID of the notification template to use
-- `target_id` (String) ID of the notification target (output)
+- `target_id` (String) The <code>id</code> of the Notification target to send the Notification to.
+- `template_id` (String) The <code>id</code> of the Notification template to use.
 
 ## Import
 

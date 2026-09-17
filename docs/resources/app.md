@@ -25,37 +25,37 @@ resource "criblio_app" "my_app" {
 
 ### Required
 
-- `id` (String) Unique identifier for the App. When provided with <code>source</code>, overrides the <code>id</code> that is listed in the package.json for the App.
+- `id` (String) Unique identifier for the App. If you also provide a source, this value overrides the id listed in the App package.
 
 ### Optional
 
-- `author` (String) Author of the app.
-- `cribl` (Attributes) (see [below for nested schema](#nestedatt--cribl))
-- `description` (String) Brief description of the app.
-- `display_name` (String) Human-readable display name for the app.
+- `author` (String) Author of the App.
+- `cribl` (Attributes) Cribl metadata for the App. (see [below for nested schema](#nestedatt--cribl))
+- `description` (String) Brief description of the App.
+- `display_name` (String) Human-readable display name for the App.
 - `filename` (String) Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.
-- `force` (Boolean) If <code>true</code>, overwrite any existing App that has the same <code>id</code>. If <code>false</code>, and an App with the same <code>id</code> already exists, the request fails.
-- `min_log_stream_version` (String) Minimum Cribl Stream version required by this app.
+- `force` (Boolean) Overwrite any existing App that has the same identifier. If disabled, installing over an existing App with the same identifier fails.
+- `min_log_stream_version` (String) Minimum Cribl Stream version that the App requires.
 - `source` (String) The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud.
-- `spec` (String) Schema spec version for the app.
-- `tags` (Attributes) (see [below for nested schema](#nestedatt--tags))
-- `version` (String) Semantic version of the app.
+- `spec` (String) Version constraint for the App installation. Accepts a specific version (for example, 2.1.0), a semver range (for example, ^2.0.0), or a Git reference such as a branch, tag, or commit.
+- `tags` (Attributes) Tags for categorizing the App in the Cribl Marketplace. (see [below for nested schema](#nestedatt--tags))
+- `version` (String) Version of the App. When installing an existing App, defaults to the version in the App package. When creating a new App, defaults to 0.0.1.
 
 <a id="nestedatt--cribl"></a>
 ### Nested Schema for `cribl`
 
 Optional:
 
-- `type` (String) Cribl package type. Always "app" for apps.
-- `create_app_script_version` (String) Version of the create-app scaffold that generated this app.
-- `hidden` (Boolean) When <code>true</code>, the app is installed but hidden from the Apps list UI.
+- `type` (String) Cribl package type. Always app for Apps.
+- `create_app_script_version` (String) Version of the scaffold script that originally created the App. Populated automatically.
+- `hidden` (Boolean) Install the App without listing it in the Apps list in the UI.
 
 <a id="nestedatt--tags"></a>
 ### Nested Schema for `tags`
 
 Optional:
 
-- `product` (List of String) Cribl products supported by the app.
+- `product` (List of String) Cribl products that the App supports.
 
 ## Import
 

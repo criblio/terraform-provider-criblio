@@ -34,35 +34,35 @@ resource "criblio_project" "my_project" {
 
 ### Required
 
-- `destinations` (List of String)
+- `destinations` (List of String) List of Destination IDs associated with the Project.
 - `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier.
-- `subscriptions` (List of String)
+- `subscriptions` (List of String) List of Subscription IDs associated with the Project.
 
 ### Optional
 
-- `consumers` (Attributes Map) (see [below for nested schema](#nestedatt--consumers))
-- `description` (String)
+- `consumers` (Attributes Map) Map of Subscription consumer configurations keyed by Subscription ID. (see [below for nested schema](#nestedatt--consumers))
+- `description` (String) Brief description of the Project.
 
 <a id="nestedatt--consumers"></a>
 ### Nested Schema for `consumers`
 
 Optional:
 
-- `connections` (Attributes List) (see [below for nested schema](#nestedatt--consumers--connections))
+- `connections` (Attributes List) Array of connections that route data from the consumer through a Pipeline or Pack to a Destination. (see [below for nested schema](#nestedatt--consumers--connections))
 - `disabled` (Boolean) It should be removed as a consumer is present or absent.
-- `type` (String)
+- `type` (String) Type of the Subscription consumer.
 
 <a id="nestedatt--consumers--connections"></a>
 ### Nested Schema for `consumers.connections`
 
 Required:
 
-- `output` (String)
+- `output` (String) The <code>id</code> of the Destination to send data to.
 
 Optional:
 
-- `pipeline` (String)
+- `pipeline` (String) The <code>id</code> of the Pipeline or Pack used to process data before it is sent to the Destination.
 
 ## Import
 

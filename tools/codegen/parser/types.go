@@ -108,14 +108,21 @@ type FieldDef struct {
 
 // OneOfVariantDef describes one flattened oneOf variant model.
 type OneOfVariantDef struct {
-	APIName            string
-	TerraformName      string
-	GoName             string
-	ModelName          string
-	SchemaName         string
-	DiscriminatorField string
-	DiscriminatorValue string
-	Fields             []FieldDef
+	APIName                string
+	TerraformName          string
+	GoName                 string
+	ModelName              string
+	SchemaName             string
+	NestUnder              string
+	ParentRequired         bool
+	ParentComputed         bool
+	ParentOptionalComputed bool
+	RequestField           bool
+	UpdateField            bool
+	DiscriminatorAtParent  bool
+	DiscriminatorField     string
+	DiscriminatorValue     string
+	Fields                 []FieldDef
 }
 
 // OutputFile describes a generated file decision.

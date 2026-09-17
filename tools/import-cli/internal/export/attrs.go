@@ -61,6 +61,55 @@ func filterAttrsBySchema(attrs map[string]hcl.Value, modelTypeName string) {
 	}
 }
 
+// pruneNotificationTargetConfigs recursively removes empty optional SMTP
+// configuration objects returned for non-SMTP notification targets. Notification
+// objects can be top-level resources or nested in search dashboards. Emitting
+// conf = {} is invalid because email_recipient is required when conf is set.
+func pruneNotificationTargetConfigs(attrs map[string]hcl.Value) {
+	for name, value := range attrs {
+		if name == "target_configs" && value.Kind == hcl.KindList {
+			for index := range value.List {
+				item := &value.List[index]
+				if item.Kind != hcl.KindMap {
+					continue
+				}
+				conf, ok := item.Map["conf"]
+				if ok && conf.Kind == hcl.KindMap && !hasNonNullValue(conf) {
+					delete(item.Map, "conf")
+				}
+			}
+		}
+
+		switch value.Kind {
+		case hcl.KindMap:
+			pruneNotificationTargetConfigs(value.Map)
+		case hcl.KindList:
+			for index := range value.List {
+				if value.List[index].Kind == hcl.KindMap {
+					pruneNotificationTargetConfigs(value.List[index].Map)
+				}
+			}
+		}
+		attrs[name] = value
+	}
+}
+
+func hasNonNullValue(value hcl.Value) bool {
+	switch value.Kind {
+	case hcl.KindNull:
+		return false
+	case hcl.KindMap:
+		for _, child := range value.Map {
+			if hasNonNullValue(child) {
+				return true
+			}
+		}
+		return false
+	default:
+		return true
+	}
+}
+
 // hclOptionsForType returns HCL conversion options for the given resource type,
 // including skipping read-only attributes (and oneOf list attr when present) so generated config is valid.
 func hclOptionsForType(typeName string, e registry.Entry) *hcl.Options {

@@ -48,9 +48,14 @@ resource "criblio_database_connection" "my_database_connection" {
 - `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
 - `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
 - `connection_timeout` (Integer) Maximum time (in milliseconds) to wait when establishing the database connection.
+- `credentials_secret` (String) Name of the stored credentials secret containing username and password for SQL Server configObj authentication.
 - `creds_secrets` (String, Sensitive) Name of the stored credentials secret containing username and password. Used with Oracle connections.
+- `database` (String) Database to connect to instead of the server default.
+- `host` (String) Hostname of the server to connect to.
+- `log_on_mechanism` (String) Log On Mechanism for databases that support multiple, like Teradata.
 - `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
 - `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
+- `sslmode` (String) HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.
 - `tags` (String) Comma-separated list of tags for categorizing and filtering Database Connections.
 - `text_secret` (String, Sensitive) Name of the stored text secret containing the connection string.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--tls))
@@ -75,9 +80,14 @@ Optional:
 - `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
 - `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
 - `connection_timeout` (Integer) Maximum time (in milliseconds) to wait when establishing the database connection.
+- `credentials_secret` (String) Name of the stored credentials secret containing username and password for SQL Server configObj authentication.
 - `creds_secrets` (String, Sensitive) Name of the stored credentials secret containing username and password. Used with Oracle connections.
+- `database` (String) Database to connect to instead of the server default.
+- `host` (String) Hostname of the server to connect to.
+- `log_on_mechanism` (String) Log On Mechanism for databases that support multiple, like Teradata.
 - `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
 - `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
+- `sslmode` (String) HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.
 - `tags` (String) Comma-separated list of tags for categorizing and filtering Database Connections.
 - `text_secret` (String, Sensitive) Name of the stored text secret containing the connection string.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--tls))

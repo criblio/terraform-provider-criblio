@@ -17,234 +17,285 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type SourceModel struct {
-	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
-	Items                     types.List                      `tfsdk:"items" json:"-"`
-	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
-	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
-	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
-	InputHttp                 *InputHttpModel                 `tfsdk:"input_http" json:"InputHttp,omitempty"`
-	InputSplunk               *InputSplunkModel               `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
-	InputSplunkSearch         *InputSplunkSearchModel         `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
-	InputSplunkHec            *InputSplunkHecModel            `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
-	InputAzureBlob            *InputAzureBlobModel            `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
-	InputElastic              *InputElasticModel              `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
-	InputConfluentCloud       *InputConfluentCloudModel       `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
-	InputGrafana              *InputGrafanaModel              `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
-	InputLoki                 *InputLokiModel                 `tfsdk:"input_loki" json:"InputLoki,omitempty"`
-	InputPrometheusRw         *InputPrometheusRwModel         `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
-	InputPrometheus           *InputPrometheusModel           `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
-	InputEdgePrometheus       *InputEdgePrometheusModel       `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
-	InputOffice365Mgmt        *InputOffice365MgmtModel        `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
-	InputOffice365Service     *InputOffice365ServiceModel     `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
-	InputOffice365MsgTrace    *InputOffice365MsgTraceModel    `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
-	InputMicrosoftGraph       *InputMicrosoftGraphModel       `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
-	InputEventhub             *InputEventhubModel             `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
-	InputEventhubAmqp         *InputEventhubAmqpModel         `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
-	InputExec                 *InputExecModel                 `tfsdk:"input_exec" json:"InputExec,omitempty"`
-	InputFirehose             *InputFirehoseModel             `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
-	InputGooglePubsub         *InputGooglePubsubModel         `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
-	InputCribl                *InputCriblModel                `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
-	InputCriblTcp             *InputCriblTcpModel             `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
-	InputCriblHttp            *InputCriblHttpModel            `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
-	InputCriblLakeHttp        *InputCriblLakeHttpModel        `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
-	InputTcpjson              *InputTcpjsonModel              `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
-	InputSystemMetrics        *InputSystemMetricsModel        `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
-	InputSystemState          *InputSystemStateModel          `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
-	InputKubeMetrics          *InputKubeMetricsModel          `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
-	InputKubeLogs             *InputKubeLogsModel             `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
-	InputKubeEvents           *InputKubeEventsModel           `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
-	InputWindowsMetrics       *InputWindowsMetricsModel       `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
-	InputCrowdstrike          *InputCrowdstrikeModel          `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
-	InputDatadogAgent         *InputDatadogAgentModel         `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
-	InputDatagen              *InputDatagenModel              `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
-	InputHttpRaw              *InputHttpRawModel              `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
-	InputKinesis              *InputKinesisModel              `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
-	InputCriblmetrics         *InputCriblmetricsModel         `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
-	InputMetrics              *InputMetricsModel              `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
-	InputS3                   *InputS3Model                   `tfsdk:"input_s3" json:"InputS3,omitempty"`
-	InputS3Inventory          *InputS3InventoryModel          `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
-	InputSnmp                 *InputSnmpModel                 `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
-	InputOpenTelemetry        *InputOpenTelemetryModel        `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetryModel `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
-	InputSqs                  *InputSqsModel                  `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
-	InputSyslog               *InputSyslogModel               `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
-	InputFile                 *InputFileModel                 `tfsdk:"input_file" json:"InputFile,omitempty"`
-	InputTcp                  *InputTcpModel                  `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
-	InputAppscope             *InputAppscopeModel             `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
-	InputWef                  *InputWefModel                  `tfsdk:"input_wef" json:"InputWef,omitempty"`
-	InputWinEventLogs         *InputWinEventLogsModel         `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
-	InputAppleUnifiedLogs     *InputAppleUnifiedLogsModel     `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
-	InputRawUdp               *InputRawUdpModel               `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
-	InputJournalFiles         *InputJournalFilesModel         `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
-	InputWiz                  *InputWizModel                  `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
-	InputOpenai               *InputOpenaiModel               `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
-	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
-	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
-	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
-	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
-	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
-	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
-	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
-	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
-	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
-	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
-	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
-	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	GroupID                           types.String                            `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                                types.String                            `tfsdk:"id" json:"id,omitempty"`
+	Items                             types.List                              `tfsdk:"items" json:"-"`
+	InputCollection                   *InputCollectionModel                   `tfsdk:"input_collection" json:"InputCollection,omitempty"`
+	InputKafka                        *InputKafkaModel                        `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
+	InputMsk                          *InputMskModel                          `tfsdk:"input_msk" json:"InputMsk,omitempty"`
+	InputHttp                         *InputHttpModel                         `tfsdk:"input_http" json:"InputHttp,omitempty"`
+	InputSplunk                       *InputSplunkModel                       `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
+	InputSplunkSearch                 *InputSplunkSearchModel                 `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
+	InputSplunkHec                    *InputSplunkHecModel                    `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
+	InputAzureBlob                    *InputAzureBlobModel                    `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
+	InputAzureVnetFlowLog             *InputAzureVnetFlowLogModel             `tfsdk:"input_azure_vnet_flow_log" json:"InputAzureVnetFlowLog,omitempty"`
+	InputElastic                      *InputElasticModel                      `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
+	InputConfluentCloud               *InputConfluentCloudModel               `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
+	InputGrafana                      *InputGrafanaModel                      `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
+	InputLoki                         *InputLokiModel                         `tfsdk:"input_loki" json:"InputLoki,omitempty"`
+	InputPrometheusRw                 *InputPrometheusRwModel                 `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
+	InputPrometheus                   *InputPrometheusModel                   `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
+	InputEdgePrometheus               *InputEdgePrometheusModel               `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
+	InputOffice365Mgmt                *InputOffice365MgmtModel                `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
+	InputOffice365Service             *InputOffice365ServiceModel             `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
+	InputOffice365MsgTrace            *InputOffice365MsgTraceModel            `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
+	InputMicrosoftGraph               *InputMicrosoftGraphModel               `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
+	InputEventhub                     *InputEventhubModel                     `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
+	InputEventhubAmqp                 *InputEventhubAmqpModel                 `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
+	InputExec                         *InputExecModel                         `tfsdk:"input_exec" json:"InputExec,omitempty"`
+	InputFirehose                     *InputFirehoseModel                     `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
+	InputGooglePubsub                 *InputGooglePubsubModel                 `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
+	InputCribl                        *InputCriblModel                        `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
+	InputCriblTcp                     *InputCriblTcpModel                     `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
+	InputCriblHttp                    *InputCriblHttpModel                    `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
+	InputCriblLakeHttp                *InputCriblLakeHttpModel                `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
+	InputTcpjson                      *InputTcpjsonModel                      `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
+	InputSystemMetrics                *InputSystemMetricsModel                `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
+	InputSystemState                  *InputSystemStateModel                  `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
+	InputKubeMetrics                  *InputKubeMetricsModel                  `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
+	InputKubeLogs                     *InputKubeLogsModel                     `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
+	InputKubeEvents                   *InputKubeEventsModel                   `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
+	InputWindowsMetrics               *InputWindowsMetricsModel               `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
+	InputCrowdstrike                  *InputCrowdstrikeModel                  `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
+	InputDatadogAgent                 *InputDatadogAgentModel                 `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
+	InputDatagen                      *InputDatagenModel                      `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
+	InputHttpRaw                      *InputHttpRawModel                      `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
+	InputKinesis                      *InputKinesisModel                      `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
+	InputCriblmetrics                 *InputCriblmetricsModel                 `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
+	InputMetrics                      *InputMetricsModel                      `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
+	InputS3                           *InputS3Model                           `tfsdk:"input_s3" json:"InputS3,omitempty"`
+	InputS3Inventory                  *InputS3InventoryModel                  `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
+	InputSnmp                         *InputSnmpModel                         `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
+	InputOpenTelemetry                *InputOpenTelemetryModel                `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
+	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
+	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
+	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
+	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
+	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
+	InputWef                          *InputWefModel                          `tfsdk:"input_wef" json:"InputWef,omitempty"`
+	InputWinEventLogs                 *InputWinEventLogsModel                 `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
+	InputAppleUnifiedLogs             *InputAppleUnifiedLogsModel             `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
+	InputRawUdp                       *InputRawUdpModel                       `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
+	InputJournalFiles                 *InputJournalFilesModel                 `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
+	InputWiz                          *InputWizModel                          `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
+	InputOpenai                       *InputOpenaiModel                       `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
+	InputWizWebhook                   *InputWizWebhookModel                   `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
+	InputNetflow                      *InputNetflowModel                      `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
+	InputSecurityLake                 *InputSecurityLakeModel                 `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3                    *InputBedrockS3Model                    `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
+	InputServicenowTable              *InputServicenowTableModel              `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
+	InputProofpointPod                *InputProofpointPodModel                `tfsdk:"input_proofpoint_pod" json:"InputProofpointPod,omitempty"`
+	InputZscalerHec                   *InputZscalerHecModel                   `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
+	InputCloudflareHec                *InputCloudflareHecModel                `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
+	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
+	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
+	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
+	InputOpenaiComplianceLogs         *InputOpenaiComplianceLogsModel         `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
+	InputAnthropicCompliance          *InputAnthropicComplianceModel          `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
+	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
+	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
+	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
+	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
+	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
+	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
+	InputBeyondtrustHec               *InputBeyondtrustHecModel               `tfsdk:"input_beyondtrust_hec" json:"InputBeyondtrustHec,omitempty"`
+	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
+	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
+	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
 }
 
 type SourceResourceModel struct {
-	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
-	Items                     types.List                      `tfsdk:"items" json:"-"`
-	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
-	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
-	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
-	InputHttp                 *InputHttpModel                 `tfsdk:"input_http" json:"InputHttp,omitempty"`
-	InputSplunk               *InputSplunkModel               `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
-	InputSplunkSearch         *InputSplunkSearchModel         `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
-	InputSplunkHec            *InputSplunkHecModel            `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
-	InputAzureBlob            *InputAzureBlobModel            `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
-	InputElastic              *InputElasticModel              `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
-	InputConfluentCloud       *InputConfluentCloudModel       `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
-	InputGrafana              *InputGrafanaModel              `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
-	InputLoki                 *InputLokiModel                 `tfsdk:"input_loki" json:"InputLoki,omitempty"`
-	InputPrometheusRw         *InputPrometheusRwModel         `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
-	InputPrometheus           *InputPrometheusModel           `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
-	InputEdgePrometheus       *InputEdgePrometheusModel       `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
-	InputOffice365Mgmt        *InputOffice365MgmtModel        `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
-	InputOffice365Service     *InputOffice365ServiceModel     `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
-	InputOffice365MsgTrace    *InputOffice365MsgTraceModel    `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
-	InputMicrosoftGraph       *InputMicrosoftGraphModel       `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
-	InputEventhub             *InputEventhubModel             `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
-	InputEventhubAmqp         *InputEventhubAmqpModel         `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
-	InputExec                 *InputExecModel                 `tfsdk:"input_exec" json:"InputExec,omitempty"`
-	InputFirehose             *InputFirehoseModel             `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
-	InputGooglePubsub         *InputGooglePubsubModel         `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
-	InputCribl                *InputCriblModel                `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
-	InputCriblTcp             *InputCriblTcpModel             `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
-	InputCriblHttp            *InputCriblHttpModel            `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
-	InputCriblLakeHttp        *InputCriblLakeHttpModel        `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
-	InputTcpjson              *InputTcpjsonModel              `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
-	InputSystemMetrics        *InputSystemMetricsModel        `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
-	InputSystemState          *InputSystemStateModel          `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
-	InputKubeMetrics          *InputKubeMetricsModel          `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
-	InputKubeLogs             *InputKubeLogsModel             `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
-	InputKubeEvents           *InputKubeEventsModel           `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
-	InputWindowsMetrics       *InputWindowsMetricsModel       `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
-	InputCrowdstrike          *InputCrowdstrikeModel          `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
-	InputDatadogAgent         *InputDatadogAgentModel         `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
-	InputDatagen              *InputDatagenModel              `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
-	InputHttpRaw              *InputHttpRawModel              `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
-	InputKinesis              *InputKinesisModel              `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
-	InputCriblmetrics         *InputCriblmetricsModel         `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
-	InputMetrics              *InputMetricsModel              `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
-	InputS3                   *InputS3Model                   `tfsdk:"input_s3" json:"InputS3,omitempty"`
-	InputS3Inventory          *InputS3InventoryModel          `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
-	InputSnmp                 *InputSnmpModel                 `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
-	InputOpenTelemetry        *InputOpenTelemetryModel        `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetryModel `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
-	InputSqs                  *InputSqsModel                  `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
-	InputSyslog               *InputSyslogModel               `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
-	InputFile                 *InputFileModel                 `tfsdk:"input_file" json:"InputFile,omitempty"`
-	InputTcp                  *InputTcpModel                  `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
-	InputAppscope             *InputAppscopeModel             `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
-	InputWef                  *InputWefModel                  `tfsdk:"input_wef" json:"InputWef,omitempty"`
-	InputWinEventLogs         *InputWinEventLogsModel         `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
-	InputAppleUnifiedLogs     *InputAppleUnifiedLogsModel     `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
-	InputRawUdp               *InputRawUdpModel               `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
-	InputJournalFiles         *InputJournalFilesModel         `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
-	InputWiz                  *InputWizModel                  `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
-	InputOpenai               *InputOpenaiModel               `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
-	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
-	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
-	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
-	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
-	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
-	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
-	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
-	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
-	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
-	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
-	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
-	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	GroupID                           types.String                            `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                                types.String                            `tfsdk:"id" json:"id,omitempty"`
+	Items                             types.List                              `tfsdk:"items" json:"-"`
+	InputCollection                   *InputCollectionModel                   `tfsdk:"input_collection" json:"InputCollection,omitempty"`
+	InputKafka                        *InputKafkaModel                        `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
+	InputMsk                          *InputMskModel                          `tfsdk:"input_msk" json:"InputMsk,omitempty"`
+	InputHttp                         *InputHttpModel                         `tfsdk:"input_http" json:"InputHttp,omitempty"`
+	InputSplunk                       *InputSplunkModel                       `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
+	InputSplunkSearch                 *InputSplunkSearchModel                 `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
+	InputSplunkHec                    *InputSplunkHecModel                    `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
+	InputAzureBlob                    *InputAzureBlobModel                    `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
+	InputAzureVnetFlowLog             *InputAzureVnetFlowLogModel             `tfsdk:"input_azure_vnet_flow_log" json:"InputAzureVnetFlowLog,omitempty"`
+	InputElastic                      *InputElasticModel                      `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
+	InputConfluentCloud               *InputConfluentCloudModel               `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
+	InputGrafana                      *InputGrafanaModel                      `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
+	InputLoki                         *InputLokiModel                         `tfsdk:"input_loki" json:"InputLoki,omitempty"`
+	InputPrometheusRw                 *InputPrometheusRwModel                 `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
+	InputPrometheus                   *InputPrometheusModel                   `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
+	InputEdgePrometheus               *InputEdgePrometheusModel               `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
+	InputOffice365Mgmt                *InputOffice365MgmtModel                `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
+	InputOffice365Service             *InputOffice365ServiceModel             `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
+	InputOffice365MsgTrace            *InputOffice365MsgTraceModel            `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
+	InputMicrosoftGraph               *InputMicrosoftGraphModel               `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
+	InputEventhub                     *InputEventhubModel                     `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
+	InputEventhubAmqp                 *InputEventhubAmqpModel                 `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
+	InputExec                         *InputExecModel                         `tfsdk:"input_exec" json:"InputExec,omitempty"`
+	InputFirehose                     *InputFirehoseModel                     `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
+	InputGooglePubsub                 *InputGooglePubsubModel                 `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
+	InputCribl                        *InputCriblModel                        `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
+	InputCriblTcp                     *InputCriblTcpModel                     `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
+	InputCriblHttp                    *InputCriblHttpModel                    `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
+	InputCriblLakeHttp                *InputCriblLakeHttpModel                `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
+	InputTcpjson                      *InputTcpjsonModel                      `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
+	InputSystemMetrics                *InputSystemMetricsModel                `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
+	InputSystemState                  *InputSystemStateModel                  `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
+	InputKubeMetrics                  *InputKubeMetricsModel                  `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
+	InputKubeLogs                     *InputKubeLogsModel                     `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
+	InputKubeEvents                   *InputKubeEventsModel                   `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
+	InputWindowsMetrics               *InputWindowsMetricsModel               `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
+	InputCrowdstrike                  *InputCrowdstrikeModel                  `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
+	InputDatadogAgent                 *InputDatadogAgentModel                 `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
+	InputDatagen                      *InputDatagenModel                      `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
+	InputHttpRaw                      *InputHttpRawModel                      `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
+	InputKinesis                      *InputKinesisModel                      `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
+	InputCriblmetrics                 *InputCriblmetricsModel                 `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
+	InputMetrics                      *InputMetricsModel                      `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
+	InputS3                           *InputS3Model                           `tfsdk:"input_s3" json:"InputS3,omitempty"`
+	InputS3Inventory                  *InputS3InventoryModel                  `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
+	InputSnmp                         *InputSnmpModel                         `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
+	InputOpenTelemetry                *InputOpenTelemetryModel                `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
+	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
+	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
+	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
+	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
+	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
+	InputWef                          *InputWefModel                          `tfsdk:"input_wef" json:"InputWef,omitempty"`
+	InputWinEventLogs                 *InputWinEventLogsModel                 `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
+	InputAppleUnifiedLogs             *InputAppleUnifiedLogsModel             `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
+	InputRawUdp                       *InputRawUdpModel                       `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
+	InputJournalFiles                 *InputJournalFilesModel                 `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
+	InputWiz                          *InputWizModel                          `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
+	InputOpenai                       *InputOpenaiModel                       `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
+	InputWizWebhook                   *InputWizWebhookModel                   `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
+	InputNetflow                      *InputNetflowModel                      `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
+	InputSecurityLake                 *InputSecurityLakeModel                 `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3                    *InputBedrockS3Model                    `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
+	InputServicenowTable              *InputServicenowTableModel              `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
+	InputProofpointPod                *InputProofpointPodModel                `tfsdk:"input_proofpoint_pod" json:"InputProofpointPod,omitempty"`
+	InputZscalerHec                   *InputZscalerHecModel                   `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
+	InputCloudflareHec                *InputCloudflareHecModel                `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
+	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
+	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
+	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
+	InputOpenaiComplianceLogs         *InputOpenaiComplianceLogsModel         `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
+	InputAnthropicCompliance          *InputAnthropicComplianceModel          `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
+	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
+	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
+	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
+	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
+	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
+	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
+	InputBeyondtrustHec               *InputBeyondtrustHecModel               `tfsdk:"input_beyondtrust_hec" json:"InputBeyondtrustHec,omitempty"`
+	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
+	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
+	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
 }
 
 type SourceDataSourceModel struct {
-	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
-	Items                     types.List                      `tfsdk:"items" json:"-"`
-	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
-	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
-	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
-	InputHttp                 *InputHttpModel                 `tfsdk:"input_http" json:"InputHttp,omitempty"`
-	InputSplunk               *InputSplunkModel               `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
-	InputSplunkSearch         *InputSplunkSearchModel         `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
-	InputSplunkHec            *InputSplunkHecModel            `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
-	InputAzureBlob            *InputAzureBlobModel            `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
-	InputElastic              *InputElasticModel              `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
-	InputConfluentCloud       *InputConfluentCloudModel       `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
-	InputGrafana              *InputGrafanaModel              `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
-	InputLoki                 *InputLokiModel                 `tfsdk:"input_loki" json:"InputLoki,omitempty"`
-	InputPrometheusRw         *InputPrometheusRwModel         `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
-	InputPrometheus           *InputPrometheusModel           `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
-	InputEdgePrometheus       *InputEdgePrometheusModel       `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
-	InputOffice365Mgmt        *InputOffice365MgmtModel        `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
-	InputOffice365Service     *InputOffice365ServiceModel     `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
-	InputOffice365MsgTrace    *InputOffice365MsgTraceModel    `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
-	InputMicrosoftGraph       *InputMicrosoftGraphModel       `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
-	InputEventhub             *InputEventhubModel             `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
-	InputEventhubAmqp         *InputEventhubAmqpModel         `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
-	InputExec                 *InputExecModel                 `tfsdk:"input_exec" json:"InputExec,omitempty"`
-	InputFirehose             *InputFirehoseModel             `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
-	InputGooglePubsub         *InputGooglePubsubModel         `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
-	InputCribl                *InputCriblModel                `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
-	InputCriblTcp             *InputCriblTcpModel             `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
-	InputCriblHttp            *InputCriblHttpModel            `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
-	InputCriblLakeHttp        *InputCriblLakeHttpModel        `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
-	InputTcpjson              *InputTcpjsonModel              `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
-	InputSystemMetrics        *InputSystemMetricsModel        `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
-	InputSystemState          *InputSystemStateModel          `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
-	InputKubeMetrics          *InputKubeMetricsModel          `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
-	InputKubeLogs             *InputKubeLogsModel             `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
-	InputKubeEvents           *InputKubeEventsModel           `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
-	InputWindowsMetrics       *InputWindowsMetricsModel       `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
-	InputCrowdstrike          *InputCrowdstrikeModel          `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
-	InputDatadogAgent         *InputDatadogAgentModel         `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
-	InputDatagen              *InputDatagenModel              `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
-	InputHttpRaw              *InputHttpRawModel              `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
-	InputKinesis              *InputKinesisModel              `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
-	InputCriblmetrics         *InputCriblmetricsModel         `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
-	InputMetrics              *InputMetricsModel              `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
-	InputS3                   *InputS3Model                   `tfsdk:"input_s3" json:"InputS3,omitempty"`
-	InputS3Inventory          *InputS3InventoryModel          `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
-	InputSnmp                 *InputSnmpModel                 `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
-	InputOpenTelemetry        *InputOpenTelemetryModel        `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetryModel `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
-	InputSqs                  *InputSqsModel                  `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
-	InputSyslog               *InputSyslogModel               `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
-	InputFile                 *InputFileModel                 `tfsdk:"input_file" json:"InputFile,omitempty"`
-	InputTcp                  *InputTcpModel                  `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
-	InputAppscope             *InputAppscopeModel             `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
-	InputWef                  *InputWefModel                  `tfsdk:"input_wef" json:"InputWef,omitempty"`
-	InputWinEventLogs         *InputWinEventLogsModel         `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
-	InputAppleUnifiedLogs     *InputAppleUnifiedLogsModel     `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
-	InputRawUdp               *InputRawUdpModel               `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
-	InputJournalFiles         *InputJournalFilesModel         `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
-	InputWiz                  *InputWizModel                  `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
-	InputOpenai               *InputOpenaiModel               `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
-	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
-	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
-	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
-	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
-	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
-	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
-	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
-	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
-	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
-	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
-	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
-	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	GroupID                           types.String                            `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                                types.String                            `tfsdk:"id" json:"id,omitempty"`
+	Items                             types.List                              `tfsdk:"items" json:"-"`
+	InputCollection                   *InputCollectionModel                   `tfsdk:"input_collection" json:"InputCollection,omitempty"`
+	InputKafka                        *InputKafkaModel                        `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
+	InputMsk                          *InputMskModel                          `tfsdk:"input_msk" json:"InputMsk,omitempty"`
+	InputHttp                         *InputHttpModel                         `tfsdk:"input_http" json:"InputHttp,omitempty"`
+	InputSplunk                       *InputSplunkModel                       `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
+	InputSplunkSearch                 *InputSplunkSearchModel                 `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
+	InputSplunkHec                    *InputSplunkHecModel                    `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
+	InputAzureBlob                    *InputAzureBlobModel                    `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
+	InputAzureVnetFlowLog             *InputAzureVnetFlowLogModel             `tfsdk:"input_azure_vnet_flow_log" json:"InputAzureVnetFlowLog,omitempty"`
+	InputElastic                      *InputElasticModel                      `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
+	InputConfluentCloud               *InputConfluentCloudModel               `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
+	InputGrafana                      *InputGrafanaModel                      `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
+	InputLoki                         *InputLokiModel                         `tfsdk:"input_loki" json:"InputLoki,omitempty"`
+	InputPrometheusRw                 *InputPrometheusRwModel                 `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
+	InputPrometheus                   *InputPrometheusModel                   `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
+	InputEdgePrometheus               *InputEdgePrometheusModel               `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
+	InputOffice365Mgmt                *InputOffice365MgmtModel                `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
+	InputOffice365Service             *InputOffice365ServiceModel             `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
+	InputOffice365MsgTrace            *InputOffice365MsgTraceModel            `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
+	InputMicrosoftGraph               *InputMicrosoftGraphModel               `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
+	InputEventhub                     *InputEventhubModel                     `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
+	InputEventhubAmqp                 *InputEventhubAmqpModel                 `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
+	InputExec                         *InputExecModel                         `tfsdk:"input_exec" json:"InputExec,omitempty"`
+	InputFirehose                     *InputFirehoseModel                     `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
+	InputGooglePubsub                 *InputGooglePubsubModel                 `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
+	InputCribl                        *InputCriblModel                        `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
+	InputCriblTcp                     *InputCriblTcpModel                     `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
+	InputCriblHttp                    *InputCriblHttpModel                    `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
+	InputCriblLakeHttp                *InputCriblLakeHttpModel                `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
+	InputTcpjson                      *InputTcpjsonModel                      `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
+	InputSystemMetrics                *InputSystemMetricsModel                `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
+	InputSystemState                  *InputSystemStateModel                  `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
+	InputKubeMetrics                  *InputKubeMetricsModel                  `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
+	InputKubeLogs                     *InputKubeLogsModel                     `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
+	InputKubeEvents                   *InputKubeEventsModel                   `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
+	InputWindowsMetrics               *InputWindowsMetricsModel               `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
+	InputCrowdstrike                  *InputCrowdstrikeModel                  `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
+	InputDatadogAgent                 *InputDatadogAgentModel                 `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
+	InputDatagen                      *InputDatagenModel                      `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
+	InputHttpRaw                      *InputHttpRawModel                      `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
+	InputKinesis                      *InputKinesisModel                      `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
+	InputCriblmetrics                 *InputCriblmetricsModel                 `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
+	InputMetrics                      *InputMetricsModel                      `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
+	InputS3                           *InputS3Model                           `tfsdk:"input_s3" json:"InputS3,omitempty"`
+	InputS3Inventory                  *InputS3InventoryModel                  `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
+	InputSnmp                         *InputSnmpModel                         `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
+	InputOpenTelemetry                *InputOpenTelemetryModel                `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
+	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
+	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
+	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
+	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
+	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
+	InputWef                          *InputWefModel                          `tfsdk:"input_wef" json:"InputWef,omitempty"`
+	InputWinEventLogs                 *InputWinEventLogsModel                 `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
+	InputAppleUnifiedLogs             *InputAppleUnifiedLogsModel             `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
+	InputRawUdp                       *InputRawUdpModel                       `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
+	InputJournalFiles                 *InputJournalFilesModel                 `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
+	InputWiz                          *InputWizModel                          `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
+	InputOpenai                       *InputOpenaiModel                       `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
+	InputWizWebhook                   *InputWizWebhookModel                   `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
+	InputNetflow                      *InputNetflowModel                      `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
+	InputSecurityLake                 *InputSecurityLakeModel                 `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3                    *InputBedrockS3Model                    `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
+	InputServicenowTable              *InputServicenowTableModel              `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
+	InputProofpointPod                *InputProofpointPodModel                `tfsdk:"input_proofpoint_pod" json:"InputProofpointPod,omitempty"`
+	InputZscalerHec                   *InputZscalerHecModel                   `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
+	InputCloudflareHec                *InputCloudflareHecModel                `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
+	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
+	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
+	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
+	InputOpenaiComplianceLogs         *InputOpenaiComplianceLogsModel         `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
+	InputAnthropicCompliance          *InputAnthropicComplianceModel          `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
+	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
+	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
+	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
+	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
+	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
+	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
+	InputBeyondtrustHec               *InputBeyondtrustHecModel               `tfsdk:"input_beyondtrust_hec" json:"InputBeyondtrustHec,omitempty"`
+	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
+	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
+	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
 }
 
 type SourceAPIModel struct {
@@ -254,77 +305,94 @@ type SourceAPIModel struct {
 
 func SourceLegacyItemsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"input_collection":             types.ObjectType{AttrTypes: InputCollectionModelAttrTypes()},
-		"input_kafka":                  types.ObjectType{AttrTypes: InputKafkaModelAttrTypes()},
-		"input_msk":                    types.ObjectType{AttrTypes: InputMskModelAttrTypes()},
-		"input_http":                   types.ObjectType{AttrTypes: InputHttpModelAttrTypes()},
-		"input_splunk":                 types.ObjectType{AttrTypes: InputSplunkModelAttrTypes()},
-		"input_splunk_search":          types.ObjectType{AttrTypes: InputSplunkSearchModelAttrTypes()},
-		"input_splunk_hec":             types.ObjectType{AttrTypes: InputSplunkHecModelAttrTypes()},
-		"input_azure_blob":             types.ObjectType{AttrTypes: InputAzureBlobModelAttrTypes()},
-		"input_elastic":                types.ObjectType{AttrTypes: InputElasticModelAttrTypes()},
-		"input_confluent_cloud":        types.ObjectType{AttrTypes: InputConfluentCloudModelAttrTypes()},
-		"input_grafana":                types.ObjectType{AttrTypes: InputGrafanaModelAttrTypes()},
-		"input_loki":                   types.ObjectType{AttrTypes: InputLokiModelAttrTypes()},
-		"input_prometheus_rw":          types.ObjectType{AttrTypes: InputPrometheusRwModelAttrTypes()},
-		"input_prometheus":             types.ObjectType{AttrTypes: InputPrometheusModelAttrTypes()},
-		"input_edge_prometheus":        types.ObjectType{AttrTypes: InputEdgePrometheusModelAttrTypes()},
-		"input_office365_mgmt":         types.ObjectType{AttrTypes: InputOffice365MgmtModelAttrTypes()},
-		"input_office365_service":      types.ObjectType{AttrTypes: InputOffice365ServiceModelAttrTypes()},
-		"input_office365_msg_trace":    types.ObjectType{AttrTypes: InputOffice365MsgTraceModelAttrTypes()},
-		"input_microsoft_graph":        types.ObjectType{AttrTypes: InputMicrosoftGraphModelAttrTypes()},
-		"input_eventhub":               types.ObjectType{AttrTypes: InputEventhubModelAttrTypes()},
-		"input_eventhub_amqp":          types.ObjectType{AttrTypes: InputEventhubAmqpModelAttrTypes()},
-		"input_exec":                   types.ObjectType{AttrTypes: InputExecModelAttrTypes()},
-		"input_firehose":               types.ObjectType{AttrTypes: InputFirehoseModelAttrTypes()},
-		"input_google_pubsub":          types.ObjectType{AttrTypes: InputGooglePubsubModelAttrTypes()},
-		"input_cribl":                  types.ObjectType{AttrTypes: InputCriblModelAttrTypes()},
-		"input_cribl_tcp":              types.ObjectType{AttrTypes: InputCriblTcpModelAttrTypes()},
-		"input_cribl_http":             types.ObjectType{AttrTypes: InputCriblHttpModelAttrTypes()},
-		"input_cribl_lake_http":        types.ObjectType{AttrTypes: InputCriblLakeHttpModelAttrTypes()},
-		"input_tcpjson":                types.ObjectType{AttrTypes: InputTcpjsonModelAttrTypes()},
-		"input_system_metrics":         types.ObjectType{AttrTypes: InputSystemMetricsModelAttrTypes()},
-		"input_system_state":           types.ObjectType{AttrTypes: InputSystemStateModelAttrTypes()},
-		"input_kube_metrics":           types.ObjectType{AttrTypes: InputKubeMetricsModelAttrTypes()},
-		"input_kube_logs":              types.ObjectType{AttrTypes: InputKubeLogsModelAttrTypes()},
-		"input_kube_events":            types.ObjectType{AttrTypes: InputKubeEventsModelAttrTypes()},
-		"input_windows_metrics":        types.ObjectType{AttrTypes: InputWindowsMetricsModelAttrTypes()},
-		"input_crowdstrike":            types.ObjectType{AttrTypes: InputCrowdstrikeModelAttrTypes()},
-		"input_datadog_agent":          types.ObjectType{AttrTypes: InputDatadogAgentModelAttrTypes()},
-		"input_datagen":                types.ObjectType{AttrTypes: InputDatagenModelAttrTypes()},
-		"input_http_raw":               types.ObjectType{AttrTypes: InputHttpRawModelAttrTypes()},
-		"input_kinesis":                types.ObjectType{AttrTypes: InputKinesisModelAttrTypes()},
-		"input_criblmetrics":           types.ObjectType{AttrTypes: InputCriblmetricsModelAttrTypes()},
-		"input_metrics":                types.ObjectType{AttrTypes: InputMetricsModelAttrTypes()},
-		"input_s3":                     types.ObjectType{AttrTypes: InputS3ModelAttrTypes()},
-		"input_s3_inventory":           types.ObjectType{AttrTypes: InputS3InventoryModelAttrTypes()},
-		"input_snmp":                   types.ObjectType{AttrTypes: InputSnmpModelAttrTypes()},
-		"input_open_telemetry":         types.ObjectType{AttrTypes: InputOpenTelemetryModelAttrTypes()},
-		"input_model_driven_telemetry": types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
-		"input_sqs":                    types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
-		"input_syslog":                 types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
-		"input_file":                   types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
-		"input_tcp":                    types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
-		"input_appscope":               types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
-		"input_wef":                    types.ObjectType{AttrTypes: InputWefModelAttrTypes()},
-		"input_win_event_logs":         types.ObjectType{AttrTypes: InputWinEventLogsModelAttrTypes()},
-		"input_apple_unified_logs":     types.ObjectType{AttrTypes: InputAppleUnifiedLogsModelAttrTypes()},
-		"input_raw_udp":                types.ObjectType{AttrTypes: InputRawUdpModelAttrTypes()},
-		"input_journal_files":          types.ObjectType{AttrTypes: InputJournalFilesModelAttrTypes()},
-		"input_wiz":                    types.ObjectType{AttrTypes: InputWizModelAttrTypes()},
-		"input_openai":                 types.ObjectType{AttrTypes: InputOpenaiModelAttrTypes()},
-		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
-		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
-		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
-		"input_bedrock_s3":             types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
-		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
-		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
-		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
-		"input_sysdig_hec":             types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
-		"input_upwind_hec":             types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
-		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
-		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
-		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+		"input_collection":                     types.ObjectType{AttrTypes: InputCollectionModelAttrTypes()},
+		"input_kafka":                          types.ObjectType{AttrTypes: InputKafkaModelAttrTypes()},
+		"input_msk":                            types.ObjectType{AttrTypes: InputMskModelAttrTypes()},
+		"input_http":                           types.ObjectType{AttrTypes: InputHttpModelAttrTypes()},
+		"input_splunk":                         types.ObjectType{AttrTypes: InputSplunkModelAttrTypes()},
+		"input_splunk_search":                  types.ObjectType{AttrTypes: InputSplunkSearchModelAttrTypes()},
+		"input_splunk_hec":                     types.ObjectType{AttrTypes: InputSplunkHecModelAttrTypes()},
+		"input_azure_blob":                     types.ObjectType{AttrTypes: InputAzureBlobModelAttrTypes()},
+		"input_azure_vnet_flow_log":            types.ObjectType{AttrTypes: InputAzureVnetFlowLogModelAttrTypes()},
+		"input_elastic":                        types.ObjectType{AttrTypes: InputElasticModelAttrTypes()},
+		"input_confluent_cloud":                types.ObjectType{AttrTypes: InputConfluentCloudModelAttrTypes()},
+		"input_grafana":                        types.ObjectType{AttrTypes: InputGrafanaModelAttrTypes()},
+		"input_loki":                           types.ObjectType{AttrTypes: InputLokiModelAttrTypes()},
+		"input_prometheus_rw":                  types.ObjectType{AttrTypes: InputPrometheusRwModelAttrTypes()},
+		"input_prometheus":                     types.ObjectType{AttrTypes: InputPrometheusModelAttrTypes()},
+		"input_edge_prometheus":                types.ObjectType{AttrTypes: InputEdgePrometheusModelAttrTypes()},
+		"input_office365_mgmt":                 types.ObjectType{AttrTypes: InputOffice365MgmtModelAttrTypes()},
+		"input_office365_service":              types.ObjectType{AttrTypes: InputOffice365ServiceModelAttrTypes()},
+		"input_office365_msg_trace":            types.ObjectType{AttrTypes: InputOffice365MsgTraceModelAttrTypes()},
+		"input_microsoft_graph":                types.ObjectType{AttrTypes: InputMicrosoftGraphModelAttrTypes()},
+		"input_eventhub":                       types.ObjectType{AttrTypes: InputEventhubModelAttrTypes()},
+		"input_eventhub_amqp":                  types.ObjectType{AttrTypes: InputEventhubAmqpModelAttrTypes()},
+		"input_exec":                           types.ObjectType{AttrTypes: InputExecModelAttrTypes()},
+		"input_firehose":                       types.ObjectType{AttrTypes: InputFirehoseModelAttrTypes()},
+		"input_google_pubsub":                  types.ObjectType{AttrTypes: InputGooglePubsubModelAttrTypes()},
+		"input_cribl":                          types.ObjectType{AttrTypes: InputCriblModelAttrTypes()},
+		"input_cribl_tcp":                      types.ObjectType{AttrTypes: InputCriblTcpModelAttrTypes()},
+		"input_cribl_http":                     types.ObjectType{AttrTypes: InputCriblHttpModelAttrTypes()},
+		"input_cribl_lake_http":                types.ObjectType{AttrTypes: InputCriblLakeHttpModelAttrTypes()},
+		"input_tcpjson":                        types.ObjectType{AttrTypes: InputTcpjsonModelAttrTypes()},
+		"input_system_metrics":                 types.ObjectType{AttrTypes: InputSystemMetricsModelAttrTypes()},
+		"input_system_state":                   types.ObjectType{AttrTypes: InputSystemStateModelAttrTypes()},
+		"input_kube_metrics":                   types.ObjectType{AttrTypes: InputKubeMetricsModelAttrTypes()},
+		"input_kube_logs":                      types.ObjectType{AttrTypes: InputKubeLogsModelAttrTypes()},
+		"input_kube_events":                    types.ObjectType{AttrTypes: InputKubeEventsModelAttrTypes()},
+		"input_windows_metrics":                types.ObjectType{AttrTypes: InputWindowsMetricsModelAttrTypes()},
+		"input_crowdstrike":                    types.ObjectType{AttrTypes: InputCrowdstrikeModelAttrTypes()},
+		"input_datadog_agent":                  types.ObjectType{AttrTypes: InputDatadogAgentModelAttrTypes()},
+		"input_datagen":                        types.ObjectType{AttrTypes: InputDatagenModelAttrTypes()},
+		"input_http_raw":                       types.ObjectType{AttrTypes: InputHttpRawModelAttrTypes()},
+		"input_kinesis":                        types.ObjectType{AttrTypes: InputKinesisModelAttrTypes()},
+		"input_criblmetrics":                   types.ObjectType{AttrTypes: InputCriblmetricsModelAttrTypes()},
+		"input_metrics":                        types.ObjectType{AttrTypes: InputMetricsModelAttrTypes()},
+		"input_s3":                             types.ObjectType{AttrTypes: InputS3ModelAttrTypes()},
+		"input_s3_inventory":                   types.ObjectType{AttrTypes: InputS3InventoryModelAttrTypes()},
+		"input_snmp":                           types.ObjectType{AttrTypes: InputSnmpModelAttrTypes()},
+		"input_open_telemetry":                 types.ObjectType{AttrTypes: InputOpenTelemetryModelAttrTypes()},
+		"input_model_driven_telemetry":         types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
+		"input_sqs":                            types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
+		"input_syslog":                         types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
+		"input_file":                           types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
+		"input_tcp":                            types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
+		"input_appscope":                       types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
+		"input_wef":                            types.ObjectType{AttrTypes: InputWefModelAttrTypes()},
+		"input_win_event_logs":                 types.ObjectType{AttrTypes: InputWinEventLogsModelAttrTypes()},
+		"input_apple_unified_logs":             types.ObjectType{AttrTypes: InputAppleUnifiedLogsModelAttrTypes()},
+		"input_raw_udp":                        types.ObjectType{AttrTypes: InputRawUdpModelAttrTypes()},
+		"input_journal_files":                  types.ObjectType{AttrTypes: InputJournalFilesModelAttrTypes()},
+		"input_wiz":                            types.ObjectType{AttrTypes: InputWizModelAttrTypes()},
+		"input_openai":                         types.ObjectType{AttrTypes: InputOpenaiModelAttrTypes()},
+		"input_wiz_webhook":                    types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
+		"input_netflow":                        types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
+		"input_security_lake":                  types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_bedrock_s3":                     types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
+		"input_servicenow_table":               types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
+		"input_proofpoint_pod":                 types.ObjectType{AttrTypes: InputProofpointPodModelAttrTypes()},
+		"input_zscaler_hec":                    types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
+		"input_cloudflare_hec":                 types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_sysdig_hec":                     types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
+		"input_upwind_hec":                     types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
+		"input_trellix_hec":                    types.ObjectType{AttrTypes: InputTrellixHecModelAttrTypes()},
+		"input_sailpoint_hec":                  types.ObjectType{AttrTypes: InputSailpointHecModelAttrTypes()},
+		"input_extrahop_revealx360":            types.ObjectType{AttrTypes: InputExtrahopRevealx360ModelAttrTypes()},
+		"input_aqua_security_hec":              types.ObjectType{AttrTypes: InputAquaSecurityHecModelAttrTypes()},
+		"input_openai_compliance_logs":         types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
+		"input_anthropic_compliance":           types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
+		"input_anthropic_enterprise_analytics": types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsModelAttrTypes()},
+		"input_microsoft_copilot":              types.ObjectType{AttrTypes: InputMicrosoftCopilotModelAttrTypes()},
+		"input_okta":                           types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+		"input_akamai_hec":                     types.ObjectType{AttrTypes: InputAkamaiHecModelAttrTypes()},
+		"input_ping_identity_pingone":          types.ObjectType{AttrTypes: InputPingIDentityPingoneModelAttrTypes()},
+		"input_gigamon_hec":                    types.ObjectType{AttrTypes: InputGigamonHecModelAttrTypes()},
+		"input_vectra_ai_hec":                  types.ObjectType{AttrTypes: InputVectraAiHecModelAttrTypes()},
+		"input_f5_big_ip":                      types.ObjectType{AttrTypes: InputF5BigIpModelAttrTypes()},
+		"input_beyondtrust_hec":                types.ObjectType{AttrTypes: InputBeyondtrustHecModelAttrTypes()},
+		"input_hashicorp_hcp_vault_dedicated":  types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedModelAttrTypes()},
+		"input_mimecast_hec":                   types.ObjectType{AttrTypes: InputMimecastHecModelAttrTypes()},
+		"input_trend_micro_vision_one":         types.ObjectType{AttrTypes: InputTrendMicroVisionOneModelAttrTypes()},
 	}
 }
 
@@ -332,14 +400,18 @@ type InputCollectionCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCollectionCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCollectionCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -347,7 +419,9 @@ func InputCollectionCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -450,14 +524,18 @@ type InputKafkaCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputKafkaCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputKafkaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -465,7 +543,9 @@ func InputKafkaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -813,14 +893,18 @@ type InputMskCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputMskCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputMskCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -828,7 +912,9 @@ func InputMskCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1083,14 +1169,18 @@ type InputHttpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputHttpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1098,7 +1188,9 @@ func InputHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1163,13 +1255,13 @@ func InputHttpPqAttrTypes() map[string]attr.Type {
 type InputHttpTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -1177,13 +1269,13 @@ type InputHttpTLSModel struct {
 type InputHttpTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -1192,13 +1284,13 @@ func InputHttpTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -1222,39 +1314,16 @@ func InputHttpMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputHttpAuthTokensExtModel struct {
-	Token       types.String `tfsdk:"token" json:"token,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	Metadata    types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+	Token types.String `tfsdk:"token" json:"token,omitempty"`
 }
 
 type InputHttpAuthTokensExtAPIModel struct {
-	Token       *string `json:"token,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Metadata    any     `json:"metadata,omitempty"`
+	Token *string `json:"token,omitempty"`
 }
 
 func InputHttpAuthTokensExtAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"token":       types.StringType,
-		"description": types.StringType,
-		"metadata":    types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpAuthTokensExtMetadataAttrTypes()}},
-	}
-}
-
-type InputHttpAuthTokensExtMetadataModel struct {
-	Name  types.String `tfsdk:"name" json:"name,omitempty"`
-	Value types.String `tfsdk:"value" json:"value,omitempty"`
-}
-
-type InputHttpAuthTokensExtMetadataAPIModel struct {
-	Name  *string `json:"name,omitempty"`
-	Value *string `json:"value,omitempty"`
-}
-
-func InputHttpAuthTokensExtMetadataAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"name":  types.StringType,
-		"value": types.StringType,
+		"token": types.StringType,
 	}
 }
 
@@ -1262,14 +1331,18 @@ type InputSplunkCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSplunkCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSplunkCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1277,7 +1350,9 @@ func InputSplunkCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1342,13 +1417,13 @@ func InputSplunkPqAttrTypes() map[string]attr.Type {
 type InputSplunkTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -1356,13 +1431,13 @@ type InputSplunkTLSModel struct {
 type InputSplunkTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -1371,13 +1446,13 @@ func InputSplunkTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -1401,19 +1476,25 @@ func InputSplunkMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputSplunkAuthTokensModel struct {
+	AuthType    types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
 	Token       types.String `tfsdk:"token" json:"token,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
 type InputSplunkAuthTokensAPIModel struct {
+	AuthType    *string `json:"authType,omitempty"`
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 	Token       *string `json:"token,omitempty"`
 	Description *string `json:"description,omitempty"`
 }
 
 func InputSplunkAuthTokensAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"token":       types.StringType,
-		"description": types.StringType,
+		"auth_type":    types.StringType,
+		"token_secret": types.StringType,
+		"token":        types.StringType,
+		"description":  types.StringType,
 	}
 }
 
@@ -1421,14 +1502,18 @@ type InputSplunkSearchCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSplunkSearchCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSplunkSearchCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1436,7 +1521,9 @@ func InputSplunkSearchCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1588,14 +1675,18 @@ type InputSplunkHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSplunkHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSplunkHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1603,7 +1694,9 @@ func InputSplunkHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1717,13 +1810,13 @@ func InputSplunkHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
 type InputSplunkHecTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -1731,13 +1824,13 @@ type InputSplunkHecTLSModel struct {
 type InputSplunkHecTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -1746,13 +1839,13 @@ func InputSplunkHecTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -1779,14 +1872,18 @@ type InputAzureBlobCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputAzureBlobCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputAzureBlobCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1794,7 +1891,9 @@ func InputAzureBlobCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1887,18 +1986,140 @@ func InputAzureBlobCertificateAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputAzureVnetFlowLogCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputAzureVnetFlowLogCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputAzureVnetFlowLogCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputAzureVnetFlowLogConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputAzureVnetFlowLogConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputAzureVnetFlowLogConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputAzureVnetFlowLogPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputAzureVnetFlowLogPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputAzureVnetFlowLogPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAzureVnetFlowLogMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputAzureVnetFlowLogMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputAzureVnetFlowLogMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputAzureVnetFlowLogCertificateModel struct {
+	CertificateName types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+}
+
+type InputAzureVnetFlowLogCertificateAPIModel struct {
+	CertificateName *string `json:"certificateName,omitempty"`
+}
+
+func InputAzureVnetFlowLogCertificateAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"certificate_name": types.StringType,
+	}
+}
+
 type InputElasticCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputElasticCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputElasticCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1906,7 +2127,9 @@ func InputElasticCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -1971,13 +2194,13 @@ func InputElasticPqAttrTypes() map[string]attr.Type {
 type InputElasticTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -1985,13 +2208,13 @@ type InputElasticTLSModel struct {
 type InputElasticTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -2000,13 +2223,13 @@ func InputElasticTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -2088,14 +2311,18 @@ type InputConfluentCloudCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputConfluentCloudCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputConfluentCloudCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2103,7 +2330,9 @@ func InputConfluentCloudCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -2451,14 +2680,18 @@ type InputGrafanaCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputGrafanaCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputGrafanaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2466,7 +2699,9 @@ func InputGrafanaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -2531,13 +2766,13 @@ func InputGrafanaPqAttrTypes() map[string]attr.Type {
 type InputGrafanaTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -2545,13 +2780,13 @@ type InputGrafanaTLSModel struct {
 type InputGrafanaTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -2560,13 +2795,13 @@ func InputGrafanaTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -2651,14 +2886,18 @@ type InputLokiCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputLokiCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputLokiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2666,7 +2905,9 @@ func InputLokiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -2731,13 +2972,13 @@ func InputLokiPqAttrTypes() map[string]attr.Type {
 type InputLokiTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -2745,13 +2986,13 @@ type InputLokiTLSModel struct {
 type InputLokiTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -2760,13 +3001,13 @@ func InputLokiTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -2793,14 +3034,18 @@ type InputPrometheusRwCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputPrometheusRwCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputPrometheusRwCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2808,7 +3053,9 @@ func InputPrometheusRwCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -2873,13 +3120,13 @@ func InputPrometheusRwPqAttrTypes() map[string]attr.Type {
 type InputPrometheusRwTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -2887,13 +3134,13 @@ type InputPrometheusRwTLSModel struct {
 type InputPrometheusRwTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -2902,13 +3149,13 @@ func InputPrometheusRwTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -2935,14 +3182,18 @@ type InputPrometheusCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputPrometheusCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputPrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2950,7 +3201,9 @@ func InputPrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -3067,14 +3320,18 @@ type InputEdgePrometheusCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputEdgePrometheusCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputEdgePrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3082,7 +3339,9 @@ func InputEdgePrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -3265,14 +3524,18 @@ type InputOffice365MgmtCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOffice365MgmtCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOffice365MgmtCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3280,7 +3543,9 @@ func InputOffice365MgmtCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -3424,14 +3689,18 @@ type InputOffice365ServiceCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOffice365ServiceCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOffice365ServiceCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3439,7 +3708,9 @@ func InputOffice365ServiceCriblSourceProvenanceAttrTypes() map[string]attr.Type 
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -3583,14 +3854,18 @@ type InputOffice365MsgTraceCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOffice365MsgTraceCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOffice365MsgTraceCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3598,7 +3873,9 @@ func InputOffice365MsgTraceCriblSourceProvenanceAttrTypes() map[string]attr.Type
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -3739,14 +4016,18 @@ type InputMicrosoftGraphCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputMicrosoftGraphCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputMicrosoftGraphCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3754,7 +4035,9 @@ func InputMicrosoftGraphCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -3895,14 +4178,18 @@ type InputEventhubCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputEventhubCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputEventhubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3910,7 +4197,9 @@ func InputEventhubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4072,14 +4361,18 @@ type InputEventhubAmqpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputEventhubAmqpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputEventhubAmqpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4087,7 +4380,9 @@ func InputEventhubAmqpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4300,14 +4595,18 @@ type InputExecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputExecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputExecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4315,7 +4614,9 @@ func InputExecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4398,14 +4699,18 @@ type InputFirehoseCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputFirehoseCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputFirehoseCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4413,7 +4718,9 @@ func InputFirehoseCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4478,13 +4785,13 @@ func InputFirehosePqAttrTypes() map[string]attr.Type {
 type InputFirehoseTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -4492,13 +4799,13 @@ type InputFirehoseTLSModel struct {
 type InputFirehoseTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -4507,13 +4814,13 @@ func InputFirehoseTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -4540,14 +4847,18 @@ type InputGooglePubsubCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputGooglePubsubCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputGooglePubsubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4555,7 +4866,9 @@ func InputGooglePubsubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4638,14 +4951,18 @@ type InputCriblCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCriblCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCriblCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4653,7 +4970,9 @@ func InputCriblCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4736,14 +5055,18 @@ type InputCriblTcpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCriblTcpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCriblTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4751,7 +5074,9 @@ func InputCriblTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4816,13 +5141,13 @@ func InputCriblTcpPqAttrTypes() map[string]attr.Type {
 type InputCriblTcpTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -4830,13 +5155,13 @@ type InputCriblTcpTLSModel struct {
 type InputCriblTcpTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -4845,13 +5170,13 @@ func InputCriblTcpTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -4898,14 +5223,18 @@ type InputCriblHttpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCriblHttpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCriblHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4913,7 +5242,9 @@ func InputCriblHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -4998,13 +5329,13 @@ func InputCriblHttpAuthTokensAttrTypes() map[string]attr.Type {
 type InputCriblHttpTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -5012,13 +5343,13 @@ type InputCriblHttpTLSModel struct {
 type InputCriblHttpTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -5027,13 +5358,13 @@ func InputCriblHttpTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -5060,14 +5391,18 @@ type InputCriblLakeHttpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCriblLakeHttpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCriblLakeHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5075,7 +5410,9 @@ func InputCriblLakeHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -5140,13 +5477,13 @@ func InputCriblLakeHttpPqAttrTypes() map[string]attr.Type {
 type InputCriblLakeHttpTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -5154,13 +5491,13 @@ type InputCriblLakeHttpTLSModel struct {
 type InputCriblLakeHttpTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -5169,13 +5506,13 @@ func InputCriblLakeHttpTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -5199,82 +5536,16 @@ func InputCriblLakeHttpMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCriblLakeHttpAuthTokensExtModel struct {
-	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
-	Description           types.String `tfsdk:"description" json:"description,omitempty"`
-	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
-	SplunkHecMetadata     types.Object `tfsdk:"splunk_hec_metadata" json:"splunkHecMetadata,omitempty"`
-	ElasticsearchMetadata types.Object `tfsdk:"elasticsearch_metadata" json:"elasticsearchMetadata,omitempty"`
+	Token types.String `tfsdk:"token" json:"token,omitempty"`
 }
 
 type InputCriblLakeHttpAuthTokensExtAPIModel struct {
-	Token                 *string `json:"token,omitempty"`
-	Description           *string `json:"description,omitempty"`
-	Metadata              any     `json:"metadata,omitempty"`
-	SplunkHecMetadata     any     `json:"splunkHecMetadata,omitempty"`
-	ElasticsearchMetadata any     `json:"elasticsearchMetadata,omitempty"`
+	Token *string `json:"token,omitempty"`
 }
 
 func InputCriblLakeHttpAuthTokensExtAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"token":                  types.StringType,
-		"description":            types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtMetadataAttrTypes()}},
-		"splunk_hec_metadata":    types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtSplunkHecMetadataAttrTypes()},
-		"elasticsearch_metadata": types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtElasticsearchMetadataAttrTypes()},
-	}
-}
-
-type InputCriblLakeHttpAuthTokensExtMetadataModel struct {
-	Name  types.String `tfsdk:"name" json:"name,omitempty"`
-	Value types.String `tfsdk:"value" json:"value,omitempty"`
-}
-
-type InputCriblLakeHttpAuthTokensExtMetadataAPIModel struct {
-	Name  *string `json:"name,omitempty"`
-	Value *string `json:"value,omitempty"`
-}
-
-func InputCriblLakeHttpAuthTokensExtMetadataAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"name":  types.StringType,
-		"value": types.StringType,
-	}
-}
-
-type InputCriblLakeHttpAuthTokensExtSplunkHecMetadataModel struct {
-	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
-	DefaultDataset        types.String `tfsdk:"default_dataset" json:"defaultDataset,omitempty"`
-	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
-}
-
-type InputCriblLakeHttpAuthTokensExtSplunkHecMetadataAPIModel struct {
-	Enabled               *bool    `json:"enabled,omitempty"`
-	DefaultDataset        *string  `json:"defaultDataset,omitempty"`
-	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
-}
-
-func InputCriblLakeHttpAuthTokensExtSplunkHecMetadataAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"enabled":                  types.BoolType,
-		"default_dataset":          types.StringType,
-		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
-	}
-}
-
-type InputCriblLakeHttpAuthTokensExtElasticsearchMetadataModel struct {
-	Enabled        types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
-	DefaultDataset types.String `tfsdk:"default_dataset" json:"defaultDataset,omitempty"`
-}
-
-type InputCriblLakeHttpAuthTokensExtElasticsearchMetadataAPIModel struct {
-	Enabled        *bool   `json:"enabled,omitempty"`
-	DefaultDataset *string `json:"defaultDataset,omitempty"`
-}
-
-func InputCriblLakeHttpAuthTokensExtElasticsearchMetadataAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"enabled":         types.BoolType,
-		"default_dataset": types.StringType,
+		"token": types.StringType,
 	}
 }
 
@@ -5282,14 +5553,18 @@ type InputTcpjsonCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputTcpjsonCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputTcpjsonCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5297,7 +5572,9 @@ func InputTcpjsonCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -5362,13 +5639,13 @@ func InputTcpjsonPqAttrTypes() map[string]attr.Type {
 type InputTcpjsonTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -5376,13 +5653,13 @@ type InputTcpjsonTLSModel struct {
 type InputTcpjsonTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -5391,13 +5668,13 @@ func InputTcpjsonTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -5424,14 +5701,18 @@ type InputSystemMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSystemMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSystemMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5439,7 +5720,9 @@ func InputSystemMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -5809,14 +6092,18 @@ type InputSystemStateCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSystemStateCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSystemStateCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5824,7 +6111,9 @@ func InputSystemStateCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -6134,14 +6423,18 @@ type InputKubeMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputKubeMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputKubeMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6149,7 +6442,9 @@ func InputKubeMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -6278,14 +6573,18 @@ type InputKubeLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputKubeLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputKubeLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6293,7 +6592,9 @@ func InputKubeLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -6419,14 +6720,18 @@ type InputKubeEventsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputKubeEventsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputKubeEventsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6434,7 +6739,9 @@ func InputKubeEventsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -6534,14 +6841,18 @@ type InputWindowsMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputWindowsMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputWindowsMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6549,7 +6860,9 @@ func InputWindowsMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -6864,14 +7177,18 @@ type InputCrowdstrikeCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCrowdstrikeCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCrowdstrikeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6879,7 +7196,9 @@ func InputCrowdstrikeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -6999,14 +7318,18 @@ type InputDatadogAgentCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputDatadogAgentCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputDatadogAgentCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7014,7 +7337,9 @@ func InputDatadogAgentCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7079,13 +7404,13 @@ func InputDatadogAgentPqAttrTypes() map[string]attr.Type {
 type InputDatadogAgentTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -7093,13 +7418,13 @@ type InputDatadogAgentTLSModel struct {
 type InputDatadogAgentTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -7108,13 +7433,13 @@ func InputDatadogAgentTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -7178,14 +7503,18 @@ type InputDatagenCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputDatagenCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputDatagenCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7193,7 +7522,9 @@ func InputDatagenCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7293,14 +7624,18 @@ type InputHttpRawCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputHttpRawCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputHttpRawCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7308,7 +7643,9 @@ func InputHttpRawCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7373,13 +7710,13 @@ func InputHttpRawPqAttrTypes() map[string]attr.Type {
 type InputHttpRawTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -7387,13 +7724,13 @@ type InputHttpRawTLSModel struct {
 type InputHttpRawTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -7402,13 +7739,13 @@ func InputHttpRawTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -7432,39 +7769,16 @@ func InputHttpRawMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputHttpRawAuthTokensExtModel struct {
-	Token       types.String `tfsdk:"token" json:"token,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	Metadata    types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+	AuthType types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 }
 
 type InputHttpRawAuthTokensExtAPIModel struct {
-	Token       *string `json:"token,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Metadata    any     `json:"metadata,omitempty"`
+	AuthType *string `json:"authType,omitempty"`
 }
 
 func InputHttpRawAuthTokensExtAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"token":       types.StringType,
-		"description": types.StringType,
-		"metadata":    types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtMetadataAttrTypes()}},
-	}
-}
-
-type InputHttpRawAuthTokensExtMetadataModel struct {
-	Name  types.String `tfsdk:"name" json:"name,omitempty"`
-	Value types.String `tfsdk:"value" json:"value,omitempty"`
-}
-
-type InputHttpRawAuthTokensExtMetadataAPIModel struct {
-	Name  *string `json:"name,omitempty"`
-	Value *string `json:"value,omitempty"`
-}
-
-func InputHttpRawAuthTokensExtMetadataAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"name":  types.StringType,
-		"value": types.StringType,
+		"auth_type": types.StringType,
 	}
 }
 
@@ -7472,14 +7786,18 @@ type InputKinesisCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputKinesisCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputKinesisCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7487,7 +7805,9 @@ func InputKinesisCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7570,14 +7890,18 @@ type InputCriblmetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCriblmetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCriblmetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7585,7 +7909,9 @@ func InputCriblmetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7668,14 +7994,18 @@ type InputMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7683,7 +8013,9 @@ func InputMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7748,13 +8080,13 @@ func InputMetricsPqAttrTypes() map[string]attr.Type {
 type InputMetricsTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -7762,13 +8094,13 @@ type InputMetricsTLSModel struct {
 type InputMetricsTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -7777,13 +8109,13 @@ func InputMetricsTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -7810,14 +8142,18 @@ type InputS3CriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputS3CriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7825,7 +8161,9 @@ func InputS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -7945,14 +8283,18 @@ type InputS3InventoryCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputS3InventoryCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputS3InventoryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7960,7 +8302,9 @@ func InputS3InventoryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8080,14 +8424,18 @@ type InputSnmpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSnmpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSnmpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8095,7 +8443,9 @@ func InputSnmpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8178,28 +8528,40 @@ func InputSnmpSnmpV3AuthAttrTypes() map[string]attr.Type {
 }
 
 type InputSnmpSnmpV3AuthV3UsersModel struct {
-	Name         types.String `tfsdk:"name" json:"name,omitempty"`
-	AuthProtocol types.String `tfsdk:"auth_protocol" json:"authProtocol,omitempty"`
-	AuthKey      types.String `tfsdk:"auth_key" json:"authKey,omitempty"`
-	PrivProtocol types.String `tfsdk:"priv_protocol" json:"privProtocol,omitempty"`
-	PrivKey      types.String `tfsdk:"priv_key" json:"privKey,omitempty"`
+	Name          types.String `tfsdk:"name" json:"name,omitempty"`
+	AuthProtocol  types.String `tfsdk:"auth_protocol" json:"authProtocol,omitempty"`
+	AuthKeyType   types.String `tfsdk:"auth_key_type" json:"authKeyType,omitempty"`
+	AuthKey       types.String `tfsdk:"auth_key" json:"authKey,omitempty"`
+	AuthKeySecret types.String `tfsdk:"auth_key_secret" json:"authKeySecret,omitempty"`
+	PrivProtocol  types.String `tfsdk:"priv_protocol" json:"privProtocol,omitempty"`
+	PrivKeyType   types.String `tfsdk:"priv_key_type" json:"privKeyType,omitempty"`
+	PrivKey       types.String `tfsdk:"priv_key" json:"privKey,omitempty"`
+	PrivKeySecret types.String `tfsdk:"priv_key_secret" json:"privKeySecret,omitempty"`
 }
 
 type InputSnmpSnmpV3AuthV3UsersAPIModel struct {
-	Name         *string `json:"name,omitempty"`
-	AuthProtocol *string `json:"authProtocol,omitempty"`
-	AuthKey      *string `json:"authKey,omitempty"`
-	PrivProtocol *string `json:"privProtocol,omitempty"`
-	PrivKey      *string `json:"privKey,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	AuthProtocol  *string `json:"authProtocol,omitempty"`
+	AuthKeyType   *string `json:"authKeyType,omitempty"`
+	AuthKey       *string `json:"authKey,omitempty"`
+	AuthKeySecret *string `json:"authKeySecret,omitempty"`
+	PrivProtocol  *string `json:"privProtocol,omitempty"`
+	PrivKeyType   *string `json:"privKeyType,omitempty"`
+	PrivKey       *string `json:"privKey,omitempty"`
+	PrivKeySecret *string `json:"privKeySecret,omitempty"`
 }
 
 func InputSnmpSnmpV3AuthV3UsersAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"name":          types.StringType,
-		"auth_protocol": types.StringType,
-		"auth_key":      types.StringType,
-		"priv_protocol": types.StringType,
-		"priv_key":      types.StringType,
+		"name":            types.StringType,
+		"auth_protocol":   types.StringType,
+		"auth_key_type":   types.StringType,
+		"auth_key":        types.StringType,
+		"auth_key_secret": types.StringType,
+		"priv_protocol":   types.StringType,
+		"priv_key_type":   types.StringType,
+		"priv_key":        types.StringType,
+		"priv_key_secret": types.StringType,
 	}
 }
 
@@ -8224,14 +8586,18 @@ type InputOpenTelemetryCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOpenTelemetryCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOpenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8239,7 +8605,9 @@ func InputOpenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8304,13 +8672,13 @@ func InputOpenTelemetryPqAttrTypes() map[string]attr.Type {
 type InputOpenTelemetryTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -8318,13 +8686,13 @@ type InputOpenTelemetryTLSModel struct {
 type InputOpenTelemetryTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -8333,13 +8701,13 @@ func InputOpenTelemetryTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -8355,18 +8723,26 @@ type InputOpenTelemetryAuthMethodsExtModel struct {
 	Username          types.String `tfsdk:"username" json:"username,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	Issuer            types.String `tfsdk:"issuer" json:"issuer,omitempty"`
+	JwksURI           types.String `tfsdk:"jwks_uri" json:"jwksUri,omitempty"`
+	Audience          types.String `tfsdk:"audience" json:"audience,omitempty"`
+	Scopes            types.List   `tfsdk:"scopes" json:"scopes,omitempty"`
 }
 
 type InputOpenTelemetryAuthMethodsExtAPIModel struct {
-	AuthType          *string `json:"authType,omitempty"`
-	Token             *string `json:"token,omitempty"`
-	Description       *string `json:"description,omitempty"`
-	Metadata          any     `json:"metadata,omitempty"`
-	Enabled           *bool   `json:"enabled,omitempty"`
-	TokenSecret       *string `json:"tokenSecret,omitempty"`
-	Username          *string `json:"username,omitempty"`
-	Password          *string `json:"password,omitempty"`
-	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
+	AuthType          *string  `json:"authType,omitempty"`
+	Token             *string  `json:"token,omitempty"`
+	Description       *string  `json:"description,omitempty"`
+	Metadata          any      `json:"metadata,omitempty"`
+	Enabled           *bool    `json:"enabled,omitempty"`
+	TokenSecret       *string  `json:"tokenSecret,omitempty"`
+	Username          *string  `json:"username,omitempty"`
+	Password          *string  `json:"password,omitempty"`
+	CredentialsSecret *string  `json:"credentialsSecret,omitempty"`
+	Issuer            *string  `json:"issuer,omitempty"`
+	JwksURI           *string  `json:"jwksUri,omitempty"`
+	Audience          *string  `json:"audience,omitempty"`
+	Scopes            []string `json:"scopes,omitempty"`
 }
 
 func InputOpenTelemetryAuthMethodsExtAttrTypes() map[string]attr.Type {
@@ -8380,6 +8756,10 @@ func InputOpenTelemetryAuthMethodsExtAttrTypes() map[string]attr.Type {
 		"username":           types.StringType,
 		"password":           types.StringType,
 		"credentials_secret": types.StringType,
+		"issuer":             types.StringType,
+		"jwks_uri":           types.StringType,
+		"audience":           types.StringType,
+		"scopes":             types.ListType{ElemType: types.StringType},
 	}
 }
 
@@ -8421,14 +8801,18 @@ type InputModelDrivenTelemetryCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputModelDrivenTelemetryCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8436,7 +8820,9 @@ func InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.T
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8501,13 +8887,13 @@ func InputModelDrivenTelemetryPqAttrTypes() map[string]attr.Type {
 type InputModelDrivenTelemetryTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -8515,13 +8901,13 @@ type InputModelDrivenTelemetryTLSModel struct {
 type InputModelDrivenTelemetryTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -8530,13 +8916,13 @@ func InputModelDrivenTelemetryTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -8563,14 +8949,18 @@ type InputSqsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSqsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSqsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8578,7 +8968,9 @@ func InputSqsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8661,14 +9053,18 @@ type InputSyslogCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSyslogCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSyslogCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8676,7 +9072,9 @@ func InputSyslogCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8741,13 +9139,13 @@ func InputSyslogPqAttrTypes() map[string]attr.Type {
 type InputSyslogTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -8755,13 +9153,13 @@ type InputSyslogTLSModel struct {
 type InputSyslogTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -8770,13 +9168,13 @@ func InputSyslogTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -8803,14 +9201,18 @@ type InputFileCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputFileCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputFileCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8818,7 +9220,9 @@ func InputFileCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8901,14 +9305,18 @@ type InputTcpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputTcpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8916,7 +9324,9 @@ func InputTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -8981,13 +9391,13 @@ func InputTcpPqAttrTypes() map[string]attr.Type {
 type InputTcpTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -8995,13 +9405,13 @@ type InputTcpTLSModel struct {
 type InputTcpTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -9010,13 +9420,13 @@ func InputTcpTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -9063,14 +9473,18 @@ type InputAppscopeCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputAppscopeCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputAppscopeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9078,7 +9492,9 @@ func InputAppscopeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -9226,13 +9642,13 @@ func InputAppscopePersistenceAttrTypes() map[string]attr.Type {
 type InputAppscopeTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -9240,13 +9656,13 @@ type InputAppscopeTLSModel struct {
 type InputAppscopeTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -9255,13 +9671,13 @@ func InputAppscopeTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -9271,14 +9687,18 @@ type InputWefCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputWefCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputWefCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9286,7 +9706,9 @@ func InputWefCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -9506,14 +9928,18 @@ type InputWinEventLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputWinEventLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputWinEventLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9521,7 +9947,9 @@ func InputWinEventLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -9604,14 +10032,18 @@ type InputAppleUnifiedLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputAppleUnifiedLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9619,7 +10051,9 @@ func InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type 
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -9702,14 +10136,18 @@ type InputRawUdpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputRawUdpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputRawUdpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9717,7 +10155,9 @@ func InputRawUdpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -9800,14 +10240,18 @@ type InputJournalFilesCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputJournalFilesCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputJournalFilesCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9815,7 +10259,9 @@ func InputJournalFilesCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -9915,14 +10361,18 @@ type InputWizCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputWizCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputWizCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9930,7 +10380,9 @@ func InputWizCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -10101,14 +10553,18 @@ type InputOpenaiCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOpenaiCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOpenaiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10116,7 +10572,9 @@ func InputOpenaiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -10345,14 +10803,18 @@ type InputWizWebhookCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputWizWebhookCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputWizWebhookCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10360,7 +10822,9 @@ func InputWizWebhookCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -10425,13 +10889,13 @@ func InputWizWebhookPqAttrTypes() map[string]attr.Type {
 type InputWizWebhookTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -10439,13 +10903,13 @@ type InputWizWebhookTLSModel struct {
 type InputWizWebhookTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -10454,13 +10918,13 @@ func InputWizWebhookTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -10484,12 +10948,16 @@ func InputWizWebhookMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputWizWebhookAuthTokensExtModel struct {
+	AuthType    types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
 	Token       types.String `tfsdk:"token" json:"token,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 	Metadata    types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
 }
 
 type InputWizWebhookAuthTokensExtAPIModel struct {
+	AuthType    *string `json:"authType,omitempty"`
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 	Token       *string `json:"token,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Metadata    any     `json:"metadata,omitempty"`
@@ -10497,9 +10965,11 @@ type InputWizWebhookAuthTokensExtAPIModel struct {
 
 func InputWizWebhookAuthTokensExtAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"token":       types.StringType,
-		"description": types.StringType,
-		"metadata":    types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizWebhookAuthTokensExtMetadataAttrTypes()}},
+		"auth_type":    types.StringType,
+		"token_secret": types.StringType,
+		"token":        types.StringType,
+		"description":  types.StringType,
+		"metadata":     types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizWebhookAuthTokensExtMetadataAttrTypes()}},
 	}
 }
 
@@ -10524,14 +10994,18 @@ type InputNetflowCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputNetflowCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputNetflowCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10539,7 +11013,9 @@ func InputNetflowCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -10622,14 +11098,18 @@ type InputSecurityLakeCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSecurityLakeCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSecurityLakeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10637,7 +11117,9 @@ func InputSecurityLakeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -10757,14 +11239,18 @@ type InputBedrockS3CriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputBedrockS3CriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputBedrockS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10772,7 +11258,9 @@ func InputBedrockS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -10892,14 +11380,18 @@ type InputServicenowTableCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputServicenowTableCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputServicenowTableCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10907,7 +11399,9 @@ func InputServicenowTableCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -11055,18 +11549,150 @@ func InputServicenowTableOauthHeadersAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputProofpointPodCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputProofpointPodCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputProofpointPodCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputProofpointPodConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputProofpointPodConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputProofpointPodConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputProofpointPodPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputProofpointPodPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputProofpointPodPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputProofpointPodTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	Servername         types.String `tfsdk:"servername" json:"servername,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputProofpointPodTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	Servername         *string `json:"servername,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputProofpointPodTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"reject_unauthorized": types.BoolType,
+		"servername":          types.StringType,
+		"certificate_name":    types.StringType,
+		"ca_path":             types.StringType,
+		"priv_key_path":       types.StringType,
+		"cert_path":           types.StringType,
+		"passphrase":          types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
 type InputZscalerHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputZscalerHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputZscalerHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11074,7 +11700,9 @@ func InputZscalerHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -11188,13 +11816,13 @@ func InputZscalerHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
 type InputZscalerHecTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -11202,13 +11830,13 @@ type InputZscalerHecTLSModel struct {
 type InputZscalerHecTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -11217,13 +11845,13 @@ func InputZscalerHecTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -11250,14 +11878,18 @@ type InputCloudflareHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputCloudflareHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputCloudflareHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11265,7 +11897,9 @@ func InputCloudflareHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -11379,13 +12013,13 @@ func InputCloudflareHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
 type InputCloudflareHecTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -11393,13 +12027,13 @@ type InputCloudflareHecTLSModel struct {
 type InputCloudflareHecTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -11408,13 +12042,13 @@ func InputCloudflareHecTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -11441,14 +12075,18 @@ type InputSysdigHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputSysdigHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputSysdigHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11456,7 +12094,9 @@ func InputSysdigHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -11570,13 +12210,13 @@ func InputSysdigHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
 type InputSysdigHecTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -11584,13 +12224,13 @@ type InputSysdigHecTLSModel struct {
 type InputSysdigHecTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -11599,13 +12239,13 @@ func InputSysdigHecTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -11632,14 +12272,18 @@ type InputUpwindHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputUpwindHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputUpwindHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11647,7 +12291,9 @@ func InputUpwindHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -11761,13 +12407,13 @@ func InputUpwindHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
 type InputUpwindHecTLSModel struct {
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
 	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
 	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
-	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 }
@@ -11775,13 +12421,13 @@ type InputUpwindHecTLSModel struct {
 type InputUpwindHecTLSAPIModel struct {
 	Disabled           *bool   `json:"disabled,omitempty"`
 	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
 	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
 	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
 	CertificateName    *string `json:"certificateName,omitempty"`
 	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
 	Passphrase         *string `json:"passphrase,omitempty"`
 	CertPath           *string `json:"certPath,omitempty"`
-	CaPath             *string `json:"caPath,omitempty"`
 	MinVersion         *string `json:"minVersion,omitempty"`
 	MaxVersion         *string `json:"maxVersion,omitempty"`
 }
@@ -11790,13 +12436,13 @@ func InputUpwindHecTLSAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":            types.BoolType,
 		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"common_name_regex":   types.StringType,
 		"certificate_name":    types.StringType,
 		"priv_key_path":       types.StringType,
 		"passphrase":          types.StringType,
 		"cert_path":           types.StringType,
-		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
 	}
@@ -11819,18 +12465,810 @@ func InputUpwindHecMetadataAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputTrellixHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputTrellixHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputTrellixHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputTrellixHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputTrellixHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputTrellixHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputTrellixHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputTrellixHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputTrellixHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputTrellixHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputTrellixHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputTrellixHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputTrellixHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputTrellixHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputTrellixHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputTrellixHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputTrellixHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputTrellixHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputTrellixHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputTrellixHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputTrellixHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputSailpointHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputSailpointHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputSailpointHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputSailpointHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputSailpointHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputSailpointHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputSailpointHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputSailpointHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputSailpointHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputSailpointHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputSailpointHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputSailpointHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputSailpointHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputSailpointHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputSailpointHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputSailpointHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputSailpointHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputSailpointHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputSailpointHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputSailpointHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputSailpointHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputExtrahopRevealx360CriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputExtrahopRevealx360CriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputExtrahopRevealx360CriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputExtrahopRevealx360ConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputExtrahopRevealx360ConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputExtrahopRevealx360ConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputExtrahopRevealx360PqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputExtrahopRevealx360PqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputExtrahopRevealx360PqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputExtrahopRevealx360AuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputExtrahopRevealx360AuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputExtrahopRevealx360AuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360AuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputExtrahopRevealx360AuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputExtrahopRevealx360AuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputExtrahopRevealx360AuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputExtrahopRevealx360TLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputExtrahopRevealx360TLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputExtrahopRevealx360TLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputExtrahopRevealx360MetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputExtrahopRevealx360MetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputExtrahopRevealx360MetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputAquaSecurityHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputAquaSecurityHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputAquaSecurityHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputAquaSecurityHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputAquaSecurityHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputAquaSecurityHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputAquaSecurityHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputAquaSecurityHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputAquaSecurityHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAquaSecurityHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputAquaSecurityHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputAquaSecurityHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputAquaSecurityHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputAquaSecurityHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputAquaSecurityHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputAquaSecurityHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputAquaSecurityHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputAquaSecurityHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputAquaSecurityHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputAquaSecurityHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputAquaSecurityHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
 type InputOpenaiComplianceLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOpenaiComplianceLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11838,7 +13276,9 @@ func InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes() map[string]attr.T
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -11956,14 +13396,18 @@ type InputAnthropicComplianceCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputAnthropicComplianceCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputAnthropicComplianceCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11971,7 +13415,9 @@ func InputAnthropicComplianceCriblSourceProvenanceAttrTypes() map[string]attr.Ty
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -12355,18 +13801,367 @@ func InputAnthropicComplianceRetryRulesAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputAnthropicEnterpriseAnalyticsCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputAnthropicEnterpriseAnalyticsCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputAnthropicEnterpriseAnalyticsConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputAnthropicEnterpriseAnalyticsConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputAnthropicEnterpriseAnalyticsPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputAnthropicEnterpriseAnalyticsPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAnthropicEnterpriseAnalyticsContentConfigModel struct {
+	ContentType           types.String `tfsdk:"content_type" json:"contentType,omitempty"`
+	Disabled              types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	ManageState           types.Bool   `tfsdk:"manage_state" json:"manageState,omitempty"`
+	GroupBy               types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
+	BucketWidth           types.String `tfsdk:"bucket_width" json:"bucketWidth,omitempty"`
+	CronSchedule          types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	JobTimeout            types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+}
+
+type InputAnthropicEnterpriseAnalyticsContentConfigAPIModel struct {
+	ContentType           *string  `json:"contentType,omitempty"`
+	Disabled              *bool    `json:"disabled,omitempty"`
+	StateTracking         *bool    `json:"stateTracking,omitempty"`
+	StateUpdateExpression *string  `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string  `json:"stateMergeExpression,omitempty"`
+	ManageState           *bool    `json:"manageState,omitempty"`
+	GroupBy               []string `json:"groupBy,omitempty"`
+	BucketWidth           *string  `json:"bucketWidth,omitempty"`
+	CronSchedule          *string  `json:"cronSchedule,omitempty"`
+	Earliest              *string  `json:"earliest,omitempty"`
+	JobTimeout            *string  `json:"jobTimeout,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsContentConfigAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"content_type":            types.StringType,
+		"disabled":                types.BoolType,
+		"state_tracking":          types.BoolType,
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"manage_state":            types.BoolType,
+		"group_by":                types.ListType{ElemType: types.StringType},
+		"bucket_width":            types.StringType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"job_timeout":             types.StringType,
+	}
+}
+
+type InputAnthropicEnterpriseAnalyticsMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputAnthropicEnterpriseAnalyticsMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputAnthropicEnterpriseAnalyticsRetryRulesModel struct {
+	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
+	Interval            types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	Limit               types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
+	Multiplier          types.Float64 `tfsdk:"multiplier" json:"multiplier,omitempty"`
+	Codes               types.List    `tfsdk:"codes" json:"codes,omitempty"`
+	EnableHeader        types.Bool    `tfsdk:"enable_header" json:"enableHeader,omitempty"`
+	RetryConnectTimeout types.Bool    `tfsdk:"retry_connect_timeout" json:"retryConnectTimeout,omitempty"`
+	RetryConnectReset   types.Bool    `tfsdk:"retry_connect_reset" json:"retryConnectReset,omitempty"`
+}
+
+type InputAnthropicEnterpriseAnalyticsRetryRulesAPIModel struct {
+	Type                *string   `json:"type,omitempty"`
+	Interval            *float64  `json:"interval,omitempty"`
+	Limit               *float64  `json:"limit,omitempty"`
+	Multiplier          *float64  `json:"multiplier,omitempty"`
+	Codes               []float64 `json:"codes,omitempty"`
+	EnableHeader        *bool     `json:"enableHeader,omitempty"`
+	RetryConnectTimeout *bool     `json:"retryConnectTimeout,omitempty"`
+	RetryConnectReset   *bool     `json:"retryConnectReset,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsRetryRulesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                  types.StringType,
+		"interval":              types.Float64Type,
+		"limit":                 types.Float64Type,
+		"multiplier":            types.Float64Type,
+		"codes":                 types.ListType{ElemType: types.Float64Type},
+		"enable_header":         types.BoolType,
+		"retry_connect_timeout": types.BoolType,
+		"retry_connect_reset":   types.BoolType,
+	}
+}
+
+type InputMicrosoftCopilotCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputMicrosoftCopilotCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputMicrosoftCopilotCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputMicrosoftCopilotConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputMicrosoftCopilotConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputMicrosoftCopilotConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputMicrosoftCopilotPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputMicrosoftCopilotPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputMicrosoftCopilotPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputMicrosoftCopilotMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputMicrosoftCopilotMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputMicrosoftCopilotMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputMicrosoftCopilotRetryRulesModel struct {
+	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
+	Interval            types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	Limit               types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
+	Multiplier          types.Float64 `tfsdk:"multiplier" json:"multiplier,omitempty"`
+	Codes               types.List    `tfsdk:"codes" json:"codes,omitempty"`
+	EnableHeader        types.Bool    `tfsdk:"enable_header" json:"enableHeader,omitempty"`
+	RetryConnectTimeout types.Bool    `tfsdk:"retry_connect_timeout" json:"retryConnectTimeout,omitempty"`
+	RetryConnectReset   types.Bool    `tfsdk:"retry_connect_reset" json:"retryConnectReset,omitempty"`
+}
+
+type InputMicrosoftCopilotRetryRulesAPIModel struct {
+	Type                *string   `json:"type,omitempty"`
+	Interval            *float64  `json:"interval,omitempty"`
+	Limit               *float64  `json:"limit,omitempty"`
+	Multiplier          *float64  `json:"multiplier,omitempty"`
+	Codes               []float64 `json:"codes,omitempty"`
+	EnableHeader        *bool     `json:"enableHeader,omitempty"`
+	RetryConnectTimeout *bool     `json:"retryConnectTimeout,omitempty"`
+	RetryConnectReset   *bool     `json:"retryConnectReset,omitempty"`
+}
+
+func InputMicrosoftCopilotRetryRulesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                  types.StringType,
+		"interval":              types.Float64Type,
+		"limit":                 types.Float64Type,
+		"multiplier":            types.Float64Type,
+		"codes":                 types.ListType{ElemType: types.Float64Type},
+		"enable_header":         types.BoolType,
+		"retry_connect_timeout": types.BoolType,
+		"retry_connect_reset":   types.BoolType,
+	}
+}
+
+type InputMicrosoftCopilotCertOptionsModel struct {
+	CertificateName types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath     types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase      types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath        types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+}
+
+type InputMicrosoftCopilotCertOptionsAPIModel struct {
+	CertificateName *string `json:"certificateName,omitempty"`
+	PrivKeyPath     *string `json:"privKeyPath,omitempty"`
+	Passphrase      *string `json:"passphrase,omitempty"`
+	CertPath        *string `json:"certPath,omitempty"`
+}
+
+func InputMicrosoftCopilotCertOptionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"certificate_name": types.StringType,
+		"priv_key_path":    types.StringType,
+		"passphrase":       types.StringType,
+		"cert_path":        types.StringType,
+	}
+}
+
 type InputOktaCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
 	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
 }
 
 type InputOktaCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
 	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
 }
 
 func InputOktaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -12374,7 +14169,9 @@ func InputOktaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
 		"account_id":      types.StringType,
+		"template_family": types.StringType,
 	}
 }
 
@@ -12488,6 +14285,1779 @@ func InputOktaRetryRulesAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputAkamaiHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputAkamaiHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputAkamaiHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputAkamaiHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputAkamaiHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputAkamaiHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputAkamaiHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputAkamaiHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputAkamaiHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAkamaiHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputAkamaiHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputAkamaiHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputAkamaiHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputAkamaiHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputAkamaiHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputAkamaiHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputAkamaiHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputAkamaiHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputAkamaiHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputAkamaiHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputAkamaiHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputPingIdentityPingoneCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputPingIdentityPingoneCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputPingIdentityPingoneCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputPingIdentityPingoneConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputPingIdentityPingoneConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputPingIdentityPingoneConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputPingIdentityPingonePqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputPingIdentityPingonePqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputPingIdentityPingonePqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputPingIdentityPingoneAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputPingIdentityPingoneAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputPingIdentityPingoneAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputPingIdentityPingoneAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputPingIdentityPingoneAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputPingIdentityPingoneAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputPingIdentityPingoneTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputPingIdentityPingoneTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputPingIdentityPingoneTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputPingIdentityPingoneMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputPingIdentityPingoneMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputPingIdentityPingoneMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputGigamonHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputGigamonHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputGigamonHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputGigamonHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputGigamonHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputGigamonHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputGigamonHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputGigamonHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputGigamonHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputGigamonHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputGigamonHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputGigamonHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputGigamonHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputGigamonHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputGigamonHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputGigamonHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputGigamonHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputGigamonHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputGigamonHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputGigamonHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputGigamonHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputVectraAiHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputVectraAiHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputVectraAiHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputVectraAiHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputVectraAiHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputVectraAiHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputVectraAiHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputVectraAiHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputVectraAiHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputVectraAiHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputVectraAiHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputVectraAiHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputVectraAiHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputVectraAiHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputVectraAiHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputVectraAiHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputVectraAiHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputVectraAiHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputVectraAiHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputVectraAiHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputVectraAiHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputF5BigIpCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputF5BigIpCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputF5BigIpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputF5BigIpConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputF5BigIpConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputF5BigIpConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputF5BigIpPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputF5BigIpPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputF5BigIpPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputF5BigIpAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputF5BigIpAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputF5BigIpAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputF5BigIpAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputF5BigIpAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputF5BigIpAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputF5BigIpTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputF5BigIpTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputF5BigIpTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputF5BigIpMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputF5BigIpMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputF5BigIpMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputBeyondtrustHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputBeyondtrustHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputBeyondtrustHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputBeyondtrustHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputBeyondtrustHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputBeyondtrustHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputBeyondtrustHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputBeyondtrustHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputBeyondtrustHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputBeyondtrustHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputBeyondtrustHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputBeyondtrustHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputBeyondtrustHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputBeyondtrustHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputBeyondtrustHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputBeyondtrustHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputBeyondtrustHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputBeyondtrustHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputBeyondtrustHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputBeyondtrustHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputBeyondtrustHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputHashicorpHcpVaultDedicatedMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputHashicorpHcpVaultDedicatedMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputMimecastHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputMimecastHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputMimecastHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputMimecastHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputMimecastHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputMimecastHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputMimecastHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputMimecastHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputMimecastHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputMimecastHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputMimecastHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputMimecastHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputMimecastHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputMimecastHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputMimecastHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputMimecastHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputMimecastHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputMimecastHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputMimecastHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputMimecastHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputMimecastHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputTrendMicroVisionOneCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	SourceService  types.String `tfsdk:"source_service" json:"sourceService,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
+	TemplateFamily types.String `tfsdk:"template_family" json:"templateFamily,omitempty"`
+}
+
+type InputTrendMicroVisionOneCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+	SourceService  *string `json:"sourceService,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
+	TemplateFamily *string `json:"templateFamily,omitempty"`
+}
+
+func InputTrendMicroVisionOneCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+		"source_service":  types.StringType,
+		"account_id":      types.StringType,
+		"template_family": types.StringType,
+	}
+}
+
+type InputTrendMicroVisionOneConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputTrendMicroVisionOneConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputTrendMicroVisionOneConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputTrendMicroVisionOnePqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputTrendMicroVisionOnePqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputTrendMicroVisionOnePqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputTrendMicroVisionOneAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputTrendMicroVisionOneAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputTrendMicroVisionOneAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputTrendMicroVisionOneAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputTrendMicroVisionOneAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputTrendMicroVisionOneAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputTrendMicroVisionOneTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputTrendMicroVisionOneTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputTrendMicroVisionOneTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"ca_path":             types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputTrendMicroVisionOneMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputTrendMicroVisionOneMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputTrendMicroVisionOneMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
 func SourceTerraformValueToJSON(value attr.Value) (any, error) {
 	if value.IsNull() || value.IsUnknown() {
 		return nil, nil
@@ -12576,6 +16146,8 @@ func SourceTerraformNameToAPIName(name string) string {
 		return prefix + "lokiAPI"
 	case "max_manifest_size_kb":
 		return prefix + "maxManifestSizeKB"
+	case "max_message_size_kb":
+		return prefix + "maxMessageSizeKB"
 	case "name":
 		return prefix + "Name"
 	case "org_roles":
@@ -12839,6 +16411,15 @@ func (m SourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputAzureBlob != nil {
 		value, err := m.InputAzureBlob.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputAzureVnetFlowLog != nil {
+		value, err := m.InputAzureVnetFlowLog.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -13350,6 +16931,15 @@ func (m SourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputProofpointPod != nil {
+		value, err := m.InputProofpointPod.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputZscalerHec != nil {
 		value, err := m.InputZscalerHec.terraformPayload()
 		if err != nil {
@@ -13386,6 +16976,42 @@ func (m SourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputTrellixHec != nil {
+		value, err := m.InputTrellixHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSailpointHec != nil {
+		value, err := m.InputSailpointHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputExtrahopRevealx360 != nil {
+		value, err := m.InputExtrahopRevealx360.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputAquaSecurityHec != nil {
+		value, err := m.InputAquaSecurityHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputOpenaiComplianceLogs != nil {
 		value, err := m.InputOpenaiComplianceLogs.terraformPayload()
 		if err != nil {
@@ -13404,8 +17030,107 @@ func (m SourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputAnthropicEnterpriseAnalytics != nil {
+		value, err := m.InputAnthropicEnterpriseAnalytics.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputMicrosoftCopilot != nil {
+		value, err := m.InputMicrosoftCopilot.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputOkta != nil {
 		value, err := m.InputOkta.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputAkamaiHec != nil {
+		value, err := m.InputAkamaiHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputPingIDentityPingone != nil {
+		value, err := m.InputPingIDentityPingone.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputGigamonHec != nil {
+		value, err := m.InputGigamonHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputVectraAiHec != nil {
+		value, err := m.InputVectraAiHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputF5BigIp != nil {
+		value, err := m.InputF5BigIp.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputBeyondtrustHec != nil {
+		value, err := m.InputBeyondtrustHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputHashicorpHcpVaultDedicated != nil {
+		value, err := m.InputHashicorpHcpVaultDedicated.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputMimecastHec != nil {
+		value, err := m.InputMimecastHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputTrendMicroVisionOne != nil {
+		value, err := m.InputTrendMicroVisionOne.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -13475,6 +17200,11 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	case "azure_blob":
 		m.InputAzureBlob = &InputAzureBlobModel{}
 		if err := m.InputAzureBlob.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "azure_vnet_flow_log":
+		m.InputAzureVnetFlowLog = &InputAzureVnetFlowLogModel{}
+		if err := m.InputAzureVnetFlowLog.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "elastic":
@@ -13757,6 +17487,11 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputServicenowTable.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "proofpoint_pod":
+		m.InputProofpointPod = &InputProofpointPodModel{}
+		if err := m.InputProofpointPod.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "zscaler_hec":
 		m.InputZscalerHec = &InputZscalerHecModel{}
 		if err := m.InputZscalerHec.unmarshalPayload(raw); err != nil {
@@ -13777,6 +17512,26 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputUpwindHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "trellix_hec":
+		m.InputTrellixHec = &InputTrellixHecModel{}
+		if err := m.InputTrellixHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sailpoint_hec":
+		m.InputSailpointHec = &InputSailpointHecModel{}
+		if err := m.InputSailpointHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "extrahop_revealx_360":
+		m.InputExtrahopRevealx360 = &InputExtrahopRevealx360Model{}
+		if err := m.InputExtrahopRevealx360.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "aqua_security_hec":
+		m.InputAquaSecurityHec = &InputAquaSecurityHecModel{}
+		if err := m.InputAquaSecurityHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "openai_compliance_logs":
 		m.InputOpenaiComplianceLogs = &InputOpenaiComplianceLogsModel{}
 		if err := m.InputOpenaiComplianceLogs.unmarshalPayload(raw); err != nil {
@@ -13787,9 +17542,64 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputAnthropicCompliance.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "anthropic_enterprise_analytics":
+		m.InputAnthropicEnterpriseAnalytics = &InputAnthropicEnterpriseAnalyticsModel{}
+		if err := m.InputAnthropicEnterpriseAnalytics.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "microsoft_copilot":
+		m.InputMicrosoftCopilot = &InputMicrosoftCopilotModel{}
+		if err := m.InputMicrosoftCopilot.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "okta":
 		m.InputOkta = &InputOktaModel{}
 		if err := m.InputOkta.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "akamai_hec":
+		m.InputAkamaiHec = &InputAkamaiHecModel{}
+		if err := m.InputAkamaiHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "ping_identity_pingone":
+		m.InputPingIDentityPingone = &InputPingIDentityPingoneModel{}
+		if err := m.InputPingIDentityPingone.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "gigamon_hec":
+		m.InputGigamonHec = &InputGigamonHecModel{}
+		if err := m.InputGigamonHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "vectra_ai_hec":
+		m.InputVectraAiHec = &InputVectraAiHecModel{}
+		if err := m.InputVectraAiHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "f5_big_ip":
+		m.InputF5BigIp = &InputF5BigIpModel{}
+		if err := m.InputF5BigIp.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "beyondtrust_hec":
+		m.InputBeyondtrustHec = &InputBeyondtrustHecModel{}
+		if err := m.InputBeyondtrustHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "hashicorp_hcp_vault_dedicated":
+		m.InputHashicorpHcpVaultDedicated = &InputHashicorpHcpVaultDedicatedModel{}
+		if err := m.InputHashicorpHcpVaultDedicated.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "mimecast_hec":
+		m.InputMimecastHec = &InputMimecastHecModel{}
+		if err := m.InputMimecastHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "trend_micro_vision_one":
+		m.InputTrendMicroVisionOne = &InputTrendMicroVisionOneModel{}
+		if err := m.InputTrendMicroVisionOne.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}
@@ -14158,6 +17968,7 @@ type InputKafkaModel struct {
 	MaxBytes                  types.Float64 `tfsdk:"max_bytes" json:"maxBytes,omitempty"`
 	MaxSocketErrors           types.Float64 `tfsdk:"max_socket_errors" json:"maxSocketErrors,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -14198,6 +18009,7 @@ func InputKafkaModelAttrTypes() map[string]attr.Type {
 		"max_bytes":                  types.Float64Type,
 		"max_socket_errors":          types.Float64Type,
 		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKafkaMetadataAttrTypes()}},
+		"auto_parse":                 types.BoolType,
 		"description":                types.StringType,
 	}
 }
@@ -14448,6 +18260,13 @@ func (m InputKafkaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -14778,6 +18597,15 @@ func (m *InputKafkaModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKafkaMetadataAttrTypes()})
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -14835,6 +18663,7 @@ type InputMskModel struct {
 	MaxBytesPerPartition      types.Float64 `tfsdk:"max_bytes_per_partition" json:"maxBytesPerPartition,omitempty"`
 	MaxBytes                  types.Float64 `tfsdk:"max_bytes" json:"maxBytes,omitempty"`
 	MaxSocketErrors           types.Float64 `tfsdk:"max_socket_errors" json:"maxSocketErrors,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                 types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                 types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
@@ -14886,6 +18715,7 @@ func InputMskModelAttrTypes() map[string]attr.Type {
 		"max_bytes_per_partition":    types.Float64Type,
 		"max_bytes":                  types.Float64Type,
 		"max_socket_errors":          types.Float64Type,
+		"auto_parse":                 types.BoolType,
 		"description":                types.StringType,
 		"aws_api_key":                types.StringType,
 		"aws_secret":                 types.StringType,
@@ -15201,6 +19031,13 @@ func (m InputMskModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_socket_errors to API value: %v", err)
 		}
 		output["maxSocketErrors"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -15625,6 +19462,15 @@ func (m *InputMskModel) unmarshalPayload(input map[string]any) error {
 		m.MaxSocketErrors = value.(types.Float64)
 	} else {
 		m.MaxSocketErrors = types.Float64Null()
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -16312,6 +20158,7 @@ type InputSplunkModel struct {
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	AutoParse             types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	AuthTokens            types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
 	MaxS2Sversion         types.String  `tfsdk:"max_s2_sversion" json:"maxS2Sversion,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
@@ -16346,6 +20193,7 @@ func InputSplunkModelAttrTypes() map[string]attr.Type {
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkMetadataAttrTypes()}},
 		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
 		"stale_channel_flush_ms":  types.Float64Type,
+		"auto_parse":              types.BoolType,
 		"auth_tokens":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkAuthTokensAttrTypes()}},
 		"max_s2_sversion":         types.StringType,
 		"description":             types.StringType,
@@ -16518,6 +20366,13 @@ func (m InputSplunkModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
 		}
 		output["staleChannelFlushMs"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.AuthTokens)
@@ -16781,6 +20636,15 @@ func (m *InputSplunkModel) unmarshalPayload(input map[string]any) error {
 		m.StaleChannelFlushMs = value.(types.Float64)
 	} else {
 		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["authTokens"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkAuthTokensAttrTypes()}})
@@ -17639,6 +21503,7 @@ type InputSplunkHecModel struct {
 	SplunkHecAcks             types.Bool    `tfsdk:"splunk_hec_acks" json:"splunkHecAcks,omitempty"`
 	BreakerRulesets           types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs       types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	UseFwdTimezone            types.Bool    `tfsdk:"use_fwd_timezone" json:"useFwdTimezone,omitempty"`
 	DropControlFields         types.Bool    `tfsdk:"drop_control_fields" json:"dropControlFields,omitempty"`
 	ExtractMetrics            types.Bool    `tfsdk:"extract_metrics" json:"extractMetrics,omitempty"`
@@ -17682,6 +21547,7 @@ func InputSplunkHecModelAttrTypes() map[string]attr.Type {
 		"splunk_hec_acks":              types.BoolType,
 		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
 		"stale_channel_flush_ms":       types.Float64Type,
+		"auto_parse":                   types.BoolType,
 		"use_fwd_timezone":             types.BoolType,
 		"drop_control_fields":          types.BoolType,
 		"extract_metrics":              types.BoolType,
@@ -17917,6 +21783,13 @@ func (m InputSplunkHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
 		}
 		output["staleChannelFlushMs"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.UseFwdTimezone.IsNull() && !m.UseFwdTimezone.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.UseFwdTimezone)
@@ -18262,6 +22135,15 @@ func (m *InputSplunkHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.StaleChannelFlushMs = types.Float64Null()
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["useFwdTimezone"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
 		if err != nil {
@@ -18347,12 +22229,14 @@ type InputAzureBlobModel struct {
 	MaxMessages                 types.Float64 `tfsdk:"max_messages" json:"maxMessages,omitempty"`
 	ServicePeriodSecs           types.Float64 `tfsdk:"service_period_secs" json:"servicePeriodSecs,omitempty"`
 	SkipOnError                 types.Bool    `tfsdk:"skip_on_error" json:"skipOnError,omitempty"`
+	Encoding                    types.String  `tfsdk:"encoding" json:"encoding,omitempty"`
 	Metadata                    types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	BreakerRulesets             types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs         types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
 	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
 	AuthType                    types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	AutoParse                   types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
 	ConnectionString            types.String  `tfsdk:"connection_string" json:"connectionString,omitempty"`
 	TextSecret                  types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
@@ -18385,12 +22269,14 @@ func InputAzureBlobModelAttrTypes() map[string]attr.Type {
 		"max_messages":                   types.Float64Type,
 		"service_period_secs":            types.Float64Type,
 		"skip_on_error":                  types.BoolType,
+		"encoding":                       types.StringType,
 		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureBlobMetadataAttrTypes()}},
 		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
 		"stale_channel_flush_ms":         types.Float64Type,
 		"parquet_chunk_size_mb":          types.Float64Type,
 		"parquet_chunk_download_timeout": types.Float64Type,
 		"auth_type":                      types.StringType,
+		"auto_parse":                     types.BoolType,
 		"description":                    types.StringType,
 		"connection_string":              types.StringType,
 		"text_secret":                    types.StringType,
@@ -18532,6 +22418,13 @@ func (m InputAzureBlobModel) terraformPayload() (map[string]any, error) {
 		}
 		output["skipOnError"] = value
 	}
+	if !m.Encoding.IsNull() && !m.Encoding.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Encoding)
+		if err != nil {
+			return nil, fmt.Errorf("convert encoding to API value: %v", err)
+		}
+		output["encoding"] = value
+	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
 		if err != nil {
@@ -18573,6 +22466,13 @@ func (m InputAzureBlobModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert auth_type to API value: %v", err)
 		}
 		output["authType"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -18813,6 +22713,15 @@ func (m *InputAzureBlobModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.SkipOnError = types.BoolNull()
 	}
+	if item, ok := input["encoding"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert encoding from API value: %v", err)
+		}
+		m.Encoding = value.(types.String)
+	} else {
+		m.Encoding = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureBlobMetadataAttrTypes()}})
 		if err != nil {
@@ -18866,6 +22775,15 @@ func (m *InputAzureBlobModel) unmarshalPayload(input map[string]any) error {
 		m.AuthType = value.(types.String)
 	} else {
 		m.AuthType = types.StringNull()
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -18956,6 +22874,584 @@ func (m *InputAzureBlobModel) unmarshalPayload(input map[string]any) error {
 		m.Certificate = value.(types.Object)
 	} else {
 		m.Certificate = types.ObjectNull(InputAzureBlobCertificateAttrTypes())
+	}
+	return nil
+}
+
+type InputAzureVnetFlowLogModel struct {
+	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	QueueName             types.String  `tfsdk:"queue_name" json:"queueName,omitempty"`
+	FileFilter            types.String  `tfsdk:"file_filter" json:"fileFilter,omitempty"`
+	VisibilityTimeout     types.Float64 `tfsdk:"visibility_timeout" json:"visibilityTimeout,omitempty"`
+	NumReceivers          types.Float64 `tfsdk:"num_receivers" json:"numReceivers,omitempty"`
+	MaxMessages           types.Float64 `tfsdk:"max_messages" json:"maxMessages,omitempty"`
+	MaxDequeueCount       types.Float64 `tfsdk:"max_dequeue_count" json:"maxDequeueCount,omitempty"`
+	ServicePeriodSecs     types.Float64 `tfsdk:"service_period_secs" json:"servicePeriodSecs,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	AuthType              types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	StorageAccountName    types.String  `tfsdk:"storage_account_name" json:"storageAccountName,omitempty"`
+	TenantID              types.String  `tfsdk:"tenant_id" json:"tenantId,omitempty"`
+	ClientID              types.String  `tfsdk:"client_id" json:"clientId,omitempty"`
+	AzureCloud            types.String  `tfsdk:"azure_cloud" json:"azureCloud,omitempty"`
+	EndpointSuffix        types.String  `tfsdk:"endpoint_suffix" json:"endpointSuffix,omitempty"`
+	ClientTextSecret      types.String  `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	Certificate           types.Object  `tfsdk:"certificate" json:"certificate,omitempty"`
+}
+
+func InputAzureVnetFlowLogModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputAzureVnetFlowLogCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureVnetFlowLogConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputAzureVnetFlowLogPqAttrTypes()},
+		"queue_name":              types.StringType,
+		"file_filter":             types.StringType,
+		"visibility_timeout":      types.Float64Type,
+		"num_receivers":           types.Float64Type,
+		"max_messages":            types.Float64Type,
+		"max_dequeue_count":       types.Float64Type,
+		"service_period_secs":     types.Float64Type,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureVnetFlowLogMetadataAttrTypes()}},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"text_secret":             types.StringType,
+		"storage_account_name":    types.StringType,
+		"tenant_id":               types.StringType,
+		"client_id":               types.StringType,
+		"azure_cloud":             types.StringType,
+		"endpoint_suffix":         types.StringType,
+		"client_text_secret":      types.StringType,
+		"certificate":             types.ObjectType{AttrTypes: InputAzureVnetFlowLogCertificateAttrTypes()},
+	}
+}
+
+func (m InputAzureVnetFlowLogModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.QueueName.IsNull() && !m.QueueName.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.QueueName)
+		if err != nil {
+			return nil, fmt.Errorf("convert queue_name to API value: %v", err)
+		}
+		output["queueName"] = value
+	}
+	if !m.FileFilter.IsNull() && !m.FileFilter.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.FileFilter)
+		if err != nil {
+			return nil, fmt.Errorf("convert file_filter to API value: %v", err)
+		}
+		output["fileFilter"] = value
+	}
+	if !m.VisibilityTimeout.IsNull() && !m.VisibilityTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.VisibilityTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert visibility_timeout to API value: %v", err)
+		}
+		output["visibilityTimeout"] = value
+	}
+	if !m.NumReceivers.IsNull() && !m.NumReceivers.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.NumReceivers)
+		if err != nil {
+			return nil, fmt.Errorf("convert num_receivers to API value: %v", err)
+		}
+		output["numReceivers"] = value
+	}
+	if !m.MaxMessages.IsNull() && !m.MaxMessages.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMessages)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_messages to API value: %v", err)
+		}
+		output["maxMessages"] = value
+	}
+	if !m.MaxDequeueCount.IsNull() && !m.MaxDequeueCount.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxDequeueCount)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_dequeue_count to API value: %v", err)
+		}
+		output["maxDequeueCount"] = value
+	}
+	if !m.ServicePeriodSecs.IsNull() && !m.ServicePeriodSecs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ServicePeriodSecs)
+		if err != nil {
+			return nil, fmt.Errorf("convert service_period_secs to API value: %v", err)
+		}
+		output["servicePeriodSecs"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
+	}
+	if !m.AuthType.IsNull() && !m.AuthType.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthType)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_type to API value: %v", err)
+		}
+		output["authType"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.TextSecret.IsNull() && !m.TextSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
+		}
+		output["textSecret"] = value
+	}
+	if !m.StorageAccountName.IsNull() && !m.StorageAccountName.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StorageAccountName)
+		if err != nil {
+			return nil, fmt.Errorf("convert storage_account_name to API value: %v", err)
+		}
+		output["storageAccountName"] = value
+	}
+	if !m.TenantID.IsNull() && !m.TenantID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TenantID)
+		if err != nil {
+			return nil, fmt.Errorf("convert tenant_id to API value: %v", err)
+		}
+		output["tenantId"] = value
+	}
+	if !m.ClientID.IsNull() && !m.ClientID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ClientID)
+		if err != nil {
+			return nil, fmt.Errorf("convert client_id to API value: %v", err)
+		}
+		output["clientId"] = value
+	}
+	if !m.AzureCloud.IsNull() && !m.AzureCloud.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AzureCloud)
+		if err != nil {
+			return nil, fmt.Errorf("convert azure_cloud to API value: %v", err)
+		}
+		output["azureCloud"] = value
+	}
+	if !m.EndpointSuffix.IsNull() && !m.EndpointSuffix.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EndpointSuffix)
+		if err != nil {
+			return nil, fmt.Errorf("convert endpoint_suffix to API value: %v", err)
+		}
+		output["endpointSuffix"] = value
+	}
+	if !m.ClientTextSecret.IsNull() && !m.ClientTextSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ClientTextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert client_text_secret to API value: %v", err)
+		}
+		output["clientTextSecret"] = value
+	}
+	if !m.Certificate.IsNull() && !m.Certificate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Certificate)
+		if err != nil {
+			return nil, fmt.Errorf("convert certificate to API value: %v", err)
+		}
+		output["certificate"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_vnet_flow_log"
+	}
+	return output, nil
+}
+
+func (m *InputAzureVnetFlowLogModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAzureVnetFlowLogCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputAzureVnetFlowLogCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureVnetFlowLogConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAzureVnetFlowLogConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAzureVnetFlowLogPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputAzureVnetFlowLogPqAttrTypes())
+	}
+	if item, ok := input["queueName"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert queueName from API value: %v", err)
+		}
+		m.QueueName = value.(types.String)
+	} else {
+		m.QueueName = types.StringNull()
+	}
+	if item, ok := input["fileFilter"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert fileFilter from API value: %v", err)
+		}
+		m.FileFilter = value.(types.String)
+	} else {
+		m.FileFilter = types.StringNull()
+	}
+	if item, ok := input["visibilityTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert visibilityTimeout from API value: %v", err)
+		}
+		m.VisibilityTimeout = value.(types.Float64)
+	} else {
+		m.VisibilityTimeout = types.Float64Null()
+	}
+	if item, ok := input["numReceivers"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert numReceivers from API value: %v", err)
+		}
+		m.NumReceivers = value.(types.Float64)
+	} else {
+		m.NumReceivers = types.Float64Null()
+	}
+	if item, ok := input["maxMessages"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMessages from API value: %v", err)
+		}
+		m.MaxMessages = value.(types.Float64)
+	} else {
+		m.MaxMessages = types.Float64Null()
+	}
+	if item, ok := input["maxDequeueCount"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxDequeueCount from API value: %v", err)
+		}
+		m.MaxDequeueCount = value.(types.Float64)
+	} else {
+		m.MaxDequeueCount = types.Float64Null()
+	}
+	if item, ok := input["servicePeriodSecs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert servicePeriodSecs from API value: %v", err)
+		}
+		m.ServicePeriodSecs = value.(types.Float64)
+	} else {
+		m.ServicePeriodSecs = types.Float64Null()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureVnetFlowLogMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAzureVnetFlowLogMetadataAttrTypes()})
+	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Float64)
+	} else {
+		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["authType"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert authType from API value: %v", err)
+		}
+		m.AuthType = value.(types.String)
+	} else {
+		m.AuthType = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["textSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert textSecret from API value: %v", err)
+		}
+		m.TextSecret = value.(types.String)
+	} else {
+		m.TextSecret = types.StringNull()
+	}
+	if item, ok := input["storageAccountName"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert storageAccountName from API value: %v", err)
+		}
+		m.StorageAccountName = value.(types.String)
+	} else {
+		m.StorageAccountName = types.StringNull()
+	}
+	if item, ok := input["tenantId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert tenantId from API value: %v", err)
+		}
+		m.TenantID = value.(types.String)
+	} else {
+		m.TenantID = types.StringNull()
+	}
+	if item, ok := input["clientId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert clientId from API value: %v", err)
+		}
+		m.ClientID = value.(types.String)
+	} else {
+		m.ClientID = types.StringNull()
+	}
+	if item, ok := input["azureCloud"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert azureCloud from API value: %v", err)
+		}
+		m.AzureCloud = value.(types.String)
+	} else {
+		m.AzureCloud = types.StringNull()
+	}
+	if item, ok := input["endpointSuffix"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert endpointSuffix from API value: %v", err)
+		}
+		m.EndpointSuffix = value.(types.String)
+	} else {
+		m.EndpointSuffix = types.StringNull()
+	}
+	if item, ok := input["clientTextSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert clientTextSecret from API value: %v", err)
+		}
+		m.ClientTextSecret = value.(types.String)
+	} else {
+		m.ClientTextSecret = types.StringNull()
+	}
+	if item, ok := input["certificate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAzureVnetFlowLogCertificateAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert certificate from API value: %v", err)
+		}
+		m.Certificate = value.(types.Object)
+	} else {
+		m.Certificate = types.ObjectNull(InputAzureVnetFlowLogCertificateAttrTypes())
 	}
 	return nil
 }
@@ -19700,6 +24196,7 @@ type InputConfluentCloudModel struct {
 	MaxBytes                  types.Float64 `tfsdk:"max_bytes" json:"maxBytes,omitempty"`
 	MaxSocketErrors           types.Float64 `tfsdk:"max_socket_errors" json:"maxSocketErrors,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -19740,6 +24237,7 @@ func InputConfluentCloudModelAttrTypes() map[string]attr.Type {
 		"max_bytes":                  types.Float64Type,
 		"max_socket_errors":          types.Float64Type,
 		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputConfluentCloudMetadataAttrTypes()}},
+		"auto_parse":                 types.BoolType,
 		"description":                types.StringType,
 	}
 }
@@ -19990,6 +24488,13 @@ func (m InputConfluentCloudModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -20319,6 +24824,15 @@ func (m *InputConfluentCloudModel) unmarshalPayload(input map[string]any) error 
 		m.Metadata = value.(types.List)
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputConfluentCloudMetadataAttrTypes()})
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -26668,6 +31182,7 @@ type InputEventhubModel struct {
 	MaxSocketErrors           types.Float64 `tfsdk:"max_socket_errors" json:"maxSocketErrors,omitempty"`
 	MinimizeDuplicates        types.Bool    `tfsdk:"minimize_duplicates" json:"minimizeDuplicates,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -26708,6 +31223,7 @@ func InputEventhubModelAttrTypes() map[string]attr.Type {
 		"max_socket_errors":          types.Float64Type,
 		"minimize_duplicates":        types.BoolType,
 		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputEventhubMetadataAttrTypes()}},
+		"auto_parse":                 types.BoolType,
 		"description":                types.StringType,
 	}
 }
@@ -26958,6 +31474,13 @@ func (m InputEventhubModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -27288,6 +31811,15 @@ func (m *InputEventhubModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEventhubMetadataAttrTypes()})
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -27328,6 +31860,7 @@ type InputEventhubAmqpModel struct {
 	ConnectionMaxBackoff     types.Int64  `tfsdk:"connection_max_backoff" json:"connectionMaxBackoff,omitempty"`
 	ConnectionTimeoutInMs    types.Int64  `tfsdk:"connection_timeout_in_ms" json:"connectionTimeoutInMs,omitempty"`
 	Metadata                 types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse                types.Bool   `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description              types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -27360,6 +31893,7 @@ func InputEventhubAmqpModelAttrTypes() map[string]attr.Type {
 		"connection_max_backoff":     types.Int64Type,
 		"connection_timeout_in_ms":   types.Int64Type,
 		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputEventhubAmqpMetadataAttrTypes()}},
+		"auto_parse":                 types.BoolType,
 		"description":                types.StringType,
 	}
 }
@@ -27554,6 +32088,13 @@ func (m InputEventhubAmqpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -27812,6 +32353,15 @@ func (m *InputEventhubAmqpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEventhubAmqpMetadataAttrTypes()})
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -27843,6 +32393,7 @@ type InputExecModel struct {
 	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse             types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 	Interval              types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
 	CronSchedule          types.String  `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
@@ -27868,6 +32419,7 @@ func InputExecModelAttrTypes() map[string]attr.Type {
 		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
 		"stale_channel_flush_ms":  types.Float64Type,
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputExecMetadataAttrTypes()}},
+		"auto_parse":              types.BoolType,
 		"description":             types.StringType,
 		"interval":                types.Float64Type,
 		"cron_schedule":           types.StringType,
@@ -28001,6 +32553,13 @@ func (m InputExecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -28191,6 +32750,15 @@ func (m *InputExecModel) unmarshalPayload(input map[string]any) error {
 		m.Metadata = value.(types.List)
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputExecMetadataAttrTypes()})
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -28789,6 +33357,7 @@ type InputGooglePubsubModel struct {
 	Concurrency               types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 	OrderedDelivery           types.Bool    `tfsdk:"ordered_delivery" json:"orderedDelivery,omitempty"`
 }
@@ -28819,6 +33388,7 @@ func InputGooglePubsubModelAttrTypes() map[string]attr.Type {
 		"concurrency":                 types.Float64Type,
 		"request_timeout":             types.Float64Type,
 		"metadata":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputGooglePubsubMetadataAttrTypes()}},
+		"auto_parse":                  types.BoolType,
 		"description":                 types.StringType,
 		"ordered_delivery":            types.BoolType,
 	}
@@ -28993,6 +33563,13 @@ func (m InputGooglePubsubModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -29230,6 +33807,15 @@ func (m *InputGooglePubsubModel) unmarshalPayload(input map[string]any) error {
 		m.Metadata = value.(types.List)
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputGooglePubsubMetadataAttrTypes()})
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -35556,6 +40142,7 @@ type InputHttpRawModel struct {
 	IpDenylistRegex               types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
 	BreakerRulesets               types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs           types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	AutoParse                     types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Metadata                      types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	AllowedPaths                  types.List    `tfsdk:"allowed_paths" json:"allowedPaths,omitempty"`
 	AllowedMethods                types.List    `tfsdk:"allowed_methods" json:"allowedMethods,omitempty"`
@@ -35600,6 +40187,7 @@ func InputHttpRawModelAttrTypes() map[string]attr.Type {
 		"ip_denylist_regex":                types.StringType,
 		"breaker_rulesets":                 types.ListType{ElemType: types.StringType},
 		"stale_channel_flush_ms":           types.Float64Type,
+		"auto_parse":                       types.BoolType,
 		"metadata":                         types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()}},
 		"allowed_paths":                    types.ListType{ElemType: types.StringType},
 		"allowed_methods":                  types.ListType{ElemType: types.StringType},
@@ -35818,6 +40406,13 @@ func (m InputHttpRawModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
 		}
 		output["staleChannelFlushMs"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
@@ -36164,6 +40759,15 @@ func (m *InputHttpRawModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.StaleChannelFlushMs = types.Float64Null()
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()}})
 		if err != nil {
@@ -36299,6 +40903,7 @@ type InputKinesisModel struct {
 	VerifyKPLCheckSums      types.Bool    `tfsdk:"verify_kplcheck_sums" json:"verifyKPLCheckSums,omitempty"`
 	AvoidDuplicates         types.Bool    `tfsdk:"avoid_duplicates" json:"avoidDuplicates,omitempty"`
 	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse               types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
@@ -36338,6 +40943,7 @@ func InputKinesisModelAttrTypes() map[string]attr.Type {
 		"verify_kplcheck_sums":      types.BoolType,
 		"avoid_duplicates":          types.BoolType,
 		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputKinesisMetadataAttrTypes()}},
+		"auto_parse":                types.BoolType,
 		"description":               types.StringType,
 		"aws_api_key":               types.StringType,
 		"aws_secret":                types.StringType,
@@ -36569,6 +41175,13 @@ func (m InputKinesisModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -36885,6 +41498,15 @@ func (m *InputKinesisModel) unmarshalPayload(input map[string]any) error {
 		m.Metadata = value.(types.List)
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKinesisMetadataAttrTypes()})
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -37648,6 +42270,7 @@ type InputS3Model struct {
 	PollTimeout                 types.Float64 `tfsdk:"poll_timeout" json:"pollTimeout,omitempty"`
 	Encoding                    types.String  `tfsdk:"encoding" json:"encoding,omitempty"`
 	TagAfterProcessing          types.Bool    `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
+	AutoParse                   types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                   types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
@@ -37706,6 +42329,7 @@ func InputS3ModelAttrTypes() map[string]attr.Type {
 		"poll_timeout":                   types.Float64Type,
 		"encoding":                       types.StringType,
 		"tag_after_processing":           types.BoolType,
+		"auto_parse":                     types.BoolType,
 		"description":                    types.StringType,
 		"aws_api_key":                    types.StringType,
 		"aws_secret":                     types.StringType,
@@ -38022,6 +42646,13 @@ func (m InputS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tag_after_processing to API value: %v", err)
 		}
 		output["tagAfterProcessing"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -38493,6 +43124,15 @@ func (m *InputS3Model) unmarshalPayload(input map[string]any) error {
 		m.TagAfterProcessing = value.(types.Bool)
 	} else {
 		m.TagAfterProcessing = types.BoolNull()
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -40054,6 +44694,8 @@ type InputOpenTelemetryModel struct {
 	AuthMethodsExt        types.List    `tfsdk:"auth_methods_ext" json:"authMethodsExt,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	MaxActiveCxn          types.Float64 `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
+	MaxMessageSizeKB      types.Float64 `tfsdk:"max_message_size_kb" json:"maxMessageSizeKB,omitempty"`
+	MaxConcurrentStreams  types.Float64 `tfsdk:"max_concurrent_streams" json:"maxConcurrentStreams,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 	Username              types.String  `tfsdk:"username" json:"username,omitempty"`
 	Password              types.String  `tfsdk:"password" json:"password,omitempty"`
@@ -40096,6 +44738,8 @@ func InputOpenTelemetryModelAttrTypes() map[string]attr.Type {
 		"auth_methods_ext":        types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()}},
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()}},
 		"max_active_cxn":          types.Float64Type,
+		"max_message_size_kb":     types.Float64Type,
+		"max_concurrent_streams":  types.Float64Type,
 		"description":             types.StringType,
 		"username":                types.StringType,
 		"password":                types.StringType,
@@ -40324,6 +44968,20 @@ func (m InputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_active_cxn to API value: %v", err)
 		}
 		output["maxActiveCxn"] = value
+	}
+	if !m.MaxMessageSizeKB.IsNull() && !m.MaxMessageSizeKB.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMessageSizeKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_message_size_kb to API value: %v", err)
+		}
+		output["maxMessageSizeKB"] = value
+	}
+	if !m.MaxConcurrentStreams.IsNull() && !m.MaxConcurrentStreams.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxConcurrentStreams)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_concurrent_streams to API value: %v", err)
+		}
+		output["maxConcurrentStreams"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -40660,6 +45318,24 @@ func (m *InputOpenTelemetryModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.MaxActiveCxn = types.Float64Null()
 	}
+	if item, ok := input["maxMessageSizeKB"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMessageSizeKB from API value: %v", err)
+		}
+		m.MaxMessageSizeKB = value.(types.Float64)
+	} else {
+		m.MaxMessageSizeKB = types.Float64Null()
+	}
+	if item, ok := input["maxConcurrentStreams"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConcurrentStreams from API value: %v", err)
+		}
+		m.MaxConcurrentStreams = value.(types.Float64)
+	} else {
+		m.MaxConcurrentStreams = types.Float64Null()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -40743,6 +45419,8 @@ type InputModelDrivenTelemetryModel struct {
 	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	MaxActiveCxn          types.Float64 `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
+	MaxMessageSizeKB      types.Float64 `tfsdk:"max_message_size_kb" json:"maxMessageSizeKB,omitempty"`
+	MaxConcurrentStreams  types.Float64 `tfsdk:"max_concurrent_streams" json:"maxConcurrentStreams,omitempty"`
 	ShutdownTimeoutMs     types.Float64 `tfsdk:"shutdown_timeout_ms" json:"shutdownTimeoutMs,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
@@ -40765,6 +45443,8 @@ func InputModelDrivenTelemetryModelAttrTypes() map[string]attr.Type {
 		"tls":                     types.ObjectType{AttrTypes: InputModelDrivenTelemetryTLSAttrTypes()},
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputModelDrivenTelemetryMetadataAttrTypes()}},
 		"max_active_cxn":          types.Float64Type,
+		"max_message_size_kb":     types.Float64Type,
+		"max_concurrent_streams":  types.Float64Type,
 		"shutdown_timeout_ms":     types.Float64Type,
 		"description":             types.StringType,
 	}
@@ -40883,6 +45563,20 @@ func (m InputModelDrivenTelemetryModel) terraformPayload() (map[string]any, erro
 			return nil, fmt.Errorf("convert max_active_cxn to API value: %v", err)
 		}
 		output["maxActiveCxn"] = value
+	}
+	if !m.MaxMessageSizeKB.IsNull() && !m.MaxMessageSizeKB.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMessageSizeKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_message_size_kb to API value: %v", err)
+		}
+		output["maxMessageSizeKB"] = value
+	}
+	if !m.MaxConcurrentStreams.IsNull() && !m.MaxConcurrentStreams.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxConcurrentStreams)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_concurrent_streams to API value: %v", err)
+		}
+		output["maxConcurrentStreams"] = value
 	}
 	if !m.ShutdownTimeoutMs.IsNull() && !m.ShutdownTimeoutMs.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ShutdownTimeoutMs)
@@ -41049,6 +45743,24 @@ func (m *InputModelDrivenTelemetryModel) unmarshalPayload(input map[string]any) 
 	} else {
 		m.MaxActiveCxn = types.Float64Null()
 	}
+	if item, ok := input["maxMessageSizeKB"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMessageSizeKB from API value: %v", err)
+		}
+		m.MaxMessageSizeKB = value.(types.Float64)
+	} else {
+		m.MaxMessageSizeKB = types.Float64Null()
+	}
+	if item, ok := input["maxConcurrentStreams"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConcurrentStreams from API value: %v", err)
+		}
+		m.MaxConcurrentStreams = value.(types.Float64)
+	} else {
+		m.MaxConcurrentStreams = types.Float64Null()
+	}
 	if item, ok := input["shutdownTimeoutMs"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -41100,6 +45812,7 @@ type InputSqsModel struct {
 	VisibilityTimeout       types.Float64 `tfsdk:"visibility_timeout" json:"visibilityTimeout,omitempty"`
 	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	PollTimeout             types.Float64 `tfsdk:"poll_timeout" json:"pollTimeout,omitempty"`
+	AutoParse               types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
@@ -41137,6 +45850,7 @@ func InputSqsModelAttrTypes() map[string]attr.Type {
 		"visibility_timeout":        types.Float64Type,
 		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputSqsMetadataAttrTypes()}},
 		"poll_timeout":              types.Float64Type,
+		"auto_parse":                types.BoolType,
 		"description":               types.StringType,
 		"aws_api_key":               types.StringType,
 		"aws_secret":                types.StringType,
@@ -41348,6 +46062,13 @@ func (m InputSqsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert poll_timeout to API value: %v", err)
 		}
 		output["pollTimeout"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -41645,6 +46366,15 @@ func (m *InputSqsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.PollTimeout = types.Float64Null()
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -41717,6 +46447,7 @@ type InputSyslogModel struct {
 	Metadata                         types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	UdpSocketRxBufSize               types.Float64 `tfsdk:"udp_socket_rx_buf_size" json:"udpSocketRxBufSize,omitempty"`
 	EnableLoadBalancing              types.Bool    `tfsdk:"enable_load_balancing" json:"enableLoadBalancing,omitempty"`
+	AutoParse                        types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description                      types.String  `tfsdk:"description" json:"description,omitempty"`
 	EnableEnhancedProxyHeaderParsing types.Bool    `tfsdk:"enable_enhanced_proxy_header_parsing" json:"enableEnhancedProxyHeaderParsing,omitempty"`
 }
@@ -41755,6 +46486,7 @@ func InputSyslogModelAttrTypes() map[string]attr.Type {
 		"metadata":                             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSyslogMetadataAttrTypes()}},
 		"udp_socket_rx_buf_size":               types.Float64Type,
 		"enable_load_balancing":                types.BoolType,
+		"auto_parse":                           types.BoolType,
 		"description":                          types.StringType,
 		"enable_enhanced_proxy_header_parsing": types.BoolType,
 	}
@@ -41985,6 +46717,13 @@ func (m InputSyslogModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert enable_load_balancing to API value: %v", err)
 		}
 		output["enableLoadBalancing"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -42295,6 +47034,15 @@ func (m *InputSyslogModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.EnableLoadBalancing = types.BoolNull()
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -42339,10 +47087,12 @@ type InputFileModel struct {
 	CheckFileModTime            types.Bool    `tfsdk:"check_file_mod_time" json:"checkFileModTime,omitempty"`
 	ForceText                   types.Bool    `tfsdk:"force_text" json:"forceText,omitempty"`
 	HashLen                     types.Float64 `tfsdk:"hash_len" json:"hashLen,omitempty"`
+	EnableLoadBalancing         types.Bool    `tfsdk:"enable_load_balancing" json:"enableLoadBalancing,omitempty"`
 	Metadata                    types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	BreakerRulesets             types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	DisableStaleChannelFlush    types.Bool    `tfsdk:"disable_stale_channel_flush" json:"disableStaleChannelFlush,omitempty"`
 	StaleChannelFlushMs         types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	AutoParse                   types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
 	Path                        types.String  `tfsdk:"path" json:"path,omitempty"`
 	Depth                       types.Float64 `tfsdk:"depth" json:"depth,omitempty"`
@@ -42350,45 +47100,51 @@ type InputFileModel struct {
 	DeleteFiles                 types.Bool    `tfsdk:"delete_files" json:"deleteFiles,omitempty"`
 	SaltHash                    types.Bool    `tfsdk:"salt_hash" json:"saltHash,omitempty"`
 	OptimizeLeafDirectories     types.Bool    `tfsdk:"optimize_leaf_directories" json:"optimizeLeafDirectories,omitempty"`
+	EnableDiscoveryThrottle     types.Bool    `tfsdk:"enable_discovery_throttle" json:"enableDiscoveryThrottle,omitempty"`
+	DiscoveryThrottleCpuPercent types.Float64 `tfsdk:"discovery_throttle_cpu_percent" json:"discoveryThrottleCpuPercent,omitempty"`
 	IncludeUnidentifiableBinary types.Bool    `tfsdk:"include_unidentifiable_binary" json:"includeUnidentifiableBinary,omitempty"`
 }
 
 func InputFileModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                            types.StringType,
-		"type":                          types.StringType,
-		"disabled":                      types.BoolType,
-		"pipeline":                      types.StringType,
-		"send_to_routes":                types.BoolType,
-		"environment":                   types.StringType,
-		"pq_enabled":                    types.BoolType,
-		"streamtags":                    types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance":       types.ObjectType{AttrTypes: InputFileCriblSourceProvenanceAttrTypes()},
-		"connections":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileConnectionsAttrTypes()}},
-		"pq":                            types.ObjectType{AttrTypes: InputFilePqAttrTypes()},
-		"mode":                          types.StringType,
-		"interval":                      types.Float64Type,
-		"filenames":                     types.ListType{ElemType: types.StringType},
-		"filter_archived_files":         types.BoolType,
-		"tail_only":                     types.BoolType,
-		"idle_timeout":                  types.Float64Type,
-		"min_age_dur":                   types.StringType,
-		"max_age_dur":                   types.StringType,
-		"check_file_mod_time":           types.BoolType,
-		"force_text":                    types.BoolType,
-		"hash_len":                      types.Float64Type,
-		"metadata":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()}},
-		"breaker_rulesets":              types.ListType{ElemType: types.StringType},
-		"disable_stale_channel_flush":   types.BoolType,
-		"stale_channel_flush_ms":        types.Float64Type,
-		"description":                   types.StringType,
-		"path":                          types.StringType,
-		"depth":                         types.Float64Type,
-		"suppress_missing_path_errors":  types.BoolType,
-		"delete_files":                  types.BoolType,
-		"salt_hash":                     types.BoolType,
-		"optimize_leaf_directories":     types.BoolType,
-		"include_unidentifiable_binary": types.BoolType,
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputFileCriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputFilePqAttrTypes()},
+		"mode":                           types.StringType,
+		"interval":                       types.Float64Type,
+		"filenames":                      types.ListType{ElemType: types.StringType},
+		"filter_archived_files":          types.BoolType,
+		"tail_only":                      types.BoolType,
+		"idle_timeout":                   types.Float64Type,
+		"min_age_dur":                    types.StringType,
+		"max_age_dur":                    types.StringType,
+		"check_file_mod_time":            types.BoolType,
+		"force_text":                     types.BoolType,
+		"hash_len":                       types.Float64Type,
+		"enable_load_balancing":          types.BoolType,
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()}},
+		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
+		"disable_stale_channel_flush":    types.BoolType,
+		"stale_channel_flush_ms":         types.Float64Type,
+		"auto_parse":                     types.BoolType,
+		"description":                    types.StringType,
+		"path":                           types.StringType,
+		"depth":                          types.Float64Type,
+		"suppress_missing_path_errors":   types.BoolType,
+		"delete_files":                   types.BoolType,
+		"salt_hash":                      types.BoolType,
+		"optimize_leaf_directories":      types.BoolType,
+		"enable_discovery_throttle":      types.BoolType,
+		"discovery_throttle_cpu_percent": types.Float64Type,
+		"include_unidentifiable_binary":  types.BoolType,
 	}
 }
 
@@ -42548,6 +47304,13 @@ func (m InputFileModel) terraformPayload() (map[string]any, error) {
 		}
 		output["hashLen"] = value
 	}
+	if !m.EnableLoadBalancing.IsNull() && !m.EnableLoadBalancing.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableLoadBalancing)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_load_balancing to API value: %v", err)
+		}
+		output["enableLoadBalancing"] = value
+	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
 		if err != nil {
@@ -42575,6 +47338,13 @@ func (m InputFileModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
 		}
 		output["staleChannelFlushMs"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -42624,6 +47394,20 @@ func (m InputFileModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert optimize_leaf_directories to API value: %v", err)
 		}
 		output["optimizeLeafDirectories"] = value
+	}
+	if !m.EnableDiscoveryThrottle.IsNull() && !m.EnableDiscoveryThrottle.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableDiscoveryThrottle)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_discovery_throttle to API value: %v", err)
+		}
+		output["enableDiscoveryThrottle"] = value
+	}
+	if !m.DiscoveryThrottleCpuPercent.IsNull() && !m.DiscoveryThrottleCpuPercent.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.DiscoveryThrottleCpuPercent)
+		if err != nil {
+			return nil, fmt.Errorf("convert discovery_throttle_cpu_percent to API value: %v", err)
+		}
+		output["discoveryThrottleCpuPercent"] = value
 	}
 	if !m.IncludeUnidentifiableBinary.IsNull() && !m.IncludeUnidentifiableBinary.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.IncludeUnidentifiableBinary)
@@ -42837,6 +47621,15 @@ func (m *InputFileModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.HashLen = types.Float64Null()
 	}
+	if item, ok := input["enableLoadBalancing"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableLoadBalancing from API value: %v", err)
+		}
+		m.EnableLoadBalancing = value.(types.Bool)
+	} else {
+		m.EnableLoadBalancing = types.BoolNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()}})
 		if err != nil {
@@ -42872,6 +47665,15 @@ func (m *InputFileModel) unmarshalPayload(input map[string]any) error {
 		m.StaleChannelFlushMs = value.(types.Float64)
 	} else {
 		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -42936,6 +47738,24 @@ func (m *InputFileModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.OptimizeLeafDirectories = types.BoolNull()
 	}
+	if item, ok := input["enableDiscoveryThrottle"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableDiscoveryThrottle from API value: %v", err)
+		}
+		m.EnableDiscoveryThrottle = value.(types.Bool)
+	} else {
+		m.EnableDiscoveryThrottle = types.BoolNull()
+	}
+	if item, ok := input["discoveryThrottleCpuPercent"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert discoveryThrottleCpuPercent from API value: %v", err)
+		}
+		m.DiscoveryThrottleCpuPercent = value.(types.Float64)
+	} else {
+		m.DiscoveryThrottleCpuPercent = types.Float64Null()
+	}
 	if item, ok := input["includeUnidentifiableBinary"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
 		if err != nil {
@@ -42972,6 +47792,7 @@ type InputTcpModel struct {
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	AutoParse             types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	EnableHeader          types.Bool    `tfsdk:"enable_header" json:"enableHeader,omitempty"`
 	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
@@ -43005,6 +47826,7 @@ func InputTcpModelAttrTypes() map[string]attr.Type {
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputTcpMetadataAttrTypes()}},
 		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
 		"stale_channel_flush_ms":  types.Float64Type,
+		"auto_parse":              types.BoolType,
 		"enable_header":           types.BoolType,
 		"preprocess":              types.ObjectType{AttrTypes: InputTcpPreprocessAttrTypes()},
 		"description":             types.StringType,
@@ -43176,6 +47998,13 @@ func (m InputTcpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
 		}
 		output["staleChannelFlushMs"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.EnableHeader.IsNull() && !m.EnableHeader.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.EnableHeader)
@@ -43432,6 +48261,15 @@ func (m *InputTcpModel) unmarshalPayload(input map[string]any) error {
 		m.StaleChannelFlushMs = value.(types.Float64)
 	} else {
 		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["enableHeader"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
@@ -44723,6 +49561,7 @@ type InputWinEventLogsModel struct {
 	MaxEventBytes            types.Int64   `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
 	Description              types.String  `tfsdk:"description" json:"description,omitempty"`
 	DisableJSONRendering     types.Bool    `tfsdk:"disable_json_rendering" json:"disableJsonRendering,omitempty"`
+	IncludeEmptyJSONFields   types.Bool    `tfsdk:"include_empty_json_fields" json:"includeEmptyJsonFields,omitempty"`
 	DisableXmlRendering      types.Bool    `tfsdk:"disable_xml_rendering" json:"disableXmlRendering,omitempty"`
 }
 
@@ -44750,6 +49589,7 @@ func InputWinEventLogsModelAttrTypes() map[string]attr.Type {
 		"max_event_bytes":             types.Int64Type,
 		"description":                 types.StringType,
 		"disable_json_rendering":      types.BoolType,
+		"include_empty_json_fields":   types.BoolType,
 		"disable_xml_rendering":       types.BoolType,
 	}
 }
@@ -44909,6 +49749,13 @@ func (m InputWinEventLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert disable_json_rendering to API value: %v", err)
 		}
 		output["disableJsonRendering"] = value
+	}
+	if !m.IncludeEmptyJSONFields.IsNull() && !m.IncludeEmptyJSONFields.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IncludeEmptyJSONFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert include_empty_json_fields to API value: %v", err)
+		}
+		output["includeEmptyJsonFields"] = value
 	}
 	if !m.DisableXmlRendering.IsNull() && !m.DisableXmlRendering.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.DisableXmlRendering)
@@ -45121,6 +49968,15 @@ func (m *InputWinEventLogsModel) unmarshalPayload(input map[string]any) error {
 		m.DisableJSONRendering = value.(types.Bool)
 	} else {
 		m.DisableJSONRendering = types.BoolNull()
+	}
+	if item, ok := input["includeEmptyJsonFields"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert includeEmptyJsonFields from API value: %v", err)
+		}
+		m.IncludeEmptyJSONFields = value.(types.Bool)
+	} else {
+		m.IncludeEmptyJSONFields = types.BoolNull()
 	}
 	if item, ok := input["disableXmlRendering"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
@@ -45444,6 +50300,7 @@ type InputRawUdpModel struct {
 	IngestRawBytes        types.Bool    `tfsdk:"ingest_raw_bytes" json:"ingestRawBytes,omitempty"`
 	UdpSocketRxBufSize    types.Float64 `tfsdk:"udp_socket_rx_buf_size" json:"udpSocketRxBufSize,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse             types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -45468,6 +50325,7 @@ func InputRawUdpModelAttrTypes() map[string]attr.Type {
 		"ingest_raw_bytes":        types.BoolType,
 		"udp_socket_rx_buf_size":  types.Float64Type,
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputRawUdpMetadataAttrTypes()}},
+		"auto_parse":              types.BoolType,
 		"description":             types.StringType,
 	}
 }
@@ -45606,6 +50464,13 @@ func (m InputRawUdpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -45792,6 +50657,15 @@ func (m *InputRawUdpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputRawUdpMetadataAttrTypes()})
 	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -45824,6 +50698,7 @@ type InputJournalFilesModel struct {
 	MaxAgeDur                 types.String  `tfsdk:"max_age_dur" json:"maxAgeDur,omitempty"`
 	SuppressMissingPathErrors types.Bool    `tfsdk:"suppress_missing_path_errors" json:"suppressMissingPathErrors,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AutoParse                 types.Bool    `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -45848,6 +50723,7 @@ func InputJournalFilesModelAttrTypes() map[string]attr.Type {
 		"max_age_dur":                  types.StringType,
 		"suppress_missing_path_errors": types.BoolType,
 		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputJournalFilesMetadataAttrTypes()}},
+		"auto_parse":                   types.BoolType,
 		"description":                  types.StringType,
 	}
 }
@@ -45986,6 +50862,13 @@ func (m InputJournalFilesModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert metadata to API value: %v", err)
 		}
 		output["metadata"] = value
+	}
+	if !m.AutoParse.IsNull() && !m.AutoParse.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AutoParse)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_parse to API value: %v", err)
+		}
+		output["autoParse"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -46171,6 +51054,15 @@ func (m *InputJournalFilesModel) unmarshalPayload(input map[string]any) error {
 		m.Metadata = value.(types.List)
 	} else {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesMetadataAttrTypes()})
+	}
+	if item, ok := input["autoParse"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoParse from API value: %v", err)
+		}
+		m.AutoParse = value.(types.Bool)
+	} else {
+		m.AutoParse = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -51112,6 +56004,422 @@ func (m *InputServicenowTableModel) unmarshalPayload(input map[string]any) error
 	return nil
 }
 
+type InputProofpointPodModel struct {
+	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	ClusterID             types.String  `tfsdk:"cluster_id" json:"clusterId,omitempty"`
+	FeedType              types.String  `tfsdk:"feed_type" json:"feedType,omitempty"`
+	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	Compress              types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
+	HandshakeTimeout      types.Float64 `tfsdk:"handshake_timeout" json:"handshakeTimeout,omitempty"`
+	KeepAliveIntervalSec  types.Float64 `tfsdk:"keep_alive_interval_sec" json:"keepAliveIntervalSec,omitempty"`
+	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
+	MaxMessageSize        types.String  `tfsdk:"max_message_size" json:"maxMessageSize,omitempty"`
+	ReadBufferSize        types.String  `tfsdk:"read_buffer_size" json:"readBufferSize,omitempty"`
+	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputProofpointPodModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputProofpointPodCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputProofpointPodConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputProofpointPodPqAttrTypes()},
+		"cluster_id":              types.StringType,
+		"feed_type":               types.StringType,
+		"text_secret":             types.StringType,
+		"tls":                     types.ObjectType{AttrTypes: InputProofpointPodTLSAttrTypes()},
+		"compress":                types.BoolType,
+		"handshake_timeout":       types.Float64Type,
+		"keep_alive_interval_sec": types.Float64Type,
+		"max_missed_keep_alives":  types.Float64Type,
+		"max_message_size":        types.StringType,
+		"read_buffer_size":        types.StringType,
+		"description":             types.StringType,
+	}
+}
+
+func (m InputProofpointPodModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.ClusterID.IsNull() && !m.ClusterID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ClusterID)
+		if err != nil {
+			return nil, fmt.Errorf("convert cluster_id to API value: %v", err)
+		}
+		output["clusterId"] = value
+	}
+	if !m.FeedType.IsNull() && !m.FeedType.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.FeedType)
+		if err != nil {
+			return nil, fmt.Errorf("convert feed_type to API value: %v", err)
+		}
+		output["feedType"] = value
+	}
+	if !m.TextSecret.IsNull() && !m.TextSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
+		}
+		output["textSecret"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.Compress.IsNull() && !m.Compress.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Compress)
+		if err != nil {
+			return nil, fmt.Errorf("convert compress to API value: %v", err)
+		}
+		output["compress"] = value
+	}
+	if !m.HandshakeTimeout.IsNull() && !m.HandshakeTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HandshakeTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert handshake_timeout to API value: %v", err)
+		}
+		output["handshakeTimeout"] = value
+	}
+	if !m.KeepAliveIntervalSec.IsNull() && !m.KeepAliveIntervalSec.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveIntervalSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_interval_sec to API value: %v", err)
+		}
+		output["keepAliveIntervalSec"] = value
+	}
+	if !m.MaxMissedKeepAlives.IsNull() && !m.MaxMissedKeepAlives.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMissedKeepAlives)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_missed_keep_alives to API value: %v", err)
+		}
+		output["maxMissedKeepAlives"] = value
+	}
+	if !m.MaxMessageSize.IsNull() && !m.MaxMessageSize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMessageSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_message_size to API value: %v", err)
+		}
+		output["maxMessageSize"] = value
+	}
+	if !m.ReadBufferSize.IsNull() && !m.ReadBufferSize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ReadBufferSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert read_buffer_size to API value: %v", err)
+		}
+		output["readBufferSize"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "proofpoint_pod"
+	}
+	return output, nil
+}
+
+func (m *InputProofpointPodModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputProofpointPodCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputProofpointPodCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputProofpointPodConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputProofpointPodConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputProofpointPodPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputProofpointPodPqAttrTypes())
+	}
+	if item, ok := input["clusterId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert clusterId from API value: %v", err)
+		}
+		m.ClusterID = value.(types.String)
+	} else {
+		m.ClusterID = types.StringNull()
+	}
+	if item, ok := input["feedType"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert feedType from API value: %v", err)
+		}
+		m.FeedType = value.(types.String)
+	} else {
+		m.FeedType = types.StringNull()
+	}
+	if item, ok := input["textSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert textSecret from API value: %v", err)
+		}
+		m.TextSecret = value.(types.String)
+	} else {
+		m.TextSecret = types.StringNull()
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputProofpointPodTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputProofpointPodTLSAttrTypes())
+	}
+	if item, ok := input["compress"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert compress from API value: %v", err)
+		}
+		m.Compress = value.(types.Bool)
+	} else {
+		m.Compress = types.BoolNull()
+	}
+	if item, ok := input["handshakeTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert handshakeTimeout from API value: %v", err)
+		}
+		m.HandshakeTimeout = value.(types.Float64)
+	} else {
+		m.HandshakeTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveIntervalSec"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveIntervalSec from API value: %v", err)
+		}
+		m.KeepAliveIntervalSec = value.(types.Float64)
+	} else {
+		m.KeepAliveIntervalSec = types.Float64Null()
+	}
+	if item, ok := input["maxMissedKeepAlives"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMissedKeepAlives from API value: %v", err)
+		}
+		m.MaxMissedKeepAlives = value.(types.Float64)
+	} else {
+		m.MaxMissedKeepAlives = types.Float64Null()
+	}
+	if item, ok := input["maxMessageSize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert maxMessageSize from API value: %v", err)
+		}
+		m.MaxMessageSize = value.(types.String)
+	} else {
+		m.MaxMessageSize = types.StringNull()
+	}
+	if item, ok := input["readBufferSize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert readBufferSize from API value: %v", err)
+		}
+		m.ReadBufferSize = value.(types.String)
+	} else {
+		m.ReadBufferSize = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
 type InputZscalerHecModel struct {
 	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
 	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
@@ -53622,6 +58930,2390 @@ func (m *InputUpwindHecModel) unmarshalPayload(input map[string]any) error {
 	return nil
 }
 
+type InputTrellixHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputTrellixHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputTrellixHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputTrellixHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputTrellixHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputTrellixHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "trellix_hec"
+	}
+	return output, nil
+}
+
+func (m *InputTrellixHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputTrellixHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputTrellixHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputTrellixHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputTrellixHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputTrellixHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputTrellixHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputTrellixHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputTrellixHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrellixHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputTrellixHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputSailpointHecModel struct {
+	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                  types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                  types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens            types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq          types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout      types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex      types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputSailpointHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputSailpointHecCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputSailpointHecPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecAuthTokensAttrTypes()}},
+		"tls":                      types.ObjectType{AttrTypes: InputSailpointHecTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"hec_api":                  types.StringType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecMetadataAttrTypes()}},
+		"description":              types.StringType,
+	}
+}
+
+func (m InputSailpointHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sailpoint_hec"
+	}
+	return output, nil
+}
+
+func (m *InputSailpointHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSailpointHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputSailpointHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSailpointHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSailpointHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputSailpointHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSailpointHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSailpointHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputSailpointHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSailpointHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSailpointHecMetadataAttrTypes()})
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputExtrahopRevealx360Model struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputExtrahopRevealx360ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputExtrahopRevealx360CriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360ConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputExtrahopRevealx360PqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360AuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputExtrahopRevealx360TLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360MetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputExtrahopRevealx360Model) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "extrahop_revealx_360"
+	}
+	return output, nil
+}
+
+func (m *InputExtrahopRevealx360Model) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputExtrahopRevealx360CriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputExtrahopRevealx360CriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360ConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputExtrahopRevealx360ConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputExtrahopRevealx360PqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputExtrahopRevealx360PqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360AuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputExtrahopRevealx360AuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputExtrahopRevealx360TLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputExtrahopRevealx360TLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputExtrahopRevealx360MetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputExtrahopRevealx360MetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputAquaSecurityHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	HecAcks                   types.Bool    `tfsdk:"hec_acks" json:"hecAcks,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputAquaSecurityHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputAquaSecurityHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputAquaSecurityHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputAquaSecurityHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"hec_acks":                     types.BoolType,
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputAquaSecurityHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.HecAcks.IsNull() && !m.HecAcks.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAcks)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_acks to API value: %v", err)
+		}
+		output["hecAcks"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "aqua_security_hec"
+	}
+	return output, nil
+}
+
+func (m *InputAquaSecurityHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAquaSecurityHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputAquaSecurityHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAquaSecurityHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAquaSecurityHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputAquaSecurityHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputAquaSecurityHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAquaSecurityHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputAquaSecurityHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAquaSecurityHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAquaSecurityHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["hecAcks"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert hecAcks from API value: %v", err)
+		}
+		m.HecAcks = value.(types.Bool)
+	} else {
+		m.HecAcks = types.BoolNull()
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
 type InputOpenaiComplianceLogsModel struct {
 	ID                     types.String  `tfsdk:"id" json:"id,omitempty"`
 	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
@@ -54922,6 +62614,1144 @@ func (m *InputAnthropicComplianceModel) unmarshalPayload(input map[string]any) e
 	return nil
 }
 
+type InputAnthropicEnterpriseAnalyticsModel struct {
+	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	APIKey                types.String  `tfsdk:"api_key" json:"apiKey,omitempty"`
+	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	ContentConfig         types.List    `tfsdk:"content_config" json:"contentConfig,omitempty"`
+	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
+	Ttl                   types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit  types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	RetryRules            types.Object  `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputAnthropicEnterpriseAnalyticsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsPqAttrTypes()},
+		"api_key":                 types.StringType,
+		"text_secret":             types.StringType,
+		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsContentConfigAttrTypes()}},
+		"request_timeout":         types.Float64Type,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsMetadataAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsRetryRulesAttrTypes()},
+		"description":             types.StringType,
+	}
+}
+
+func (m InputAnthropicEnterpriseAnalyticsModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.APIKey.IsNull() && !m.APIKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.APIKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert api_key to API value: %v", err)
+		}
+		output["apiKey"] = value
+	}
+	if !m.TextSecret.IsNull() && !m.TextSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
+		}
+		output["textSecret"] = value
+	}
+	if !m.ContentConfig.IsNull() && !m.ContentConfig.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ContentConfig)
+		if err != nil {
+			return nil, fmt.Errorf("convert content_config to API value: %v", err)
+		}
+		output["contentConfig"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
+	}
+	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTime)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_time to API value: %v", err)
+		}
+		output["keepAliveTime"] = value
+	}
+	if !m.MaxMissedKeepAlives.IsNull() && !m.MaxMissedKeepAlives.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMissedKeepAlives)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_missed_keep_alives to API value: %v", err)
+		}
+		output["maxMissedKeepAlives"] = value
+	}
+	if !m.Ttl.IsNull() && !m.Ttl.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Ttl)
+		if err != nil {
+			return nil, fmt.Errorf("convert ttl to API value: %v", err)
+		}
+		output["ttl"] = value
+	}
+	if !m.IgnoreGroupJobsLimit.IsNull() && !m.IgnoreGroupJobsLimit.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IgnoreGroupJobsLimit)
+		if err != nil {
+			return nil, fmt.Errorf("convert ignore_group_jobs_limit to API value: %v", err)
+		}
+		output["ignoreGroupJobsLimit"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.RetryRules.IsNull() && !m.RetryRules.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RetryRules)
+		if err != nil {
+			return nil, fmt.Errorf("convert retry_rules to API value: %v", err)
+		}
+		output["retryRules"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "anthropic_enterprise_analytics"
+	}
+	return output, nil
+}
+
+func (m *InputAnthropicEnterpriseAnalyticsModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputAnthropicEnterpriseAnalyticsCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputAnthropicEnterpriseAnalyticsPqAttrTypes())
+	}
+	if item, ok := input["apiKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert apiKey from API value: %v", err)
+		}
+		m.APIKey = value.(types.String)
+	} else {
+		m.APIKey = types.StringNull()
+	}
+	if item, ok := input["textSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert textSecret from API value: %v", err)
+		}
+		m.TextSecret = value.(types.String)
+	} else {
+		m.TextSecret = types.StringNull()
+	}
+	if item, ok := input["contentConfig"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsContentConfigAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert contentConfig from API value: %v", err)
+		}
+		m.ContentConfig = value.(types.List)
+	} else {
+		m.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsContentConfigAttrTypes()})
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Float64)
+	} else {
+		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTime"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTime from API value: %v", err)
+		}
+		m.KeepAliveTime = value.(types.Float64)
+	} else {
+		m.KeepAliveTime = types.Float64Null()
+	}
+	if item, ok := input["maxMissedKeepAlives"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMissedKeepAlives from API value: %v", err)
+		}
+		m.MaxMissedKeepAlives = value.(types.Float64)
+	} else {
+		m.MaxMissedKeepAlives = types.Float64Null()
+	}
+	if item, ok := input["ttl"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ttl from API value: %v", err)
+		}
+		m.Ttl = value.(types.String)
+	} else {
+		m.Ttl = types.StringNull()
+	}
+	if item, ok := input["ignoreGroupJobsLimit"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert ignoreGroupJobsLimit from API value: %v", err)
+		}
+		m.IgnoreGroupJobsLimit = value.(types.Bool)
+	} else {
+		m.IgnoreGroupJobsLimit = types.BoolNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsMetadataAttrTypes()})
+	}
+	if item, ok := input["retryRules"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsRetryRulesAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert retryRules from API value: %v", err)
+		}
+		m.RetryRules = value.(types.Object)
+	} else {
+		m.RetryRules = types.ObjectNull(InputAnthropicEnterpriseAnalyticsRetryRulesAttrTypes())
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputMicrosoftCopilotModel struct {
+	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	TenantID              types.String  `tfsdk:"tenant_id" json:"tenantId,omitempty"`
+	ClientID              types.String  `tfsdk:"client_id" json:"clientId,omitempty"`
+	Resource              types.String  `tfsdk:"resource" json:"resource,omitempty"`
+	AuthType              types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	PlanType              types.String  `tfsdk:"plan_type" json:"planType,omitempty"`
+	CronSchedule          types.String  `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	Earliest              types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                types.String  `tfsdk:"latest" json:"latest,omitempty"`
+	PageSize              types.Int64   `tfsdk:"page_size" json:"pageSize,omitempty"`
+	AppClassFilter        types.List    `tfsdk:"app_class_filter" json:"appClassFilter,omitempty"`
+	FilterByLicense       types.Bool    `tfsdk:"filter_by_license" json:"filterByLicense,omitempty"`
+	SkuIDs                types.List    `tfsdk:"sku_ids" json:"skuIds,omitempty"`
+	ManageState           types.Map     `tfsdk:"manage_state" json:"manageState,omitempty"`
+	Timeout               types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	JobTimeout            types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
+	Ttl                   types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit  types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	RetryRules            types.Object  `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	CertOptions           types.Object  `tfsdk:"cert_options" json:"certOptions,omitempty"`
+}
+
+func InputMicrosoftCopilotModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputMicrosoftCopilotCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputMicrosoftCopilotConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputMicrosoftCopilotPqAttrTypes()},
+		"tenant_id":               types.StringType,
+		"client_id":               types.StringType,
+		"resource":                types.StringType,
+		"auth_type":               types.StringType,
+		"plan_type":               types.StringType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"page_size":               types.Int64Type,
+		"app_class_filter":        types.ListType{ElemType: types.StringType},
+		"filter_by_license":       types.BoolType,
+		"sku_ids":                 types.ListType{ElemType: types.StringType},
+		"manage_state":            types.MapType{ElemType: types.StringType},
+		"timeout":                 types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"job_timeout":             types.StringType,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputMicrosoftCopilotMetadataAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputMicrosoftCopilotRetryRulesAttrTypes()},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"description":             types.StringType,
+		"text_secret":             types.StringType,
+		"cert_options":            types.ObjectType{AttrTypes: InputMicrosoftCopilotCertOptionsAttrTypes()},
+	}
+}
+
+func (m InputMicrosoftCopilotModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.TenantID.IsNull() && !m.TenantID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TenantID)
+		if err != nil {
+			return nil, fmt.Errorf("convert tenant_id to API value: %v", err)
+		}
+		output["tenantId"] = value
+	}
+	if !m.ClientID.IsNull() && !m.ClientID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ClientID)
+		if err != nil {
+			return nil, fmt.Errorf("convert client_id to API value: %v", err)
+		}
+		output["clientId"] = value
+	}
+	if !m.Resource.IsNull() && !m.Resource.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Resource)
+		if err != nil {
+			return nil, fmt.Errorf("convert resource to API value: %v", err)
+		}
+		output["resource"] = value
+	}
+	if !m.AuthType.IsNull() && !m.AuthType.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthType)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_type to API value: %v", err)
+		}
+		output["authType"] = value
+	}
+	if !m.PlanType.IsNull() && !m.PlanType.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PlanType)
+		if err != nil {
+			return nil, fmt.Errorf("convert plan_type to API value: %v", err)
+		}
+		output["planType"] = value
+	}
+	if !m.CronSchedule.IsNull() && !m.CronSchedule.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CronSchedule)
+		if err != nil {
+			return nil, fmt.Errorf("convert cron_schedule to API value: %v", err)
+		}
+		output["cronSchedule"] = value
+	}
+	if !m.Earliest.IsNull() && !m.Earliest.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Earliest)
+		if err != nil {
+			return nil, fmt.Errorf("convert earliest to API value: %v", err)
+		}
+		output["earliest"] = value
+	}
+	if !m.Latest.IsNull() && !m.Latest.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Latest)
+		if err != nil {
+			return nil, fmt.Errorf("convert latest to API value: %v", err)
+		}
+		output["latest"] = value
+	}
+	if !m.PageSize.IsNull() && !m.PageSize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PageSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert page_size to API value: %v", err)
+		}
+		output["pageSize"] = value
+	}
+	if !m.AppClassFilter.IsNull() && !m.AppClassFilter.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AppClassFilter)
+		if err != nil {
+			return nil, fmt.Errorf("convert app_class_filter to API value: %v", err)
+		}
+		output["appClassFilter"] = value
+	}
+	if !m.FilterByLicense.IsNull() && !m.FilterByLicense.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.FilterByLicense)
+		if err != nil {
+			return nil, fmt.Errorf("convert filter_by_license to API value: %v", err)
+		}
+		output["filterByLicense"] = value
+	}
+	if !m.SkuIDs.IsNull() && !m.SkuIDs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SkuIDs)
+		if err != nil {
+			return nil, fmt.Errorf("convert sku_ids to API value: %v", err)
+		}
+		output["skuIds"] = value
+	}
+	if !m.ManageState.IsNull() && !m.ManageState.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ManageState)
+		if err != nil {
+			return nil, fmt.Errorf("convert manage_state to API value: %v", err)
+		}
+		output["manageState"] = value
+	}
+	if !m.Timeout.IsNull() && !m.Timeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Timeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert timeout to API value: %v", err)
+		}
+		output["timeout"] = value
+	}
+	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTime)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_time to API value: %v", err)
+		}
+		output["keepAliveTime"] = value
+	}
+	if !m.JobTimeout.IsNull() && !m.JobTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.JobTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert job_timeout to API value: %v", err)
+		}
+		output["jobTimeout"] = value
+	}
+	if !m.MaxMissedKeepAlives.IsNull() && !m.MaxMissedKeepAlives.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMissedKeepAlives)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_missed_keep_alives to API value: %v", err)
+		}
+		output["maxMissedKeepAlives"] = value
+	}
+	if !m.Ttl.IsNull() && !m.Ttl.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Ttl)
+		if err != nil {
+			return nil, fmt.Errorf("convert ttl to API value: %v", err)
+		}
+		output["ttl"] = value
+	}
+	if !m.IgnoreGroupJobsLimit.IsNull() && !m.IgnoreGroupJobsLimit.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IgnoreGroupJobsLimit)
+		if err != nil {
+			return nil, fmt.Errorf("convert ignore_group_jobs_limit to API value: %v", err)
+		}
+		output["ignoreGroupJobsLimit"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.RetryRules.IsNull() && !m.RetryRules.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RetryRules)
+		if err != nil {
+			return nil, fmt.Errorf("convert retry_rules to API value: %v", err)
+		}
+		output["retryRules"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.TextSecret.IsNull() && !m.TextSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
+		}
+		output["textSecret"] = value
+	}
+	if !m.CertOptions.IsNull() && !m.CertOptions.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CertOptions)
+		if err != nil {
+			return nil, fmt.Errorf("convert cert_options to API value: %v", err)
+		}
+		output["certOptions"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "microsoft_copilot"
+	}
+	return output, nil
+}
+
+func (m *InputMicrosoftCopilotModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMicrosoftCopilotCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputMicrosoftCopilotCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputMicrosoftCopilotConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMicrosoftCopilotConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMicrosoftCopilotPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputMicrosoftCopilotPqAttrTypes())
+	}
+	if item, ok := input["tenantId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert tenantId from API value: %v", err)
+		}
+		m.TenantID = value.(types.String)
+	} else {
+		m.TenantID = types.StringNull()
+	}
+	if item, ok := input["clientId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert clientId from API value: %v", err)
+		}
+		m.ClientID = value.(types.String)
+	} else {
+		m.ClientID = types.StringNull()
+	}
+	if item, ok := input["resource"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert resource from API value: %v", err)
+		}
+		m.Resource = value.(types.String)
+	} else {
+		m.Resource = types.StringNull()
+	}
+	if item, ok := input["authType"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert authType from API value: %v", err)
+		}
+		m.AuthType = value.(types.String)
+	} else {
+		m.AuthType = types.StringNull()
+	}
+	if item, ok := input["planType"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert planType from API value: %v", err)
+		}
+		m.PlanType = value.(types.String)
+	} else {
+		m.PlanType = types.StringNull()
+	}
+	if item, ok := input["cronSchedule"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert cronSchedule from API value: %v", err)
+		}
+		m.CronSchedule = value.(types.String)
+	} else {
+		m.CronSchedule = types.StringNull()
+	}
+	if item, ok := input["earliest"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert earliest from API value: %v", err)
+		}
+		m.Earliest = value.(types.String)
+	} else {
+		m.Earliest = types.StringNull()
+	}
+	if item, ok := input["latest"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert latest from API value: %v", err)
+		}
+		m.Latest = value.(types.String)
+	} else {
+		m.Latest = types.StringNull()
+	}
+	if item, ok := input["pageSize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert pageSize from API value: %v", err)
+		}
+		m.PageSize = value.(types.Int64)
+	} else {
+		m.PageSize = types.Int64Null()
+	}
+	if item, ok := input["appClassFilter"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert appClassFilter from API value: %v", err)
+		}
+		m.AppClassFilter = value.(types.List)
+	} else {
+		m.AppClassFilter = types.ListNull(types.StringType)
+	}
+	if item, ok := input["filterByLicense"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert filterByLicense from API value: %v", err)
+		}
+		m.FilterByLicense = value.(types.Bool)
+	} else {
+		m.FilterByLicense = types.BoolNull()
+	}
+	if item, ok := input["skuIds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert skuIds from API value: %v", err)
+		}
+		m.SkuIDs = value.(types.List)
+	} else {
+		m.SkuIDs = types.ListNull(types.StringType)
+	}
+	if item, ok := input["manageState"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert manageState from API value: %v", err)
+		}
+		m.ManageState = value.(types.Map)
+	} else {
+		m.ManageState = types.MapNull(types.StringType)
+	}
+	if item, ok := input["timeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeout from API value: %v", err)
+		}
+		m.Timeout = value.(types.Float64)
+	} else {
+		m.Timeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTime"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTime from API value: %v", err)
+		}
+		m.KeepAliveTime = value.(types.Float64)
+	} else {
+		m.KeepAliveTime = types.Float64Null()
+	}
+	if item, ok := input["jobTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert jobTimeout from API value: %v", err)
+		}
+		m.JobTimeout = value.(types.String)
+	} else {
+		m.JobTimeout = types.StringNull()
+	}
+	if item, ok := input["maxMissedKeepAlives"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMissedKeepAlives from API value: %v", err)
+		}
+		m.MaxMissedKeepAlives = value.(types.Float64)
+	} else {
+		m.MaxMissedKeepAlives = types.Float64Null()
+	}
+	if item, ok := input["ttl"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ttl from API value: %v", err)
+		}
+		m.Ttl = value.(types.String)
+	} else {
+		m.Ttl = types.StringNull()
+	}
+	if item, ok := input["ignoreGroupJobsLimit"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert ignoreGroupJobsLimit from API value: %v", err)
+		}
+		m.IgnoreGroupJobsLimit = value.(types.Bool)
+	} else {
+		m.IgnoreGroupJobsLimit = types.BoolNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputMicrosoftCopilotMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMicrosoftCopilotMetadataAttrTypes()})
+	}
+	if item, ok := input["retryRules"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMicrosoftCopilotRetryRulesAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert retryRules from API value: %v", err)
+		}
+		m.RetryRules = value.(types.Object)
+	} else {
+		m.RetryRules = types.ObjectNull(InputMicrosoftCopilotRetryRulesAttrTypes())
+	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Float64)
+	} else {
+		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["textSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert textSecret from API value: %v", err)
+		}
+		m.TextSecret = value.(types.String)
+	} else {
+		m.TextSecret = types.StringNull()
+	}
+	if item, ok := input["certOptions"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMicrosoftCopilotCertOptionsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert certOptions from API value: %v", err)
+		}
+		m.CertOptions = value.(types.Object)
+	} else {
+		m.CertOptions = types.ObjectNull(InputMicrosoftCopilotCertOptionsAttrTypes())
+	}
+	return nil
+}
+
 type InputOktaModel struct {
 	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
 	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
@@ -55415,6 +64245,5478 @@ func (m *InputOktaModel) unmarshalPayload(input map[string]any) error {
 		m.RetryRules = value.(types.Object)
 	} else {
 		m.RetryRules = types.ObjectNull(InputOktaRetryRulesAttrTypes())
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputAkamaiHecModel struct {
+	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                  types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                  types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens            types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq          types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout      types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex      types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	HecAcks               types.Bool    `tfsdk:"hec_acks" json:"hecAcks,omitempty"`
+	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputAkamaiHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputAkamaiHecCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputAkamaiHecPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecAuthTokensAttrTypes()}},
+		"tls":                      types.ObjectType{AttrTypes: InputAkamaiHecTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"hec_api":                  types.StringType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecMetadataAttrTypes()}},
+		"hec_acks":                 types.BoolType,
+		"description":              types.StringType,
+	}
+}
+
+func (m InputAkamaiHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.HecAcks.IsNull() && !m.HecAcks.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAcks)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_acks to API value: %v", err)
+		}
+		output["hecAcks"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "akamai_hec"
+	}
+	return output, nil
+}
+
+func (m *InputAkamaiHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAkamaiHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputAkamaiHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAkamaiHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAkamaiHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputAkamaiHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputAkamaiHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAkamaiHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputAkamaiHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAkamaiHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAkamaiHecMetadataAttrTypes()})
+	}
+	if item, ok := input["hecAcks"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert hecAcks from API value: %v", err)
+		}
+		m.HecAcks = value.(types.Bool)
+	} else {
+		m.HecAcks = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputPingIDentityPingoneModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputPingIDentityPingoneModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputPingIdentityPingoneCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputPingIdentityPingonePqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputPingIdentityPingoneTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputPingIDentityPingoneModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "ping_identity_pingone"
+	}
+	return output, nil
+}
+
+func (m *InputPingIDentityPingoneModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputPingIdentityPingoneCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputPingIdentityPingoneCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputPingIdentityPingoneConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputPingIdentityPingonePqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputPingIdentityPingonePqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputPingIdentityPingoneAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputPingIdentityPingoneTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputPingIdentityPingoneTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputPingIdentityPingoneMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputPingIdentityPingoneMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputGigamonHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputGigamonHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputGigamonHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputGigamonHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputGigamonHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputGigamonHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "gigamon_hec"
+	}
+	return output, nil
+}
+
+func (m *InputGigamonHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputGigamonHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputGigamonHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputGigamonHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputGigamonHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputGigamonHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputGigamonHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputGigamonHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputGigamonHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputGigamonHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputGigamonHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputVectraAiHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputVectraAiHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputVectraAiHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputVectraAiHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputVectraAiHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputVectraAiHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "vectra_ai_hec"
+	}
+	return output, nil
+}
+
+func (m *InputVectraAiHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputVectraAiHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputVectraAiHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputVectraAiHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputVectraAiHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputVectraAiHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputVectraAiHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputVectraAiHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputVectraAiHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputVectraAiHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputVectraAiHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputF5BigIpModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	HecAcks                   types.Bool    `tfsdk:"hec_acks" json:"hecAcks,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputF5BigIpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputF5BigIpCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputF5BigIpPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputF5BigIpTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"hec_acks":                     types.BoolType,
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputF5BigIpModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.HecAcks.IsNull() && !m.HecAcks.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAcks)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_acks to API value: %v", err)
+		}
+		output["hecAcks"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "f5_big_ip"
+	}
+	return output, nil
+}
+
+func (m *InputF5BigIpModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputF5BigIpCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputF5BigIpCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputF5BigIpConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputF5BigIpPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputF5BigIpPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputF5BigIpAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputF5BigIpTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputF5BigIpTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputF5BigIpMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputF5BigIpMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["hecAcks"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert hecAcks from API value: %v", err)
+		}
+		m.HecAcks = value.(types.Bool)
+	} else {
+		m.HecAcks = types.BoolNull()
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputBeyondtrustHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputBeyondtrustHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputBeyondtrustHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputBeyondtrustHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputBeyondtrustHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecMetadataAttrTypes()}},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputBeyondtrustHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "beyondtrust_hec"
+	}
+	return output, nil
+}
+
+func (m *InputBeyondtrustHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBeyondtrustHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputBeyondtrustHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputBeyondtrustHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBeyondtrustHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputBeyondtrustHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputBeyondtrustHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBeyondtrustHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputBeyondtrustHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputBeyondtrustHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputBeyondtrustHecMetadataAttrTypes()})
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputHashicorpHcpVaultDedicatedModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputHashicorpHcpVaultDedicatedModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputHashicorpHcpVaultDedicatedModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "hashicorp_hcp_vault_dedicated"
+	}
+	return output, nil
+}
+
+func (m *InputHashicorpHcpVaultDedicatedModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputHashicorpHcpVaultDedicatedCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputHashicorpHcpVaultDedicatedPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputHashicorpHcpVaultDedicatedTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputMimecastHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputMimecastHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputMimecastHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputMimecastHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputMimecastHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputMimecastHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "mimecast_hec"
+	}
+	return output, nil
+}
+
+func (m *InputMimecastHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMimecastHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputMimecastHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMimecastHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMimecastHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputMimecastHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputMimecastHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputMimecastHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputMimecastHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputMimecastHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMimecastHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputTrendMicroVisionOneModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputTrendMicroVisionOneModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputTrendMicroVisionOneCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputTrendMicroVisionOnePqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputTrendMicroVisionOneTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputTrendMicroVisionOneModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "trend_micro_vision_one"
+	}
+	return output, nil
+}
+
+func (m *InputTrendMicroVisionOneModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputTrendMicroVisionOneCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputTrendMicroVisionOneCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputTrendMicroVisionOneConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputTrendMicroVisionOnePqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputTrendMicroVisionOnePqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputTrendMicroVisionOneAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputTrendMicroVisionOneTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputTrendMicroVisionOneTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputTrendMicroVisionOneMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputTrendMicroVisionOneMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)

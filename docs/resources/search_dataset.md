@@ -60,6 +60,7 @@ resource "criblio_search_dataset" "my_searchdataset" {
 - `apihttp_dataset` (Attributes) (see [below for nested schema](#nestedatt--apihttp_dataset))
 - `dataset_api_log_analytics` (Attributes) (see [below for nested schema](#nestedatt--dataset_api_log_analytics))
 - `api_ms_graph_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_ms_graph_dataset))
+- `dataset_api_ngsiem` (Attributes) (see [below for nested schema](#nestedatt--dataset_api_ngsiem))
 - `api_okta_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_okta_dataset))
 - `api_open_search_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_open_search_dataset))
 - `api_tailscale_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_tailscale_dataset))
@@ -271,6 +272,25 @@ Optional:
 - `id` (String) Unique identifier for the Dataset.
 - `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_ms_graph_dataset--metadata))
+- `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
+- `search_version` (String) Search execution version for the Dataset.
+- `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `view_name` (String) Lakehouse cache view name, when applicable.
+
+<a id="nestedatt--dataset_api_ngsiem"></a>
+### Nested Schema for `dataset_api_ngsiem`
+
+Optional:
+
+- `query_string` (String) CQL query string submitted to the LogScale queryjobs API.
+- `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
+- `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--dataset_api_ngsiem--cache_connection_info))
+- `description` (String) Brief description of the Dataset.
+- `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
+- `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
+- `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
+- `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--dataset_api_ngsiem--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
@@ -624,6 +644,7 @@ Optional:
 <a id="nestedatt--apihttp_dataset--cache_connection_info"></a>
 <a id="nestedatt--dataset_api_log_analytics--cache_connection_info"></a>
 <a id="nestedatt--api_ms_graph_dataset--cache_connection_info"></a>
+<a id="nestedatt--dataset_api_ngsiem--cache_connection_info"></a>
 <a id="nestedatt--api_okta_dataset--cache_connection_info"></a>
 <a id="nestedatt--api_open_search_dataset--cache_connection_info"></a>
 <a id="nestedatt--api_tailscale_dataset--cache_connection_info"></a>
@@ -661,6 +682,7 @@ Optional:
 <a id="nestedatt--apihttp_dataset--metadata"></a>
 <a id="nestedatt--dataset_api_log_analytics--metadata"></a>
 <a id="nestedatt--api_ms_graph_dataset--metadata"></a>
+<a id="nestedatt--dataset_api_ngsiem--metadata"></a>
 <a id="nestedatt--api_okta_dataset--metadata"></a>
 <a id="nestedatt--api_open_search_dataset--metadata"></a>
 <a id="nestedatt--api_tailscale_dataset--metadata"></a>
@@ -697,6 +719,7 @@ Optional:
 <a id="nestedatt--apihttp_dataset--metadata--latest_run_info"></a>
 <a id="nestedatt--dataset_api_log_analytics--metadata--latest_run_info"></a>
 <a id="nestedatt--api_ms_graph_dataset--metadata--latest_run_info"></a>
+<a id="nestedatt--dataset_api_ngsiem--metadata--latest_run_info"></a>
 <a id="nestedatt--api_okta_dataset--metadata--latest_run_info"></a>
 <a id="nestedatt--api_open_search_dataset--metadata--latest_run_info"></a>
 <a id="nestedatt--api_tailscale_dataset--metadata--latest_run_info"></a>

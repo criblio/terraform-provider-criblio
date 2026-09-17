@@ -26,6 +26,7 @@ type NotificationModel struct {
 	Mode                types.String `tfsdk:"mode" json:"mode,omitempty"`
 	Pack                types.String `tfsdk:"pack" json:"pack,omitempty"`
 	TargetConfigs       types.List   `tfsdk:"target_configs" json:"targetConfigs,omitempty"`
+	TargetDetails       types.List   `tfsdk:"target_details" json:"targetDetails,omitempty"`
 	Targets             types.List   `tfsdk:"targets" json:"targets,omitempty"`
 	TemplateTargetPairs types.List   `tfsdk:"template_target_pairs" json:"templateTargetPairs,omitempty"`
 }
@@ -40,6 +41,7 @@ type NotificationResourceModel struct {
 	Mode                types.String   `tfsdk:"mode" json:"mode,omitempty"`
 	Pack                types.String   `tfsdk:"pack" json:"pack,omitempty"`
 	TargetConfigs       types.List     `tfsdk:"target_configs" json:"targetConfigs,omitempty"`
+	TargetDetails       types.List     `tfsdk:"target_details" json:"targetDetails,omitempty"`
 	Targets             []types.String `tfsdk:"targets" json:"targets,omitempty"`
 	TemplateTargetPairs types.List     `tfsdk:"template_target_pairs" json:"templateTargetPairs,omitempty"`
 }
@@ -54,6 +56,7 @@ type NotificationDataSourceModel struct {
 	Mode                types.String   `tfsdk:"mode" json:"mode,omitempty"`
 	Pack                types.String   `tfsdk:"pack" json:"pack,omitempty"`
 	TargetConfigs       types.List     `tfsdk:"target_configs" json:"targetConfigs,omitempty"`
+	TargetDetails       types.List     `tfsdk:"target_details" json:"targetDetails,omitempty"`
 	Targets             []types.String `tfsdk:"targets" json:"targets,omitempty"`
 	TemplateTargetPairs types.List     `tfsdk:"template_target_pairs" json:"templateTargetPairs,omitempty"`
 }
@@ -68,6 +71,7 @@ type NotificationAPIModel struct {
 	Mode                *string  `json:"mode,omitempty"`
 	Pack                *string  `json:"pack,omitempty"`
 	TargetConfigs       any      `json:"targetConfigs,omitempty"`
+	TargetDetails       any      `json:"targetDetails,omitempty"`
 	Targets             []string `json:"targets,omitempty"`
 	TemplateTargetPairs any      `json:"templateTargetPairs,omitempty"`
 }
@@ -131,33 +135,93 @@ func NotificationMetadataAttrTypes() map[string]attr.Type {
 }
 
 type NotificationTargetConfigsModel struct {
-	ID types.String `tfsdk:"id" json:"id,omitempty"`
+	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	ID   types.String `tfsdk:"id" json:"id,omitempty"`
 }
 
 type NotificationTargetConfigsAPIModel struct {
-	ID *string `json:"id,omitempty"`
+	Conf any     `json:"conf,omitempty"`
+	ID   *string `json:"id,omitempty"`
 }
 
 func NotificationTargetConfigsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id": types.StringType,
+		"conf": types.ObjectType{AttrTypes: NotificationTargetConfigsConfAttrTypes()},
+		"id":   types.StringType,
+	}
+}
+
+type NotificationTargetConfigsConfModel struct {
+	Body           types.String `tfsdk:"body" json:"body,omitempty"`
+	EmailRecipient types.Object `tfsdk:"email_recipient" json:"emailRecipient,omitempty"`
+	Subject        types.String `tfsdk:"subject" json:"subject,omitempty"`
+}
+
+type NotificationTargetConfigsConfAPIModel struct {
+	Body           *string `json:"body,omitempty"`
+	EmailRecipient any     `json:"emailRecipient,omitempty"`
+	Subject        *string `json:"subject,omitempty"`
+}
+
+func NotificationTargetConfigsConfAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"body":            types.StringType,
+		"email_recipient": types.ObjectType{AttrTypes: NotificationTargetConfigsConfEmailRecipientAttrTypes()},
+		"subject":         types.StringType,
+	}
+}
+
+type NotificationTargetConfigsConfEmailRecipientModel struct {
+	Bcc types.String `tfsdk:"bcc" json:"bcc,omitempty"`
+	Cc  types.String `tfsdk:"cc" json:"cc,omitempty"`
+	To  types.String `tfsdk:"to" json:"to,omitempty"`
+}
+
+type NotificationTargetConfigsConfEmailRecipientAPIModel struct {
+	Bcc *string `json:"bcc,omitempty"`
+	Cc  *string `json:"cc,omitempty"`
+	To  *string `json:"to,omitempty"`
+}
+
+func NotificationTargetConfigsConfEmailRecipientAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"bcc": types.StringType,
+		"cc":  types.StringType,
+		"to":  types.StringType,
+	}
+}
+
+type NotificationTargetDetailsModel struct {
+	ID   types.String `tfsdk:"id" json:"id,omitempty"`
+	Type types.String `tfsdk:"type" json:"type,omitempty"`
+}
+
+type NotificationTargetDetailsAPIModel struct {
+	ID   *string `json:"id,omitempty"`
+	Type *string `json:"type,omitempty"`
+}
+
+func NotificationTargetDetailsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":   types.StringType,
+		"type": types.StringType,
 	}
 }
 
 type NotificationTemplateTargetPairsModel struct {
-	TemplateID types.String `tfsdk:"template_id" json:"templateId,omitempty"`
 	TargetID   types.String `tfsdk:"target_id" json:"targetId,omitempty"`
+	TemplateID types.String `tfsdk:"template_id" json:"templateId,omitempty"`
 }
 
 type NotificationTemplateTargetPairsAPIModel struct {
-	TemplateID *string `json:"templateId,omitempty"`
 	TargetID   *string `json:"targetId,omitempty"`
+	TemplateID *string `json:"templateId,omitempty"`
 }
 
 func NotificationTemplateTargetPairsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"template_id": types.StringType,
 		"target_id":   types.StringType,
+		"template_id": types.StringType,
 	}
 }
 
@@ -423,6 +487,13 @@ func (m NotificationModel) MarshalJSON() ([]byte, error) {
 		}
 		output["targetConfigs"] = value
 	}
+	if !m.TargetDetails.IsNull() && !m.TargetDetails.IsUnknown() {
+		value, err := NotificationTerraformValueToJSON(m.TargetDetails)
+		if err != nil {
+			return nil, fmt.Errorf("convert target_details to API value: %v", err)
+		}
+		output["targetDetails"] = value
+	}
 	if !m.Targets.IsNull() && !m.Targets.IsUnknown() {
 		value, err := NotificationTerraformValueToJSON(m.Targets)
 		if err != nil {
@@ -494,6 +565,15 @@ func (m *NotificationModel) UnmarshalJSON(data []byte) error {
 		m.TargetConfigs = value.(types.List)
 	} else {
 		m.TargetConfigs = types.ListNull(types.ObjectType{AttrTypes: NotificationTargetConfigsAttrTypes()})
+	}
+	if input.TargetDetails != nil {
+		value, err := NotificationAPIValueToTerraformValue(input.TargetDetails, types.ListType{ElemType: types.ObjectType{AttrTypes: NotificationTargetDetailsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert targetDetails from API value: %v", err)
+		}
+		m.TargetDetails = value.(types.List)
+	} else {
+		m.TargetDetails = types.ListNull(types.ObjectType{AttrTypes: NotificationTargetDetailsAttrTypes()})
 	}
 	if input.Targets != nil {
 		value, diags := types.ListValueFrom(context.Background(), types.StringType, input.Targets)
