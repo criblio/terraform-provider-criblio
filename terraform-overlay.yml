@@ -3480,6 +3480,9 @@ actions:
   - target: "$.components.schemas.Notification.properties.targetConfigs"
     update:
       x-terraform-optional-computed: true
+  - target: "$.components.schemas.NotificationTargetConfig.properties.conf"
+    update:
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.Notification.properties.conf"
     update:
       x-terraform-optional-computed: true

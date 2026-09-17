@@ -75,11 +75,27 @@ func pruneNotificationTargetConfigs(attrs map[string]hcl.Value) {
 			continue
 		}
 		conf, ok := item.Map["conf"]
-		if ok && conf.Kind == hcl.KindMap && len(conf.Map) == 0 {
+		if ok && conf.Kind == hcl.KindMap && !hasNonNullValue(conf) {
 			delete(item.Map, "conf")
 		}
 	}
 	attrs["target_configs"] = targetConfigs
+}
+
+func hasNonNullValue(value hcl.Value) bool {
+	switch value.Kind {
+	case hcl.KindNull:
+		return false
+	case hcl.KindMap:
+		for _, child := range value.Map {
+			if hasNonNullValue(child) {
+				return true
+			}
+		}
+		return false
+	default:
+		return true
+	}
 }
 
 // hclOptionsForType returns HCL conversion options for the given resource type,

@@ -965,7 +965,7 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 													"conf": schema.SingleNestedAttribute{
 														Required:    false,
 														Optional:    true,
-														Computed:    false,
+														Computed:    true,
 														Description: `Simple Mail Transfer Protocol (SMTP) configuration for the Notification target.`,
 														Attributes: map[string]schema.Attribute{
 															"body": schema.StringAttribute{
