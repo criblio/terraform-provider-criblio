@@ -74,7 +74,7 @@ resource "criblio_monitor" "example" {
 - `description` (String) Optional human-readable description of the monitor.
 - `search_mode` (String) Logs monitors only. Distinguishes authoring a fresh search ('new') from selecting a saved one ('saved'). Defaults to 'new' when omitted; ignored for non-logs monitor types.
 - `silence` (List of String) IDs of silence windows that suppress this monitor's alerts.
-- `template_params` (Map of String) Template parameter bindings keyed by query label. Baseline values come from the query's shared configs; non-empty values act as user overrides.
+- `template_params` (String) Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).
 - `unit` (String) Optional unit label applied to the monitor's values.
 
 ### Optional

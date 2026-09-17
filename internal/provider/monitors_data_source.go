@@ -249,10 +249,10 @@ func (d *MonitorsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 							Description: `IDs of silence windows that suppress this monitor's alerts.`,
 							ElementType: types.StringType,
 						},
-						"template_params": schema.MapAttribute{
+						"template_params": schema.StringAttribute{
 							Computed:    true,
-							Description: `Template parameter bindings keyed by query label. Baseline values come from the query's shared configs; non-empty values act as user overrides.`,
-							ElementType: types.StringType,
+							Description: `Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).`,
+							CustomType:  jsontypes.NormalizedType{},
 						},
 						"type": schema.StringAttribute{
 							Computed:    true,
@@ -685,7 +685,7 @@ func MonitorsItemAttrTypes() map[string]attr.Type {
 		"query":                              types.MapType{ElemType: types.ObjectType{AttrTypes: MonitorQueryAttrTypes()}},
 		"search_mode":                        types.StringType,
 		"silence":                            types.ListType{ElemType: types.StringType},
-		"template_params":                    types.MapType{ElemType: types.StringType},
+		"template_params":                    jsontypes.NormalizedType{},
 		"type":                               types.StringType,
 		"unit":                               types.StringType,
 		"anomaly_config":                     types.ObjectType{AttrTypes: AnomalyConfigModelAttrTypes()},
