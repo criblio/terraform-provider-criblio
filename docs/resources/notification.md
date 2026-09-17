@@ -91,13 +91,10 @@ Optional:
 <a id="nestedatt--target_configs--conf"></a>
 ### Nested Schema for `target_configs.conf`
 
-Required:
-
-- `email_recipient` (Attributes) Email recipient settings for the Notification target. (see [below for nested schema](#nestedatt--target_configs--conf--email_recipient))
-
 Optional:
 
 - `body` (String) Email body.
+- `email_recipient` (Attributes) Email recipient settings for the Notification target. (see [below for nested schema](#nestedatt--target_configs--conf--email_recipient))
 - `subject` (String) Email subject.
 
 <a id="nestedatt--target_configs--conf--email_recipient"></a>

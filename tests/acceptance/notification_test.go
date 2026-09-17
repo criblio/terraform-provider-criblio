@@ -19,6 +19,14 @@ func TestNotification(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
+				// A non-email target may provide an empty override object. This
+				// guards against making the SMTP-only email_recipient field
+				// mandatory for every notification target type.
+				Config:             notificationConfigWithoutEmailRecipient(),
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: true,
+			},
+			{
 				Config: notificationConfig(false, "60s"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "id", "test_notification"),
@@ -47,6 +55,26 @@ func TestNotification(t *testing.T) {
 			},
 		},
 	})
+}
+
+func notificationConfigWithoutEmailRecipient() string {
+	return `resource "criblio_notification" "my_notification" {
+  condition = "high-volume"
+  group     = "default"
+  id        = "test_notification"
+
+  conf = {
+    name        = "cribl_http:test_search_source"
+    time_window = "60s"
+    data_volume = "1GB"
+  }
+
+  target_configs = [{
+    id   = "non-email-target"
+    conf = {}
+  }]
+}
+`
 }
 
 func notificationConfig(disabled bool, timeWindow string) string {

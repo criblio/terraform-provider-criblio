@@ -59,4 +59,13 @@ resource "criblio_notification" "source_high_volume" {
     criblio_notification_target.alerts.id,
     criblio_notification_target.slack_alerts.id,
   ]
+  # Non-email targets can use an override without configuring email_recipient.
+  target_configs = [
+    {
+      id = criblio_notification_target.slack_alerts.id
+      conf = {
+        include_results = true
+      }
+    },
+  ]
 }
