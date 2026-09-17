@@ -3674,3 +3674,89 @@ actions:
       x-terraform-optional-computed: true
       x-terraform-use-state-for-unknown: true
       x-terraform-force-new-always: true
+
+  # Lakehouse engine metrics monitors are global CRUD objects. Keep managedBy
+  # fixed so monitors created by Terraform remain protected from UI mutation.
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors.get"
+    update:
+      x-terraform-list: Monitor
+      x-terraform-list-name: Monitors
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.get"
+    update:
+      x-terraform-read: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.patch"
+    update:
+      x-terraform-update: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.delete"
+    update:
+      x-terraform-delete: Monitor
+  - target: "$.components.schemas.AetosMonitorConf.properties.managedBy"
+    update:
+      const: terraform
+      default: terraform
+      x-terraform-fixed-value: terraform
+  - target: "$.components.schemas.AetosMonitorConf.properties.$profileRef"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.Inheritable.properties.$configRefs"
+    update:
+      x-terraform-ignore: true
+  # Name the anonymous notification union branches so codegen can expose their
+  # distinct policy and direct-target payloads as Terraform attributes.
+  - target: "$.components.schemas"
+    update:
+      MonitorPolicyNotificationConfig:
+        type: object
+        properties:
+          config:
+            type: array
+            items:
+              $ref: "#/components/schemas/NotificationPolicy"
+            description: Notification policy entries for policy-based routing.
+          enabled:
+            type: boolean
+            description: Whether notifications are enabled for this monitor.
+          type:
+            type: string
+            const: policy
+            description: "Type of notification configuration: policy-based routing."
+        required:
+          - config
+          - enabled
+          - type
+      MonitorTargetNotificationConfig:
+        type: object
+        properties:
+          config:
+            type: array
+            items:
+              $ref: "#/components/schemas/TemplateTargetPair"
+            description: Template and target pairs for direct target-based delivery.
+          enabled:
+            type: boolean
+            description: Whether notifications are enabled for this monitor.
+          type:
+            type: string
+            const: target
+            description: "Type of notification configuration: direct target-based delivery."
+        required:
+          - config
+          - enabled
+          - type
+  - target: "$.components.schemas.NotificationConfig"
+    replace:
+      oneOf:
+        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
+        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+      description: Notification settings for a monitor.
+      title: NotificationConfig
+  - target: "$.components.schemas.InheritableINotificationConfig"
+    replace:
+      oneOf:
+        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
+        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+        - $ref: "#/components/schemas/Inheritable"
