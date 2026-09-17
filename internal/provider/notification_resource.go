@@ -193,9 +193,9 @@ func (r *NotificationResource) Schema(_ context.Context, _ resource.SchemaReques
 									Description: `Email body.`,
 								},
 								"email_recipient": schema.SingleNestedAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
 									Description: `Email recipient settings for the Notification target.`,
 									Attributes: map[string]schema.Attribute{
 										"bcc": schema.StringAttribute{

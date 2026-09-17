@@ -3483,6 +3483,13 @@ actions:
   - target: "$.components.schemas.NotificationTargetConfig.properties.conf"
     update:
       x-terraform-optional-computed: true
+  # The upstream schema models every target config as SMTP and requires an
+  # email recipient. Existing non-SMTP notifications (for example, Slack)
+  # legitimately configure conf without emailRecipient, so keep it optional
+  # in Terraform for backward compatibility.
+  - target: "$.components.schemas.NotificationSmtpTargetConfig.properties.emailRecipient"
+    update:
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.Notification.properties.conf"
     update:
       x-terraform-optional-computed: true

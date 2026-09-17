@@ -305,13 +305,10 @@ Optional:
 <a id="nestedatt--schedule--notifications--items--target_configs--conf"></a>
 ### Nested Schema for `schedule.notifications.items.target_configs.conf`
 
-Required:
-
-- `email_recipient` (Attributes) Email recipient settings for the Notification target. (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs--conf--email_recipient))
-
 Optional:
 
 - `body` (String) Email body.
+- `email_recipient` (Attributes) Email recipient settings for the Notification target. (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs--conf--email_recipient))
 - `subject` (String) Email subject.
 
 <a id="nestedatt--schedule--notifications--items--target_configs--conf--email_recipient"></a>
