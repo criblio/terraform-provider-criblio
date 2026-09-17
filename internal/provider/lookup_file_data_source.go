@@ -55,6 +55,10 @@ func (d *LookupFileDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 				Computed:    true,
 				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
 			},
+			"modified": schema.Float64Attribute{
+				Computed:    true,
+				Description: `Last modification time of the Lookup file, in milliseconds since the Unix epoch.`,
+			},
 			"pending_task": schema.SingleNestedAttribute{
 				Computed:    true,
 				Description: `Details of the pending background task for this Lookup, if one is in progress.`,

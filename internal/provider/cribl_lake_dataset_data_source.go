@@ -57,7 +57,7 @@ func (d *CriblLakeDatasetDataSource) Schema(_ context.Context, _ datasource.Sche
 			},
 			"lake_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The <code>id</code> of the Lake to create the Lake Dataset in.`,
+				Description: `The <code>id</code> of the Lake to create the Lake Datasets in.`,
 			},
 			"retention_period_in_days": schema.Int64Attribute{
 				Computed:    true,

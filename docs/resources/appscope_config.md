@@ -273,29 +273,29 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
 
 ### Required
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--config))
-- `description` (String)
+- `config` (Attributes) AppScope configuration for the library entry, including any custom overrides. (see [below for nested schema](#nestedatt--config))
+- `description` (String) Brief description of the AppScope Config.
 - `group_id` (String) Worker group ID.
-- `id` (String)
-- `lib` (String)
+- `id` (String) Unique identifier for the AppScope Config.
+- `lib` (String) Library metadata for the AppScope Config.
 
 ### Optional
 
-- `tags` (String)
+- `tags` (String) Tags associated with the AppScope Config.
 
 <a id="nestedatt--config"></a>
 ### Nested Schema for `config`
 
 Optional:
 
-- `cribl` (Attributes) (see [below for nested schema](#nestedatt--config--cribl))
+- `cribl` (Attributes) Cribl integration settings for AppScope data delivery. (see [below for nested schema](#nestedatt--config--cribl))
 - `custom` (Attributes List) (see [below for nested schema](#nestedatt--config--custom))
-- `event` (Attributes) (see [below for nested schema](#nestedatt--config--event))
-- `libscope` (Attributes) (see [below for nested schema](#nestedatt--config--libscope))
-- `metric` (Attributes) (see [below for nested schema](#nestedatt--config--metric))
-- `payload` (Attributes) (see [below for nested schema](#nestedatt--config--payload))
-- `protocol` (Attributes List) (see [below for nested schema](#nestedatt--config--protocol))
-- `tags` (Attributes List) (see [below for nested schema](#nestedatt--config--tags))
+- `event` (Attributes) Event collection settings for AppScope. (see [below for nested schema](#nestedatt--config--event))
+- `libscope` (Attributes) Library-level settings for the AppScope instrumentation library. (see [below for nested schema](#nestedatt--config--libscope))
+- `metric` (Attributes) Metric collection settings for AppScope. (see [below for nested schema](#nestedatt--config--metric))
+- `payload` (Attributes) Payload capture settings. (see [below for nested schema](#nestedatt--config--payload))
+- `protocol` (Attributes List) Custom protocol definitions for AppScope protocol detection. (see [below for nested schema](#nestedatt--config--protocol))
+- `tags` (Attributes List) Custom tags to attach to AppScope events. (see [below for nested schema](#nestedatt--config--tags))
 
 <a id="nestedatt--config--cribl"></a>
 <a id="nestedatt--config--custom--config--cribl"></a>
@@ -303,10 +303,10 @@ Optional:
 
 Optional:
 
-- `authtoken` (String)
-- `enable` (Boolean)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--cribl--transport))
-- `use_scope_source_transport` (Boolean)
+- `authtoken` (String) Authentication token used when sending AppScope data to Cribl.
+- `enable` (Boolean) If <code>true</code>, send AppScope data to Cribl. Otherwise, <code>false</code>.
+- `transport` (Attributes) Transport used to send AppScope data to Cribl. (see [below for nested schema](#nestedatt--config--cribl--transport))
+- `use_scope_source_transport` (Boolean) If <code>true</code>, use the AppScope Source transport to send data to Cribl. Otherwise, <code>false</code>.
 
 <a id="nestedatt--config--cribl--transport"></a>
 <a id="nestedatt--config--custom--config--cribl--transport"></a>
@@ -320,12 +320,12 @@ Optional:
 
 Optional:
 
-- `buffer` (String)
-- `host` (String)
-- `path` (String)
-- `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--cribl--transport--tls))
-- `type` (String)
+- `buffer` (String) Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.
+- `host` (String) Hostname or IP address of the destination to which AppScope sends data.
+- `path` (String) Filesystem path or Unix domain socket path used for the transport.
+- `port` (Integer) Port number of the destination to which AppScope sends data.
+- `tls` (Attributes) TLS settings for the transport connection to the destination. (see [below for nested schema](#nestedatt--config--cribl--transport--tls))
+- `type` (String) Type of transport used to send AppScope data.
 
 <a id="nestedatt--config--cribl--transport--tls"></a>
 <a id="nestedatt--config--custom--config--cribl--transport--tls"></a>
@@ -339,50 +339,48 @@ Optional:
 
 Optional:
 
-- `cacertpath` (String)
-- `enable` (Boolean)
-- `validateserver` (Boolean)
+- `cacertpath` (String) Filesystem path to the CA certificate used to validate the destination server.
+- `enable` (Boolean) If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.
+- `validateserver` (Boolean) If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.
 
 <a id="nestedatt--config--custom"></a>
 ### Nested Schema for `config.custom`
 
 Required:
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config))
+- `config` (Attributes) AppScope configuration applied when the custom matcher matches. (see [below for nested schema](#nestedatt--config--custom--config))
 
 Optional:
 
-- `ancestor` (String)
-- `arg` (String)
-- `env` (String)
-- `hostname` (String)
-- `procname` (String)
-- `username` (String)
+- `ancestor` (String) Ancestor process to match when applying the custom AppScope configuration.
+- `arg` (String) Process argument to match when applying the custom AppScope configuration.
+- `env` (String) Environment variable to match when applying the custom AppScope configuration.
+- `hostname` (String) Hostname to match when applying the custom AppScope configuration.
+- `procname` (String) Process name to match when applying the custom AppScope configuration.
+- `username` (String) Username to match when applying the custom AppScope configuration.
 
 <a id="nestedatt--config--custom--config"></a>
 ### Nested Schema for `config.custom.config`
 
 Optional:
 
-- `cribl` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--cribl))
-- `event` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event))
-- `libscope` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope))
-- `metric` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric))
-- `payload` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--payload))
-- `protocol` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--protocol))
-- `tags` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--tags))
+- `cribl` (Attributes) Cribl integration settings for AppScope data delivery. (see [below for nested schema](#nestedatt--config--custom--config--cribl))
+- `event` (Attributes) Event collection settings for AppScope. (see [below for nested schema](#nestedatt--config--custom--config--event))
+- `libscope` (Attributes) Library-level settings for the AppScope instrumentation library. (see [below for nested schema](#nestedatt--config--custom--config--libscope))
+- `metric` (Attributes) Metric collection settings for AppScope. (see [below for nested schema](#nestedatt--config--custom--config--metric))
+- `payload` (Attributes) Payload capture settings. (see [below for nested schema](#nestedatt--config--custom--config--payload))
+- `protocol` (Attributes List) Custom protocol definitions for AppScope protocol detection. (see [below for nested schema](#nestedatt--config--custom--config--protocol))
+- `tags` (Attributes List) Custom tags to attach to AppScope events. (see [below for nested schema](#nestedatt--config--custom--config--tags))
 
 <a id="nestedatt--config--custom--config--event"></a>
-<a id="nestedatt--config--custom--config--metric"></a>
 <a id="nestedatt--config--event"></a>
-<a id="nestedatt--config--metric"></a>
 ### Nested Schema for `config.custom.config.event`
 
 Required:
 
-- `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--transport))
+- `enable` (Boolean) If <code>true</code>, enable event collection. Otherwise, <code>false</code>.
+- `format` (Attributes) Formatting options for AppScope event output. (see [below for nested schema](#nestedatt--config--custom--config--event--format))
+- `transport` (Attributes) Transport used to send AppScope event data. (see [below for nested schema](#nestedatt--config--custom--config--event--transport))
 - `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--event--watch))
 
 <a id="nestedatt--config--custom--config--event--format"></a>
@@ -391,8 +389,8 @@ Required:
 
 Required:
 
-- `enhancefs` (Boolean)
-- `maxeventpersec` (Number)
+- `enhancefs` (Boolean) If <code>true</code>, enhance file system events with additional metadata. Otherwise, <code>false</code>.
+- `maxeventpersec` (Integer) Maximum number of events per second that AppScope emits.
 
 <a id="nestedatt--config--custom--config--event--watch"></a>
 <a id="nestedatt--config--event--watch"></a>
@@ -400,16 +398,16 @@ Required:
 
 Required:
 
-- `type` (String)
+- `type` (String) Type of entity to watch.
 
 Optional:
 
-- `allowbinary` (Boolean)
-- `enabled` (Boolean)
-- `field` (String)
-- `headers` (List of String)
-- `name` (String)
-- `value` (String)
+- `allowbinary` (Boolean) If <code>true</code>, allow binary data for this watch entry. Otherwise, <code>false</code>.
+- `enabled` (Boolean) If <code>true</code>, enable this watch entry. Otherwise, <code>false</code>.
+- `field` (String) Field to match for this watch entry.
+- `headers` (List of String) Headers to match for this watch entry.
+- `name` (String) Name of the watch entry.
+- `value` (String) Value to match for this watch entry.
 
 <a id="nestedatt--config--custom--config--libscope"></a>
 <a id="nestedatt--config--libscope"></a>
@@ -417,10 +415,10 @@ Optional:
 
 Optional:
 
-- `commanddir` (String)
-- `configevent` (Boolean)
-- `log` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log))
-- `summaryperiod` (Number)
+- `commanddir` (String) Directory that AppScope monitors for command files.
+- `configevent` (Boolean) If <code>true</code>, emit a configuration event describing the current AppScope settings. Otherwise, <code>false</code>.
+- `log` (Attributes) Logging settings for the AppScope library. (see [below for nested schema](#nestedatt--config--custom--config--libscope--log))
+- `summaryperiod` (Integer) Interval, in seconds, at which AppScope emits summary metrics.
 
 <a id="nestedatt--config--custom--config--libscope--log"></a>
 <a id="nestedatt--config--libscope--log"></a>
@@ -428,8 +426,19 @@ Optional:
 
 Optional:
 
-- `level` (String)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log--transport))
+- `level` (String) Minimum severity level for AppScope library log messages.
+- `transport` (Attributes) Transport used to send AppScope library log messages. (see [below for nested schema](#nestedatt--config--custom--config--libscope--log--transport))
+
+<a id="nestedatt--config--custom--config--metric"></a>
+<a id="nestedatt--config--metric"></a>
+### Nested Schema for `config.custom.config.metric`
+
+Required:
+
+- `enable` (Boolean) If <code>true</code>, enable metric collection. Otherwise, <code>false</code>.
+- `format` (Attributes) Formatting options for AppScope metric output. (see [below for nested schema](#nestedatt--config--custom--config--metric--format))
+- `transport` (Attributes) Transport used to send AppScope metric data. (see [below for nested schema](#nestedatt--config--custom--config--metric--transport))
+- `watch` (Attributes List) List of metric watch expressions that control which metrics AppScope collects. (see [below for nested schema](#nestedatt--config--custom--config--metric--watch))
 
 <a id="nestedatt--config--custom--config--metric--format"></a>
 <a id="nestedatt--config--metric--format"></a>
@@ -437,10 +446,10 @@ Optional:
 
 Optional:
 
-- `statsdmaxlen` (Number)
-- `statsdprefix` (String)
-- `type` (String)
-- `verbosity` (Number)
+- `statsdmaxlen` (Integer) Maximum length, in bytes, of a StatsD metric string.
+- `statsdprefix` (String) Prefix prepended to StatsD metric names.
+- `type` (String) Format in which AppScope emits metrics.
+- `verbosity` (Integer) Verbosity level for the emitted metrics.
 
 <a id="nestedatt--config--custom--config--metric--watch"></a>
 <a id="nestedatt--config--metric--watch"></a>
@@ -456,8 +465,8 @@ Optional:
 
 Required:
 
-- `dir` (String)
-- `enable` (Boolean)
+- `dir` (String) Directory in which AppScope writes captured payload data.
+- `enable` (Boolean) If <code>true</code>, enable payload capture. Otherwise, <code>false</code>.
 
 <a id="nestedatt--config--custom--config--protocol"></a>
 <a id="nestedatt--config--protocol"></a>
@@ -465,12 +474,12 @@ Required:
 
 Required:
 
-- `binary` (Boolean)
-- `detect` (Boolean)
-- `len` (Number)
-- `name` (String)
-- `payload` (Boolean)
-- `regex` (String)
+- `binary` (Boolean) If <code>true</code>, treat the protocol payload as binary. Otherwise, <code>false</code>.
+- `detect` (Boolean) If <code>true</code>, enable automatic detection of this protocol. Otherwise, <code>false</code>.
+- `len` (Integer) Number of bytes to examine when detecting the protocol.
+- `name` (String) Name of the protocol.
+- `payload` (Boolean) If <code>true</code>, capture the payload for this protocol. Otherwise, <code>false</code>.
+- `regex` (String) Regular expression used to detect the protocol.
 
 <a id="nestedatt--config--custom--config--tags"></a>
 <a id="nestedatt--config--tags"></a>
@@ -478,8 +487,8 @@ Required:
 
 Required:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Name of the tag.
+- `value` (String) Value of the tag.
 
 ## Import
 

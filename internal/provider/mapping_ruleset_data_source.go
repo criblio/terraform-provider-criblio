@@ -37,7 +37,7 @@ func (d *MappingRulesetDataSource) Schema(_ context.Context, _ datasource.Schema
 		Attributes: map[string]schema.Attribute{
 			"active": schema.BoolAttribute{
 				Computed:    true,
-				Description: `If <code>true</code>, the Mapping Ruleset is active. Otherwise, <code>false</code>.`,
+				Description: `Whether the Mapping Ruleset is active.`,
 			},
 			"conf": schema.SingleNestedAttribute{
 				Computed:    true,
@@ -50,7 +50,7 @@ func (d *MappingRulesetDataSource) Schema(_ context.Context, _ datasource.Schema
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Function type. Always <code>eval</code> for Mapping Rules.`,
+									Description: `Function type for the Mapping Rule.`,
 								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
@@ -58,11 +58,11 @@ func (d *MappingRulesetDataSource) Schema(_ context.Context, _ datasource.Schema
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
-									Description: `If <code>true</code>, the function is disabled. Otherwise, <code>false</code>.`,
+									Description: `Disable this Mapping Rule.`,
 								},
 								"final": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Always <code>true</code> to ensure that every Mapping Rule is final. Once a Mapping Rule matches (its <code>filter</code> evaluates to <code>true</code>), no further Mapping Rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.`,
+									Description: `When a Mapping Rule matches, no further rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -79,11 +79,11 @@ func (d *MappingRulesetDataSource) Schema(_ context.Context, _ datasource.Schema
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
 														Computed:    true,
-														Description: `Always <code>groupId</code> to specify the assignment type.`,
+														Description: `Assignment type for the Mapping Rule.`,
 													},
 													"value": schema.StringAttribute{
 														Computed:    true,
-														Description: `The <code>id</code> of the group to assign the Worker or Edge Node to if the Mapping Rule applies.`,
+														Description: `The group to assign the Worker or Edge Node to when the Mapping Rule matches.`,
 													},
 												},
 											},

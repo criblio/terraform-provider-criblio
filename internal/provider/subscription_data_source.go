@@ -40,14 +40,17 @@ func (d *SubscriptionDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Description: `Consumers are now defined on projects instead of subscriptions.`,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Array of connections that route data from the consumer through a Pipeline or Pack to a Destination.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `The <code>id</code> of the Destination to send data to.`,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `The <code>id</code> of the Pipeline or Pack used to process data before it is sent to the Destination.`,
 								},
 							},
 						},
@@ -57,28 +60,34 @@ func (d *SubscriptionDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						Description: `It should be removed as a consumer is present or absent.`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of the Subscription consumer.`,
 					},
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Subscription.`,
 			},
 			"disabled": schema.BoolAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `If <code>true</code>, disable the Subscription. Otherwise, <code>false</code>.`,
 			},
 			"filter": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `JavaScript expression that selects a subset of events to be processed in the Pipeline.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Subscription.`,
 			},
 			"pipeline": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `The <code>id</code> of the Pipeline where matching events are processed.`,
 			},
 		},
 	}

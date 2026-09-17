@@ -210,6 +210,125 @@ func TestParseOneOfVariants(t *testing.T) {
 	}
 }
 
+func TestParseNestedPropertyOneOfVariants(t *testing.T) {
+	var document yaml.Node
+	err := yaml.Unmarshal([]byte(`
+components:
+  schemas:
+    Monitor:
+      type: object
+      required:
+        - detectionConfig
+      properties:
+        type:
+          type: string
+        detectionConfig:
+          $ref: "#/components/schemas/DetectionConfig"
+          x-terraform-discriminator-at-parent: true
+    DetectionConfig:
+      oneOf:
+        - $ref: "#/components/schemas/AnomalyConfig"
+        - $ref: "#/components/schemas/ChangeConfig"
+      discriminator:
+        propertyName: type
+        mapping:
+          anomaly: "#/components/schemas/AnomalyConfig"
+          change: "#/components/schemas/ChangeConfig"
+    AnomalyConfig:
+      type: object
+      properties:
+        algorithm:
+          type: string
+    ChangeConfig:
+      type: object
+      properties:
+        compareAgainst:
+          type: string
+`), &document)
+	if err != nil {
+		t.Fatalf("unmarshal fixture: %v", err)
+	}
+
+	root := document.Content[0]
+	components, ok := mappingValue(root, "components")
+	if !ok {
+		t.Fatal("components not found")
+	}
+	schemas, ok := mappingValue(components, "schemas")
+	if !ok {
+		t.Fatal("schemas not found")
+	}
+	monitor, ok := mappingValue(schemas, "Monitor")
+	if !ok {
+		t.Fatal("Monitor schema not found")
+	}
+
+	requestFields := map[string]bool{"detectionConfig": true}
+	_, variants, err := parseSchemaFields("Monitor", monitor, schemas, requestFields, requestFields, nil)
+	if err != nil {
+		t.Fatalf("parseSchemaFields returned error: %v", err)
+	}
+	if len(variants) != 2 {
+		t.Fatalf("variant count = %d, want 2", len(variants))
+	}
+	for _, variant := range variants {
+		if variant.NestUnder != "detectionConfig" {
+			t.Fatalf("%s NestUnder = %q, want detectionConfig", variant.APIName, variant.NestUnder)
+		}
+		if variant.DiscriminatorField != "type" {
+			t.Fatalf("%s discriminator = %q, want type", variant.APIName, variant.DiscriminatorField)
+		}
+		if !variant.DiscriminatorAtParent {
+			t.Fatalf("%s discriminator should be read from the parent", variant.APIName)
+		}
+		if !variant.RequestField || !variant.UpdateField {
+			t.Fatalf("%s request/update eligibility was not retained", variant.APIName)
+		}
+		if !variant.ParentRequired {
+			t.Fatalf("%s parent requiredness was not retained", variant.APIName)
+		}
+	}
+}
+
+func TestQualifyNestedVariantCollisions(t *testing.T) {
+	variants := []OneOfVariantDef{
+		{GoName: "Shared", ModelName: "SharedModel", TerraformName: "shared", NestUnder: "primaryConfig"},
+		{GoName: "Shared", ModelName: "SharedModel", TerraformName: "shared", NestUnder: "fallbackConfig"},
+		{GoName: "Unique", ModelName: "UniqueModel", TerraformName: "unique", NestUnder: "primaryConfig"},
+	}
+
+	qualifyNestedVariantCollisions(variants)
+
+	if variants[0].GoName != "PrimaryConfigShared" || variants[0].ModelName != "PrimaryConfigSharedModel" || variants[0].TerraformName != "primary_config_shared" {
+		t.Fatalf("first shared variant was not parent-qualified: %#v", variants[0])
+	}
+	if variants[1].GoName != "FallbackConfigShared" || variants[1].ModelName != "FallbackConfigSharedModel" || variants[1].TerraformName != "fallback_config_shared" {
+		t.Fatalf("second shared variant was not parent-qualified: %#v", variants[1])
+	}
+	if variants[2].GoName != "Unique" || variants[2].TerraformName != "unique" {
+		t.Fatalf("unique variant was unexpectedly renamed: %#v", variants[2])
+	}
+}
+
+func TestAppendMissingOneOfVariantsDeduplicatesRequestAndResponse(t *testing.T) {
+	existing := []OneOfVariantDef{{NestUnder: "config", SchemaName: "Shared", RequestField: true}}
+	additional := []OneOfVariantDef{
+		{NestUnder: "config", SchemaName: "Shared", ParentComputed: true},
+		{NestUnder: "other", SchemaName: "Shared", ParentComputed: true},
+	}
+
+	got := appendMissingOneOfVariants(existing, additional)
+	if len(got) != 2 {
+		t.Fatalf("variant count = %d, want 2", len(got))
+	}
+	if got[0].NestUnder != "config" || !got[0].RequestField {
+		t.Fatalf("request variant was not preserved: %#v", got[0])
+	}
+	if got[1].NestUnder != "other" || !got[1].ParentComputed {
+		t.Fatalf("distinct response variant was not appended: %#v", got[1])
+	}
+}
+
 func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {

@@ -826,60 +826,49 @@ func SearchDashboardScheduleNotificationsAttrTypes() map[string]attr.Type {
 }
 
 type SearchDashboardScheduleNotificationsItemsModel struct {
-	ID                  types.String `tfsdk:"id" json:"id,omitempty"`
-	Disabled            types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	Condition           types.String `tfsdk:"condition" json:"condition,omitempty"`
-	Targets             types.List   `tfsdk:"targets" json:"targets,omitempty"`
-	TargetConfigs       types.List   `tfsdk:"target_configs" json:"targetConfigs,omitempty"`
 	Conf                types.Object `tfsdk:"conf" json:"conf,omitempty"`
-	Metadata            types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+	Disabled            types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	Group               types.String `tfsdk:"group" json:"group,omitempty"`
-	Pack                types.String `tfsdk:"pack" json:"pack,omitempty"`
+	ID                  types.String `tfsdk:"id" json:"id,omitempty"`
+	Metadata            types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
 	Mode                types.String `tfsdk:"mode" json:"mode,omitempty"`
+	Pack                types.String `tfsdk:"pack" json:"pack,omitempty"`
+	TargetConfigs       types.List   `tfsdk:"target_configs" json:"targetConfigs,omitempty"`
+	TargetDetails       types.List   `tfsdk:"target_details" json:"targetDetails,omitempty"`
+	Targets             types.List   `tfsdk:"targets" json:"targets,omitempty"`
 	TemplateTargetPairs types.List   `tfsdk:"template_target_pairs" json:"templateTargetPairs,omitempty"`
 }
 
 type SearchDashboardScheduleNotificationsItemsAPIModel struct {
-	ID                  *string  `json:"id,omitempty"`
-	Disabled            *bool    `json:"disabled,omitempty"`
 	Condition           *string  `json:"condition,omitempty"`
-	Targets             []string `json:"targets,omitempty"`
-	TargetConfigs       any      `json:"targetConfigs,omitempty"`
 	Conf                any      `json:"conf,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
+	Disabled            *bool    `json:"disabled,omitempty"`
 	Group               *string  `json:"group,omitempty"`
-	Pack                *string  `json:"pack,omitempty"`
+	ID                  *string  `json:"id,omitempty"`
+	Metadata            any      `json:"metadata,omitempty"`
 	Mode                *string  `json:"mode,omitempty"`
+	Pack                *string  `json:"pack,omitempty"`
+	TargetConfigs       any      `json:"targetConfigs,omitempty"`
+	TargetDetails       any      `json:"targetDetails,omitempty"`
+	Targets             []string `json:"targets,omitempty"`
 	TemplateTargetPairs any      `json:"templateTargetPairs,omitempty"`
 }
 
 func SearchDashboardScheduleNotificationsItemsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                    types.StringType,
-		"disabled":              types.BoolType,
 		"condition":             types.StringType,
-		"targets":               types.ListType{ElemType: types.StringType},
-		"target_configs":        types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsTargetConfigsAttrTypes()}},
 		"conf":                  types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsConfAttrTypes()},
-		"metadata":              types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsMetadataAttrTypes()}},
+		"disabled":              types.BoolType,
 		"group":                 types.StringType,
-		"pack":                  types.StringType,
+		"id":                    types.StringType,
+		"metadata":              types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsMetadataAttrTypes()}},
 		"mode":                  types.StringType,
+		"pack":                  types.StringType,
+		"target_configs":        types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsTargetConfigsAttrTypes()}},
+		"target_details":        types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsTargetDetailsAttrTypes()}},
+		"targets":               types.ListType{ElemType: types.StringType},
 		"template_target_pairs": types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsTemplateTargetPairsAttrTypes()}},
-	}
-}
-
-type SearchDashboardScheduleNotificationsItemsTargetConfigsModel struct {
-	ID types.String `tfsdk:"id" json:"id,omitempty"`
-}
-
-type SearchDashboardScheduleNotificationsItemsTargetConfigsAPIModel struct {
-	ID *string `json:"id,omitempty"`
-}
-
-func SearchDashboardScheduleNotificationsItemsTargetConfigsAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"id": types.StringType,
 	}
 }
 
@@ -941,20 +930,94 @@ func SearchDashboardScheduleNotificationsItemsMetadataAttrTypes() map[string]att
 	}
 }
 
+type SearchDashboardScheduleNotificationsItemsTargetConfigsModel struct {
+	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	ID   types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetConfigsAPIModel struct {
+	Conf any     `json:"conf,omitempty"`
+	ID   *string `json:"id,omitempty"`
+}
+
+func SearchDashboardScheduleNotificationsItemsTargetConfigsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"conf": types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsTargetConfigsConfAttrTypes()},
+		"id":   types.StringType,
+	}
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetConfigsConfModel struct {
+	Body           types.String `tfsdk:"body" json:"body,omitempty"`
+	EmailRecipient types.Object `tfsdk:"email_recipient" json:"emailRecipient,omitempty"`
+	Subject        types.String `tfsdk:"subject" json:"subject,omitempty"`
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetConfigsConfAPIModel struct {
+	Body           *string `json:"body,omitempty"`
+	EmailRecipient any     `json:"emailRecipient,omitempty"`
+	Subject        *string `json:"subject,omitempty"`
+}
+
+func SearchDashboardScheduleNotificationsItemsTargetConfigsConfAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"body":            types.StringType,
+		"email_recipient": types.ObjectType{AttrTypes: SearchDashboardScheduleNotificationsItemsTargetConfigsConfEmailRecipientAttrTypes()},
+		"subject":         types.StringType,
+	}
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetConfigsConfEmailRecipientModel struct {
+	Bcc types.String `tfsdk:"bcc" json:"bcc,omitempty"`
+	Cc  types.String `tfsdk:"cc" json:"cc,omitempty"`
+	To  types.String `tfsdk:"to" json:"to,omitempty"`
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetConfigsConfEmailRecipientAPIModel struct {
+	Bcc *string `json:"bcc,omitempty"`
+	Cc  *string `json:"cc,omitempty"`
+	To  *string `json:"to,omitempty"`
+}
+
+func SearchDashboardScheduleNotificationsItemsTargetConfigsConfEmailRecipientAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"bcc": types.StringType,
+		"cc":  types.StringType,
+		"to":  types.StringType,
+	}
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetDetailsModel struct {
+	ID   types.String `tfsdk:"id" json:"id,omitempty"`
+	Type types.String `tfsdk:"type" json:"type,omitempty"`
+}
+
+type SearchDashboardScheduleNotificationsItemsTargetDetailsAPIModel struct {
+	ID   *string `json:"id,omitempty"`
+	Type *string `json:"type,omitempty"`
+}
+
+func SearchDashboardScheduleNotificationsItemsTargetDetailsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":   types.StringType,
+		"type": types.StringType,
+	}
+}
+
 type SearchDashboardScheduleNotificationsItemsTemplateTargetPairsModel struct {
-	TemplateID types.String `tfsdk:"template_id" json:"templateId,omitempty"`
 	TargetID   types.String `tfsdk:"target_id" json:"targetId,omitempty"`
+	TemplateID types.String `tfsdk:"template_id" json:"templateId,omitempty"`
 }
 
 type SearchDashboardScheduleNotificationsItemsTemplateTargetPairsAPIModel struct {
-	TemplateID *string `json:"templateId,omitempty"`
 	TargetID   *string `json:"targetId,omitempty"`
+	TemplateID *string `json:"templateId,omitempty"`
 }
 
 func SearchDashboardScheduleNotificationsItemsTemplateTargetPairsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"template_id": types.StringType,
 		"target_id":   types.StringType,
+		"template_id": types.StringType,
 	}
 }
 

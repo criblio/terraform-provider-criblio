@@ -92,6 +92,7 @@ type DestinationModel struct {
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
 	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
 	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputTraversalOtlp            *OutputTraversalOtlpModel            `tfsdk:"output_traversal_otlp" json:"OutputTraversalOtlp,omitempty"`
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
@@ -106,6 +107,7 @@ type DestinationModel struct {
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
 }
 
 type DestinationResourceModel struct {
@@ -184,6 +186,7 @@ type DestinationResourceModel struct {
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
 	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
 	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputTraversalOtlp            *OutputTraversalOtlpModel            `tfsdk:"output_traversal_otlp" json:"OutputTraversalOtlp,omitempty"`
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
@@ -198,6 +201,7 @@ type DestinationResourceModel struct {
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
 }
 
 type DestinationDataSourceModel struct {
@@ -276,6 +280,7 @@ type DestinationDataSourceModel struct {
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
 	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
 	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputTraversalOtlp            *OutputTraversalOtlpModel            `tfsdk:"output_traversal_otlp" json:"OutputTraversalOtlp,omitempty"`
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
@@ -290,6 +295,7 @@ type DestinationDataSourceModel struct {
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
 }
 
 type DestinationAPIModel struct {
@@ -5430,6 +5436,158 @@ func OutputDynatraceOtlpTimeoutRetrySettingsAttrTypes() map[string]attr.Type {
 	}
 }
 
+type OutputTraversalOtlpMetadataModel struct {
+	Key   types.String `tfsdk:"key" json:"key,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputTraversalOtlpMetadataAPIModel struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputTraversalOtlpMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key":   types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type OutputTraversalOtlpOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputTraversalOtlpOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputTraversalOtlpOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type OutputTraversalOtlpOauthHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputTraversalOtlpOauthHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputTraversalOtlpOauthHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type OutputTraversalOtlpExtraHttpHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputTraversalOtlpExtraHttpHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputTraversalOtlpExtraHttpHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type OutputTraversalOtlpResponseRetrySettingsModel struct {
+	HttpStatus     types.Float64 `tfsdk:"http_status" json:"httpStatus,omitempty"`
+	InitialBackoff types.Float64 `tfsdk:"initial_backoff" json:"initialBackoff,omitempty"`
+	BackoffRate    types.Float64 `tfsdk:"backoff_rate" json:"backoffRate,omitempty"`
+	MaxBackoff     types.Float64 `tfsdk:"max_backoff" json:"maxBackoff,omitempty"`
+}
+
+type OutputTraversalOtlpResponseRetrySettingsAPIModel struct {
+	HttpStatus     *float64 `json:"httpStatus,omitempty"`
+	InitialBackoff *float64 `json:"initialBackoff,omitempty"`
+	BackoffRate    *float64 `json:"backoffRate,omitempty"`
+	MaxBackoff     *float64 `json:"maxBackoff,omitempty"`
+}
+
+func OutputTraversalOtlpResponseRetrySettingsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"http_status":     types.Float64Type,
+		"initial_backoff": types.Float64Type,
+		"backoff_rate":    types.Float64Type,
+		"max_backoff":     types.Float64Type,
+	}
+}
+
+type OutputTraversalOtlpTimeoutRetrySettingsModel struct {
+	TimeoutRetry   types.Bool    `tfsdk:"timeout_retry" json:"timeoutRetry,omitempty"`
+	InitialBackoff types.Float64 `tfsdk:"initial_backoff" json:"initialBackoff,omitempty"`
+	BackoffRate    types.Float64 `tfsdk:"backoff_rate" json:"backoffRate,omitempty"`
+	MaxBackoff     types.Float64 `tfsdk:"max_backoff" json:"maxBackoff,omitempty"`
+}
+
+type OutputTraversalOtlpTimeoutRetrySettingsAPIModel struct {
+	TimeoutRetry   *bool    `json:"timeoutRetry,omitempty"`
+	InitialBackoff *float64 `json:"initialBackoff,omitempty"`
+	BackoffRate    *float64 `json:"backoffRate,omitempty"`
+	MaxBackoff     *float64 `json:"maxBackoff,omitempty"`
+}
+
+func OutputTraversalOtlpTimeoutRetrySettingsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"timeout_retry":   types.BoolType,
+		"initial_backoff": types.Float64Type,
+		"backoff_rate":    types.Float64Type,
+		"max_backoff":     types.Float64Type,
+	}
+}
+
+type OutputTraversalOtlpTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type OutputTraversalOtlpTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func OutputTraversalOtlpTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"reject_unauthorized": types.BoolType,
+		"certificate_name":    types.StringType,
+		"ca_path":             types.StringType,
+		"priv_key_path":       types.StringType,
+		"cert_path":           types.StringType,
+		"passphrase":          types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
 type OutputSentinelOneAiSiemExtraHttpHeadersModel struct {
 	Name  types.String `tfsdk:"name" json:"name,omitempty"`
 	Value types.String `tfsdk:"value" json:"value,omitempty"`
@@ -6409,6 +6567,10 @@ func DestinationTerraformNameToAPIName(name string) string {
 		return prefix + "endpointURLConfiguration"
 	case "manual_apikey":
 		return prefix + "manualAPIKey"
+	case "max_batch_size_kb":
+		return prefix + "maxBatchSizeKB"
+	case "max_buffered_kb":
+		return prefix + "maxBufferedKB"
 	case "max_file_size_mb":
 		return prefix + "maxFileSizeMB"
 	case "max_payload_size_kb":
@@ -6431,6 +6593,10 @@ func DestinationTerraformNameToAPIName(name string) string {
 		return prefix + "wiz_environment"
 	case "wiz_sourcetype":
 		return prefix + "wiz_sourcetype"
+	case "wiz_vpc_event_format":
+		return prefix + "wiz_vpc_event_format"
+	case "wiz_vpc_flow_log_format":
+		return prefix + "wiz_vpc_flow_log_format"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -7225,6 +7391,15 @@ func (m DestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputTraversalOtlp != nil {
+		value, err := m.OutputTraversalOtlp.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputSentinelOneAiSiem != nil {
 		value, err := m.OutputSentinelOneAiSiem.terraformPayload()
 		if err != nil {
@@ -7344,6 +7519,15 @@ func (m DestinationModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.OutputIbmCloudS3 != nil {
 		value, err := m.OutputIbmCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputDatabricksZerobus != nil {
+		value, err := m.OutputDatabricksZerobus.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -7739,6 +7923,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputDynatraceOtlp.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "traversal_otlp":
+		m.OutputTraversalOtlp = &OutputTraversalOtlpModel{}
+		if err := m.OutputTraversalOtlp.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "sentinel_one_ai_siem":
 		m.OutputSentinelOneAiSiem = &OutputSentinelOneAiSiemModel{}
 		if err := m.OutputSentinelOneAiSiem.unmarshalPayload(raw); err != nil {
@@ -7807,6 +7996,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "ibm_cloud_s3":
 		m.OutputIbmCloudS3 = &OutputIbmCloudS3Model{}
 		if err := m.OutputIbmCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "databricks_zerobus":
+		m.OutputDatabricksZerobus = &OutputDatabricksZerobusModel{}
+		if err := m.OutputDatabricksZerobus.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}
@@ -9301,11 +9495,11 @@ type OutputSentinelModel struct {
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	AuthType                      types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
 	LoginURL                      types.String  `tfsdk:"login_url" json:"loginUrl,omitempty"`
-	Secret                        types.String  `tfsdk:"secret" json:"secret,omitempty"`
 	RefreshTokenField             types.String  `tfsdk:"refresh_token_field" json:"refreshTokenField,omitempty"`
 	RotateRefreshToken            types.Bool    `tfsdk:"rotate_refresh_token" json:"rotateRefreshToken,omitempty"`
 	RefreshURL                    types.String  `tfsdk:"refresh_url" json:"refreshUrl,omitempty"`
 	RefreshRequestParams          types.List    `tfsdk:"refresh_request_params" json:"refreshRequestParams,omitempty"`
+	OauthSecretSource             types.String  `tfsdk:"oauth_secret_source" json:"oauthSecretSource,omitempty"`
 	ClientID                      types.String  `tfsdk:"client_id" json:"client_id,omitempty"`
 	Scope                         types.String  `tfsdk:"scope" json:"scope,omitempty"`
 	EndpointURLConfiguration      types.String  `tfsdk:"endpoint_urlconfiguration" json:"endpointURLConfiguration,omitempty"`
@@ -9332,6 +9526,8 @@ type OutputSentinelModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+	Secret                        types.String  `tfsdk:"secret" json:"secret,omitempty"`
+	OauthTextSecret               types.String  `tfsdk:"oauth_text_secret" json:"oauthTextSecret,omitempty"`
 	URL                           types.String  `tfsdk:"url" json:"url,omitempty"`
 	DcrID                         types.String  `tfsdk:"dcr_id" json:"dcrID,omitempty"`
 	DceEndpoint                   types.String  `tfsdk:"dce_endpoint" json:"dceEndpoint,omitempty"`
@@ -9365,11 +9561,11 @@ func OutputSentinelModelAttrTypes() map[string]attr.Type {
 		"on_backpressure":                   types.StringType,
 		"auth_type":                         types.StringType,
 		"login_url":                         types.StringType,
-		"secret":                            types.StringType,
 		"refresh_token_field":               types.StringType,
 		"rotate_refresh_token":              types.BoolType,
 		"refresh_url":                       types.StringType,
 		"refresh_request_params":            types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()}},
+		"oauth_secret_source":               types.StringType,
 		"client_id":                         types.StringType,
 		"scope":                             types.StringType,
 		"endpoint_urlconfiguration":         types.StringType,
@@ -9396,6 +9592,8 @@ func OutputSentinelModelAttrTypes() map[string]attr.Type {
 		"pq_on_backpressure":                types.StringType,
 		"pq_max_buffer_size_bytes":          types.StringType,
 		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"secret":                            types.StringType,
+		"oauth_text_secret":                 types.StringType,
 		"url":                               types.StringType,
 		"dcr_id":                            types.StringType,
 		"dce_endpoint":                      types.StringType,
@@ -9580,13 +9778,6 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 		}
 		output["loginUrl"] = value
 	}
-	if !m.Secret.IsNull() && !m.Secret.IsUnknown() {
-		value, err := DestinationTerraformValueToJSON(m.Secret)
-		if err != nil {
-			return nil, fmt.Errorf("convert secret to API value: %v", err)
-		}
-		output["secret"] = value
-	}
 	if !m.RefreshTokenField.IsNull() && !m.RefreshTokenField.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.RefreshTokenField)
 		if err != nil {
@@ -9614,6 +9805,13 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert refresh_request_params to API value: %v", err)
 		}
 		output["refreshRequestParams"] = value
+	}
+	if !m.OauthSecretSource.IsNull() && !m.OauthSecretSource.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OauthSecretSource)
+		if err != nil {
+			return nil, fmt.Errorf("convert oauth_secret_source to API value: %v", err)
+		}
+		output["oauthSecretSource"] = value
 	}
 	if !m.ClientID.IsNull() && !m.ClientID.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.ClientID)
@@ -9796,6 +9994,20 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if !m.Secret.IsNull() && !m.Secret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Secret)
+		if err != nil {
+			return nil, fmt.Errorf("convert secret to API value: %v", err)
+		}
+		output["secret"] = value
+	}
+	if !m.OauthTextSecret.IsNull() && !m.OauthTextSecret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OauthTextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert oauth_text_secret to API value: %v", err)
+		}
+		output["oauthTextSecret"] = value
 	}
 	if !m.URL.IsNull() && !m.URL.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.URL)
@@ -10057,15 +10269,6 @@ func (m *OutputSentinelModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.LoginURL = types.StringNull()
 	}
-	if item, ok := input["secret"]; ok {
-		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
-		if err != nil {
-			return fmt.Errorf("convert secret from API value: %v", err)
-		}
-		m.Secret = value.(types.String)
-	} else {
-		m.Secret = types.StringNull()
-	}
 	if item, ok := input["refreshTokenField"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -10101,6 +10304,15 @@ func (m *OutputSentinelModel) unmarshalPayload(input map[string]any) error {
 		m.RefreshRequestParams = value.(types.List)
 	} else {
 		m.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()})
+	}
+	if item, ok := input["oauthSecretSource"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert oauthSecretSource from API value: %v", err)
+		}
+		m.OauthSecretSource = value.(types.String)
+	} else {
+		m.OauthSecretSource = types.StringNull()
 	}
 	if item, ok := input["client_id"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
@@ -10335,6 +10547,24 @@ func (m *OutputSentinelModel) unmarshalPayload(input map[string]any) error {
 		m.PqControls = value.(types.Map)
 	} else {
 		m.PqControls = types.MapNull(types.StringType)
+	}
+	if item, ok := input["secret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert secret from API value: %v", err)
+		}
+		m.Secret = value.(types.String)
+	} else {
+		m.Secret = types.StringNull()
+	}
+	if item, ok := input["oauthTextSecret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert oauthTextSecret from API value: %v", err)
+		}
+		m.OauthTextSecret = value.(types.String)
+	} else {
+		m.OauthTextSecret = types.StringNull()
 	}
 	if item, ok := input["url"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
@@ -13656,6 +13886,8 @@ type OutputWizHecModel struct {
 	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
 	Token                         types.String  `tfsdk:"token" json:"token,omitempty"`
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	WizVpcEventFormat             types.String  `tfsdk:"wiz_vpc_event_format" json:"wiz_vpc_event_format,omitempty"`
+	WizVpcFlowLogFormat           types.String  `tfsdk:"wiz_vpc_flow_log_format" json:"wiz_vpc_flow_log_format,omitempty"`
 	PqStrictOrdering              types.Bool    `tfsdk:"pq_strict_ordering" json:"pqStrictOrdering,omitempty"`
 	PqRatePerSec                  types.Float64 `tfsdk:"pq_rate_per_sec" json:"pqRatePerSec,omitempty"`
 	PqMode                        types.String  `tfsdk:"pq_mode" json:"pqMode,omitempty"`
@@ -13702,6 +13934,8 @@ func OutputWizHecModelAttrTypes() map[string]attr.Type {
 		"description":                       types.StringType,
 		"token":                             types.StringType,
 		"text_secret":                       types.StringType,
+		"wiz_vpc_event_format":              types.StringType,
+		"wiz_vpc_flow_log_format":           types.StringType,
 		"pq_strict_ordering":                types.BoolType,
 		"pq_rate_per_sec":                   types.Float64Type,
 		"pq_mode":                           types.StringType,
@@ -13928,6 +14162,20 @@ func (m OutputWizHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if !m.WizVpcEventFormat.IsNull() && !m.WizVpcEventFormat.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.WizVpcEventFormat)
+		if err != nil {
+			return nil, fmt.Errorf("convert wiz_vpc_event_format to API value: %v", err)
+		}
+		output["wiz_vpc_event_format"] = value
+	}
+	if !m.WizVpcFlowLogFormat.IsNull() && !m.WizVpcFlowLogFormat.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.WizVpcFlowLogFormat)
+		if err != nil {
+			return nil, fmt.Errorf("convert wiz_vpc_flow_log_format to API value: %v", err)
+		}
+		output["wiz_vpc_flow_log_format"] = value
 	}
 	if !m.PqStrictOrdering.IsNull() && !m.PqStrictOrdering.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.PqStrictOrdering)
@@ -14289,6 +14537,24 @@ func (m *OutputWizHecModel) unmarshalPayload(input map[string]any) error {
 		m.TextSecret = value.(types.String)
 	} else {
 		m.TextSecret = types.StringNull()
+	}
+	if item, ok := input["wiz_vpc_event_format"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert wiz_vpc_event_format from API value: %v", err)
+		}
+		m.WizVpcEventFormat = value.(types.String)
+	} else {
+		m.WizVpcEventFormat = types.StringNull()
+	}
+	if item, ok := input["wiz_vpc_flow_log_format"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert wiz_vpc_flow_log_format from API value: %v", err)
+		}
+		m.WizVpcFlowLogFormat = value.(types.String)
+	} else {
+		m.WizVpcFlowLogFormat = types.StringNull()
 	}
 	if item, ok := input["pqStrictOrdering"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
@@ -29286,43 +29552,49 @@ func (m *OutputGooglePubsubModel) unmarshalPayload(input map[string]any) error {
 }
 
 type OutputExabeamModel struct {
-	ID                     types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
-	Pipeline               types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SystemFields           types.List    `tfsdk:"system_fields" json:"systemFields,omitempty"`
-	Environment            types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	Streamtags             types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	Bucket                 types.String  `tfsdk:"bucket" json:"bucket,omitempty"`
-	Region                 types.String  `tfsdk:"region" json:"region,omitempty"`
-	StagePath              types.String  `tfsdk:"stage_path" json:"stagePath,omitempty"`
-	Endpoint               types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	ObjectACL              types.String  `tfsdk:"object_acl" json:"objectACL,omitempty"`
-	StorageClass           types.String  `tfsdk:"storage_class" json:"storageClass,omitempty"`
-	ReuseConnections       types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
-	RejectUnauthorized     types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	AddIDToStagePath       types.Bool    `tfsdk:"add_id_to_stage_path" json:"addIdToStagePath,omitempty"`
-	RemoveEmptyDirs        types.Bool    `tfsdk:"remove_empty_dirs" json:"removeEmptyDirs,omitempty"`
-	MaxFileOpenTimeSec     types.Float64 `tfsdk:"max_file_open_time_sec" json:"maxFileOpenTimeSec,omitempty"`
-	MaxFileIDleTimeSec     types.Float64 `tfsdk:"max_file_idle_time_sec" json:"maxFileIdleTimeSec,omitempty"`
-	MaxOpenFiles           types.Float64 `tfsdk:"max_open_files" json:"maxOpenFiles,omitempty"`
-	OnBackpressure         types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
-	DeadletterEnabled      types.Bool    `tfsdk:"deadletter_enabled" json:"deadletterEnabled,omitempty"`
-	OnDiskFullBackpressure types.String  `tfsdk:"on_disk_full_backpressure" json:"onDiskFullBackpressure,omitempty"`
-	RetrySettings          types.Object  `tfsdk:"retry_settings" json:"retrySettings,omitempty"`
-	Orphans                types.Object  `tfsdk:"orphans" json:"orphans,omitempty"`
-	MaxFileSizeMB          types.Float64 `tfsdk:"max_file_size_mb" json:"maxFileSizeMB,omitempty"`
-	EncodedConfiguration   types.String  `tfsdk:"encoded_configuration" json:"encodedConfiguration,omitempty"`
-	CollectorInstanceID    types.String  `tfsdk:"collector_instance_id" json:"collectorInstanceId,omitempty"`
-	SiteName               types.String  `tfsdk:"site_name" json:"siteName,omitempty"`
-	SiteID                 types.String  `tfsdk:"site_id" json:"siteId,omitempty"`
-	TimezoneOffset         types.String  `tfsdk:"timezone_offset" json:"timezoneOffset,omitempty"`
-	AwsAPIKey              types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecretKey           types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	Description            types.String  `tfsdk:"description" json:"description,omitempty"`
-	EmptyDirCleanupSec     types.Float64 `tfsdk:"empty_dir_cleanup_sec" json:"emptyDirCleanupSec,omitempty"`
-	DirectoryBatchSize     types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
-	DeadletterPath         types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
-	MaxRetryNum            types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+	ID                      types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                    types.String  `tfsdk:"type" json:"type,omitempty"`
+	Pipeline                types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SystemFields            types.List    `tfsdk:"system_fields" json:"systemFields,omitempty"`
+	Environment             types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	Streamtags              types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	Bucket                  types.String  `tfsdk:"bucket" json:"bucket,omitempty"`
+	Region                  types.String  `tfsdk:"region" json:"region,omitempty"`
+	StagePath               types.String  `tfsdk:"stage_path" json:"stagePath,omitempty"`
+	Endpoint                types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ObjectACL               types.String  `tfsdk:"object_acl" json:"objectACL,omitempty"`
+	StorageClass            types.String  `tfsdk:"storage_class" json:"storageClass,omitempty"`
+	ReuseConnections        types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	RejectUnauthorized      types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	AddIDToStagePath        types.Bool    `tfsdk:"add_id_to_stage_path" json:"addIdToStagePath,omitempty"`
+	RemoveEmptyDirs         types.Bool    `tfsdk:"remove_empty_dirs" json:"removeEmptyDirs,omitempty"`
+	MaxFileOpenTimeSec      types.Float64 `tfsdk:"max_file_open_time_sec" json:"maxFileOpenTimeSec,omitempty"`
+	MaxFileIDleTimeSec      types.Float64 `tfsdk:"max_file_idle_time_sec" json:"maxFileIdleTimeSec,omitempty"`
+	MaxOpenFiles            types.Float64 `tfsdk:"max_open_files" json:"maxOpenFiles,omitempty"`
+	OnBackpressure          types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	DeadletterEnabled       types.Bool    `tfsdk:"deadletter_enabled" json:"deadletterEnabled,omitempty"`
+	OnDiskFullBackpressure  types.String  `tfsdk:"on_disk_full_backpressure" json:"onDiskFullBackpressure,omitempty"`
+	RetrySettings           types.Object  `tfsdk:"retry_settings" json:"retrySettings,omitempty"`
+	Orphans                 types.Object  `tfsdk:"orphans" json:"orphans,omitempty"`
+	MaxFileSizeMB           types.Float64 `tfsdk:"max_file_size_mb" json:"maxFileSizeMB,omitempty"`
+	EncodedConfiguration    types.String  `tfsdk:"encoded_configuration" json:"encodedConfiguration,omitempty"`
+	CollectorInstanceID     types.String  `tfsdk:"collector_instance_id" json:"collectorInstanceId,omitempty"`
+	AwsAuthenticationMethod types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	SiteName                types.String  `tfsdk:"site_name" json:"siteName,omitempty"`
+	SiteID                  types.String  `tfsdk:"site_id" json:"siteId,omitempty"`
+	TimezoneOffset          types.String  `tfsdk:"timezone_offset" json:"timezoneOffset,omitempty"`
+	Hostname                types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
+	Forwarder               types.String  `tfsdk:"forwarder" json:"forwarder,omitempty"`
+	Origin                  types.String  `tfsdk:"origin" json:"origin,omitempty"`
+	Logtags                 types.String  `tfsdk:"logtags" json:"logtags,omitempty"`
+	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
+	EmptyDirCleanupSec      types.Float64 `tfsdk:"empty_dir_cleanup_sec" json:"emptyDirCleanupSec,omitempty"`
+	DirectoryBatchSize      types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
+	DeadletterPath          types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
+	MaxRetryNum             types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
 }
 
 func OutputExabeamModelAttrTypes() map[string]attr.Type {
@@ -29354,9 +29626,14 @@ func OutputExabeamModelAttrTypes() map[string]attr.Type {
 		"max_file_size_mb":          types.Float64Type,
 		"encoded_configuration":     types.StringType,
 		"collector_instance_id":     types.StringType,
+		"aws_authentication_method": types.StringType,
 		"site_name":                 types.StringType,
 		"site_id":                   types.StringType,
 		"timezone_offset":           types.StringType,
+		"hostname":                  types.StringType,
+		"forwarder":                 types.StringType,
+		"origin":                    types.StringType,
+		"logtags":                   types.StringType,
 		"aws_api_key":               types.StringType,
 		"aws_secret_key":            types.StringType,
 		"description":               types.StringType,
@@ -29364,6 +29641,7 @@ func OutputExabeamModelAttrTypes() map[string]attr.Type {
 		"directory_batch_size":      types.Float64Type,
 		"deadletter_path":           types.StringType,
 		"max_retry_num":             types.Float64Type,
+		"aws_secret":                types.StringType,
 	}
 }
 
@@ -29558,6 +29836,13 @@ func (m OutputExabeamModel) terraformPayload() (map[string]any, error) {
 		}
 		output["collectorInstanceId"] = value
 	}
+	if !m.AwsAuthenticationMethod.IsNull() && !m.AwsAuthenticationMethod.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.AwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_authentication_method to API value: %v", err)
+		}
+		output["awsAuthenticationMethod"] = value
+	}
 	if !m.SiteName.IsNull() && !m.SiteName.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.SiteName)
 		if err != nil {
@@ -29578,6 +29863,34 @@ func (m OutputExabeamModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timezone_offset to API value: %v", err)
 		}
 		output["timezoneOffset"] = value
+	}
+	if !m.Hostname.IsNull() && !m.Hostname.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Hostname)
+		if err != nil {
+			return nil, fmt.Errorf("convert hostname to API value: %v", err)
+		}
+		output["hostname"] = value
+	}
+	if !m.Forwarder.IsNull() && !m.Forwarder.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Forwarder)
+		if err != nil {
+			return nil, fmt.Errorf("convert forwarder to API value: %v", err)
+		}
+		output["forwarder"] = value
+	}
+	if !m.Origin.IsNull() && !m.Origin.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Origin)
+		if err != nil {
+			return nil, fmt.Errorf("convert origin to API value: %v", err)
+		}
+		output["origin"] = value
+	}
+	if !m.Logtags.IsNull() && !m.Logtags.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Logtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert logtags to API value: %v", err)
+		}
+		output["logtags"] = value
 	}
 	if !m.AwsAPIKey.IsNull() && !m.AwsAPIKey.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.AwsAPIKey)
@@ -29627,6 +29940,13 @@ func (m OutputExabeamModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if !m.AwsSecret.IsNull() && !m.AwsSecret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.AwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
+		}
+		output["awsSecret"] = value
 	}
 	if _, ok := output["type"]; !ok {
 		output["type"] = "exabeam"
@@ -29878,6 +30198,15 @@ func (m *OutputExabeamModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CollectorInstanceID = types.StringNull()
 	}
+	if item, ok := input["awsAuthenticationMethod"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsAuthenticationMethod from API value: %v", err)
+		}
+		m.AwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.AwsAuthenticationMethod = types.StringNull()
+	}
 	if item, ok := input["siteName"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -29904,6 +30233,42 @@ func (m *OutputExabeamModel) unmarshalPayload(input map[string]any) error {
 		m.TimezoneOffset = value.(types.String)
 	} else {
 		m.TimezoneOffset = types.StringNull()
+	}
+	if item, ok := input["hostname"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hostname from API value: %v", err)
+		}
+		m.Hostname = value.(types.String)
+	} else {
+		m.Hostname = types.StringNull()
+	}
+	if item, ok := input["forwarder"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert forwarder from API value: %v", err)
+		}
+		m.Forwarder = value.(types.String)
+	} else {
+		m.Forwarder = types.StringNull()
+	}
+	if item, ok := input["origin"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert origin from API value: %v", err)
+		}
+		m.Origin = value.(types.String)
+	} else {
+		m.Origin = types.StringNull()
+	}
+	if item, ok := input["logtags"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert logtags from API value: %v", err)
+		}
+		m.Logtags = value.(types.String)
+	} else {
+		m.Logtags = types.StringNull()
 	}
 	if item, ok := input["awsApiKey"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
@@ -29967,6 +30332,15 @@ func (m *OutputExabeamModel) unmarshalPayload(input map[string]any) error {
 		m.MaxRetryNum = value.(types.Float64)
 	} else {
 		m.MaxRetryNum = types.Float64Null()
+	}
+	if item, ok := input["awsSecret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsSecret from API value: %v", err)
+		}
+		m.AwsSecret = value.(types.String)
+	} else {
+		m.AwsSecret = types.StringNull()
 	}
 	return nil
 }
@@ -39988,26 +40362,28 @@ func (m *OutputGraphiteModel) unmarshalPayload(input map[string]any) error {
 }
 
 type OutputRouterModel struct {
-	ID           types.String `tfsdk:"id" json:"id,omitempty"`
-	Type         types.String `tfsdk:"type" json:"type,omitempty"`
-	Pipeline     types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SystemFields types.List   `tfsdk:"system_fields" json:"systemFields,omitempty"`
-	Environment  types.String `tfsdk:"environment" json:"environment,omitempty"`
-	Streamtags   types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	Rules        types.List   `tfsdk:"rules" json:"rules,omitempty"`
-	Description  types.String `tfsdk:"description" json:"description,omitempty"`
+	ID                  types.String `tfsdk:"id" json:"id,omitempty"`
+	Type                types.String `tfsdk:"type" json:"type,omitempty"`
+	Pipeline            types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SystemFields        types.List   `tfsdk:"system_fields" json:"systemFields,omitempty"`
+	Environment         types.String `tfsdk:"environment" json:"environment,omitempty"`
+	Streamtags          types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	ReportBranchMetrics types.Bool   `tfsdk:"report_branch_metrics" json:"reportBranchMetrics,omitempty"`
+	Rules               types.List   `tfsdk:"rules" json:"rules,omitempty"`
+	Description         types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
 func OutputRouterModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":            types.StringType,
-		"type":          types.StringType,
-		"pipeline":      types.StringType,
-		"system_fields": types.ListType{ElemType: types.StringType},
-		"environment":   types.StringType,
-		"streamtags":    types.ListType{ElemType: types.StringType},
-		"rules":         types.ListType{ElemType: types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()}},
-		"description":   types.StringType,
+		"id":                    types.StringType,
+		"type":                  types.StringType,
+		"pipeline":              types.StringType,
+		"system_fields":         types.ListType{ElemType: types.StringType},
+		"environment":           types.StringType,
+		"streamtags":            types.ListType{ElemType: types.StringType},
+		"report_branch_metrics": types.BoolType,
+		"rules":                 types.ListType{ElemType: types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()}},
+		"description":           types.StringType,
 	}
 }
 
@@ -40054,6 +40430,13 @@ func (m OutputRouterModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
 		}
 		output["streamtags"] = value
+	}
+	if !m.ReportBranchMetrics.IsNull() && !m.ReportBranchMetrics.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ReportBranchMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert report_branch_metrics to API value: %v", err)
+		}
+		output["reportBranchMetrics"] = value
 	}
 	if !m.Rules.IsNull() && !m.Rules.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.Rules)
@@ -40129,6 +40512,15 @@ func (m *OutputRouterModel) unmarshalPayload(input map[string]any) error {
 		m.Streamtags = value.(types.List)
 	} else {
 		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["reportBranchMetrics"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert reportBranchMetrics from API value: %v", err)
+		}
+		m.ReportBranchMetrics = value.(types.Bool)
+	} else {
+		m.ReportBranchMetrics = types.BoolNull()
 	}
 	if item, ok := input["rules"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()}})
@@ -51729,6 +52121,7 @@ type OutputCriblSearchEngineModel struct {
 	ResponseHonorRetryAfterHeader types.Bool    `tfsdk:"response_honor_retry_after_header" json:"responseHonorRetryAfterHeader,omitempty"`
 	AuthTokens                    types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	SendAs                        types.String  `tfsdk:"send_as" json:"sendAs,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
 	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
 	URL                           types.String  `tfsdk:"url" json:"url,omitempty"`
@@ -51779,6 +52172,7 @@ func OutputCriblSearchEngineModelAttrTypes() map[string]attr.Type {
 		"response_honor_retry_after_header": types.BoolType,
 		"auth_tokens":                       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblSearchEngineAuthTokensAttrTypes()}},
 		"on_backpressure":                   types.StringType,
+		"send_as":                           types.StringType,
 		"use_round_robin_dns":               types.BoolType,
 		"description":                       types.StringType,
 		"url":                               types.StringType,
@@ -51991,6 +52385,13 @@ func (m OutputCriblSearchEngineModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert on_backpressure to API value: %v", err)
 		}
 		output["onBackpressure"] = value
+	}
+	if !m.SendAs.IsNull() && !m.SendAs.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SendAs)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_as to API value: %v", err)
+		}
+		output["sendAs"] = value
 	}
 	if !m.UseRoundRobinDns.IsNull() && !m.UseRoundRobinDns.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.UseRoundRobinDns)
@@ -52374,6 +52775,15 @@ func (m *OutputCriblSearchEngineModel) unmarshalPayload(input map[string]any) er
 		m.OnBackpressure = value.(types.String)
 	} else {
 		m.OnBackpressure = types.StringNull()
+	}
+	if item, ok := input["sendAs"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert sendAs from API value: %v", err)
+		}
+		m.SendAs = value.(types.String)
+	} else {
+		m.SendAs = types.StringNull()
 	}
 	if item, ok := input["useRoundRobinDns"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
@@ -56331,6 +56741,7 @@ type OutputCriblLakeModel struct {
 	DynamicDataset                types.Bool    `tfsdk:"dynamic_dataset" json:"dynamicDataset,omitempty"`
 	MaxClosingFilesToBackpressure types.Float64 `tfsdk:"max_closing_files_to_backpressure" json:"maxClosingFilesToBackpressure,omitempty"`
 	MaxConcurrentFileParts        types.Float64 `tfsdk:"max_concurrent_file_parts" json:"maxConcurrentFileParts,omitempty"`
+	FreshnessGracePeriodSec       types.Float64 `tfsdk:"freshness_grace_period_sec" json:"freshnessGracePeriodSec,omitempty"`
 	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
 	Compress                      types.String  `tfsdk:"compress" json:"compress,omitempty"`
 	CompressionLevel              types.String  `tfsdk:"compression_level" json:"compressionLevel,omitempty"`
@@ -56382,6 +56793,7 @@ func OutputCriblLakeModelAttrTypes() map[string]attr.Type {
 		"dynamic_dataset":                   types.BoolType,
 		"max_closing_files_to_backpressure": types.Float64Type,
 		"max_concurrent_file_parts":         types.Float64Type,
+		"freshness_grace_period_sec":        types.Float64Type,
 		"description":                       types.StringType,
 		"compress":                          types.StringType,
 		"compression_level":                 types.StringType,
@@ -56607,6 +57019,13 @@ func (m OutputCriblLakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_concurrent_file_parts to API value: %v", err)
 		}
 		output["maxConcurrentFileParts"] = value
+	}
+	if !m.FreshnessGracePeriodSec.IsNull() && !m.FreshnessGracePeriodSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FreshnessGracePeriodSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert freshness_grace_period_sec to API value: %v", err)
+		}
+		output["freshnessGracePeriodSec"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.Description)
@@ -57001,6 +57420,15 @@ func (m *OutputCriblLakeModel) unmarshalPayload(input map[string]any) error {
 		m.MaxConcurrentFileParts = value.(types.Float64)
 	} else {
 		m.MaxConcurrentFileParts = types.Float64Null()
+	}
+	if item, ok := input["freshnessGracePeriodSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert freshnessGracePeriodSec from API value: %v", err)
+		}
+		m.FreshnessGracePeriodSec = value.(types.Float64)
+	} else {
+		m.FreshnessGracePeriodSec = types.Float64Null()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
@@ -63101,6 +63529,1052 @@ func (m *OutputDynatraceOtlpModel) unmarshalPayload(input map[string]any) error 
 		m.ResponseHonorRetryAfterHeader = value.(types.Bool)
 	} else {
 		m.ResponseHonorRetryAfterHeader = types.BoolNull()
+	}
+	if item, ok := input["pqStrictOrdering"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqStrictOrdering from API value: %v", err)
+		}
+		m.PqStrictOrdering = value.(types.Bool)
+	} else {
+		m.PqStrictOrdering = types.BoolNull()
+	}
+	if item, ok := input["pqRatePerSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqRatePerSec from API value: %v", err)
+		}
+		m.PqRatePerSec = value.(types.Float64)
+	} else {
+		m.PqRatePerSec = types.Float64Null()
+	}
+	if item, ok := input["pqMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMode from API value: %v", err)
+		}
+		m.PqMode = value.(types.String)
+	} else {
+		m.PqMode = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSize from API value: %v", err)
+		}
+		m.PqMaxBufferSize = value.(types.Float64)
+	} else {
+		m.PqMaxBufferSize = types.Float64Null()
+	}
+	if item, ok := input["pqMaxBackpressureSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBackpressureSec from API value: %v", err)
+		}
+		m.PqMaxBackpressureSec = value.(types.Float64)
+	} else {
+		m.PqMaxBackpressureSec = types.Float64Null()
+	}
+	if item, ok := input["pqMaxFileSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxFileSize from API value: %v", err)
+		}
+		m.PqMaxFileSize = value.(types.String)
+	} else {
+		m.PqMaxFileSize = types.StringNull()
+	}
+	if item, ok := input["pqMaxSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxSize from API value: %v", err)
+		}
+		m.PqMaxSize = value.(types.String)
+	} else {
+		m.PqMaxSize = types.StringNull()
+	}
+	if item, ok := input["pqPath"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqPath from API value: %v", err)
+		}
+		m.PqPath = value.(types.String)
+	} else {
+		m.PqPath = types.StringNull()
+	}
+	if item, ok := input["pqCompress"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqCompress from API value: %v", err)
+		}
+		m.PqCompress = value.(types.String)
+	} else {
+		m.PqCompress = types.StringNull()
+	}
+	if item, ok := input["pqOnBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqOnBackpressure from API value: %v", err)
+		}
+		m.PqOnBackpressure = value.(types.String)
+	} else {
+		m.PqOnBackpressure = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSizeBytes"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSizeBytes from API value: %v", err)
+		}
+		m.PqMaxBufferSizeBytes = value.(types.String)
+	} else {
+		m.PqMaxBufferSizeBytes = types.StringNull()
+	}
+	if item, ok := input["pqControls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert pqControls from API value: %v", err)
+		}
+		m.PqControls = value.(types.Map)
+	} else {
+		m.PqControls = types.MapNull(types.StringType)
+	}
+	return nil
+}
+
+type OutputTraversalOtlpModel struct {
+	ID                            types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                          types.String  `tfsdk:"type" json:"type,omitempty"`
+	Pipeline                      types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SystemFields                  types.List    `tfsdk:"system_fields" json:"systemFields,omitempty"`
+	Environment                   types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	Streamtags                    types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	AuthType                      types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Endpoint                      types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	Protocol                      types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
+	PreserveNativeAnyValue        types.Bool    `tfsdk:"preserve_native_any_value" json:"preserveNativeAnyValue,omitempty"`
+	Compress                      types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	HttpCompress                  types.String  `tfsdk:"http_compress" json:"httpCompress,omitempty"`
+	HttpLogsEndpointOverride      types.String  `tfsdk:"http_logs_endpoint_override" json:"httpLogsEndpointOverride,omitempty"`
+	Metadata                      types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	DynamicHeadersEnabled         types.Bool    `tfsdk:"dynamic_headers_enabled" json:"dynamicHeadersEnabled,omitempty"`
+	DynamicHeadersField           types.String  `tfsdk:"dynamic_headers_field" json:"dynamicHeadersField,omitempty"`
+	Concurrency                   types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
+	MaxPayloadSizeKB              types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
+	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
+	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
+	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
+	ConnectionTimeout             types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	KeepAliveTime                 types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	KeepAlive                     types.Bool    `tfsdk:"keep_alive" json:"keepAlive,omitempty"`
+	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
+	CredentialsSecret             types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	LoginURL                      types.String  `tfsdk:"login_url" json:"loginUrl,omitempty"`
+	SecretParamName               types.String  `tfsdk:"secret_param_name" json:"secretParamName,omitempty"`
+	OauthTextSecret               types.String  `tfsdk:"oauth_text_secret" json:"oauthTextSecret,omitempty"`
+	TokenAttributeName            types.String  `tfsdk:"token_attribute_name" json:"tokenAttributeName,omitempty"`
+	AuthHeaderExpr                types.String  `tfsdk:"auth_header_expr" json:"authHeaderExpr,omitempty"`
+	TokenTimeoutSecs              types.Float64 `tfsdk:"token_timeout_secs" json:"tokenTimeoutSecs,omitempty"`
+	OauthParams                   types.List    `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	OauthHeaders                  types.List    `tfsdk:"oauth_headers" json:"oauthHeaders,omitempty"`
+	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
+	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
+	SafeHeaders                   types.List    `tfsdk:"safe_headers" json:"safeHeaders,omitempty"`
+	ResponseRetrySettings         types.List    `tfsdk:"response_retry_settings" json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings          types.Object  `tfsdk:"timeout_retry_settings" json:"timeoutRetrySettings,omitempty"`
+	ResponseHonorRetryAfterHeader types.Bool    `tfsdk:"response_honor_retry_after_header" json:"responseHonorRetryAfterHeader,omitempty"`
+	TLS                           types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	PqStrictOrdering              types.Bool    `tfsdk:"pq_strict_ordering" json:"pqStrictOrdering,omitempty"`
+	PqRatePerSec                  types.Float64 `tfsdk:"pq_rate_per_sec" json:"pqRatePerSec,omitempty"`
+	PqMode                        types.String  `tfsdk:"pq_mode" json:"pqMode,omitempty"`
+	PqMaxBufferSize               types.Float64 `tfsdk:"pq_max_buffer_size" json:"pqMaxBufferSize,omitempty"`
+	PqMaxBackpressureSec          types.Float64 `tfsdk:"pq_max_backpressure_sec" json:"pqMaxBackpressureSec,omitempty"`
+	PqMaxFileSize                 types.String  `tfsdk:"pq_max_file_size" json:"pqMaxFileSize,omitempty"`
+	PqMaxSize                     types.String  `tfsdk:"pq_max_size" json:"pqMaxSize,omitempty"`
+	PqPath                        types.String  `tfsdk:"pq_path" json:"pqPath,omitempty"`
+	PqCompress                    types.String  `tfsdk:"pq_compress" json:"pqCompress,omitempty"`
+	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
+	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputTraversalOtlpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"auth_type":                         types.StringType,
+		"endpoint":                          types.StringType,
+		"protocol":                          types.StringType,
+		"preserve_native_any_value":         types.BoolType,
+		"compress":                          types.StringType,
+		"http_compress":                     types.StringType,
+		"http_logs_endpoint_override":       types.StringType,
+		"metadata":                          types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpMetadataAttrTypes()}},
+		"dynamic_headers_enabled":           types.BoolType,
+		"dynamic_headers_field":             types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"failed_request_logging_mode":       types.StringType,
+		"connection_timeout":                types.Float64Type,
+		"keep_alive_time":                   types.Float64Type,
+		"keep_alive":                        types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"credentials_secret":                types.StringType,
+		"text_secret":                       types.StringType,
+		"login_url":                         types.StringType,
+		"secret_param_name":                 types.StringType,
+		"oauth_text_secret":                 types.StringType,
+		"token_attribute_name":              types.StringType,
+		"auth_header_expr":                  types.StringType,
+		"token_timeout_secs":                types.Float64Type,
+		"oauth_params":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpOauthParamsAttrTypes()}},
+		"oauth_headers":                     types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpOauthHeadersAttrTypes()}},
+		"reject_unauthorized":               types.BoolType,
+		"use_round_robin_dns":               types.BoolType,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpExtraHttpHeadersAttrTypes()}},
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputTraversalOtlpTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputTraversalOtlpTLSAttrTypes()},
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
+func (m OutputTraversalOtlpModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SystemFields.IsNull() && !m.SystemFields.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SystemFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert system_fields to API value: %v", err)
+		}
+		output["systemFields"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.AuthType.IsNull() && !m.AuthType.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.AuthType)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_type to API value: %v", err)
+		}
+		output["authType"] = value
+	}
+	if !m.Endpoint.IsNull() && !m.Endpoint.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Endpoint)
+		if err != nil {
+			return nil, fmt.Errorf("convert endpoint to API value: %v", err)
+		}
+		output["endpoint"] = value
+	}
+	if !m.Protocol.IsNull() && !m.Protocol.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Protocol)
+		if err != nil {
+			return nil, fmt.Errorf("convert protocol to API value: %v", err)
+		}
+		output["protocol"] = value
+	}
+	if !m.PreserveNativeAnyValue.IsNull() && !m.PreserveNativeAnyValue.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PreserveNativeAnyValue)
+		if err != nil {
+			return nil, fmt.Errorf("convert preserve_native_any_value to API value: %v", err)
+		}
+		output["preserveNativeAnyValue"] = value
+	}
+	if !m.Compress.IsNull() && !m.Compress.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Compress)
+		if err != nil {
+			return nil, fmt.Errorf("convert compress to API value: %v", err)
+		}
+		output["compress"] = value
+	}
+	if !m.HttpCompress.IsNull() && !m.HttpCompress.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.HttpCompress)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_compress to API value: %v", err)
+		}
+		output["httpCompress"] = value
+	}
+	if !m.HttpLogsEndpointOverride.IsNull() && !m.HttpLogsEndpointOverride.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.HttpLogsEndpointOverride)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_logs_endpoint_override to API value: %v", err)
+		}
+		output["httpLogsEndpointOverride"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.DynamicHeadersEnabled.IsNull() && !m.DynamicHeadersEnabled.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.DynamicHeadersEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert dynamic_headers_enabled to API value: %v", err)
+		}
+		output["dynamicHeadersEnabled"] = value
+	}
+	if !m.DynamicHeadersField.IsNull() && !m.DynamicHeadersField.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.DynamicHeadersField)
+		if err != nil {
+			return nil, fmt.Errorf("convert dynamic_headers_field to API value: %v", err)
+		}
+		output["dynamicHeadersField"] = value
+	}
+	if !m.Concurrency.IsNull() && !m.Concurrency.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Concurrency)
+		if err != nil {
+			return nil, fmt.Errorf("convert concurrency to API value: %v", err)
+		}
+		output["concurrency"] = value
+	}
+	if !m.MaxPayloadSizeKB.IsNull() && !m.MaxPayloadSizeKB.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxPayloadSizeKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_payload_size_kb to API value: %v", err)
+		}
+		output["maxPayloadSizeKB"] = value
+	}
+	if !m.TimeoutSec.IsNull() && !m.TimeoutSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TimeoutSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
+		}
+		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
+	}
+	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert flush_period_sec to API value: %v", err)
+		}
+		output["flushPeriodSec"] = value
+	}
+	if !m.FailedRequestLoggingMode.IsNull() && !m.FailedRequestLoggingMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FailedRequestLoggingMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert failed_request_logging_mode to API value: %v", err)
+		}
+		output["failedRequestLoggingMode"] = value
+	}
+	if !m.ConnectionTimeout.IsNull() && !m.ConnectionTimeout.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ConnectionTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert connection_timeout to API value: %v", err)
+		}
+		output["connectionTimeout"] = value
+	}
+	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.KeepAliveTime)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_time to API value: %v", err)
+		}
+		output["keepAliveTime"] = value
+	}
+	if !m.KeepAlive.IsNull() && !m.KeepAlive.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.KeepAlive)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive to API value: %v", err)
+		}
+		output["keepAlive"] = value
+	}
+	if !m.OnBackpressure.IsNull() && !m.OnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert on_backpressure to API value: %v", err)
+		}
+		output["onBackpressure"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.CredentialsSecret.IsNull() && !m.CredentialsSecret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.CredentialsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert credentials_secret to API value: %v", err)
+		}
+		output["credentialsSecret"] = value
+	}
+	if !m.TextSecret.IsNull() && !m.TextSecret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
+		}
+		output["textSecret"] = value
+	}
+	if !m.LoginURL.IsNull() && !m.LoginURL.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.LoginURL)
+		if err != nil {
+			return nil, fmt.Errorf("convert login_url to API value: %v", err)
+		}
+		output["loginUrl"] = value
+	}
+	if !m.SecretParamName.IsNull() && !m.SecretParamName.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SecretParamName)
+		if err != nil {
+			return nil, fmt.Errorf("convert secret_param_name to API value: %v", err)
+		}
+		output["secretParamName"] = value
+	}
+	if !m.OauthTextSecret.IsNull() && !m.OauthTextSecret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OauthTextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert oauth_text_secret to API value: %v", err)
+		}
+		output["oauthTextSecret"] = value
+	}
+	if !m.TokenAttributeName.IsNull() && !m.TokenAttributeName.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TokenAttributeName)
+		if err != nil {
+			return nil, fmt.Errorf("convert token_attribute_name to API value: %v", err)
+		}
+		output["tokenAttributeName"] = value
+	}
+	if !m.AuthHeaderExpr.IsNull() && !m.AuthHeaderExpr.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.AuthHeaderExpr)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_header_expr to API value: %v", err)
+		}
+		output["authHeaderExpr"] = value
+	}
+	if !m.TokenTimeoutSecs.IsNull() && !m.TokenTimeoutSecs.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TokenTimeoutSecs)
+		if err != nil {
+			return nil, fmt.Errorf("convert token_timeout_secs to API value: %v", err)
+		}
+		output["tokenTimeoutSecs"] = value
+	}
+	if !m.OauthParams.IsNull() && !m.OauthParams.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OauthParams)
+		if err != nil {
+			return nil, fmt.Errorf("convert oauth_params to API value: %v", err)
+		}
+		output["oauthParams"] = value
+	}
+	if !m.OauthHeaders.IsNull() && !m.OauthHeaders.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OauthHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert oauth_headers to API value: %v", err)
+		}
+		output["oauthHeaders"] = value
+	}
+	if !m.RejectUnauthorized.IsNull() && !m.RejectUnauthorized.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.RejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert reject_unauthorized to API value: %v", err)
+		}
+		output["rejectUnauthorized"] = value
+	}
+	if !m.UseRoundRobinDns.IsNull() && !m.UseRoundRobinDns.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.UseRoundRobinDns)
+		if err != nil {
+			return nil, fmt.Errorf("convert use_round_robin_dns to API value: %v", err)
+		}
+		output["useRoundRobinDns"] = value
+	}
+	if !m.ExtraHttpHeaders.IsNull() && !m.ExtraHttpHeaders.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ExtraHttpHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert extra_http_headers to API value: %v", err)
+		}
+		output["extraHttpHeaders"] = value
+	}
+	if !m.SafeHeaders.IsNull() && !m.SafeHeaders.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SafeHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert safe_headers to API value: %v", err)
+		}
+		output["safeHeaders"] = value
+	}
+	if !m.ResponseRetrySettings.IsNull() && !m.ResponseRetrySettings.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ResponseRetrySettings)
+		if err != nil {
+			return nil, fmt.Errorf("convert response_retry_settings to API value: %v", err)
+		}
+		output["responseRetrySettings"] = value
+	}
+	if !m.TimeoutRetrySettings.IsNull() && !m.TimeoutRetrySettings.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TimeoutRetrySettings)
+		if err != nil {
+			return nil, fmt.Errorf("convert timeout_retry_settings to API value: %v", err)
+		}
+		output["timeoutRetrySettings"] = value
+	}
+	if !m.ResponseHonorRetryAfterHeader.IsNull() && !m.ResponseHonorRetryAfterHeader.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ResponseHonorRetryAfterHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert response_honor_retry_after_header to API value: %v", err)
+		}
+		output["responseHonorRetryAfterHeader"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.PqStrictOrdering.IsNull() && !m.PqStrictOrdering.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqStrictOrdering)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_strict_ordering to API value: %v", err)
+		}
+		output["pqStrictOrdering"] = value
+	}
+	if !m.PqRatePerSec.IsNull() && !m.PqRatePerSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqRatePerSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_rate_per_sec to API value: %v", err)
+		}
+		output["pqRatePerSec"] = value
+	}
+	if !m.PqMode.IsNull() && !m.PqMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_mode to API value: %v", err)
+		}
+		output["pqMode"] = value
+	}
+	if !m.PqMaxBufferSize.IsNull() && !m.PqMaxBufferSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size to API value: %v", err)
+		}
+		output["pqMaxBufferSize"] = value
+	}
+	if !m.PqMaxBackpressureSec.IsNull() && !m.PqMaxBackpressureSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBackpressureSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_backpressure_sec to API value: %v", err)
+		}
+		output["pqMaxBackpressureSec"] = value
+	}
+	if !m.PqMaxFileSize.IsNull() && !m.PqMaxFileSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxFileSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_file_size to API value: %v", err)
+		}
+		output["pqMaxFileSize"] = value
+	}
+	if !m.PqMaxSize.IsNull() && !m.PqMaxSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_size to API value: %v", err)
+		}
+		output["pqMaxSize"] = value
+	}
+	if !m.PqPath.IsNull() && !m.PqPath.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_path to API value: %v", err)
+		}
+		output["pqPath"] = value
+	}
+	if !m.PqCompress.IsNull() && !m.PqCompress.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqCompress)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_compress to API value: %v", err)
+		}
+		output["pqCompress"] = value
+	}
+	if !m.PqOnBackpressure.IsNull() && !m.PqOnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqOnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_on_backpressure to API value: %v", err)
+		}
+		output["pqOnBackpressure"] = value
+	}
+	if !m.PqMaxBufferSizeBytes.IsNull() && !m.PqMaxBufferSizeBytes.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSizeBytes)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size_bytes to API value: %v", err)
+		}
+		output["pqMaxBufferSizeBytes"] = value
+	}
+	if !m.PqControls.IsNull() && !m.PqControls.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqControls)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
+		}
+		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "traversal_otlp"
+	}
+	return output, nil
+}
+
+func (m *OutputTraversalOtlpModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["systemFields"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert systemFields from API value: %v", err)
+		}
+		m.SystemFields = value.(types.List)
+	} else {
+		m.SystemFields = types.ListNull(types.StringType)
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["authType"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert authType from API value: %v", err)
+		}
+		m.AuthType = value.(types.String)
+	} else {
+		m.AuthType = types.StringNull()
+	}
+	if item, ok := input["endpoint"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert endpoint from API value: %v", err)
+		}
+		m.Endpoint = value.(types.String)
+	} else {
+		m.Endpoint = types.StringNull()
+	}
+	if item, ok := input["protocol"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert protocol from API value: %v", err)
+		}
+		m.Protocol = value.(types.String)
+	} else {
+		m.Protocol = types.StringNull()
+	}
+	if item, ok := input["preserveNativeAnyValue"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert preserveNativeAnyValue from API value: %v", err)
+		}
+		m.PreserveNativeAnyValue = value.(types.Bool)
+	} else {
+		m.PreserveNativeAnyValue = types.BoolNull()
+	}
+	if item, ok := input["compress"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert compress from API value: %v", err)
+		}
+		m.Compress = value.(types.String)
+	} else {
+		m.Compress = types.StringNull()
+	}
+	if item, ok := input["httpCompress"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert httpCompress from API value: %v", err)
+		}
+		m.HttpCompress = value.(types.String)
+	} else {
+		m.HttpCompress = types.StringNull()
+	}
+	if item, ok := input["httpLogsEndpointOverride"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert httpLogsEndpointOverride from API value: %v", err)
+		}
+		m.HttpLogsEndpointOverride = value.(types.String)
+	} else {
+		m.HttpLogsEndpointOverride = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpMetadataAttrTypes()})
+	}
+	if item, ok := input["dynamicHeadersEnabled"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert dynamicHeadersEnabled from API value: %v", err)
+		}
+		m.DynamicHeadersEnabled = value.(types.Bool)
+	} else {
+		m.DynamicHeadersEnabled = types.BoolNull()
+	}
+	if item, ok := input["dynamicHeadersField"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert dynamicHeadersField from API value: %v", err)
+		}
+		m.DynamicHeadersField = value.(types.String)
+	} else {
+		m.DynamicHeadersField = types.StringNull()
+	}
+	if item, ok := input["concurrency"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert concurrency from API value: %v", err)
+		}
+		m.Concurrency = value.(types.Float64)
+	} else {
+		m.Concurrency = types.Float64Null()
+	}
+	if item, ok := input["maxPayloadSizeKB"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxPayloadSizeKB from API value: %v", err)
+		}
+		m.MaxPayloadSizeKB = value.(types.Float64)
+	} else {
+		m.MaxPayloadSizeKB = types.Float64Null()
+	}
+	if item, ok := input["timeoutSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeoutSec from API value: %v", err)
+		}
+		m.TimeoutSec = value.(types.Float64)
+	} else {
+		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
+	if item, ok := input["flushPeriodSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert flushPeriodSec from API value: %v", err)
+		}
+		m.FlushPeriodSec = value.(types.Float64)
+	} else {
+		m.FlushPeriodSec = types.Float64Null()
+	}
+	if item, ok := input["failedRequestLoggingMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert failedRequestLoggingMode from API value: %v", err)
+		}
+		m.FailedRequestLoggingMode = value.(types.String)
+	} else {
+		m.FailedRequestLoggingMode = types.StringNull()
+	}
+	if item, ok := input["connectionTimeout"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert connectionTimeout from API value: %v", err)
+		}
+		m.ConnectionTimeout = value.(types.Float64)
+	} else {
+		m.ConnectionTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTime"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTime from API value: %v", err)
+		}
+		m.KeepAliveTime = value.(types.Float64)
+	} else {
+		m.KeepAliveTime = types.Float64Null()
+	}
+	if item, ok := input["keepAlive"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert keepAlive from API value: %v", err)
+		}
+		m.KeepAlive = value.(types.Bool)
+	} else {
+		m.KeepAlive = types.BoolNull()
+	}
+	if item, ok := input["onBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert onBackpressure from API value: %v", err)
+		}
+		m.OnBackpressure = value.(types.String)
+	} else {
+		m.OnBackpressure = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["credentialsSecret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert credentialsSecret from API value: %v", err)
+		}
+		m.CredentialsSecret = value.(types.String)
+	} else {
+		m.CredentialsSecret = types.StringNull()
+	}
+	if item, ok := input["textSecret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert textSecret from API value: %v", err)
+		}
+		m.TextSecret = value.(types.String)
+	} else {
+		m.TextSecret = types.StringNull()
+	}
+	if item, ok := input["loginUrl"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert loginUrl from API value: %v", err)
+		}
+		m.LoginURL = value.(types.String)
+	} else {
+		m.LoginURL = types.StringNull()
+	}
+	if item, ok := input["secretParamName"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert secretParamName from API value: %v", err)
+		}
+		m.SecretParamName = value.(types.String)
+	} else {
+		m.SecretParamName = types.StringNull()
+	}
+	if item, ok := input["oauthTextSecret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert oauthTextSecret from API value: %v", err)
+		}
+		m.OauthTextSecret = value.(types.String)
+	} else {
+		m.OauthTextSecret = types.StringNull()
+	}
+	if item, ok := input["tokenAttributeName"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert tokenAttributeName from API value: %v", err)
+		}
+		m.TokenAttributeName = value.(types.String)
+	} else {
+		m.TokenAttributeName = types.StringNull()
+	}
+	if item, ok := input["authHeaderExpr"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert authHeaderExpr from API value: %v", err)
+		}
+		m.AuthHeaderExpr = value.(types.String)
+	} else {
+		m.AuthHeaderExpr = types.StringNull()
+	}
+	if item, ok := input["tokenTimeoutSecs"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert tokenTimeoutSecs from API value: %v", err)
+		}
+		m.TokenTimeoutSecs = value.(types.Float64)
+	} else {
+		m.TokenTimeoutSecs = types.Float64Null()
+	}
+	if item, ok := input["oauthParams"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpOauthParamsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert oauthParams from API value: %v", err)
+		}
+		m.OauthParams = value.(types.List)
+	} else {
+		m.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthParamsAttrTypes()})
+	}
+	if item, ok := input["oauthHeaders"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpOauthHeadersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert oauthHeaders from API value: %v", err)
+		}
+		m.OauthHeaders = value.(types.List)
+	} else {
+		m.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpOauthHeadersAttrTypes()})
+	}
+	if item, ok := input["rejectUnauthorized"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert rejectUnauthorized from API value: %v", err)
+		}
+		m.RejectUnauthorized = value.(types.Bool)
+	} else {
+		m.RejectUnauthorized = types.BoolNull()
+	}
+	if item, ok := input["useRoundRobinDns"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert useRoundRobinDns from API value: %v", err)
+		}
+		m.UseRoundRobinDns = value.(types.Bool)
+	} else {
+		m.UseRoundRobinDns = types.BoolNull()
+	}
+	if item, ok := input["extraHttpHeaders"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpExtraHttpHeadersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert extraHttpHeaders from API value: %v", err)
+		}
+		m.ExtraHttpHeaders = value.(types.List)
+	} else {
+		m.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpExtraHttpHeadersAttrTypes()})
+	}
+	if item, ok := input["safeHeaders"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert safeHeaders from API value: %v", err)
+		}
+		m.SafeHeaders = value.(types.List)
+	} else {
+		m.SafeHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["responseRetrySettings"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTraversalOtlpResponseRetrySettingsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert responseRetrySettings from API value: %v", err)
+		}
+		m.ResponseRetrySettings = value.(types.List)
+	} else {
+		m.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputTraversalOtlpResponseRetrySettingsAttrTypes()})
+	}
+	if item, ok := input["timeoutRetrySettings"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: OutputTraversalOtlpTimeoutRetrySettingsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert timeoutRetrySettings from API value: %v", err)
+		}
+		m.TimeoutRetrySettings = value.(types.Object)
+	} else {
+		m.TimeoutRetrySettings = types.ObjectNull(OutputTraversalOtlpTimeoutRetrySettingsAttrTypes())
+	}
+	if item, ok := input["responseHonorRetryAfterHeader"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert responseHonorRetryAfterHeader from API value: %v", err)
+		}
+		m.ResponseHonorRetryAfterHeader = value.(types.Bool)
+	} else {
+		m.ResponseHonorRetryAfterHeader = types.BoolNull()
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: OutputTraversalOtlpTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(OutputTraversalOtlpTLSAttrTypes())
 	}
 	if item, ok := input["pqStrictOrdering"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
@@ -76647,6 +78121,620 @@ func (m *OutputIbmCloudS3Model) unmarshalPayload(input map[string]any) error {
 		m.MaxRetryNum = value.(types.Float64)
 	} else {
 		m.MaxRetryNum = types.Float64Null()
+	}
+	return nil
+}
+
+type OutputDatabricksZerobusModel struct {
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                 types.String  `tfsdk:"type" json:"type,omitempty"`
+	Pipeline             types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SystemFields         types.List    `tfsdk:"system_fields" json:"systemFields,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkspaceURL         types.String  `tfsdk:"workspace_url" json:"workspaceUrl,omitempty"`
+	WorkspaceID          types.String  `tfsdk:"workspace_id" json:"workspaceId,omitempty"`
+	ZerobusEndpoint      types.String  `tfsdk:"zerobus_endpoint" json:"zerobusEndpoint,omitempty"`
+	ClientID             types.String  `tfsdk:"client_id" json:"clientId,omitempty"`
+	ClientTextSecret     types.String  `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	TableName            types.String  `tfsdk:"table_name" json:"tableName,omitempty"`
+	MaxBatchSizeKB       types.Int64   `tfsdk:"max_batch_size_kb" json:"maxBatchSizeKB,omitempty"`
+	MaxBatchRecords      types.Int64   `tfsdk:"max_batch_records" json:"maxBatchRecords,omitempty"`
+	MaxBufferedKB        types.Int64   `tfsdk:"max_buffered_kb" json:"maxBufferedKB,omitempty"`
+	MaxInflightBatches   types.Int64   `tfsdk:"max_inflight_batches" json:"maxInflightBatches,omitempty"`
+	FlushPeriodSec       types.Int64   `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
+	AckTimeoutSec        types.Int64   `tfsdk:"ack_timeout_sec" json:"ackTimeoutSec,omitempty"`
+	ConnectionTimeoutSec types.Int64   `tfsdk:"connection_timeout_sec" json:"connectionTimeoutSec,omitempty"`
+	OnBackpressure       types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	PqStrictOrdering     types.Bool    `tfsdk:"pq_strict_ordering" json:"pqStrictOrdering,omitempty"`
+	PqRatePerSec         types.Float64 `tfsdk:"pq_rate_per_sec" json:"pqRatePerSec,omitempty"`
+	PqMode               types.String  `tfsdk:"pq_mode" json:"pqMode,omitempty"`
+	PqMaxBufferSize      types.Float64 `tfsdk:"pq_max_buffer_size" json:"pqMaxBufferSize,omitempty"`
+	PqMaxBackpressureSec types.Float64 `tfsdk:"pq_max_backpressure_sec" json:"pqMaxBackpressureSec,omitempty"`
+	PqMaxFileSize        types.String  `tfsdk:"pq_max_file_size" json:"pqMaxFileSize,omitempty"`
+	PqMaxSize            types.String  `tfsdk:"pq_max_size" json:"pqMaxSize,omitempty"`
+	PqPath               types.String  `tfsdk:"pq_path" json:"pqPath,omitempty"`
+	PqCompress           types.String  `tfsdk:"pq_compress" json:"pqCompress,omitempty"`
+	PqOnBackpressure     types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
+	PqMaxBufferSizeBytes types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputDatabricksZerobusModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"pipeline":                 types.StringType,
+		"system_fields":            types.ListType{ElemType: types.StringType},
+		"environment":              types.StringType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"workspace_url":            types.StringType,
+		"workspace_id":             types.StringType,
+		"zerobus_endpoint":         types.StringType,
+		"client_id":                types.StringType,
+		"client_text_secret":       types.StringType,
+		"table_name":               types.StringType,
+		"max_batch_size_kb":        types.Int64Type,
+		"max_batch_records":        types.Int64Type,
+		"max_buffered_kb":          types.Int64Type,
+		"max_inflight_batches":     types.Int64Type,
+		"flush_period_sec":         types.Int64Type,
+		"ack_timeout_sec":          types.Int64Type,
+		"connection_timeout_sec":   types.Int64Type,
+		"on_backpressure":          types.StringType,
+		"description":              types.StringType,
+		"pq_strict_ordering":       types.BoolType,
+		"pq_rate_per_sec":          types.Float64Type,
+		"pq_mode":                  types.StringType,
+		"pq_max_buffer_size":       types.Float64Type,
+		"pq_max_backpressure_sec":  types.Float64Type,
+		"pq_max_file_size":         types.StringType,
+		"pq_max_size":              types.StringType,
+		"pq_path":                  types.StringType,
+		"pq_compress":              types.StringType,
+		"pq_on_backpressure":       types.StringType,
+		"pq_max_buffer_size_bytes": types.StringType,
+		"pq_controls":              types.MapType{ElemType: types.StringType},
+	}
+}
+
+func (m OutputDatabricksZerobusModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SystemFields.IsNull() && !m.SystemFields.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SystemFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert system_fields to API value: %v", err)
+		}
+		output["systemFields"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.WorkspaceURL.IsNull() && !m.WorkspaceURL.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.WorkspaceURL)
+		if err != nil {
+			return nil, fmt.Errorf("convert workspace_url to API value: %v", err)
+		}
+		output["workspaceUrl"] = value
+	}
+	if !m.WorkspaceID.IsNull() && !m.WorkspaceID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.WorkspaceID)
+		if err != nil {
+			return nil, fmt.Errorf("convert workspace_id to API value: %v", err)
+		}
+		output["workspaceId"] = value
+	}
+	if !m.ZerobusEndpoint.IsNull() && !m.ZerobusEndpoint.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ZerobusEndpoint)
+		if err != nil {
+			return nil, fmt.Errorf("convert zerobus_endpoint to API value: %v", err)
+		}
+		output["zerobusEndpoint"] = value
+	}
+	if !m.ClientID.IsNull() && !m.ClientID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ClientID)
+		if err != nil {
+			return nil, fmt.Errorf("convert client_id to API value: %v", err)
+		}
+		output["clientId"] = value
+	}
+	if !m.ClientTextSecret.IsNull() && !m.ClientTextSecret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ClientTextSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert client_text_secret to API value: %v", err)
+		}
+		output["clientTextSecret"] = value
+	}
+	if !m.TableName.IsNull() && !m.TableName.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TableName)
+		if err != nil {
+			return nil, fmt.Errorf("convert table_name to API value: %v", err)
+		}
+		output["tableName"] = value
+	}
+	if !m.MaxBatchSizeKB.IsNull() && !m.MaxBatchSizeKB.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxBatchSizeKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_batch_size_kb to API value: %v", err)
+		}
+		output["maxBatchSizeKB"] = value
+	}
+	if !m.MaxBatchRecords.IsNull() && !m.MaxBatchRecords.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxBatchRecords)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_batch_records to API value: %v", err)
+		}
+		output["maxBatchRecords"] = value
+	}
+	if !m.MaxBufferedKB.IsNull() && !m.MaxBufferedKB.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxBufferedKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_buffered_kb to API value: %v", err)
+		}
+		output["maxBufferedKB"] = value
+	}
+	if !m.MaxInflightBatches.IsNull() && !m.MaxInflightBatches.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxInflightBatches)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_inflight_batches to API value: %v", err)
+		}
+		output["maxInflightBatches"] = value
+	}
+	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert flush_period_sec to API value: %v", err)
+		}
+		output["flushPeriodSec"] = value
+	}
+	if !m.AckTimeoutSec.IsNull() && !m.AckTimeoutSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.AckTimeoutSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert ack_timeout_sec to API value: %v", err)
+		}
+		output["ackTimeoutSec"] = value
+	}
+	if !m.ConnectionTimeoutSec.IsNull() && !m.ConnectionTimeoutSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ConnectionTimeoutSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert connection_timeout_sec to API value: %v", err)
+		}
+		output["connectionTimeoutSec"] = value
+	}
+	if !m.OnBackpressure.IsNull() && !m.OnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert on_backpressure to API value: %v", err)
+		}
+		output["onBackpressure"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.PqStrictOrdering.IsNull() && !m.PqStrictOrdering.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqStrictOrdering)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_strict_ordering to API value: %v", err)
+		}
+		output["pqStrictOrdering"] = value
+	}
+	if !m.PqRatePerSec.IsNull() && !m.PqRatePerSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqRatePerSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_rate_per_sec to API value: %v", err)
+		}
+		output["pqRatePerSec"] = value
+	}
+	if !m.PqMode.IsNull() && !m.PqMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_mode to API value: %v", err)
+		}
+		output["pqMode"] = value
+	}
+	if !m.PqMaxBufferSize.IsNull() && !m.PqMaxBufferSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size to API value: %v", err)
+		}
+		output["pqMaxBufferSize"] = value
+	}
+	if !m.PqMaxBackpressureSec.IsNull() && !m.PqMaxBackpressureSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBackpressureSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_backpressure_sec to API value: %v", err)
+		}
+		output["pqMaxBackpressureSec"] = value
+	}
+	if !m.PqMaxFileSize.IsNull() && !m.PqMaxFileSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxFileSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_file_size to API value: %v", err)
+		}
+		output["pqMaxFileSize"] = value
+	}
+	if !m.PqMaxSize.IsNull() && !m.PqMaxSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_size to API value: %v", err)
+		}
+		output["pqMaxSize"] = value
+	}
+	if !m.PqPath.IsNull() && !m.PqPath.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_path to API value: %v", err)
+		}
+		output["pqPath"] = value
+	}
+	if !m.PqCompress.IsNull() && !m.PqCompress.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqCompress)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_compress to API value: %v", err)
+		}
+		output["pqCompress"] = value
+	}
+	if !m.PqOnBackpressure.IsNull() && !m.PqOnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqOnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_on_backpressure to API value: %v", err)
+		}
+		output["pqOnBackpressure"] = value
+	}
+	if !m.PqMaxBufferSizeBytes.IsNull() && !m.PqMaxBufferSizeBytes.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSizeBytes)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size_bytes to API value: %v", err)
+		}
+		output["pqMaxBufferSizeBytes"] = value
+	}
+	if !m.PqControls.IsNull() && !m.PqControls.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqControls)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
+		}
+		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "databricks_zerobus"
+	}
+	return output, nil
+}
+
+func (m *OutputDatabricksZerobusModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["systemFields"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert systemFields from API value: %v", err)
+		}
+		m.SystemFields = value.(types.List)
+	} else {
+		m.SystemFields = types.ListNull(types.StringType)
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["workspaceUrl"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert workspaceUrl from API value: %v", err)
+		}
+		m.WorkspaceURL = value.(types.String)
+	} else {
+		m.WorkspaceURL = types.StringNull()
+	}
+	if item, ok := input["workspaceId"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert workspaceId from API value: %v", err)
+		}
+		m.WorkspaceID = value.(types.String)
+	} else {
+		m.WorkspaceID = types.StringNull()
+	}
+	if item, ok := input["zerobusEndpoint"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert zerobusEndpoint from API value: %v", err)
+		}
+		m.ZerobusEndpoint = value.(types.String)
+	} else {
+		m.ZerobusEndpoint = types.StringNull()
+	}
+	if item, ok := input["clientId"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert clientId from API value: %v", err)
+		}
+		m.ClientID = value.(types.String)
+	} else {
+		m.ClientID = types.StringNull()
+	}
+	if item, ok := input["clientTextSecret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert clientTextSecret from API value: %v", err)
+		}
+		m.ClientTextSecret = value.(types.String)
+	} else {
+		m.ClientTextSecret = types.StringNull()
+	}
+	if item, ok := input["tableName"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert tableName from API value: %v", err)
+		}
+		m.TableName = value.(types.String)
+	} else {
+		m.TableName = types.StringNull()
+	}
+	if item, ok := input["maxBatchSizeKB"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxBatchSizeKB from API value: %v", err)
+		}
+		m.MaxBatchSizeKB = value.(types.Int64)
+	} else {
+		m.MaxBatchSizeKB = types.Int64Null()
+	}
+	if item, ok := input["maxBatchRecords"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxBatchRecords from API value: %v", err)
+		}
+		m.MaxBatchRecords = value.(types.Int64)
+	} else {
+		m.MaxBatchRecords = types.Int64Null()
+	}
+	if item, ok := input["maxBufferedKB"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxBufferedKB from API value: %v", err)
+		}
+		m.MaxBufferedKB = value.(types.Int64)
+	} else {
+		m.MaxBufferedKB = types.Int64Null()
+	}
+	if item, ok := input["maxInflightBatches"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxInflightBatches from API value: %v", err)
+		}
+		m.MaxInflightBatches = value.(types.Int64)
+	} else {
+		m.MaxInflightBatches = types.Int64Null()
+	}
+	if item, ok := input["flushPeriodSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert flushPeriodSec from API value: %v", err)
+		}
+		m.FlushPeriodSec = value.(types.Int64)
+	} else {
+		m.FlushPeriodSec = types.Int64Null()
+	}
+	if item, ok := input["ackTimeoutSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert ackTimeoutSec from API value: %v", err)
+		}
+		m.AckTimeoutSec = value.(types.Int64)
+	} else {
+		m.AckTimeoutSec = types.Int64Null()
+	}
+	if item, ok := input["connectionTimeoutSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert connectionTimeoutSec from API value: %v", err)
+		}
+		m.ConnectionTimeoutSec = value.(types.Int64)
+	} else {
+		m.ConnectionTimeoutSec = types.Int64Null()
+	}
+	if item, ok := input["onBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert onBackpressure from API value: %v", err)
+		}
+		m.OnBackpressure = value.(types.String)
+	} else {
+		m.OnBackpressure = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["pqStrictOrdering"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqStrictOrdering from API value: %v", err)
+		}
+		m.PqStrictOrdering = value.(types.Bool)
+	} else {
+		m.PqStrictOrdering = types.BoolNull()
+	}
+	if item, ok := input["pqRatePerSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqRatePerSec from API value: %v", err)
+		}
+		m.PqRatePerSec = value.(types.Float64)
+	} else {
+		m.PqRatePerSec = types.Float64Null()
+	}
+	if item, ok := input["pqMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMode from API value: %v", err)
+		}
+		m.PqMode = value.(types.String)
+	} else {
+		m.PqMode = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSize from API value: %v", err)
+		}
+		m.PqMaxBufferSize = value.(types.Float64)
+	} else {
+		m.PqMaxBufferSize = types.Float64Null()
+	}
+	if item, ok := input["pqMaxBackpressureSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBackpressureSec from API value: %v", err)
+		}
+		m.PqMaxBackpressureSec = value.(types.Float64)
+	} else {
+		m.PqMaxBackpressureSec = types.Float64Null()
+	}
+	if item, ok := input["pqMaxFileSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxFileSize from API value: %v", err)
+		}
+		m.PqMaxFileSize = value.(types.String)
+	} else {
+		m.PqMaxFileSize = types.StringNull()
+	}
+	if item, ok := input["pqMaxSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxSize from API value: %v", err)
+		}
+		m.PqMaxSize = value.(types.String)
+	} else {
+		m.PqMaxSize = types.StringNull()
+	}
+	if item, ok := input["pqPath"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqPath from API value: %v", err)
+		}
+		m.PqPath = value.(types.String)
+	} else {
+		m.PqPath = types.StringNull()
+	}
+	if item, ok := input["pqCompress"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqCompress from API value: %v", err)
+		}
+		m.PqCompress = value.(types.String)
+	} else {
+		m.PqCompress = types.StringNull()
+	}
+	if item, ok := input["pqOnBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqOnBackpressure from API value: %v", err)
+		}
+		m.PqOnBackpressure = value.(types.String)
+	} else {
+		m.PqOnBackpressure = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSizeBytes"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSizeBytes from API value: %v", err)
+		}
+		m.PqMaxBufferSizeBytes = value.(types.String)
+	} else {
+		m.PqMaxBufferSizeBytes = types.StringNull()
+	}
+	if item, ok := input["pqControls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert pqControls from API value: %v", err)
+		}
+		m.PqControls = value.(types.Map)
+	} else {
+		m.PqControls = types.MapNull(types.StringType)
 	}
 	return nil
 }

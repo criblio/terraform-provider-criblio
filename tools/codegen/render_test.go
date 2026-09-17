@@ -329,6 +329,46 @@ func TestRenderedSnippets(t *testing.T) {
 	})
 	assertContains(t, discriminatorResource, `stringvalidator.OneOf("chronicle")`)
 
+	nestedOneOfTypes := renderTemplate(t, "types", parser.ResourceDef{
+		StructName: "Monitor",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			GoName:                "AnomalyConfig",
+			ModelName:             "AnomalyConfigModel",
+			TerraformName:         "anomaly_config",
+			NestUnder:             "detectionConfig",
+			ParentRequired:        true,
+			RequestField:          true,
+			UpdateField:           true,
+			DiscriminatorAtParent: true,
+			DiscriminatorField:    "type",
+			DiscriminatorValue:    "anomaly",
+			Fields: []parser.FieldDef{{
+				APIName:       "algorithm",
+				TerraformName: "algorithm",
+				GoName:        "Algorithm",
+				Type:          "string",
+				RequestField:  true,
+			}},
+		}},
+	})
+	assertContains(t, nestedOneOfTypes, `output["detectionConfig"] = value`)
+	assertNotContains(t, nestedOneOfTypes, `for key, item := range value`)
+	assertContains(t, nestedOneOfTypes, `multiple oneOf variants configured for detectionConfig`)
+	assertContains(t, nestedOneOfTypes, `exactly one oneOf variant must be configured for detectionConfig`)
+	assertContains(t, nestedOneOfTypes, `if value, ok := raw["type"].(string); ok`)
+	assertContains(t, nestedOneOfTypes, `nested, ok := raw["detectionConfig"].(map[string]any)`)
+	assertContains(t, nestedOneOfTypes, `m.AnomalyConfig.unmarshalPayload(nested)`)
+
+	computedNestedResource := renderTemplate(t, "resource", parser.ResourceDef{
+		StructName: "Monitor",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			TerraformName:  "api_only_config",
+			ParentComputed: true,
+		}},
+	})
+	assertContains(t, computedNestedResource, `"api_only_config": schema.SingleNestedAttribute{`)
+	assertContains(t, computedNestedResource, "Computed: true,")
+
 	destinationResource := renderTemplate(t, "resource", destination)
 	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")

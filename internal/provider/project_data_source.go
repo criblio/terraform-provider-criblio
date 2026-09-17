@@ -36,18 +36,22 @@ func (d *ProjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 		MarkdownDescription: "Project Data Source",
 		Attributes: map[string]schema.Attribute{
 			"consumers": schema.MapNestedAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Map of Subscription consumer configurations keyed by Subscription ID.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"connections": schema.ListNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Array of connections that route data from the consumer through a Pipeline or Pack to a Destination.`,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"output": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `The <code>id</code> of the Destination to send data to.`,
 									},
 									"pipeline": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `The <code>id</code> of the Pipeline or Pack used to process data before it is sent to the Destination.`,
 									},
 								},
 							},
@@ -57,16 +61,19 @@ func (d *ProjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 							Description: `It should be removed as a consumer is present or absent.`,
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Type of the Subscription consumer.`,
 						},
 					},
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Project.`,
 			},
 			"destinations": schema.ListAttribute{
 				Computed:    true,
+				Description: `List of Destination IDs associated with the Project.`,
 				ElementType: types.StringType,
 			},
 			"group_id": schema.StringAttribute{
@@ -79,6 +86,7 @@ func (d *ProjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 			},
 			"subscriptions": schema.ListAttribute{
 				Computed:    true,
+				Description: `List of Subscription IDs associated with the Project.`,
 				ElementType: types.StringType,
 			},
 		},

@@ -157,6 +157,25 @@ func TestConvertRawItemPackUsesTerraformTagsAsJSONFallback(t *testing.T) {
 	assert.Equal(t, "4.10.0", attrs["min_log_stream_version"].String)
 }
 
+func TestConvertRawGroupPreservesCloudConfiguration(t *testing.T) {
+	e := registry.Entry{TypeName: "criblio_group", ModelTypeName: "GroupResourceModel"}
+	raw := json.RawMessage(`{
+		"id":"cloud-workers",
+		"cloud":{"provider":"aws","region":"us-west-2"}
+	}`)
+
+	model, err := ConvertRawItemWithIdentifiers(e, raw, map[string]string{"ID": "cloud-workers"})
+	require.NoError(t, err)
+
+	attrs, err := hcl.ModelToValue(model, nil)
+	require.NoError(t, err)
+	cloud, ok := attrs["cloud"]
+	require.True(t, ok)
+	require.Equal(t, hcl.KindMap, cloud.Kind)
+	assert.Equal(t, "aws", cloud.Map["provider"].String)
+	assert.Equal(t, "us-west-2", cloud.Map["region"].String)
+}
+
 func TestConvertRawItemCollectorKeepsAzureConfiguration(t *testing.T) {
 	e := registry.Entry{TypeName: "criblio_collector", ModelTypeName: "CollectorResourceModel"}
 	raw := json.RawMessage(`{

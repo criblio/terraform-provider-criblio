@@ -115,6 +115,10 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 											Computed:    true,
 											Description: `Filesystem path to the PEM-encoded TLS certificate.`,
 										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `Name of a predefined Certificate stored in Cribl.`,
+										},
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
 											Description: `If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.`,
@@ -144,6 +148,34 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed:    true,
 							Description: `App configuration.`,
 							Attributes: map[string]schema.Attribute{
+								"app_backend_broker_origin": schema.StringAttribute{
+									Computed:    true,
+									Description: `Public origin for App Platform backend broker callbacks (standalone/on-prem only). Must be an absolute HTTP(S) URL.`,
+								},
+								"app_backend_max_callbacks_per_installation": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of broker callbacks per minute a single app backend installation may make. Over-limit callbacks receive HTTP 429.`,
+								},
+								"app_backend_max_callbacks_total": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of broker callbacks per minute across all app backend installations on this Leader. Unlimited when unset. Over-limit callbacks receive HTTP 429.`,
+								},
+								"app_backend_max_in_flight": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of concurrent App Platform backend invocations across all apps on this Leader.`,
+								},
+								"app_schedule_body_expression_max_length": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of characters allowed in a schedule bodyExpression.`,
+								},
+								"app_scheduled_concurrent_job_limit": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of concurrent scheduled App Platform function jobs across all apps on this Leader (group-wide). Changes require a Leader restart.`,
+								},
+								"app_schedules_max": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of schedule records a single App may declare.`,
+								},
 								"enabled": schema.BoolAttribute{
 									Computed:    true,
 									Description: `If <code>true</code>, enable Apps. Otherwise, <code>false</code>.`,

@@ -53,6 +53,7 @@ resource "criblio_pack_lookups" "my_packlookups" {
 
 ### Read-Only
 
+- `modified` (Number) Last modification time of the Lookup file, in milliseconds since the Unix epoch.
 - `pending_task` (Attributes) Details of the pending background task for this Lookup, if one is in progress. (see [below for nested schema](#nestedatt--pending_task))
 - `version` (String) Unique string generated for each modification of the Lookup.
 

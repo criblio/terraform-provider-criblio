@@ -2112,6 +2112,201 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 					},
 				},
 			},
+			"dataset_api_ngsiem": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_ngsiem"),
+						Description: `Resource type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_ngsiem"),
+						},
+					},
+					"query_string": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `CQL query string submitted to the LogScale queryjobs API.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
+					},
+					"breaker_rulesets": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Event breaker rulesets that are applied when reading events from the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"cache_connection_info": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache.`,
+						Attributes: map[string]schema.Attribute{
+							"accelerated_fields": schema.ListAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Accelerated fields (materialized columns) for the cache connection.`,
+								ElementType: types.StringType,
+							},
+							"cache_ref": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
+							},
+							"created_at": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
+							},
+							"lakehouse_connection_type": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.`,
+							},
+							"migration_query_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
+							},
+							"retention_in_days": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retention period for the Lakehouse cache connection, in days.`,
+							},
+						},
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Brief description of the Dataset.`,
+					},
+					"exclude_internal_fields": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.`,
+					},
+					"filter": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Filter expression that is evaluated against each object path to determine inclusion.`,
+					},
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Dataset acceleration and metadata collection configuration.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Rolling time window that defines how far back acceleration scans.`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
+							},
+							"field_list": schema.ListAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.`,
+								ElementType: types.StringType,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Details from the most recent acceleration scan.`,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Timestamp (in Unix time) for the earliest event that was observed during the scan (seconds).`,
+									},
+									"finished_at": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Timestamp (in Unix time) when the acceleration run finished (milliseconds).`,
+									},
+									"latest_scanned_time": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Timestamp (in Unix time) for the latest event that was observed during the scan (seconds).`,
+									},
+									"object_count": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Number of objects on the acceleration manifest after the scan completed.`,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Identifier for the Dataset Provider that the Dataset uses.`,
+					},
+					"search_version": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Search execution version for the Dataset.`,
+					},
+					"tags": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"view_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Lakehouse cache view name, when applicable.`,
+					},
+				},
+			},
 			"api_okta_dataset": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -5762,6 +5957,9 @@ func isSearchDatasetImportState(state *SearchDatasetModel) bool {
 	if state.DatasetAPIMsgraph != nil {
 		return false
 	}
+	if state.DatasetAPINgsiem != nil {
+		return false
+	}
 	if state.DatasetAPIOkta != nil {
 		return false
 	}
@@ -6746,6 +6944,90 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIMsgraph.ViewName = api.DatasetAPIMsgraph.ViewName
 		} else if state.DatasetAPIMsgraph.ViewName.IsNull() || state.DatasetAPIMsgraph.ViewName.IsUnknown() {
 			state.DatasetAPIMsgraph.ViewName = types.StringNull()
+		}
+	}
+	if api.DatasetAPINgsiem != nil {
+		if state.DatasetAPINgsiem == nil {
+			state.DatasetAPINgsiem = &DatasetAPINgsiemModel{}
+		}
+		if !api.DatasetAPINgsiem.Type.IsNull() && !api.DatasetAPINgsiem.Type.IsUnknown() {
+			state.DatasetAPINgsiem.Type = api.DatasetAPINgsiem.Type
+		} else if state.DatasetAPINgsiem.Type.IsNull() || state.DatasetAPINgsiem.Type.IsUnknown() {
+			state.DatasetAPINgsiem.Type = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.QueryString.IsNull() && !api.DatasetAPINgsiem.QueryString.IsUnknown() {
+			state.DatasetAPINgsiem.QueryString = api.DatasetAPINgsiem.QueryString
+		} else if state.DatasetAPINgsiem.QueryString.IsNull() || state.DatasetAPINgsiem.QueryString.IsUnknown() {
+			state.DatasetAPINgsiem.QueryString = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.BreakerRulesets.IsNull() && !api.DatasetAPINgsiem.BreakerRulesets.IsUnknown() {
+			state.DatasetAPINgsiem.BreakerRulesets = api.DatasetAPINgsiem.BreakerRulesets
+		} else if state.DatasetAPINgsiem.BreakerRulesets.IsNull() || state.DatasetAPINgsiem.BreakerRulesets.IsUnknown() {
+			state.DatasetAPINgsiem.BreakerRulesets = types.ListNull(types.StringType)
+		}
+		if elementType := state.DatasetAPINgsiem.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPINgsiem.BreakerRulesets = types.ListNull(types.StringType)
+		}
+		if !api.DatasetAPINgsiem.CacheConnectionInfo.IsNull() && !api.DatasetAPINgsiem.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPINgsiem.CacheConnectionInfo = api.DatasetAPINgsiem.CacheConnectionInfo
+		} else if state.DatasetAPINgsiem.CacheConnectionInfo.IsNull() || state.DatasetAPINgsiem.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPINgsiem.CacheConnectionInfo = types.ObjectNull(DatasetApiNgsiemCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPINgsiem.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
+			state.DatasetAPINgsiem.CacheConnectionInfo = types.ObjectNull(DatasetApiNgsiemCacheConnectionInfoAttrTypes())
+		}
+		if !api.DatasetAPINgsiem.Description.IsNull() && !api.DatasetAPINgsiem.Description.IsUnknown() {
+			state.DatasetAPINgsiem.Description = api.DatasetAPINgsiem.Description
+		} else if state.DatasetAPINgsiem.Description.IsNull() || state.DatasetAPINgsiem.Description.IsUnknown() {
+			state.DatasetAPINgsiem.Description = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.ExcludeInternalFields.IsNull() && !api.DatasetAPINgsiem.ExcludeInternalFields.IsUnknown() {
+			state.DatasetAPINgsiem.ExcludeInternalFields = api.DatasetAPINgsiem.ExcludeInternalFields
+		} else if state.DatasetAPINgsiem.ExcludeInternalFields.IsNull() || state.DatasetAPINgsiem.ExcludeInternalFields.IsUnknown() {
+			state.DatasetAPINgsiem.ExcludeInternalFields = types.BoolNull()
+		}
+		if !api.DatasetAPINgsiem.Filter.IsNull() && !api.DatasetAPINgsiem.Filter.IsUnknown() {
+			state.DatasetAPINgsiem.Filter = api.DatasetAPINgsiem.Filter
+		} else if state.DatasetAPINgsiem.Filter.IsNull() || state.DatasetAPINgsiem.Filter.IsUnknown() {
+			state.DatasetAPINgsiem.Filter = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.ID.IsNull() && !api.DatasetAPINgsiem.ID.IsUnknown() {
+			state.DatasetAPINgsiem.ID = api.DatasetAPINgsiem.ID
+		} else if state.DatasetAPINgsiem.ID.IsNull() || state.DatasetAPINgsiem.ID.IsUnknown() {
+			state.DatasetAPINgsiem.ID = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.ManagedBy.IsNull() && !api.DatasetAPINgsiem.ManagedBy.IsUnknown() {
+			state.DatasetAPINgsiem.ManagedBy = api.DatasetAPINgsiem.ManagedBy
+		} else if state.DatasetAPINgsiem.ManagedBy.IsNull() || state.DatasetAPINgsiem.ManagedBy.IsUnknown() {
+			state.DatasetAPINgsiem.ManagedBy = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.Metadata.IsNull() && !api.DatasetAPINgsiem.Metadata.IsUnknown() {
+			state.DatasetAPINgsiem.Metadata = api.DatasetAPINgsiem.Metadata
+		} else if state.DatasetAPINgsiem.Metadata.IsNull() || state.DatasetAPINgsiem.Metadata.IsUnknown() {
+			state.DatasetAPINgsiem.Metadata = types.ObjectNull(DatasetApiNgsiemMetadataAttrTypes())
+		}
+		if len(state.DatasetAPINgsiem.Metadata.AttributeTypes(context.Background())) == 0 {
+			state.DatasetAPINgsiem.Metadata = types.ObjectNull(DatasetApiNgsiemMetadataAttrTypes())
+		}
+		if !api.DatasetAPINgsiem.ProviderID.IsNull() && !api.DatasetAPINgsiem.ProviderID.IsUnknown() {
+			state.DatasetAPINgsiem.ProviderID = api.DatasetAPINgsiem.ProviderID
+		} else if state.DatasetAPINgsiem.ProviderID.IsNull() || state.DatasetAPINgsiem.ProviderID.IsUnknown() {
+			state.DatasetAPINgsiem.ProviderID = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.SearchVersion.IsNull() && !api.DatasetAPINgsiem.SearchVersion.IsUnknown() {
+			state.DatasetAPINgsiem.SearchVersion = api.DatasetAPINgsiem.SearchVersion
+		} else if state.DatasetAPINgsiem.SearchVersion.IsNull() || state.DatasetAPINgsiem.SearchVersion.IsUnknown() {
+			state.DatasetAPINgsiem.SearchVersion = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.Tags.IsNull() && !api.DatasetAPINgsiem.Tags.IsUnknown() {
+			state.DatasetAPINgsiem.Tags = api.DatasetAPINgsiem.Tags
+		} else if state.DatasetAPINgsiem.Tags.IsNull() || state.DatasetAPINgsiem.Tags.IsUnknown() {
+			state.DatasetAPINgsiem.Tags = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.ViewName.IsNull() && !api.DatasetAPINgsiem.ViewName.IsUnknown() {
+			state.DatasetAPINgsiem.ViewName = api.DatasetAPINgsiem.ViewName
+		} else if state.DatasetAPINgsiem.ViewName.IsNull() || state.DatasetAPINgsiem.ViewName.IsUnknown() {
+			state.DatasetAPINgsiem.ViewName = types.StringNull()
 		}
 	}
 	if api.DatasetAPIOkta != nil {

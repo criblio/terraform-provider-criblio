@@ -17,87 +17,95 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type SystemInfoModel struct {
-	APIPort            types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
-	AppPlatformEnabled types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
-	BUILD              types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
-	Conf               types.Object  `tfsdk:"conf" json:"conf,omitempty"`
-	ConfigPath         types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
-	DistMode           types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
-	Env                types.Map     `tfsdk:"env" json:"env,omitempty"`
-	Guid               types.String  `tfsdk:"guid" json:"guid,omitempty"`
-	Hostname           types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
-	InsightsEnabled    types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
-	InstallPath        types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
-	License            types.Object  `tfsdk:"license" json:"license,omitempty"`
-	Limits             types.Object  `tfsdk:"limits" json:"limits,omitempty"`
-	Openssl            types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
-	Os                 types.Object  `tfsdk:"os" json:"os,omitempty"`
-	SystemConf         types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
-	Version            types.String  `tfsdk:"version" json:"version,omitempty"`
-	WorkerProcesses    types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
+	APIPort              types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
+	AppPlatformEnabled   types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
+	BUILD                types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
+	Conf                 types.Object  `tfsdk:"conf" json:"conf,omitempty"`
+	ConfigPath           types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
+	CriblSecurityEnabled types.Bool    `tfsdk:"cribl_security_enabled" json:"criblSecurityEnabled,omitempty"`
+	DistMode             types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
+	Env                  types.Map     `tfsdk:"env" json:"env,omitempty"`
+	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
+	Hostname             types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
+	InsightsEnabled      types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
+	InstallPath          types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
+	IsHighside           types.Bool    `tfsdk:"is_highside" json:"isHighside,omitempty"`
+	License              types.Object  `tfsdk:"license" json:"license,omitempty"`
+	Limits               types.Object  `tfsdk:"limits" json:"limits,omitempty"`
+	Openssl              types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
+	Os                   types.Object  `tfsdk:"os" json:"os,omitempty"`
+	SystemConf           types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
+	Version              types.String  `tfsdk:"version" json:"version,omitempty"`
+	WorkerProcesses      types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoResourceModel struct {
-	APIPort            types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
-	AppPlatformEnabled types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
-	BUILD              types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
-	Conf               types.Object  `tfsdk:"conf" json:"conf,omitempty"`
-	ConfigPath         types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
-	DistMode           types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
-	Env                types.Map     `tfsdk:"env" json:"env,omitempty"`
-	Guid               types.String  `tfsdk:"guid" json:"guid,omitempty"`
-	Hostname           types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
-	InsightsEnabled    types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
-	InstallPath        types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
-	License            types.Object  `tfsdk:"license" json:"license,omitempty"`
-	Limits             types.Object  `tfsdk:"limits" json:"limits,omitempty"`
-	Openssl            types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
-	Os                 types.Object  `tfsdk:"os" json:"os,omitempty"`
-	SystemConf         types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
-	Version            types.String  `tfsdk:"version" json:"version,omitempty"`
-	WorkerProcesses    types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
+	APIPort              types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
+	AppPlatformEnabled   types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
+	BUILD                types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
+	Conf                 types.Object  `tfsdk:"conf" json:"conf,omitempty"`
+	ConfigPath           types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
+	CriblSecurityEnabled types.Bool    `tfsdk:"cribl_security_enabled" json:"criblSecurityEnabled,omitempty"`
+	DistMode             types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
+	Env                  types.Map     `tfsdk:"env" json:"env,omitempty"`
+	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
+	Hostname             types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
+	InsightsEnabled      types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
+	InstallPath          types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
+	IsHighside           types.Bool    `tfsdk:"is_highside" json:"isHighside,omitempty"`
+	License              types.Object  `tfsdk:"license" json:"license,omitempty"`
+	Limits               types.Object  `tfsdk:"limits" json:"limits,omitempty"`
+	Openssl              types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
+	Os                   types.Object  `tfsdk:"os" json:"os,omitempty"`
+	SystemConf           types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
+	Version              types.String  `tfsdk:"version" json:"version,omitempty"`
+	WorkerProcesses      types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoDataSourceModel struct {
-	APIPort            types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
-	AppPlatformEnabled types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
-	BUILD              types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
-	Conf               types.Object  `tfsdk:"conf" json:"conf,omitempty"`
-	ConfigPath         types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
-	DistMode           types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
-	Env                types.Map     `tfsdk:"env" json:"env,omitempty"`
-	Guid               types.String  `tfsdk:"guid" json:"guid,omitempty"`
-	Hostname           types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
-	InsightsEnabled    types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
-	InstallPath        types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
-	License            types.Object  `tfsdk:"license" json:"license,omitempty"`
-	Limits             types.Object  `tfsdk:"limits" json:"limits,omitempty"`
-	Openssl            types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
-	Os                 types.Object  `tfsdk:"os" json:"os,omitempty"`
-	SystemConf         types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
-	Version            types.String  `tfsdk:"version" json:"version,omitempty"`
-	WorkerProcesses    types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
+	APIPort              types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
+	AppPlatformEnabled   types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
+	BUILD                types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
+	Conf                 types.Object  `tfsdk:"conf" json:"conf,omitempty"`
+	ConfigPath           types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
+	CriblSecurityEnabled types.Bool    `tfsdk:"cribl_security_enabled" json:"criblSecurityEnabled,omitempty"`
+	DistMode             types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
+	Env                  types.Map     `tfsdk:"env" json:"env,omitempty"`
+	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
+	Hostname             types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
+	InsightsEnabled      types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
+	InstallPath          types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
+	IsHighside           types.Bool    `tfsdk:"is_highside" json:"isHighside,omitempty"`
+	License              types.Object  `tfsdk:"license" json:"license,omitempty"`
+	Limits               types.Object  `tfsdk:"limits" json:"limits,omitempty"`
+	Openssl              types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
+	Os                   types.Object  `tfsdk:"os" json:"os,omitempty"`
+	SystemConf           types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
+	Version              types.String  `tfsdk:"version" json:"version,omitempty"`
+	WorkerProcesses      types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoAPIModel struct {
-	APIPort            *float64          `json:"apiPort,omitempty"`
-	AppPlatformEnabled *bool             `json:"appPlatformEnabled,omitempty"`
-	BUILD              map[string]string `json:"BUILD,omitempty"`
-	Conf               any               `json:"conf,omitempty"`
-	ConfigPath         *string           `json:"configPath,omitempty"`
-	DistMode           *string           `json:"distMode,omitempty"`
-	Env                map[string]string `json:"env,omitempty"`
-	Guid               *string           `json:"guid,omitempty"`
-	Hostname           *string           `json:"hostname,omitempty"`
-	InsightsEnabled    *bool             `json:"insightsEnabled,omitempty"`
-	InstallPath        *string           `json:"installPath,omitempty"`
-	License            any               `json:"license,omitempty"`
-	Limits             any               `json:"limits,omitempty"`
-	Openssl            any               `json:"openssl,omitempty"`
-	Os                 any               `json:"os,omitempty"`
-	SystemConf         any               `json:"systemConf,omitempty"`
-	Version            *string           `json:"version,omitempty"`
-	WorkerProcesses    *float64          `json:"workerProcesses,omitempty"`
+	APIPort              *float64          `json:"apiPort,omitempty"`
+	AppPlatformEnabled   *bool             `json:"appPlatformEnabled,omitempty"`
+	BUILD                map[string]string `json:"BUILD,omitempty"`
+	Conf                 any               `json:"conf,omitempty"`
+	ConfigPath           *string           `json:"configPath,omitempty"`
+	CriblSecurityEnabled *bool             `json:"criblSecurityEnabled,omitempty"`
+	DistMode             *string           `json:"distMode,omitempty"`
+	Env                  map[string]string `json:"env,omitempty"`
+	Guid                 *string           `json:"guid,omitempty"`
+	Hostname             *string           `json:"hostname,omitempty"`
+	InsightsEnabled      *bool             `json:"insightsEnabled,omitempty"`
+	InstallPath          *string           `json:"installPath,omitempty"`
+	IsHighside           *bool             `json:"isHighside,omitempty"`
+	License              any               `json:"license,omitempty"`
+	Limits               any               `json:"limits,omitempty"`
+	Openssl              any               `json:"openssl,omitempty"`
+	Os                   any               `json:"os,omitempty"`
+	SystemConf           any               `json:"systemConf,omitempty"`
+	Version              *string           `json:"version,omitempty"`
+	WorkerProcesses      *float64          `json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoConfModel struct {
@@ -133,120 +141,129 @@ func SystemInfoConfAttrTypes() map[string]attr.Type {
 }
 
 type SystemInfoLicenseModel struct {
-	Email        types.String `tfsdk:"email" json:"email,omitempty"`
-	IsRegistered types.Bool   `tfsdk:"is_registered" json:"isRegistered,omitempty"`
-	IsSplunkApp  types.Bool   `tfsdk:"is_splunk_app" json:"isSplunkApp,omitempty"`
-	Limits       types.Object `tfsdk:"limits" json:"limits,omitempty"`
-	Type         types.String `tfsdk:"type" json:"type,omitempty"`
+	Email           types.String `tfsdk:"email" json:"email,omitempty"`
+	IsRegistered    types.Bool   `tfsdk:"is_registered" json:"isRegistered,omitempty"`
+	IsSplunkApp     types.Bool   `tfsdk:"is_splunk_app" json:"isSplunkApp,omitempty"`
+	Limits          types.Object `tfsdk:"limits" json:"limits,omitempty"`
+	RegisteredEmail types.String `tfsdk:"registered_email" json:"registeredEmail,omitempty"`
+	Type            types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SystemInfoLicenseAPIModel struct {
-	Email        *string `json:"email,omitempty"`
-	IsRegistered *bool   `json:"isRegistered,omitempty"`
-	IsSplunkApp  *bool   `json:"isSplunkApp,omitempty"`
-	Limits       any     `json:"limits,omitempty"`
-	Type         *string `json:"type,omitempty"`
+	Email           *string `json:"email,omitempty"`
+	IsRegistered    *bool   `json:"isRegistered,omitempty"`
+	IsSplunkApp     *bool   `json:"isSplunkApp,omitempty"`
+	Limits          any     `json:"limits,omitempty"`
+	RegisteredEmail *string `json:"registeredEmail,omitempty"`
+	Type            *string `json:"type,omitempty"`
 }
 
 func SystemInfoLicenseAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"email":         types.StringType,
-		"is_registered": types.BoolType,
-		"is_splunk_app": types.BoolType,
-		"limits":        types.ObjectType{AttrTypes: SystemInfoLicenseLimitsAttrTypes()},
-		"type":          types.StringType,
+		"email":            types.StringType,
+		"is_registered":    types.BoolType,
+		"is_splunk_app":    types.BoolType,
+		"limits":           types.ObjectType{AttrTypes: SystemInfoLicenseLimitsAttrTypes()},
+		"registered_email": types.StringType,
+		"type":             types.StringType,
 	}
 }
 
 type SystemInfoLicenseLimitsModel struct {
-	AppPlatform           types.Int64 `tfsdk:"app_platform" json:"app_platform,omitempty"`
-	EdgeGroups            types.Int64 `tfsdk:"edge_groups" json:"edge_groups,omitempty"`
-	EdgeProcs             types.Int64 `tfsdk:"edge_procs" json:"edge_procs,omitempty"`
-	ExternalSecretStores  types.Int64 `tfsdk:"external_secret_stores" json:"external_secret_stores,omitempty"`
-	Kms                   types.Int64 `tfsdk:"kms" json:"kms,omitempty"`
-	LakeAccessGroups      types.Int64 `tfsdk:"lake_access_groups" json:"lake_access_groups,omitempty"`
-	LakeDdss              types.Int64 `tfsdk:"lake_ddss" json:"lake_ddss,omitempty"`
-	LakeMetrics           types.Int64 `tfsdk:"lake_metrics" json:"lake_metrics,omitempty"`
-	LakeStorageLocations  types.Int64 `tfsdk:"lake_storage_locations" json:"lake_storage_locations,omitempty"`
-	Lakehouse             types.Int64 `tfsdk:"lakehouse" json:"lakehouse,omitempty"`
-	LeaderResiliency      types.Int64 `tfsdk:"leader_resiliency" json:"leader_resiliency,omitempty"`
-	MaxExecutorsPerSearch types.Int64 `tfsdk:"max_executors_per_search" json:"max_executors_per_search,omitempty"`
-	Notifications         types.Int64 `tfsdk:"notifications" json:"notifications,omitempty"`
-	Outpost               types.Int64 `tfsdk:"outpost" json:"outpost,omitempty"`
-	OutpostGroups         types.Int64 `tfsdk:"outpost_groups" json:"outpost_groups,omitempty"`
-	PersistentQueue       types.Int64 `tfsdk:"persistent_queue" json:"persistent_queue,omitempty"`
-	Projects              types.Int64 `tfsdk:"projects" json:"projects,omitempty"`
-	Rbac                  types.Int64 `tfsdk:"rbac" json:"rbac,omitempty"`
-	RemoteAuth            types.Int64 `tfsdk:"remote_auth" json:"remote_auth,omitempty"`
-	RemoteGit             types.Int64 `tfsdk:"remote_git" json:"remote_git,omitempty"`
-	S3Bundle              types.Int64 `tfsdk:"s3_bundle" json:"s3_bundle,omitempty"`
-	Sds                   types.Int64 `tfsdk:"sds" json:"sds,omitempty"`
-	SearchAcceleration    types.Int64 `tfsdk:"search_acceleration" json:"search_acceleration,omitempty"`
-	SearchGroups          types.Int64 `tfsdk:"search_groups" json:"search_groups,omitempty"`
-	SystemEmail           types.Int64 `tfsdk:"system_email" json:"system_email,omitempty"`
-	WorkerGroups          types.Int64 `tfsdk:"worker_groups" json:"worker_groups,omitempty"`
-	WorkerProcs           types.Int64 `tfsdk:"worker_procs" json:"worker_procs,omitempty"`
+	AppPlatform             types.Int64 `tfsdk:"app_platform" json:"app_platform,omitempty"`
+	EdgeGroups              types.Int64 `tfsdk:"edge_groups" json:"edge_groups,omitempty"`
+	EdgeProcs               types.Int64 `tfsdk:"edge_procs" json:"edge_procs,omitempty"`
+	ExternalSecretStores    types.Int64 `tfsdk:"external_secret_stores" json:"external_secret_stores,omitempty"`
+	Kms                     types.Int64 `tfsdk:"kms" json:"kms,omitempty"`
+	LakeAccessGroups        types.Int64 `tfsdk:"lake_access_groups" json:"lake_access_groups,omitempty"`
+	LakeDdss                types.Int64 `tfsdk:"lake_ddss" json:"lake_ddss,omitempty"`
+	LakeMetrics             types.Int64 `tfsdk:"lake_metrics" json:"lake_metrics,omitempty"`
+	LakeStorageLocations    types.Int64 `tfsdk:"lake_storage_locations" json:"lake_storage_locations,omitempty"`
+	Lakehouse               types.Int64 `tfsdk:"lakehouse" json:"lakehouse,omitempty"`
+	LeaderResiliency        types.Int64 `tfsdk:"leader_resiliency" json:"leader_resiliency,omitempty"`
+	MaxExecutorsPerSearch   types.Int64 `tfsdk:"max_executors_per_search" json:"max_executors_per_search,omitempty"`
+	Notifications           types.Int64 `tfsdk:"notifications" json:"notifications,omitempty"`
+	Outpost                 types.Int64 `tfsdk:"outpost" json:"outpost,omitempty"`
+	OutpostGroups           types.Int64 `tfsdk:"outpost_groups" json:"outpost_groups,omitempty"`
+	PersistentQueue         types.Int64 `tfsdk:"persistent_queue" json:"persistent_queue,omitempty"`
+	Projects                types.Int64 `tfsdk:"projects" json:"projects,omitempty"`
+	Rbac                    types.Int64 `tfsdk:"rbac" json:"rbac,omitempty"`
+	RecordErasure           types.Int64 `tfsdk:"record_erasure" json:"record_erasure,omitempty"`
+	RemoteAuth              types.Int64 `tfsdk:"remote_auth" json:"remote_auth,omitempty"`
+	RemoteGit               types.Int64 `tfsdk:"remote_git" json:"remote_git,omitempty"`
+	S3Bundle                types.Int64 `tfsdk:"s3_bundle" json:"s3_bundle,omitempty"`
+	Sds                     types.Int64 `tfsdk:"sds" json:"sds,omitempty"`
+	SearchAcceleration      types.Int64 `tfsdk:"search_acceleration" json:"search_acceleration,omitempty"`
+	SearchGroups            types.Int64 `tfsdk:"search_groups" json:"search_groups,omitempty"`
+	SystemEmail             types.Int64 `tfsdk:"system_email" json:"system_email,omitempty"`
+	WorkerGroupBootThrottle types.Int64 `tfsdk:"worker_group_boot_throttle" json:"worker_group_boot_throttle,omitempty"`
+	WorkerGroups            types.Int64 `tfsdk:"worker_groups" json:"worker_groups,omitempty"`
+	WorkerProcs             types.Int64 `tfsdk:"worker_procs" json:"worker_procs,omitempty"`
 }
 
 type SystemInfoLicenseLimitsAPIModel struct {
-	AppPlatform           *int64 `json:"app_platform,omitempty"`
-	EdgeGroups            *int64 `json:"edge_groups,omitempty"`
-	EdgeProcs             *int64 `json:"edge_procs,omitempty"`
-	ExternalSecretStores  *int64 `json:"external_secret_stores,omitempty"`
-	Kms                   *int64 `json:"kms,omitempty"`
-	LakeAccessGroups      *int64 `json:"lake_access_groups,omitempty"`
-	LakeDdss              *int64 `json:"lake_ddss,omitempty"`
-	LakeMetrics           *int64 `json:"lake_metrics,omitempty"`
-	LakeStorageLocations  *int64 `json:"lake_storage_locations,omitempty"`
-	Lakehouse             *int64 `json:"lakehouse,omitempty"`
-	LeaderResiliency      *int64 `json:"leader_resiliency,omitempty"`
-	MaxExecutorsPerSearch *int64 `json:"max_executors_per_search,omitempty"`
-	Notifications         *int64 `json:"notifications,omitempty"`
-	Outpost               *int64 `json:"outpost,omitempty"`
-	OutpostGroups         *int64 `json:"outpost_groups,omitempty"`
-	PersistentQueue       *int64 `json:"persistent_queue,omitempty"`
-	Projects              *int64 `json:"projects,omitempty"`
-	Rbac                  *int64 `json:"rbac,omitempty"`
-	RemoteAuth            *int64 `json:"remote_auth,omitempty"`
-	RemoteGit             *int64 `json:"remote_git,omitempty"`
-	S3Bundle              *int64 `json:"s3_bundle,omitempty"`
-	Sds                   *int64 `json:"sds,omitempty"`
-	SearchAcceleration    *int64 `json:"search_acceleration,omitempty"`
-	SearchGroups          *int64 `json:"search_groups,omitempty"`
-	SystemEmail           *int64 `json:"system_email,omitempty"`
-	WorkerGroups          *int64 `json:"worker_groups,omitempty"`
-	WorkerProcs           *int64 `json:"worker_procs,omitempty"`
+	AppPlatform             *int64 `json:"app_platform,omitempty"`
+	EdgeGroups              *int64 `json:"edge_groups,omitempty"`
+	EdgeProcs               *int64 `json:"edge_procs,omitempty"`
+	ExternalSecretStores    *int64 `json:"external_secret_stores,omitempty"`
+	Kms                     *int64 `json:"kms,omitempty"`
+	LakeAccessGroups        *int64 `json:"lake_access_groups,omitempty"`
+	LakeDdss                *int64 `json:"lake_ddss,omitempty"`
+	LakeMetrics             *int64 `json:"lake_metrics,omitempty"`
+	LakeStorageLocations    *int64 `json:"lake_storage_locations,omitempty"`
+	Lakehouse               *int64 `json:"lakehouse,omitempty"`
+	LeaderResiliency        *int64 `json:"leader_resiliency,omitempty"`
+	MaxExecutorsPerSearch   *int64 `json:"max_executors_per_search,omitempty"`
+	Notifications           *int64 `json:"notifications,omitempty"`
+	Outpost                 *int64 `json:"outpost,omitempty"`
+	OutpostGroups           *int64 `json:"outpost_groups,omitempty"`
+	PersistentQueue         *int64 `json:"persistent_queue,omitempty"`
+	Projects                *int64 `json:"projects,omitempty"`
+	Rbac                    *int64 `json:"rbac,omitempty"`
+	RecordErasure           *int64 `json:"record_erasure,omitempty"`
+	RemoteAuth              *int64 `json:"remote_auth,omitempty"`
+	RemoteGit               *int64 `json:"remote_git,omitempty"`
+	S3Bundle                *int64 `json:"s3_bundle,omitempty"`
+	Sds                     *int64 `json:"sds,omitempty"`
+	SearchAcceleration      *int64 `json:"search_acceleration,omitempty"`
+	SearchGroups            *int64 `json:"search_groups,omitempty"`
+	SystemEmail             *int64 `json:"system_email,omitempty"`
+	WorkerGroupBootThrottle *int64 `json:"worker_group_boot_throttle,omitempty"`
+	WorkerGroups            *int64 `json:"worker_groups,omitempty"`
+	WorkerProcs             *int64 `json:"worker_procs,omitempty"`
 }
 
 func SystemInfoLicenseLimitsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"app_platform":             types.Int64Type,
-		"edge_groups":              types.Int64Type,
-		"edge_procs":               types.Int64Type,
-		"external_secret_stores":   types.Int64Type,
-		"kms":                      types.Int64Type,
-		"lake_access_groups":       types.Int64Type,
-		"lake_ddss":                types.Int64Type,
-		"lake_metrics":             types.Int64Type,
-		"lake_storage_locations":   types.Int64Type,
-		"lakehouse":                types.Int64Type,
-		"leader_resiliency":        types.Int64Type,
-		"max_executors_per_search": types.Int64Type,
-		"notifications":            types.Int64Type,
-		"outpost":                  types.Int64Type,
-		"outpost_groups":           types.Int64Type,
-		"persistent_queue":         types.Int64Type,
-		"projects":                 types.Int64Type,
-		"rbac":                     types.Int64Type,
-		"remote_auth":              types.Int64Type,
-		"remote_git":               types.Int64Type,
-		"s3_bundle":                types.Int64Type,
-		"sds":                      types.Int64Type,
-		"search_acceleration":      types.Int64Type,
-		"search_groups":            types.Int64Type,
-		"system_email":             types.Int64Type,
-		"worker_groups":            types.Int64Type,
-		"worker_procs":             types.Int64Type,
+		"app_platform":               types.Int64Type,
+		"edge_groups":                types.Int64Type,
+		"edge_procs":                 types.Int64Type,
+		"external_secret_stores":     types.Int64Type,
+		"kms":                        types.Int64Type,
+		"lake_access_groups":         types.Int64Type,
+		"lake_ddss":                  types.Int64Type,
+		"lake_metrics":               types.Int64Type,
+		"lake_storage_locations":     types.Int64Type,
+		"lakehouse":                  types.Int64Type,
+		"leader_resiliency":          types.Int64Type,
+		"max_executors_per_search":   types.Int64Type,
+		"notifications":              types.Int64Type,
+		"outpost":                    types.Int64Type,
+		"outpost_groups":             types.Int64Type,
+		"persistent_queue":           types.Int64Type,
+		"projects":                   types.Int64Type,
+		"rbac":                       types.Int64Type,
+		"record_erasure":             types.Int64Type,
+		"remote_auth":                types.Int64Type,
+		"remote_git":                 types.Int64Type,
+		"s3_bundle":                  types.Int64Type,
+		"sds":                        types.Int64Type,
+		"search_acceleration":        types.Int64Type,
+		"search_groups":              types.Int64Type,
+		"system_email":               types.Int64Type,
+		"worker_group_boot_throttle": types.Int64Type,
+		"worker_groups":              types.Int64Type,
+		"worker_procs":               types.Int64Type,
 	}
 }
 
@@ -432,6 +449,8 @@ func SystemInfoTerraformNameToAPIName(name string) string {
 		return prefix + "outpost_groups"
 	case "persistent_queue":
 		return prefix + "persistent_queue"
+	case "record_erasure":
+		return prefix + "record_erasure"
 	case "remote_auth":
 		return prefix + "remote_auth"
 	case "remote_git":
@@ -444,6 +463,8 @@ func SystemInfoTerraformNameToAPIName(name string) string {
 		return prefix + "search_groups"
 	case "system_email":
 		return prefix + "system_email"
+	case "worker_group_boot_throttle":
+		return prefix + "worker_group_boot_throttle"
 	case "worker_groups":
 		return prefix + "worker_groups"
 	case "worker_procs":
@@ -633,6 +654,13 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 		}
 		output["configPath"] = value
 	}
+	if !m.CriblSecurityEnabled.IsNull() && !m.CriblSecurityEnabled.IsUnknown() {
+		value, err := SystemInfoTerraformValueToJSON(m.CriblSecurityEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_security_enabled to API value: %v", err)
+		}
+		output["criblSecurityEnabled"] = value
+	}
 	if !m.DistMode.IsNull() && !m.DistMode.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.DistMode)
 		if err != nil {
@@ -674,6 +702,13 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert install_path to API value: %v", err)
 		}
 		output["installPath"] = value
+	}
+	if !m.IsHighside.IsNull() && !m.IsHighside.IsUnknown() {
+		value, err := SystemInfoTerraformValueToJSON(m.IsHighside)
+		if err != nil {
+			return nil, fmt.Errorf("convert is_highside to API value: %v", err)
+		}
+		output["isHighside"] = value
 	}
 	if !m.License.IsNull() && !m.License.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.License)
@@ -765,6 +800,11 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.ConfigPath = types.StringNull()
 	}
+	if input.CriblSecurityEnabled != nil {
+		m.CriblSecurityEnabled = types.BoolValue(*input.CriblSecurityEnabled)
+	} else {
+		m.CriblSecurityEnabled = types.BoolNull()
+	}
 	if input.DistMode != nil {
 		m.DistMode = types.StringValue(*input.DistMode)
 	} else {
@@ -798,6 +838,11 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 		m.InstallPath = types.StringValue(*input.InstallPath)
 	} else {
 		m.InstallPath = types.StringNull()
+	}
+	if input.IsHighside != nil {
+		m.IsHighside = types.BoolValue(*input.IsHighside)
+	} else {
+		m.IsHighside = types.BoolNull()
 	}
 	if input.License != nil {
 		value, err := SystemInfoAPIValueToTerraformValue(input.License, types.ObjectType{AttrTypes: SystemInfoLicenseAttrTypes()})

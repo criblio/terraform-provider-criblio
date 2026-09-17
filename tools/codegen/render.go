@@ -260,6 +260,10 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"acceptanceDataSourceSkipsCloud":   acceptanceDataSourceSkipsCloud,
 		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
 		"noDiscriminatorVariants":          noDiscriminatorVariants,
+		"rootOneOfVariants":                rootOneOfVariants,
+		"hasRootOneOf":                     hasRootOneOf,
+		"nestedOneOfGroups":                nestedOneOfGroups,
+		"needsNestedShapeMatcher":          needsNestedShapeMatcher,
 		"discriminatorCaseValues":          discriminatorCaseValues,
 		"directDiscriminatorField":         directDiscriminatorField,
 		"directDiscriminatorAPINames":      directDiscriminatorAPINames,
@@ -832,9 +836,10 @@ func writeValidatorCalls(output *strings.Builder, indent, kind string, calls []s
 
 func writeOneOfSchemaAttribute(output *strings.Builder, variant parser.OneOfVariantDef, indent string, optional bool) {
 	fmt.Fprintf(output, "%s%q: schema.SingleNestedAttribute{\n", indent, variant.TerraformName)
-	if optional {
+	if optional && (!variant.ParentComputed || variant.ParentOptionalComputed) {
 		fmt.Fprintf(output, "%s\tOptional: true,\n", indent)
-	} else {
+	}
+	if !optional || variant.ParentComputed {
 		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
 	}
 	fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
@@ -1393,11 +1398,72 @@ func listItemAttrTypes(resource parser.ResourceDef) []string {
 func noDiscriminatorVariants(resource parser.ResourceDef) []parser.OneOfVariantDef {
 	var variants []parser.OneOfVariantDef
 	for _, variant := range resource.OneOfVariants {
-		if variant.DiscriminatorValue == "" {
+		if variant.NestUnder == "" && variant.DiscriminatorValue == "" {
 			variants = append(variants, variant)
 		}
 	}
 	return variants
+}
+
+func rootOneOfVariants(variants []parser.OneOfVariantDef) []parser.OneOfVariantDef {
+	var root []parser.OneOfVariantDef
+	for _, variant := range variants {
+		if variant.NestUnder == "" {
+			root = append(root, variant)
+		}
+	}
+	return root
+}
+
+func hasRootOneOf(resource parser.ResourceDef) bool {
+	return len(rootOneOfVariants(resource.OneOfVariants)) > 0
+}
+
+type oneOfVariantGroup struct {
+	APIName               string
+	Required              bool
+	RequestField          bool
+	UpdateField           bool
+	DiscriminatorField    string
+	DiscriminatorAtParent bool
+	Variants              []parser.OneOfVariantDef
+}
+
+func nestedOneOfGroups(variants []parser.OneOfVariantDef) []oneOfVariantGroup {
+	indexes := map[string]int{}
+	var groups []oneOfVariantGroup
+	for _, variant := range variants {
+		if variant.NestUnder == "" {
+			continue
+		}
+		index, ok := indexes[variant.NestUnder]
+		if !ok {
+			index = len(groups)
+			indexes[variant.NestUnder] = index
+			groups = append(groups, oneOfVariantGroup{
+				APIName:               variant.NestUnder,
+				Required:              variant.ParentRequired,
+				RequestField:          variant.RequestField,
+				UpdateField:           variant.UpdateField,
+				DiscriminatorField:    variant.DiscriminatorField,
+				DiscriminatorAtParent: variant.DiscriminatorAtParent,
+			})
+		}
+		groups[index].Variants = append(groups[index].Variants, variant)
+	}
+	return groups
+}
+
+func needsNestedShapeMatcher(resource parser.ResourceDef) bool {
+	if len(noDiscriminatorVariants(resource)) > 0 {
+		return false
+	}
+	for _, group := range nestedOneOfGroups(resource.OneOfVariants) {
+		if group.DiscriminatorField == "" {
+			return true
+		}
+	}
+	return false
 }
 
 func discriminatorCaseValues(resource parser.ResourceDef, variant parser.OneOfVariantDef) []string {
@@ -1431,6 +1497,9 @@ func directDiscriminatorAPINames(variants []parser.OneOfVariantDef) []string {
 	seen := map[string]bool{}
 	var names []string
 	for _, variant := range variants {
+		if variant.NestUnder != "" {
+			continue
+		}
 		field := directDiscriminatorField(variant)
 		if field == nil || seen[field.APIName] {
 			continue

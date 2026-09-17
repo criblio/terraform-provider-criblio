@@ -9,6 +9,17 @@ on:
       - 'v*'
       - '!*-goatify'   # exclude v0.0.1-goatify (created by goatify release)
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing provider tag to release (for example, v1.25.81)
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      release_tag:
+        description: Existing provider tag to release
+        required: true
+        type: string
 
 # Releases need permission to read and write the repository contents.
 # GitHub considers creating releases and uploading assets as writing content.
@@ -25,6 +36,7 @@ jobs:
         with:
           # Allow GoReleaser to access older tag information.
           fetch-depth: 0
+          ref: ${{ inputs.release_tag || github.ref_name }}
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'

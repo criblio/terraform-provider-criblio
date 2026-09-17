@@ -81,7 +81,7 @@ func (r *CriblLakeDatasetResource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `The <code>id</code> of the Lake to create the Lake Dataset in.`,
+				Description: `The <code>id</code> of the Lake to create the Lake Datasets in.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},

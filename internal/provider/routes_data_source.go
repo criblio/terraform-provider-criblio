@@ -93,6 +93,10 @@ func (d *RoutesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 				Description: `Array of Route configurations that define how events are processed and routed.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"auto_parse": schema.BoolAttribute{
+							Computed:    true,
+							Description: `If <code>true</code>, detect each matched event's datatype and extract fields from <code>_raw</code> before the Pipeline processes the event, so Functions and Filters can reference the extracted fields. Otherwise, <code>false</code> (the default).`,
+						},
 						"clones": schema.ListAttribute{
 							Computed:    true,
 							Description: `Array of clone configurations, each with a key-value pair to set or overwrite in cloned events. Original events continue to the next Route.`,

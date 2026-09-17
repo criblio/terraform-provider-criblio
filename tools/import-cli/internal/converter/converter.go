@@ -349,6 +349,19 @@ func lowerCamelName(name string) string {
 }
 
 func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
+	if field.Kind() == reflect.Ptr && field.Type().Elem().Kind() == reflect.Struct {
+		var values map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &values); err != nil {
+			return err
+		}
+		value := reflect.New(field.Type().Elem())
+		if err := populateGeneratedModel(value.Elem(), values); err != nil {
+			return err
+		}
+		field.Set(value)
+		return nil
+	}
+
 	switch field.Type() {
 	case reflect.TypeOf(types.String{}):
 		var value string

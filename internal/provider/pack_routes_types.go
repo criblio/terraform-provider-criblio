@@ -96,6 +96,7 @@ func PackRoutesGroupsAttrTypes() map[string]attr.Type {
 }
 
 type PackRoutesRoutesModel struct {
+	AutoParse              types.Bool   `tfsdk:"auto_parse" json:"autoParse,omitempty"`
 	Clones                 types.List   `tfsdk:"clones" json:"clones,omitempty"`
 	Context                types.String `tfsdk:"context" json:"context,omitempty"`
 	Description            types.String `tfsdk:"description" json:"description,omitempty"`
@@ -113,6 +114,7 @@ type PackRoutesRoutesModel struct {
 }
 
 type PackRoutesRoutesAPIModel struct {
+	AutoParse              *bool    `json:"autoParse,omitempty"`
 	Clones                 []string `json:"clones,omitempty"`
 	Context                *string  `json:"context,omitempty"`
 	Description            *string  `json:"description,omitempty"`
@@ -131,6 +133,7 @@ type PackRoutesRoutesAPIModel struct {
 
 func PackRoutesRoutesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
+		"auto_parse":               types.BoolType,
 		"clones":                   types.ListType{ElemType: types.MapType{ElemType: types.StringType}},
 		"context":                  types.StringType,
 		"description":              types.StringType,

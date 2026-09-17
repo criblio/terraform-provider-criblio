@@ -226,7 +226,7 @@ Optional:
 - `format` (Attributes) Numeric format for axis labels. (see [below for nested schema](#nestedatt--chart_config--y_axis--format))
 - `interval` (Number) Fixed interval between axis tick marks.
 - `max` (Number) Maximum value for the axis range.
-- `min` (Number) Minimum value for the axis range.
+- `min` (String) Minimum value for the axis range. Use <code>auto</code> to scale the axis to the data range instead of anchoring it at zero.
 - `position` (String) Axis position.
 - `scale` (String) Scale type.
 - `split_line` (Boolean) If <code>true</code>, show horizontal grid lines.

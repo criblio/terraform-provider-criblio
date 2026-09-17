@@ -51,7 +51,7 @@ resource "criblio_pack" "vars_pack" {
 - `description` (String) Brief description of the Global Variable.
 - `lib` (String) Library that contains the Global Variable.
 - `tags` (String) Metadata tags for categorizing and filtering Global Variables.
-- `value` (String) Value of the Global Variable. For <code>type: expression</code>, the value is a JavaScript expression.
+- `value` (String) Value of the Global Variable. When the type is expression, enter a JavaScript expression.
 
 <a id="nestedatt--args"></a>
 ### Nested Schema for `args`

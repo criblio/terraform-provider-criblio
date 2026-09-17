@@ -243,7 +243,7 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 				field.Optional = false
 				fields = append(fields, field)
 			}
-			variants = append(variants, readVariants...)
+			variants = appendMissingOneOfVariants(variants, readVariants)
 		}
 	}
 	fields = appendPathParams(fields, resource.Create.PathParams)
@@ -251,6 +251,7 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	fields = appendPathParams(fields, resource.Update.PathParams)
 	fields = appendPathParams(fields, resource.Delete.PathParams)
 	fields = appendQueryParams(fields, resource.Create.QueryParams)
+	qualifyNestedVariantCollisions(variants)
 	sort.SliceStable(fields, func(i, j int) bool {
 		return fields[i].TerraformName < fields[j].TerraformName
 	})
@@ -258,6 +259,22 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	resource.OneOfVariants = variants
 	applyResourceCompatibility(resource)
 	return nil
+}
+
+func appendMissingOneOfVariants(existing, additional []OneOfVariantDef) []OneOfVariantDef {
+	seen := make(map[string]bool, len(existing))
+	for _, variant := range existing {
+		seen[variant.NestUnder+"\x00"+variant.SchemaName] = true
+	}
+	for _, variant := range additional {
+		key := variant.NestUnder + "\x00" + variant.SchemaName
+		if seen[key] {
+			continue
+		}
+		seen[key] = true
+		existing = append(existing, variant)
+	}
+	return existing
 }
 
 func listItemSchemaName(schemas *yaml.Node, responseSchemaName string) string {
@@ -623,13 +640,36 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 				continue
 			}
 
-			if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-				parsed, err := parseOneOfVariants(modelName, property, schemas)
+			unionSchema := property
+			referencedUnion := false
+			if schemaName := directSchemaRefName(property); schemaName != "" {
+				if resolved, found := mappingValue(schemas, schemaName); found {
+					unionSchema = resolved
+					referencedUnion = true
+				}
+			}
+			if oneOf, hasOneOf := mappingValue(unionSchema, "oneOf"); hasOneOf && oneOf.Kind == yaml.SequenceNode {
+				parsed, err := parseOneOfVariants(modelName, unionSchema, schemas, apiName)
 				if err != nil {
 					return nil, nil, err
 				}
-				variants = append(variants, parsed...)
-				continue
+				if len(parsed) > 0 && (!referencedUnion || len(parsed) == len(oneOf.Content)) {
+					discriminatorAtParent := boolAnnotation(property, "x-terraform-discriminator-at-parent") ||
+						boolAnnotation(unionSchema, "x-terraform-discriminator-at-parent")
+					parentOptionalComputed := boolAnnotation(property, "x-terraform-optional-computed")
+					parentComputed := parentOptionalComputed || boolAnnotation(property, "readOnly") ||
+						boolAnnotation(property, "x-terraform-computed") || (getFields[apiName] && !postFields[apiName])
+					for variantIndex := range parsed {
+						parsed[variantIndex].ParentRequired = required[apiName]
+						parsed[variantIndex].ParentComputed = parentComputed
+						parsed[variantIndex].ParentOptionalComputed = parentOptionalComputed
+						parsed[variantIndex].RequestField = postFields[apiName]
+						parsed[variantIndex].UpdateField = updateFields[apiName]
+						parsed[variantIndex].DiscriminatorAtParent = discriminatorAtParent
+					}
+					variants = append(variants, parsed...)
+					continue
+				}
 			}
 
 			field, err := fieldDef(modelName, apiName, property, schemas)
@@ -642,13 +682,32 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 	}
 	applyDiscriminatorMappingEnum(schema, fields)
 	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-		parsed, err := parseOneOfVariants(modelName, schema, schemas)
+		parsed, err := parseOneOfVariants(modelName, schema, schemas, "")
 		if err != nil {
 			return nil, nil, err
 		}
 		variants = append(variants, parsed...)
 	}
 	return fields, variants, nil
+}
+
+func qualifyNestedVariantCollisions(variants []OneOfVariantDef) {
+	counts := map[string]int{}
+	for _, variant := range variants {
+		if variant.NestUnder != "" {
+			counts[variant.GoName]++
+		}
+	}
+	for index := range variants {
+		variant := &variants[index]
+		if variant.NestUnder == "" || counts[variant.GoName] < 2 {
+			continue
+		}
+		prefix := exportName(variant.NestUnder)
+		variant.GoName = prefix + variant.GoName
+		variant.ModelName = prefix + variant.ModelName
+		variant.TerraformName = snake(variant.NestUnder) + "_" + variant.TerraformName
+	}
 }
 
 func applyDiscriminatorMappingEnum(schema *yaml.Node, fields []FieldDef) {
@@ -680,7 +739,7 @@ func applyDiscriminatorMappingEnum(schema *yaml.Node, fields []FieldDef) {
 	}
 }
 
-func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node, nestUnder string) ([]OneOfVariantDef, error) {
 	oneOf, ok := mappingValue(unionSchema, "oneOf")
 	if !ok || oneOf.Kind != yaml.SequenceNode {
 		return nil, nil
@@ -724,6 +783,7 @@ func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node)
 			GoName:             exportName(schemaName),
 			ModelName:          modelName,
 			SchemaName:         schemaName,
+			NestUnder:          nestUnder,
 			DiscriminatorField: discriminatorField,
 			DiscriminatorValue: discriminatorValue,
 			Fields:             variantFields,

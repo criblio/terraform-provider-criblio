@@ -44,26 +44,30 @@ func (r *ProjectResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 		MarkdownDescription: "Project Resource",
 		Attributes: map[string]schema.Attribute{
 			"consumers": schema.MapNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Map of Subscription consumer configurations keyed by Subscription ID.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"connections": schema.ListNestedAttribute{
-							Required: false,
-							Optional: true,
-							Computed: false,
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Array of connections that route data from the consumer through a Pipeline or Pack to a Destination.`,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"output": schema.StringAttribute{
-										Required: true,
-										Optional: false,
-										Computed: false,
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `The <code>id</code> of the Destination to send data to.`,
 									},
 									"pipeline": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `The <code>id</code> of the Pipeline or Pack used to process data before it is sent to the Destination.`,
 									},
 								},
 							},
@@ -75,22 +79,25 @@ func (r *ProjectResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 							Description: `It should be removed as a consumer is present or absent.`,
 						},
 						"type": schema.StringAttribute{
-							Required: false,
-							Optional: true,
-							Computed: false,
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Type of the Subscription consumer.`,
 						},
 					},
 				},
 			},
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Brief description of the Project.`,
 			},
 			"destinations": schema.ListAttribute{
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
+				Description: `List of Destination IDs associated with the Project.`,
 				ElementType: types.StringType,
 			},
 			"group_id": schema.StringAttribute{
@@ -116,6 +123,7 @@ func (r *ProjectResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
+				Description: `List of Subscription IDs associated with the Project.`,
 				ElementType: types.StringType,
 			},
 		},

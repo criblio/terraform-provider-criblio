@@ -111,21 +111,21 @@ func AppscopeConfigConfigCriblAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigCriblTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigCriblTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigCriblTransportAttrTypes() map[string]attr.Type {
@@ -133,7 +133,7 @@ func AppscopeConfigConfigCriblTransportAttrTypes() map[string]attr.Type {
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigCriblTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -247,21 +247,21 @@ func AppscopeConfigConfigCustomConfigCriblAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigCustomConfigCriblTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigCriblTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigCriblTransportAttrTypes() map[string]attr.Type {
@@ -269,7 +269,7 @@ func AppscopeConfigConfigCustomConfigCriblTransportAttrTypes() map[string]attr.T
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigCustomConfigCriblTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -322,38 +322,38 @@ func AppscopeConfigConfigCustomConfigEventAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigCustomConfigEventFormatModel struct {
-	Enhancefs      types.Bool    `tfsdk:"enhancefs" json:"enhancefs,omitempty"`
-	Maxeventpersec types.Float64 `tfsdk:"maxeventpersec" json:"maxeventpersec,omitempty"`
+	Enhancefs      types.Bool  `tfsdk:"enhancefs" json:"enhancefs,omitempty"`
+	Maxeventpersec types.Int64 `tfsdk:"maxeventpersec" json:"maxeventpersec,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigEventFormatAPIModel struct {
-	Enhancefs      *bool    `json:"enhancefs,omitempty"`
-	Maxeventpersec *float64 `json:"maxeventpersec,omitempty"`
+	Enhancefs      *bool  `json:"enhancefs,omitempty"`
+	Maxeventpersec *int64 `json:"maxeventpersec,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigEventFormatAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"enhancefs":      types.BoolType,
-		"maxeventpersec": types.Float64Type,
+		"maxeventpersec": types.Int64Type,
 	}
 }
 
 type AppscopeConfigConfigCustomConfigEventTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigEventTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigEventTransportAttrTypes() map[string]attr.Type {
@@ -361,7 +361,7 @@ func AppscopeConfigConfigCustomConfigEventTransportAttrTypes() map[string]attr.T
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigCustomConfigEventTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -420,17 +420,17 @@ func AppscopeConfigConfigCustomConfigEventWatchAttrTypes() map[string]attr.Type 
 }
 
 type AppscopeConfigConfigCustomConfigLibscopeModel struct {
-	Commanddir    types.String  `tfsdk:"commanddir" json:"commanddir,omitempty"`
-	Configevent   types.Bool    `tfsdk:"configevent" json:"configevent,omitempty"`
-	Log           types.Object  `tfsdk:"log" json:"log,omitempty"`
-	Summaryperiod types.Float64 `tfsdk:"summaryperiod" json:"summaryperiod,omitempty"`
+	Commanddir    types.String `tfsdk:"commanddir" json:"commanddir,omitempty"`
+	Configevent   types.Bool   `tfsdk:"configevent" json:"configevent,omitempty"`
+	Log           types.Object `tfsdk:"log" json:"log,omitempty"`
+	Summaryperiod types.Int64  `tfsdk:"summaryperiod" json:"summaryperiod,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigLibscopeAPIModel struct {
-	Commanddir    *string  `json:"commanddir,omitempty"`
-	Configevent   *bool    `json:"configevent,omitempty"`
-	Log           any      `json:"log,omitempty"`
-	Summaryperiod *float64 `json:"summaryperiod,omitempty"`
+	Commanddir    *string `json:"commanddir,omitempty"`
+	Configevent   *bool   `json:"configevent,omitempty"`
+	Log           any     `json:"log,omitempty"`
+	Summaryperiod *int64  `json:"summaryperiod,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigLibscopeAttrTypes() map[string]attr.Type {
@@ -438,7 +438,7 @@ func AppscopeConfigConfigCustomConfigLibscopeAttrTypes() map[string]attr.Type {
 		"commanddir":    types.StringType,
 		"configevent":   types.BoolType,
 		"log":           types.ObjectType{AttrTypes: AppscopeConfigConfigCustomConfigLibscopeLogAttrTypes()},
-		"summaryperiod": types.Float64Type,
+		"summaryperiod": types.Int64Type,
 	}
 }
 
@@ -460,21 +460,21 @@ func AppscopeConfigConfigCustomConfigLibscopeLogAttrTypes() map[string]attr.Type
 }
 
 type AppscopeConfigConfigCustomConfigLibscopeLogTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigLibscopeLogTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigLibscopeLogTransportAttrTypes() map[string]attr.Type {
@@ -482,7 +482,7 @@ func AppscopeConfigConfigCustomConfigLibscopeLogTransportAttrTypes() map[string]
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigCustomConfigLibscopeLogTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -532,44 +532,44 @@ func AppscopeConfigConfigCustomConfigMetricAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigCustomConfigMetricFormatModel struct {
-	Statsdmaxlen types.Float64 `tfsdk:"statsdmaxlen" json:"statsdmaxlen,omitempty"`
-	Statsdprefix types.String  `tfsdk:"statsdprefix" json:"statsdprefix,omitempty"`
-	Type         types.String  `tfsdk:"type" json:"type,omitempty"`
-	Verbosity    types.Float64 `tfsdk:"verbosity" json:"verbosity,omitempty"`
+	Statsdmaxlen types.Int64  `tfsdk:"statsdmaxlen" json:"statsdmaxlen,omitempty"`
+	Statsdprefix types.String `tfsdk:"statsdprefix" json:"statsdprefix,omitempty"`
+	Type         types.String `tfsdk:"type" json:"type,omitempty"`
+	Verbosity    types.Int64  `tfsdk:"verbosity" json:"verbosity,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigMetricFormatAPIModel struct {
-	Statsdmaxlen *float64 `json:"statsdmaxlen,omitempty"`
-	Statsdprefix *string  `json:"statsdprefix,omitempty"`
-	Type         *string  `json:"type,omitempty"`
-	Verbosity    *float64 `json:"verbosity,omitempty"`
+	Statsdmaxlen *int64  `json:"statsdmaxlen,omitempty"`
+	Statsdprefix *string `json:"statsdprefix,omitempty"`
+	Type         *string `json:"type,omitempty"`
+	Verbosity    *int64  `json:"verbosity,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigMetricFormatAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"statsdmaxlen": types.Float64Type,
+		"statsdmaxlen": types.Int64Type,
 		"statsdprefix": types.StringType,
 		"type":         types.StringType,
-		"verbosity":    types.Float64Type,
+		"verbosity":    types.Int64Type,
 	}
 }
 
 type AppscopeConfigConfigCustomConfigMetricTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigMetricTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigMetricTransportAttrTypes() map[string]attr.Type {
@@ -577,7 +577,7 @@ func AppscopeConfigConfigCustomConfigMetricTransportAttrTypes() map[string]attr.
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigCustomConfigMetricTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -635,28 +635,28 @@ func AppscopeConfigConfigCustomConfigPayloadAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigCustomConfigProtocolModel struct {
-	Binary  types.Bool    `tfsdk:"binary" json:"binary,omitempty"`
-	Detect  types.Bool    `tfsdk:"detect" json:"detect,omitempty"`
-	Len     types.Float64 `tfsdk:"len" json:"len,omitempty"`
-	Name    types.String  `tfsdk:"name" json:"name,omitempty"`
-	Payload types.Bool    `tfsdk:"payload" json:"payload,omitempty"`
-	Regex   types.String  `tfsdk:"regex" json:"regex,omitempty"`
+	Binary  types.Bool   `tfsdk:"binary" json:"binary,omitempty"`
+	Detect  types.Bool   `tfsdk:"detect" json:"detect,omitempty"`
+	Len     types.Int64  `tfsdk:"len" json:"len,omitempty"`
+	Name    types.String `tfsdk:"name" json:"name,omitempty"`
+	Payload types.Bool   `tfsdk:"payload" json:"payload,omitempty"`
+	Regex   types.String `tfsdk:"regex" json:"regex,omitempty"`
 }
 
 type AppscopeConfigConfigCustomConfigProtocolAPIModel struct {
-	Binary  *bool    `json:"binary,omitempty"`
-	Detect  *bool    `json:"detect,omitempty"`
-	Len     *float64 `json:"len,omitempty"`
-	Name    *string  `json:"name,omitempty"`
-	Payload *bool    `json:"payload,omitempty"`
-	Regex   *string  `json:"regex,omitempty"`
+	Binary  *bool   `json:"binary,omitempty"`
+	Detect  *bool   `json:"detect,omitempty"`
+	Len     *int64  `json:"len,omitempty"`
+	Name    *string `json:"name,omitempty"`
+	Payload *bool   `json:"payload,omitempty"`
+	Regex   *string `json:"regex,omitempty"`
 }
 
 func AppscopeConfigConfigCustomConfigProtocolAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"binary":  types.BoolType,
 		"detect":  types.BoolType,
-		"len":     types.Float64Type,
+		"len":     types.Int64Type,
 		"name":    types.StringType,
 		"payload": types.BoolType,
 		"regex":   types.StringType,
@@ -707,38 +707,38 @@ func AppscopeConfigConfigEventAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigEventFormatModel struct {
-	Enhancefs      types.Bool    `tfsdk:"enhancefs" json:"enhancefs,omitempty"`
-	Maxeventpersec types.Float64 `tfsdk:"maxeventpersec" json:"maxeventpersec,omitempty"`
+	Enhancefs      types.Bool  `tfsdk:"enhancefs" json:"enhancefs,omitempty"`
+	Maxeventpersec types.Int64 `tfsdk:"maxeventpersec" json:"maxeventpersec,omitempty"`
 }
 
 type AppscopeConfigConfigEventFormatAPIModel struct {
-	Enhancefs      *bool    `json:"enhancefs,omitempty"`
-	Maxeventpersec *float64 `json:"maxeventpersec,omitempty"`
+	Enhancefs      *bool  `json:"enhancefs,omitempty"`
+	Maxeventpersec *int64 `json:"maxeventpersec,omitempty"`
 }
 
 func AppscopeConfigConfigEventFormatAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"enhancefs":      types.BoolType,
-		"maxeventpersec": types.Float64Type,
+		"maxeventpersec": types.Int64Type,
 	}
 }
 
 type AppscopeConfigConfigEventTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigEventTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigEventTransportAttrTypes() map[string]attr.Type {
@@ -746,7 +746,7 @@ func AppscopeConfigConfigEventTransportAttrTypes() map[string]attr.Type {
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigEventTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -805,17 +805,17 @@ func AppscopeConfigConfigEventWatchAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigLibscopeModel struct {
-	Commanddir    types.String  `tfsdk:"commanddir" json:"commanddir,omitempty"`
-	Configevent   types.Bool    `tfsdk:"configevent" json:"configevent,omitempty"`
-	Log           types.Object  `tfsdk:"log" json:"log,omitempty"`
-	Summaryperiod types.Float64 `tfsdk:"summaryperiod" json:"summaryperiod,omitempty"`
+	Commanddir    types.String `tfsdk:"commanddir" json:"commanddir,omitempty"`
+	Configevent   types.Bool   `tfsdk:"configevent" json:"configevent,omitempty"`
+	Log           types.Object `tfsdk:"log" json:"log,omitempty"`
+	Summaryperiod types.Int64  `tfsdk:"summaryperiod" json:"summaryperiod,omitempty"`
 }
 
 type AppscopeConfigConfigLibscopeAPIModel struct {
-	Commanddir    *string  `json:"commanddir,omitempty"`
-	Configevent   *bool    `json:"configevent,omitempty"`
-	Log           any      `json:"log,omitempty"`
-	Summaryperiod *float64 `json:"summaryperiod,omitempty"`
+	Commanddir    *string `json:"commanddir,omitempty"`
+	Configevent   *bool   `json:"configevent,omitempty"`
+	Log           any     `json:"log,omitempty"`
+	Summaryperiod *int64  `json:"summaryperiod,omitempty"`
 }
 
 func AppscopeConfigConfigLibscopeAttrTypes() map[string]attr.Type {
@@ -823,7 +823,7 @@ func AppscopeConfigConfigLibscopeAttrTypes() map[string]attr.Type {
 		"commanddir":    types.StringType,
 		"configevent":   types.BoolType,
 		"log":           types.ObjectType{AttrTypes: AppscopeConfigConfigLibscopeLogAttrTypes()},
-		"summaryperiod": types.Float64Type,
+		"summaryperiod": types.Int64Type,
 	}
 }
 
@@ -845,21 +845,21 @@ func AppscopeConfigConfigLibscopeLogAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigLibscopeLogTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigLibscopeLogTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigLibscopeLogTransportAttrTypes() map[string]attr.Type {
@@ -867,7 +867,7 @@ func AppscopeConfigConfigLibscopeLogTransportAttrTypes() map[string]attr.Type {
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigLibscopeLogTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -917,44 +917,44 @@ func AppscopeConfigConfigMetricAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigMetricFormatModel struct {
-	Statsdmaxlen types.Float64 `tfsdk:"statsdmaxlen" json:"statsdmaxlen,omitempty"`
-	Statsdprefix types.String  `tfsdk:"statsdprefix" json:"statsdprefix,omitempty"`
-	Type         types.String  `tfsdk:"type" json:"type,omitempty"`
-	Verbosity    types.Float64 `tfsdk:"verbosity" json:"verbosity,omitempty"`
+	Statsdmaxlen types.Int64  `tfsdk:"statsdmaxlen" json:"statsdmaxlen,omitempty"`
+	Statsdprefix types.String `tfsdk:"statsdprefix" json:"statsdprefix,omitempty"`
+	Type         types.String `tfsdk:"type" json:"type,omitempty"`
+	Verbosity    types.Int64  `tfsdk:"verbosity" json:"verbosity,omitempty"`
 }
 
 type AppscopeConfigConfigMetricFormatAPIModel struct {
-	Statsdmaxlen *float64 `json:"statsdmaxlen,omitempty"`
-	Statsdprefix *string  `json:"statsdprefix,omitempty"`
-	Type         *string  `json:"type,omitempty"`
-	Verbosity    *float64 `json:"verbosity,omitempty"`
+	Statsdmaxlen *int64  `json:"statsdmaxlen,omitempty"`
+	Statsdprefix *string `json:"statsdprefix,omitempty"`
+	Type         *string `json:"type,omitempty"`
+	Verbosity    *int64  `json:"verbosity,omitempty"`
 }
 
 func AppscopeConfigConfigMetricFormatAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"statsdmaxlen": types.Float64Type,
+		"statsdmaxlen": types.Int64Type,
 		"statsdprefix": types.StringType,
 		"type":         types.StringType,
-		"verbosity":    types.Float64Type,
+		"verbosity":    types.Int64Type,
 	}
 }
 
 type AppscopeConfigConfigMetricTransportModel struct {
-	Buffer types.String  `tfsdk:"buffer" json:"buffer,omitempty"`
-	Host   types.String  `tfsdk:"host" json:"host,omitempty"`
-	Path   types.String  `tfsdk:"path" json:"path,omitempty"`
-	Port   types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS    types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
+	Buffer types.String `tfsdk:"buffer" json:"buffer,omitempty"`
+	Host   types.String `tfsdk:"host" json:"host,omitempty"`
+	Path   types.String `tfsdk:"path" json:"path,omitempty"`
+	Port   types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	TLS    types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type AppscopeConfigConfigMetricTransportAPIModel struct {
-	Buffer *string  `json:"buffer,omitempty"`
-	Host   *string  `json:"host,omitempty"`
-	Path   *string  `json:"path,omitempty"`
-	Port   *float64 `json:"port,omitempty"`
-	TLS    any      `json:"tls,omitempty"`
-	Type   *string  `json:"type,omitempty"`
+	Buffer *string `json:"buffer,omitempty"`
+	Host   *string `json:"host,omitempty"`
+	Path   *string `json:"path,omitempty"`
+	Port   *int64  `json:"port,omitempty"`
+	TLS    any     `json:"tls,omitempty"`
+	Type   *string `json:"type,omitempty"`
 }
 
 func AppscopeConfigConfigMetricTransportAttrTypes() map[string]attr.Type {
@@ -962,7 +962,7 @@ func AppscopeConfigConfigMetricTransportAttrTypes() map[string]attr.Type {
 		"buffer": types.StringType,
 		"host":   types.StringType,
 		"path":   types.StringType,
-		"port":   types.Float64Type,
+		"port":   types.Int64Type,
 		"tls":    types.ObjectType{AttrTypes: AppscopeConfigConfigMetricTransportTLSAttrTypes()},
 		"type":   types.StringType,
 	}
@@ -1020,28 +1020,28 @@ func AppscopeConfigConfigPayloadAttrTypes() map[string]attr.Type {
 }
 
 type AppscopeConfigConfigProtocolModel struct {
-	Binary  types.Bool    `tfsdk:"binary" json:"binary,omitempty"`
-	Detect  types.Bool    `tfsdk:"detect" json:"detect,omitempty"`
-	Len     types.Float64 `tfsdk:"len" json:"len,omitempty"`
-	Name    types.String  `tfsdk:"name" json:"name,omitempty"`
-	Payload types.Bool    `tfsdk:"payload" json:"payload,omitempty"`
-	Regex   types.String  `tfsdk:"regex" json:"regex,omitempty"`
+	Binary  types.Bool   `tfsdk:"binary" json:"binary,omitempty"`
+	Detect  types.Bool   `tfsdk:"detect" json:"detect,omitempty"`
+	Len     types.Int64  `tfsdk:"len" json:"len,omitempty"`
+	Name    types.String `tfsdk:"name" json:"name,omitempty"`
+	Payload types.Bool   `tfsdk:"payload" json:"payload,omitempty"`
+	Regex   types.String `tfsdk:"regex" json:"regex,omitempty"`
 }
 
 type AppscopeConfigConfigProtocolAPIModel struct {
-	Binary  *bool    `json:"binary,omitempty"`
-	Detect  *bool    `json:"detect,omitempty"`
-	Len     *float64 `json:"len,omitempty"`
-	Name    *string  `json:"name,omitempty"`
-	Payload *bool    `json:"payload,omitempty"`
-	Regex   *string  `json:"regex,omitempty"`
+	Binary  *bool   `json:"binary,omitempty"`
+	Detect  *bool   `json:"detect,omitempty"`
+	Len     *int64  `json:"len,omitempty"`
+	Name    *string `json:"name,omitempty"`
+	Payload *bool   `json:"payload,omitempty"`
+	Regex   *string `json:"regex,omitempty"`
 }
 
 func AppscopeConfigConfigProtocolAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"binary":  types.BoolType,
 		"detect":  types.BoolType,
-		"len":     types.Float64Type,
+		"len":     types.Int64Type,
 		"name":    types.StringType,
 		"payload": types.BoolType,
 		"regex":   types.StringType,

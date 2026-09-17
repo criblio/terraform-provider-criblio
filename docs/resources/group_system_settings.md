@@ -19,10 +19,11 @@ resource "criblio_group_system_settings" "my_group_system_settings" {
     host = "0.0.0.0"
     port = 9000
     ssl = {
-      cert_path = "/opt/cribl/local/cribl/auth/cribl.crt"
+      cert_path = "/opt/cribl/local/cribl/auth/myApiCert.crt"
+      certificate_name = "myApiCert"
       disabled = false
       passphrase = ""
-      priv_key_path = "/opt/cribl/local/cribl/auth/cribl.key"
+      priv_key_path = "/opt/cribl/local/cribl/auth/myApiCert.key"
     }
   }
   backups = {
@@ -124,6 +125,7 @@ Optional:
 
 - `ca_path` (String) Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.
 - `cert_path` (String) Filesystem path to the PEM-encoded TLS certificate.
+- `certificate_name` (String) Name of a predefined Certificate stored in Cribl.
 - `disabled` (Boolean) If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.
 - `passphrase` (String, Sensitive) Passphrase to decrypt the TLS private key, if encrypted.
 - `priv_key_path` (String) Filesystem path to the PEM-encoded TLS private key.
@@ -133,6 +135,13 @@ Optional:
 
 Optional:
 
+- `app_backend_broker_origin` (String) Public origin for App Platform backend broker callbacks (standalone/on-prem only). Must be an absolute HTTP(S) URL.
+- `app_backend_max_callbacks_per_installation` (Integer) Maximum number of broker callbacks per minute a single app backend installation may make. Over-limit callbacks receive HTTP 429.
+- `app_backend_max_callbacks_total` (Integer) Maximum number of broker callbacks per minute across all app backend installations on this Leader. Unlimited when unset. Over-limit callbacks receive HTTP 429.
+- `app_backend_max_in_flight` (Integer) Maximum number of concurrent App Platform backend invocations across all apps on this Leader.
+- `app_schedule_body_expression_max_length` (Integer) Maximum number of characters allowed in a schedule bodyExpression.
+- `app_scheduled_concurrent_job_limit` (Integer) Maximum number of concurrent scheduled App Platform function jobs across all apps on this Leader (group-wide). Changes require a Leader restart.
+- `app_schedules_max` (Integer) Maximum number of schedule records a single App may declare.
 - `enabled` (Boolean) If <code>true</code>, enable Apps. Otherwise, <code>false</code>.
 
 <a id="nestedatt--backups"></a>

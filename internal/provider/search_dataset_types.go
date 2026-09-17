@@ -31,6 +31,7 @@ type SearchDatasetModel struct {
 	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetApiHttp,omitempty"`
 	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetApiLogAnalytics,omitempty"`
 	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetApiMsgraph,omitempty"`
+	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetApiNgsiem,omitempty"`
 	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetApiOkta,omitempty"`
 	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetApiOpensearch,omitempty"`
 	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetApiTailscale,omitempty"`
@@ -64,6 +65,7 @@ type SearchDatasetResourceModel struct {
 	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetApiHttp,omitempty"`
 	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetApiLogAnalytics,omitempty"`
 	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetApiMsgraph,omitempty"`
+	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetApiNgsiem,omitempty"`
 	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetApiOkta,omitempty"`
 	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetApiOpensearch,omitempty"`
 	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetApiTailscale,omitempty"`
@@ -97,6 +99,7 @@ type SearchDatasetDataSourceModel struct {
 	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetApiHttp,omitempty"`
 	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetApiLogAnalytics,omitempty"`
 	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetApiMsgraph,omitempty"`
+	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetApiNgsiem,omitempty"`
 	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetApiOkta,omitempty"`
 	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetApiOpensearch,omitempty"`
 	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetApiTailscale,omitempty"`
@@ -911,6 +914,84 @@ type DatasetApiMsgraphMetadataLatestRunInfoAPIModel struct {
 }
 
 func DatasetApiMsgraphMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"earliest_scanned_time": types.Int64Type,
+		"finished_at":           types.Int64Type,
+		"latest_scanned_time":   types.Int64Type,
+		"object_count":          types.Int64Type,
+	}
+}
+
+type DatasetApiNgsiemCacheConnectionInfoModel struct {
+	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
+	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
+	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
+	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
+	MigrationQueryID        types.String  `tfsdk:"migration_query_id" json:"migrationQueryId,omitempty"`
+	RetentionInDays         types.Float64 `tfsdk:"retention_in_days" json:"retentionInDays,omitempty"`
+}
+
+type DatasetApiNgsiemCacheConnectionInfoAPIModel struct {
+	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
+	CacheRef                *string  `json:"cacheRef,omitempty"`
+	CreatedAt               *float64 `json:"createdAt,omitempty"`
+	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
+	MigrationQueryID        *string  `json:"migrationQueryId,omitempty"`
+	RetentionInDays         *float64 `json:"retentionInDays,omitempty"`
+}
+
+func DatasetApiNgsiemCacheConnectionInfoAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"accelerated_fields":        types.ListType{ElemType: types.StringType},
+		"cache_ref":                 types.StringType,
+		"created_at":                types.Float64Type,
+		"lakehouse_connection_type": types.StringType,
+		"migration_query_id":        types.StringType,
+		"retention_in_days":         types.Float64Type,
+	}
+}
+
+type DatasetApiNgsiemMetadataModel struct {
+	Earliest           types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	EnableAcceleration types.Bool   `tfsdk:"enable_acceleration" json:"enableAcceleration,omitempty"`
+	FieldList          types.List   `tfsdk:"field_list" json:"fieldList,omitempty"`
+	LatestRunInfo      types.Object `tfsdk:"latest_run_info" json:"latestRunInfo,omitempty"`
+	ScanMode           types.String `tfsdk:"scan_mode" json:"scanMode,omitempty"`
+}
+
+type DatasetApiNgsiemMetadataAPIModel struct {
+	Earliest           *string  `json:"earliest,omitempty"`
+	EnableAcceleration *bool    `json:"enableAcceleration,omitempty"`
+	FieldList          []string `json:"fieldList,omitempty"`
+	LatestRunInfo      any      `json:"latestRunInfo,omitempty"`
+	ScanMode           *string  `json:"scanMode,omitempty"`
+}
+
+func DatasetApiNgsiemMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"earliest":            types.StringType,
+		"enable_acceleration": types.BoolType,
+		"field_list":          types.ListType{ElemType: types.StringType},
+		"latest_run_info":     types.ObjectType{AttrTypes: DatasetApiNgsiemMetadataLatestRunInfoAttrTypes()},
+		"scan_mode":           types.StringType,
+	}
+}
+
+type DatasetApiNgsiemMetadataLatestRunInfoModel struct {
+	EarliestScannedTime types.Int64 `tfsdk:"earliest_scanned_time" json:"earliestScannedTime,omitempty"`
+	FinishedAt          types.Int64 `tfsdk:"finished_at" json:"finishedAt,omitempty"`
+	LatestScannedTime   types.Int64 `tfsdk:"latest_scanned_time" json:"latestScannedTime,omitempty"`
+	ObjectCount         types.Int64 `tfsdk:"object_count" json:"objectCount,omitempty"`
+}
+
+type DatasetApiNgsiemMetadataLatestRunInfoAPIModel struct {
+	EarliestScannedTime *int64 `json:"earliestScannedTime,omitempty"`
+	FinishedAt          *int64 `json:"finishedAt,omitempty"`
+	LatestScannedTime   *int64 `json:"latestScannedTime,omitempty"`
+	ObjectCount         *int64 `json:"objectCount,omitempty"`
+}
+
+func DatasetApiNgsiemMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"earliest_scanned_time": types.Int64Type,
 		"finished_at":           types.Int64Type,
@@ -2623,6 +2704,15 @@ func (m SearchDatasetModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.DatasetAPINgsiem != nil {
+		value, err := m.DatasetAPINgsiem.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.DatasetAPIOkta != nil {
 		value, err := m.DatasetAPIOkta.terraformPayload()
 		if err != nil {
@@ -2848,6 +2938,11 @@ func (m *SearchDatasetModel) UnmarshalJSON(data []byte) error {
 	case "api_msgraph":
 		m.DatasetAPIMsgraph = &DatasetAPIMsgraphModel{}
 		if err := m.DatasetAPIMsgraph.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "api_ngsiem":
+		m.DatasetAPINgsiem = &DatasetAPINgsiemModel{}
+		if err := m.DatasetAPINgsiem.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "api_okta":
@@ -5776,6 +5871,278 @@ func (m *DatasetAPIMsgraphModel) unmarshalPayload(input map[string]any) error {
 		m.Metadata = value.(types.Object)
 	} else {
 		m.Metadata = types.ObjectNull(DatasetApiMsgraphMetadataAttrTypes())
+	}
+	if item, ok := input["provider"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert provider from API value: %v", err)
+		}
+		m.ProviderID = value.(types.String)
+	} else {
+		m.ProviderID = types.StringNull()
+	}
+	if item, ok := input["searchVersion"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert searchVersion from API value: %v", err)
+		}
+		m.SearchVersion = value.(types.String)
+	} else {
+		m.SearchVersion = types.StringNull()
+	}
+	if item, ok := input["tags"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert tags from API value: %v", err)
+		}
+		m.Tags = value.(types.String)
+	} else {
+		m.Tags = types.StringNull()
+	}
+	if item, ok := input["viewName"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert viewName from API value: %v", err)
+		}
+		m.ViewName = value.(types.String)
+	} else {
+		m.ViewName = types.StringNull()
+	}
+	return nil
+}
+
+type DatasetAPINgsiemModel struct {
+	Type                  types.String `tfsdk:"type" json:"type,omitempty"`
+	QueryString           types.String `tfsdk:"query_string" json:"queryString,omitempty"`
+	BreakerRulesets       types.List   `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	CacheConnectionInfo   types.Object `tfsdk:"cache_connection_info" json:"cacheConnectionInfo,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
+	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
+	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
+	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
+	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
+	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
+	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPINgsiemModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"query_string":            types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiNgsiemCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"managed_by":              types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiNgsiemMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
+func (m DatasetAPINgsiemModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.QueryString.IsNull() && !m.QueryString.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.QueryString)
+		if err != nil {
+			return nil, fmt.Errorf("convert query_string to API value: %v", err)
+		}
+		output["queryString"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.CacheConnectionInfo.IsNull() && !m.CacheConnectionInfo.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.CacheConnectionInfo)
+		if err != nil {
+			return nil, fmt.Errorf("convert cache_connection_info to API value: %v", err)
+		}
+		output["cacheConnectionInfo"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.ExcludeInternalFields.IsNull() && !m.ExcludeInternalFields.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ExcludeInternalFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert exclude_internal_fields to API value: %v", err)
+		}
+		output["excludeInternalFields"] = value
+	}
+	if !m.Filter.IsNull() && !m.Filter.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Filter)
+		if err != nil {
+			return nil, fmt.Errorf("convert filter to API value: %v", err)
+		}
+		output["filter"] = value
+	}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.ProviderID.IsNull() && !m.ProviderID.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ProviderID)
+		if err != nil {
+			return nil, fmt.Errorf("convert provider_id to API value: %v", err)
+		}
+		output["provider"] = value
+	}
+	if !m.SearchVersion.IsNull() && !m.SearchVersion.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.SearchVersion)
+		if err != nil {
+			return nil, fmt.Errorf("convert search_version to API value: %v", err)
+		}
+		output["searchVersion"] = value
+	}
+	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Tags)
+		if err != nil {
+			return nil, fmt.Errorf("convert tags to API value: %v", err)
+		}
+		output["tags"] = value
+	}
+	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
+		if err != nil {
+			return nil, fmt.Errorf("convert view_name to API value: %v", err)
+		}
+		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_ngsiem"
+	}
+	return output, nil
+}
+
+func (m *DatasetAPINgsiemModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["type"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["queryString"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert queryString from API value: %v", err)
+		}
+		m.QueryString = value.(types.String)
+	} else {
+		m.QueryString = types.StringNull()
+	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["cacheConnectionInfo"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiNgsiemCacheConnectionInfoAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert cacheConnectionInfo from API value: %v", err)
+		}
+		m.CacheConnectionInfo = value.(types.Object)
+	} else {
+		m.CacheConnectionInfo = types.ObjectNull(DatasetApiNgsiemCacheConnectionInfoAttrTypes())
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["excludeInternalFields"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert excludeInternalFields from API value: %v", err)
+		}
+		m.ExcludeInternalFields = value.(types.Bool)
+	} else {
+		m.ExcludeInternalFields = types.BoolNull()
+	}
+	if item, ok := input["filter"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert filter from API value: %v", err)
+		}
+		m.Filter = value.(types.String)
+	} else {
+		m.Filter = types.StringNull()
+	}
+	if item, ok := input["id"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiNgsiemMetadataAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.Object)
+	} else {
+		m.Metadata = types.ObjectNull(DatasetApiNgsiemMetadataAttrTypes())
 	}
 	if item, ok := input["provider"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)

@@ -1,0 +1,131 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Only one run may calculate and create the next import-cli tag at a time.
+concurrency:
+  group: auto-release-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      provider_tag: ${{ steps.tags.outputs.provider_tag }}
+      goatify_tag: ${{ steps.tags.outputs.goatify_tag }}
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Calculate and create release tags
+        id: tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --force --tags origin
+
+          latest_provider_tag=$(git tag --merged "$GITHUB_SHA" --list 'v*' --sort=-version:refname \
+            | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          latest_goatify_tag=$(git tag --merged "$GITHUB_SHA" --list 'goatify-v*' --sort=-version:refname | head -n 1)
+          if [[ -z "$latest_provider_tag" || -z "$latest_goatify_tag" ]]; then
+            echo "Could not find the previous provider and import CLI release tags" >&2
+            exit 1
+          fi
+
+          # Check all changes accumulated since a component's previous release. This
+          # means a skipped merge is reconsidered on the next merge instead of lost.
+          provider_changed=false
+          import_cli_changed=false
+          while IFS= read -r file; do
+            if [[ "$file" == "main.go" || "$file" == "go.mod" || "$file" == "go.sum" \
+              || "$file" == ".goreleaser.yml" || "$file" == "terraform-registry-manifest.json" \
+              || "$file" == docs/* || "$file" == examples/* \
+              || ( "$file" == internal/*.go && "$file" != *_test.go ) ]]; then
+              provider_changed=true
+            fi
+          done < <(git diff --name-only "$latest_provider_tag..$GITHUB_SHA")
+
+          while IFS= read -r file; do
+            if [[ "$file" == "go.mod" || "$file" == "go.sum" || "$file" == ".goreleaser-goatify.yml" \
+              || ( "$file" == tools/import-cli/*.go && "$file" != *_test.go ) \
+              || ( "$file" == internal/provider/*.go && "$file" != *_test.go ) \
+              || ( "$file" == internal/auth/*.go && "$file" != *_test.go ) \
+              || ( "$file" == internal/restclient/*.go && "$file" != *_test.go ) \
+              || ( "$file" == internal/useragent/*.go && "$file" != *_test.go ) \
+              || ( "$file" == internal/tfplanmodifiers/*.go && "$file" != *_test.go ) \
+              || ( "$file" == internal/validators/*.go && "$file" != *_test.go ) ]]; then
+              import_cli_changed=true
+            fi
+          done < <(git diff --name-only "$latest_goatify_tag..$GITHUB_SHA")
+
+          echo "Provider changes since $latest_provider_tag: $provider_changed"
+          echo "Import CLI changes since $latest_goatify_tag: $import_cli_changed"
+
+          provider_version=$(sed -nE 's/^[[:space:]]*version = "([0-9]+\.[0-9]+\.[0-9]+)"$/\1/p' docs/index.md)
+          if [[ -z "$provider_version" || "$provider_version" == *$'\n'* ]]; then
+            echo "docs/index.md must contain exactly one provider version" >&2
+            exit 1
+          fi
+
+          provider_tag="v$provider_version"
+          if git rev-parse -q --verify "refs/tags/$provider_tag" >/dev/null; then
+            if [[ "$(git rev-list -n 1 "$provider_tag")" == "$GITHUB_SHA" ]]; then
+              echo "Provider tag $provider_tag already points at this commit; reusing it"
+              echo "provider_tag=$provider_tag" >> "$GITHUB_OUTPUT"
+            elif [[ "$provider_changed" == true ]]; then
+              echo "Provider changes need a new version; $provider_tag was already released" >&2
+              echo "Update the version in docs/index.md before merging" >&2
+              exit 1
+            else
+              echo "No provider changes; skipping provider release"
+              echo "provider_tag=" >> "$GITHUB_OUTPUT"
+            fi
+          elif [[ "$provider_changed" == true ]]; then
+            git tag "$provider_tag" "$GITHUB_SHA"
+            git push origin "refs/tags/$provider_tag"
+            echo "provider_tag=$provider_tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "Provider version changed without releasable provider changes; skipping provider release"
+            echo "provider_tag=" >> "$GITHUB_OUTPUT"
+          fi
+
+          current_goatify_tag=$(git tag --points-at "$GITHUB_SHA" --list 'goatify-v*' --sort=-version:refname | head -n 1)
+          if [[ -n "$current_goatify_tag" ]]; then
+            goatify_tag="$current_goatify_tag"
+            echo "Import CLI tag $goatify_tag already points at this commit; reusing it"
+          elif [[ "$import_cli_changed" == true ]]; then
+            if [[ ! "$latest_goatify_tag" =~ ^goatify-v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+              echo "Could not derive a version from latest import CLI tag: $latest_goatify_tag" >&2
+              exit 1
+            fi
+            goatify_tag="goatify-v${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.$((BASH_REMATCH[3] + 1))"
+            git tag "$goatify_tag" "$GITHUB_SHA"
+            git push origin "refs/tags/$goatify_tag"
+          else
+            goatify_tag=""
+            echo "No import CLI changes; skipping import CLI release"
+          fi
+          echo "goatify_tag=$goatify_tag" >> "$GITHUB_OUTPUT"
+
+  release-provider:
+    needs: prepare
+    if: needs.prepare.outputs.provider_tag != ''
+    uses: ./.github/workflows/tf_provider_release.yaml
+    with:
+      release_tag: ${{ needs.prepare.outputs.provider_tag }}
+    secrets: inherit
+
+  release-import-cli:
+    needs: prepare
+    if: needs.prepare.outputs.goatify_tag != ''
+    uses: ./.github/workflows/goatify_release.yaml
+    with:
+      release_tag: ${{ needs.prepare.outputs.goatify_tag }}
+    secrets: inherit

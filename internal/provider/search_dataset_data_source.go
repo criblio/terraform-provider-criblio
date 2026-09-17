@@ -1407,6 +1407,136 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					},
 				},
 			},
+			"dataset_api_ngsiem": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Resource type identifier.`,
+					},
+					"query_string": schema.StringAttribute{
+						Computed:    true,
+						Description: `CQL query string submitted to the LogScale queryjobs API.`,
+					},
+					"breaker_rulesets": schema.ListAttribute{
+						Computed:    true,
+						Description: `Event breaker rulesets that are applied when reading events from the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"cache_connection_info": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache.`,
+						Attributes: map[string]schema.Attribute{
+							"accelerated_fields": schema.ListAttribute{
+								Computed:    true,
+								Description: `Accelerated fields (materialized columns) for the cache connection.`,
+								ElementType: types.StringType,
+							},
+							"cache_ref": schema.StringAttribute{
+								Computed:    true,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
+							},
+							"created_at": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
+							},
+							"lakehouse_connection_type": schema.StringAttribute{
+								Computed:    true,
+								Description: `If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.`,
+							},
+							"migration_query_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
+							},
+							"retention_in_days": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Retention period for the Lakehouse cache connection, in days.`,
+							},
+						},
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Brief description of the Dataset.`,
+					},
+					"exclude_internal_fields": schema.BoolAttribute{
+						Computed:    true,
+						Description: `When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `Filter expression that is evaluated against each object path to determine inclusion.`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Dataset acceleration and metadata collection configuration.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Computed:    true,
+								Description: `Rolling time window that defines how far back acceleration scans.`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
+							},
+							"field_list": schema.ListAttribute{
+								Computed:    true,
+								Description: `Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.`,
+								ElementType: types.StringType,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed:    true,
+								Description: `Details from the most recent acceleration scan.`,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Timestamp (in Unix time) for the earliest event that was observed during the scan (seconds).`,
+									},
+									"finished_at": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Timestamp (in Unix time) when the acceleration run finished (milliseconds).`,
+									},
+									"latest_scanned_time": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Timestamp (in Unix time) for the latest event that was observed during the scan (seconds).`,
+									},
+									"object_count": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Number of objects on the acceleration manifest after the scan completed.`,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Description: `Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Identifier for the Dataset Provider that the Dataset uses.`,
+					},
+					"search_version": schema.StringAttribute{
+						Computed:    true,
+						Description: `Search execution version for the Dataset.`,
+					},
+					"tags": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"view_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `Lakehouse cache view name, when applicable.`,
+					},
+				},
+			},
 			"api_okta_dataset": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{

@@ -17,237 +17,288 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type PackSourceModel struct {
-	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
-	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
-	Items                     types.List                      `tfsdk:"items" json:"-"`
-	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
-	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
-	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
-	InputHttp                 *InputHttpModel                 `tfsdk:"input_http" json:"InputHttp,omitempty"`
-	InputSplunk               *InputSplunkModel               `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
-	InputSplunkSearch         *InputSplunkSearchModel         `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
-	InputSplunkHec            *InputSplunkHecModel            `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
-	InputAzureBlob            *InputAzureBlobModel            `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
-	InputElastic              *InputElasticModel              `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
-	InputConfluentCloud       *InputConfluentCloudModel       `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
-	InputGrafana              *InputGrafanaModel              `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
-	InputLoki                 *InputLokiModel                 `tfsdk:"input_loki" json:"InputLoki,omitempty"`
-	InputPrometheusRw         *InputPrometheusRwModel         `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
-	InputPrometheus           *InputPrometheusModel           `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
-	InputEdgePrometheus       *InputEdgePrometheusModel       `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
-	InputOffice365Mgmt        *InputOffice365MgmtModel        `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
-	InputOffice365Service     *InputOffice365ServiceModel     `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
-	InputOffice365MsgTrace    *InputOffice365MsgTraceModel    `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
-	InputMicrosoftGraph       *InputMicrosoftGraphModel       `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
-	InputEventhub             *InputEventhubModel             `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
-	InputEventhubAmqp         *InputEventhubAmqpModel         `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
-	InputExec                 *InputExecModel                 `tfsdk:"input_exec" json:"InputExec,omitempty"`
-	InputFirehose             *InputFirehoseModel             `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
-	InputGooglePubsub         *InputGooglePubsubModel         `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
-	InputCribl                *InputCriblModel                `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
-	InputCriblTcp             *InputCriblTcpModel             `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
-	InputCriblHttp            *InputCriblHttpModel            `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
-	InputCriblLakeHttp        *InputCriblLakeHttpModel        `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
-	InputTcpjson              *InputTcpjsonModel              `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
-	InputSystemMetrics        *InputSystemMetricsModel        `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
-	InputSystemState          *InputSystemStateModel          `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
-	InputKubeMetrics          *InputKubeMetricsModel          `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
-	InputKubeLogs             *InputKubeLogsModel             `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
-	InputKubeEvents           *InputKubeEventsModel           `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
-	InputWindowsMetrics       *InputWindowsMetricsModel       `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
-	InputCrowdstrike          *InputCrowdstrikeModel          `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
-	InputDatadogAgent         *InputDatadogAgentModel         `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
-	InputDatagen              *InputDatagenModel              `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
-	InputHttpRaw              *InputHttpRawModel              `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
-	InputKinesis              *InputKinesisModel              `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
-	InputCriblmetrics         *InputCriblmetricsModel         `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
-	InputMetrics              *InputMetricsModel              `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
-	InputS3                   *InputS3Model                   `tfsdk:"input_s3" json:"InputS3,omitempty"`
-	InputS3Inventory          *InputS3InventoryModel          `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
-	InputSnmp                 *InputSnmpModel                 `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
-	InputOpenTelemetry        *InputOpenTelemetryModel        `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetryModel `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
-	InputSqs                  *InputSqsModel                  `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
-	InputSyslog               *InputSyslogModel               `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
-	InputFile                 *InputFileModel                 `tfsdk:"input_file" json:"InputFile,omitempty"`
-	InputTcp                  *InputTcpModel                  `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
-	InputAppscope             *InputAppscopeModel             `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
-	InputWef                  *InputWefModel                  `tfsdk:"input_wef" json:"InputWef,omitempty"`
-	InputWinEventLogs         *InputWinEventLogsModel         `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
-	InputAppleUnifiedLogs     *InputAppleUnifiedLogsModel     `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
-	InputRawUdp               *InputRawUdpModel               `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
-	InputJournalFiles         *InputJournalFilesModel         `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
-	InputWiz                  *InputWizModel                  `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
-	InputOpenai               *InputOpenaiModel               `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
-	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
-	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
-	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
-	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
-	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
-	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
-	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
-	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
-	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
-	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
-	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
-	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	GroupID                           types.String                            `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                                types.String                            `tfsdk:"id" json:"id,omitempty"`
+	Pack                              types.String                            `tfsdk:"pack" json:"pack,omitempty"`
+	Items                             types.List                              `tfsdk:"items" json:"-"`
+	InputCollection                   *InputCollectionModel                   `tfsdk:"input_collection" json:"InputCollection,omitempty"`
+	InputKafka                        *InputKafkaModel                        `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
+	InputMsk                          *InputMskModel                          `tfsdk:"input_msk" json:"InputMsk,omitempty"`
+	InputHttp                         *InputHttpModel                         `tfsdk:"input_http" json:"InputHttp,omitempty"`
+	InputSplunk                       *InputSplunkModel                       `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
+	InputSplunkSearch                 *InputSplunkSearchModel                 `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
+	InputSplunkHec                    *InputSplunkHecModel                    `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
+	InputAzureBlob                    *InputAzureBlobModel                    `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
+	InputAzureVnetFlowLog             *InputAzureVnetFlowLogModel             `tfsdk:"input_azure_vnet_flow_log" json:"InputAzureVnetFlowLog,omitempty"`
+	InputElastic                      *InputElasticModel                      `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
+	InputConfluentCloud               *InputConfluentCloudModel               `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
+	InputGrafana                      *InputGrafanaModel                      `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
+	InputLoki                         *InputLokiModel                         `tfsdk:"input_loki" json:"InputLoki,omitempty"`
+	InputPrometheusRw                 *InputPrometheusRwModel                 `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
+	InputPrometheus                   *InputPrometheusModel                   `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
+	InputEdgePrometheus               *InputEdgePrometheusModel               `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
+	InputOffice365Mgmt                *InputOffice365MgmtModel                `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
+	InputOffice365Service             *InputOffice365ServiceModel             `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
+	InputOffice365MsgTrace            *InputOffice365MsgTraceModel            `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
+	InputMicrosoftGraph               *InputMicrosoftGraphModel               `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
+	InputEventhub                     *InputEventhubModel                     `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
+	InputEventhubAmqp                 *InputEventhubAmqpModel                 `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
+	InputExec                         *InputExecModel                         `tfsdk:"input_exec" json:"InputExec,omitempty"`
+	InputFirehose                     *InputFirehoseModel                     `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
+	InputGooglePubsub                 *InputGooglePubsubModel                 `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
+	InputCribl                        *InputCriblModel                        `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
+	InputCriblTcp                     *InputCriblTcpModel                     `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
+	InputCriblHttp                    *InputCriblHttpModel                    `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
+	InputCriblLakeHttp                *InputCriblLakeHttpModel                `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
+	InputTcpjson                      *InputTcpjsonModel                      `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
+	InputSystemMetrics                *InputSystemMetricsModel                `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
+	InputSystemState                  *InputSystemStateModel                  `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
+	InputKubeMetrics                  *InputKubeMetricsModel                  `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
+	InputKubeLogs                     *InputKubeLogsModel                     `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
+	InputKubeEvents                   *InputKubeEventsModel                   `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
+	InputWindowsMetrics               *InputWindowsMetricsModel               `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
+	InputCrowdstrike                  *InputCrowdstrikeModel                  `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
+	InputDatadogAgent                 *InputDatadogAgentModel                 `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
+	InputDatagen                      *InputDatagenModel                      `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
+	InputHttpRaw                      *InputHttpRawModel                      `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
+	InputKinesis                      *InputKinesisModel                      `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
+	InputCriblmetrics                 *InputCriblmetricsModel                 `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
+	InputMetrics                      *InputMetricsModel                      `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
+	InputS3                           *InputS3Model                           `tfsdk:"input_s3" json:"InputS3,omitempty"`
+	InputS3Inventory                  *InputS3InventoryModel                  `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
+	InputSnmp                         *InputSnmpModel                         `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
+	InputOpenTelemetry                *InputOpenTelemetryModel                `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
+	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
+	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
+	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
+	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
+	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
+	InputWef                          *InputWefModel                          `tfsdk:"input_wef" json:"InputWef,omitempty"`
+	InputWinEventLogs                 *InputWinEventLogsModel                 `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
+	InputAppleUnifiedLogs             *InputAppleUnifiedLogsModel             `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
+	InputRawUdp                       *InputRawUdpModel                       `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
+	InputJournalFiles                 *InputJournalFilesModel                 `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
+	InputWiz                          *InputWizModel                          `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
+	InputOpenai                       *InputOpenaiModel                       `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
+	InputWizWebhook                   *InputWizWebhookModel                   `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
+	InputNetflow                      *InputNetflowModel                      `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
+	InputSecurityLake                 *InputSecurityLakeModel                 `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3                    *InputBedrockS3Model                    `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
+	InputServicenowTable              *InputServicenowTableModel              `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
+	InputProofpointPod                *InputProofpointPodModel                `tfsdk:"input_proofpoint_pod" json:"InputProofpointPod,omitempty"`
+	InputZscalerHec                   *InputZscalerHecModel                   `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
+	InputCloudflareHec                *InputCloudflareHecModel                `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
+	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
+	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
+	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
+	InputOpenaiComplianceLogs         *InputOpenaiComplianceLogsModel         `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
+	InputAnthropicCompliance          *InputAnthropicComplianceModel          `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
+	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
+	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
+	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
+	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
+	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
+	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
+	InputBeyondtrustHec               *InputBeyondtrustHecModel               `tfsdk:"input_beyondtrust_hec" json:"InputBeyondtrustHec,omitempty"`
+	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
+	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
+	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
 }
 
 type PackSourceResourceModel struct {
-	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
-	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
-	Items                     types.List                      `tfsdk:"items" json:"-"`
-	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
-	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
-	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
-	InputHttp                 *InputHttpModel                 `tfsdk:"input_http" json:"InputHttp,omitempty"`
-	InputSplunk               *InputSplunkModel               `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
-	InputSplunkSearch         *InputSplunkSearchModel         `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
-	InputSplunkHec            *InputSplunkHecModel            `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
-	InputAzureBlob            *InputAzureBlobModel            `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
-	InputElastic              *InputElasticModel              `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
-	InputConfluentCloud       *InputConfluentCloudModel       `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
-	InputGrafana              *InputGrafanaModel              `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
-	InputLoki                 *InputLokiModel                 `tfsdk:"input_loki" json:"InputLoki,omitempty"`
-	InputPrometheusRw         *InputPrometheusRwModel         `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
-	InputPrometheus           *InputPrometheusModel           `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
-	InputEdgePrometheus       *InputEdgePrometheusModel       `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
-	InputOffice365Mgmt        *InputOffice365MgmtModel        `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
-	InputOffice365Service     *InputOffice365ServiceModel     `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
-	InputOffice365MsgTrace    *InputOffice365MsgTraceModel    `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
-	InputMicrosoftGraph       *InputMicrosoftGraphModel       `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
-	InputEventhub             *InputEventhubModel             `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
-	InputEventhubAmqp         *InputEventhubAmqpModel         `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
-	InputExec                 *InputExecModel                 `tfsdk:"input_exec" json:"InputExec,omitempty"`
-	InputFirehose             *InputFirehoseModel             `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
-	InputGooglePubsub         *InputGooglePubsubModel         `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
-	InputCribl                *InputCriblModel                `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
-	InputCriblTcp             *InputCriblTcpModel             `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
-	InputCriblHttp            *InputCriblHttpModel            `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
-	InputCriblLakeHttp        *InputCriblLakeHttpModel        `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
-	InputTcpjson              *InputTcpjsonModel              `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
-	InputSystemMetrics        *InputSystemMetricsModel        `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
-	InputSystemState          *InputSystemStateModel          `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
-	InputKubeMetrics          *InputKubeMetricsModel          `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
-	InputKubeLogs             *InputKubeLogsModel             `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
-	InputKubeEvents           *InputKubeEventsModel           `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
-	InputWindowsMetrics       *InputWindowsMetricsModel       `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
-	InputCrowdstrike          *InputCrowdstrikeModel          `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
-	InputDatadogAgent         *InputDatadogAgentModel         `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
-	InputDatagen              *InputDatagenModel              `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
-	InputHttpRaw              *InputHttpRawModel              `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
-	InputKinesis              *InputKinesisModel              `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
-	InputCriblmetrics         *InputCriblmetricsModel         `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
-	InputMetrics              *InputMetricsModel              `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
-	InputS3                   *InputS3Model                   `tfsdk:"input_s3" json:"InputS3,omitempty"`
-	InputS3Inventory          *InputS3InventoryModel          `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
-	InputSnmp                 *InputSnmpModel                 `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
-	InputOpenTelemetry        *InputOpenTelemetryModel        `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetryModel `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
-	InputSqs                  *InputSqsModel                  `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
-	InputSyslog               *InputSyslogModel               `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
-	InputFile                 *InputFileModel                 `tfsdk:"input_file" json:"InputFile,omitempty"`
-	InputTcp                  *InputTcpModel                  `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
-	InputAppscope             *InputAppscopeModel             `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
-	InputWef                  *InputWefModel                  `tfsdk:"input_wef" json:"InputWef,omitempty"`
-	InputWinEventLogs         *InputWinEventLogsModel         `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
-	InputAppleUnifiedLogs     *InputAppleUnifiedLogsModel     `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
-	InputRawUdp               *InputRawUdpModel               `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
-	InputJournalFiles         *InputJournalFilesModel         `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
-	InputWiz                  *InputWizModel                  `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
-	InputOpenai               *InputOpenaiModel               `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
-	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
-	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
-	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
-	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
-	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
-	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
-	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
-	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
-	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
-	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
-	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
-	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	GroupID                           types.String                            `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                                types.String                            `tfsdk:"id" json:"id,omitempty"`
+	Pack                              types.String                            `tfsdk:"pack" json:"pack,omitempty"`
+	Items                             types.List                              `tfsdk:"items" json:"-"`
+	InputCollection                   *InputCollectionModel                   `tfsdk:"input_collection" json:"InputCollection,omitempty"`
+	InputKafka                        *InputKafkaModel                        `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
+	InputMsk                          *InputMskModel                          `tfsdk:"input_msk" json:"InputMsk,omitempty"`
+	InputHttp                         *InputHttpModel                         `tfsdk:"input_http" json:"InputHttp,omitempty"`
+	InputSplunk                       *InputSplunkModel                       `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
+	InputSplunkSearch                 *InputSplunkSearchModel                 `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
+	InputSplunkHec                    *InputSplunkHecModel                    `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
+	InputAzureBlob                    *InputAzureBlobModel                    `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
+	InputAzureVnetFlowLog             *InputAzureVnetFlowLogModel             `tfsdk:"input_azure_vnet_flow_log" json:"InputAzureVnetFlowLog,omitempty"`
+	InputElastic                      *InputElasticModel                      `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
+	InputConfluentCloud               *InputConfluentCloudModel               `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
+	InputGrafana                      *InputGrafanaModel                      `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
+	InputLoki                         *InputLokiModel                         `tfsdk:"input_loki" json:"InputLoki,omitempty"`
+	InputPrometheusRw                 *InputPrometheusRwModel                 `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
+	InputPrometheus                   *InputPrometheusModel                   `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
+	InputEdgePrometheus               *InputEdgePrometheusModel               `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
+	InputOffice365Mgmt                *InputOffice365MgmtModel                `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
+	InputOffice365Service             *InputOffice365ServiceModel             `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
+	InputOffice365MsgTrace            *InputOffice365MsgTraceModel            `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
+	InputMicrosoftGraph               *InputMicrosoftGraphModel               `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
+	InputEventhub                     *InputEventhubModel                     `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
+	InputEventhubAmqp                 *InputEventhubAmqpModel                 `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
+	InputExec                         *InputExecModel                         `tfsdk:"input_exec" json:"InputExec,omitempty"`
+	InputFirehose                     *InputFirehoseModel                     `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
+	InputGooglePubsub                 *InputGooglePubsubModel                 `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
+	InputCribl                        *InputCriblModel                        `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
+	InputCriblTcp                     *InputCriblTcpModel                     `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
+	InputCriblHttp                    *InputCriblHttpModel                    `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
+	InputCriblLakeHttp                *InputCriblLakeHttpModel                `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
+	InputTcpjson                      *InputTcpjsonModel                      `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
+	InputSystemMetrics                *InputSystemMetricsModel                `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
+	InputSystemState                  *InputSystemStateModel                  `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
+	InputKubeMetrics                  *InputKubeMetricsModel                  `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
+	InputKubeLogs                     *InputKubeLogsModel                     `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
+	InputKubeEvents                   *InputKubeEventsModel                   `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
+	InputWindowsMetrics               *InputWindowsMetricsModel               `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
+	InputCrowdstrike                  *InputCrowdstrikeModel                  `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
+	InputDatadogAgent                 *InputDatadogAgentModel                 `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
+	InputDatagen                      *InputDatagenModel                      `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
+	InputHttpRaw                      *InputHttpRawModel                      `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
+	InputKinesis                      *InputKinesisModel                      `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
+	InputCriblmetrics                 *InputCriblmetricsModel                 `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
+	InputMetrics                      *InputMetricsModel                      `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
+	InputS3                           *InputS3Model                           `tfsdk:"input_s3" json:"InputS3,omitempty"`
+	InputS3Inventory                  *InputS3InventoryModel                  `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
+	InputSnmp                         *InputSnmpModel                         `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
+	InputOpenTelemetry                *InputOpenTelemetryModel                `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
+	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
+	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
+	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
+	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
+	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
+	InputWef                          *InputWefModel                          `tfsdk:"input_wef" json:"InputWef,omitempty"`
+	InputWinEventLogs                 *InputWinEventLogsModel                 `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
+	InputAppleUnifiedLogs             *InputAppleUnifiedLogsModel             `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
+	InputRawUdp                       *InputRawUdpModel                       `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
+	InputJournalFiles                 *InputJournalFilesModel                 `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
+	InputWiz                          *InputWizModel                          `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
+	InputOpenai                       *InputOpenaiModel                       `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
+	InputWizWebhook                   *InputWizWebhookModel                   `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
+	InputNetflow                      *InputNetflowModel                      `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
+	InputSecurityLake                 *InputSecurityLakeModel                 `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3                    *InputBedrockS3Model                    `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
+	InputServicenowTable              *InputServicenowTableModel              `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
+	InputProofpointPod                *InputProofpointPodModel                `tfsdk:"input_proofpoint_pod" json:"InputProofpointPod,omitempty"`
+	InputZscalerHec                   *InputZscalerHecModel                   `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
+	InputCloudflareHec                *InputCloudflareHecModel                `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
+	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
+	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
+	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
+	InputOpenaiComplianceLogs         *InputOpenaiComplianceLogsModel         `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
+	InputAnthropicCompliance          *InputAnthropicComplianceModel          `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
+	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
+	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
+	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
+	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
+	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
+	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
+	InputBeyondtrustHec               *InputBeyondtrustHecModel               `tfsdk:"input_beyondtrust_hec" json:"InputBeyondtrustHec,omitempty"`
+	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
+	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
+	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
 }
 
 type PackSourceDataSourceModel struct {
-	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
-	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
-	Items                     types.List                      `tfsdk:"items" json:"-"`
-	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
-	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
-	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
-	InputHttp                 *InputHttpModel                 `tfsdk:"input_http" json:"InputHttp,omitempty"`
-	InputSplunk               *InputSplunkModel               `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
-	InputSplunkSearch         *InputSplunkSearchModel         `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
-	InputSplunkHec            *InputSplunkHecModel            `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
-	InputAzureBlob            *InputAzureBlobModel            `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
-	InputElastic              *InputElasticModel              `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
-	InputConfluentCloud       *InputConfluentCloudModel       `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
-	InputGrafana              *InputGrafanaModel              `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
-	InputLoki                 *InputLokiModel                 `tfsdk:"input_loki" json:"InputLoki,omitempty"`
-	InputPrometheusRw         *InputPrometheusRwModel         `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
-	InputPrometheus           *InputPrometheusModel           `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
-	InputEdgePrometheus       *InputEdgePrometheusModel       `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
-	InputOffice365Mgmt        *InputOffice365MgmtModel        `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
-	InputOffice365Service     *InputOffice365ServiceModel     `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
-	InputOffice365MsgTrace    *InputOffice365MsgTraceModel    `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
-	InputMicrosoftGraph       *InputMicrosoftGraphModel       `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
-	InputEventhub             *InputEventhubModel             `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
-	InputEventhubAmqp         *InputEventhubAmqpModel         `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
-	InputExec                 *InputExecModel                 `tfsdk:"input_exec" json:"InputExec,omitempty"`
-	InputFirehose             *InputFirehoseModel             `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
-	InputGooglePubsub         *InputGooglePubsubModel         `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
-	InputCribl                *InputCriblModel                `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
-	InputCriblTcp             *InputCriblTcpModel             `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
-	InputCriblHttp            *InputCriblHttpModel            `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
-	InputCriblLakeHttp        *InputCriblLakeHttpModel        `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
-	InputTcpjson              *InputTcpjsonModel              `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
-	InputSystemMetrics        *InputSystemMetricsModel        `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
-	InputSystemState          *InputSystemStateModel          `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
-	InputKubeMetrics          *InputKubeMetricsModel          `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
-	InputKubeLogs             *InputKubeLogsModel             `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
-	InputKubeEvents           *InputKubeEventsModel           `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
-	InputWindowsMetrics       *InputWindowsMetricsModel       `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
-	InputCrowdstrike          *InputCrowdstrikeModel          `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
-	InputDatadogAgent         *InputDatadogAgentModel         `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
-	InputDatagen              *InputDatagenModel              `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
-	InputHttpRaw              *InputHttpRawModel              `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
-	InputKinesis              *InputKinesisModel              `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
-	InputCriblmetrics         *InputCriblmetricsModel         `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
-	InputMetrics              *InputMetricsModel              `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
-	InputS3                   *InputS3Model                   `tfsdk:"input_s3" json:"InputS3,omitempty"`
-	InputS3Inventory          *InputS3InventoryModel          `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
-	InputSnmp                 *InputSnmpModel                 `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
-	InputOpenTelemetry        *InputOpenTelemetryModel        `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetryModel `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
-	InputSqs                  *InputSqsModel                  `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
-	InputSyslog               *InputSyslogModel               `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
-	InputFile                 *InputFileModel                 `tfsdk:"input_file" json:"InputFile,omitempty"`
-	InputTcp                  *InputTcpModel                  `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
-	InputAppscope             *InputAppscopeModel             `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
-	InputWef                  *InputWefModel                  `tfsdk:"input_wef" json:"InputWef,omitempty"`
-	InputWinEventLogs         *InputWinEventLogsModel         `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
-	InputAppleUnifiedLogs     *InputAppleUnifiedLogsModel     `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
-	InputRawUdp               *InputRawUdpModel               `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
-	InputJournalFiles         *InputJournalFilesModel         `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
-	InputWiz                  *InputWizModel                  `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
-	InputOpenai               *InputOpenaiModel               `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
-	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
-	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
-	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
-	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
-	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
-	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
-	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
-	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
-	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
-	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
-	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
-	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	GroupID                           types.String                            `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                                types.String                            `tfsdk:"id" json:"id,omitempty"`
+	Pack                              types.String                            `tfsdk:"pack" json:"pack,omitempty"`
+	Items                             types.List                              `tfsdk:"items" json:"-"`
+	InputCollection                   *InputCollectionModel                   `tfsdk:"input_collection" json:"InputCollection,omitempty"`
+	InputKafka                        *InputKafkaModel                        `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
+	InputMsk                          *InputMskModel                          `tfsdk:"input_msk" json:"InputMsk,omitempty"`
+	InputHttp                         *InputHttpModel                         `tfsdk:"input_http" json:"InputHttp,omitempty"`
+	InputSplunk                       *InputSplunkModel                       `tfsdk:"input_splunk" json:"InputSplunk,omitempty"`
+	InputSplunkSearch                 *InputSplunkSearchModel                 `tfsdk:"input_splunk_search" json:"InputSplunkSearch,omitempty"`
+	InputSplunkHec                    *InputSplunkHecModel                    `tfsdk:"input_splunk_hec" json:"InputSplunkHec,omitempty"`
+	InputAzureBlob                    *InputAzureBlobModel                    `tfsdk:"input_azure_blob" json:"InputAzureBlob,omitempty"`
+	InputAzureVnetFlowLog             *InputAzureVnetFlowLogModel             `tfsdk:"input_azure_vnet_flow_log" json:"InputAzureVnetFlowLog,omitempty"`
+	InputElastic                      *InputElasticModel                      `tfsdk:"input_elastic" json:"InputElastic,omitempty"`
+	InputConfluentCloud               *InputConfluentCloudModel               `tfsdk:"input_confluent_cloud" json:"InputConfluentCloud,omitempty"`
+	InputGrafana                      *InputGrafanaModel                      `tfsdk:"input_grafana" json:"InputGrafana,omitempty"`
+	InputLoki                         *InputLokiModel                         `tfsdk:"input_loki" json:"InputLoki,omitempty"`
+	InputPrometheusRw                 *InputPrometheusRwModel                 `tfsdk:"input_prometheus_rw" json:"InputPrometheusRw,omitempty"`
+	InputPrometheus                   *InputPrometheusModel                   `tfsdk:"input_prometheus" json:"InputPrometheus,omitempty"`
+	InputEdgePrometheus               *InputEdgePrometheusModel               `tfsdk:"input_edge_prometheus" json:"InputEdgePrometheus,omitempty"`
+	InputOffice365Mgmt                *InputOffice365MgmtModel                `tfsdk:"input_office365_mgmt" json:"InputOffice365Mgmt,omitempty"`
+	InputOffice365Service             *InputOffice365ServiceModel             `tfsdk:"input_office365_service" json:"InputOffice365Service,omitempty"`
+	InputOffice365MsgTrace            *InputOffice365MsgTraceModel            `tfsdk:"input_office365_msg_trace" json:"InputOffice365MsgTrace,omitempty"`
+	InputMicrosoftGraph               *InputMicrosoftGraphModel               `tfsdk:"input_microsoft_graph" json:"InputMicrosoftGraph,omitempty"`
+	InputEventhub                     *InputEventhubModel                     `tfsdk:"input_eventhub" json:"InputEventhub,omitempty"`
+	InputEventhubAmqp                 *InputEventhubAmqpModel                 `tfsdk:"input_eventhub_amqp" json:"InputEventhubAmqp,omitempty"`
+	InputExec                         *InputExecModel                         `tfsdk:"input_exec" json:"InputExec,omitempty"`
+	InputFirehose                     *InputFirehoseModel                     `tfsdk:"input_firehose" json:"InputFirehose,omitempty"`
+	InputGooglePubsub                 *InputGooglePubsubModel                 `tfsdk:"input_google_pubsub" json:"InputGooglePubsub,omitempty"`
+	InputCribl                        *InputCriblModel                        `tfsdk:"input_cribl" json:"InputCribl,omitempty"`
+	InputCriblTcp                     *InputCriblTcpModel                     `tfsdk:"input_cribl_tcp" json:"InputCriblTcp,omitempty"`
+	InputCriblHttp                    *InputCriblHttpModel                    `tfsdk:"input_cribl_http" json:"InputCriblHttp,omitempty"`
+	InputCriblLakeHttp                *InputCriblLakeHttpModel                `tfsdk:"input_cribl_lake_http" json:"InputCriblLakeHttp,omitempty"`
+	InputTcpjson                      *InputTcpjsonModel                      `tfsdk:"input_tcpjson" json:"InputTcpjson,omitempty"`
+	InputSystemMetrics                *InputSystemMetricsModel                `tfsdk:"input_system_metrics" json:"InputSystemMetrics,omitempty"`
+	InputSystemState                  *InputSystemStateModel                  `tfsdk:"input_system_state" json:"InputSystemState,omitempty"`
+	InputKubeMetrics                  *InputKubeMetricsModel                  `tfsdk:"input_kube_metrics" json:"InputKubeMetrics,omitempty"`
+	InputKubeLogs                     *InputKubeLogsModel                     `tfsdk:"input_kube_logs" json:"InputKubeLogs,omitempty"`
+	InputKubeEvents                   *InputKubeEventsModel                   `tfsdk:"input_kube_events" json:"InputKubeEvents,omitempty"`
+	InputWindowsMetrics               *InputWindowsMetricsModel               `tfsdk:"input_windows_metrics" json:"InputWindowsMetrics,omitempty"`
+	InputCrowdstrike                  *InputCrowdstrikeModel                  `tfsdk:"input_crowdstrike" json:"InputCrowdstrike,omitempty"`
+	InputDatadogAgent                 *InputDatadogAgentModel                 `tfsdk:"input_datadog_agent" json:"InputDatadogAgent,omitempty"`
+	InputDatagen                      *InputDatagenModel                      `tfsdk:"input_datagen" json:"InputDatagen,omitempty"`
+	InputHttpRaw                      *InputHttpRawModel                      `tfsdk:"input_http_raw" json:"InputHttpRaw,omitempty"`
+	InputKinesis                      *InputKinesisModel                      `tfsdk:"input_kinesis" json:"InputKinesis,omitempty"`
+	InputCriblmetrics                 *InputCriblmetricsModel                 `tfsdk:"input_criblmetrics" json:"InputCriblmetrics,omitempty"`
+	InputMetrics                      *InputMetricsModel                      `tfsdk:"input_metrics" json:"InputMetrics,omitempty"`
+	InputS3                           *InputS3Model                           `tfsdk:"input_s3" json:"InputS3,omitempty"`
+	InputS3Inventory                  *InputS3InventoryModel                  `tfsdk:"input_s3_inventory" json:"InputS3Inventory,omitempty"`
+	InputSnmp                         *InputSnmpModel                         `tfsdk:"input_snmp" json:"InputSnmp,omitempty"`
+	InputOpenTelemetry                *InputOpenTelemetryModel                `tfsdk:"input_open_telemetry" json:"InputOpenTelemetry,omitempty"`
+	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
+	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
+	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
+	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
+	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
+	InputWef                          *InputWefModel                          `tfsdk:"input_wef" json:"InputWef,omitempty"`
+	InputWinEventLogs                 *InputWinEventLogsModel                 `tfsdk:"input_win_event_logs" json:"InputWinEventLogs,omitempty"`
+	InputAppleUnifiedLogs             *InputAppleUnifiedLogsModel             `tfsdk:"input_apple_unified_logs" json:"InputAppleUnifiedLogs,omitempty"`
+	InputRawUdp                       *InputRawUdpModel                       `tfsdk:"input_raw_udp" json:"InputRawUdp,omitempty"`
+	InputJournalFiles                 *InputJournalFilesModel                 `tfsdk:"input_journal_files" json:"InputJournalFiles,omitempty"`
+	InputWiz                          *InputWizModel                          `tfsdk:"input_wiz" json:"InputWiz,omitempty"`
+	InputOpenai                       *InputOpenaiModel                       `tfsdk:"input_openai" json:"InputOpenai,omitempty"`
+	InputWizWebhook                   *InputWizWebhookModel                   `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
+	InputNetflow                      *InputNetflowModel                      `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
+	InputSecurityLake                 *InputSecurityLakeModel                 `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3                    *InputBedrockS3Model                    `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
+	InputServicenowTable              *InputServicenowTableModel              `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
+	InputProofpointPod                *InputProofpointPodModel                `tfsdk:"input_proofpoint_pod" json:"InputProofpointPod,omitempty"`
+	InputZscalerHec                   *InputZscalerHecModel                   `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
+	InputCloudflareHec                *InputCloudflareHecModel                `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
+	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
+	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
+	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
+	InputOpenaiComplianceLogs         *InputOpenaiComplianceLogsModel         `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
+	InputAnthropicCompliance          *InputAnthropicComplianceModel          `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
+	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
+	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
+	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
+	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
+	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
+	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
+	InputBeyondtrustHec               *InputBeyondtrustHecModel               `tfsdk:"input_beyondtrust_hec" json:"InputBeyondtrustHec,omitempty"`
+	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
+	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
+	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
 }
 
 type PackSourceAPIModel struct {
@@ -258,77 +309,94 @@ type PackSourceAPIModel struct {
 
 func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"input_collection":             types.ObjectType{AttrTypes: InputCollectionModelAttrTypes()},
-		"input_kafka":                  types.ObjectType{AttrTypes: InputKafkaModelAttrTypes()},
-		"input_msk":                    types.ObjectType{AttrTypes: InputMskModelAttrTypes()},
-		"input_http":                   types.ObjectType{AttrTypes: InputHttpModelAttrTypes()},
-		"input_splunk":                 types.ObjectType{AttrTypes: InputSplunkModelAttrTypes()},
-		"input_splunk_search":          types.ObjectType{AttrTypes: InputSplunkSearchModelAttrTypes()},
-		"input_splunk_hec":             types.ObjectType{AttrTypes: InputSplunkHecModelAttrTypes()},
-		"input_azure_blob":             types.ObjectType{AttrTypes: InputAzureBlobModelAttrTypes()},
-		"input_elastic":                types.ObjectType{AttrTypes: InputElasticModelAttrTypes()},
-		"input_confluent_cloud":        types.ObjectType{AttrTypes: InputConfluentCloudModelAttrTypes()},
-		"input_grafana":                types.ObjectType{AttrTypes: InputGrafanaModelAttrTypes()},
-		"input_loki":                   types.ObjectType{AttrTypes: InputLokiModelAttrTypes()},
-		"input_prometheus_rw":          types.ObjectType{AttrTypes: InputPrometheusRwModelAttrTypes()},
-		"input_prometheus":             types.ObjectType{AttrTypes: InputPrometheusModelAttrTypes()},
-		"input_edge_prometheus":        types.ObjectType{AttrTypes: InputEdgePrometheusModelAttrTypes()},
-		"input_office365_mgmt":         types.ObjectType{AttrTypes: InputOffice365MgmtModelAttrTypes()},
-		"input_office365_service":      types.ObjectType{AttrTypes: InputOffice365ServiceModelAttrTypes()},
-		"input_office365_msg_trace":    types.ObjectType{AttrTypes: InputOffice365MsgTraceModelAttrTypes()},
-		"input_microsoft_graph":        types.ObjectType{AttrTypes: InputMicrosoftGraphModelAttrTypes()},
-		"input_eventhub":               types.ObjectType{AttrTypes: InputEventhubModelAttrTypes()},
-		"input_eventhub_amqp":          types.ObjectType{AttrTypes: InputEventhubAmqpModelAttrTypes()},
-		"input_exec":                   types.ObjectType{AttrTypes: InputExecModelAttrTypes()},
-		"input_firehose":               types.ObjectType{AttrTypes: InputFirehoseModelAttrTypes()},
-		"input_google_pubsub":          types.ObjectType{AttrTypes: InputGooglePubsubModelAttrTypes()},
-		"input_cribl":                  types.ObjectType{AttrTypes: InputCriblModelAttrTypes()},
-		"input_cribl_tcp":              types.ObjectType{AttrTypes: InputCriblTcpModelAttrTypes()},
-		"input_cribl_http":             types.ObjectType{AttrTypes: InputCriblHttpModelAttrTypes()},
-		"input_cribl_lake_http":        types.ObjectType{AttrTypes: InputCriblLakeHttpModelAttrTypes()},
-		"input_tcpjson":                types.ObjectType{AttrTypes: InputTcpjsonModelAttrTypes()},
-		"input_system_metrics":         types.ObjectType{AttrTypes: InputSystemMetricsModelAttrTypes()},
-		"input_system_state":           types.ObjectType{AttrTypes: InputSystemStateModelAttrTypes()},
-		"input_kube_metrics":           types.ObjectType{AttrTypes: InputKubeMetricsModelAttrTypes()},
-		"input_kube_logs":              types.ObjectType{AttrTypes: InputKubeLogsModelAttrTypes()},
-		"input_kube_events":            types.ObjectType{AttrTypes: InputKubeEventsModelAttrTypes()},
-		"input_windows_metrics":        types.ObjectType{AttrTypes: InputWindowsMetricsModelAttrTypes()},
-		"input_crowdstrike":            types.ObjectType{AttrTypes: InputCrowdstrikeModelAttrTypes()},
-		"input_datadog_agent":          types.ObjectType{AttrTypes: InputDatadogAgentModelAttrTypes()},
-		"input_datagen":                types.ObjectType{AttrTypes: InputDatagenModelAttrTypes()},
-		"input_http_raw":               types.ObjectType{AttrTypes: InputHttpRawModelAttrTypes()},
-		"input_kinesis":                types.ObjectType{AttrTypes: InputKinesisModelAttrTypes()},
-		"input_criblmetrics":           types.ObjectType{AttrTypes: InputCriblmetricsModelAttrTypes()},
-		"input_metrics":                types.ObjectType{AttrTypes: InputMetricsModelAttrTypes()},
-		"input_s3":                     types.ObjectType{AttrTypes: InputS3ModelAttrTypes()},
-		"input_s3_inventory":           types.ObjectType{AttrTypes: InputS3InventoryModelAttrTypes()},
-		"input_snmp":                   types.ObjectType{AttrTypes: InputSnmpModelAttrTypes()},
-		"input_open_telemetry":         types.ObjectType{AttrTypes: InputOpenTelemetryModelAttrTypes()},
-		"input_model_driven_telemetry": types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
-		"input_sqs":                    types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
-		"input_syslog":                 types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
-		"input_file":                   types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
-		"input_tcp":                    types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
-		"input_appscope":               types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
-		"input_wef":                    types.ObjectType{AttrTypes: InputWefModelAttrTypes()},
-		"input_win_event_logs":         types.ObjectType{AttrTypes: InputWinEventLogsModelAttrTypes()},
-		"input_apple_unified_logs":     types.ObjectType{AttrTypes: InputAppleUnifiedLogsModelAttrTypes()},
-		"input_raw_udp":                types.ObjectType{AttrTypes: InputRawUdpModelAttrTypes()},
-		"input_journal_files":          types.ObjectType{AttrTypes: InputJournalFilesModelAttrTypes()},
-		"input_wiz":                    types.ObjectType{AttrTypes: InputWizModelAttrTypes()},
-		"input_openai":                 types.ObjectType{AttrTypes: InputOpenaiModelAttrTypes()},
-		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
-		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
-		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
-		"input_bedrock_s3":             types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
-		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
-		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
-		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
-		"input_sysdig_hec":             types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
-		"input_upwind_hec":             types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
-		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
-		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
-		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+		"input_collection":                     types.ObjectType{AttrTypes: InputCollectionModelAttrTypes()},
+		"input_kafka":                          types.ObjectType{AttrTypes: InputKafkaModelAttrTypes()},
+		"input_msk":                            types.ObjectType{AttrTypes: InputMskModelAttrTypes()},
+		"input_http":                           types.ObjectType{AttrTypes: InputHttpModelAttrTypes()},
+		"input_splunk":                         types.ObjectType{AttrTypes: InputSplunkModelAttrTypes()},
+		"input_splunk_search":                  types.ObjectType{AttrTypes: InputSplunkSearchModelAttrTypes()},
+		"input_splunk_hec":                     types.ObjectType{AttrTypes: InputSplunkHecModelAttrTypes()},
+		"input_azure_blob":                     types.ObjectType{AttrTypes: InputAzureBlobModelAttrTypes()},
+		"input_azure_vnet_flow_log":            types.ObjectType{AttrTypes: InputAzureVnetFlowLogModelAttrTypes()},
+		"input_elastic":                        types.ObjectType{AttrTypes: InputElasticModelAttrTypes()},
+		"input_confluent_cloud":                types.ObjectType{AttrTypes: InputConfluentCloudModelAttrTypes()},
+		"input_grafana":                        types.ObjectType{AttrTypes: InputGrafanaModelAttrTypes()},
+		"input_loki":                           types.ObjectType{AttrTypes: InputLokiModelAttrTypes()},
+		"input_prometheus_rw":                  types.ObjectType{AttrTypes: InputPrometheusRwModelAttrTypes()},
+		"input_prometheus":                     types.ObjectType{AttrTypes: InputPrometheusModelAttrTypes()},
+		"input_edge_prometheus":                types.ObjectType{AttrTypes: InputEdgePrometheusModelAttrTypes()},
+		"input_office365_mgmt":                 types.ObjectType{AttrTypes: InputOffice365MgmtModelAttrTypes()},
+		"input_office365_service":              types.ObjectType{AttrTypes: InputOffice365ServiceModelAttrTypes()},
+		"input_office365_msg_trace":            types.ObjectType{AttrTypes: InputOffice365MsgTraceModelAttrTypes()},
+		"input_microsoft_graph":                types.ObjectType{AttrTypes: InputMicrosoftGraphModelAttrTypes()},
+		"input_eventhub":                       types.ObjectType{AttrTypes: InputEventhubModelAttrTypes()},
+		"input_eventhub_amqp":                  types.ObjectType{AttrTypes: InputEventhubAmqpModelAttrTypes()},
+		"input_exec":                           types.ObjectType{AttrTypes: InputExecModelAttrTypes()},
+		"input_firehose":                       types.ObjectType{AttrTypes: InputFirehoseModelAttrTypes()},
+		"input_google_pubsub":                  types.ObjectType{AttrTypes: InputGooglePubsubModelAttrTypes()},
+		"input_cribl":                          types.ObjectType{AttrTypes: InputCriblModelAttrTypes()},
+		"input_cribl_tcp":                      types.ObjectType{AttrTypes: InputCriblTcpModelAttrTypes()},
+		"input_cribl_http":                     types.ObjectType{AttrTypes: InputCriblHttpModelAttrTypes()},
+		"input_cribl_lake_http":                types.ObjectType{AttrTypes: InputCriblLakeHttpModelAttrTypes()},
+		"input_tcpjson":                        types.ObjectType{AttrTypes: InputTcpjsonModelAttrTypes()},
+		"input_system_metrics":                 types.ObjectType{AttrTypes: InputSystemMetricsModelAttrTypes()},
+		"input_system_state":                   types.ObjectType{AttrTypes: InputSystemStateModelAttrTypes()},
+		"input_kube_metrics":                   types.ObjectType{AttrTypes: InputKubeMetricsModelAttrTypes()},
+		"input_kube_logs":                      types.ObjectType{AttrTypes: InputKubeLogsModelAttrTypes()},
+		"input_kube_events":                    types.ObjectType{AttrTypes: InputKubeEventsModelAttrTypes()},
+		"input_windows_metrics":                types.ObjectType{AttrTypes: InputWindowsMetricsModelAttrTypes()},
+		"input_crowdstrike":                    types.ObjectType{AttrTypes: InputCrowdstrikeModelAttrTypes()},
+		"input_datadog_agent":                  types.ObjectType{AttrTypes: InputDatadogAgentModelAttrTypes()},
+		"input_datagen":                        types.ObjectType{AttrTypes: InputDatagenModelAttrTypes()},
+		"input_http_raw":                       types.ObjectType{AttrTypes: InputHttpRawModelAttrTypes()},
+		"input_kinesis":                        types.ObjectType{AttrTypes: InputKinesisModelAttrTypes()},
+		"input_criblmetrics":                   types.ObjectType{AttrTypes: InputCriblmetricsModelAttrTypes()},
+		"input_metrics":                        types.ObjectType{AttrTypes: InputMetricsModelAttrTypes()},
+		"input_s3":                             types.ObjectType{AttrTypes: InputS3ModelAttrTypes()},
+		"input_s3_inventory":                   types.ObjectType{AttrTypes: InputS3InventoryModelAttrTypes()},
+		"input_snmp":                           types.ObjectType{AttrTypes: InputSnmpModelAttrTypes()},
+		"input_open_telemetry":                 types.ObjectType{AttrTypes: InputOpenTelemetryModelAttrTypes()},
+		"input_model_driven_telemetry":         types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
+		"input_sqs":                            types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
+		"input_syslog":                         types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
+		"input_file":                           types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
+		"input_tcp":                            types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
+		"input_appscope":                       types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
+		"input_wef":                            types.ObjectType{AttrTypes: InputWefModelAttrTypes()},
+		"input_win_event_logs":                 types.ObjectType{AttrTypes: InputWinEventLogsModelAttrTypes()},
+		"input_apple_unified_logs":             types.ObjectType{AttrTypes: InputAppleUnifiedLogsModelAttrTypes()},
+		"input_raw_udp":                        types.ObjectType{AttrTypes: InputRawUdpModelAttrTypes()},
+		"input_journal_files":                  types.ObjectType{AttrTypes: InputJournalFilesModelAttrTypes()},
+		"input_wiz":                            types.ObjectType{AttrTypes: InputWizModelAttrTypes()},
+		"input_openai":                         types.ObjectType{AttrTypes: InputOpenaiModelAttrTypes()},
+		"input_wiz_webhook":                    types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
+		"input_netflow":                        types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
+		"input_security_lake":                  types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_bedrock_s3":                     types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
+		"input_servicenow_table":               types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
+		"input_proofpoint_pod":                 types.ObjectType{AttrTypes: InputProofpointPodModelAttrTypes()},
+		"input_zscaler_hec":                    types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
+		"input_cloudflare_hec":                 types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_sysdig_hec":                     types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
+		"input_upwind_hec":                     types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
+		"input_trellix_hec":                    types.ObjectType{AttrTypes: InputTrellixHecModelAttrTypes()},
+		"input_sailpoint_hec":                  types.ObjectType{AttrTypes: InputSailpointHecModelAttrTypes()},
+		"input_extrahop_revealx360":            types.ObjectType{AttrTypes: InputExtrahopRevealx360ModelAttrTypes()},
+		"input_aqua_security_hec":              types.ObjectType{AttrTypes: InputAquaSecurityHecModelAttrTypes()},
+		"input_openai_compliance_logs":         types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
+		"input_anthropic_compliance":           types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
+		"input_anthropic_enterprise_analytics": types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsModelAttrTypes()},
+		"input_microsoft_copilot":              types.ObjectType{AttrTypes: InputMicrosoftCopilotModelAttrTypes()},
+		"input_okta":                           types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+		"input_akamai_hec":                     types.ObjectType{AttrTypes: InputAkamaiHecModelAttrTypes()},
+		"input_ping_identity_pingone":          types.ObjectType{AttrTypes: InputPingIDentityPingoneModelAttrTypes()},
+		"input_gigamon_hec":                    types.ObjectType{AttrTypes: InputGigamonHecModelAttrTypes()},
+		"input_vectra_ai_hec":                  types.ObjectType{AttrTypes: InputVectraAiHecModelAttrTypes()},
+		"input_f5_big_ip":                      types.ObjectType{AttrTypes: InputF5BigIpModelAttrTypes()},
+		"input_beyondtrust_hec":                types.ObjectType{AttrTypes: InputBeyondtrustHecModelAttrTypes()},
+		"input_hashicorp_hcp_vault_dedicated":  types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedModelAttrTypes()},
+		"input_mimecast_hec":                   types.ObjectType{AttrTypes: InputMimecastHecModelAttrTypes()},
+		"input_trend_micro_vision_one":         types.ObjectType{AttrTypes: InputTrendMicroVisionOneModelAttrTypes()},
 	}
 }
 
@@ -420,6 +488,8 @@ func PackSourceTerraformNameToAPIName(name string) string {
 		return prefix + "lokiAPI"
 	case "max_manifest_size_kb":
 		return prefix + "maxManifestSizeKB"
+	case "max_message_size_kb":
+		return prefix + "maxMessageSizeKB"
 	case "name":
 		return prefix + "Name"
 	case "org_roles":
@@ -683,6 +753,15 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputAzureBlob != nil {
 		value, err := m.InputAzureBlob.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputAzureVnetFlowLog != nil {
+		value, err := m.InputAzureVnetFlowLog.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1194,6 +1273,15 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputProofpointPod != nil {
+		value, err := m.InputProofpointPod.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputZscalerHec != nil {
 		value, err := m.InputZscalerHec.terraformPayload()
 		if err != nil {
@@ -1230,6 +1318,42 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputTrellixHec != nil {
+		value, err := m.InputTrellixHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSailpointHec != nil {
+		value, err := m.InputSailpointHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputExtrahopRevealx360 != nil {
+		value, err := m.InputExtrahopRevealx360.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputAquaSecurityHec != nil {
+		value, err := m.InputAquaSecurityHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputOpenaiComplianceLogs != nil {
 		value, err := m.InputOpenaiComplianceLogs.terraformPayload()
 		if err != nil {
@@ -1248,8 +1372,107 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputAnthropicEnterpriseAnalytics != nil {
+		value, err := m.InputAnthropicEnterpriseAnalytics.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputMicrosoftCopilot != nil {
+		value, err := m.InputMicrosoftCopilot.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputOkta != nil {
 		value, err := m.InputOkta.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputAkamaiHec != nil {
+		value, err := m.InputAkamaiHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputPingIDentityPingone != nil {
+		value, err := m.InputPingIDentityPingone.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputGigamonHec != nil {
+		value, err := m.InputGigamonHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputVectraAiHec != nil {
+		value, err := m.InputVectraAiHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputF5BigIp != nil {
+		value, err := m.InputF5BigIp.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputBeyondtrustHec != nil {
+		value, err := m.InputBeyondtrustHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputHashicorpHcpVaultDedicated != nil {
+		value, err := m.InputHashicorpHcpVaultDedicated.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputMimecastHec != nil {
+		value, err := m.InputMimecastHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputTrendMicroVisionOne != nil {
+		value, err := m.InputTrendMicroVisionOne.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1324,6 +1547,11 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "azure_blob":
 		m.InputAzureBlob = &InputAzureBlobModel{}
 		if err := m.InputAzureBlob.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "azure_vnet_flow_log":
+		m.InputAzureVnetFlowLog = &InputAzureVnetFlowLogModel{}
+		if err := m.InputAzureVnetFlowLog.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "elastic":
@@ -1606,6 +1834,11 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputServicenowTable.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "proofpoint_pod":
+		m.InputProofpointPod = &InputProofpointPodModel{}
+		if err := m.InputProofpointPod.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "zscaler_hec":
 		m.InputZscalerHec = &InputZscalerHecModel{}
 		if err := m.InputZscalerHec.unmarshalPayload(raw); err != nil {
@@ -1626,6 +1859,26 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputUpwindHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "trellix_hec":
+		m.InputTrellixHec = &InputTrellixHecModel{}
+		if err := m.InputTrellixHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sailpoint_hec":
+		m.InputSailpointHec = &InputSailpointHecModel{}
+		if err := m.InputSailpointHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "extrahop_revealx_360":
+		m.InputExtrahopRevealx360 = &InputExtrahopRevealx360Model{}
+		if err := m.InputExtrahopRevealx360.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "aqua_security_hec":
+		m.InputAquaSecurityHec = &InputAquaSecurityHecModel{}
+		if err := m.InputAquaSecurityHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "openai_compliance_logs":
 		m.InputOpenaiComplianceLogs = &InputOpenaiComplianceLogsModel{}
 		if err := m.InputOpenaiComplianceLogs.unmarshalPayload(raw); err != nil {
@@ -1636,9 +1889,64 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputAnthropicCompliance.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "anthropic_enterprise_analytics":
+		m.InputAnthropicEnterpriseAnalytics = &InputAnthropicEnterpriseAnalyticsModel{}
+		if err := m.InputAnthropicEnterpriseAnalytics.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "microsoft_copilot":
+		m.InputMicrosoftCopilot = &InputMicrosoftCopilotModel{}
+		if err := m.InputMicrosoftCopilot.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "okta":
 		m.InputOkta = &InputOktaModel{}
 		if err := m.InputOkta.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "akamai_hec":
+		m.InputAkamaiHec = &InputAkamaiHecModel{}
+		if err := m.InputAkamaiHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "ping_identity_pingone":
+		m.InputPingIDentityPingone = &InputPingIDentityPingoneModel{}
+		if err := m.InputPingIDentityPingone.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "gigamon_hec":
+		m.InputGigamonHec = &InputGigamonHecModel{}
+		if err := m.InputGigamonHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "vectra_ai_hec":
+		m.InputVectraAiHec = &InputVectraAiHecModel{}
+		if err := m.InputVectraAiHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "f5_big_ip":
+		m.InputF5BigIp = &InputF5BigIpModel{}
+		if err := m.InputF5BigIp.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "beyondtrust_hec":
+		m.InputBeyondtrustHec = &InputBeyondtrustHecModel{}
+		if err := m.InputBeyondtrustHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "hashicorp_hcp_vault_dedicated":
+		m.InputHashicorpHcpVaultDedicated = &InputHashicorpHcpVaultDedicatedModel{}
+		if err := m.InputHashicorpHcpVaultDedicated.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "mimecast_hec":
+		m.InputMimecastHec = &InputMimecastHecModel{}
+		if err := m.InputMimecastHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "trend_micro_vision_one":
+		m.InputTrendMicroVisionOne = &InputTrendMicroVisionOneModel{}
+		if err := m.InputTrendMicroVisionOne.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}

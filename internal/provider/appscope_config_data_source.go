@@ -36,53 +36,68 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 		MarkdownDescription: "AppscopeConfig Data Source",
 		Attributes: map[string]schema.Attribute{
 			"config": schema.SingleNestedAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `AppScope configuration for the library entry, including any custom overrides.`,
 				Attributes: map[string]schema.Attribute{
 					"cribl": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Cribl integration settings for AppScope data delivery.`,
 						Attributes: map[string]schema.Attribute{
 							"authtoken": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication token used when sending AppScope data to Cribl.`,
 							},
 							"enable": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `If <code>true</code>, send AppScope data to Cribl. Otherwise, <code>false</code>.`,
 							},
 							"transport": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Transport used to send AppScope data to Cribl.`,
 								Attributes: map[string]schema.Attribute{
 									"buffer": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 									},
 									"host": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 									},
 									"path": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Filesystem path or Unix domain socket path used for the transport.`,
 									},
-									"port": schema.Float64Attribute{
-										Computed: true,
+									"port": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Port number of the destination to which AppScope sends data.`,
 									},
 									"tls": schema.SingleNestedAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `TLS settings for the transport connection to the destination.`,
 										Attributes: map[string]schema.Attribute{
 											"cacertpath": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 											},
 											"enable": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 											},
 											"validateserver": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 											},
 										},
 									},
 									"type": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Type of transport used to send AppScope data.`,
 									},
 								},
 							},
 							"use_scope_source_transport": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `If <code>true</code>, use the AppScope Source transport to send data to Cribl. Otherwise, <code>false</code>.`,
 							},
 						},
 					},
@@ -91,142 +106,181 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"ancestor": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Ancestor process to match when applying the custom AppScope configuration.`,
 								},
 								"arg": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Process argument to match when applying the custom AppScope configuration.`,
 								},
 								"config": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AppScope configuration applied when the custom matcher matches.`,
 									Attributes: map[string]schema.Attribute{
 										"cribl": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Cribl integration settings for AppScope data delivery.`,
 											Attributes: map[string]schema.Attribute{
 												"authtoken": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Authentication token used when sending AppScope data to Cribl.`,
 												},
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, send AppScope data to Cribl. Otherwise, <code>false</code>.`,
 												},
 												"transport": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Transport used to send AppScope data to Cribl.`,
 													Attributes: map[string]schema.Attribute{
 														"buffer": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 														},
 														"host": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 														},
 														"path": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Filesystem path or Unix domain socket path used for the transport.`,
 														},
-														"port": schema.Float64Attribute{
-															Computed: true,
+														"port": schema.Int64Attribute{
+															Computed:    true,
+															Description: `Port number of the destination to which AppScope sends data.`,
 														},
 														"tls": schema.SingleNestedAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `TLS settings for the transport connection to the destination.`,
 															Attributes: map[string]schema.Attribute{
 																"cacertpath": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 																},
 																"enable": schema.BoolAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 																},
 																"validateserver": schema.BoolAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 																},
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Type of transport used to send AppScope data.`,
 														},
 													},
 												},
 												"use_scope_source_transport": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, use the AppScope Source transport to send data to Cribl. Otherwise, <code>false</code>.`,
 												},
 											},
 										},
 										"event": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Event collection settings for AppScope.`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, enable event collection. Otherwise, <code>false</code>.`,
 												},
 												"format": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Formatting options for AppScope event output.`,
 													Attributes: map[string]schema.Attribute{
 														"enhancefs": schema.BoolAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `If <code>true</code>, enhance file system events with additional metadata. Otherwise, <code>false</code>.`,
 														},
-														"maxeventpersec": schema.Float64Attribute{
-															Computed: true,
+														"maxeventpersec": schema.Int64Attribute{
+															Computed:    true,
+															Description: `Maximum number of events per second that AppScope emits.`,
 														},
 													},
 												},
 												"transport": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Transport used to send AppScope event data.`,
 													Attributes: map[string]schema.Attribute{
 														"buffer": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 														},
 														"host": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 														},
 														"path": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Filesystem path or Unix domain socket path used for the transport.`,
 														},
-														"port": schema.Float64Attribute{
-															Computed: true,
+														"port": schema.Int64Attribute{
+															Computed:    true,
+															Description: `Port number of the destination to which AppScope sends data.`,
 														},
 														"tls": schema.SingleNestedAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `TLS settings for the transport connection to the destination.`,
 															Attributes: map[string]schema.Attribute{
 																"cacertpath": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 																},
 																"enable": schema.BoolAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 																},
 																"validateserver": schema.BoolAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 																},
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Type of transport used to send AppScope data.`,
 														},
 													},
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
-													Description: `Resource type identifier.`,
+													Description: `Serialization format for AppScope event data.`,
 												},
 												"watch": schema.ListNestedAttribute{
 													Computed: true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"allowbinary": schema.BoolAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `If <code>true</code>, allow binary data for this watch entry. Otherwise, <code>false</code>.`,
 															},
 															"enabled": schema.BoolAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `If <code>true</code>, enable this watch entry. Otherwise, <code>false</code>.`,
 															},
 															"field": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Field to match for this watch entry.`,
 															},
 															"headers": schema.ListAttribute{
 																Computed:    true,
+																Description: `Headers to match for this watch entry.`,
 																ElementType: types.StringType,
 															},
 															"name": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Name of the watch entry.`,
 															},
 															"type": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Type of entity to watch.`,
 															},
 															"value": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Value to match for this watch entry.`,
 															},
 														},
 													},
@@ -234,120 +288,154 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 											},
 										},
 										"libscope": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Library-level settings for the AppScope instrumentation library.`,
 											Attributes: map[string]schema.Attribute{
 												"commanddir": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Directory that AppScope monitors for command files.`,
 												},
 												"configevent": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, emit a configuration event describing the current AppScope settings. Otherwise, <code>false</code>.`,
 												},
 												"log": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Logging settings for the AppScope library.`,
 													Attributes: map[string]schema.Attribute{
 														"level": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Minimum severity level for AppScope library log messages.`,
 														},
 														"transport": schema.SingleNestedAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Transport used to send AppScope library log messages.`,
 															Attributes: map[string]schema.Attribute{
 																"buffer": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 																},
 																"host": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 																},
 																"path": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Filesystem path or Unix domain socket path used for the transport.`,
 																},
-																"port": schema.Float64Attribute{
-																	Computed: true,
+																"port": schema.Int64Attribute{
+																	Computed:    true,
+																	Description: `Port number of the destination to which AppScope sends data.`,
 																},
 																"tls": schema.SingleNestedAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `TLS settings for the transport connection to the destination.`,
 																	Attributes: map[string]schema.Attribute{
 																		"cacertpath": schema.StringAttribute{
-																			Computed: true,
+																			Computed:    true,
+																			Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 																		},
 																		"enable": schema.BoolAttribute{
-																			Computed: true,
+																			Computed:    true,
+																			Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 																		},
 																		"validateserver": schema.BoolAttribute{
-																			Computed: true,
+																			Computed:    true,
+																			Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 																		},
 																	},
 																},
 																"type": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Type of transport used to send AppScope data.`,
 																},
 															},
 														},
 													},
 												},
-												"summaryperiod": schema.Float64Attribute{
-													Computed: true,
+												"summaryperiod": schema.Int64Attribute{
+													Computed:    true,
+													Description: `Interval, in seconds, at which AppScope emits summary metrics.`,
 												},
 											},
 										},
 										"metric": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Metric collection settings for AppScope.`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, enable metric collection. Otherwise, <code>false</code>.`,
 												},
 												"format": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Formatting options for AppScope metric output.`,
 													Attributes: map[string]schema.Attribute{
-														"statsdmaxlen": schema.Float64Attribute{
-															Computed: true,
+														"statsdmaxlen": schema.Int64Attribute{
+															Computed:    true,
+															Description: `Maximum length, in bytes, of a StatsD metric string.`,
 														},
 														"statsdprefix": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Prefix prepended to StatsD metric names.`,
 														},
 														"type": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Format in which AppScope emits metrics.`,
 														},
-														"verbosity": schema.Float64Attribute{
-															Computed: true,
+														"verbosity": schema.Int64Attribute{
+															Computed:    true,
+															Description: `Verbosity level for the emitted metrics.`,
 														},
 													},
 												},
 												"transport": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Transport used to send AppScope metric data.`,
 													Attributes: map[string]schema.Attribute{
 														"buffer": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 														},
 														"host": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 														},
 														"path": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Filesystem path or Unix domain socket path used for the transport.`,
 														},
-														"port": schema.Float64Attribute{
-															Computed: true,
+														"port": schema.Int64Attribute{
+															Computed:    true,
+															Description: `Port number of the destination to which AppScope sends data.`,
 														},
 														"tls": schema.SingleNestedAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `TLS settings for the transport connection to the destination.`,
 															Attributes: map[string]schema.Attribute{
 																"cacertpath": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 																},
 																"enable": schema.BoolAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 																},
 																"validateserver": schema.BoolAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 																},
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Type of transport used to send AppScope data.`,
 														},
 													},
 												},
 												"watch": schema.ListNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `List of metric watch expressions that control which metrics AppScope collects.`,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"type": schema.StringAttribute{
@@ -359,50 +447,63 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 											},
 										},
 										"payload": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Payload capture settings.`,
 											Attributes: map[string]schema.Attribute{
 												"dir": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Directory in which AppScope writes captured payload data.`,
 												},
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, enable payload capture. Otherwise, <code>false</code>.`,
 												},
 											},
 										},
 										"protocol": schema.ListNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Custom protocol definitions for AppScope protocol detection.`,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"binary": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `If <code>true</code>, treat the protocol payload as binary. Otherwise, <code>false</code>.`,
 													},
 													"detect": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `If <code>true</code>, enable automatic detection of this protocol. Otherwise, <code>false</code>.`,
 													},
-													"len": schema.Float64Attribute{
-														Computed: true,
+													"len": schema.Int64Attribute{
+														Computed:    true,
+														Description: `Number of bytes to examine when detecting the protocol.`,
 													},
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Name of the protocol.`,
 													},
 													"payload": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `If <code>true</code>, capture the payload for this protocol. Otherwise, <code>false</code>.`,
 													},
 													"regex": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Regular expression used to detect the protocol.`,
 													},
 												},
 											},
 										},
 										"tags": schema.ListNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Custom tags to attach to AppScope events.`,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"key": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Name of the tag.`,
 													},
 													"value": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Value of the tag.`,
 													},
 												},
 											},
@@ -410,100 +511,126 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 									},
 								},
 								"env": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Environment variable to match when applying the custom AppScope configuration.`,
 								},
 								"hostname": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Hostname to match when applying the custom AppScope configuration.`,
 								},
 								"procname": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Process name to match when applying the custom AppScope configuration.`,
 								},
 								"username": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Username to match when applying the custom AppScope configuration.`,
 								},
 							},
 						},
 					},
 					"event": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Event collection settings for AppScope.`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `If <code>true</code>, enable event collection. Otherwise, <code>false</code>.`,
 							},
 							"format": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Formatting options for AppScope event output.`,
 								Attributes: map[string]schema.Attribute{
 									"enhancefs": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `If <code>true</code>, enhance file system events with additional metadata. Otherwise, <code>false</code>.`,
 									},
-									"maxeventpersec": schema.Float64Attribute{
-										Computed: true,
+									"maxeventpersec": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Maximum number of events per second that AppScope emits.`,
 									},
 								},
 							},
 							"transport": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Transport used to send AppScope event data.`,
 								Attributes: map[string]schema.Attribute{
 									"buffer": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 									},
 									"host": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 									},
 									"path": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Filesystem path or Unix domain socket path used for the transport.`,
 									},
-									"port": schema.Float64Attribute{
-										Computed: true,
+									"port": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Port number of the destination to which AppScope sends data.`,
 									},
 									"tls": schema.SingleNestedAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `TLS settings for the transport connection to the destination.`,
 										Attributes: map[string]schema.Attribute{
 											"cacertpath": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 											},
 											"enable": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 											},
 											"validateserver": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 											},
 										},
 									},
 									"type": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Type of transport used to send AppScope data.`,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
-								Description: `Resource type identifier.`,
+								Description: `Serialization format for AppScope event data.`,
 							},
 							"watch": schema.ListNestedAttribute{
 								Computed: true,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"allowbinary": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, allow binary data for this watch entry. Otherwise, <code>false</code>.`,
 										},
 										"enabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, enable this watch entry. Otherwise, <code>false</code>.`,
 										},
 										"field": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Field to match for this watch entry.`,
 										},
 										"headers": schema.ListAttribute{
 											Computed:    true,
+											Description: `Headers to match for this watch entry.`,
 											ElementType: types.StringType,
 										},
 										"name": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Name of the watch entry.`,
 										},
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Type of entity to watch.`,
 										},
 										"value": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Value to match for this watch entry.`,
 										},
 									},
 								},
@@ -511,120 +638,154 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 						},
 					},
 					"libscope": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Library-level settings for the AppScope instrumentation library.`,
 						Attributes: map[string]schema.Attribute{
 							"commanddir": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Directory that AppScope monitors for command files.`,
 							},
 							"configevent": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `If <code>true</code>, emit a configuration event describing the current AppScope settings. Otherwise, <code>false</code>.`,
 							},
 							"log": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Logging settings for the AppScope library.`,
 								Attributes: map[string]schema.Attribute{
 									"level": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Minimum severity level for AppScope library log messages.`,
 									},
 									"transport": schema.SingleNestedAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Transport used to send AppScope library log messages.`,
 										Attributes: map[string]schema.Attribute{
 											"buffer": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 											},
 											"host": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 											},
 											"path": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Filesystem path or Unix domain socket path used for the transport.`,
 											},
-											"port": schema.Float64Attribute{
-												Computed: true,
+											"port": schema.Int64Attribute{
+												Computed:    true,
+												Description: `Port number of the destination to which AppScope sends data.`,
 											},
 											"tls": schema.SingleNestedAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `TLS settings for the transport connection to the destination.`,
 												Attributes: map[string]schema.Attribute{
 													"cacertpath": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 													},
 													"enable": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 													},
 													"validateserver": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 													},
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Type of transport used to send AppScope data.`,
 											},
 										},
 									},
 								},
 							},
-							"summaryperiod": schema.Float64Attribute{
-								Computed: true,
+							"summaryperiod": schema.Int64Attribute{
+								Computed:    true,
+								Description: `Interval, in seconds, at which AppScope emits summary metrics.`,
 							},
 						},
 					},
 					"metric": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Metric collection settings for AppScope.`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `If <code>true</code>, enable metric collection. Otherwise, <code>false</code>.`,
 							},
 							"format": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Formatting options for AppScope metric output.`,
 								Attributes: map[string]schema.Attribute{
-									"statsdmaxlen": schema.Float64Attribute{
-										Computed: true,
+									"statsdmaxlen": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Maximum length, in bytes, of a StatsD metric string.`,
 									},
 									"statsdprefix": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Prefix prepended to StatsD metric names.`,
 									},
 									"type": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Format in which AppScope emits metrics.`,
 									},
-									"verbosity": schema.Float64Attribute{
-										Computed: true,
+									"verbosity": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Verbosity level for the emitted metrics.`,
 									},
 								},
 							},
 							"transport": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Transport used to send AppScope metric data.`,
 								Attributes: map[string]schema.Attribute{
 									"buffer": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Buffering mode for outbound data.<br/> <br><code>line</code> == Flush per line <br><code>full</code> == Buffer fully before flushing.`,
 									},
 									"host": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Hostname or IP address of the destination to which AppScope sends data.`,
 									},
 									"path": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Filesystem path or Unix domain socket path used for the transport.`,
 									},
-									"port": schema.Float64Attribute{
-										Computed: true,
+									"port": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Port number of the destination to which AppScope sends data.`,
 									},
 									"tls": schema.SingleNestedAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `TLS settings for the transport connection to the destination.`,
 										Attributes: map[string]schema.Attribute{
 											"cacertpath": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Filesystem path to the CA certificate used to validate the destination server.`,
 											},
 											"enable": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, enable TLS for the transport connection. Otherwise, <code>false</code>.`,
 											},
 											"validateserver": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, validate the destination server's TLS certificate. Otherwise, <code>false</code>.`,
 											},
 										},
 									},
 									"type": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Type of transport used to send AppScope data.`,
 									},
 								},
 							},
 							"watch": schema.ListNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `List of metric watch expressions that control which metrics AppScope collects.`,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
@@ -636,50 +797,63 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 						},
 					},
 					"payload": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Payload capture settings.`,
 						Attributes: map[string]schema.Attribute{
 							"dir": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Directory in which AppScope writes captured payload data.`,
 							},
 							"enable": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `If <code>true</code>, enable payload capture. Otherwise, <code>false</code>.`,
 							},
 						},
 					},
 					"protocol": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Custom protocol definitions for AppScope protocol detection.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"binary": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, treat the protocol payload as binary. Otherwise, <code>false</code>.`,
 								},
 								"detect": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable automatic detection of this protocol. Otherwise, <code>false</code>.`,
 								},
-								"len": schema.Float64Attribute{
-									Computed: true,
+								"len": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Number of bytes to examine when detecting the protocol.`,
 								},
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name of the protocol.`,
 								},
 								"payload": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, capture the payload for this protocol. Otherwise, <code>false</code>.`,
 								},
 								"regex": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Regular expression used to detect the protocol.`,
 								},
 							},
 						},
 					},
 					"tags": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Custom tags to attach to AppScope events.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name of the tag.`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value of the tag.`,
 								},
 							},
 						},
@@ -687,20 +861,24 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the AppScope Config.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the AppScope Config.`,
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Library metadata for the AppScope Config.`,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Tags associated with the AppScope Config.`,
 			},
 		},
 	}

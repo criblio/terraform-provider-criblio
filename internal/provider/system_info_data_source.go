@@ -95,6 +95,10 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Computed:    true,
 							Description: `Filesystem path to the Cribl configuration directory.`,
 						},
+						"cribl_security_enabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Consolidated Cribl Detect enablement status. <code>true</code> only when the <code>feature-cribl-security</code> feature flag is enabled and <code>appPlatformEnabled</code> is also <code>true</code>, since Detect ships as an App Platform app. Acts as the single source of truth for the product UI and Cloud Portal navigation entries.`,
+						},
 						"dist_mode": schema.StringAttribute{
 							Computed:    true,
 							Description: `Distribution mode of the Cribl instance.`,
@@ -120,13 +124,17 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Computed:    true,
 							Description: `Filesystem path where Cribl is installed.`,
 						},
+						"is_highside": schema.BoolAttribute{
+							Computed:    true,
+							Description: `If <code>true</code>, this instance runs in the Highside deployment mode (air-gapped Cribl Search and Lake).`,
+						},
 						"license": schema.SingleNestedAttribute{
 							Computed:    true,
 							Description: `License information for the Cribl instance.`,
 							Attributes: map[string]schema.Attribute{
 								"email": schema.StringAttribute{
 									Computed:    true,
-									Description: `Email address associated with the license.`,
+									Description: `Legacy contact email on system info: JWT license email when present, otherwise the registration email. Prefer <code>registeredEmail</code> for the address from product registration.`,
 								},
 								"is_registered": schema.BoolAttribute{
 									Computed:    true,
@@ -212,6 +220,10 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 											Computed:    true,
 											Description: `Maximum number of role-based access control (RBAC) users.`,
 										},
+										"record_erasure": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Record erasure limit.`,
+										},
 										"remote_auth": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Maximum number of remote authentication connections.`,
@@ -240,6 +252,10 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 											Computed:    true,
 											Description: `System email limit.`,
 										},
+										"worker_group_boot_throttle": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Whether the Leader may throttle Worker Group and Fleet APIs that boot a group process when resources are insufficient.`,
+										},
 										"worker_groups": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Maximum number of Worker Groups.`,
@@ -249,6 +265,10 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 											Description: `Maximum number of Worker Processes.`,
 										},
 									},
+								},
+								"registered_email": schema.StringAttribute{
+									Computed:    true,
+									Description: `Email from product registration. Separate from the JWT license email used in license aggregation.`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -375,7 +395,7 @@ func (d *SystemInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(SystemInfoItemAttrTypes(), map[string]attr.Value{"api_port": item.APIPort, "app_platform_enabled": item.AppPlatformEnabled, "build": item.BUILD, "conf": item.Conf, "config_path": item.ConfigPath, "dist_mode": item.DistMode, "env": item.Env, "guid": item.Guid, "hostname": item.Hostname, "insights_enabled": item.InsightsEnabled, "install_path": item.InstallPath, "license": item.License, "limits": item.Limits, "openssl": item.Openssl, "os": item.Os, "system_conf": item.SystemConf, "version": item.Version, "worker_processes": item.WorkerProcesses}))
+			values = append(values, types.ObjectValueMust(SystemInfoItemAttrTypes(), map[string]attr.Value{"api_port": item.APIPort, "app_platform_enabled": item.AppPlatformEnabled, "build": item.BUILD, "conf": item.Conf, "config_path": item.ConfigPath, "cribl_security_enabled": item.CriblSecurityEnabled, "dist_mode": item.DistMode, "env": item.Env, "guid": item.Guid, "hostname": item.Hostname, "insights_enabled": item.InsightsEnabled, "install_path": item.InstallPath, "is_highside": item.IsHighside, "license": item.License, "limits": item.Limits, "openssl": item.Openssl, "os": item.Os, "system_conf": item.SystemConf, "version": item.Version, "worker_processes": item.WorkerProcesses}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: SystemInfoItemAttrTypes()}, values)
@@ -384,23 +404,25 @@ func (d *SystemInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 
 func SystemInfoItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"api_port":             types.Float64Type,
-		"app_platform_enabled": types.BoolType,
-		"build":                types.MapType{ElemType: types.StringType},
-		"conf":                 types.ObjectType{AttrTypes: SystemInfoConfAttrTypes()},
-		"config_path":          types.StringType,
-		"dist_mode":            types.StringType,
-		"env":                  types.MapType{ElemType: types.StringType},
-		"guid":                 types.StringType,
-		"hostname":             types.StringType,
-		"insights_enabled":     types.BoolType,
-		"install_path":         types.StringType,
-		"license":              types.ObjectType{AttrTypes: SystemInfoLicenseAttrTypes()},
-		"limits":               types.ObjectType{AttrTypes: SystemInfoLimitsAttrTypes()},
-		"openssl":              types.ObjectType{AttrTypes: SystemInfoOpensslAttrTypes()},
-		"os":                   types.ObjectType{AttrTypes: SystemInfoOsAttrTypes()},
-		"system_conf":          types.ObjectType{AttrTypes: SystemInfoSystemConfAttrTypes()},
-		"version":              types.StringType,
-		"worker_processes":     types.Float64Type,
+		"api_port":               types.Float64Type,
+		"app_platform_enabled":   types.BoolType,
+		"build":                  types.MapType{ElemType: types.StringType},
+		"conf":                   types.ObjectType{AttrTypes: SystemInfoConfAttrTypes()},
+		"config_path":            types.StringType,
+		"cribl_security_enabled": types.BoolType,
+		"dist_mode":              types.StringType,
+		"env":                    types.MapType{ElemType: types.StringType},
+		"guid":                   types.StringType,
+		"hostname":               types.StringType,
+		"insights_enabled":       types.BoolType,
+		"install_path":           types.StringType,
+		"is_highside":            types.BoolType,
+		"license":                types.ObjectType{AttrTypes: SystemInfoLicenseAttrTypes()},
+		"limits":                 types.ObjectType{AttrTypes: SystemInfoLimitsAttrTypes()},
+		"openssl":                types.ObjectType{AttrTypes: SystemInfoOpensslAttrTypes()},
+		"os":                     types.ObjectType{AttrTypes: SystemInfoOsAttrTypes()},
+		"system_conf":            types.ObjectType{AttrTypes: SystemInfoSystemConfAttrTypes()},
+		"version":                types.StringType,
+		"worker_processes":       types.Float64Type,
 	}
 }

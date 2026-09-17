@@ -77,6 +77,7 @@ Required:
 
 Optional:
 
+- `auto_parse` (Boolean) If <code>true</code>, detect each matched event's datatype and extract fields from <code>_raw</code> before the Pipeline processes the event, so Functions and Filters can reference the extracted fields. Otherwise, <code>false</code> (the default).
 - `clones` (List of String) Array of clone configurations, each with a key-value pair to set or overwrite in cloned events. Original events continue to the next Route.
 - `context` (String) Context for the Route: <code>group</code> (Worker Group or Edge Fleet) or <code>pack</code>.
 - `description` (String) Brief description of the Route.

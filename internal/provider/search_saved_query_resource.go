@@ -635,11 +635,11 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 								Computed:    false,
 								Description: `Maximum value for the axis range.`,
 							},
-							"min": schema.Float64Attribute{
+							"min": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum value for the axis range.`,
+								Description: `Minimum value for the axis range. Use <code>auto</code> to scale the axis to the data range instead of anchoring it at zero.`,
 							},
 							"position": schema.StringAttribute{
 								Required:    false,
