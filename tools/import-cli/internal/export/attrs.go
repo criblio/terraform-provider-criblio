@@ -61,25 +61,37 @@ func filterAttrsBySchema(attrs map[string]hcl.Value, modelTypeName string) {
 	}
 }
 
-// pruneNotificationTargetConfigs removes empty optional SMTP configuration
-// objects returned for non-SMTP notification targets. Emitting conf = {} is
-// invalid because the provider schema requires email_recipient when conf is set.
+// pruneNotificationTargetConfigs recursively removes empty optional SMTP
+// configuration objects returned for non-SMTP notification targets. Notification
+// objects can be top-level resources or nested in search dashboards. Emitting
+// conf = {} is invalid because email_recipient is required when conf is set.
 func pruneNotificationTargetConfigs(attrs map[string]hcl.Value) {
-	targetConfigs, ok := attrs["target_configs"]
-	if !ok || targetConfigs.Kind != hcl.KindList {
-		return
-	}
-	for index := range targetConfigs.List {
-		item := &targetConfigs.List[index]
-		if item.Kind != hcl.KindMap {
-			continue
+	for name, value := range attrs {
+		if name == "target_configs" && value.Kind == hcl.KindList {
+			for index := range value.List {
+				item := &value.List[index]
+				if item.Kind != hcl.KindMap {
+					continue
+				}
+				conf, ok := item.Map["conf"]
+				if ok && conf.Kind == hcl.KindMap && !hasNonNullValue(conf) {
+					delete(item.Map, "conf")
+				}
+			}
 		}
-		conf, ok := item.Map["conf"]
-		if ok && conf.Kind == hcl.KindMap && !hasNonNullValue(conf) {
-			delete(item.Map, "conf")
+
+		switch value.Kind {
+		case hcl.KindMap:
+			pruneNotificationTargetConfigs(value.Map)
+		case hcl.KindList:
+			for index := range value.List {
+				if value.List[index].Kind == hcl.KindMap {
+					pruneNotificationTargetConfigs(value.List[index].Map)
+				}
+			}
 		}
+		attrs[name] = value
 	}
-	attrs["target_configs"] = targetConfigs
 }
 
 func hasNonNullValue(value hcl.Value) bool {

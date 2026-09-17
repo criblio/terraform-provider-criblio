@@ -145,6 +145,50 @@ func TestPruneNotificationTargetConfigsFromProviderModel(t *testing.T) {
 	assert.NotContains(t, targetConfigs.List[0].Map, "conf")
 }
 
+func TestPruneNotificationTargetConfigsNestedInSearchDashboard(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"schedule": {
+			Kind: hcl.KindMap,
+			Map: map[string]hcl.Value{
+				"notifications": {
+					Kind: hcl.KindMap,
+					Map: map[string]hcl.Value{
+						"items": {
+							Kind: hcl.KindList,
+							List: []hcl.Value{{
+								Kind: hcl.KindMap,
+								Map: map[string]hcl.Value{
+									"target_configs": {
+										Kind: hcl.KindList,
+										List: []hcl.Value{{
+											Kind: hcl.KindMap,
+											Map: map[string]hcl.Value{
+												"id": {Kind: hcl.KindString, String: "slack-target"},
+												"conf": {
+													Kind: hcl.KindMap,
+													Map: map[string]hcl.Value{
+														"email_recipient": {Kind: hcl.KindNull},
+													},
+												},
+											},
+										}},
+									},
+								},
+							}},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	pruneNotificationTargetConfigs(attrs)
+
+	targetConfigs := attrs["schedule"].Map["notifications"].Map["items"].List[0].Map["target_configs"]
+	require.Len(t, targetConfigs.List, 1)
+	assert.NotContains(t, targetConfigs.List[0].Map, "conf")
+}
+
 func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 	opts := hclOptionsForType("criblio_search_engine", registry.Entry{})
 	require.NotNil(t, opts)

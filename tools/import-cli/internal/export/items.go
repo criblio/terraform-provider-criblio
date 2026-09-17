@@ -67,7 +67,7 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if r.TypeName == "criblio_subscription" {
 		custom.ApplySubscriptionDefaults(attrs)
 	}
-	if r.TypeName == "criblio_notification" {
+	if r.TypeName == "criblio_notification" || r.TypeName == "criblio_search_dashboard" {
 		pruneNotificationTargetConfigs(attrs)
 	}
 	if r.TypeName == "criblio_pack" {
@@ -312,7 +312,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if typeName == "criblio_subscription" {
 		custom.ApplySubscriptionDefaults(attrs)
 	}
-	if typeName == "criblio_notification" {
+	if typeName == "criblio_notification" || typeName == "criblio_search_dashboard" {
 		pruneNotificationTargetConfigs(attrs)
 	}
 	if typeName == "criblio_pack" {
