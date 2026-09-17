@@ -168,6 +168,7 @@ func TestIsPackRoutesImportStateTreatsEmptyRoutesAsImport(t *testing.T) {
 func TestApplyRoutesAPIToStateFillsUnknownRouteAttributesAfterWrite(t *testing.T) {
 	routeTypes := RoutesRoutesAttrTypes()
 	stateRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
+		"auto_parse":               types.BoolUnknown(),
 		"clones":                   types.ListUnknown(types.MapType{ElemType: types.StringType}),
 		"context":                  types.StringNull(),
 		"description":              types.StringUnknown(),
@@ -184,6 +185,7 @@ func TestApplyRoutesAPIToStateFillsUnknownRouteAttributesAfterWrite(t *testing.T
 		"id":                       types.StringUnknown(),
 	})
 	apiRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
+		"auto_parse":               types.BoolValue(false),
 		"clones":                   types.ListValueMust(types.MapType{ElemType: types.StringType}, nil),
 		"context":                  types.StringNull(),
 		"description":              types.StringValue(""),
@@ -214,7 +216,7 @@ func TestApplyRoutesAPIToStateFillsUnknownRouteAttributesAfterWrite(t *testing.T
 	if !ok {
 		t.Fatalf("route element type = %T", state.Routes.Elements()[0])
 	}
-	for _, name := range []string{"clones", "description", "disabled", "enable_output_expression", "id"} {
+	for _, name := range []string{"auto_parse", "clones", "description", "disabled", "enable_output_expression", "id"} {
 		if route.Attributes()[name].IsUnknown() {
 			t.Fatalf("%s is still unknown", name)
 		}

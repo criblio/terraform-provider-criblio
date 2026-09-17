@@ -817,6 +817,7 @@ func TestHCLOptionsForType_lookupFilesSkipComputedFields(t *testing.T) {
 
 			assert.True(t, opts.SkipAttributes["pending_task"])
 			assert.True(t, opts.SkipAttributes["version"])
+			assert.True(t, opts.SkipAttributes["modified"])
 			assert.False(t, opts.SkipAttributes["content"])
 		})
 	}

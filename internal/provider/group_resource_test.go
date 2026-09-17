@@ -50,6 +50,53 @@ func TestGroupAPIFromModelKeepsStreamOnPremValue(t *testing.T) {
 	}
 }
 
+func TestGroupDataSourceApplyGroupAPIModelIncludesGit(t *testing.T) {
+	commit := "abc123"
+	localChanges := int64(2)
+	authorEmail := "dev@example.com"
+	authorName := "Example Developer"
+	date := "2026-09-17T00:00:00Z"
+	message := "Update source"
+	short := "abc123"
+	api := &groupAPIModel{
+		ID: "default",
+		Git: &groupGitAPI{
+			Commit:       &commit,
+			LocalChanges: &localChanges,
+			Log: []groupGitCommitAPI{{
+				AuthorEmail: &authorEmail,
+				AuthorName:  &authorName,
+				Date:        &date,
+				Hash:        &commit,
+				Message:     &message,
+				Short:       &short,
+			}},
+		},
+	}
+
+	var data GroupDataSourceModel
+	data.applyGroupAPIModel(api)
+
+	if data.Git == nil {
+		t.Fatal("expected git state")
+	}
+	if got := data.Git.Commit.ValueString(); got != commit {
+		t.Fatalf("git.commit = %q, want %q", got, commit)
+	}
+	if got := data.Git.LocalChanges.ValueInt64(); got != localChanges {
+		t.Fatalf("git.local_changes = %d, want %d", got, localChanges)
+	}
+	if len(data.Git.Log) != 1 {
+		t.Fatalf("git.log length = %d, want 1", len(data.Git.Log))
+	}
+	if got := data.Git.Log[0].AuthorEmail.ValueString(); got != authorEmail {
+		t.Fatalf("git.log[0].author_email = %q, want %q", got, authorEmail)
+	}
+	if got := data.Git.Log[0].Message.ValueString(); got != message {
+		t.Fatalf("git.log[0].message = %q, want %q", got, message)
+	}
+}
+
 func TestGroupAPIFromModelNormalizesInheritedGroupAsFleetForAPI(t *testing.T) {
 	model := &GroupResourceModel{
 		ID:       types.StringValue("my-edge-subfleet"),

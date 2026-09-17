@@ -70,6 +70,7 @@ resource "criblio_pack_source" "my_packsource" {
   id       = %q
 
   input_tcp = {
+    auto_parse          = false
     auth_type           = "manual"
     description         = "my_description"
     disabled            = true

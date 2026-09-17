@@ -44,6 +44,7 @@ data "criblio_group" "my_group" {
   - 10240 -> 120 MB/s
   - 13312 -> 156 MB/s
   - 15360 -> 180 MB/s
+- `git` (Attributes) Git status fields requested through the fields argument. (see [below for nested schema](#nestedatt--git))
 - `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
@@ -62,3 +63,24 @@ Read-Only:
 
 - `provider` (String)
 - `region` (String)
+
+<a id="nestedatt--git"></a>
+### Nested Schema for `git`
+
+Read-Only:
+
+- `commit` (String) Commit hash of the currently committed configuration version.
+- `local_changes` (Number) Number of local configuration changes not yet committed.
+- `log` (Attributes List) List of recent configuration commits. (see [below for nested schema](#nestedatt--git--log))
+
+<a id="nestedatt--git--log"></a>
+### Nested Schema for `git.log`
+
+Read-Only:
+
+- `author_email` (String)
+- `author_name` (String)
+- `date` (String)
+- `hash` (String)
+- `message` (String)
+- `short` (String)

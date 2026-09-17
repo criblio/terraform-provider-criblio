@@ -49,6 +49,27 @@ func TestHclOptionsForType_searchMacroSkipsComputedOnlyAttrs(t *testing.T) {
 	assert.Equal(t, `severity >= "Error"`, attrs["replacement"].String)
 }
 
+func TestPruneNotificationTargetConfigsRemovesEmptyConf(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"target_configs": {
+			Kind: hcl.KindList,
+			List: []hcl.Value{{
+				Kind: hcl.KindMap,
+				Map: map[string]hcl.Value{
+					"id":   {Kind: hcl.KindString, String: "slack-target"},
+					"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{}},
+				},
+			}},
+		},
+	}
+
+	pruneNotificationTargetConfigs(attrs)
+
+	item := attrs["target_configs"].List[0]
+	assert.NotContains(t, item.Map, "conf")
+	assert.Equal(t, "slack-target", item.Map["id"].String)
+}
+
 func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 	opts := hclOptionsForType("criblio_search_engine", registry.Entry{})
 	require.NotNil(t, opts)

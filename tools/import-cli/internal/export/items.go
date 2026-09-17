@@ -309,6 +309,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if typeName == "criblio_subscription" {
 		custom.ApplySubscriptionDefaults(attrs)
 	}
+	if typeName == "criblio_notification" {
+		pruneNotificationTargetConfigs(attrs)
+	}
 	if typeName == "criblio_pack" {
 		custom.ApplyPackDefaults(attrs)
 	}

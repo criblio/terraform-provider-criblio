@@ -61,6 +61,27 @@ func filterAttrsBySchema(attrs map[string]hcl.Value, modelTypeName string) {
 	}
 }
 
+// pruneNotificationTargetConfigs removes empty optional SMTP configuration
+// objects returned for non-SMTP notification targets. Emitting conf = {} is
+// invalid because the provider schema requires email_recipient when conf is set.
+func pruneNotificationTargetConfigs(attrs map[string]hcl.Value) {
+	targetConfigs, ok := attrs["target_configs"]
+	if !ok || targetConfigs.Kind != hcl.KindList {
+		return
+	}
+	for index := range targetConfigs.List {
+		item := &targetConfigs.List[index]
+		if item.Kind != hcl.KindMap {
+			continue
+		}
+		conf, ok := item.Map["conf"]
+		if ok && conf.Kind == hcl.KindMap && len(conf.Map) == 0 {
+			delete(item.Map, "conf")
+		}
+	}
+	attrs["target_configs"] = targetConfigs
+}
+
 // hclOptionsForType returns HCL conversion options for the given resource type,
 // including skipping read-only attributes (and oneOf list attr when present) so generated config is valid.
 func hclOptionsForType(typeName string, e registry.Entry) *hcl.Options {
