@@ -244,7 +244,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, false)")
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))")
 	assertContains(t, resourceContent, "apiModel, err := r.api.Read(ctx, model)")
-	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
+	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, true)")
 	assertContains(t, resourceContent, "if !preserveInputs || (fillMissingInputs && (state.Cert.IsNull() || state.Cert.IsUnknown()))")
 	assertContains(t, resourceContent, "api.DisplayName.IsNull()")
 	assertContains(t, resourceContent, "if !api.InUse.IsNull() && !api.InUse.IsUnknown()")
@@ -1121,6 +1121,19 @@ func TestGeneratedImportUsesPathParams(t *testing.T) {
 	assertContains(t, command, `"lakehouse_id": "lakehouse-01"`)
 	assertContains(t, command, `"lake_dataset_id": "web-logs"`)
 	assertNotContains(t, command, `cert-001`)
+}
+
+func TestGeneratedJSONImportPreservesPathParams(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName: "Source",
+		Fields: []parser.FieldDef{
+			{TerraformName: "group_id", GoName: "GroupID", PathParam: true},
+			{TerraformName: "id", GoName: "ID", PathParam: true},
+		},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, "applySourceAPIToState(apiModel, &model, true, true)")
 }
 
 func TestResourceCreateCanBeDisabled(t *testing.T) {

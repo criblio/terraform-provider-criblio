@@ -27,3 +27,29 @@ func TestSourceMarshalJSONInfersS3Type(t *testing.T) {
 		t.Fatalf("type = %#v, want s3; payload=%s", got, payload)
 	}
 }
+
+func TestApplySourceAPIToStatePreservesImportedGroupID(t *testing.T) {
+	state := SourceModel{
+		GroupID: types.StringValue("default"),
+		ID:      types.StringValue("diag_kafka"),
+	}
+	api := SourceModel{
+		GroupID: types.StringValue("diag"),
+		ID:      types.StringValue("diag_kafka"),
+		InputKafka: &InputKafkaModel{
+			GroupID: types.StringValue("diag"),
+		},
+	}
+
+	applySourceAPIToState(&api, &state, true, true)
+
+	if got := state.GroupID.ValueString(); got != "default" {
+		t.Fatalf("root group_id = %q, want default", got)
+	}
+	if state.InputKafka == nil {
+		t.Fatal("input_kafka was not hydrated")
+	}
+	if got := state.InputKafka.GroupID.ValueString(); got != "diag" {
+		t.Fatalf("input_kafka.group_id = %q, want diag", got)
+	}
+}

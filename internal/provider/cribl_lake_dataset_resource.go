@@ -279,7 +279,7 @@ func (r *CriblLakeDatasetResource) ImportState(ctx context.Context, req resource
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCriblLakeDatasetAPIToState(apiModel, &model, false, false)
+	applyCriblLakeDatasetAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

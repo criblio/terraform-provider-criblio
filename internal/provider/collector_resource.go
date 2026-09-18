@@ -4638,7 +4638,7 @@ func (r *CollectorResource) ImportState(ctx context.Context, req resource.Import
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCollectorAPIToState(apiModel, &model, false, false)
+	applyCollectorAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

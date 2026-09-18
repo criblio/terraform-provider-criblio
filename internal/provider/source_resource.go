@@ -68202,7 +68202,7 @@ func (r *SourceResource) ImportState(ctx context.Context, req resource.ImportSta
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySourceAPIToState(apiModel, &model, false, false)
+	applySourceAPIToState(apiModel, &model, true, true)
 	normalizeSourceRootInputEmptyLists(&model)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }

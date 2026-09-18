@@ -2332,7 +2332,7 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+	apply{{ .StructName }}APIToState(apiModel, &model, true, true)
 {{- if eq .StructName "Source" }}
 	normalizeSourceRootInputEmptyLists(&model)
 {{- else if eq .StructName "PackSource" }}

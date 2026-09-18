@@ -256,7 +256,7 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySubscriptionAPIToState(apiModel, &model, false, false)
+	applySubscriptionAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

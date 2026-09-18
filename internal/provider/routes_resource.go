@@ -390,7 +390,7 @@ func (r *RoutesResource) ImportState(ctx context.Context, req resource.ImportSta
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRoutesAPIToState(apiModel, &model, false, false)
+	applyRoutesAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
