@@ -214,7 +214,7 @@ func (r *GrokResource) ImportState(ctx context.Context, req resource.ImportState
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGrokAPIToState(apiModel, &model, false, false)
+	applyGrokAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

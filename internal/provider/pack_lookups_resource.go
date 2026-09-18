@@ -272,7 +272,7 @@ func (r *PackLookupsResource) ImportState(ctx context.Context, req resource.Impo
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPackLookupsAPIToState(apiModel, &model, false, false)
+	applyPackLookupsAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

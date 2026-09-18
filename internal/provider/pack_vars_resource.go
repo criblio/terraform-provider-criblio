@@ -287,7 +287,7 @@ func (r *PackVarsResource) ImportState(ctx context.Context, req resource.ImportS
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPackVarsAPIToState(apiModel, &model, false, false)
+	applyPackVarsAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

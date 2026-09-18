@@ -35832,7 +35832,7 @@ func (r *DestinationResource) ImportState(ctx context.Context, req resource.Impo
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyDestinationAPIToState(apiModel, &model, false, false)
+	applyDestinationAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

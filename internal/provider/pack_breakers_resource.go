@@ -423,7 +423,7 @@ func (r *PackBreakersResource) ImportState(ctx context.Context, req resource.Imp
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPackBreakersAPIToState(apiModel, &model, false, false)
+	applyPackBreakersAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

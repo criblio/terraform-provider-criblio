@@ -259,7 +259,7 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCertificateAPIToState(apiModel, &model, false, false)
+	applyCertificateAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

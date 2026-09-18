@@ -380,7 +380,7 @@ func (r *PipelineResource) ImportState(ctx context.Context, req resource.ImportS
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPipelineAPIToState(apiModel, &model, false, false)
+	applyPipelineAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

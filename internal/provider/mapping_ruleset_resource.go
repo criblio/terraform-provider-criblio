@@ -293,7 +293,7 @@ func (r *MappingRulesetResource) ImportState(ctx context.Context, req resource.I
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyMappingRulesetAPIToState(apiModel, &model, false, false)
+	applyMappingRulesetAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

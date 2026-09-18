@@ -68218,7 +68218,7 @@ func (r *PackSourceResource) ImportState(ctx context.Context, req resource.Impor
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPackSourceAPIToState(apiModel, &model, false, false)
+	applyPackSourceAPIToState(apiModel, &model, true, true)
 	normalizePackSourceRootInputEmptyLists(&model)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }

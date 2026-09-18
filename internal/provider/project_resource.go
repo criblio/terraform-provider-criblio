@@ -254,7 +254,7 @@ func (r *ProjectResource) ImportState(ctx context.Context, req resource.ImportSt
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyProjectAPIToState(apiModel, &model, false, false)
+	applyProjectAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

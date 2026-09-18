@@ -258,7 +258,7 @@ func (r *LookupFileResource) ImportState(ctx context.Context, req resource.Impor
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyLookupFileAPIToState(apiModel, &model, false, false)
+	applyLookupFileAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
