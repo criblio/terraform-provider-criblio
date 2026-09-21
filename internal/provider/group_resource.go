@@ -106,7 +106,10 @@ func (r *GroupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group id`,
+				Description: `Group id. Requires replacement if changed.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
 			"inherits": schema.StringAttribute{
 				Computed: true,
@@ -124,6 +127,10 @@ func (r *GroupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			"name": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Group name. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9-]+$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9-]+$`).String()),
 				},

@@ -462,6 +462,11 @@ func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err
 	if attempt >= retryMax && !beyondRetryMax {
 		return false
 	}
+	if statusCode == http.StatusInternalServerError && isConfigHelperProxyPath(path) && isConfigHelperConnectionRefusedResponse(body) {
+		// The proxy could not deliver the request to the newly created group's
+		// config helper, so replaying even a POST or PATCH is safe.
+		return true
+	}
 	if statusCode == http.StatusTooManyRequests {
 		return isIdempotentAPIMethod(method) ||
 			isGroupCreatePath(method, path) ||
@@ -530,6 +535,13 @@ func isConfigHelperAdmissionResponse(body []byte) bool {
 	default:
 		return false
 	}
+}
+
+func isConfigHelperConnectionRefusedResponse(body []byte) bool {
+	message := strings.ToLower(string(body))
+	return strings.Contains(message, "econnrefused") &&
+		strings.Contains(message, "cfg-") &&
+		strings.Contains(message, ".sock")
 }
 
 func isRetryableAPIMethod(method string) bool {

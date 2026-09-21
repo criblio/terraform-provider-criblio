@@ -5,9 +5,47 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
+	frameworkresource "github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 )
+
+func TestGroupIdentityChangesRequireReplacement(t *testing.T) {
+	var schemaResponse frameworkresource.SchemaResponse
+	(&GroupResource{}).Schema(context.Background(), frameworkresource.SchemaRequest{}, &schemaResponse)
+
+	for _, attributeName := range []string{"id", "name"} {
+		t.Run(attributeName, func(t *testing.T) {
+			attribute, ok := schemaResponse.Schema.Attributes[attributeName].(schema.StringAttribute)
+			if !ok {
+				t.Fatalf("%s schema attribute has type %T, want schema.StringAttribute", attributeName, schemaResponse.Schema.Attributes[attributeName])
+			}
+
+			request := planmodifier.StringRequest{
+				ConfigValue: types.StringValue("renamed-group"),
+				PlanValue:   types.StringValue("renamed-group"),
+				StateValue:  types.StringValue("original-group"),
+				Plan: tfsdk.Plan{
+					Raw: tftypes.NewValue(tftypes.String, "renamed-group"),
+				},
+				State: tfsdk.State{
+					Raw: tftypes.NewValue(tftypes.String, "original-group"),
+				},
+			}
+			var response planmodifier.StringResponse
+			for _, modifier := range attribute.PlanModifiers {
+				modifier.PlanModifyString(context.Background(), request, &response)
+			}
+			if !response.RequiresReplace {
+				t.Fatalf("changing %s did not require replacement", attributeName)
+			}
+		})
+	}
+}
 
 func TestGroupAPIFromModelNormalizesEdgeOnPremForAPI(t *testing.T) {
 	model := &GroupResourceModel{
