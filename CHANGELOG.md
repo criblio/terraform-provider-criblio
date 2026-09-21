@@ -9,7 +9,7 @@ commit history, and tag-to-tag diffs.
 ## [Unreleased]
 
 ### Added
-- Added automatic changelog updates to `make generate`, using commit subjects since the latest provider release.
+- Added changelog update script to run within make generate.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.

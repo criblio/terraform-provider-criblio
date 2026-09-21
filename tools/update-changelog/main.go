@@ -11,9 +11,10 @@ import (
 const changelogPath = "CHANGELOG.md"
 
 var subjectPrefixRE = regexp.MustCompile(`(?i)^(add|added|adding|feat|fix|fixed|fixing|remove|removed|removing|security)(?:\([^)]*\))?:?\s+`)
+var providerTagRE = regexp.MustCompile(`^v[0-9]+\.[0-9]+\.[0-9]+$`)
 
 func main() {
-	subjects, err := unreleasedCommitSubjects()
+	subjects, err := unreleasedCommitSubjects(".")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "find unreleased commits: %v\n", err)
 		os.Exit(1)
@@ -24,13 +25,17 @@ func main() {
 	}
 }
 
-func unreleasedCommitSubjects() ([]string, error) {
-	tagOutput, err := exec.Command("git", "describe", "--tags", "--abbrev=0", "--match", "v[0-9]*").Output()
+func unreleasedCommitSubjects(repo string) ([]string, error) {
+	tagOutput, err := gitOutput(repo, "tag", "--merged", "HEAD", "--sort=-version:refname")
 	if err != nil {
-		return nil, fmt.Errorf("find latest provider tag: %w", err)
+		return nil, fmt.Errorf("list provider tags: %w", err)
 	}
-	tag := strings.TrimSpace(string(tagOutput))
-	logOutput, err := exec.Command("git", "log", "--no-merges", "--reverse", "--format=%s", tag+"..HEAD").Output()
+	tag := latestProviderTag(string(tagOutput))
+	if tag == "" {
+		return nil, fmt.Errorf("no reachable provider release tag matching vX.Y.Z; fetch tags and full history before generating the changelog")
+	}
+
+	logOutput, err := gitOutput(repo, "log", "--no-merges", "--reverse", "--format=%s", tag+"..HEAD")
 	if err != nil {
 		return nil, fmt.Errorf("read commits after %s: %w", tag, err)
 	}
@@ -39,6 +44,21 @@ func unreleasedCommitSubjects() ([]string, error) {
 		return nil, nil
 	}
 	return lines, nil
+}
+
+func gitOutput(repo string, args ...string) ([]byte, error) {
+	cmd := exec.Command("git", args...)
+	cmd.Dir = repo
+	return cmd.Output()
+}
+
+func latestProviderTag(output string) string {
+	for _, tag := range strings.Fields(output) {
+		if providerTagRE.MatchString(tag) {
+			return tag
+		}
+	}
+	return ""
 }
 
 func updateChangelog(path string, subjects []string) error {
@@ -50,7 +70,14 @@ func updateChangelog(path string, subjects []string) error {
 	updated := string(content)
 	for _, subject := range subjects {
 		category, entry := changelogEntry(subject)
-		if entry == "" || strings.Contains(updated, "- "+entry+"\n") {
+		if entry == "" {
+			continue
+		}
+		unreleased, err := unreleasedSection(updated)
+		if err != nil {
+			return err
+		}
+		if strings.Contains(unreleased, "- "+entry+"\n") {
 			continue
 		}
 		updated, err = insertUnreleasedEntry(updated, category, entry)
@@ -105,17 +132,10 @@ func changelogEntry(subject string) (string, string) {
 }
 
 func insertUnreleasedEntry(content, category, entry string) (string, error) {
-	const unreleasedHeader = "## [Unreleased]"
-	unreleasedStart := strings.Index(content, unreleasedHeader)
-	if unreleasedStart < 0 {
-		return "", fmt.Errorf("%s heading not found", unreleasedHeader)
+	sectionStart, sectionEnd, err := unreleasedSectionBounds(content)
+	if err != nil {
+		return "", err
 	}
-	sectionStart := unreleasedStart + len(unreleasedHeader)
-	nextReleaseOffset := strings.Index(content[sectionStart:], "\n## [")
-	if nextReleaseOffset < 0 {
-		nextReleaseOffset = len(content) - sectionStart
-	}
-	sectionEnd := sectionStart + nextReleaseOffset
 	section := content[sectionStart:sectionEnd]
 	heading := "### " + category
 
@@ -131,4 +151,27 @@ func insertUnreleasedEntry(content, category, entry string) (string, error) {
 
 	block := "\n### " + category + "\n- " + entry + "\n"
 	return content[:sectionEnd] + block + content[sectionEnd:], nil
+}
+
+func unreleasedSection(content string) (string, error) {
+	start, end, err := unreleasedSectionBounds(content)
+	if err != nil {
+		return "", err
+	}
+	return content[start:end], nil
+}
+
+func unreleasedSectionBounds(content string) (int, int, error) {
+	const unreleasedHeader = "## [Unreleased]"
+	unreleasedStart := strings.Index(content, unreleasedHeader)
+	if unreleasedStart < 0 {
+		return 0, 0, fmt.Errorf("%s heading not found", unreleasedHeader)
+	}
+	sectionStart := unreleasedStart + len(unreleasedHeader)
+	nextReleaseOffset := strings.Index(content[sectionStart:], "\n## [")
+	if nextReleaseOffset < 0 {
+		nextReleaseOffset = len(content) - sectionStart
+	}
+	sectionEnd := sectionStart + nextReleaseOffset
+	return sectionStart, sectionEnd, nil
 }
