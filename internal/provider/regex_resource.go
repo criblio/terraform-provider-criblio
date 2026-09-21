@@ -229,7 +229,7 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, false, false)
+	applyRegexAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

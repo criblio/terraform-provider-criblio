@@ -352,6 +352,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			}
 			continue
 		}
+		if isMissingInputDeleteResponse(method, path, statusCode, responseBody) {
+			c.resetRetryWaitBudget()
+			return responseBody, nil
+		}
 		return responseBody, err
 	}
 }
@@ -462,6 +466,14 @@ func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err
 	if attempt >= retryMax && !beyondRetryMax {
 		return false
 	}
+	if statusCode == http.StatusInternalServerError && isConfigHelperProxyPath(path) && isConfigHelperConnectionRefusedResponse(body) {
+		// The proxy could not deliver the request to the newly created group's
+		// config helper, so replaying even a POST or PATCH is safe.
+		return true
+	}
+	if isMissingInputDeleteResponse(method, path, statusCode, body) {
+		return true
+	}
 	if statusCode == http.StatusTooManyRequests {
 		return isIdempotentAPIMethod(method) ||
 			isGroupCreatePath(method, path) ||
@@ -530,6 +542,33 @@ func isConfigHelperAdmissionResponse(body []byte) bool {
 	default:
 		return false
 	}
+}
+
+func isConfigHelperConnectionRefusedResponse(body []byte) bool {
+	message := strings.ToLower(string(body))
+	return strings.Contains(message, "econnrefused") &&
+		strings.Contains(message, "cfg-") &&
+		strings.Contains(message, ".sock")
+}
+
+func isMissingInputDeleteResponse(method, path string, statusCode int, body []byte) bool {
+	if method != http.MethodDelete || statusCode != http.StatusInternalServerError {
+		return false
+	}
+
+	cleanPath := strings.SplitN(auth.TrimPath(path), "?", 2)[0]
+	parts := strings.Split(strings.Trim(cleanPath, "/"), "/")
+	if len(parts) != 5 || parts[0] != "m" || parts[2] != "system" || parts[3] != "inputs" {
+		return false
+	}
+
+	var response struct {
+		Message string `json:"message"`
+	}
+	if err := json.Unmarshal(body, &response); err != nil {
+		return false
+	}
+	return strings.EqualFold(strings.TrimSpace(response.Message), "Input does not exist")
 }
 
 func isRetryableAPIMethod(method string) bool {

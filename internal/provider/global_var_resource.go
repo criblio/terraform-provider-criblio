@@ -271,7 +271,7 @@ func (r *GlobalVarResource) ImportState(ctx context.Context, req resource.Import
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGlobalVarAPIToState(apiModel, &model, false, false)
+	applyGlobalVarAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

@@ -19,6 +19,7 @@ func TestWorkerGroup(t *testing.T) {
 
 	suffix := strings.ToLower(acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum))
 	groupID := "tf-stream-group-" + suffix
+	renamedGroupID := groupID + "-renamed"
 	resourceName := "criblio_group.azure_eastus_stream_group"
 
 	t.Run("plan-diff", func(t *testing.T) {
@@ -37,14 +38,22 @@ func TestWorkerGroup(t *testing.T) {
 					),
 				},
 				{
-					Config: workerGroupConfig(groupID, "updated", "updated"),
+					Config: workerGroupConfig(renamedGroupID, "created", "created"),
+					ConfigPlanChecks: resource.ConfigPlanChecks{
+						PreApply: []plancheck.PlanCheck{
+							plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionReplace),
+						},
+					},
+				},
+				{
+					Config: workerGroupConfig(renamedGroupID, "updated", "updated"),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "description", "Worker group updated"),
 						resource.TestCheckResourceAttr(resourceName, "tags", "environment=updated"),
 					),
 				},
 				{
-					Config: workerGroupConfig(groupID, "updated", "updated"),
+					Config: workerGroupConfig(renamedGroupID, "updated", "updated"),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
 							plancheck.ExpectEmptyPlan(),
@@ -54,7 +63,7 @@ func TestWorkerGroup(t *testing.T) {
 				{
 					ResourceName:      resourceName,
 					ImportState:       true,
-					ImportStateId:     groupID,
+					ImportStateId:     renamedGroupID,
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
 						"cloud",

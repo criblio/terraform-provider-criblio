@@ -396,7 +396,7 @@ func (r *ProjectPipelineResource) ImportState(ctx context.Context, req resource.
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyProjectPipelineAPIToState(apiModel, &model, false, false)
+	applyProjectPipelineAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

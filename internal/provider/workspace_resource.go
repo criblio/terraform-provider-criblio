@@ -232,7 +232,7 @@ func (r *WorkspaceResource) ImportState(ctx context.Context, req resource.Import
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyWorkspaceAPIToState(apiModel, &model, false, false)
+	applyWorkspaceAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

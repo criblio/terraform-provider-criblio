@@ -215,7 +215,7 @@ func (r *SchemaResource) ImportState(ctx context.Context, req resource.ImportSta
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySchemaAPIToState(apiModel, &model, false, false)
+	applySchemaAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

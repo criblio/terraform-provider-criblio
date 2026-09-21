@@ -397,6 +397,133 @@ func TestPostDoesNotRetryTransientECONNRESETResponse(t *testing.T) {
 	}
 }
 
+func TestConfigHelperConnectionRefusedRetriesMutations(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	tests := []struct {
+		name   string
+		method string
+		path   string
+	}{
+		{name: "pipeline create", method: http.MethodPost, path: "/m/mygroup2/pipelines"},
+		{name: "settings update", method: http.MethodPatch, path: "/m/mygroup2/system/settings/conf"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			requestCount := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requestCount++
+				if r.Method != test.method {
+					t.Errorf("method = %q, expected %q", r.Method, test.method)
+				}
+				if requestCount == 1 {
+					w.WriteHeader(http.StatusInternalServerError)
+					_, _ = w.Write([]byte(`{"status":"error","message":"The Config Helper service is not available","error":{"message":"connect ECONNREFUSED /tmp/cribl-6786a94f-cfg-mygroup2.sock"}}`))
+					return
+				}
+				writeJSON(t, w, testItem{ID: "retried", Name: "success"})
+			}))
+			defer server.Close()
+
+			client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+			if _, err := do(context.Background(), client, test.method, test.path, "application/json", []byte(`{"name":"request"}`)); err != nil {
+				t.Fatalf("%s returned error: %v", test.method, err)
+			}
+			if requestCount != 2 {
+				t.Fatalf("request count = %d, expected 2", requestCount)
+			}
+		})
+	}
+}
+
+func TestConfigHelperConnectionRefusedDoesNotRetryGenericPost(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"error":{"message":"connect ECONNREFUSED /tmp/cribl-6786a94f-cfg-mygroup2.sock"}}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	_, err := Post[testItem, testItem](context.Background(), client, "/pipelines", testItem{Name: "pipeline"})
+	if err == nil {
+		t.Fatal("Post returned nil error, expected HTTP 500")
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+}
+
+func TestDeleteRetriesMissingInputResponse(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		if r.Method != http.MethodDelete {
+			t.Errorf("method = %q, expected DELETE", r.Method)
+		}
+		if requestCount == 1 {
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Input does not exist"}`))
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	if err := Delete(context.Background(), client, "/m/default/system/inputs/http-listener"); err != nil {
+		t.Fatalf("Delete returned error: %v", err)
+	}
+	if requestCount != 2 {
+		t.Fatalf("request count = %d, expected 2", requestCount)
+	}
+}
+
+func TestDeleteTreatsRepeatedMissingInputResponseAsSuccess(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"status":"error","message":"Input does not exist"}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	if err := Delete(context.Background(), client, "/m/default/system/inputs/http-listener"); err != nil {
+		t.Fatalf("Delete returned error: %v", err)
+	}
+	if requestCount < 2 {
+		t.Fatalf("request count = %d, expected retries", requestCount)
+	}
+}
+
+func TestDeleteDoesNotSuppressMissingInputResponseForOtherPaths(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"status":"error","message":"Input does not exist"}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	if err := Delete(context.Background(), client, "/m/default/pipelines/example"); err == nil {
+		t.Fatal("Delete returned nil error for a non-input path")
+	}
+}
+
 func TestReplaySafeRequestsRetryTooManyRequests(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 	fastAPIRetry(t)

@@ -254,7 +254,7 @@ func (r *SecretResource) ImportState(ctx context.Context, req resource.ImportSta
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySecretAPIToState(apiModel, &model, false, false)
+	applySecretAPIToState(apiModel, &model, true, true)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
