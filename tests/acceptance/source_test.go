@@ -12,10 +12,6 @@ import (
 
 func TestSource(t *testing.T) {
 	if os.Getenv("DEPLOYMENT") == "onprem" {
-		// On-prem source mutations update the same inputs configuration and are
-		// not safe to execute concurrently.
-		t.Setenv("TF_CLI_ARGS_apply", "-parallelism=1")
-		t.Setenv("TF_CLI_ARGS_destroy", "-parallelism=1")
 		time.Sleep(1 * time.Second)
 	}
 	t.Run("plan-diff", func(t *testing.T) {
