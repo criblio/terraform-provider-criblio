@@ -36,6 +36,48 @@ func TestToResourceItems_empty_results(t *testing.T) {
 	assert.Empty(t, result.Items)
 }
 
+func TestToResourceItemsSkipsSystemManagedSecret(t *testing.T) {
+	reg := buildTestRegistry(t)
+	groupIDs := []string{"default", "criblcon-demo", "default_fleet"}
+	identifiers := make([]map[string]string, 0, len(groupIDs))
+	for _, groupID := range groupIDs {
+		identifiers = append(identifiers, map[string]string{
+			"group_id": groupID,
+			"id":       "__cribl_to_cribl__",
+		})
+	}
+	results := []discovery.Result{{
+		TypeName:          "criblio_secret",
+		Count:             len(identifiers),
+		Identifiers:       identifiers,
+		InventoryComplete: true,
+	}}
+	for _, test := range []struct {
+		name            string
+		excludeDefaults bool
+		includeOverride IncludeOverride
+	}{
+		{name: "defaults included"},
+		{name: "defaults excluded", excludeDefaults: true},
+		{
+			name:            "explicit inclusion cannot override exclusion",
+			excludeDefaults: true,
+			includeOverride: ParseIncludeDefaultIDs([]string{"__cribl_to_cribl__", "criblio_secret:__cribl_to_cribl__"}),
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := ToResourceItems(context.Background(), nil, reg, results, groupIDs, nil, 1, test.excludeDefaults, test.includeOverride, nil)
+			require.NoError(t, err)
+			assert.Empty(t, result.Items)
+			assert.Empty(t, result.ListSkipped)
+			require.Len(t, result.ConvertSkipped, len(groupIDs))
+			for _, skipped := range result.ConvertSkipped {
+				assert.Contains(t, skipped, "skipped by config")
+			}
+		})
+	}
+}
+
 func TestOrderedTaskGroupsUsesReverseDiscoveryOrder(t *testing.T) {
 	tasks := map[string][]conversionTask{
 		"":        {{idMap: map[string]string{"id": "global"}}},
@@ -857,6 +899,13 @@ func TestEnsureNotificationTargetSecretPlaceholders(t *testing.T) {
 }
 
 func TestSkipResourceByID(t *testing.T) {
+	t.Run("only skip the system-managed secret across groups and fleets", func(t *testing.T) {
+		for _, groupID := range []string{"default", "criblcon-demo", "default_fleet"} {
+			assert.True(t, skipResourceByID("criblio_secret", map[string]string{"group_id": groupID, "id": "__cribl_to_cribl__"}))
+			assert.False(t, skipResourceByID("criblio_secret", map[string]string{"group_id": groupID, "id": "test_secret"}))
+			assert.False(t, skipResourceByID("criblio_secret", map[string]string{"group_id": groupID, "id": "cribl_to_cribl"}))
+		}
+	})
 	t.Run("skip by exclusions.SkipExportIDs", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"id": "in_syslog"}))

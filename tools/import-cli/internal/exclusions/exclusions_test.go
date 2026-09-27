@@ -51,6 +51,10 @@ func TestSkipExportIDs_ContainsExpectedTypesAndIDs(t *testing.T) {
 		{"criblio_source", "in_http", false},
 		{"criblio_group", "search", true},
 		{"criblio_group", "stream-leaders", false},
+		{"criblio_secret", "__cribl_to_cribl__", true},
+		{"criblio_secret", "test_secret", false},
+		{"criblio_secret", "cribl_to_cribl", false},
+		{"criblio_pipeline", "__cribl_to_cribl__", false},
 		{"unknown_type", "any_id", false},
 	}
 	for _, tt := range tests {
