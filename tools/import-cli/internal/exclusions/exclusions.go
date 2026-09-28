@@ -50,6 +50,9 @@ var SkipExportIDs = map[string]map[string]bool{
 		"in_prometheus_rw": true, // Product-managed default Search source.
 		"in_splunk_hec":    true, // Product-managed default with a write-only required token.
 	},
+	"criblio_secret": {
+		"__cribl_to_cribl__": true,
+	},
 	"criblio_source": {
 		"in_syslog":         true, // provider marshal fails: union type Input all fields null
 		"in_syslog_default": true,
