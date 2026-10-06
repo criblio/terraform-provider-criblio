@@ -468,6 +468,43 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 							stringvalidator.OneOf("mad"),
 						},
 					},
+					"mode": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `How the peer cohort is pooled: per-instant cross-section, or pooled over the window.`,
+					},
+					"cohort_labels": schema.ListAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Labels that group series into peer cohorts; empty means one global cohort across all series.`,
+						ElementType: types.StringType,
+					},
+					"threshold_direction": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Which side flags an outlier: above the cohort spread, below it, or either.`,
+					},
+					"evaluation_window_ms": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Window in milliseconds the pooled cohort median/MAD is computed over.`,
+					},
+					"pct": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Percentage (1-100) of a series' window points that must breach before it is flagged.`,
+					},
+					"min_coverage": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Percentage (1-100) of expected window points a series needs before it is graded.`,
+					},
 				},
 			},
 			"forecast_config": schema.SingleNestedAttribute{
@@ -1172,6 +1209,39 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 			state.OutlierConfig.Algorithm = api.OutlierConfig.Algorithm
 		} else if state.OutlierConfig.Algorithm.IsNull() || state.OutlierConfig.Algorithm.IsUnknown() {
 			state.OutlierConfig.Algorithm = types.StringNull()
+		}
+		if !api.OutlierConfig.Mode.IsNull() && !api.OutlierConfig.Mode.IsUnknown() {
+			state.OutlierConfig.Mode = api.OutlierConfig.Mode
+		} else if state.OutlierConfig.Mode.IsNull() || state.OutlierConfig.Mode.IsUnknown() {
+			state.OutlierConfig.Mode = types.StringNull()
+		}
+		if !api.OutlierConfig.CohortLabels.IsNull() && !api.OutlierConfig.CohortLabels.IsUnknown() {
+			state.OutlierConfig.CohortLabels = api.OutlierConfig.CohortLabels
+		} else if state.OutlierConfig.CohortLabels.IsNull() || state.OutlierConfig.CohortLabels.IsUnknown() {
+			state.OutlierConfig.CohortLabels = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutlierConfig.CohortLabels.ElementType(context.Background()); elementType == nil {
+			state.OutlierConfig.CohortLabels = types.ListNull(types.StringType)
+		}
+		if !api.OutlierConfig.ThresholdDirection.IsNull() && !api.OutlierConfig.ThresholdDirection.IsUnknown() {
+			state.OutlierConfig.ThresholdDirection = api.OutlierConfig.ThresholdDirection
+		} else if state.OutlierConfig.ThresholdDirection.IsNull() || state.OutlierConfig.ThresholdDirection.IsUnknown() {
+			state.OutlierConfig.ThresholdDirection = types.StringNull()
+		}
+		if !api.OutlierConfig.EvaluationWindowMs.IsNull() && !api.OutlierConfig.EvaluationWindowMs.IsUnknown() {
+			state.OutlierConfig.EvaluationWindowMs = api.OutlierConfig.EvaluationWindowMs
+		} else if state.OutlierConfig.EvaluationWindowMs.IsNull() || state.OutlierConfig.EvaluationWindowMs.IsUnknown() {
+			state.OutlierConfig.EvaluationWindowMs = types.Float64Null()
+		}
+		if !api.OutlierConfig.Pct.IsNull() && !api.OutlierConfig.Pct.IsUnknown() {
+			state.OutlierConfig.Pct = api.OutlierConfig.Pct
+		} else if state.OutlierConfig.Pct.IsNull() || state.OutlierConfig.Pct.IsUnknown() {
+			state.OutlierConfig.Pct = types.Float64Null()
+		}
+		if !api.OutlierConfig.MinCoverage.IsNull() && !api.OutlierConfig.MinCoverage.IsUnknown() {
+			state.OutlierConfig.MinCoverage = api.OutlierConfig.MinCoverage
+		} else if state.OutlierConfig.MinCoverage.IsNull() || state.OutlierConfig.MinCoverage.IsUnknown() {
+			state.OutlierConfig.MinCoverage = types.Float64Null()
 		}
 	}
 	if api.ForecastConfig != nil {

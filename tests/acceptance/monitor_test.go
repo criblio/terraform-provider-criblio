@@ -67,6 +67,30 @@ func TestMonitor(t *testing.T) {
 			},
 		})
 	})
+
+	t.Run("outlier-dispatch", func(t *testing.T) {
+		resourceName := "criblio_monitor.example_outlier"
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: monitorOutlier(),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "type", "outlier"),
+						resource.TestCheckResourceAttr(resourceName, "outlier_config.mode", "instant"),
+						resource.TestCheckResourceAttr(resourceName, "outlier_config.threshold_direction", "either"),
+						resource.TestCheckNoResourceAttr(resourceName, "anomaly_config"),
+						resource.TestCheckNoResourceAttr(resourceName, "forecast_config"),
+					),
+				},
+				{
+					Config:   monitorOutlier(),
+					PlanOnly: true,
+				},
+			},
+		})
+	})
 }
 
 func monitorThreshold(limit int) string {
@@ -125,6 +149,59 @@ func monitorForecast() string {
     window      = "1h"
     deviations  = 2
     seasonality = "hourly"
+  }
+
+  priority_scalar_value = { value = "P3" }
+  team_scalar_value     = { value = "" }
+
+  query = {
+    A = {
+      mode       = "promql"
+      dataset_id = "metrics"
+      promql     = "cpu_usage_percent"
+    }
+  }
+
+  expr = []
+
+  firing_condition = {
+    fire_delay  = 300
+    clear_delay = 60
+  }
+
+  firing_rule = {
+    label = ""
+    threshold = [{
+      severity        = "warning"
+      limit           = 90
+      operator        = "gt"
+      included_tags   = []
+      excluded_tags   = []
+      times_triggered = 1
+    }]
+  }
+
+  aetos_metadata = {}
+}
+`
+}
+
+func monitorOutlier() string {
+	return `resource "criblio_monitor" "example_outlier" {
+  id         = "acc_test_outlier_monitor"
+  name       = "Acceptance Test - Outlier Monitor"
+  enabled    = true
+  type       = "outlier"
+  dataset_id = "metrics"
+
+  outlier_config = {
+    algorithm            = "mad"
+    mode                 = "instant"
+    cohort_labels        = []
+    threshold_direction  = "either"
+    evaluation_window_ms = 1800000
+    pct                  = 20
+    min_coverage         = 80
   }
 
   priority_scalar_value = { value = "P3" }

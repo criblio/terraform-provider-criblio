@@ -1552,12 +1552,24 @@ func (m *ChangeConfigModel) unmarshalPayload(input map[string]any) error {
 }
 
 type OutlierConfigModel struct {
-	Algorithm types.String `tfsdk:"algorithm" json:"algorithm,omitempty"`
+	Algorithm          types.String  `tfsdk:"algorithm" json:"algorithm,omitempty"`
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	CohortLabels       types.List    `tfsdk:"cohort_labels" json:"cohortLabels,omitempty"`
+	ThresholdDirection types.String  `tfsdk:"threshold_direction" json:"thresholdDirection,omitempty"`
+	EvaluationWindowMs types.Float64 `tfsdk:"evaluation_window_ms" json:"evaluationWindowMs,omitempty"`
+	Pct                types.Float64 `tfsdk:"pct" json:"pct,omitempty"`
+	MinCoverage        types.Float64 `tfsdk:"min_coverage" json:"minCoverage,omitempty"`
 }
 
 func OutlierConfigModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"algorithm": types.StringType,
+		"algorithm":            types.StringType,
+		"mode":                 types.StringType,
+		"cohort_labels":        types.ListType{ElemType: types.StringType},
+		"threshold_direction":  types.StringType,
+		"evaluation_window_ms": types.Float64Type,
+		"pct":                  types.Float64Type,
+		"min_coverage":         types.Float64Type,
 	}
 }
 
@@ -1569,6 +1581,48 @@ func (m OutlierConfigModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert algorithm to API value: %v", err)
 		}
 		output["algorithm"] = value
+	}
+	if !m.Mode.IsNull() && !m.Mode.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.Mode)
+		if err != nil {
+			return nil, fmt.Errorf("convert mode to API value: %v", err)
+		}
+		output["mode"] = value
+	}
+	if !m.CohortLabels.IsNull() && !m.CohortLabels.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.CohortLabels)
+		if err != nil {
+			return nil, fmt.Errorf("convert cohort_labels to API value: %v", err)
+		}
+		output["cohortLabels"] = value
+	}
+	if !m.ThresholdDirection.IsNull() && !m.ThresholdDirection.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ThresholdDirection)
+		if err != nil {
+			return nil, fmt.Errorf("convert threshold_direction to API value: %v", err)
+		}
+		output["thresholdDirection"] = value
+	}
+	if !m.EvaluationWindowMs.IsNull() && !m.EvaluationWindowMs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.EvaluationWindowMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert evaluation_window_ms to API value: %v", err)
+		}
+		output["evaluationWindowMs"] = value
+	}
+	if !m.Pct.IsNull() && !m.Pct.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.Pct)
+		if err != nil {
+			return nil, fmt.Errorf("convert pct to API value: %v", err)
+		}
+		output["pct"] = value
+	}
+	if !m.MinCoverage.IsNull() && !m.MinCoverage.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.MinCoverage)
+		if err != nil {
+			return nil, fmt.Errorf("convert min_coverage to API value: %v", err)
+		}
+		output["minCoverage"] = value
 	}
 	return output, nil
 }
@@ -1582,6 +1636,60 @@ func (m *OutlierConfigModel) unmarshalPayload(input map[string]any) error {
 		m.Algorithm = value.(types.String)
 	} else {
 		m.Algorithm = types.StringNull()
+	}
+	if item, ok := input["mode"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert mode from API value: %v", err)
+		}
+		m.Mode = value.(types.String)
+	} else {
+		m.Mode = types.StringNull()
+	}
+	if item, ok := input["cohortLabels"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert cohortLabels from API value: %v", err)
+		}
+		m.CohortLabels = value.(types.List)
+	} else {
+		m.CohortLabels = types.ListNull(types.StringType)
+	}
+	if item, ok := input["thresholdDirection"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert thresholdDirection from API value: %v", err)
+		}
+		m.ThresholdDirection = value.(types.String)
+	} else {
+		m.ThresholdDirection = types.StringNull()
+	}
+	if item, ok := input["evaluationWindowMs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert evaluationWindowMs from API value: %v", err)
+		}
+		m.EvaluationWindowMs = value.(types.Float64)
+	} else {
+		m.EvaluationWindowMs = types.Float64Null()
+	}
+	if item, ok := input["pct"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pct from API value: %v", err)
+		}
+		m.Pct = value.(types.Float64)
+	} else {
+		m.Pct = types.Float64Null()
+	}
+	if item, ok := input["minCoverage"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert minCoverage from API value: %v", err)
+		}
+		m.MinCoverage = value.(types.Float64)
+	} else {
+		m.MinCoverage = types.Float64Null()
 	}
 	return nil
 }

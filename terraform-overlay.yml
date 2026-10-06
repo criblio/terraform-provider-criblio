@@ -3839,3 +3839,51 @@ actions:
           change: "#/components/schemas/ChangeConfig"
           outlier: "#/components/schemas/OutlierConfig"
           forecast: "#/components/schemas/ForecastConfig"
+
+  # OutlierConfig: published docs spec still carries only the {algorithm:mad} stub (predates
+  # cribl/cribl @swaggerDescription backfill). Forward-port the real 7-field IOutlierConfig
+  # (MON-1392) so outlier is a typed block now; drop once the published spec catches up on sync.
+  - target: "$.components.schemas.OutlierConfig"
+    replace:
+      type: object
+      properties:
+        algorithm:
+          type: string
+          const: mad
+          description: Discriminator value.
+        mode:
+          type: string
+          enum:
+            - instant
+            - windowed
+          description: "How the peer cohort is pooled: per-instant cross-section, or pooled over the window."
+        cohortLabels:
+          type: array
+          items:
+            type: string
+          description: Labels that group series into peer cohorts; empty means one global cohort across all series.
+        thresholdDirection:
+          type: string
+          enum:
+            - above
+            - below
+            - either
+          description: "Which side flags an outlier: above the cohort spread, below it, or either."
+        evaluationWindowMs:
+          type: number
+          description: Window in milliseconds the pooled cohort median/MAD is computed over.
+        pct:
+          type: number
+          description: Percentage (1-100) of a series' window points that must breach before it is flagged.
+        minCoverage:
+          type: number
+          description: Percentage (1-100) of expected window points a series needs before it is graded.
+      required:
+        - algorithm
+        - mode
+        - cohortLabels
+        - thresholdDirection
+        - evaluationWindowMs
+        - pct
+        - minCoverage
+      title: OutlierConfig

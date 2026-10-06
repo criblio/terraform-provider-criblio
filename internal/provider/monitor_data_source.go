@@ -323,6 +323,31 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 						Computed:    true,
 						Description: `Discriminator value.`,
 					},
+					"mode": schema.StringAttribute{
+						Computed:    true,
+						Description: `How the peer cohort is pooled: per-instant cross-section, or pooled over the window.`,
+					},
+					"cohort_labels": schema.ListAttribute{
+						Computed:    true,
+						Description: `Labels that group series into peer cohorts; empty means one global cohort across all series.`,
+						ElementType: types.StringType,
+					},
+					"threshold_direction": schema.StringAttribute{
+						Computed:    true,
+						Description: `Which side flags an outlier: above the cohort spread, below it, or either.`,
+					},
+					"evaluation_window_ms": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Window in milliseconds the pooled cohort median/MAD is computed over.`,
+					},
+					"pct": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Percentage (1-100) of a series' window points that must breach before it is flagged.`,
+					},
+					"min_coverage": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Percentage (1-100) of expected window points a series needs before it is graded.`,
+					},
 				},
 			},
 			"forecast_config": schema.SingleNestedAttribute{
