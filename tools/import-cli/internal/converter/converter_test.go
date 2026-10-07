@@ -213,6 +213,25 @@ func TestConvertRawItemCollectorKeepsAzureConfiguration(t *testing.T) {
 	assert.Equal(t, hcl.KindMap, azure.Map["input"].Kind)
 }
 
+func TestConvertPackCollectorPreservesScopeAndVariant(t *testing.T) {
+	entry := registry.Entry{TypeName: "criblio_pack_collector", ModelTypeName: "PackCollectorResourceModel"}
+	for _, kind := range []string{"rest", "cribl_lake"} {
+		t.Run(kind, func(t *testing.T) {
+			raw := json.RawMessage(`{"id":"events","type":"collection","collector":{"type":"` + kind + `"},"ttl":"4h"}`)
+			model, err := ConvertRawItemWithIdentifiers(entry, raw, map[string]string{"GroupID": "default", "ID": "events", "Pack": "my-pack"})
+			require.NoError(t, err)
+			attrs, err := hcl.ModelToValue(model, nil)
+			require.NoError(t, err)
+			assert.Equal(t, "default", attrs["group_id"].String)
+			assert.Equal(t, "my-pack", attrs["pack"].String)
+			assert.Equal(t, "events", attrs["id"].String)
+			variant := attrs["input_collector_"+kind]
+			require.Equal(t, hcl.KindMap, variant.Kind)
+			assert.Equal(t, kind, variant.Map["collector"].Map["type"].String)
+		})
+	}
+}
+
 func TestConvertFromResponseBody_pipeline(t *testing.T) {
 	ctx := context.Background()
 	reg := buildTestRegistry(t)

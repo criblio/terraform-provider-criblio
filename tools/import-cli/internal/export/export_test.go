@@ -562,6 +562,18 @@ func TestCollectorRegistrySupportsFilesystemOneOfBlock(t *testing.T) {
 	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_filesystem")
 }
 
+func TestPackCollectorRegistry(t *testing.T) {
+	entry, ok := buildTestRegistry(t).ByTypeName("criblio_pack_collector")
+	require.True(t, ok)
+	require.NotNil(t, entry.OneOf)
+	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_rest")
+	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_cribl_lake")
+	assert.Equal(t, "collector.type", entry.OneOf.NestedDiscriminatorField)
+	assert.Equal(t, "json:group_id,id,pack", entry.ImportIDFormat)
+	assert.Equal(t, "/m/{group_id}/p/{pack}/lib/jobs", entry.RESTListPath)
+	assert.Equal(t, "/m/{group_id}/p/{pack}/lib/jobs/{id}", entry.RESTGetPath)
+}
+
 func TestResolveNestedDiscriminator(t *testing.T) {
 	t.Run("extracts nested field", func(t *testing.T) {
 		itemMap := map[string]string{

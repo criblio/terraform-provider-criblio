@@ -219,7 +219,7 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 	case "criblio_pack_pipeline":
 		// Only check if the pack itself is a default; pipeline IDs like "main" are valid inside user packs.
 		return custom.DefaultPackIDs[pack]
-	case "criblio_pack_source":
+	case "criblio_pack_source", "criblio_pack_collector":
 		// Only check if the pack itself is a default; source IDs are valid inside user packs.
 		return custom.DefaultPackIDs[pack]
 	case "criblio_pack_vars":

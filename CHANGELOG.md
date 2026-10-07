@@ -9,12 +9,14 @@ commit history, and tag-to-tag diffs.
 ## [Unreleased]
 
 ### Added
+- Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.
 - Added changelog update script to run within make generate.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
 
 ### Fixed
+- Fixed configured TTL updates in `criblio_collector` and `criblio_pack_collector` while retaining existing behavior for omitted TTL and other collector fields.
 - Retried HTTP 429 responses using server-provided `Retry-After` delays up to 60 seconds, including Config Helper admission throttling during bulk group and fleet operations, while preserving command cancellation and bounding cumulative import CLI retry waits.
 - Excluded the internal `metrics_ingest` pipeline from import CLI exports.
 - Fixed import issues when duplicate params exist.

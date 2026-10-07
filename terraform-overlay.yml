@@ -90,6 +90,53 @@ actions:
   - target: "$.paths./m/{groupId}/lib/jobs/{id}.delete"
     update:
       x-terraform-delete: Collector
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackCollector
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: pack
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the Pack.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this collector instance.
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.post.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.get"
+    update:
+      x-terraform-read: PackCollector
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.get.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.patch"
+    update:
+      x-terraform-update: PackCollector
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.patch.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.delete"
+    update:
+      x-terraform-delete: PackCollector
   - target: "$.components.schemas.InputCollector"
     update:
       properties:
