@@ -11,21 +11,23 @@ import (
 )
 
 // Exercise the framework's complete planning pipeline, including its unknown
-// marking and modifier ordering, for both resources that share collector fields.
-func TestCollectorHoistedFieldsPlan(t *testing.T) {
+// marking and modifier ordering, for TTL in both collector resources.
+func TestCollectorTTLPlan(t *testing.T) {
 	ctx := context.Background()
 	server := providerserver.NewProtocol6(New("test")())()
-	before := map[string]any{
-		"ttl": "4h", "environment": "dev", "ignore_group_jobs_limit": false,
-		"resume_on_boot": false, "worker_affinity": false,
-	}
-	after := map[string]any{
-		"ttl": "8h", "environment": "prod", "ignore_group_jobs_limit": true,
-		"resume_on_boot": true, "worker_affinity": true,
-	}
+	before := map[string]any{"ttl": "4h"}
+	after := map[string]any{"ttl": "8h"}
 	unknown := map[string]any{}
+	nulls := map[string]any{}
 	for field := range before {
 		unknown[field] = tftypes.UnknownValue
+		nulls[field] = nil
+	}
+	// Discovery fixtures configure these two fields but omit TTL and the other
+	// job flags; the S3 fixture omits all five. Those omissions must remain stable.
+	discoveryDefaults := map[string]any{
+		"environment": "demo", "ignore_group_jobs_limit": false,
+		"ttl": nil, "resume_on_boot": nil, "worker_affinity": nil,
 	}
 	for _, res := range []resource.Resource{NewCollectorResource(), NewPackCollectorResource()} {
 		var metadata resource.MetadataResponse
@@ -36,27 +38,42 @@ func TestCollectorHoistedFieldsPlan(t *testing.T) {
 		for _, kind := range []string{"splunk", "rest", "s3", "azure_blob", "cribl_lake", "database", "gcs", "health_check", "script", "filesystem"} {
 			block := "input_collector_" + kind
 			for _, tc := range []struct {
-				name   string
-				nested map[string]any
-				root   map[string]any
-				want   map[string]any
-				create bool
+				name      string
+				nested    map[string]any
+				root      map[string]any
+				prior     map[string]any
+				proposed  map[string]any
+				want      map[string]any
+				create    bool
+				unchanged bool
 			}{
 				{name: "nested_update", nested: after, want: after},
-				{name: "nested_unchanged", nested: before, want: before},
+				{name: "nested_unchanged", nested: before, want: before, unchanged: true},
 				{name: "nested_unknown", nested: unknown, want: unknown},
-				{name: "nested_omitted", nested: map[string]any{}, want: before},
+				{name: "nested_omitted", nested: map[string]any{}, proposed: before, want: before, unchanged: true},
 				{name: "root_update", nested: map[string]any{}, root: after, want: after},
 				{name: "create", nested: after, want: after, create: true},
+				{name: "nulls_unchanged", nested: nulls, prior: nulls, want: nulls, unchanged: true},
+				{name: "nulls_update", nested: after, prior: nulls, want: after},
+				{name: "nulls_unknown", nested: unknown, prior: nulls, want: unknown},
+				{name: "nulls_create", nested: nulls, prior: nulls, want: unknown, create: true},
+				{name: "discovery_omitted_settings", nested: discoveryDefaults, prior: discoveryDefaults, want: discoveryDefaults, unchanged: true},
 			} {
 				t.Run(metadata.TypeName+"/"+kind+"/"+tc.name, func(t *testing.T) {
-					stateFields := map[string]any{"id": "events", "group_id": "default", block: before}
+					prior := tc.prior
+					if prior == nil {
+						prior = before
+					}
+					stateFields := map[string]any{"id": "events", "group_id": "default", block: prior}
 					configFields := map[string]any{"id": "events", "group_id": "default", block: tc.nested}
 					planFields := map[string]any{"id": "events", "group_id": "default", block: tc.nested}
+					if tc.proposed != nil {
+						planFields[block] = tc.proposed
+					}
 					if metadata.TypeName == "criblio_pack_collector" {
 						stateFields["pack"], configFields["pack"], planFields["pack"] = "my-pack", "my-pack", "my-pack"
 					}
-					for field, value := range before {
+					for field, value := range prior {
 						stateFields[field], planFields[field] = value, value
 					}
 					for field, value := range tc.root {
@@ -83,6 +100,9 @@ func TestCollectorHoistedFieldsPlan(t *testing.T) {
 					planned, err := response.PlannedState.Unmarshal(objectType)
 					if err != nil {
 						t.Fatal(err)
+					}
+					if tc.unchanged && !planned.Equal(state) {
+						t.Error("unchanged configuration produced a non-empty plan")
 					}
 					var fields map[string]tftypes.Value
 					if err := planned.As(&fields); err != nil {
