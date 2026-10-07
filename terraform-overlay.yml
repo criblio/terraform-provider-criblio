@@ -3704,6 +3704,27 @@ actions:
     update:
       x-terraform-delete: Monitor
 
+  # MON-1453 follow-up: criblio_monitor_config_profile -- Aetos monitor config profiles.
+  # Route /products/lakehouse_engine_metrics/config-profiles; clean CRUD schema
+  # (MonitorConfigProfile: configIds[], name, description?, parentId?, id).
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: MonitorConfigProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles.get"
+    update:
+      x-terraform-list: MonitorConfigProfile
+      x-terraform-list-name: MonitorConfigProfiles
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.get"
+    update:
+      x-terraform-read: MonitorConfigProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.patch"
+    update:
+      x-terraform-update: MonitorConfigProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.delete"
+    update:
+      x-terraform-delete: MonitorConfigProfile
+
   # $profileRef is UI-only linkage to a shared monitor profile; no criblio_monitor_profile
   # resource exists yet to create the IDs it references. $configRefs is the equivalent linkage
   # surface on the shared Inheritable schema used by every profile-linkable field below. Both
