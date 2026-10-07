@@ -105,7 +105,6 @@ resource "criblio_pack_collector" "test" {
       type           = "collection"
       send_to_routes = true
     }
-    schedule = { enabled = false }
   }
 }
 
