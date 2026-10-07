@@ -11,7 +11,8 @@ package registry
 // These align with OpenAPI oneOf schemas: Output -> destination/pack_destination; Input -> source; InputCollector/SavedJob -> collector; NotificationTarget -> notification_target.
 // ReadOnlyAttr is the tfsdk attribute name (e.g. "items") so it can be skipped in HCL; Go field name is derived for reflection.
 var (
-	oneOfOutput = &OneOfConfig{
+	oneOfCollector = &OneOfConfig{ReadOnlyAttr: "items", DiscriminatorField: "type", BlockNamePrefix: "input_collector_", KeysToSkip: []string{"status"}, UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"}, NestedDiscriminatorField: "collector.type", DiscriminatorAlias: map[string]string{"google_cloud_storage": "gcs"}}
+	oneOfOutput    = &OneOfConfig{
 		ReadOnlyAttr:       "items",
 		DiscriminatorField: "type",
 		BlockNamePrefix:    "output_",
@@ -56,7 +57,8 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_appscope_config":              {SDKService: "AppscopeConfigs", ListMethod: "ListAppscopeLibEntry", GetMethod: "GetAppscopeLibEntryByID", ImportIDFormat: ""},
 	"criblio_certificate":                  {SDKService: "Certificates", ListMethod: "ListCertificate", GetMethod: "GetCertificateByID", ImportIDFormat: ""},
 	"criblio_custom_banner":                {SDKService: "Banners", ListMethod: "", GetMethod: "", ImportIDFormat: "id"},
-	"criblio_collector":                    {SDKService: "SavedJobs", ListMethod: "ListCollectors", GetMethod: "GetSavedJobByID", ImportIDFormat: "", OneOf: &OneOfConfig{ReadOnlyAttr: "items", DiscriminatorField: "type", BlockNamePrefix: "input_collector_", KeysToSkip: []string{"status"}, UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"}, NestedDiscriminatorField: "collector.type", DiscriminatorAlias: map[string]string{"google_cloud_storage": "gcs"}}},
+	"criblio_collector":                    {SDKService: "SavedJobs", ListMethod: "ListCollectors", GetMethod: "GetSavedJobByID", ImportIDFormat: "", OneOf: oneOfCollector},
+	"criblio_pack_collector":               {SDKService: "SavedJobs", ListMethod: "GetSavedJobLibByPack", GetMethod: "GetSavedJobLibByPackAndID", ImportIDFormat: "", OneOf: oneOfCollector},
 	"criblio_commit":                       {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_cribl_lake_dataset":           {SDKService: "Lake", ListMethod: "GetCriblLakeDatasetByLakeID", GetMethod: "GetCriblLakeDatasetByLakeIDAndID", ImportIDFormat: ""},
 	"criblio_cribl_lake_house":             {SDKService: "LakeHouse", ListMethod: "ListDefaultLakeLakehouse", GetMethod: "GetDefaultLakeLakehouseByID", ImportIDFormat: ""},
@@ -121,6 +123,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_key":                          {SDKService: "Keys", ListMethod: "ListKeyMetadataEntity", GetMethod: "GetKeyMetadataEntityByID", ImportIDFormat: "json:group_id,id,key_id", RESTListPath: "/m/{group_id}/system/keys", RESTGetPath: "/m/{group_id}/system/keys", ListItemIDMethod: "GetKeyID"},
 	"criblio_pack":                         {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/packs", RESTGetPath: "/m/{group_id}/packs/{id}"},
 	"criblio_pack_source":                  {ListMethod: "GetSystemInputsByPack", GetMethod: "GetSystemInputsByPackAndID", ImportIDFormat: "json:group_id,id,pack", RESTListPath: "/m/{group_id}/p/{pack}/system/inputs", RESTGetPath: "/m/{group_id}/p/{pack}/system/inputs/{id}"},
+	"criblio_pack_collector":               {ListMethod: "GetSavedJobLibByPack", GetMethod: "GetSavedJobLibByPackAndID", ImportIDFormat: "json:group_id,id,pack", RESTListPath: "/m/{group_id}/p/{pack}/lib/jobs", RESTGetPath: "/m/{group_id}/p/{pack}/lib/jobs/{id}"},
 	"criblio_pack_pipeline":                {ListMethod: "GetPipelinesByPack", GetMethod: "GetPipelinesByPackWithID", ImportIDFormat: "json:group_id,id,pack", RESTListPath: "/m/{group_id}/p/{pack}/pipelines", RESTGetPath: "/m/{group_id}/p/{pack}/pipelines/{id}"},
 	"criblio_pack_breakers":                {ImportIDFormat: "json:group_id,id,pack", RESTListPath: "/m/{group_id}/p/{pack}/lib/breakers", RESTGetPath: "/m/{group_id}/p/{pack}/lib/breakers/{id}"},
 	"criblio_pack_lookups":                 {ImportIDFormat: "json:group_id,id,pack", RESTListPath: "/m/{group_id}/p/{pack}/system/lookups", RESTGetPath: "/m/{group_id}/p/{pack}/system/lookups/{id}"},

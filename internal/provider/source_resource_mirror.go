@@ -330,6 +330,10 @@ func (r *CollectorResource) ValidateConfig(ctx context.Context, req resource.Val
 	validateOneOfIdentity[CollectorModel](ctx, req, resp)
 }
 
+func (r *PackCollectorResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[PackCollectorModel](ctx, req, resp)
+}
+
 func (r *PackSourceResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
 	validateOneOfIdentity[PackSourceModel](ctx, req, resp)
 }

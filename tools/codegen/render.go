@@ -1185,7 +1185,7 @@ func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 		}
 	}
 	walk(resource.Fields)
-	if resource.StructName != "PackDestination" && resource.StructName != "PackSource" {
+	if resource.StructName != "PackDestination" && resource.StructName != "PackSource" && resource.StructName != "PackCollector" {
 		for _, variant := range resource.OneOfVariants {
 			walk(variant.Fields)
 		}
@@ -1471,7 +1471,7 @@ func discriminatorCaseValues(resource parser.ResourceDef, variant parser.OneOfVa
 		return nil
 	}
 	values := []string{variant.DiscriminatorValue}
-	if resource.StructName == "Collector" {
+	if resource.StructName == "Collector" || resource.StructName == "PackCollector" {
 		switch variant.TerraformName {
 		case "input_collector_azure_blob":
 			values = append(values, "azure_blob")

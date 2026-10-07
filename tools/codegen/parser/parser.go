@@ -396,7 +396,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		resource.Fields = fields
 	}
 	makeDirectDiscriminatorsOptionalComputed(resource.OneOfVariants)
-	if resource.StructName == "Collector" {
+	if resource.StructName == "Collector" || resource.StructName == "PackCollector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
 	if resource.StructName == "SearchDataset" {

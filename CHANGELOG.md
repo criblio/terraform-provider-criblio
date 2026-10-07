@@ -9,6 +9,7 @@ commit history, and tag-to-tag diffs.
 ## [Unreleased]
 
 ### Added
+- Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.
 - Added changelog update script to run within make generate.
 
 ### Changed

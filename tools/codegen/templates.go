@@ -732,7 +732,7 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	normalizeRoutesPayload(output)
 {{- end }}
-{{- if eq .StructName "Collector" }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 	output["type"] = "collection"
 {{- end }}
 	return json.Marshal(output)
@@ -915,7 +915,7 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
-{{- if eq .StructName "Collector" }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 	normalizeCollectorUnionValues(raw)
 	data, err := json.Marshal(raw)
 	if err != nil {
@@ -1134,7 +1134,7 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 	}
 }
 {{- end }}
-{{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource")) }}
+{{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource") (eq .StructName "PackCollector")) }}
 {{ range .OneOfVariants }}
 type {{ .ModelName }} struct {
 {{- range .Fields }}
@@ -2007,7 +2007,7 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		{{- if .CreateDisabledMessage }}
 		MarkdownDescription: {{ printf "%q" .CreateDisabledMessage }},
 		{{- else }}
-		MarkdownDescription: "{{ .StructName }} Resource",
+		MarkdownDescription: "{{ if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}",
 		{{- end }}
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
@@ -2062,14 +2062,14 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 {{- if .Create.ReadAfterWrite }}
-{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	_, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	_, err := r.api.Create(ctx, model)
 {{- end }}
 {{- else }}
-{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
@@ -2156,7 +2156,7 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
-{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Update(ctx, requestModel)
 {{- else }}
@@ -3090,12 +3090,12 @@ const docTemplate = `---
 page_title: "{{ resourceType . }} Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else }}{{ .StructName }} Resource{{ end }}
+  {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
 ---
 
 # {{ resourceType . }} (Resource)
 
-{{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else }}{{ .StructName }} Resource{{ end }}
+{{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
 
 ## Example Usage
 
