@@ -36,13 +36,17 @@ func TestPackCollector(t *testing.T) {
 							resource.TestCheckResourceAttr(name, "pack", packID),
 							resource.TestCheckResourceAttr(name, block+".collector.type", kind),
 							resource.TestCheckResourceAttr(name, block+".ttl", "4h"),
+							resource.TestCheckResourceAttr(name, "ttl", "4h"),
 							resource.TestCheckResourceAttrPair("data.criblio_pack_collector.test", "id", name, "id"),
 							resource.TestCheckResourceAttr("data.criblio_pack_collector.test", block+".collector.type", kind),
 						),
 					},
 					{
 						Config: config("8h"),
-						Check:  resource.TestCheckResourceAttr(name, block+".ttl", "8h"),
+						Check: resource.ComposeAggregateTestCheckFunc(
+							resource.TestCheckResourceAttr(name, block+".ttl", "8h"),
+							resource.TestCheckResourceAttr(name, "ttl", "8h"),
+						),
 					},
 					{
 						Config: config("8h"),
