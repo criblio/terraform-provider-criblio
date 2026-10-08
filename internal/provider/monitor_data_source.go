@@ -100,6 +100,16 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Computed:    true,
 				Description: `Human-readable name for the monitor.`,
 			},
+			"profile_ref": schema.SingleNestedAttribute{
+				Computed:    true,
+				Description: `Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited.`,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the profile.`,
+					},
+				},
+			},
 			"query": schema.MapNestedAttribute{
 				Computed:    true,
 				Description: `Monitor queries keyed by query label. Each query is inheritable from a linked profile.`,

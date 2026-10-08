@@ -24,6 +24,7 @@ type MonitorModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
+	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         types.List                            `tfsdk:"silence" json:"silence,omitempty"`
@@ -57,6 +58,7 @@ type MonitorResourceModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
+	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
@@ -90,6 +92,7 @@ type MonitorDataSourceModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
+	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
@@ -123,6 +126,7 @@ type MonitorAPIModel struct {
 	ID             *string  `json:"id,omitempty"`
 	ManagedBy      *string  `json:"managedBy,omitempty"`
 	Name           *string  `json:"name,omitempty"`
+	ProfileRef     any      `json:"$profileRef,omitempty"`
 	Query          any      `json:"query,omitempty"`
 	SearchMode     *string  `json:"searchMode,omitempty"`
 	Silence        []string `json:"silence,omitempty"`
@@ -163,6 +167,20 @@ func MonitorExprAttrTypes() map[string]attr.Type {
 		"right":        types.StringType,
 		"scalar":       types.Float64Type,
 		"text":         types.StringType,
+	}
+}
+
+type MonitorProfileRefModel struct {
+	ID types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type MonitorProfileRefAPIModel struct {
+	ID *string `json:"id,omitempty"`
+}
+
+func MonitorProfileRefAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id": types.StringType,
 	}
 }
 
@@ -579,6 +597,8 @@ func MonitorTerraformNameToAPIName(name string) string {
 		return prefix + "clear_delay"
 	case "fire_delay":
 		return prefix + "fire_delay"
+	case "profile_ref":
+		return prefix + "$profileRef"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -784,6 +804,13 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 		}
 		output["name"] = value
 	}
+	if !m.ProfileRef.IsNull() && !m.ProfileRef.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ProfileRef)
+		if err != nil {
+			return nil, fmt.Errorf("convert profile_ref to API value: %v", err)
+		}
+		output["$profileRef"] = value
+	}
 	if !m.Query.IsNull() && !m.Query.IsUnknown() {
 		value, err := MonitorTerraformValueToJSON(m.Query)
 		if err != nil {
@@ -825,21 +852,6 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert unit to API value: %v", err)
 		}
 		output["unit"] = value
-	}
-	if m.FiringCondition == nil && m.FiringConditionInheritable == nil && true {
-		return nil, fmt.Errorf("exactly one oneOf variant must be configured for firingCondition")
-	}
-	if m.FiringRule == nil && m.FiringRuleInheritable == nil && true {
-		return nil, fmt.Errorf("exactly one oneOf variant must be configured for firingRule")
-	}
-	if m.AetosMetadata == nil && m.MetadataInheritable == nil && true {
-		return nil, fmt.Errorf("exactly one oneOf variant must be configured for metadata")
-	}
-	if m.PriorityScalarValue == nil && m.PriorityInheritable == nil && true {
-		return nil, fmt.Errorf("exactly one oneOf variant must be configured for priority")
-	}
-	if m.TeamScalarValue == nil && m.TeamInheritable == nil && true {
-		return nil, fmt.Errorf("exactly one oneOf variant must be configured for team")
 	}
 	if m.AnomalyConfig != nil {
 		value, err := m.AnomalyConfig.terraformPayload()
@@ -1061,6 +1073,15 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 		m.Name = types.StringValue(*input.Name)
 	} else {
 		m.Name = types.StringNull()
+	}
+	if input.ProfileRef != nil {
+		value, err := MonitorAPIValueToTerraformValue(input.ProfileRef, types.ObjectType{AttrTypes: MonitorProfileRefAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert $profileRef from API value: %v", err)
+		}
+		m.ProfileRef = value.(types.Object)
+	} else {
+		m.ProfileRef = types.ObjectNull(MonitorProfileRefAttrTypes())
 	}
 	if input.Query != nil {
 		value, err := MonitorAPIValueToTerraformValue(input.Query, types.MapType{ElemType: types.ObjectType{AttrTypes: MonitorQueryAttrTypes()}})

@@ -125,6 +125,7 @@ resource "criblio_monitor" "example_outlier" {
 ### Optional
 
 - `description` (String) Optional human-readable description of the monitor.
+- `profile_ref` (Attributes) Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited. (see [below for nested schema](#nestedatt--profile_ref))
 - `search_mode` (String) Logs monitors only. Distinguishes authoring a fresh search ('new') from selecting a saved one ('saved'). Defaults to 'new' when omitted; ignored for non-logs monitor types.
 - `silence` (List of String) IDs of silence windows that suppress this monitor's alerts.
 - `template_params` (String) Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).
@@ -290,6 +291,13 @@ Optional:
 - `operation` (String) (Deprecated) Operation type for structured expressions.
 - `right` (String) Deprecated legacy right-hand query or expression label for a binary operation. Read only by legacy structured expressions.
 - `scalar` (Number) Deprecated legacy numeric scalar for a query-scalar binary operation. Read only by legacy structured expressions.
+
+<a id="nestedatt--profile_ref"></a>
+### Nested Schema for `profile_ref`
+
+Required:
+
+- `id` (String) Unique identifier for the profile.
 
 <a id="nestedatt--query"></a>
 ### Nested Schema for `query`
