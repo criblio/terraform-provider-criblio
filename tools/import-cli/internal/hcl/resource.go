@@ -40,7 +40,10 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 	return &ResourceBlockOptions{
 		SkipNullAttributes:      true,
 		SkipEmptyListAttributes: true,
-		SkipPruneEmptyListsFor:  map[string][]string{"criblio_pack": {"tags"}},
+		SkipPruneEmptyListsFor: map[string][]string{
+			"criblio_pack":             {"tags"},
+			"criblio_search_dashboard": {"elements"},
+		},
 		AlwaysEmitEmptyListsFor: map[string][]string{
 			"criblio_project":                 {"subscriptions", "destinations"},
 			"criblio_search_dataset_ruleset":  {"rules"},
@@ -52,6 +55,7 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_pipeline":         {"conf"},
 			"criblio_pack_pipeline":    {"conf"},
 			"criblio_project_pipeline": {"conf"},
+			"criblio_search_dashboard": {"groups"},
 		},
 	}
 }

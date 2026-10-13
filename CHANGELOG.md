@@ -16,6 +16,8 @@ commit history, and tag-to-tag diffs.
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
 
 ### Fixed
+- Allowed export discovery to continue when local_search list endpoints return HTTP 500 with "No workers registered".
+- Preserved metric dashboard search sources, datasets, step strategies, query builder settings, and input variants during API updates, reads, and imports.
 - Fixed configured TTL updates in `criblio_collector` and `criblio_pack_collector` while retaining existing behavior for omitted TTL and other collector fields.
 - Retried HTTP 429 responses using server-provided `Retry-After` delays up to 60 seconds, including Config Helper admission throttling during bulk group and fleet operations, while preserving command cancellation and bounding cumulative import CLI retry waits.
 - Excluded the internal `metrics_ingest` pipeline from import CLI exports.

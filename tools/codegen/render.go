@@ -1832,6 +1832,13 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func curatedExampleUsage(resource parser.ResourceDef) (string, bool) {
+	if resource.TypeName == "criblio_search_dashboard" {
+		content, err := readRepoFile(filepath.Join("examples", "resources", resource.TypeName, "metric.tf"))
+		if err != nil {
+			return "", false
+		}
+		return strings.TrimSpace(string(content)), true
+	}
 	if resource.TypeName == "criblio_search_dataset_ruleset" || resource.TypeName == "criblio_search_datatype" {
 		content, err := readRepoFile(filepath.Join("examples", "resources", resource.TypeName, "resource.tf"))
 		if err != nil {

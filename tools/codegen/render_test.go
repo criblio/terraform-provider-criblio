@@ -28,6 +28,18 @@ func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
 	}
 }
 
+func TestSearchDashboardExampleIncludesMetricQuery(t *testing.T) {
+	resource := parser.ResourceDef{TypeName: "criblio_search_dashboard"}
+	example := exampleUsage(resource)
+	for _, expected := range []string{
+		"search_query_metric", "customerMetricsPromql", "step_strategy", "builder", "variant",
+	} {
+		if !strings.Contains(example, expected) {
+			t.Errorf("dashboard example is missing %s", expected)
+		}
+	}
+}
+
 func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	resources := parseFixture(t)
 	ignored, err := readIgnoreFile(filepath.Join("testdata", ".codegen-ignore"))

@@ -1974,12 +1974,47 @@ actions:
         alias:
           type: string
           x-terraform-optional-computed: true
+        builder:
+          $ref: "#/components/schemas/MetricVisualQueryBuilder"
+          x-terraform-optional-computed: true
+        datasetId:
+          type: string
+          x-terraform-optional-computed: true
+        enabled:
+          type: boolean
+          x-terraform-optional-computed: true
         localId:
           type: string
+          x-terraform-optional-computed: true
+        mode:
+          $ref: "#/components/schemas/MetricQueryMode"
           x-terraform-optional-computed: true
         query:
           type: string
           x-terraform-optional-computed: true
+        showPromqlPreview:
+          type: boolean
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.MetricVisualQueryBuilder.properties"
+    update:
+      agg:
+        x-terraform-optional-computed: true
+      filters:
+        x-terraform-optional-computed: true
+      groupBy:
+        x-terraform-optional-computed: true
+      metric:
+        x-terraform-optional-computed: true
+      range:
+        x-terraform-optional-computed: true
+  - target: "$.components.schemas.MetricLabelFilter.properties"
+    update:
+      k:
+        x-terraform-optional-computed: true
+      op:
+        x-terraform-optional-computed: true
+      v:
+        x-terraform-optional-computed: true
   - target: "$.components.schemas"
     update:
       DashboardElementVisualization:
@@ -2048,6 +2083,9 @@ actions:
             type: string
             x-terraform-optional-computed: true
           type:
+            type: string
+            x-terraform-optional-computed: true
+          variant:
             type: string
             x-terraform-optional-computed: true
       DashboardElementMarkdown:
@@ -2137,8 +2175,14 @@ actions:
       SearchQueryMetric:
         type: object
         properties:
+          datasetId:
+            type: string
+            x-terraform-optional-computed: true
           earliest:
             $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          expectedOutputType:
+            $ref: "#/components/schemas/ExpectedOutputType"
             x-terraform-optional-computed: true
           latest:
             $ref: "#/components/schemas/SearchDashboardRelativeTime"
@@ -2148,8 +2192,35 @@ actions:
             items:
               $ref: "#/components/schemas/PanelQueryDefinition"
             x-terraform-optional-computed: true
+          source:
+            $ref: "#/components/schemas/MetricSearchSource"
+            x-terraform-optional-computed: true
+          stepStrategy:
+            $ref: "#/components/schemas/SearchDashboardMetricStepStrategy"
+            x-terraform-optional-computed: true
+          timezone:
+            type: string
+            x-terraform-optional-computed: true
           type:
             type: string
+            x-terraform-optional-computed: true
+      SearchDashboardMetricStepStrategy:
+        type: object
+        properties:
+          step:
+            type: number
+            description: Fixed PromQL query step in seconds, used when type is fixed.
+            x-terraform-optional-computed: true
+          targetPoints:
+            type: number
+            description: Desired maximum chart point count, used when type is auto.
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            description: Step resolution strategy, either auto or fixed.
+            enum:
+              - auto
+              - fixed
             x-terraform-optional-computed: true
       SearchDashboardRelativeTime:
         type: object
