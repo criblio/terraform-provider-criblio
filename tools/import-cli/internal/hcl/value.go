@@ -447,6 +447,24 @@ func attrToValue(av attr.Value, path string, sensitive bool, opts *Options) (Val
 			return Value{Kind: KindNull}, nil
 		}
 		return Value{Kind: KindNumber, Number: v.ValueFloat64()}, nil
+	case types.Number:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		return Value{Kind: KindExpression, Expr: v.ValueBigFloat().Text('f', -1)}, nil
+	case types.Tuple:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		list := make([]Value, 0, len(v.Elements()))
+		for index, element := range v.Elements() {
+			converted, err := attrToValue(element, path+fmt.Sprintf("[%d]", index), false, opts)
+			if err != nil {
+				return Value{}, err
+			}
+			list = append(list, converted)
+		}
+		return Value{Kind: KindList, List: list}, nil
 	case types.List:
 		if v.IsNull() || v.IsUnknown() {
 			return Value{Kind: KindNull}, nil

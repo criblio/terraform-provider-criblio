@@ -37,6 +37,7 @@ data "criblio_pack" "my_pack" {
 ### Read-Only
 
 - `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+- `tags` (Dynamic) Pack tags from pack settings, including custom keys and values alongside predefined tag fields.
 
 <a id="nestedatt--items"></a>
 ### Nested Schema for `items`

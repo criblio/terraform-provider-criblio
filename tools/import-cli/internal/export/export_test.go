@@ -36,6 +36,55 @@ func TestToResourceItems_empty_results(t *testing.T) {
 	assert.Empty(t, result.Items)
 }
 
+func TestToResourceItemsPackCustomTags(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Header().Set("Content-Type", "application/json")
+		switch request.URL.Path {
+		case "/api/v1/m/default/packs/sample-pack":
+			_, err := writer.Write([]byte(`{"items":[{"id":"sample-pack","version":"1.0.0","tags":{"streamtags":["inventory-label"]}}]}`))
+			require.NoError(t, err)
+		case "/api/v1/m/default/p/sample-pack/pack/settings":
+			_, err := writer.Write([]byte(`{"items":[{"id":"settings","package":{"tags":{"streamtags":["ui-label"],"ManagedByTFE":"true","product_id":"001234","used_for":"non_prod"}}}]}`))
+			require.NoError(t, err)
+		default:
+			http.NotFound(writer, request)
+		}
+	}))
+	defer server.Close()
+	client := &importclient.Client{REST: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}
+	result, err := ToResourceItems(context.Background(), client, buildTestRegistry(t), []discovery.Result{{
+		TypeName: "criblio_pack", Count: 1, InventoryComplete: true,
+		Identifiers: []map[string]string{{"group_id": "default", "id": "sample-pack"}},
+	}}, []string{"default"}, nil, 1, false, IncludeOverride{}, nil)
+	require.NoError(t, err)
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+	tags := result.Items[0].Attrs["tags"].Map
+	assert.Equal(t, "ui-label", tags["streamtags"].List[0].String)
+	assert.Equal(t, "true", tags["ManagedByTFE"].String)
+	assert.Equal(t, "001234", tags["product_id"].String)
+	assert.Equal(t, "non_prod", tags["used_for"].String)
+	assert.NotContains(t, tags, "managed_by_tfe")
+	assert.NotContains(t, tags, "custom")
+	assert.NotContains(t, tags, "domain")
+	assert.NotContains(t, result.Items[0].Attrs, "custom_tags")
+}
+
+func TestFlattenPackItemsPreservesDynamicTags(t *testing.T) {
+	tags := hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{"ManagedByTFE": {Kind: hcl.KindString, String: "true"}}}
+	attrs := map[string]hcl.Value{
+		"tags": tags,
+		"items": {Kind: hcl.KindList, List: []hcl.Value{{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"display_name": {Kind: hcl.KindString, String: "Sample"},
+			"tags":         {Kind: hcl.KindMap, Map: map[string]hcl.Value{"domain": {Kind: hcl.KindList}}},
+		}}}},
+	}
+	flattenResourceItemsToTopLevel("criblio_pack", attrs)
+	assert.Equal(t, tags, attrs["tags"])
+	assert.Equal(t, "Sample", attrs["display_name"].String)
+	assert.NotContains(t, attrs, "items")
+}
+
 func TestToResourceItemsSkipsSystemManagedSecret(t *testing.T) {
 	reg := buildTestRegistry(t)
 	groupIDs := []string{"default", "criblcon-demo", "default_fleet"}

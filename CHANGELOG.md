@@ -9,6 +9,7 @@ commit history, and tag-to-tag diffs.
 ## [Unreleased]
 
 ### Added
+- Added support for custom keys and values in `criblio_pack.tags`, alongside predefined tag fields.
 - Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.
 - Added changelog update script to run within make generate.
 

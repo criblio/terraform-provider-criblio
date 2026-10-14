@@ -43,6 +43,14 @@ func flattenItemsListToTopLevel(attrs map[string]hcl.Value) {
 	delete(attrs, "items")
 }
 
+func flattenResourceItemsToTopLevel(typeName string, attrs map[string]hcl.Value) {
+	tags, hasTags := attrs["tags"]
+	flattenItemsListToTopLevel(attrs)
+	if typeName == "criblio_pack" && hasTags && !tags.IsNull() {
+		attrs["tags"] = tags
+	}
+}
+
 // filterAttrsBySchema removes from attrs any key not in the provider model's schema (tfsdk attribute names).
 // Ensures generated HCL only includes supported attributes; unsupported fields are ignored.
 func filterAttrsBySchema(attrs map[string]hcl.Value, modelTypeName string) {

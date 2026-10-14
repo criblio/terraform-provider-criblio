@@ -41,7 +41,7 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 		return nil, fmt.Sprintf("%s %v: model to value: %s", r.TypeName, idMap, sanitizeConvertError(attrErr))
 	}
 	if flattenItemsToTopLevelTypes[r.TypeName] {
-		flattenItemsListToTopLevel(attrs)
+		flattenResourceItemsToTopLevel(r.TypeName, attrs)
 	}
 	if r.TypeName == "criblio_pipeline" || r.TypeName == "criblio_pack_pipeline" || r.TypeName == "criblio_project_pipeline" {
 		ensurePipelineConfForExport(attrs)
@@ -69,9 +69,6 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	}
 	if r.TypeName == "criblio_notification" || r.TypeName == "criblio_search_dashboard" {
 		pruneNotificationTargetConfigs(attrs)
-	}
-	if r.TypeName == "criblio_pack" {
-		custom.ApplyPackDefaults(attrs)
 	}
 	if r.TypeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
@@ -286,7 +283,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		return fmt.Errorf("model to value: %w", attrErr)
 	}
 	if flattenItemsToTopLevelTypes[typeName] {
-		flattenItemsListToTopLevel(attrs)
+		flattenResourceItemsToTopLevel(typeName, attrs)
 	}
 	if typeName == "criblio_pack" {
 		delete(attrs, "exports")
@@ -314,9 +311,6 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	if typeName == "criblio_notification" || typeName == "criblio_search_dashboard" {
 		pruneNotificationTargetConfigs(attrs)
-	}
-	if typeName == "criblio_pack" {
-		custom.ApplyPackDefaults(attrs)
 	}
 	if typeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)

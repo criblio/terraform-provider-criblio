@@ -19,11 +19,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/dynamicplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -31,6 +32,7 @@ import (
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &PackResource{}
 var _ resource.ResourceWithImportState = &PackResource{}
+var _ resource.ResourceWithUpgradeState = &PackResource{}
 
 func NewPackResource() resource.Resource {
 	return &PackResource{}
@@ -59,7 +61,7 @@ type PackResourceModel struct {
 	Outputs              types.Float64     `tfsdk:"outputs"`
 	Source               types.String      `tfsdk:"source"`
 	Spec                 types.String      `tfsdk:"spec"`
-	Tags                 types.Object      `tfsdk:"tags"`
+	Tags                 types.Dynamic     `tfsdk:"tags"`
 	Version              types.String      `tfsdk:"version"`
 }
 
@@ -69,6 +71,7 @@ func (r *PackResource) Metadata(ctx context.Context, req resource.MetadataReques
 
 func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Version:             1,
 		MarkdownDescription: "Pack Resource",
 		Attributes: map[string]schema.Attribute{
 			"allow_custom_functions": schema.BoolAttribute{
@@ -247,39 +250,14 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:    true,
 				Description: `body string optional Specify a branch, tag or a semver spec`,
 			},
-			"tags": schema.SingleNestedAttribute{
+			"tags": schema.DynamicAttribute{
 				Optional: true,
 				Computed: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.Dynamic{
+					dynamicplanmodifier.UseStateForUnknown(),
 				},
-				Attributes: map[string]schema.Attribute{
-					"data_type": schema.ListAttribute{
-						Optional:    true,
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Pack data_type tags (from pack metadata).`,
-					},
-					"domain": schema.ListAttribute{
-						Optional:    true,
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Pack domain tags (from pack metadata).`,
-					},
-					"streamtags": schema.ListAttribute{
-						Optional:    true,
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Pack streamtags (from pack metadata).`,
-					},
-					"technology": schema.ListAttribute{
-						Optional:    true,
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Pack technology tags (from pack metadata).`,
-					},
-				},
-				Description: `Pack tags (from pack metadata). Changes are reflected in state from the API; no replacement.`,
+				Validators:  []validator.Dynamic{packTagsValidator{}},
+				Description: "Pack tags with arbitrary case-sensitive keys. Built-in data_type, domain, streamtags, and technology fields remain string lists; other keys accept JSON-compatible values. Changes use pack/settings.",
 			},
 			"version": schema.StringAttribute{
 				Optional: true,
@@ -314,10 +292,11 @@ func (r *PackResource) Configure(ctx context.Context, req resource.ConfigureRequ
 }
 
 type packTagsAPI struct {
-	DataType   []string `json:"dataType,omitempty"`
-	Domain     []string `json:"domain,omitempty"`
-	Streamtags []string `json:"streamtags,omitempty"`
-	Technology []string `json:"technology,omitempty"`
+	Raw        map[string]any `json:"-"`
+	DataType   []string       `json:"dataType,omitempty"`
+	Domain     []string       `json:"domain,omitempty"`
+	Streamtags []string       `json:"streamtags,omitempty"`
+	Technology []string       `json:"technology,omitempty"`
 }
 
 type packAPIModel struct {
@@ -419,7 +398,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		}
 	}
 
-	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data); err != nil {
+	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data, cfg.Tags); err != nil {
 		resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", err))
 		return
 	}
@@ -447,6 +426,7 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	savedAuthor, savedDesc, savedDisplay, savedVersion := data.Author, data.Description, data.DisplayName, data.Version
+	savedTags := data.Tags
 	if err := r.refreshPackState(ctx, data); err != nil {
 		if restclient.IsNotFound(err) {
 			resp.State.RemoveResource(ctx)
@@ -455,6 +435,7 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+	data.Tags = packTagsForRead(ctx, data.Tags, savedTags)
 	if !savedAuthor.IsNull() && !savedAuthor.IsUnknown() {
 		data.Author = savedAuthor
 	}
@@ -516,7 +497,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		}
 	}
 
-	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data); err != nil {
+	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data, cfg.Tags); err != nil {
 		resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", err))
 		return
 	}
@@ -581,6 +562,16 @@ func (r *PackResource) refreshPackState(ctx context.Context, data *PackResourceM
 	}
 	if apiModel == nil {
 		return fmt.Errorf("response envelope contained no items")
+	}
+	settingsTags, found, err := readPackSettingsTags(ctx, r.client, data.GroupID.ValueString(), r.effectivePackID(ctx, data))
+	if err != nil {
+		return err
+	}
+	if found {
+		apiModel.Tags, err = decodePackTags(settingsTags)
+		if err != nil {
+			return err
+		}
 	}
 	data.applyPackAPIModel(apiModel)
 	return nil
@@ -760,7 +751,7 @@ func (r *PackResource) patchPackByIDWithSourceForm(ctx context.Context, groupID,
 	return &apiModel, nil
 }
 
-func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID string, data *PackResourceModel) error {
+func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID string, data *PackResourceModel, configuredTags types.Dynamic) error {
 	displayName := data.ID.ValueString()
 	if !data.DisplayName.IsNull() && !data.DisplayName.IsUnknown() && data.DisplayName.ValueString() != "" {
 		displayName = data.DisplayName.ValueString()
@@ -771,10 +762,21 @@ func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID st
 	} else if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
 		version = data.Items[0].Version.ValueString()
 	}
-	tags, err := tagsAPIMap(ctx, data.Tags)
+	remoteTags, found, err := readPackSettingsTags(ctx, r.client, groupID, packID)
 	if err != nil {
 		return err
 	}
+	if !found {
+		remoteTags, err = tagsAPIMap(ctx, data.Tags)
+		if err != nil {
+			return err
+		}
+	}
+	configured, err := tagsAPIMap(ctx, configuredTags)
+	if err != nil {
+		return err
+	}
+	tags := mergePackSettingsTags(remoteTags, configured)
 	packageObj := map[string]any{
 		"displayName": displayName,
 		"tags":        tags,
@@ -877,63 +879,15 @@ func packInstallTagsFromAPI(tags *packTagsAPI) *packInstallInfoTags {
 	}
 }
 
-func packRequestBodyTagsAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"data_type":  types.ListType{ElemType: types.StringType},
-		"domain":     types.ListType{ElemType: types.StringType},
-		"streamtags": types.ListType{ElemType: types.StringType},
-		"technology": types.ListType{ElemType: types.StringType},
-	}
-}
-
-func packRequestBodyTagsObjectFromAPI(tags *packTagsAPI) types.Object {
-	if tags == nil {
-		return types.ObjectNull(packRequestBodyTagsAttrTypes())
-	}
-	return types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
-		"data_type":  types.ListValueMust(types.StringType, stringAttrValues(tags.DataType)),
-		"domain":     types.ListValueMust(types.StringType, stringAttrValues(tags.Domain)),
-		"streamtags": types.ListValueMust(types.StringType, stringAttrValues(tags.Streamtags)),
-		"technology": types.ListValueMust(types.StringType, stringAttrValues(tags.Technology)),
-	})
-}
-
-func packTagsAPIFromTF(ctx context.Context, tags types.Object) (*packTagsAPI, error) {
-	if tags.IsNull() || tags.IsUnknown() {
+func packTagsAPIFromTF(ctx context.Context, tags types.Dynamic) (*packTagsAPI, error) {
+	if tags.IsNull() || tags.IsUnknown() || tags.IsUnderlyingValueUnknown() {
 		return nil, nil
 	}
-	var model packRequestBodyTags
-	diags := tags.As(ctx, &model, basetypes.ObjectAsOptions{})
-	if diags.HasError() {
-		return nil, fmt.Errorf("convert pack tags: %s", diags.Errors()[0].Summary())
-	}
-	return &packTagsAPI{
-		DataType:   stringSliceFromList(model.DataType),
-		Domain:     stringSliceFromList(model.Domain),
-		Streamtags: stringSliceFromList(model.Streamtags),
-		Technology: stringSliceFromList(model.Technology),
-	}, nil
-}
-
-func tagsAPIMap(ctx context.Context, tags types.Object) (map[string]any, error) {
-	out := map[string]any{
-		"dataType":   []string{},
-		"domain":     []string{},
-		"streamtags": []string{},
-		"technology": []string{},
-	}
-	model, err := packTagsAPIFromTF(ctx, tags)
-	if err != nil {
+	values, err := tagsAPIMap(ctx, tags)
+	if err != nil || values == nil {
 		return nil, err
 	}
-	if model == nil {
-		return out, nil
-	}
-	out["dataType"] = nonNilStringSlice(model.DataType)
-	out["domain"] = nonNilStringSlice(model.Domain)
-	out["streamtags"] = nonNilStringSlice(model.Streamtags)
-	out["technology"] = nonNilStringSlice(model.Technology)
-	return out, nil
+	return decodePackTags(values)
 }
 
 func stringValuesFromSlice(values []string) []types.String {
@@ -1141,77 +1095,6 @@ func preservePackPlan(ctx context.Context, data *PackResourceModel, plan types.O
 	if !planData.Version.IsNull() && !planData.Version.IsUnknown() {
 		data.Version = planData.Version
 	}
-}
-
-func preservePackTags(ctx context.Context, apiTags, planTags types.Object) types.Object {
-	if planTags.IsNull() || planTags.IsUnknown() {
-		return concretePackTags(ctx, apiTags)
-	}
-
-	var planned packRequestBodyTags
-	if diags := planTags.As(ctx, &planned, basetypes.ObjectAsOptions{}); diags.HasError() {
-		return concretePackTags(ctx, apiTags)
-	}
-
-	concrete := concretePackTags(ctx, apiTags)
-	var merged packRequestBodyTags
-	if diags := concrete.As(ctx, &merged, basetypes.ObjectAsOptions{}); diags.HasError() {
-		return concrete
-	}
-
-	if !planned.DataType.IsNull() && !planned.DataType.IsUnknown() {
-		merged.DataType = planned.DataType
-	}
-	if !planned.Domain.IsNull() && !planned.Domain.IsUnknown() {
-		merged.Domain = planned.Domain
-	}
-	if !planned.Streamtags.IsNull() && !planned.Streamtags.IsUnknown() {
-		merged.Streamtags = planned.Streamtags
-	}
-	if !planned.Technology.IsNull() && !planned.Technology.IsUnknown() {
-		merged.Technology = planned.Technology
-	}
-
-	return types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
-		"data_type":  merged.DataType,
-		"domain":     merged.Domain,
-		"streamtags": merged.Streamtags,
-		"technology": merged.Technology,
-	})
-}
-
-func concretePackTags(ctx context.Context, tags types.Object) types.Object {
-	empty := types.ListValueMust(types.StringType, nil)
-	model := packRequestBodyTags{
-		DataType:   empty,
-		Domain:     empty,
-		Streamtags: empty,
-		Technology: empty,
-	}
-	if !tags.IsNull() && !tags.IsUnknown() {
-		var decoded packRequestBodyTags
-		if diags := tags.As(ctx, &decoded, basetypes.ObjectAsOptions{}); !diags.HasError() {
-			if !decoded.DataType.IsNull() && !decoded.DataType.IsUnknown() {
-				model.DataType = decoded.DataType
-			}
-			if !decoded.Domain.IsNull() && !decoded.Domain.IsUnknown() {
-				model.Domain = decoded.Domain
-			}
-			if !decoded.Streamtags.IsNull() && !decoded.Streamtags.IsUnknown() {
-				model.Streamtags = decoded.Streamtags
-			}
-			if !decoded.Technology.IsNull() && !decoded.Technology.IsUnknown() {
-				model.Technology = decoded.Technology
-			}
-		}
-	}
-
-	return types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
-		"data_type":  model.DataType,
-		"domain":     model.Domain,
-		"streamtags": model.Streamtags,
-		"technology": model.Technology,
-	})
 }
 
 func (r *PackResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
