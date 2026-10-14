@@ -3618,9 +3618,12 @@ actions:
         message:
           type: string
           description: Message template for the notification.
+        trigger:
+          type: string
+          description: Custom expression evaluated against Search results when triggerType is custom. Filters notification matches without removing saved query results.
         triggerType:
           type: string
-          description: Type of trigger.
+          description: Type of trigger. Use custom to evaluate trigger against Search results, or resultsCount to compare the number of results.
         triggerComparator:
           type: string
           description: Comparison operator.

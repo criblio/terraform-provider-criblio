@@ -9,9 +9,11 @@ commit history, and tag-to-tag diffs.
 ## [Unreleased]
 
 ### Added
+- Added `conf.trigger` for custom Search notification conditions in notifications and scheduled dashboard notifications, allowing saved results to be retained while alerts remain selective.
 - Added support for custom keys and values in `criblio_pack.tags`, alongside predefined tag fields.
 - Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.
 - Added changelog update script to run within make generate.
+- Added metrics search support in search dashboards. (#234).
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.

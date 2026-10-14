@@ -60,7 +60,8 @@ Optional:
 
 - `saved_query_id` (String) ID of the saved query this notification is associated with.
 - `message` (String) Message template for the notification.
-- `trigger_type` (String) Type of trigger.
+- `trigger` (String) Custom expression evaluated against Search results when triggerType is custom. Filters notification matches without removing saved query results.
+- `trigger_type` (String) Type of trigger. Use custom to evaluate trigger against Search results, or resultsCount to compare the number of results.
 - `trigger_comparator` (String) Comparison operator.
 - `trigger_count` (Number) Threshold count for the trigger.
 - `name` (String) Input or source ID for Stream notifications.
