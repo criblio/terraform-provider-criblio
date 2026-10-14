@@ -46,10 +46,3 @@ type packInstallInfoTags struct {
 	Streamtags []types.String `tfsdk:"streamtags"`
 	Technology []types.String `tfsdk:"technology"`
 }
-
-type packRequestBodyTags struct {
-	DataType   types.List `tfsdk:"data_type"`
-	Domain     types.List `tfsdk:"domain"`
-	Streamtags types.List `tfsdk:"streamtags"`
-	Technology types.List `tfsdk:"technology"`
-}

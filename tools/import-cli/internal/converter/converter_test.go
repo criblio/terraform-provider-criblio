@@ -157,6 +157,55 @@ func TestConvertRawItemPackUsesTerraformTagsAsJSONFallback(t *testing.T) {
 	assert.Equal(t, "4.10.0", attrs["min_log_stream_version"].String)
 }
 
+func TestConvertPackCustomTagsPreservesKeys(t *testing.T) {
+	entry := registry.Entry{
+		TypeName: "criblio_pack", ModelTypeName: "PackResourceModel", RESTGetPath: "/m/{group_id}/packs/{id}",
+	}
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Header().Set("Content-Type", "application/json")
+		switch request.URL.Path {
+		case "/api/v1/m/default/packs/sample-pack":
+			_, err := writer.Write([]byte(`{"items":[{"id":"sample-pack","tags":{"streamtags":["inventory"]}}]}`))
+			require.NoError(t, err)
+		case "/api/v1/m/default/p/sample-pack/pack/settings":
+			_, err := writer.Write([]byte(`{"items":[{"id":"settings","package":{"tags":{"streamtags":["ui-label"],"ManagedByTFE":"TRUE","product_id":"001234","used_for":"non_prod","useCase":["analytics"]}}}]}`))
+			require.NoError(t, err)
+		default:
+			http.NotFound(writer, request)
+		}
+	}))
+	defer server.Close()
+	client := &importclient.Client{REST: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}
+	model, err := Convert(context.Background(), client, entry, map[string]string{"GroupID": "default", "ID": "sample-pack"})
+	require.NoError(t, err)
+	attrs, err := hcl.ModelToValue(model, nil)
+	require.NoError(t, err)
+	custom := attrs["tags"].Map
+	assert.Equal(t, "TRUE", custom["ManagedByTFE"].String)
+	assert.Equal(t, "001234", custom["product_id"].String)
+	assert.Equal(t, "non_prod", custom["used_for"].String)
+	assert.NotContains(t, custom, "managed_by_tfe")
+	assert.NotContains(t, attrs["tags"].Map, "use_case")
+	assert.Equal(t, "analytics", attrs["tags"].Map["useCase"].List[0].String)
+	assert.Equal(t, "ui-label", attrs["tags"].Map["streamtags"].List[0].String)
+	model, err = ConvertRawItemWithIdentifiers(entry, json.RawMessage(`{"id":"sample-pack","tags":{"ManagedByTFE":"true","product_id":"001234","streamtags":["raw-label"]}}`), map[string]string{"GroupID": "default", "ID": "sample-pack"})
+	require.NoError(t, err)
+	attrs, err = hcl.ModelToValue(model, nil)
+	require.NoError(t, err)
+	assert.Equal(t, "true", attrs["tags"].Map["ManagedByTFE"].String)
+	assert.Equal(t, "001234", attrs["tags"].Map["product_id"].String)
+	model, err = ConvertRawItemWithIdentifiers(entry, json.RawMessage(`{"id":"sample-pack","tags":{"Count":9007199254740993,"metadata":{"OwnerName":"team"},"values":["label",true,42]}}`), map[string]string{"GroupID": "default", "ID": "sample-pack"})
+	require.NoError(t, err)
+	attrs, err = hcl.ModelToValue(model, nil)
+	require.NoError(t, err)
+	assert.Equal(t, hcl.KindExpression, attrs["tags"].Map["Count"].Kind)
+	assert.Equal(t, "9007199254740993", attrs["tags"].Map["Count"].Expr)
+	assert.Equal(t, "team", attrs["tags"].Map["metadata"].Map["OwnerName"].String)
+	assert.Equal(t, "label", attrs["tags"].Map["values"].List[0].String)
+	assert.True(t, attrs["tags"].Map["values"].List[1].Bool)
+	assert.Equal(t, "42", attrs["tags"].Map["values"].List[2].Expr)
+}
+
 func TestConvertRawGroupPreservesCloudConfiguration(t *testing.T) {
 	e := registry.Entry{TypeName: "criblio_group", ModelTypeName: "GroupResourceModel"}
 	raw := json.RawMessage(`{

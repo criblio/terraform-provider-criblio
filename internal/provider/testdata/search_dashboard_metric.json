@@ -1,0 +1,75 @@
+{
+  "id": "pai7wm0s3",
+  "name": "GoatBot Metrics Starter",
+  "category": "metrics",
+  "description": "Starter metrics dashboard",
+  "groups": {},
+  "schedule": {"enabled": false},
+  "elements": [
+    {
+      "id": "wrkrunout1",
+      "type": "chart.line",
+      "title": "Worker run outcomes",
+      "layout": {"x": 0, "y": 4, "w": 12, "h": 4},
+      "config": {},
+      "search": {
+        "type": "metric",
+        "source": "customerMetricsPromql",
+        "datasetId": "metrics",
+        "expectedOutputType": "range",
+        "earliest": "-1h",
+        "latest": "now",
+        "timezone": "local",
+        "stepStrategy": {"type": "auto", "targetPoints": 240},
+        "queries": [
+          {
+            "localId": "A",
+            "alias": "Query A",
+            "enabled": true,
+            "mode": "code",
+            "datasetId": "metrics",
+            "showPromqlPreview": false,
+            "query": "sum by (issue, outcome) (goatbot_run_outcome_total)",
+            "builder": {
+              "metric": "goatbot_run_outcome_total",
+              "filters": [],
+              "agg": "sum",
+              "groupBy": ["issue", "outcome"],
+              "range": "5m"
+            }
+          },
+          {
+            "localId": "B",
+            "alias": "Query B",
+            "enabled": false,
+            "mode": "visual",
+            "datasetId": "metrics",
+            "showPromqlPreview": true,
+            "query": "sum(goatbot_poll_total{outcome=\"success\"})",
+            "builder": {
+              "metric": "goatbot_poll_total",
+              "filters": [{"k": "outcome", "op": "=", "v": "success"}],
+              "agg": "sum",
+              "groupBy": [],
+              "range": "5m"
+            }
+          }
+        ]
+      },
+      "titleAction": {
+        "label": "Open in Metrics",
+        "openInNewTab": true,
+        "url": "/search/metrics/explorer?dataset=metrics&dashboardId=pai7wm0s3&dashboardElementId=wrkrunout1"
+      }
+    },
+    {
+      "id": "w7nycno7l",
+      "inputId": "time",
+      "type": "input.timerange",
+      "variant": "input",
+      "title": "Time Range",
+      "layout": {"x": 0, "y": 0, "w": 4, "h": 2},
+      "config": {"defaultValue": {"earliest": "-1h", "latest": "now"}}
+    }
+  ]
+}

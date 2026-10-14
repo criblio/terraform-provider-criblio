@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -24,12 +25,9 @@ func TestPackTagsAllowsPartialConfiguration(t *testing.T) {
 		t.Fatalf("pack schema diagnostics: %v", response.Diagnostics)
 	}
 
-	tags := response.Schema.Attributes["tags"].(schema.SingleNestedAttribute)
-	for _, name := range []string{"data_type", "domain", "streamtags", "technology"} {
-		attribute := tags.Attributes[name].(schema.ListAttribute)
-		if attribute.Required || !attribute.Optional || !attribute.Computed {
-			t.Errorf("tags.%s must be optional and computed: %#v", name, attribute)
-		}
+	tags := response.Schema.Attributes["tags"].(schema.DynamicAttribute)
+	if !tags.Optional || !tags.Computed {
+		t.Fatalf("tags must remain optional and computed: %#v", tags)
 	}
 }
 
@@ -121,7 +119,7 @@ func TestPackPlanDecodeAllowsUnknownItems(t *testing.T) {
 		"outputs":                types.Float64Type,
 		"source":                 types.StringType,
 		"spec":                   types.StringType,
-		"tags":                   tagsType,
+		"tags":                   types.DynamicType,
 		"version":                types.StringType,
 	}
 	plan := types.ObjectValueMust(packTypes, map[string]attr.Value{
@@ -141,7 +139,7 @@ func TestPackPlanDecodeAllowsUnknownItems(t *testing.T) {
 		"outputs":                types.Float64Null(),
 		"source":                 types.StringValue("https://example.com/my-pack.crbl"),
 		"spec":                   types.StringNull(),
-		"tags":                   types.ObjectNull(tagsType.AttrTypes),
+		"tags":                   types.DynamicNull(),
 		"version":                types.StringNull(),
 	})
 
@@ -215,12 +213,15 @@ func TestPreservePackPlanResolvesUnknownTags(t *testing.T) {
 		Warnings:    jsontypes.NewNormalizedValue("null"),
 	})
 	planValues := plan.Attributes()
-	planValues["tags"] = types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
+	planValues["tags"] = types.DynamicValue(types.ObjectValueMust(map[string]attr.Type{
+		"data_type": types.ListType{ElemType: types.StringType}, "domain": types.ListType{ElemType: types.StringType},
+		"streamtags": types.ListType{ElemType: types.StringType}, "technology": types.ListType{ElemType: types.StringType},
+	}, map[string]attr.Value{
 		"data_type":  types.ListUnknown(types.StringType),
 		"domain":     types.ListValueMust(types.StringType, []attr.Value{types.StringValue("planned-domain")}),
 		"streamtags": types.ListValueMust(types.StringType, nil),
 		"technology": types.ListUnknown(types.StringType),
-	})
+	}))
 	plan = types.ObjectValueMust(plan.AttributeTypes(context.Background()), planValues)
 
 	data := &PackResourceModel{Tags: packRequestBodyTagsObjectFromAPI(&packTagsAPI{
@@ -232,28 +233,16 @@ func TestPreservePackPlanResolvesUnknownTags(t *testing.T) {
 
 	preservePackPlan(context.Background(), data, plan)
 
-	var tags packRequestBodyTags
-	if diags := data.Tags.As(context.Background(), &tags, basetypes.ObjectAsOptions{}); diags.HasError() {
-		t.Fatalf("decode preserved tags: %v", diags)
+	tags, err := tagsAPIMap(context.Background(), data.Tags)
+	if err != nil {
+		t.Fatalf("decode preserved tags: %v", err)
 	}
-	for name, value := range map[string]types.List{
-		"data_type": tags.DataType, "domain": tags.Domain, "streamtags": tags.Streamtags, "technology": tags.Technology,
-	} {
-		if value.IsNull() || value.IsUnknown() {
-			t.Errorf("tags.%s must be known after apply", name)
-		}
+	want := map[string]any{
+		"dataType": []any{"api-data-type"}, "domain": []any{"api-domain"},
+		"streamtags": []any{"api-streamtag"}, "technology": []any{"api-technology"},
 	}
-	if got := stringSliceFromList(tags.DataType); len(got) != 1 || got[0] != "api-data-type" {
-		t.Errorf("data_type = %#v, want API value", got)
-	}
-	if got := stringSliceFromList(tags.Domain); len(got) != 1 || got[0] != "planned-domain" {
-		t.Errorf("domain = %#v, want planned value", got)
-	}
-	if got := stringSliceFromList(tags.Streamtags); len(got) != 0 {
-		t.Errorf("streamtags = %#v, want planned empty list", got)
-	}
-	if got := stringSliceFromList(tags.Technology); len(got) != 1 || got[0] != "api-technology" {
-		t.Errorf("technology = %#v, want API value", got)
+	if !reflect.DeepEqual(tags, want) {
+		t.Fatalf("tags = %#v, want API tags %#v", tags, want)
 	}
 }
 
@@ -367,7 +356,7 @@ func packPlanObjectWithItems(t *testing.T, item packInstallInfo) types.Object {
 		"outputs":                types.Float64Type,
 		"source":                 types.StringType,
 		"spec":                   types.StringType,
-		"tags":                   tagsType,
+		"tags":                   types.DynamicType,
 		"version":                types.StringType,
 	}
 	itemValue := types.ObjectValueMust(itemType.AttrTypes, map[string]attr.Value{
@@ -404,7 +393,7 @@ func packPlanObjectWithItems(t *testing.T, item packInstallInfo) types.Object {
 		"outputs":                types.Float64Null(),
 		"source":                 types.StringNull(),
 		"spec":                   types.StringNull(),
-		"tags":                   types.ObjectNull(tagsType.AttrTypes),
+		"tags":                   types.DynamicNull(),
 		"version":                types.StringValue("1.0.1"),
 	})
 }

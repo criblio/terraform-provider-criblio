@@ -16,7 +16,7 @@ func (v Value) ToHCLExpr() string {
 		return strconv.Quote(v.Sensitive)
 	case KindNull:
 		return "null"
-	case KindList:
+	case KindList, KindTuple:
 		parts := make([]string, 0, len(v.List))
 		for _, el := range v.List {
 			parts = append(parts, el.ToHCLExpr())

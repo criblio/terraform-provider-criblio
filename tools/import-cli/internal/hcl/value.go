@@ -34,6 +34,8 @@ const (
 	// KindExpression is a raw Terraform expression emitted without quotes.
 	// Use sparingly when literal cty values cannot represent required HCL references.
 	KindExpression
+	// KindTuple preserves array element types without list homogenization.
+	KindTuple
 )
 
 // Value represents an HCL-compatible value that preserves null vs empty
@@ -88,12 +90,12 @@ func PruneEmptyLists(v Value) Value {
 		}
 		return Value{Kind: KindMap, Map: out}
 	}
-	if v.Kind == KindList {
+	if v.Kind == KindList || v.Kind == KindTuple {
 		list := make([]Value, len(v.List))
 		for i, el := range v.List {
 			list[i] = PruneEmptyLists(el)
 		}
-		return Value{Kind: KindList, List: list}
+		return Value{Kind: v.Kind, List: list}
 	}
 	return v
 }
@@ -124,7 +126,7 @@ func filterUrlsListItemsValue(v Value) Value {
 // Optional+Computed attributes written as null in config cause Terraform to show
 // "(known after apply)" and a perpetual diff; omitting them lets Terraform use state.
 func PruneNulls(v Value) Value {
-	if v.Kind != KindMap && v.Kind != KindList {
+	if v.Kind != KindMap && v.Kind != KindList && v.Kind != KindTuple {
 		return v
 	}
 	if v.Kind == KindMap {
@@ -141,14 +143,14 @@ func PruneNulls(v Value) Value {
 	for i, el := range v.List {
 		list[i] = PruneNulls(el)
 	}
-	return Value{Kind: KindList, List: list}
+	return Value{Kind: v.Kind, List: list}
 }
 
 // PruneNullPlaceholders removes null map entries, null list elements, and list
 // objects that become empty after their null fields are removed. It is intended
 // for exporter output where null placeholders are not valid configuration.
 func PruneNullPlaceholders(v Value) Value {
-	if v.Kind != KindMap && v.Kind != KindList {
+	if v.Kind != KindMap && v.Kind != KindList && v.Kind != KindTuple {
 		return v
 	}
 	if v.Kind == KindMap {
@@ -174,7 +176,7 @@ func PruneNullPlaceholders(v Value) Value {
 		}
 		list = append(list, child)
 	}
-	return Value{Kind: KindList, List: list}
+	return Value{Kind: v.Kind, List: list}
 }
 
 // Options configures conversion from Terraform models to HCL values.
@@ -447,6 +449,24 @@ func attrToValue(av attr.Value, path string, sensitive bool, opts *Options) (Val
 			return Value{Kind: KindNull}, nil
 		}
 		return Value{Kind: KindNumber, Number: v.ValueFloat64()}, nil
+	case types.Number:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		return Value{Kind: KindExpression, Expr: v.ValueBigFloat().Text('f', -1)}, nil
+	case types.Tuple:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		list := make([]Value, 0, len(v.Elements()))
+		for index, element := range v.Elements() {
+			converted, err := attrToValue(element, path+fmt.Sprintf("[%d]", index), false, opts)
+			if err != nil {
+				return Value{}, err
+			}
+			list = append(list, converted)
+		}
+		return Value{Kind: KindTuple, List: list}, nil
 	case types.List:
 		if v.IsNull() || v.IsUnknown() {
 			return Value{Kind: KindNull}, nil
@@ -832,7 +852,7 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 					used = append(used, varNames...)
 				}
 			}
-		case KindList:
+		case KindList, KindTuple:
 			for i := range v.List {
 				replaceInValue(&v.List[i], path+fmt.Sprintf("[%d]", i))
 			}
@@ -927,7 +947,7 @@ func ReplaceNonJSONStringsWithVariableRefs(attrs map[string]Value, resourceName 
 				v.String = ""
 				used = append(used, name)
 			}
-		case KindList:
+		case KindList, KindTuple:
 			for i := range v.List {
 				replaceInValue(&v.List[i], path+fmt.Sprintf("[%d]", i))
 			}
@@ -958,7 +978,7 @@ func CollectPlainVariableRefNames(attrs map[string]Value) []string {
 				seen[v.VarName] = true
 				names = append(names, v.VarName)
 			}
-		case KindList:
+		case KindList, KindTuple:
 			for _, el := range v.List {
 				collect(el)
 			}
@@ -1000,7 +1020,7 @@ func CollectSecretVariableNames(attrs map[string]Value) []string {
 					names = append(names, name)
 				}
 			}
-		case KindList:
+		case KindList, KindTuple:
 			for _, el := range v.List {
 				collect(el)
 			}

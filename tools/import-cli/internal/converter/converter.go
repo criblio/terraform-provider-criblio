@@ -11,6 +11,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
@@ -48,6 +49,31 @@ func Convert(ctx context.Context, client *importclient.Client, e registry.Entry,
 	raw, err := callRESTGetByID(ctx, client, e, requestParams)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", e.TypeName, err)
+	}
+	if e.TypeName == "criblio_pack" {
+		settings, settingsErr := restclient.Get[struct {
+			Package map[string]json.RawMessage `json:"package"`
+		}](ctx, client.REST, renderRESTPath("/m/{group_id}/p/{id}/pack/settings", restPathValues(requestParams)))
+		if settingsErr != nil && !restclient.IsNotFound(settingsErr) {
+			return nil, fmt.Errorf("%s: read pack settings: %w", e.TypeName, settingsErr)
+		}
+		if settingsErr == nil {
+			if settings == nil || settings.Package == nil {
+				return nil, fmt.Errorf("%s: pack settings response contained no package", e.TypeName)
+			}
+			var item map[string]json.RawMessage
+			if err := json.Unmarshal(raw, &item); err != nil {
+				return nil, err
+			}
+			item["tags"] = settings.Package["tags"]
+			if len(item["tags"]) == 0 || string(item["tags"]) == "null" {
+				item["tags"] = json.RawMessage(`{}`)
+			}
+			raw, err = json.Marshal(item)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 	converted, convErr := convertGeneratedModelFromRawItem(e, modelType, raw)
 	if convErr != nil {
@@ -175,6 +201,15 @@ func convertGeneratedModelFromRawItem(e registry.Entry, modelType reflect.Type, 
 	}
 	if err := populateGeneratedModel(modelVal.Elem(), values); err != nil {
 		return nil, fmt.Errorf("%s: populate generated model: %w", e.TypeName, err)
+	}
+	if pack, ok := modelVal.Interface().(*provider.PackResourceModel); ok {
+		if rawTags, exists := values["tags"]; exists {
+			tags, err := provider.PackTagsFromAPIJSON(rawTags)
+			if err != nil {
+				return nil, err
+			}
+			pack.Tags = tags
+		}
 	}
 	return modelVal.Interface(), nil
 }

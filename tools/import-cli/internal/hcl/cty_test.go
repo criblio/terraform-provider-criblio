@@ -71,6 +71,27 @@ func TestValueToCtyPreservesNullListElements(t *testing.T) {
 	require.True(t, objects.Index(cty.NumberIntVal(0)).GetAttr("optional").IsNull())
 }
 
+func TestValueToCtyPreservesTupleTypes(t *testing.T) {
+	input := Value{Kind: KindTuple, List: []Value{
+		{Kind: KindString, String: "label"},
+		{Kind: KindBool, Bool: true},
+		{Kind: KindNumber, Number: 42},
+		{Kind: KindNull},
+		{Kind: KindMap, Map: map[string]Value{"nullable": {Kind: KindNull}}},
+		{Kind: KindTuple},
+	}}
+	got, err := ValueToCty(input)
+	require.NoError(t, err)
+	want := cty.TupleVal([]cty.Value{
+		cty.StringVal("label"), cty.BoolVal(true), cty.NumberIntVal(42),
+		cty.NullVal(cty.DynamicPseudoType),
+		cty.ObjectVal(map[string]cty.Value{"nullable": cty.NullVal(cty.DynamicPseudoType)}),
+		cty.EmptyTupleVal,
+	})
+	require.True(t, got.RawEquals(want), "%#v", got)
+	require.Equal(t, `["label", true, 42, null, { nullable = null }, []]`, input.ToHCLExpr())
+}
+
 // Regression: search dashboard elements are a list of one-of maps (e.g. dashboard_element_input
 // vs dashboard_element_visualization). normalizeListOfMaps adds null for absent branches;
 // an extra PruneNulls on each element before ValueToCty removed those nulls and caused

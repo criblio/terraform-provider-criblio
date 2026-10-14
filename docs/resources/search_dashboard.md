@@ -13,13 +13,71 @@ SearchDashboard Resource
 ## Example Usage
 
 ```terraform
-resource "criblio_search_dashboard" "my_search_dashboard" {
+resource "criblio_search_dashboard" "metrics" {
+  id          = "metrics_starter"
+  name        = "Metrics Starter"
+  description = "Customer metrics dashboard"
+  groups      = {}
+
   elements = [
     {
+      dashboard_element_input = {
+        id       = "time-range"
+        input_id = "time"
+        type     = "input.timerange"
+        variant  = "input"
+        title    = "Time Range"
+        layout   = { x = 0, y = 0, w = 4, h = 2 }
+        config = {
+          defaultValue = jsonencode({ earliest = "-1h", latest = "now" })
+        }
+      }
+    },
+    {
+      dashboard_element_visualization = {
+        id     = "worker-outcomes"
+        type   = "chart.line"
+        title  = "Worker run outcomes"
+        layout = { x = 0, y = 2, w = 12, h = 4 }
+        config = {}
+        search = {
+          search_query_metric = {
+            type                 = "metric"
+            source               = "customerMetricsPromql"
+            dataset_id           = "metrics"
+            expected_output_type = "range"
+            earliest             = { str = "-1h" }
+            latest               = { str = "now" }
+            timezone             = "local"
+            step_strategy        = { type = "auto", target_points = 240 }
+            queries = [
+              {
+                local_id            = "A"
+                alias               = "Query A"
+                enabled             = true
+                mode                = "code"
+                dataset_id          = "metrics"
+                show_promql_preview = false
+                query               = "sum by (issue, outcome) (goatbot_run_outcome_total)"
+                builder = {
+                  metric   = "goatbot_run_outcome_total"
+                  filters  = []
+                  agg      = "sum"
+                  group_by = ["issue", "outcome"]
+                  range    = "5m"
+                }
+              }
+            ]
+          }
+        }
+        title_action = {
+          label           = "Open in Metrics"
+          open_in_new_tab = true
+          url             = "/search/metrics/explorer?dataset=metrics&dashboardId=metrics_starter&dashboardElementId=worker-outcomes"
+        }
+      }
     }
   ]
-  id = "search_activity_overview"
-  name = "Search Activity Overview"
 }
 ```
 
@@ -143,9 +201,14 @@ Optional:
 
 Optional:
 
+- `dataset_id` (String)
 - `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--earliest))
+- `expected_output_type` (String)
 - `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--latest))
 - `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries))
+- `source` (String)
+- `step_strategy` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--step_strategy))
+- `timezone` (String)
 - `type` (String)
 
 <a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries"></a>
@@ -156,8 +219,47 @@ Optional:
 Optional:
 
 - `alias` (String)
+- `builder` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder))
+- `dataset_id` (String)
+- `enabled` (Boolean)
 - `local_id` (String)
+- `mode` (String)
 - `query` (String)
+- `show_promql_preview` (Boolean)
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries--builder"></a>
+<a id="nestedatt--elements--dashboard_element--search--builder"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.queries.builder`
+
+Optional:
+
+- `agg` (String) Aggregation function to apply when deriving PromQL from the visual builder.
+- `filters` (Attributes List) Label filters applied to the selected metric before aggregation. (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder--filters))
+- `group_by` (List of String) Label names used to split the aggregate series.
+- `metric` (String) Customer metric name selected in the visual builder.
+- `range` (String) PromQL range-vector window used by rate-style visual queries. Defaults to <code>5m</code> when omitted.
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder--filters"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries--builder--filters"></a>
+<a id="nestedatt--elements--dashboard_element--search--builder--filters"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.queries.builder.filters`
+
+Optional:
+
+- `k` (String) Metric label name to filter.
+- `op` (String) PromQL label-match operator.
+- `v` (String) Label value or regular expression used by the filter.
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--step_strategy"></a>
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--step_strategy"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.step_strategy`
+
+Optional:
+
+- `step` (Number) Fixed PromQL query step in seconds, used when type is fixed.
+- `target_points` (Number) Desired maximum chart point count, used when type is auto.
+- `type` (String) Step resolution strategy, either auto or fixed.
 
 <a id="nestedatt--elements--dashboard_element_visualization--title_action"></a>
 <a id="nestedatt--elements--dashboard_element--title_action"></a>
@@ -186,6 +288,7 @@ Optional:
 - `search` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search))
 - `title` (String)
 - `type` (String)
+- `variant` (String)
 
 <a id="nestedatt--elements--dashboard_element"></a>
 ### Nested Schema for `elements.dashboard_element`

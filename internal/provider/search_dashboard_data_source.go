@@ -161,6 +161,9 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 										"search_query_metric": schema.SingleNestedAttribute{
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
+												"dataset_id": schema.StringAttribute{
+													Computed: true,
+												},
 												"earliest": schema.SingleNestedAttribute{
 													Computed: true,
 													Attributes: map[string]schema.Attribute{
@@ -171,6 +174,9 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 															Computed: true,
 														},
 													},
+												},
+												"expected_output_type": schema.StringAttribute{
+													Computed: true,
 												},
 												"latest": schema.SingleNestedAttribute{
 													Computed: true,
@@ -190,14 +196,91 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 															"alias": schema.StringAttribute{
 																Computed: true,
 															},
+															"builder": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"agg": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `Aggregation function to apply when deriving PromQL from the visual builder.`,
+																	},
+																	"filters": schema.ListNestedAttribute{
+																		Computed:    true,
+																		Description: `Label filters applied to the selected metric before aggregation.`,
+																		NestedObject: schema.NestedAttributeObject{
+																			Attributes: map[string]schema.Attribute{
+																				"k": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `Metric label name to filter.`,
+																				},
+																				"op": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `PromQL label-match operator.`,
+																				},
+																				"v": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `Label value or regular expression used by the filter.`,
+																				},
+																			},
+																		},
+																	},
+																	"group_by": schema.ListAttribute{
+																		Computed:    true,
+																		Description: `Label names used to split the aggregate series.`,
+																		ElementType: types.StringType,
+																	},
+																	"metric": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `Customer metric name selected in the visual builder.`,
+																	},
+																	"range": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `PromQL range-vector window used by rate-style visual queries. Defaults to <code>5m</code> when omitted.`,
+																	},
+																},
+															},
+															"dataset_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"enabled": schema.BoolAttribute{
+																Computed: true,
+															},
 															"local_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"mode": schema.StringAttribute{
 																Computed: true,
 															},
 															"query": schema.StringAttribute{
 																Computed: true,
 															},
+															"show_promql_preview": schema.BoolAttribute{
+																Computed: true,
+															},
 														},
 													},
+												},
+												"source": schema.StringAttribute{
+													Computed: true,
+												},
+												"step_strategy": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"step": schema.Float64Attribute{
+															Computed:    true,
+															Description: `Fixed PromQL query step in seconds, used when type is fixed.`,
+														},
+														"target_points": schema.Float64Attribute{
+															Computed:    true,
+															Description: `Desired maximum chart point count, used when type is auto.`,
+														},
+														"type": schema.StringAttribute{
+															Computed:    true,
+															Description: `Step resolution strategy, either auto or fixed.`,
+														},
+													},
+												},
+												"timezone": schema.StringAttribute{
+													Computed: true,
 												},
 												"type": schema.StringAttribute{
 													Computed: true,
@@ -345,6 +428,9 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 										"search_query_metric": schema.SingleNestedAttribute{
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
+												"dataset_id": schema.StringAttribute{
+													Computed: true,
+												},
 												"earliest": schema.SingleNestedAttribute{
 													Computed: true,
 													Attributes: map[string]schema.Attribute{
@@ -355,6 +441,9 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 															Computed: true,
 														},
 													},
+												},
+												"expected_output_type": schema.StringAttribute{
+													Computed: true,
 												},
 												"latest": schema.SingleNestedAttribute{
 													Computed: true,
@@ -374,14 +463,91 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 															"alias": schema.StringAttribute{
 																Computed: true,
 															},
+															"builder": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"agg": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `Aggregation function to apply when deriving PromQL from the visual builder.`,
+																	},
+																	"filters": schema.ListNestedAttribute{
+																		Computed:    true,
+																		Description: `Label filters applied to the selected metric before aggregation.`,
+																		NestedObject: schema.NestedAttributeObject{
+																			Attributes: map[string]schema.Attribute{
+																				"k": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `Metric label name to filter.`,
+																				},
+																				"op": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `PromQL label-match operator.`,
+																				},
+																				"v": schema.StringAttribute{
+																					Computed:    true,
+																					Description: `Label value or regular expression used by the filter.`,
+																				},
+																			},
+																		},
+																	},
+																	"group_by": schema.ListAttribute{
+																		Computed:    true,
+																		Description: `Label names used to split the aggregate series.`,
+																		ElementType: types.StringType,
+																	},
+																	"metric": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `Customer metric name selected in the visual builder.`,
+																	},
+																	"range": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `PromQL range-vector window used by rate-style visual queries. Defaults to <code>5m</code> when omitted.`,
+																	},
+																},
+															},
+															"dataset_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"enabled": schema.BoolAttribute{
+																Computed: true,
+															},
 															"local_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"mode": schema.StringAttribute{
 																Computed: true,
 															},
 															"query": schema.StringAttribute{
 																Computed: true,
 															},
+															"show_promql_preview": schema.BoolAttribute{
+																Computed: true,
+															},
 														},
 													},
+												},
+												"source": schema.StringAttribute{
+													Computed: true,
+												},
+												"step_strategy": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"step": schema.Float64Attribute{
+															Computed:    true,
+															Description: `Fixed PromQL query step in seconds, used when type is fixed.`,
+														},
+														"target_points": schema.Float64Attribute{
+															Computed:    true,
+															Description: `Desired maximum chart point count, used when type is auto.`,
+														},
+														"type": schema.StringAttribute{
+															Computed:    true,
+															Description: `Step resolution strategy, either auto or fixed.`,
+														},
+													},
+												},
+												"timezone": schema.StringAttribute{
+													Computed: true,
 												},
 												"type": schema.StringAttribute{
 													Computed: true,
@@ -394,6 +560,9 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 									Computed: true,
 								},
 								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"variant": schema.StringAttribute{
 									Computed: true,
 								},
 							},
@@ -438,10 +607,64 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 										"alias": schema.StringAttribute{
 											Computed: true,
 										},
+										"builder": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"agg": schema.StringAttribute{
+													Computed:    true,
+													Description: `Aggregation function to apply when deriving PromQL from the visual builder.`,
+												},
+												"filters": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Label filters applied to the selected metric before aggregation.`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"k": schema.StringAttribute{
+																Computed:    true,
+																Description: `Metric label name to filter.`,
+															},
+															"op": schema.StringAttribute{
+																Computed:    true,
+																Description: `PromQL label-match operator.`,
+															},
+															"v": schema.StringAttribute{
+																Computed:    true,
+																Description: `Label value or regular expression used by the filter.`,
+															},
+														},
+													},
+												},
+												"group_by": schema.ListAttribute{
+													Computed:    true,
+													Description: `Label names used to split the aggregate series.`,
+													ElementType: types.StringType,
+												},
+												"metric": schema.StringAttribute{
+													Computed:    true,
+													Description: `Customer metric name selected in the visual builder.`,
+												},
+												"range": schema.StringAttribute{
+													Computed:    true,
+													Description: `PromQL range-vector window used by rate-style visual queries. Defaults to <code>5m</code> when omitted.`,
+												},
+											},
+										},
+										"dataset_id": schema.StringAttribute{
+											Computed: true,
+										},
+										"enabled": schema.BoolAttribute{
+											Computed: true,
+										},
 										"local_id": schema.StringAttribute{
 											Computed: true,
 										},
+										"mode": schema.StringAttribute{
+											Computed: true,
+										},
 										"query": schema.StringAttribute{
+											Computed: true,
+										},
+										"show_promql_preview": schema.BoolAttribute{
 											Computed: true,
 										},
 									},

@@ -84,21 +84,6 @@ func pruneAppscopeConfig(v hcl.Value) hcl.Value {
 	return hcl.Value{Kind: hcl.KindList, List: list}
 }
 
-// ApplyPackDefaults sets required attribute defaults for criblio_pack so generated HCL
-// passes provider validation. Pack tags require "domain" key when tags is set.
-func ApplyPackDefaults(attrs map[string]hcl.Value) {
-	tags, ok := attrs["tags"]
-	if !ok || tags.Kind != hcl.KindMap || tags.Map == nil {
-		return
-	}
-	emptyList := hcl.Value{Kind: hcl.KindList, List: []hcl.Value{}}
-	cur, hasDomain := tags.Map["domain"]
-	if !hasDomain || cur.Kind == hcl.KindNull || (cur.Kind == hcl.KindList && cur.List == nil) {
-		tags.Map["domain"] = emptyList
-		attrs["tags"] = tags
-	}
-}
-
 // ApplyPackVarsDefaults fixes pack_vars attributes: args must be list of object (not JSON string);
 // id, description, lib, tags, type, value must not have extra JSON quotes (e.g. "\"test\"" -> "test").
 func ApplyPackVarsDefaults(attrs map[string]hcl.Value) {
