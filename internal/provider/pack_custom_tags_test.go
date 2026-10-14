@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -24,6 +25,70 @@ func mustPackTags(t *testing.T, raw string) types.Dynamic {
 	tags, err := PackTagsFromAPIJSON([]byte(raw))
 	require.NoError(t, err)
 	return tags
+}
+
+func TestPackCustomTagsCaseSensitiveKeys(t *testing.T) {
+	ctx := context.Background()
+	for _, raw := range []string{
+		`{"Domain":true,"Technology":{"vendor":"aws"},"Streamtags":42,"DataType":"custom"}`,
+		`{"domain":["observability"],"Domain":["custom"],"technology":["aws"],"Technology":false}`,
+	} {
+		t.Run(raw, func(t *testing.T) {
+			configured := mustPackTags(t, raw)
+			var validation validator.DynamicResponse
+			packTagsValidator{}.ValidateDynamic(ctx, validator.DynamicRequest{Path: path.Root("tags"), ConfigValue: configured}, &validation)
+			require.False(t, validation.Diagnostics.HasError(), "%v", validation.Diagnostics)
+			decoded, err := packTagsAPIFromTF(ctx, configured)
+			require.NoError(t, err)
+			require.True(t, configured.Equal(packRequestBodyTagsObjectFromAPI(decoded)))
+			var fromAPI packTagsAPI
+			require.NoError(t, json.Unmarshal([]byte(raw), &fromAPI))
+			require.True(t, configured.Equal(packRequestBodyTagsObjectFromAPI(&fromAPI)))
+		})
+	}
+	var decoded packTagsAPI
+	require.NoError(t, json.Unmarshal([]byte(`{"domain":["built-in"],"Domain":["custom"]}`), &decoded))
+	require.Equal(t, []string{"built-in"}, decoded.Domain)
+	require.Error(t, json.Unmarshal([]byte(`{"domain":true}`), &decoded))
+}
+
+func TestPackCustomTagsReadPreservesScalarDrift(t *testing.T) {
+	for _, test := range []struct {
+		name  string
+		prior string
+		api   string
+	}{
+		{"boolean", `{"ManagedByTFE":"true"}`, `{"ManagedByTFE":true}`},
+		{"number", `{"product_id":"42"}`, `{"product_id":42}`},
+		{"nested object", `{"metadata":{"enabled":"true"}}`, `{"metadata":{"enabled":true}}`},
+		{"nested array", `{"values":["true","42"]}`, `{"values":[true,42]}`},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			prior := mustPackTags(t, test.prior)
+			api := mustPackTags(t, test.api)
+			actual := packTagsForRead(context.Background(), api, prior)
+			require.True(t, actual.Equal(api), "got %s, want %s", actual, api)
+			require.False(t, actual.Equal(prior))
+		})
+	}
+}
+
+func TestPackCustomTagsReadPreservesCollectionShapes(t *testing.T) {
+	ctx := context.Background()
+	attributes := map[string]attr.Value{
+		"labels": types.TupleValueMust([]attr.Type{types.StringType}, []attr.Value{types.StringValue("label")}),
+		"metadata": types.MapValueMust(types.NumberType, map[string]attr.Value{
+			"count": types.NumberValue(big.NewFloat(42)),
+		}),
+		"values": types.ListValueMust(types.NumberType, []attr.Value{types.NumberValue(big.NewFloat(42))}),
+	}
+	attributeTypes := make(map[string]attr.Type, len(attributes))
+	for key, value := range attributes {
+		attributeTypes[key] = value.Type(ctx)
+	}
+	configured := types.DynamicValue(types.ObjectValueMust(attributeTypes, attributes))
+	api := mustPackTags(t, `{"labels":["label"],"metadata":{"count":42},"values":[42]}`)
+	require.True(t, packTagsForRead(ctx, api, configured).Equal(configured))
 }
 
 func TestPackCustomTagsSchemaAndValidation(t *testing.T) {

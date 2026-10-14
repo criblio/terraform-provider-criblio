@@ -25,6 +25,8 @@ type ResourceBlockOptions struct {
 	// for these resource type + attribute pairs. E.g. criblio_pack tags must keep domain=[].
 	// Map key = resource type name, value = attribute names.
 	SkipPruneEmptyListsFor map[string][]string
+	// SkipPruneNullsFor preserves explicit nulls in selected metadata attributes.
+	SkipPruneNullsFor map[string][]string
 	// AlwaysEmitEmptyListsFor: when SkipEmptyListAttributes is true, always emit these
 	// attributes even when empty (empty list is valid). E.g. criblio_project subscriptions, destinations.
 	// Map key = resource type name, value = attribute names.
@@ -40,6 +42,9 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 	return &ResourceBlockOptions{
 		SkipNullAttributes:      true,
 		SkipEmptyListAttributes: true,
+		SkipPruneNullsFor: map[string][]string{
+			"criblio_pack": {"tags"},
+		},
 		SkipPruneEmptyListsFor: map[string][]string{
 			"criblio_pack":             {"tags"},
 			"criblio_search_dashboard": {"elements"},
@@ -51,6 +56,7 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_search_dashboard":        {"elements"},
 		},
 		AlwaysEmitEmptyMapsFor: map[string][]string{
+			"criblio_pack":             {"tags"},
 			"criblio_mapping_ruleset":  {"conf"},
 			"criblio_pipeline":         {"conf"},
 			"criblio_pack_pipeline":    {"conf"},
@@ -97,10 +103,11 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 
 	for _, k := range keys {
 		v := attrs[k]
+		pruneNull := skipNull && !attrInList(typeName, k, opts.SkipPruneNullsFor)
 		if opts != nil && opts.SkipEmptyListAttributes && !attrInList(typeName, k, opts.SkipPruneEmptyListsFor) {
 			v = PruneEmptyLists(v)
 		}
-		if skipNull {
+		if pruneNull {
 			v = PruneNullPlaceholders(v)
 		}
 		if skipNull && v.Kind == KindNull {
@@ -118,7 +125,7 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 		if err != nil {
 			return nil, fmt.Errorf("attribute %q: %w", k, err)
 		}
-		if skipNull {
+		if pruneNull {
 			pruneEmptyCollections := opts.SkipEmptyListAttributes && !attrInList(typeName, k, opts.SkipPruneEmptyListsFor)
 			ctyVal = pruneNullCollectionPlaceholders(ctyVal, pruneEmptyCollections)
 		}

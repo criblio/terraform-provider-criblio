@@ -919,25 +919,6 @@ func stringSliceFromValues(values []types.String) []string {
 	return out
 }
 
-func stringSliceFromList(value types.List) []string {
-	if value.IsNull() || value.IsUnknown() {
-		return nil
-	}
-	elements := value.Elements()
-	if len(elements) == 0 {
-		return nil
-	}
-	out := make([]string, 0, len(elements))
-	for _, element := range elements {
-		value, ok := element.(types.String)
-		if !ok || value.IsNull() || value.IsUnknown() {
-			continue
-		}
-		out = append(out, value.ValueString())
-	}
-	return out
-}
-
 func nonNilStringSlice(values []string) []string {
 	if values == nil {
 		return []string{}

@@ -17,10 +17,13 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
+	hclv2 "github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
 
 func TestToResourceItems_empty_results(t *testing.T) {
@@ -37,6 +40,7 @@ func TestToResourceItems_empty_results(t *testing.T) {
 }
 
 func TestToResourceItemsPackCustomTags(t *testing.T) {
+	const rawTags = `{"streamtags":["ui-label"],"ManagedByTFE":"true","product_id":"001234","used_for":"non_prod","values":["label",true,42],"metadata":{"empty":{},"empty_list":[],"nullable":null,"array":[null,"x"],"objects":[{"enabled":true},{"enabled":"label"}],"all_null":{"value":null}},"Count":9007199254740993}`
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Content-Type", "application/json")
 		switch request.URL.Path {
@@ -44,7 +48,7 @@ func TestToResourceItemsPackCustomTags(t *testing.T) {
 			_, err := writer.Write([]byte(`{"items":[{"id":"sample-pack","version":"1.0.0","tags":{"streamtags":["inventory-label"]}}]}`))
 			require.NoError(t, err)
 		case "/api/v1/m/default/p/sample-pack/pack/settings":
-			_, err := writer.Write([]byte(`{"items":[{"id":"settings","package":{"tags":{"streamtags":["ui-label"],"ManagedByTFE":"true","product_id":"001234","used_for":"non_prod"}}}]}`))
+			_, err := writer.Write([]byte(`{"items":[{"id":"settings","package":{"tags":` + rawTags + `}}]}`))
 			require.NoError(t, err)
 		default:
 			http.NotFound(writer, request)
@@ -68,6 +72,21 @@ func TestToResourceItemsPackCustomTags(t *testing.T) {
 	assert.NotContains(t, tags, "custom")
 	assert.NotContains(t, tags, "domain")
 	assert.NotContains(t, result.Items[0].Attrs, "custom_tags")
+	item := result.Items[0]
+	file, err := hcl.FileWithResources([]hcl.ResourceInput{{TypeName: item.TypeName, Name: item.Name, Attrs: item.Attrs}}, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	parsed, diagnostics := hclsyntax.ParseConfig(file.Bytes(), "pack.tf", hclv2.InitialPos)
+	require.False(t, diagnostics.HasErrors(), "%s", diagnostics.Error())
+	body := parsed.Body.(*hclsyntax.Body)
+	exportedTags, diagnostics := body.Blocks[0].Body.Attributes["tags"].Expr.Value(nil)
+	require.False(t, diagnostics.HasErrors(), "%s", diagnostics.Error())
+	rawExported, err := ctyjson.Marshal(exportedTags, exportedTags.Type())
+	require.NoError(t, err)
+	want, err := provider.PackTagsFromAPIJSON([]byte(rawTags))
+	require.NoError(t, err)
+	got, err := provider.PackTagsFromAPIJSON(rawExported)
+	require.NoError(t, err)
+	require.True(t, want.Equal(got), "export changed tags: %s", rawExported)
 }
 
 func TestFlattenPackItemsPreservesDynamicTags(t *testing.T) {

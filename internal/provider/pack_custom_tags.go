@@ -88,17 +88,27 @@ func packTagHasUnknown(value attr.Value) bool {
 }
 
 func (tags *packTagsAPI) UnmarshalJSON(raw []byte) error {
-	type builtInTags packTagsAPI
-	var decoded builtInTags
-	if err := json.Unmarshal(raw, &decoded); err != nil {
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &fields); err != nil {
 		return err
+	}
+	var decoded packTagsAPI
+	for key, target := range map[string]*[]string{
+		"dataType": &decoded.DataType, "domain": &decoded.Domain,
+		"streamtags": &decoded.Streamtags, "technology": &decoded.Technology,
+	} {
+		if field, exists := fields[key]; exists {
+			if err := json.Unmarshal(field, target); err != nil {
+				return fmt.Errorf("decode pack tag %q: %w", key, err)
+			}
+		}
 	}
 	values, err := decodePackTagValues(raw)
 	if err != nil {
 		return err
 	}
 	decoded.Raw = values
-	*tags = packTagsAPI(decoded)
+	*tags = decoded
 	return nil
 }
 
@@ -431,6 +441,14 @@ func preservePackTags(ctx context.Context, apiTags, reference types.Dynamic) typ
 	}
 	underlying, err := typ.ValueFromTerraform(ctx, terraformValue)
 	if err != nil {
+		return apiTags
+	}
+	preserved, err := packTagJSONValue(ctx, underlying)
+	if err != nil {
+		return apiTags
+	}
+	preservedJSON, err := json.Marshal(preserved)
+	if err != nil || !bytes.Equal(raw, preservedJSON) {
 		return apiTags
 	}
 	return types.DynamicValue(underlying)
