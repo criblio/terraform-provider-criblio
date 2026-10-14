@@ -1131,6 +1131,7 @@ func SearchDashboardScheduleNotificationsItemsAttrTypes() map[string]attr.Type {
 type SearchDashboardScheduleNotificationsItemsConfModel struct {
 	SavedQueryID       types.String  `tfsdk:"saved_query_id" json:"savedQueryId,omitempty"`
 	Message            types.String  `tfsdk:"message" json:"message,omitempty"`
+	Trigger            types.String  `tfsdk:"trigger" json:"trigger,omitempty"`
 	TriggerType        types.String  `tfsdk:"trigger_type" json:"triggerType,omitempty"`
 	TriggerComparator  types.String  `tfsdk:"trigger_comparator" json:"triggerComparator,omitempty"`
 	TriggerCount       types.Float64 `tfsdk:"trigger_count" json:"triggerCount,omitempty"`
@@ -1144,6 +1145,7 @@ type SearchDashboardScheduleNotificationsItemsConfModel struct {
 type SearchDashboardScheduleNotificationsItemsConfAPIModel struct {
 	SavedQueryID       *string  `json:"savedQueryId,omitempty"`
 	Message            *string  `json:"message,omitempty"`
+	Trigger            *string  `json:"trigger,omitempty"`
 	TriggerType        *string  `json:"triggerType,omitempty"`
 	TriggerComparator  *string  `json:"triggerComparator,omitempty"`
 	TriggerCount       *float64 `json:"triggerCount,omitempty"`
@@ -1158,6 +1160,7 @@ func SearchDashboardScheduleNotificationsItemsConfAttrTypes() map[string]attr.Ty
 	return map[string]attr.Type{
 		"saved_query_id":       types.StringType,
 		"message":              types.StringType,
+		"trigger":              types.StringType,
 		"trigger_type":         types.StringType,
 		"trigger_comparator":   types.StringType,
 		"trigger_count":        types.Float64Type,

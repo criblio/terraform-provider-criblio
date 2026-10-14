@@ -39,12 +39,13 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
 
 resource "criblio_notification" "my_notification" {
   id        = "test_notification"
-  group_id  = "default_search"
   condition = "search"
   conf = {
-    trigger_type       = "resultsCount"
+    # Keep all query results; only matching results contribute to the alert.
+    trigger_type       = "custom"
+    trigger            = "eventsFound > 1000"
     trigger_comparator = ">"
-    trigger_count      = 10
+    trigger_count      = 0
     saved_query_id     = criblio_search_saved_query.my_searchsavedquery_with_notifications.id
     message            = "Date: {{timestamp}}\n\nA notification was triggered for the scheduled search: {{searchId}},\nTenant ID: {{tenantId}}\nSearch ID: {{savedQueryId}}.\nNotification: {{notificationId}}"
   }

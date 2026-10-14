@@ -777,9 +777,13 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 													Computed:    true,
 													Description: `Message template for the notification.`,
 												},
+												"trigger": schema.StringAttribute{
+													Computed:    true,
+													Description: `Custom expression evaluated against Search results when triggerType is custom. Filters notification matches without removing saved query results.`,
+												},
 												"trigger_type": schema.StringAttribute{
 													Computed:    true,
-													Description: `Type of trigger.`,
+													Description: `Type of trigger. Use custom to evaluate trigger against Search results, or resultsCount to compare the number of results.`,
 												},
 												"trigger_comparator": schema.StringAttribute{
 													Computed:    true,

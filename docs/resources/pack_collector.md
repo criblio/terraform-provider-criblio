@@ -13,11 +13,9 @@ Manages a Collector within a Pack using the same input_collector_* configuration
 ## Example Usage
 
 ```terraform
-# The pack must already exist in this worker group. Its ID can also be supplied
-# by a criblio_pack resource, for example: pack = criblio_pack.my_pack.id.
 resource "criblio_pack_collector" "rest" {
   group_id = "default"
-  pack     = "my-pack"
+  pack     = criblio_pack.source_pack.id
   id       = "rest-api"
 
   input_collector_rest = {
@@ -37,24 +35,14 @@ resource "criblio_pack_collector" "rest" {
   }
 }
 
-resource "criblio_pack_collector" "lake" {
-  group_id = "default"
-  pack     = "my-pack"
-  id       = "lake-events"
-
-  input_collector_cribl_lake = {
-    collector = {
-      type = "cribl_lake"
-      conf = {
-        dataset = "my-dataset"
-      }
-    }
-    input = {
-      type           = "collection"
-      send_to_routes = true
-    }
-    ttl = "4h"
-  }
+resource "criblio_pack" "source_pack" {
+  id           = "pack-with-collector"
+  group_id     = "default"
+  description  = "Pack with Collector"
+  disabled     = true
+  display_name = "Pack from Collector"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
+  version      = "1.0.0"
 }
 ```
 
@@ -697,5 +685,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_collector.my_criblio_pack_collector '{"group_id": "default", "id": "example", "pack": "example"}'
+terraform import criblio_pack_collector.rest '{"group_id":"default","pack":"my-pack","id":"rest-api"}'
 ```

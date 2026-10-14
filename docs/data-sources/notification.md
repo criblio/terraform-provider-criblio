@@ -29,7 +29,7 @@ data "criblio_notification" "my_notification" {
 
 - `condition` (String) The condition that triggers this notification
 - `conf` (Attributes) Configuration specific to the notification condition. Shape depends on `condition`:
-Search: use `savedQueryId`, `message`, and optional `triggerType` / `triggerComparator` / `triggerCount`.
+Search: use `savedQueryId`, `message`, and optional `triggerType` / `trigger` / `triggerComparator` / `triggerCount`.
 Stream source metrics: for `high-volume` / `low-volume` use `name`, `timeWindow`, optional `dataVolume` (e.g. 1TB, 420MB), optional `notifyOnResolution`, optional `__workerGroup`.
 For `no-data` use `name`, `timeWindow`, optional `notifyOnResolution`, optional `__workerGroup` (no `dataVolume`).
 For `persistent-queue-usage` (and source variant) use `name`, `timeWindow`, `usageThreshold` (0-99 percent), optional `notifyOnResolution`, optional `__workerGroup`. (see [below for nested schema](#nestedatt--conf))
@@ -50,9 +50,10 @@ Read-Only:
 - `notify_on_resolution` (Boolean) (Stream) When true, also notify when the condition returns to the OK / resolved state
 - `saved_query_id` (String) (Search) ID of the saved query this notification is associated with
 - `time_window` (String) (Stream) Time window for the metric, e.g. 60s or 5m
+- `trigger` (String) Custom expression evaluated against Search results when triggerType is custom. Filters notification matches without removing saved query results.
 - `trigger_comparator` (String) (Search) Comparison operator (e.g., >, <, =)
 - `trigger_count` (Number) (Search) Threshold count for the trigger
-- `trigger_type` (String) (Search) Type of trigger (e.g., resultsCount)
+- `trigger_type` (String) (Search) Use custom to evaluate trigger against Search results, or resultsCount to compare the number of results.
 - `usage_threshold` (Number) (Stream) For persistent queue usage conditions; percent 0-99
 - `worker_group` (String) (Stream) Optional scope to a specific worker group
 

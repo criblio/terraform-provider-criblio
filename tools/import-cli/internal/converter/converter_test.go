@@ -368,6 +368,31 @@ func TestConvertGeneratedNotificationTargetPopulatesOneOfBlock(t *testing.T) {
 	assert.True(t, target.SlackTarget.URL.IsNull())
 }
 
+func TestConvertNotificationPreservesCustomTriggerForExport(t *testing.T) {
+	e := registry.Entry{
+		TypeName: "criblio_notification", ModelTypeName: "NotificationResourceModel", GetMethod: "GetNotificationByID",
+	}
+	responseBody := struct {
+		Items []map[string]any
+	}{Items: []map[string]any{{
+		"id": "volume-alert", "condition": "search", "group": "default_search",
+		"conf": map[string]any{
+			"savedQueryId": "daily-volume", "triggerType": "custom", "trigger": "actual < 8000",
+		},
+	}}}
+	model, err := convertGeneratedModelFromResponseBody(e, GeneratedModelTypes()[e.ModelTypeName], responseBody)
+	require.NoError(t, err)
+	attributes, err := hcl.ModelToValue(model, nil)
+	require.NoError(t, err)
+	conf := attributes["conf"].Map
+	assert.Equal(t, "custom", conf["trigger_type"].String)
+	assert.Equal(t, "actual < 8000", conf["trigger"].String)
+	output, err := hcl.ResourceBlockBytes(e.TypeName, "volume_alert", attributes, nil)
+	require.NoError(t, err)
+	require.NoError(t, hcl.ParseHCL(output, "notification.tf"))
+	assert.Contains(t, string(output), `"actual < 8000"`)
+}
+
 func TestObjectListValue(t *testing.T) {
 	value, err := objectListValue(json.RawMessage(`[{"name":"val","type":"number"}]`))
 	require.NoError(t, err)
