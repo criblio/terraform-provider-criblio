@@ -3871,11 +3871,21 @@ actions:
           - config
           - enabled
           - type
+  # policy and target branches have an IDENTICAL shape ({config, enabled, type}), so codegen's
+  # shape-matching picks the first (policy) for a target notification -> "provider produced
+  # inconsistent result after apply" (verified live). Declare the self-contained `type` discriminator
+  # so codegen dispatches on it instead (policy -> policy branch, target -> target branch; the
+  # Inheritable arm has no type and falls through to the shape-match for an inherited notification).
   - target: "$.components.schemas.NotificationConfig"
     replace:
       oneOf:
         - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
         - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+      discriminator:
+        propertyName: type
+        mapping:
+          policy: "#/components/schemas/MonitorPolicyNotificationConfig"
+          target: "#/components/schemas/MonitorTargetNotificationConfig"
       description: Notification settings for a monitor.
       title: NotificationConfig
   - target: "$.components.schemas.InheritableINotificationConfig"
@@ -3884,6 +3894,11 @@ actions:
         - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
         - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
         - $ref: "#/components/schemas/Inheritable"
+      discriminator:
+        propertyName: type
+        mapping:
+          policy: "#/components/schemas/MonitorPolicyNotificationConfig"
+          target: "#/components/schemas/MonitorTargetNotificationConfig"
 
   # detectionConfig is a real 4-branch oneOf (anomaly/change/outlier/forecast) with no
   # discriminator declared upstream. Without one, codegen falls back to shape-matching

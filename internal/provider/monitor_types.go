@@ -1219,27 +1219,21 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 	{
 		nested, ok := raw["notification"].(map[string]any)
 		if ok {
-			matched := false
-			if !matched && MonitorOneOfShapeMatches(nested, []string{"config", "enabled"}, []string{"config", "enabled", "type"}) {
+			discriminator := ""
+			if value, ok := nested["type"].(string); ok {
+				discriminator = value
+			}
+			switch discriminator {
+			case "policy":
 				m.MonitorPolicyNotificationConfig = &MonitorPolicyNotificationConfigModel{}
 				if err := m.MonitorPolicyNotificationConfig.unmarshalPayload(nested); err != nil {
 					return err
 				}
-				matched = true
-			}
-			if !matched && MonitorOneOfShapeMatches(nested, []string{"config", "enabled"}, []string{"config", "enabled", "type"}) {
+			case "target":
 				m.MonitorTargetNotificationConfig = &MonitorTargetNotificationConfigModel{}
 				if err := m.MonitorTargetNotificationConfig.unmarshalPayload(nested); err != nil {
 					return err
 				}
-				matched = true
-			}
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
-				m.NotificationInheritable = &NotificationInheritableModel{}
-				if err := m.NotificationInheritable.unmarshalPayload(nested); err != nil {
-					return err
-				}
-				matched = true
 			}
 		}
 	}
@@ -2065,6 +2059,9 @@ func (m MonitorPolicyNotificationConfigModel) terraformPayload() (map[string]any
 		}
 		output["type"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "policy"
+	}
 	return output, nil
 }
 
@@ -2135,6 +2132,9 @@ func (m MonitorTargetNotificationConfigModel) terraformPayload() (map[string]any
 			return nil, fmt.Errorf("convert type to API value: %v", err)
 		}
 		output["type"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "target"
 	}
 	return output, nil
 }
