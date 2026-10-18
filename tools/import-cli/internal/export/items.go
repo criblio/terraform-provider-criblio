@@ -120,6 +120,7 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	}
 	name := generator.StableResourceNameFromMap(e.TypeName, idMap)
 	ensureNotificationTargetSecretPlaceholders(r.TypeName, attrs, name)
+	hcl.ReplaceSensitiveValuesWithVariableRefs(attrs, name, e.SensitivePaths)
 	_ = hcl.ReplaceSecretValuesWithVariableRefs(attrs, name)
 	if r.TypeName == "criblio_secret" {
 		attrs["value"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.SecretValueVariableName(name)}
@@ -355,6 +356,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	name := generator.StableResourceNameFromMap(e.TypeName, nameMap)
 	ensureNotificationTargetSecretPlaceholders(typeName, attrs, name)
+	hcl.ReplaceSensitiveValuesWithVariableRefs(attrs, name, e.SensitivePaths)
 	_ = hcl.ReplaceSecretValuesWithVariableRefs(attrs, name)
 	if typeName == "criblio_secret" {
 		attrs["value"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.SecretValueVariableName(name)}

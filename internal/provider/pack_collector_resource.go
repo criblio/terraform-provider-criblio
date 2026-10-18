@@ -511,9 +511,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed: true,
 									},
 									"password": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required: false,
@@ -521,9 +522,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed: true,
 									},
 									"token": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"token_secret": schema.StringAttribute{
 										Required: false,
@@ -879,9 +881,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed: true,
 									},
 									"password": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required: false,
@@ -889,9 +892,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed: true,
 									},
 									"token": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"token_secret": schema.StringAttribute{
 										Required: false,
@@ -915,6 +919,7 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
+										Sensitive:   true,
 										Description: `Service account key JSON (or path reference) for google_oauth`,
 									},
 									"service_account_credentials_secret": schema.StringAttribute{
@@ -1782,14 +1787,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed: true,
 									},
 									"aws_api_key": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"aws_secret_key": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"aws_secret": schema.StringAttribute{
 										Required: false,
@@ -3322,9 +3329,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"service_account_credentials": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"bucket": schema.StringAttribute{
 										Required:    false,
@@ -3756,9 +3764,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed: true,
 									},
 									"password": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:  false,
+										Optional:  true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required: false,

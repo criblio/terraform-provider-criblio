@@ -219,6 +219,7 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
+									Sensitive:   true,
 									Description: `AWS access key ID when using manual key authentication.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
@@ -377,6 +378,7 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
+									Sensitive:   true,
 									Description: `JSON key downloaded from Google Cloud Console for a service account that can call GCP APIs.`,
 									Validators: []validator.String{
 										stringvalidator.UTF8LengthAtLeast(1),
@@ -437,6 +439,7 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
+									Sensitive:   true,
 									Description: `JSON key material for a Google Workspace domain-wide delegated service account.`,
 									Validators: []validator.String{
 										stringvalidator.UTF8LengthAtLeast(1),
@@ -865,6 +868,7 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtLeast(1),
@@ -1224,6 +1228,7 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `AWS access key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
@@ -1560,6 +1565,7 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtLeast(1),

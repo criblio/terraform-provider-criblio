@@ -309,13 +309,15 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 										Computed: true,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Computed: true,
 									},
 									"token": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"token_secret": schema.StringAttribute{
 										Computed: true,
@@ -538,13 +540,15 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 										Computed: true,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Computed: true,
 									},
 									"token": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"token_secret": schema.StringAttribute{
 										Computed: true,
@@ -560,6 +564,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									},
 									"service_account_credentials": schema.StringAttribute{
 										Computed:    true,
+										Sensitive:   true,
 										Description: `Service account key JSON (or path reference) for google_oauth`,
 									},
 									"service_account_credentials_secret": schema.StringAttribute{
@@ -1111,10 +1116,12 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 										Computed: true,
 									},
 									"aws_api_key": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"aws_secret_key": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"aws_secret": schema.StringAttribute{
 										Computed: true,
@@ -2075,7 +2082,8 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"service_account_credentials": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"bucket": schema.StringAttribute{
 										Computed:    true,
@@ -2344,7 +2352,8 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 										Computed: true,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
+										Computed:  true,
+										Sensitive: true,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Computed: true,

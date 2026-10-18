@@ -415,9 +415,9 @@ Optional:
 - `reject_unauthorized` (Boolean)
 - `handle_escaped_chars` (Boolean)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
-- `token` (String)
+- `token` (String, Sensitive)
 - `token_secret` (String)
 
 <a id="nestedatt--input_collector_rest--collector--conf"></a>
@@ -427,13 +427,13 @@ Optional:
 
 - `authentication` (String)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
-- `token` (String)
+- `token` (String, Sensitive)
 - `token_secret` (String)
 - `scopes` (List of String) OAuth scopes when authentication is google_oauth or google_oauthSecret
 - `subject` (String) Subject (e.g. admin user) for Google OAuth with domain-wide delegation
-- `service_account_credentials` (String) Service account key JSON (or path reference) for google_oauth
+- `service_account_credentials` (String, Sensitive) Service account key JSON (or path reference) for google_oauth
 - `service_account_credentials_secret` (String) Secret reference for service account key when using google_oauthSecret
 - `login_url` (String) URL for authentication login
 - `login_body` (String) Body content for login request
@@ -538,8 +538,8 @@ Optional:
 - `region` (String) AWS region from which to retrieve data
 - `path` (String) Directory where data will be collected
 - `aws_authentication_method` (String)
-- `aws_api_key` (String)
-- `aws_secret_key` (String)
+- `aws_api_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive)
 - `aws_secret` (String)
 - `recurse` (Boolean)
 - `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_s3--collector--conf--extractors))
@@ -606,7 +606,7 @@ Optional:
 
 Optional:
 
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `bucket` (String) GCS Bucket from which to collect data
 - `path` (String) Directory where data will be collected
 - `auth_type` (String)
@@ -625,7 +625,7 @@ Optional:
 - `timeout` (Integer)
 - `reject_unauthorized` (Boolean)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
 
 <a id="nestedatt--input_collector_script--collector--conf"></a>

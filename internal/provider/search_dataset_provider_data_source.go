@@ -136,6 +136,7 @@ func (d *SearchDatasetProviderDataSource) Schema(_ context.Context, _ datasource
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `AWS access key ID when using manual key authentication.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
@@ -222,6 +223,7 @@ func (d *SearchDatasetProviderDataSource) Schema(_ context.Context, _ datasource
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `JSON key downloaded from Google Cloud Console for a service account that can call GCP APIs.`,
 								},
 							},
@@ -254,6 +256,7 @@ func (d *SearchDatasetProviderDataSource) Schema(_ context.Context, _ datasource
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `JSON key material for a Google Workspace domain-wide delegated service account.`,
 								},
 								"subject": schema.StringAttribute{
@@ -473,6 +476,7 @@ func (d *SearchDatasetProviderDataSource) Schema(_ context.Context, _ datasource
 					},
 					"priv_key": schema.StringAttribute{
 						Computed:    true,
+						Sensitive:   true,
 						Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
 					},
 					"passphrase": schema.StringAttribute{
@@ -662,6 +666,7 @@ func (d *SearchDatasetProviderDataSource) Schema(_ context.Context, _ datasource
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed:    true,
+						Sensitive:   true,
 						Description: `AWS access key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
@@ -852,6 +857,7 @@ func (d *SearchDatasetProviderDataSource) Schema(_ context.Context, _ datasource
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
 					},
 					"endpoint": schema.StringAttribute{

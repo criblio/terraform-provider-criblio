@@ -795,7 +795,7 @@ Optional:
 - `server_side_encryption` (String) Server-side encryption to use for uploaded objects
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
 - `description` (String)
-- `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
+- `aws_api_key` (String, Sensitive) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -1017,7 +1017,7 @@ Optional:
 - `pq_max_buffer_size_bytes` (String)
 - `pq_controls` (Map of String)
 - `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
-- `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
+- `workspace_key` (String, Sensitive) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
 - `keypair_secret` (String) Select or create a stored secret that references your access key and secret key
 
 <a id="nestedatt--output_kinesis"></a>
@@ -1050,7 +1050,7 @@ Optional:
 - `as_ndjson` (Boolean) Batch events into a single record as NDJSON
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String) Access key
+- `aws_api_key` (String, Sensitive) Access key
 - `aws_secret` (String)
 - `max_events_per_flush` (Number) Maximum number of records to send in a single request
 - `pq_strict_ordering` (Boolean)
@@ -1233,7 +1233,7 @@ Optional:
 - `udm_type` (String) Defines the specific format for UDM events sent to Google SecOps. This must match the type of UDM data being sent.
 - `api_key` (String, Sensitive) Organization's API key in Google SecOps
 - `api_key_secret` (String) Select or create a stored text secret
-- `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
+- `service_account_credentials` (String, Sensitive) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `service_account_credentials_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -1306,7 +1306,7 @@ Optional:
 - `directory_batch_size` (Number)
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
-- `aws_api_key` (String) HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
+- `aws_api_key` (String, Sensitive) HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String, Sensitive) HMAC secret. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `aws_secret` (String)
 
@@ -1331,7 +1331,7 @@ Optional:
 - `severity_expression` (String) JavaScript expression to compute the value of the severity field. Must evaluate to one of the severity values supported by Google Cloud Logging [here](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity) (case insensitive). Defaults to "DEFAULT".
 - `insert_id_expression` (String) JavaScript expression to compute the value of the insert ID field.
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `secret` (String, Sensitive)
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body.
 - `max_payload_events` (Number) Max number of events to include in the request body. Default is 0 (unlimited).
@@ -1447,7 +1447,7 @@ Optional:
 - `ordered_delivery` (Boolean) If enabled, send events in the order they were added to the queue. For this to work correctly, the process receiving events must have ordering enabled.
 - `region` (String) Region to publish messages to. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
 - `google_auth_method` (String)
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `secret` (String, Sensitive)
 - `batch_size` (Number) The maximum number of items the Google API should batch before it sends them to the topic.
 - `batch_timeout` (Number) The maximum amount of time, in milliseconds, that the Google API should wait to send a batch (if the Batch size is not reached).
@@ -1510,7 +1510,7 @@ Optional:
 - `forwarder` (String) JavaScript expression for the host that forwarded the log, evaluated per event. Static values must be quoted or backticked (for example, 'fwd-1'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${__forwarder}`. Emitted as the "forwarder" metadata field; omitted when empty or not a usable scalar.
 - `origin` (String) JavaScript expression that must resolve to an object describing the interim agent collector, such as {hostname: origin_host, '@timestamp': _time, path: source}. Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "origin" metadata field; omitted when the result is not a non-empty object.
 - `logtags` (String) JavaScript expression that must resolve to an object of custom metadata key/value pairs (searchable in Exabeam as m_c_logtags_<name>). Assemble the object upstream and reference it here (example: __exabeam_logtags), or build it inline (example: {department: dept, servertype: stype}). Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "logtags" metadata field; omitted when the result is not a non-empty object.
-- `aws_api_key` (String) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
+- `aws_api_key` (String, Sensitive) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String, Sensitive) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `description` (String)
 - `empty_dir_cleanup_sec` (Number)
@@ -1654,7 +1654,7 @@ Optional:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--tls))
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `protobuf_library_id` (String)
 - `protobuf_encoding_id` (String)
@@ -1954,7 +1954,7 @@ Optional:
 - `flush_period_sec` (Number)
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -2014,7 +2014,7 @@ Optional:
 - `storage_class` (String)
 - `server_side_encryption` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -2180,7 +2180,7 @@ Optional:
 - `duration_seconds` (Number)
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -2227,7 +2227,7 @@ Optional:
 - `max_in_progress` (Number)
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -3064,7 +3064,7 @@ Optional:
 - `kms_key_id` (String)
 - `partitioning_fields` (List of String) List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -3142,7 +3142,7 @@ Optional:
 - `enable_write_page_index` (Boolean)
 - `enable_page_checksum` (Boolean)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `empty_dir_cleanup_sec` (Number)
 - `directory_batch_size` (Number)
@@ -3742,7 +3742,7 @@ Optional:
 - `custom_labels` (Attributes List) Custom labels to be added to every event (see [below for nested schema](#nestedatt--output_chronicle--custom_labels))
 - `endpoint` (String) Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)
 - `description` (String)
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `service_account_credentials_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -5031,7 +5031,7 @@ Optional:
 - `password` (String, Sensitive)
 - `auth_type` (String)
 - `credentials_secret` (String)
-- `manual_apikey` (String) Enter API key directly
+- `manual_apikey` (String, Sensitive) Enter API key directly
 - `text_secret` (String)
 
 <a id="nestedatt--output_elastic--urls"></a>
