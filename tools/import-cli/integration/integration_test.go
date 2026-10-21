@@ -65,9 +65,10 @@ func buildLocalProvider(t *testing.T, pluginDir string) string {
 	return pluginDir
 }
 
-// writeTerraformTfvarsWithPlaceholders writes terraform.tfvars with valid placeholder values for required variables.
+// writeTerraformTfvarsWithPlaceholders writes terraform.tfvars with placeholder values for required variables.
 // Certificate variables use examples/certificate/server.crt, private key variables use server.key; others use "placeholder".
 // All certificate variables share the same cert content; all priv_key variables share the same key content.
+// These values satisfy Terraform inputs, but must not replace imported credentials.
 func writeTerraformTfvarsWithPlaceholders(t *testing.T, outputDir string) {
 	t.Helper()
 	tfvarsExample := filepath.Join(outputDir, "terraform.tfvars.example")
@@ -349,8 +350,10 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, hcl.ParseHCL(importTF, "import.tf"))
 
-	// Step 5: Write terraform.tfvars with valid placeholders (cert/key from examples/certificate/)
-	t.Log("Step 5: Write terraform.tfvars with valid placeholders")
+	// Step 5: Supply required inputs while retaining imported credentials. Generic
+	// placeholders are not valid connection strings, JSON credentials, or secret names.
+	t.Log("Step 5: Preserve imported sensitive values and supply placeholder inputs")
+	require.NoError(t, preserveImportedSensitiveValues(outputDir))
 	writeTerraformTfvarsWithPlaceholders(t, outputDir)
 
 	// Step 6: Build local provider and terraform init

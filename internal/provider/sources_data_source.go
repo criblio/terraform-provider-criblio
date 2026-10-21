@@ -498,6 +498,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
@@ -558,6 +559,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
@@ -672,6 +674,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
@@ -1054,6 +1057,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
@@ -1106,6 +1110,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -1175,6 +1180,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
@@ -1217,6 +1223,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -1363,6 +1370,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -1400,6 +1408,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -1502,6 +1511,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										Attributes: map[string]schema.Attribute{
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret provided by clients for authentication`,
 											},
 										},
@@ -1683,6 +1693,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -1767,6 +1778,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 											},
 											"description": schema.StringAttribute{
@@ -2107,10 +2119,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -2274,6 +2288,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -2342,6 +2357,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -3121,6 +3137,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -3245,6 +3262,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"credentials_secret": schema.StringAttribute{
@@ -3280,6 +3298,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -3288,6 +3307,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer tokens to include in the authorization header`,
 									ElementType: types.StringType,
 								},
@@ -3465,6 +3485,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
@@ -3606,6 +3627,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
@@ -3666,6 +3688,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
@@ -3984,6 +4007,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -4068,10 +4092,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"token": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Bearer token to include in the authorization header`,
 										},
 										"credentials_secret": schema.StringAttribute{
@@ -4097,10 +4123,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"token": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Bearer token to include in the authorization header`,
 										},
 										"credentials_secret": schema.StringAttribute{
@@ -4305,6 +4333,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -4402,10 +4431,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -4588,6 +4619,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -4685,10 +4717,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -4934,6 +4968,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -4963,6 +4998,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -5027,6 +5063,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password for Prometheus Basic authentication`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -5285,6 +5322,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -5314,6 +5352,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -5418,6 +5457,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password for Prometheus Basic authentication`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -5690,6 +5730,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Microsoft 365 Azure client secret`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -5954,6 +5995,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Microsoft 365 Azure client secret`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -6214,6 +6256,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password to run Message Trace API call.`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -6222,6 +6265,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `client_secret to pass in the OAuth request parameter.`,
 								},
 								"tenant_id": schema.StringAttribute{
@@ -6257,6 +6301,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt the private key.`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -6528,6 +6573,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `client_secret to pass in the OAuth request parameter.`,
 								},
 								"tenant_id": schema.StringAttribute{
@@ -6563,6 +6609,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt the private key.`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -6765,6 +6812,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace`,
 										},
 										"text_secret": schema.StringAttribute{
@@ -6785,6 +6833,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"client_secret": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `client_secret to pass in the OAuth request parameter`,
 										},
 										"client_text_secret": schema.StringAttribute{
@@ -6802,7 +6851,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Computed: true,
 										},
 										"passphrase": schema.StringAttribute{
-											Computed: true,
+											Computed:  true,
+											Sensitive: true,
 										},
 										"oauth_endpoint": schema.StringAttribute{
 											Computed:    true,
@@ -7080,6 +7130,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 											},
@@ -7553,6 +7604,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -7590,6 +7642,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -7833,10 +7886,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 								},
 								"secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Select or create a stored text secret`,
 								},
 								"max_backlog": schema.Float64Attribute{
@@ -8204,6 +8259,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -8476,6 +8532,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -8699,6 +8756,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -8736,6 +8794,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -8838,6 +8897,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										Attributes: map[string]schema.Attribute{
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret provided by clients for authentication`,
 											},
 										},
@@ -9019,6 +9079,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -9089,6 +9150,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -10870,6 +10932,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -11011,6 +11074,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -11039,6 +11103,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
@@ -11224,6 +11289,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -11654,6 +11720,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -11691,6 +11758,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -12005,6 +12073,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -12073,6 +12142,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -12425,6 +12495,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -12613,6 +12684,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -12770,6 +12842,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -12798,6 +12871,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"processed_tag_key": schema.StringAttribute{
@@ -12956,6 +13030,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -13113,6 +13188,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -13141,6 +13217,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
@@ -13323,6 +13400,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 													"auth_key": schema.StringAttribute{
 														Computed:    true,
+														Sensitive:   true,
 														Description: `V3 authentication key`,
 													},
 													"auth_key_secret": schema.StringAttribute{
@@ -13339,6 +13417,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 													"priv_key": schema.StringAttribute{
 														Computed:    true,
+														Sensitive:   true,
 														Description: `V3 privacy key`,
 													},
 													"priv_key_secret": schema.StringAttribute{
@@ -13562,6 +13641,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -13644,6 +13724,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Bearer token for Authorization header`,
 											},
 											"description": schema.StringAttribute{
@@ -13680,6 +13761,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"password": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Password`,
 											},
 											"credentials_secret": schema.StringAttribute{
@@ -13744,10 +13826,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -13934,6 +14018,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -14138,6 +14223,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -14210,6 +14296,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -14453,6 +14540,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -14929,6 +15017,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -15027,6 +15116,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"auth_type": schema.StringAttribute{
@@ -15329,6 +15419,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -15355,6 +15446,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -15529,6 +15621,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -16762,6 +16855,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `The client secret of the Wiz application`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -17033,6 +17127,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -17253,6 +17348,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -17290,6 +17386,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -17403,6 +17500,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"description": schema.StringAttribute{
@@ -17770,6 +17868,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -17919,6 +18018,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -17947,6 +18047,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
@@ -18108,6 +18209,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -18257,6 +18359,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -18285,6 +18388,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
@@ -18824,6 +18928,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
@@ -19017,6 +19122,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -19085,6 +19191,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -19344,6 +19451,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -19412,6 +19520,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -19676,6 +19785,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -19744,6 +19854,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -19999,6 +20110,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -20067,6 +20179,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -20322,6 +20435,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -20390,6 +20504,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -20645,6 +20760,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -20713,6 +20829,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -20949,6 +21066,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -21017,6 +21135,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -21272,6 +21391,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -21340,6 +21460,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -21574,6 +21695,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -21861,6 +21983,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -22368,6 +22491,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -22806,6 +22930,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to decrypt the private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -22950,6 +23075,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"okta_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Your Okta API token for authentication`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -23207,6 +23333,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -23275,6 +23402,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -23515,6 +23643,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -23583,6 +23712,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -23838,6 +23968,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -23906,6 +24037,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -24161,6 +24293,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -24229,6 +24362,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -24484,6 +24618,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -24552,6 +24687,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -24811,6 +24947,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -24879,6 +25016,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -25129,6 +25267,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -25197,6 +25336,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -25452,6 +25592,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -25520,6 +25661,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -25775,6 +25917,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -25843,6 +25986,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{

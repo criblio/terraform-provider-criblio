@@ -82,6 +82,7 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Authentication token`,
 								},
 								"username": schema.StringAttribute{
@@ -90,6 +91,7 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Basic authentication password`,
 								},
 							},
@@ -111,6 +113,7 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 								},
 								"routing_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `32-character integration key for an integration on a service or global ruleset`,
 								},
 								"group": schema.StringAttribute{
@@ -148,6 +151,7 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Slack's Incoming Webhook URL`,
 								},
 							},
@@ -181,10 +185,12 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `AWS access key`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `AWS secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -255,6 +261,7 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SMTP authentication password`,
 								},
 								"encryption_option": schema.StringAttribute{

@@ -641,6 +641,11 @@ var sensitiveSuffixes = []string{
 // pathRefersToSensitiveAttribute is true when path denotes a sensitive credential field,
 // not unrelated names that merely contain the sensitive word (e.g. token_timeout_secs).
 func pathRefersToSensitiveAttribute(path string) bool {
+	name := path[strings.LastIndex(path, ".")+1:]
+	// These attributes identify stored secrets; their values are names, not credentials.
+	if isSecretReferenceKey(name) {
+		return false
+	}
 	// Check exact match or dotted path match
 	for _, attr := range sensitiveAttributeNames {
 		if path == attr {
@@ -689,6 +694,9 @@ func MaskSensitiveValuesInJSON(jsonStr, resourceName, attrPath string) (string, 
 
 // isSensitiveKey returns true if the key is a sensitive field name.
 func isSensitiveKey(key string) bool {
+	if isSecretReferenceKey(key) {
+		return false
+	}
 	// Check exact match
 	for _, sensitiveKey := range sensitiveAttributeNames {
 		if key == sensitiveKey {
@@ -700,6 +708,15 @@ func isSensitiveKey(key string) bool {
 		if strings.HasSuffix(key, suffix) {
 			return true
 		}
+	}
+	return false
+}
+
+func isSecretReferenceKey(key string) bool {
+	switch key {
+	case "token_secret", "text_secret", "credentials_secret", "aws_secret", "sqsaws_secret", "api_key_secret",
+		"auth_key_secret", "client_text_secret", "oauth_text_secret", "keypair_secret", "priv_key_secret", "service_account_credentials_secret":
+		return true
 	}
 	return false
 }

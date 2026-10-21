@@ -5539,6 +5539,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
 					},
 					"aws_secret": schema.StringAttribute{
@@ -7349,6 +7350,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.`,
 					},
 					"keypair_secret": schema.StringAttribute{
@@ -7535,6 +7537,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
@@ -9038,6 +9041,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 					},
 					"service_account_credentials_secret": schema.StringAttribute{
@@ -9566,6 +9570,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: "HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.",
 					},
 					"aws_secret_key": schema.StringAttribute{
@@ -9723,6 +9728,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 					},
 					"secret": schema.StringAttribute{
@@ -10520,6 +10526,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 					},
 					"secret": schema.StringAttribute{
@@ -10968,6 +10975,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: "HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.",
 					},
 					"aws_secret_key": schema.StringAttribute{
@@ -12982,6 +12990,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
@@ -13414,6 +13423,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
+								Sensitive:   true,
 								Description: `Enter API key directly`,
 							},
 							"text_secret": schema.StringAttribute{
@@ -13841,6 +13851,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
+								Sensitive:   true,
 								Description: `Enter API key directly`,
 							},
 							"text_secret": schema.StringAttribute{
@@ -15490,6 +15501,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
@@ -15916,6 +15928,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
 					},
 					"aws_secret": schema.StringAttribute{
@@ -16948,6 +16961,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
@@ -17240,6 +17254,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
@@ -24438,6 +24453,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
 					},
 					"aws_secret": schema.StringAttribute{
@@ -25016,6 +25032,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
 					},
 					"aws_secret": schema.StringAttribute{
@@ -30115,6 +30132,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 					},
 					"service_account_credentials_secret": schema.StringAttribute{

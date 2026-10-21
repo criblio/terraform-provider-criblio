@@ -8,6 +8,10 @@ commit history, and tag-to-tag diffs.
 
 ## [Unreleased]
 
+### Security
+- Marked literal credentials sensitive through Terraform overlay annotations on sources, collectors, destinations, notification targets, their pack variants, and corresponding data sources, including HTTP authentication token lists and Slack webhook URLs.
+- Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
+
 ### Added
 - Added `conf.trigger` for custom Search notification conditions in notifications and scheduled dashboard notifications, allowing saved results to be retained while alerts remain selective.
 - Added support for custom keys and values in `criblio_pack.tags`, alongside predefined tag fields.

@@ -3802,3 +3802,679 @@ actions:
       x-terraform-optional-computed: true
       x-terraform-use-state-for-unknown: true
       x-terraform-force-new-always: true
+
+  # Literal credentials: these annotations drive both Terraform masking and
+  # import-cli sensitive variables. Stored secret names and template references
+  # deliberately remain non-sensitive. Shared schemas cover pack variants too.
+  - target: "$.components.schemas.ApiAzureDataExplorerProvider.allOf.1.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ApiElasticSearchProvider.allOf.1.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ApiOpenSearchProvider.allOf.1.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthTokenConfInputCloudflareHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthTypeTemplatemanualApiKeyAuthType.properties"
+    update:
+      manualAPIKey:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthenticationType.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthenticationTypeUse.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+      passphrase:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AwsAccountConfig.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AzureAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AzureBlobProvider.allOf.1.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.CertOptionsType.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ClickHouseProvider.allOf.1.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.GcpAccountConfig.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.GcsProvider.allOf.1.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.GoogleWorkspaceAccountConfig.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputAnthropicCompliance.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputAnthropicEnterpriseAnalytics.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputAppscope.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputBedrockS3.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCloudflareHec.properties.tls.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorGCS.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorHealthCheck.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorRest.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorS3.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorSplunk.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCriblLakeHttp.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCriblLakeHttp.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCrowdstrike.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputEdgePrometheus.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputElastic.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputElastic.properties.proxyMode.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputEventhubAmqp.properties.auth.properties.certificate.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputFirehose.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputGooglePubsub.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputGrafana.properties.lokiAuth.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputGrafana.properties.prometheusAuth.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttp.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttp.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttpAuthTokensExtItemsType.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttpRaw.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttpRaw.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputKinesis.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputLoki.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputMicrosoftCopilot.properties.certOptions.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputMicrosoftGraph.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputMsk.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOffice365Mgmt.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOffice365MsgTrace.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOffice365Service.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOkta.properties"
+    update:
+      oktaToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenTelemetry.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenTelemetry.properties.authMethodsExt.items.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenai.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenaiComplianceLogs.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputPrometheus.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputPrometheusRw.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputS3.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputS3Inventory.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSecurityLake.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSnmp.properties.snmpV3Auth.properties.v3Users.items.properties"
+    update:
+      authKey:
+        x-terraform-sensitive: true
+      privKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSplunk.properties.authTokens.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSplunkHec.properties.authTokens.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSplunkSearch.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSqs.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputTcp.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputTcpjson.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWef.properties.tls.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWiz.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWizWebhook.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWizWebhook.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputZscalerHec.properties.authTokens.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.MsGraphAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputAmazonManagedPrometheus.properties"
+    update:
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputAzureDataExplorer.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputAzureLogs.properties"
+    update:
+      workspaceKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputChronicle.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputClickHouse.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCloudflareR2.properties"
+    update:
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCloudwatch.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCrowdstrikeNextGenSiem.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCustomerMetricsStorage.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDatadog.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDataset.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDlS3.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDynatraceHttp.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputExabeam.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleBigquery.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleChronicle.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleCloudLogging.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleCloudObservability.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleCloudStorage.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGooglePubsub.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputHumioHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputInfluxdb.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputKinesis.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputLocalSearchStorage.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputLocalSearchStorage.properties.statsDestination.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputLoki.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputMicrosoftFabric.properties.sasl.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputMinio.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputMsk.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputNewrelic.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputNewrelicEvents.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputOpenTelemetry.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputPrometheus.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputS3.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSecurityLake.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSentinel.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSentinelOneAiSiem.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSignalfx.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSns.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunk.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkLb.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkLb.properties.indexerDiscoveryConfigs.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkLb.properties.indexerDiscoveryConfigs.properties.authTokens.items.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSqs.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputTcpjson.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputWavefront.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputWebhook.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      secret:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputWizHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputXsiam.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.PagerDutyTarget.properties"
+    update:
+      routingKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.PrometheusAuthType.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.PrometheusProvider.allOf.1.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.S3Provider.allOf.1.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SlackTarget.properties"
+    update:
+      url:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SmtpTarget.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SnowflakeProvider.allOf.1.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+      privKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SnsTarget.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TailscaleAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsClientSideTypeCaPathCertPath.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsClientSideTypeCaPathCertPathExtended.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsClientSideTypeExtended.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsServerSideType.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.WebhookTarget.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ZoomAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
