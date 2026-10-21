@@ -27,6 +27,7 @@ func (tr credentialTransport) RoundTrip(req *http.Request) (*http.Response, erro
 func TestExporterOmitsCredentialLiterals(t *testing.T) {
 	reg := buildTestRegistry(t)
 	tests := []struct{ name, typeName, body, field string }{
+		{"Database connection string", "criblio_database_connection", `{"id":"example","authType":"manual","databaseType":"postgres","description":"test","connectionString":"postgresql://user:ISSUE236_DUMMY@db.example.com:5432/appdb"}`, "connection_string"},
 		{"HTTP Raw tokens", "criblio_source", `{"id":"example","type":"http_raw","host":"0.0.0.0","port":10080,"authTokens":["ISSUE236_DUMMY"]}`, "auth_tokens"},
 		{"HTTP tokens", "criblio_source", `{"id":"example","type":"http","authTokens":["ISSUE236_DUMMY"]}`, "auth_tokens"},
 		{"Pack HTTP Raw tokens", "criblio_pack_source", `{"id":"example","type":"http_raw","host":"0.0.0.0","port":10080,"authTokens":["ISSUE236_DUMMY"]}`, "auth_tokens"},
