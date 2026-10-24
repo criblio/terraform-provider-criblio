@@ -5141,41 +5141,90 @@ func OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes() map[string]attr.Typ
 	}
 }
 
+type OutputLocalSearchStorageExceptionRetrySettingsModel struct {
+	ChErrorCode    types.Float64 `tfsdk:"ch_error_code" json:"chErrorCode,omitempty"`
+	InitialBackoff types.Float64 `tfsdk:"initial_backoff" json:"initialBackoff,omitempty"`
+	BackoffRate    types.Float64 `tfsdk:"backoff_rate" json:"backoffRate,omitempty"`
+	MaxBackoff     types.Float64 `tfsdk:"max_backoff" json:"maxBackoff,omitempty"`
+}
+
+type OutputLocalSearchStorageExceptionRetrySettingsAPIModel struct {
+	ChErrorCode    *float64 `json:"chErrorCode,omitempty"`
+	InitialBackoff *float64 `json:"initialBackoff,omitempty"`
+	BackoffRate    *float64 `json:"backoffRate,omitempty"`
+	MaxBackoff     *float64 `json:"maxBackoff,omitempty"`
+}
+
+func OutputLocalSearchStorageExceptionRetrySettingsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"ch_error_code":   types.Float64Type,
+		"initial_backoff": types.Float64Type,
+		"backoff_rate":    types.Float64Type,
+		"max_backoff":     types.Float64Type,
+	}
+}
+
 type OutputLocalSearchStorageStatsDestinationModel struct {
-	URL                 types.String  `tfsdk:"url" json:"url,omitempty"`
-	Database            types.String  `tfsdk:"database" json:"database,omitempty"`
-	TableName           types.String  `tfsdk:"table_name" json:"tableName,omitempty"`
-	AuthType            types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	Username            types.String  `tfsdk:"username" json:"username,omitempty"`
-	SqlUsername         types.String  `tfsdk:"sql_username" json:"sqlUsername,omitempty"`
-	Password            types.String  `tfsdk:"password" json:"password,omitempty"`
-	WaitForAsyncInserts types.Bool    `tfsdk:"wait_for_async_inserts" json:"waitForAsyncInserts,omitempty"`
-	Concurrency         types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
+	URL                    types.String  `tfsdk:"url" json:"url,omitempty"`
+	Database               types.String  `tfsdk:"database" json:"database,omitempty"`
+	TableName              types.String  `tfsdk:"table_name" json:"tableName,omitempty"`
+	AuthType               types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Username               types.String  `tfsdk:"username" json:"username,omitempty"`
+	SqlUsername            types.String  `tfsdk:"sql_username" json:"sqlUsername,omitempty"`
+	Password               types.String  `tfsdk:"password" json:"password,omitempty"`
+	WaitForAsyncInserts    types.Bool    `tfsdk:"wait_for_async_inserts" json:"waitForAsyncInserts,omitempty"`
+	Concurrency            types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
+	ExceptionRetrySettings types.List    `tfsdk:"exception_retry_settings" json:"exceptionRetrySettings,omitempty"`
 }
 
 type OutputLocalSearchStorageStatsDestinationAPIModel struct {
-	URL                 *string  `json:"url,omitempty"`
-	Database            *string  `json:"database,omitempty"`
-	TableName           *string  `json:"tableName,omitempty"`
-	AuthType            *string  `json:"authType,omitempty"`
-	Username            *string  `json:"username,omitempty"`
-	SqlUsername         *string  `json:"sqlUsername,omitempty"`
-	Password            *string  `json:"password,omitempty"`
-	WaitForAsyncInserts *bool    `json:"waitForAsyncInserts,omitempty"`
-	Concurrency         *float64 `json:"concurrency,omitempty"`
+	URL                    *string  `json:"url,omitempty"`
+	Database               *string  `json:"database,omitempty"`
+	TableName              *string  `json:"tableName,omitempty"`
+	AuthType               *string  `json:"authType,omitempty"`
+	Username               *string  `json:"username,omitempty"`
+	SqlUsername            *string  `json:"sqlUsername,omitempty"`
+	Password               *string  `json:"password,omitempty"`
+	WaitForAsyncInserts    *bool    `json:"waitForAsyncInserts,omitempty"`
+	Concurrency            *float64 `json:"concurrency,omitempty"`
+	ExceptionRetrySettings any      `json:"exceptionRetrySettings,omitempty"`
 }
 
 func OutputLocalSearchStorageStatsDestinationAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"url":                    types.StringType,
-		"database":               types.StringType,
-		"table_name":             types.StringType,
-		"auth_type":              types.StringType,
-		"username":               types.StringType,
-		"sql_username":           types.StringType,
-		"password":               types.StringType,
-		"wait_for_async_inserts": types.BoolType,
-		"concurrency":            types.Float64Type,
+		"url":                      types.StringType,
+		"database":                 types.StringType,
+		"table_name":               types.StringType,
+		"auth_type":                types.StringType,
+		"username":                 types.StringType,
+		"sql_username":             types.StringType,
+		"password":                 types.StringType,
+		"wait_for_async_inserts":   types.BoolType,
+		"concurrency":              types.Float64Type,
+		"exception_retry_settings": types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageStatsDestinationExceptionRetrySettingsAttrTypes()}},
+	}
+}
+
+type OutputLocalSearchStorageStatsDestinationExceptionRetrySettingsModel struct {
+	ChErrorCode    types.Float64 `tfsdk:"ch_error_code" json:"chErrorCode,omitempty"`
+	InitialBackoff types.Float64 `tfsdk:"initial_backoff" json:"initialBackoff,omitempty"`
+	BackoffRate    types.Float64 `tfsdk:"backoff_rate" json:"backoffRate,omitempty"`
+	MaxBackoff     types.Float64 `tfsdk:"max_backoff" json:"maxBackoff,omitempty"`
+}
+
+type OutputLocalSearchStorageStatsDestinationExceptionRetrySettingsAPIModel struct {
+	ChErrorCode    *float64 `json:"chErrorCode,omitempty"`
+	InitialBackoff *float64 `json:"initialBackoff,omitempty"`
+	BackoffRate    *float64 `json:"backoffRate,omitempty"`
+	MaxBackoff     *float64 `json:"maxBackoff,omitempty"`
+}
+
+func OutputLocalSearchStorageStatsDestinationExceptionRetrySettingsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"ch_error_code":   types.Float64Type,
+		"initial_backoff": types.Float64Type,
+		"backoff_rate":    types.Float64Type,
+		"max_backoff":     types.Float64Type,
 	}
 }
 
@@ -9495,6 +9544,7 @@ type OutputSentinelModel struct {
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	AuthType                      types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
 	LoginURL                      types.String  `tfsdk:"login_url" json:"loginUrl,omitempty"`
+	Secret                        types.String  `tfsdk:"secret" json:"secret,omitempty"`
 	RefreshTokenField             types.String  `tfsdk:"refresh_token_field" json:"refreshTokenField,omitempty"`
 	RotateRefreshToken            types.Bool    `tfsdk:"rotate_refresh_token" json:"rotateRefreshToken,omitempty"`
 	RefreshURL                    types.String  `tfsdk:"refresh_url" json:"refreshUrl,omitempty"`
@@ -9526,7 +9576,6 @@ type OutputSentinelModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
-	Secret                        types.String  `tfsdk:"secret" json:"secret,omitempty"`
 	OauthTextSecret               types.String  `tfsdk:"oauth_text_secret" json:"oauthTextSecret,omitempty"`
 	URL                           types.String  `tfsdk:"url" json:"url,omitempty"`
 	DcrID                         types.String  `tfsdk:"dcr_id" json:"dcrID,omitempty"`
@@ -9561,6 +9610,7 @@ func OutputSentinelModelAttrTypes() map[string]attr.Type {
 		"on_backpressure":                   types.StringType,
 		"auth_type":                         types.StringType,
 		"login_url":                         types.StringType,
+		"secret":                            types.StringType,
 		"refresh_token_field":               types.StringType,
 		"rotate_refresh_token":              types.BoolType,
 		"refresh_url":                       types.StringType,
@@ -9592,7 +9642,6 @@ func OutputSentinelModelAttrTypes() map[string]attr.Type {
 		"pq_on_backpressure":                types.StringType,
 		"pq_max_buffer_size_bytes":          types.StringType,
 		"pq_controls":                       types.MapType{ElemType: types.StringType},
-		"secret":                            types.StringType,
 		"oauth_text_secret":                 types.StringType,
 		"url":                               types.StringType,
 		"dcr_id":                            types.StringType,
@@ -9777,6 +9826,13 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert login_url to API value: %v", err)
 		}
 		output["loginUrl"] = value
+	}
+	if !m.Secret.IsNull() && !m.Secret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Secret)
+		if err != nil {
+			return nil, fmt.Errorf("convert secret to API value: %v", err)
+		}
+		output["secret"] = value
 	}
 	if !m.RefreshTokenField.IsNull() && !m.RefreshTokenField.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.RefreshTokenField)
@@ -9994,13 +10050,6 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
-	}
-	if !m.Secret.IsNull() && !m.Secret.IsUnknown() {
-		value, err := DestinationTerraformValueToJSON(m.Secret)
-		if err != nil {
-			return nil, fmt.Errorf("convert secret to API value: %v", err)
-		}
-		output["secret"] = value
 	}
 	if !m.OauthTextSecret.IsNull() && !m.OauthTextSecret.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.OauthTextSecret)
@@ -10268,6 +10317,15 @@ func (m *OutputSentinelModel) unmarshalPayload(input map[string]any) error {
 		m.LoginURL = value.(types.String)
 	} else {
 		m.LoginURL = types.StringNull()
+	}
+	if item, ok := input["secret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert secret from API value: %v", err)
+		}
+		m.Secret = value.(types.String)
+	} else {
+		m.Secret = types.StringNull()
 	}
 	if item, ok := input["refreshTokenField"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
@@ -10547,15 +10605,6 @@ func (m *OutputSentinelModel) unmarshalPayload(input map[string]any) error {
 		m.PqControls = value.(types.Map)
 	} else {
 		m.PqControls = types.MapNull(types.StringType)
-	}
-	if item, ok := input["secret"]; ok {
-		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
-		if err != nil {
-			return fmt.Errorf("convert secret from API value: %v", err)
-		}
-		m.Secret = value.(types.String)
-	} else {
-		m.Secret = types.StringNull()
 	}
 	if item, ok := input["oauthTextSecret"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
@@ -59812,6 +59861,7 @@ type OutputLocalSearchStorageModel struct {
 	Workload                      types.String  `tfsdk:"workload" json:"workload,omitempty"`
 	DumpFormatErrorsToDisk        types.Bool    `tfsdk:"dump_format_errors_to_disk" json:"dumpFormatErrorsToDisk,omitempty"`
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	ExceptionRetrySettings        types.List    `tfsdk:"exception_retry_settings" json:"exceptionRetrySettings,omitempty"`
 	StatsDestination              types.Object  `tfsdk:"stats_destination" json:"statsDestination,omitempty"`
 	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
 	Username                      types.String  `tfsdk:"username" json:"username,omitempty"`
@@ -59870,6 +59920,7 @@ func OutputLocalSearchStorageModelAttrTypes() map[string]attr.Type {
 		"workload":                          types.StringType,
 		"dump_format_errors_to_disk":        types.BoolType,
 		"on_backpressure":                   types.StringType,
+		"exception_retry_settings":          types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageExceptionRetrySettingsAttrTypes()}},
 		"stats_destination":                 types.ObjectType{AttrTypes: OutputLocalSearchStorageStatsDestinationAttrTypes()},
 		"description":                       types.StringType,
 		"username":                          types.StringType,
@@ -60120,6 +60171,13 @@ func (m OutputLocalSearchStorageModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert on_backpressure to API value: %v", err)
 		}
 		output["onBackpressure"] = value
+	}
+	if !m.ExceptionRetrySettings.IsNull() && !m.ExceptionRetrySettings.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ExceptionRetrySettings)
+		if err != nil {
+			return nil, fmt.Errorf("convert exception_retry_settings to API value: %v", err)
+		}
+		output["exceptionRetrySettings"] = value
 	}
 	if !m.StatsDestination.IsNull() && !m.StatsDestination.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.StatsDestination)
@@ -60569,6 +60627,15 @@ func (m *OutputLocalSearchStorageModel) unmarshalPayload(input map[string]any) e
 		m.OnBackpressure = value.(types.String)
 	} else {
 		m.OnBackpressure = types.StringNull()
+	}
+	if item, ok := input["exceptionRetrySettings"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageExceptionRetrySettingsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert exceptionRetrySettings from API value: %v", err)
+		}
+		m.ExceptionRetrySettings = value.(types.List)
+	} else {
+		m.ExceptionRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageExceptionRetrySettingsAttrTypes()})
 	}
 	if item, ok := input["statsDestination"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: OutputLocalSearchStorageStatsDestinationAttrTypes()})

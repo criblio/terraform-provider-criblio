@@ -80,6 +80,8 @@ func datasetRuleList(t *testing.T) types.List {
 		"id":                        types.StringValue("rule_1"),
 		"kusto_expression":          types.StringValue("*"),
 		"name":                      types.StringValue("n"),
+		"schema_mapping":            types.StringNull(),
+		"schema_mapping_mode":       types.StringNull(),
 		"send_data_to":              types.StringValue("destinationDataset"),
 	})
 	require.False(t, diags.HasError(), "%v", diags)

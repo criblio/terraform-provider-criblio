@@ -31,7 +31,9 @@ resource "criblio_search_engine" "my_search_engine" {
 ### Optional
 
 - `description` (String) Brief description of the lakehouse engine.
+- `maximum_tier_size` (String) Largest engine size to which this lakehouse engine may be resized. Omitted when no additional maximum applies. Derived on read and ignored in request bodies.
 - `metrics_dataset_id` (String) The <code>id</code> of the Cribl-managed customer-metrics Dataset linked to this engine, resolved by ownership (not by name). Absent when the engine has no metrics Dataset we own.
+- `minimum_tier_size` (String) Smallest engine size to which this lakehouse engine may be resized. Omitted when no additional minimum applies. Derived on read and ignored in request bodies.
 
 ### Read-Only
 

@@ -77,6 +77,14 @@ func (d *SearchDatasetRulesetDataSource) Schema(_ context.Context, _ datasource.
 							Computed:    true,
 							Description: `Display name of the rule.`,
 						},
+						"schema_mapping": schema.StringAttribute{
+							Computed:    true,
+							Description: `Target schema type to map matching events to when <code>schemaMappingMode</code> is <code>add</code> or <code>replace</code>.`,
+						},
+						"schema_mapping_mode": schema.StringAttribute{
+							Computed:    true,
+							Description: `How schema mappings are applied when enabled: <code>none</code>, <code>add</code>, or <code>replace</code>.`,
+						},
 						"send_data_to": schema.StringAttribute{
 							Computed:    true,
 							Description: `To send matching events to a Dataset, <code>destinationDataset</code>. To drop matching events, <code>drop</code>.`,

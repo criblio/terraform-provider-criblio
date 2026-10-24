@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -109,35 +110,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -187,9 +194,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -228,9 +236,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -298,6 +307,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -323,9 +344,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -353,14 +375,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -394,9 +418,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -421,20 +446,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Splunk collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"search_head": schema.StringAttribute{
@@ -468,71 +502,232 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `REST API endpoint used to create a search`,
 									},
 									"output_mode": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Format of the returned output`,
 									},
 									"authentication": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authentication method for Discover and Collect REST calls`,
 									},
 									"timeout": schema.Int64Attribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `HTTP request inactivity timeout. Use 0 for no timeout.`,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 1800),
 										},
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Use round-robin DNS lookup. Suitable when DNS server returns multiple addresses in sort order.`,
 									},
 									"disable_time_filter": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disable collector event time filtering when a date range is specified`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 									},
 									"handle_escaped_chars": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Escape characters (\") in search queries will be passed directly to Splunk`,
 									},
 									"username": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Basic authentication username`,
 									},
 									"password": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Basic authentication password`,
 									},
 									"credentials_secret": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored secret that references your credentials`,
 									},
 									"token": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Bearer token`,
 									},
 									"token_secret": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored secret that references your Bearer token`,
+									},
+									"collect_request_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Optional collect request parameters`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute the parameter's value, normally enclosed in backticks (`${earliest}`). If\u00a0a constant, use single quotes ('earliest'). Values\u00a0without delimiters (earliest) are evaluated as strings.",
+												},
+											},
+										},
+									},
+									"collect_request_headers": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Optional collect request headers`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Header Name`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute the header's value, normally enclosed in backticks (`${earliest}`). If\u00a0a constant, use single quotes ('earliest'). Values\u00a0without delimiters (earliest) are evaluated as strings.",
+												},
+											},
+										},
+									},
+									"retry_rules": schema.SingleNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Settings that control how the Collector retries failed HTTP requests.`,
+										Attributes: map[string]schema.Attribute{
+											"type": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `The algorithm to use when performing HTTP retries`,
+											},
+											"interval": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).`,
+												Validators: []validator.Float64{
+													float64validator.Between(0, 20000),
+												},
+											},
+											"limit": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `The maximum number of times to retry a failed HTTP request`,
+												Validators: []validator.Float64{
+													float64validator.Between(0, 20),
+												},
+											},
+											"codes": schema.ListAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+												Validators: []validator.List{
+													listvalidator.SizeAtLeast(1),
+												},
+												ElementType: types.Float64Type,
+											},
+											"enable_header": schema.BoolAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+											},
+											"retry_connect_timeout": schema.BoolAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
+											},
+											"retry_connect_reset": schema.BoolAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Retry request when a connection reset error (ECONNRESET) error occurs`,
+											},
+											"multiplier": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Base for exponential backoff. For example, base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on.`,
+												Validators: []validator.Float64{
+													float64validator.Between(1, 20),
+												},
+											},
+										},
+									},
+									"login_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `URL to use for login API call. This call is expected to be a POST.`,
+									},
+									"login_body": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Template for POST body to send with login request. ${username} and ${password} are used to specify location of these attributes in the message.`,
+									},
+									"token_resp_attribute": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Path to token attribute in login response body. Nested attributes are allowed.`,
+									},
+									"auth_header_expr": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `JavaScript expression to compute the Authorization header to pass in discover and collect calls. The value ${token} is used to reference the token obtained from login.`,
 									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -542,35 +737,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -620,9 +821,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Internal settings for scheduled execution of this Collector.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -661,9 +863,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -725,11 +928,24 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 												Computed: true,
 											},
 											"enabled": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Track collection progress between consecutive scheduled executions`,
 											},
 										},
+									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
 									},
 								},
 							},
@@ -756,9 +972,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -786,14 +1003,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -827,9 +1046,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -854,42 +1074,55 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Rest collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authentication method for Discover and Collect REST calls. You can specify API key–based authentication by adding the appropriate Collect headers.`,
 									},
 									"username": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Username`,
 									},
 									"password": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Password`,
 									},
 									"credentials_secret": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored secret that references your credentials`,
 									},
 									"token": schema.StringAttribute{
 										Required:  false,
@@ -953,25 +1186,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Expression for auth header value`,
 									},
 									"client_secret_param_name": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Defaults to 'client_secret'. Automatically added to request parameters using the value specified.`,
 									},
 									"auth_request_params": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `OAuth request parameters added to the POST body. The Content-Type header will automatically be set to application/x-www-form-urlencoded.`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
 												},
 											},
 										},
@@ -983,20 +1220,23 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Attribute name for token in response`,
 									},
 									"auth_request_headers": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authentication headers`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
 												},
 											},
 										},
@@ -1008,44 +1248,51 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `URL to use for the Collect operation`,
 									},
 									"collect_method": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Collect method`,
 									},
 									"collect_request_headers": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Headers to send with each Collect request.`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
 												},
 											},
 										},
 									},
 									"collect_request_params": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Collect parameters`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
 												},
 											},
 										},
@@ -1057,53 +1304,62 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Body content for the collect request, used with the post_with_body collect method`,
 									},
 									"timeout": schema.Int64Attribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `HTTP request inactivity timeout. Use 0 to disable.`,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 1800),
 										},
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Use round-robin DNS lookup. Suitable when DNS server returns multiple addresses in sort order.`,
 									},
 									"disable_time_filter": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disable Collector event time filtering when a date range is specified`,
 									},
 									"decode_url": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Decode the URL before sending requests (including pagination requests)`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 									},
 									"capture_headers": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Enable to add response headers to the resHeaders field under the __collectible object`,
 									},
 									"safe_headers": schema.ListAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
+										Description: `List of headers that are safe to log in plain text`,
 										ElementType: types.StringType,
 									},
 									"discovery": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Settings that control how the Collector discovers Collect tasks.`,
 										Attributes: map[string]schema.Attribute{
 											"discover_type": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Defines how task discovery will be performed. Each entry returned by the Discover operation will result in a Collect task.`,
 											},
 											"discover_method": schema.StringAttribute{
 												Required:    false,
@@ -1112,75 +1368,89 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 												Description: `protocol used for http discovery, required for 'http' type`,
 											},
 											"pagination": schema.SingleNestedAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Settings that control how the Collector paginates through Discover results.`,
 												Attributes: map[string]schema.Attribute{
 													"type": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Pagination`,
 													},
 													"offset_field": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Query string parameter that sets the index from which to begin returning records. Example: /api/v1/query?term=cribl&limit=100&offset=0`,
 													},
 													"limit_field": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&limit=100&offset=0`,
 													},
 													"limit": schema.Int64Attribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Maximum number of records to retrieve per request`,
 													},
 													"max_pages": schema.Int64Attribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Maximum number of pages to retrieve for the discover task. Defaults to 50 pages. Set to 0 to retrieve all pages.`,
 													},
 													"zero_indexed": schema.BoolAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Enable to indicate that the first page in the requested data is at index 0. Disabled by default, which indicates index 1.`,
 													},
 													"page_field": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Query string parameter that sets the page index to be returned. Example: /api/v1/query?term=cribl&page_size=100&page_number=0`,
 													},
 													"size_field": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&page_size=100&page_number=0`,
 													},
 													"size": schema.Int64Attribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Maximum number of records to retrieve per page`,
 													},
 													"attribute": schema.ListAttribute{
 														Required:    false,
 														Optional:    true,
 														Computed:    true,
+														Description: `Names of attributes within the response that contain next-page information`,
 														ElementType: types.StringType,
 													},
 													"last_page_expr": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `JavaScript expression used to determine when the last page has been reached. The values tested by this expression must be in the Response attributes section.`,
 													},
 													"offset": schema.Int64Attribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Offset index from which to start request. Defaults to undefined, which will start discovery from the first record.`,
 													},
 													"total_record_field": schema.StringAttribute{
-														Required: false,
-														Optional: true,
-														Computed: true,
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Name of the attribute in the response that contains the total number of records for the query`,
 													},
 													"next_relation_attribute": schema.StringAttribute{
 														Required:    false,
@@ -1194,12 +1464,25 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 														Computed:    true,
 														Description: `Optional relation for the current page in Link header pagination`,
 													},
+													"page": schema.Float64Attribute{
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Page number from which to start request. Defaults to undefined, which will start discovery from the first page.`,
+													},
+													"total_page_field": schema.StringAttribute{
+														Required:    false,
+														Optional:    true,
+														Computed:    true,
+														Description: `Name of the attribute in the response that contains the total number of pages for the query`,
+													},
 												},
 											},
 											"enable_discover_code": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Format discover result with custom code`,
 											},
 											"item_list": schema.ListAttribute{
 												Required:    false,
@@ -1215,20 +1498,23 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 												Description: `URL to hit for rest type collectors, required for 'http' discoverType`,
 											},
 											"discover_request_headers": schema.ListNestedAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Discover headers`,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Required: false,
-															Optional: true,
-															Computed: true,
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: `Name`,
 														},
 														"value": schema.StringAttribute{
-															Required: false,
-															Optional: true,
-															Computed: true,
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
 														},
 													},
 												},
@@ -1240,111 +1526,149 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 												Description: `json payload to return manually, required for 'json' discoverType`,
 											},
 											"discover_request_params": schema.ListNestedAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Discover parameters`,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Required: false,
-															Optional: true,
-															Computed: true,
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: `Name`,
 														},
 														"value": schema.StringAttribute{
-															Required: false,
-															Optional: true,
-															Computed: true,
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
 														},
 													},
 												},
 											},
 											"discover_body": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: "Template for POST body to send with the discover request. To reference global variables or functions, use template parameters: `{ myVar: ${C.vars.myVar}, secret: ${C.Secret('mySecret','text').value} }`",
 											},
 											"format_result_code": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Custom JavaScript code to format the discover result through the __e variable which is a JSON object or array containing the original discover results. The object or array passed should be manipulated to contain the desired discover results, i.e.: __e['myResult'] = [{lat: -1.1234, long: 2.345, zip: 11111},{lat: -1.235, long 2.346, zip: 22222}] or ['11111','22222']. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.`,
 											},
 											"discover_data_field": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Path to field in the response object that contains discovery results (ex: level1.name). Leave blank if the result is an array.`,
+											},
+											"enable_strict_discover_parsing": schema.BoolAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Explicitly set the discover response format. When disabled, best effort parsing is used.`,
+											},
+											"discover_response_format": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `If 'Strict discover response parsing' parsing is enabled, provide the response format`,
+											},
+											"discover_verb": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Custom HTTP method to use for the Discover operation`,
 											},
 										},
 									},
 									"pagination": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Settings that control how the Collector paginates through Collect results.`,
 										Attributes: map[string]schema.Attribute{
 											"type": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Pagination`,
 											},
 											"offset_field": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Query string parameter that sets the index from which to begin returning records. Example: /api/v1/query?term=cribl&limit=100&offset=0`,
 											},
 											"limit_field": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&limit=100&offset=0`,
 											},
 											"limit": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Maximum number of records to collect per request`,
 											},
 											"max_pages": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.`,
 											},
 											"zero_indexed": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Enable to indicate that the first page in the requested data is at index 0. Disabled by default, which indicates index 1.`,
 											},
 											"page_field": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Query string parameter that sets the page index to be returned. Example: /api/v1/query?term=cribl&page_size=100&page_number=0`,
 											},
 											"size_field": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&page_size=100&page_number=0`,
 											},
 											"size": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Maximum number of records to collect per page`,
 											},
 											"attribute": schema.ListAttribute{
 												Required:    false,
 												Optional:    true,
 												Computed:    true,
+												Description: `Names of attributes within the response that contain next-page information`,
 												ElementType: types.StringType,
 											},
 											"last_page_expr": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `JavaScript expression used to determine when the last page has been reached. The values tested by this expression must be in the Response attributes section.`,
 											},
 											"offset": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Offset index from which to start request. Defaults to undefined, which will start collection from the first record.`,
 											},
 											"total_record_field": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Name of the attribute in the response that contains the total number of records for the query`,
 											},
 											"next_relation_attribute": schema.StringAttribute{
 												Required:    false,
@@ -1358,63 +1682,86 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 												Computed:    true,
 												Description: `Optional relation for the current page in Link header pagination`,
 											},
+											"page": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Page number from which to start request. Defaults to undefined, which will start collection from the first page.`,
+											},
+											"total_page_field": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Name of the attribute in the response that contains the total number of pages for the query`,
+											},
 										},
 									},
 									"retry_rules": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Settings that control how the Collector retries failed HTTP requests.`,
 										Attributes: map[string]schema.Attribute{
 											"type": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `The algorithm to use when performing HTTP retries`,
 											},
 											"interval": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).`,
 											},
 											"limit": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Maximum number of times to retry a failed HTTP request`,
 											},
 											"multiplier": schema.Float64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Base for exponential backoff. Example: base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on.`,
 											},
 											"max_interval_ms": schema.Int64Attribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Longest interval between retries (ms)`,
 											},
 											"codes": schema.ListAttribute{
 												Required:    false,
 												Optional:    true,
 												Computed:    true,
+												Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
 												ElementType: types.Int64Type,
 											},
 											"enable_header": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: "Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to the `Longest interval between retries (ms)` value, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.",
 											},
 											"retry_connect_timeout": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
 											},
 											"retry_connect_reset": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
 											},
 											"retry_header_name": schema.StringAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Retry-After header name`,
 											},
 										},
 									},
@@ -1425,7 +1772,109 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Sensitive:   true,
 										Description: `OAuth client secret value added using the configured client secret parameter name.`,
 									},
+									"max_response_body_size": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum amount of data to buffer from a single response body. Responses exceeding this limit will be rejected. Maximum allowed value is 512 MB. Leave unset to rely on default error handling.`,
+									},
+									"stop_on_empty_results": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Stop pagination when the Event Breaker produces no events`,
+									},
+									"microsoft_graph_delta": schema.SingleNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Internal opt-in for the Microsoft Graph deltaLink state-tracking hook. Set programmatically by the Microsoft Graph source when the configured URL targets a /delta endpoint; not user-configurable.`,
+										Attributes: map[string]schema.Attribute{
+											"delta_link_attribute": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Response-body field name to extract as the delta link (typically '@odata.deltaLink')`,
+											},
+										},
+									},
+									"get_auth_token_from_header": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Extract the auth token from the HTTP 'Authorization' response header instead of the standard JSON body of the login response`,
+									},
+									"refresh_token_field": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, the Collector uses the refresh token to obtain new access tokens without re-sending credentials.`,
+									},
+									"rotate_refresh_token": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The Collector will update its stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+									},
+									"refresh_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+									},
+									"refresh_request_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, the Collector sends only grant_type, refresh_token, and client_secret.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter name.`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter value.`,
+												},
+											},
+										},
+									},
+									"text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a text secret that contains the client secret's value`,
+									},
+									"hmac_function_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create an HMAC Function to use with authentication`,
+									},
+									"collect_verb": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Custom HTTP method to use for the Collect operation`,
+									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -1435,35 +1884,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -1513,9 +1968,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -1554,9 +2010,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -1624,6 +2081,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -1649,9 +2118,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -1679,14 +2149,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -1720,9 +2192,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -1747,20 +2220,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `S3 collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"bucket": schema.StringAttribute{
@@ -1782,36 +2264,42 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Directory where data will be collected`,
 									},
 									"aws_authentication_method": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 									},
 									"aws_api_key": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Access key. If not present, will fall back to env.AWS_ACCESS_KEY_ID, or to the metadata endpoint for IAM creds. Optional when running on AWS. This value can be a constant or a JavaScript expression.`,
 									},
 									"aws_secret_key": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Secret key. If not present, will fall back to env.AWS_SECRET_ACCESS_KEY, or to the metadata endpoint for IAM creds. Optional when running on AWS. This value can be a constant or a JavaScript expression.`,
 									},
 									"aws_secret": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored secret that references AWS access key and secret key.`,
 									},
 									"recurse": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Traverse and include files from subdirectories. Leave this option enabled to ensure that all nested directories are searched and their contents collected.`,
 									},
 									"extractors": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Allows using template tokens as context for expressions that enrich discovery results. For example, given a template /path/${epoch}, an extractor under key "epoch" with an expression {date: new Date(+value*1000)}, will enrich discovery results with a human readable "date" field.`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"key": schema.StringAttribute{
@@ -1836,14 +2324,118 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum number of metadata objects to batch before recording as results`,
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
+									"output_name": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Name of the predefined Destination that will be used to auto-populate Collector settings`,
+									},
+									"parquet_chunk_size_mb": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum file size for each Parquet chunk`,
+										Validators: []validator.Float64{
+											float64validator.Between(1, 100),
+										},
+									},
+									"parquet_chunk_download_timeout": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+										Validators: []validator.Float64{
+											float64validator.Between(1, 3600),
+										},
+									},
+									"partitioning_scheme": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Partitioning scheme used for this dataset. Using a known scheme like DDSS enables more efficient data reading and retrieval.`,
+									},
+									"endpoint": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Must point to an S3-compatible endpoint. If empty, defaults to an AWS region-specific endpoint. `,
+									},
+									"enable_assume_role": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Use AssumeRole credentials`,
+									},
+									"assume_role_arn": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Amazon Resource Name (ARN) of the role to assume`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+											stringvalidator.UTF8LengthAtLeast(20),
+										},
+									},
+									"assume_role_external_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `External ID to use when assuming role`,
+									},
+									"duration_seconds": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Duration of the Assumed Role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+										Validators: []validator.Float64{
+											float64validator.Between(900, 43200),
+										},
+									},
+									"reuse_connections": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Reuse connections between requests to improve performance`,
+									},
+									"reject_unauthorized": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Reject certificates that cannot be verified against a valid CA (such as a self-signed certificate)`,
+									},
+									"verify_permissions": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disable if you can access files within the bucket but not the bucket itself. Resolves errors of the form "discover task initialization failed...error: Forbidden".`,
+									},
+									"disable_time_filter": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disable Collector event time filtering when a date range is specified`,
+									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -1853,35 +2445,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -1931,9 +2529,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -1972,9 +2571,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -2042,6 +2642,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -2067,9 +2679,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -2097,14 +2710,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -2138,9 +2753,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -2165,20 +2781,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `AzureBlob collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"container_name": schema.StringAttribute{
@@ -2188,9 +2813,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Azure container to collect from`,
 									},
 									"storage_account_name": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The name of your Azure storage account`,
 									},
 									"connection_string": schema.StringAttribute{
 										Required:    false,
@@ -2199,9 +2825,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Azure storage account Connection String`,
 									},
 									"auth_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Enter authentication data directly, or select a secret referencing your auth data`,
 									},
 									"path": schema.StringAttribute{
 										Required:    false,
@@ -2210,14 +2837,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Recurse through subdirectories`,
 									},
 									"extractors": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Extractors allow use of template tokens as context for expressions that enrich discovery results. For example, given a template /path/${epoch}, an extractor under key "epoch" with an expression {date: new Date(+value*1000)} will enrich discovery results with a human-readable "date" field.`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"key": schema.StringAttribute{
@@ -2242,9 +2871,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum number of metadata objects to batch before recording as results`,
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
@@ -2279,6 +2909,73 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed:    true,
 										Description: `Maximum time in seconds allowed to download a Parquet chunk.`,
 									},
+									"output_name": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `An optional predefined Destination that will be used to auto-populate Collector settings`,
+									},
+									"blob_types": schema.ListAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Azure blob types to include during collection. At least one type must be selected. Append blobs may cause data duplication when collected before they are finalized.`,
+										Validators: []validator.List{
+											listvalidator.SizeAtLeast(1),
+											listvalidator.UniqueValues(),
+										},
+										ElementType: types.StringType,
+									},
+									"text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Text secret`,
+									},
+									"tenant_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The service principal's tenant ID`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The service principal's client ID`,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Text secret containing the client secret`,
+									},
+									"endpoint_suffix": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.`,
+									},
+									"azure_cloud": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The Azure cloud to use. Defaults to Azure Public Cloud.`,
+									},
+									"certificate": schema.SingleNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Certificate credentials for the service principal.`,
+										Attributes: map[string]schema.Attribute{
+											"certificate_name": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `The certificate you registered as credentials for your app in the Azure portal`,
+											},
+										},
+									},
 								},
 							},
 							"destructive": schema.BoolAttribute{
@@ -2301,35 +2998,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -2379,9 +3082,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -2420,9 +3124,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -2490,6 +3195,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -2515,9 +3232,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -2545,14 +3263,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -2586,9 +3306,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -2613,20 +3334,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `CriblLake collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"dataset": schema.StringAttribute{
@@ -2635,7 +3365,25 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Computed:    true,
 										Description: `Lake dataset to collect data from`,
 									},
+									"storage_location_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Storage location for the Lake Dataset`,
+									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -2645,35 +3393,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -2723,9 +3477,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Internal settings for scheduled execution of this Collector.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -2764,9 +3519,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -2828,11 +3584,30 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 												Computed: true,
 											},
 											"enabled": schema.BoolAttribute{
-												Required: false,
-												Optional: true,
-												Computed: true,
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Enable tracking of collection progress between consecutive scheduled executions.`,
+											},
+											"tracking_column": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `A numeric database column whose greatest seen value is tracked. Return this column in monotonically increasing order when state tracking is enabled.`,
 											},
 										},
+									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
 									},
 								},
 							},
@@ -2859,9 +3634,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -2889,14 +3665,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -2930,9 +3708,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -2957,20 +3736,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Database collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"connection_id": schema.StringAttribute{
@@ -2986,11 +3774,24 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Query string for selecting data from the database`,
 									},
 									"query_validation_enabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Enforces a basic query validation that allows only a single 'select' statement. Disable for more complex queries or when using semicolons. Caution: Disabling query validation allows DDL and DML statements to be executed, which could be destructive to your database.`,
 									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -3000,35 +3801,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -3078,9 +3885,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -3119,9 +3927,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -3189,6 +3998,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -3214,9 +4035,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -3244,14 +4066,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -3285,9 +4109,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -3312,27 +4137,37 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `GoogleCloudStorage collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"service_account_credentials": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Contents of Google Cloud service account credentials (JSON keys) file. To upload a file, click the upload button at this field's upper right.`,
 									},
 									"bucket": schema.StringAttribute{
 										Required:    false,
@@ -3347,19 +4182,22 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Directory where data will be collected`,
 									},
 									"auth_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Enter account credentials manually, select a secret that references your credentials, or use Google Application Default Credentials`,
 									},
 									"recurse": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Recurse through subdirectories`,
 									},
 									"extractors": schema.ListNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Allows using template tokens as context for expressions that enrich discovery results. For example, given a template /path/${epoch}, an extractor under key "epoch" with an expression {date: new Date(+value*1000)}, will enrich discovery results with a human readable "date" field.`,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"key": schema.StringAttribute{
@@ -3384,14 +4222,69 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum number of metadata objects to batch before recording as results`,
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
+									"output_name": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Name of the predefined Destination that will be used to auto-populate Collector settings`,
+									},
+									"endpoint": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Google Cloud Storage service endpoint. If empty, the endpoint will default to https://storage.googleapis.com.`,
+									},
+									"disable_time_filter": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Used to disable Collector event time filtering when a date range is specified`,
+									},
+									"parquet_chunk_size_mb": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum file size for each Parquet chunk`,
+										Validators: []validator.Float64{
+											float64validator.Between(1, 100),
+										},
+									},
+									"parquet_chunk_download_timeout": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The maximum time allowed for downloading a Parquet chunk. Processing will abort if a chunk cannot be downloaded within the time specified.`,
+										Validators: []validator.Float64{
+											float64validator.Between(1, 3600),
+										},
+									},
+									"text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored text secret that references your credentials`,
+									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -3401,35 +4294,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -3479,9 +4378,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -3520,9 +4420,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -3590,6 +4491,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -3615,9 +4528,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -3645,14 +4559,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -3686,9 +4602,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -3713,20 +4630,29 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `HealthCheck collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"collect_url": schema.StringAttribute{
@@ -3736,45 +4662,408 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `URL to use for the Collect operation`,
 									},
 									"collect_method": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Health check HTTP method.`,
 									},
 									"authentication": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authentication method for Discover and Collect REST calls. You can specify API Key–based authentication by adding the appropriate Collect headers.`,
 									},
 									"timeout": schema.Int64Attribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `HTTP request inactivity timeout, use 0 to disable`,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 1800),
 										},
 									},
 									"reject_unauthorized": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).`,
 									},
 									"username": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Basic authentication username`,
 									},
 									"password": schema.StringAttribute{
-										Required:  false,
-										Optional:  true,
-										Computed:  true,
-										Sensitive: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `Basic authentication password`,
 									},
 									"credentials_secret": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored secret that references your credentials`,
+									},
+									"discovery": schema.SingleNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Settings that control how the Collector discovers Collect tasks.`,
+										Attributes: map[string]schema.Attribute{
+											"discover_type": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Defines how task discovery will be performed. Use None to skip the discovery. Use HTTP Request to make a REST call to discover tasks. Use Item List to enumerate items for collect to retrieve. Use JSON Response to manually define discover tasks as a JSON array of objects. Each entry returned by the discover operation will result in a collect task.`,
+											},
+											"discover_url": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Expression to derive URL to use for the Discover operation (can be a constant).`,
+											},
+											"discover_method": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Discover HTTP method.`,
+											},
+											"discover_request_headers": schema.ListNestedAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Optional discover request headers.`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: `Header name.`,
+														},
+														"value": schema.StringAttribute{
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: `JavaScript expression to compute the header value (can be a constant).`,
+														},
+													},
+												},
+											},
+											"discover_data_field": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Path to field in the response object which contains discover results (e.g.: level1.name), leave blank if the result is an array.`,
+											},
+											"manual_discover_result": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Allows hard-coding the Discover result. Must be a JSON object. Works with the Discover Data field.`,
+											},
+											"item_list": schema.ListAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: "Comma-separated list of items to return from the Discover task. Each item returned will generate a collect task, and can be referenced using `${id}` in the collect URL, headers, or parameters.",
+												Validators: []validator.List{
+													listvalidator.SizeAtLeast(1),
+												},
+												ElementType: types.StringType,
+											},
+											"discover_request_params": schema.ListNestedAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Optional discover request parameters.`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: `Parameter name.`,
+														},
+														"value": schema.StringAttribute{
+															Required:    false,
+															Optional:    true,
+															Computed:    true,
+															Description: `JavaScript expression to compute the parameter value (can be a constant).`,
+														},
+													},
+												},
+											},
+											"discover_body": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Template for POST body to send with the discover request.`,
+											},
+										},
+									},
+									"collect_request_headers": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Optional health check request headers.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Header Name`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `JavaScript expression to compute the header value (can be a constant).`,
+												},
+											},
+										},
+									},
+									"authenticate_collect": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Enable to make auth health check call.`,
+									},
+									"safe_headers": schema.ListAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `List of headers that are safe to log in plain text.`,
+										ElementType: types.StringType,
+									},
+									"retry_rules": schema.SingleNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Settings that control how the Collector retries failed HTTP requests.`,
+										Attributes: map[string]schema.Attribute{
+											"type": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `The algorithm to use when performing HTTP retries`,
+											},
+											"interval": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).`,
+												Validators: []validator.Float64{
+													float64validator.Between(0, 20000),
+												},
+											},
+											"limit": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `The maximum number of times to retry a failed HTTP request`,
+												Validators: []validator.Float64{
+													float64validator.Between(0, 20),
+												},
+											},
+											"codes": schema.ListAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+												Validators: []validator.List{
+													listvalidator.SizeAtLeast(1),
+												},
+												ElementType: types.Float64Type,
+											},
+											"enable_header": schema.BoolAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+											},
+											"multiplier": schema.Float64Attribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+												Validators: []validator.Float64{
+													float64validator.Between(1, 20),
+												},
+											},
+										},
+									},
+									"login_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `URL to use for login API call. This call is expected to be a POST.`,
+									},
+									"login_body": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Template for POST body to send with login request, ${username} and ${password} are used to specify location of these attributes in the message`,
+									},
+									"token_resp_attribute": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Path to token attribute in login response body. Nested attributes are OK. Leave blank if the response content type is text/plain; the entire response body will be used to derive the authorization header.`,
+									},
+									"auth_header_expr": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `JavaScript expression to compute the Authorization header to pass in discover and collect calls. The value ${token} is used to reference the token obtained from login.`,
+									},
+									"auth_request_headers": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Optional authentication request headers.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Header name.`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `JavaScript expression to compute the header value (can be a constant).`,
+												},
+											},
+										},
+									},
+									"client_secret_param_name": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Parameter name that contains client secret. Defaults to 'client_secret', and is automatically added to request parameters.`,
+									},
+									"client_secret_param_value": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Secret value to add to HTTP requests as the 'client secret' parameter. Stored on disk encrypted, and is automatically added to request parameters`,
+									},
+									"auth_request_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `OAuth request parameters added to the POST body. The Content-Type header will automatically be set to application/x-www-form-urlencoded.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter name.`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: "JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g.,\u00a0`${earliest}`). If\u00a0a constant, use single quotes (e.g.,\u00a0'earliest'). Values\u00a0without delimiters (e.g.,\u00a0earliest) are evaluated as strings.",
+												},
+											},
+										},
+									},
+									"refresh_token_field": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, the Collector uses the refresh token to obtain new access tokens without re-sending credentials.`,
+									},
+									"rotate_refresh_token": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The Collector will update its stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+									},
+									"refresh_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+									},
+									"refresh_request_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, the Collector sends only grant_type, refresh_token, and client_secret.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter name.`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter value.`,
+												},
+											},
+										},
+									},
+									"text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a text secret that contains the client secret's value.`,
+									},
+									"collect_request_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Optional health check request parameters.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter name`,
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `JavaScript expression to compute the parameter value (can be a constant).`,
+												},
+											},
+										},
+									},
+									"collect_body": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Template for POST body to send with the health check request. You can reference parameters from the Discover response, using template params of the form: ${variable}.`,
 									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -3784,35 +5073,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -3862,9 +5157,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -3903,9 +5199,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -3973,6 +5270,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -3998,9 +5307,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -4028,14 +5338,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -4069,9 +5381,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -4096,38 +5409,87 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Script collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"conf": schema.SingleNestedAttribute{
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"shell": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Shell to use to execute scripts.`,
 									},
 									"discover_script": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Script to discover what to collect. Should output one task per line in stdout.`,
 									},
 									"collect_script": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Script to run to perform data collections. Task passed in as $CRIBL_COLLECT_ARG. Should output results to stdout.`,
+									},
+									"env_vars": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Environment variables to expose to the discover and collect scripts.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Environment variable name`,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]*$`), "must match pattern ^[a-zA-Z][a-zA-Z0-9_-]*$"),
+													},
+												},
+												"value": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `JavaScript expression to compute environment variable's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+												},
+											},
+										},
 									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected (where applicable)`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
 							},
 						},
 					},
@@ -4137,35 +5499,41 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this Job`,
 					},
 					"ttl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 					},
 					"remove_fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.`,
 						ElementType: types.StringType,
 					},
 					"resume_on_boot": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Resume the ad hoc job if a failure condition causes Stream to restart during job execution`,
 					},
 					"environment": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"saved_state": schema.MapAttribute{
 						Required:    false,
@@ -4215,9 +5583,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Resume missed scheduled runs`,
 							},
 							"run": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Run settings that control how the scheduled job executes, including log level, task sizing, and timeout.`,
 								Attributes: map[string]schema.Attribute{
 									"reschedule_dropped_tasks": schema.BoolAttribute{
 										Required:    false,
@@ -4256,9 +5625,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time range`,
 									},
 									"earliest": schema.StringAttribute{
 										Required:    false,
@@ -4326,6 +5696,18 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 											},
 										},
 									},
+									"type": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Resource type identifier.`,
+									},
+									"timestamp_timezone": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `IANA timezone name for interpreting timestamp values in the collection time range.`,
+									},
 								},
 							},
 						},
@@ -4351,9 +5733,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("collection"),
 								},
@@ -4381,14 +5764,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"command": schema.StringAttribute{
 										Required:    false,
@@ -4422,9 +5807,10 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Name of the metadata field.`,
 										},
 										"value": schema.StringAttribute{
 											Required:    false,
@@ -4449,15 +5835,23 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 							},
 						},
 					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Description`,
+					},
 					"collector": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Filesystem collector configuration`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Collector type`,
 							},
 							"destructive": schema.BoolAttribute{
 								Required:    false,
@@ -4475,6 +5869,7 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:      false,
 								Optional:      true,
 								Computed:      true,
+								Description:   `Collector configuration`,
 								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 								Attributes: map[string]schema.Attribute{
 									"path": schema.StringAttribute{
@@ -4491,14 +5886,16 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"key": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `A token from the template directory, such as epoch`,
 												},
 												"expression": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `JavaScript expression that receives token under "value" variable, and evaluates to populate event fields, such as {date: new Date(+value*1000)}`,
 												},
 											},
 										},
@@ -4517,6 +5914,12 @@ func (r *PackCollectorResource) Schema(_ context.Context, _ resource.SchemaReque
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
+									},
+									"output_name": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select a predefined configuration (a Destination) to auto-populate Collector settings`,
 									},
 								},
 							},
@@ -4824,6 +6227,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		if len(state.InputCollectorSplunk.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorSplunk.Input = types.ObjectNull(InputCollectorSplunkInputAttrTypes())
 		}
+		if !api.InputCollectorSplunk.Description.IsNull() && !api.InputCollectorSplunk.Description.IsUnknown() {
+			state.InputCollectorSplunk.Description = api.InputCollectorSplunk.Description
+		} else if state.InputCollectorSplunk.Description.IsNull() || state.InputCollectorSplunk.Description.IsUnknown() {
+			state.InputCollectorSplunk.Description = types.StringNull()
+		}
 		if !api.InputCollectorSplunk.Collector.IsNull() && !api.InputCollectorSplunk.Collector.IsUnknown() {
 			state.InputCollectorSplunk.Collector = api.InputCollectorSplunk.Collector
 		} else if state.InputCollectorSplunk.Collector.IsNull() || state.InputCollectorSplunk.Collector.IsUnknown() {
@@ -4903,6 +6311,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		}
 		if len(state.InputCollectorRest.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorRest.Input = types.ObjectNull(InputCollectorRestInputAttrTypes())
+		}
+		if !api.InputCollectorRest.Description.IsNull() && !api.InputCollectorRest.Description.IsUnknown() {
+			state.InputCollectorRest.Description = api.InputCollectorRest.Description
+		} else if state.InputCollectorRest.Description.IsNull() || state.InputCollectorRest.Description.IsUnknown() {
+			state.InputCollectorRest.Description = types.StringNull()
 		}
 		if !api.InputCollectorRest.Collector.IsNull() && !api.InputCollectorRest.Collector.IsUnknown() {
 			state.InputCollectorRest.Collector = api.InputCollectorRest.Collector
@@ -4984,6 +6397,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		if len(state.InputCollectorS3.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorS3.Input = types.ObjectNull(InputCollectorS3InputAttrTypes())
 		}
+		if !api.InputCollectorS3.Description.IsNull() && !api.InputCollectorS3.Description.IsUnknown() {
+			state.InputCollectorS3.Description = api.InputCollectorS3.Description
+		} else if state.InputCollectorS3.Description.IsNull() || state.InputCollectorS3.Description.IsUnknown() {
+			state.InputCollectorS3.Description = types.StringNull()
+		}
 		if !api.InputCollectorS3.Collector.IsNull() && !api.InputCollectorS3.Collector.IsUnknown() {
 			state.InputCollectorS3.Collector = api.InputCollectorS3.Collector
 		} else if state.InputCollectorS3.Collector.IsNull() || state.InputCollectorS3.Collector.IsUnknown() {
@@ -5063,6 +6481,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		}
 		if len(state.InputCollectorAzureBlob.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorAzureBlob.Input = types.ObjectNull(InputCollectorAzureBlobInputAttrTypes())
+		}
+		if !api.InputCollectorAzureBlob.Description.IsNull() && !api.InputCollectorAzureBlob.Description.IsUnknown() {
+			state.InputCollectorAzureBlob.Description = api.InputCollectorAzureBlob.Description
+		} else if state.InputCollectorAzureBlob.Description.IsNull() || state.InputCollectorAzureBlob.Description.IsUnknown() {
+			state.InputCollectorAzureBlob.Description = types.StringNull()
 		}
 		if !api.InputCollectorAzureBlob.Collector.IsNull() && !api.InputCollectorAzureBlob.Collector.IsUnknown() {
 			state.InputCollectorAzureBlob.Collector = api.InputCollectorAzureBlob.Collector
@@ -5144,6 +6567,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		if len(state.InputCollectorCriblLake.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorCriblLake.Input = types.ObjectNull(InputCollectorCriblLakeInputAttrTypes())
 		}
+		if !api.InputCollectorCriblLake.Description.IsNull() && !api.InputCollectorCriblLake.Description.IsUnknown() {
+			state.InputCollectorCriblLake.Description = api.InputCollectorCriblLake.Description
+		} else if state.InputCollectorCriblLake.Description.IsNull() || state.InputCollectorCriblLake.Description.IsUnknown() {
+			state.InputCollectorCriblLake.Description = types.StringNull()
+		}
 		if !api.InputCollectorCriblLake.Collector.IsNull() && !api.InputCollectorCriblLake.Collector.IsUnknown() {
 			state.InputCollectorCriblLake.Collector = api.InputCollectorCriblLake.Collector
 		} else if state.InputCollectorCriblLake.Collector.IsNull() || state.InputCollectorCriblLake.Collector.IsUnknown() {
@@ -5223,6 +6651,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		}
 		if len(state.InputCollectorDatabase.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorDatabase.Input = types.ObjectNull(InputCollectorDatabaseInputAttrTypes())
+		}
+		if !api.InputCollectorDatabase.Description.IsNull() && !api.InputCollectorDatabase.Description.IsUnknown() {
+			state.InputCollectorDatabase.Description = api.InputCollectorDatabase.Description
+		} else if state.InputCollectorDatabase.Description.IsNull() || state.InputCollectorDatabase.Description.IsUnknown() {
+			state.InputCollectorDatabase.Description = types.StringNull()
 		}
 		if !api.InputCollectorDatabase.Collector.IsNull() && !api.InputCollectorDatabase.Collector.IsUnknown() {
 			state.InputCollectorDatabase.Collector = api.InputCollectorDatabase.Collector
@@ -5304,6 +6737,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		if len(state.InputCollectorGCS.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorGCS.Input = types.ObjectNull(InputCollectorGCSInputAttrTypes())
 		}
+		if !api.InputCollectorGCS.Description.IsNull() && !api.InputCollectorGCS.Description.IsUnknown() {
+			state.InputCollectorGCS.Description = api.InputCollectorGCS.Description
+		} else if state.InputCollectorGCS.Description.IsNull() || state.InputCollectorGCS.Description.IsUnknown() {
+			state.InputCollectorGCS.Description = types.StringNull()
+		}
 		if !api.InputCollectorGCS.Collector.IsNull() && !api.InputCollectorGCS.Collector.IsUnknown() {
 			state.InputCollectorGCS.Collector = api.InputCollectorGCS.Collector
 		} else if state.InputCollectorGCS.Collector.IsNull() || state.InputCollectorGCS.Collector.IsUnknown() {
@@ -5383,6 +6821,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		}
 		if len(state.InputCollectorHealthCheck.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorHealthCheck.Input = types.ObjectNull(InputCollectorHealthCheckInputAttrTypes())
+		}
+		if !api.InputCollectorHealthCheck.Description.IsNull() && !api.InputCollectorHealthCheck.Description.IsUnknown() {
+			state.InputCollectorHealthCheck.Description = api.InputCollectorHealthCheck.Description
+		} else if state.InputCollectorHealthCheck.Description.IsNull() || state.InputCollectorHealthCheck.Description.IsUnknown() {
+			state.InputCollectorHealthCheck.Description = types.StringNull()
 		}
 		if !api.InputCollectorHealthCheck.Collector.IsNull() && !api.InputCollectorHealthCheck.Collector.IsUnknown() {
 			state.InputCollectorHealthCheck.Collector = api.InputCollectorHealthCheck.Collector
@@ -5464,6 +6907,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		if len(state.InputCollectorScript.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorScript.Input = types.ObjectNull(InputCollectorScriptInputAttrTypes())
 		}
+		if !api.InputCollectorScript.Description.IsNull() && !api.InputCollectorScript.Description.IsUnknown() {
+			state.InputCollectorScript.Description = api.InputCollectorScript.Description
+		} else if state.InputCollectorScript.Description.IsNull() || state.InputCollectorScript.Description.IsUnknown() {
+			state.InputCollectorScript.Description = types.StringNull()
+		}
 		if !api.InputCollectorScript.Collector.IsNull() && !api.InputCollectorScript.Collector.IsUnknown() {
 			state.InputCollectorScript.Collector = api.InputCollectorScript.Collector
 		} else if state.InputCollectorScript.Collector.IsNull() || state.InputCollectorScript.Collector.IsUnknown() {
@@ -5543,6 +6991,11 @@ func applyPackCollectorAPIToState(api *PackCollectorModel, state *PackCollectorM
 		}
 		if len(state.InputCollectorFilesystem.Input.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorFilesystem.Input = types.ObjectNull(InputCollectorFilesystemInputAttrTypes())
+		}
+		if !api.InputCollectorFilesystem.Description.IsNull() && !api.InputCollectorFilesystem.Description.IsUnknown() {
+			state.InputCollectorFilesystem.Description = api.InputCollectorFilesystem.Description
+		} else if state.InputCollectorFilesystem.Description.IsNull() || state.InputCollectorFilesystem.Description.IsUnknown() {
+			state.InputCollectorFilesystem.Description = types.StringNull()
 		}
 		if !api.InputCollectorFilesystem.Collector.IsNull() && !api.InputCollectorFilesystem.Collector.IsUnknown() {
 			state.InputCollectorFilesystem.Collector = api.InputCollectorFilesystem.Collector

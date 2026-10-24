@@ -459,6 +459,40 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 Make sure hooks run on your local!
 ```git config core.hooksPath .githooks```
 
+### Refreshing the OpenAPI specification
+
+```sh
+make sync-openapi
+make generate
+go build ./...
+go test -count=1 ./internal/... ./tools/sync-openapi/... ./tools/merge-spec/... ./tools/codegen/... ./tools/specschema/... ./tools/import-cli/...
+```
+
+`sync-openapi` downloads the latest published specification from the Cribl API docs.
+To pin a release, use `go run ./tools/sync-openapi -version 4.20.3`.
+
+Collectors are derived from upstream `SavedJobCollection` and concrete
+`Collector*` schemas through the `collector_schemas` mapping in
+`terraform-overlay.yml`. Legacy `InputCollector*` definitions preserve existing
+Terraform block names, field types, validation, and provider annotations; they do
+not determine which upstream fields are available. New fields are optional and
+computed so existing configurations do not need additional values.
+
+The shared object normalizer resolves references and includes properties from all
+`allOf`, `oneOf`, and conditional object branches. Collector `__scheduling`
+settings are projected into `schedule.run`; internal template bindings and hidden
+default breakers are excluded. Other internal settings remain excluded.
+`TestCollectorUpstreamFieldCoverage` checks raw upstream branches against the
+fields emitted by codegen for every collector. Other resources can deliberately
+opt into the same normalization with `x-terraform-flatten-object-unions: true`.
+
+Compatibility overlays retain fields omitted by newer upstream specifications.
+An action can use `copy_from` before its `update` to customize a private copy of
+a shared schema; the database tracking-column overlay uses this to avoid changing
+other collector variants. Review generated schema changes for removed attributes,
+changed types, stricter validators, and newly required fields before committing.
+Live acceptance tests additionally require `TF_ACC` and Cribl credentials.
+
 ## License
 
 This project is licensed under the terms of the license included in the repository.

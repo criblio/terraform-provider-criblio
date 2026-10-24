@@ -16,7 +16,7 @@ test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
 unit-test: 
-	go test -v ./internal/auth/... ./internal/restclient/... ./tools/sync-openapi ./tools/merge-spec/...
+	go test -v ./internal/auth/... ./internal/restclient/... ./tools/sync-openapi ./tools/merge-spec/... ./tools/specschema/...
 
 sync-openapi:
 	go run ./tools/sync-openapi

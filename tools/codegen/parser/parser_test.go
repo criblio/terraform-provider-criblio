@@ -1215,3 +1215,45 @@ func hasField(fields []FieldDef, name string) bool {
 	}
 	return false
 }
+
+func TestObjectSchemaFlattensConditionalFieldsWhenEnabled(t *testing.T) {
+	var document yaml.Node
+	if err := yaml.Unmarshal([]byte(`x-terraform-flatten-object-unions: true
+properties:
+  type: {type: string}
+allOf:
+  - oneOf:
+      - properties:
+          interval: {type: number}
+        required: [interval]
+      - properties:
+          multiplier: {type: number}
+        required: [multiplier]
+`), &document); err != nil {
+		t.Fatal(err)
+	}
+	schema, ok, err := objectSchema(document.Content[0], &yaml.Node{Kind: yaml.MappingNode})
+	if err != nil || !ok {
+		t.Fatalf("objectSchema: ok=%v err=%v", ok, err)
+	}
+	properties, _ := mappingValue(schema, "properties")
+	for _, name := range []string{"type", "interval", "multiplier"} {
+		if _, ok := mappingValue(properties, name); !ok {
+			t.Errorf("missing %s", name)
+		}
+	}
+	if _, ok := mappingValue(schema, "required"); ok {
+		t.Fatal("conditional fields became unconditionally required")
+	}
+	// Existing resource schemas keep their established union representation until
+	// their migration deliberately enables complete inline-object normalization.
+	document.Content[0].Content = document.Content[0].Content[2:]
+	prior, ok, err := objectSchema(document.Content[0], &yaml.Node{Kind: yaml.MappingNode})
+	if err != nil || !ok {
+		t.Fatalf("legacy objectSchema: ok=%v err=%v", ok, err)
+	}
+	properties, _ = mappingValue(prior, "properties")
+	if _, ok := mappingValue(properties, "interval"); ok {
+		t.Fatal("unannotated schema behavior changed")
+	}
+}

@@ -73,6 +73,18 @@ func (r *SearchDatatypeResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Description: `Additional extractions applied after the primary extraction.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    true,
+							Description: `Name of the additional extraction.`,
+						},
+						"source_field": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    true,
+							Description: `Field to use as input for the extraction.`,
+						},
 						"contains_header_row": schema.BoolAttribute{
 							Required:    false,
 							Optional:    true,
@@ -229,7 +241,7 @@ func (r *SearchDatatypeResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Field mappings to rename or alias extracted fields.`,
+				Description: `Field mappings to rename or alias extracted fields, retained for compatibility with earlier configurations.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"field_name": schema.StringAttribute{
@@ -243,6 +255,38 @@ func (r *SearchDatatypeResource) Schema(_ context.Context, _ resource.SchemaRequ
 							Optional:    false,
 							Computed:    false,
 							Description: `Kusto expression or field name that provides the value.`,
+						},
+					},
+				},
+			},
+			"schema_maps": schema.SingleNestedAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Out-of-box schema mappings keyed by target schema type. Applied at ingest when enabled by a dataset rule.`,
+				Attributes: map[string]schema.Attribute{
+					"ocsf_v1_8": schema.ListNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"field_name": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Field Name`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"source": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Kusto expression that denotes the value of the field. May be a simple field name or a more complex expression for a computed value.`,
+								},
+							},
 						},
 					},
 				},
@@ -520,6 +564,14 @@ func applySearchDatatypeAPIToState(api *SearchDatatypeModel, state *SearchDataty
 		state.SchemaMap = types.ListNull(types.ObjectType{AttrTypes: SearchDatatypeSchemaMapAttrTypes()})
 	} else if len(state.SchemaMap.Elements()) == 0 {
 		state.SchemaMap = types.ListValueMust(types.ObjectType{AttrTypes: SearchDatatypeSchemaMapAttrTypes()}, nil)
+	}
+	if !preserveInputs || (fillMissingInputs && (state.SchemaMaps.IsNull() || state.SchemaMaps.IsUnknown())) {
+		if !api.SchemaMaps.IsNull() && !api.SchemaMaps.IsUnknown() {
+			state.SchemaMaps = api.SchemaMaps
+		}
+	}
+	if len(state.SchemaMaps.AttributeTypes(context.Background())) == 0 {
+		state.SchemaMaps = types.ObjectNull(SearchDatatypeSchemaMapsAttrTypes())
 	}
 	if !api.SearchVersion.IsNull() && !api.SearchVersion.IsUnknown() {
 		state.SearchVersion = api.SearchVersion

@@ -119,6 +119,12 @@ func (r *SearchEngineResource) Schema(_ context.Context, _ resource.SchemaReques
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.`,
 			},
+			"maximum_tier_size": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Largest engine size to which this lakehouse engine may be resized. Omitted when no additional maximum applies. Derived on read and ignored in request bodies.`,
+			},
 			"metrics_dataset_id": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
@@ -130,6 +136,12 @@ func (r *SearchEngineResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    false,
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.`,
+			},
+			"minimum_tier_size": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Smallest engine size to which this lakehouse engine may be resized. Omitted when no additional minimum applies. Derived on read and ignored in request bodies.`,
 			},
 			"status": schema.StringAttribute{
 				Required:    false,
@@ -318,6 +330,11 @@ func applySearchEngineAPIToState(api *SearchEngineModel, state *SearchEngineMode
 	} else if state.LastProvisionedMs.IsNull() || state.LastProvisionedMs.IsUnknown() {
 		state.LastProvisionedMs = types.Int64Value(0)
 	}
+	if !preserveInputs || (fillMissingInputs && (state.MaximumTierSize.IsNull() || state.MaximumTierSize.IsUnknown())) {
+		if !api.MaximumTierSize.IsNull() && !api.MaximumTierSize.IsUnknown() {
+			state.MaximumTierSize = api.MaximumTierSize
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.MetricsDatasetID.IsNull() || state.MetricsDatasetID.IsUnknown())) {
 		if !api.MetricsDatasetID.IsNull() && !api.MetricsDatasetID.IsUnknown() {
 			state.MetricsDatasetID = api.MetricsDatasetID
@@ -327,6 +344,11 @@ func applySearchEngineAPIToState(api *SearchEngineModel, state *SearchEngineMode
 		state.MetricsLastPublishedAt = api.MetricsLastPublishedAt
 	} else if state.MetricsLastPublishedAt.IsNull() || state.MetricsLastPublishedAt.IsUnknown() {
 		state.MetricsLastPublishedAt = types.Int64Value(0)
+	}
+	if !preserveInputs || (fillMissingInputs && (state.MinimumTierSize.IsNull() || state.MinimumTierSize.IsUnknown())) {
+		if !api.MinimumTierSize.IsNull() && !api.MinimumTierSize.IsUnknown() {
+			state.MinimumTierSize = api.MinimumTierSize
+		}
 	}
 	if !api.Status.IsNull() && !api.Status.IsUnknown() {
 		state.Status = api.Status

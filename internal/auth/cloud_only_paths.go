@@ -87,6 +87,7 @@ func init() {
 		"/search/datasets/{id}/fieldStats":                             true,
 		"/search/datasets/{id}/fields":                                 true,
 		"/search/datasets/{id}/usageStats":                             true,
+		"/search/datatype-v2-preview":                                  true,
 		"/search/datatypes":                                            true,
 		"/search/datatypes/{id}":                                       true,
 		"/search/docs":                                                 true,
@@ -186,6 +187,7 @@ func init() {
 		"/system/dsd/connections/{connectionId}/validate-access":                       true,
 		"/system/dsd/templates/connection/cloudformation":                              true,
 		"/system/dsd/templates/connection/terraform":                                   true,
+		"/workspaces/system/users/{userId}/teams":                                      true,
 	}
 	onPremOnlyPaths = map[string]bool{
 		"/system/licenses":              true,

@@ -251,6 +251,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -457,6 +463,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -662,6 +674,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -900,6 +918,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -1103,6 +1127,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -1315,6 +1345,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -1508,6 +1544,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -1700,6 +1742,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -1911,6 +1959,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2103,6 +2157,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -2299,6 +2359,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2491,6 +2557,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -2696,6 +2768,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2888,6 +2966,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -3082,6 +3166,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -3267,6 +3357,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -3481,6 +3577,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -3686,6 +3788,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -3871,6 +3979,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -4086,6 +4200,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -4271,6 +4391,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -4465,6 +4591,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -4650,6 +4782,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -5020,6 +5158,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -5227,6 +5371,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -5412,6 +5562,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
@@ -5797,6 +5953,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -6108,6 +6270,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAmazonSecurityLake.Tags.IsNull() || state.DatasetAmazonSecurityLake.Tags.IsUnknown() {
 			state.DatasetAmazonSecurityLake.Tags = types.StringNull()
 		}
+		if !api.DatasetAmazonSecurityLake.TimeCreated.IsNull() && !api.DatasetAmazonSecurityLake.TimeCreated.IsUnknown() {
+			state.DatasetAmazonSecurityLake.TimeCreated = api.DatasetAmazonSecurityLake.TimeCreated
+		} else if state.DatasetAmazonSecurityLake.TimeCreated.IsNull() || state.DatasetAmazonSecurityLake.TimeCreated.IsUnknown() {
+			state.DatasetAmazonSecurityLake.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAmazonSecurityLake.ViewName.IsNull() && !api.DatasetAmazonSecurityLake.ViewName.IsUnknown() {
 			state.DatasetAmazonSecurityLake.ViewName = api.DatasetAmazonSecurityLake.ViewName
 		} else if state.DatasetAmazonSecurityLake.ViewName.IsNull() || state.DatasetAmazonSecurityLake.ViewName.IsUnknown() {
@@ -6203,6 +6370,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAws.Tags.IsNull() || state.DatasetAPIAws.Tags.IsUnknown() {
 			state.DatasetAPIAws.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIAws.TimeCreated.IsNull() && !api.DatasetAPIAws.TimeCreated.IsUnknown() {
+			state.DatasetAPIAws.TimeCreated = api.DatasetAPIAws.TimeCreated
+		} else if state.DatasetAPIAws.TimeCreated.IsNull() || state.DatasetAPIAws.TimeCreated.IsUnknown() {
+			state.DatasetAPIAws.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIAws.ViewName.IsNull() && !api.DatasetAPIAws.ViewName.IsUnknown() {
 			state.DatasetAPIAws.ViewName = api.DatasetAPIAws.ViewName
 		} else if state.DatasetAPIAws.ViewName.IsNull() || state.DatasetAPIAws.ViewName.IsUnknown() {
@@ -6297,6 +6469,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIAzure.Tags = api.DatasetAPIAzure.Tags
 		} else if state.DatasetAPIAzure.Tags.IsNull() || state.DatasetAPIAzure.Tags.IsUnknown() {
 			state.DatasetAPIAzure.Tags = types.StringNull()
+		}
+		if !api.DatasetAPIAzure.TimeCreated.IsNull() && !api.DatasetAPIAzure.TimeCreated.IsUnknown() {
+			state.DatasetAPIAzure.TimeCreated = api.DatasetAPIAzure.TimeCreated
+		} else if state.DatasetAPIAzure.TimeCreated.IsNull() || state.DatasetAPIAzure.TimeCreated.IsUnknown() {
+			state.DatasetAPIAzure.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAPIAzure.ViewName.IsNull() && !api.DatasetAPIAzure.ViewName.IsUnknown() {
 			state.DatasetAPIAzure.ViewName = api.DatasetAPIAzure.ViewName
@@ -6407,6 +6584,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAzureDataExplorer.Tags.IsNull() || state.DatasetAPIAzureDataExplorer.Tags.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIAzureDataExplorer.TimeCreated.IsNull() && !api.DatasetAPIAzureDataExplorer.TimeCreated.IsUnknown() {
+			state.DatasetAPIAzureDataExplorer.TimeCreated = api.DatasetAPIAzureDataExplorer.TimeCreated
+		} else if state.DatasetAPIAzureDataExplorer.TimeCreated.IsNull() || state.DatasetAPIAzureDataExplorer.TimeCreated.IsUnknown() {
+			state.DatasetAPIAzureDataExplorer.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIAzureDataExplorer.ViewName.IsNull() && !api.DatasetAPIAzureDataExplorer.ViewName.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.ViewName = api.DatasetAPIAzureDataExplorer.ViewName
 		} else if state.DatasetAPIAzureDataExplorer.ViewName.IsNull() || state.DatasetAPIAzureDataExplorer.ViewName.IsUnknown() {
@@ -6495,6 +6677,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIElasticsearch.Tags = api.DatasetAPIElasticsearch.Tags
 		} else if state.DatasetAPIElasticsearch.Tags.IsNull() || state.DatasetAPIElasticsearch.Tags.IsUnknown() {
 			state.DatasetAPIElasticsearch.Tags = types.StringNull()
+		}
+		if !api.DatasetAPIElasticsearch.TimeCreated.IsNull() && !api.DatasetAPIElasticsearch.TimeCreated.IsUnknown() {
+			state.DatasetAPIElasticsearch.TimeCreated = api.DatasetAPIElasticsearch.TimeCreated
+		} else if state.DatasetAPIElasticsearch.TimeCreated.IsNull() || state.DatasetAPIElasticsearch.TimeCreated.IsUnknown() {
+			state.DatasetAPIElasticsearch.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAPIElasticsearch.ViewName.IsNull() && !api.DatasetAPIElasticsearch.ViewName.IsUnknown() {
 			state.DatasetAPIElasticsearch.ViewName = api.DatasetAPIElasticsearch.ViewName
@@ -6585,6 +6772,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIGcp.Tags.IsNull() || state.DatasetAPIGcp.Tags.IsUnknown() {
 			state.DatasetAPIGcp.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIGcp.TimeCreated.IsNull() && !api.DatasetAPIGcp.TimeCreated.IsUnknown() {
+			state.DatasetAPIGcp.TimeCreated = api.DatasetAPIGcp.TimeCreated
+		} else if state.DatasetAPIGcp.TimeCreated.IsNull() || state.DatasetAPIGcp.TimeCreated.IsUnknown() {
+			state.DatasetAPIGcp.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIGcp.ViewName.IsNull() && !api.DatasetAPIGcp.ViewName.IsUnknown() {
 			state.DatasetAPIGcp.ViewName = api.DatasetAPIGcp.ViewName
 		} else if state.DatasetAPIGcp.ViewName.IsNull() || state.DatasetAPIGcp.ViewName.IsUnknown() {
@@ -6672,6 +6864,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIGoogleWorkspace.Tags.IsNull() || state.DatasetAPIGoogleWorkspace.Tags.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIGoogleWorkspace.TimeCreated.IsNull() && !api.DatasetAPIGoogleWorkspace.TimeCreated.IsUnknown() {
+			state.DatasetAPIGoogleWorkspace.TimeCreated = api.DatasetAPIGoogleWorkspace.TimeCreated
+		} else if state.DatasetAPIGoogleWorkspace.TimeCreated.IsNull() || state.DatasetAPIGoogleWorkspace.TimeCreated.IsUnknown() {
+			state.DatasetAPIGoogleWorkspace.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIGoogleWorkspace.ViewName.IsNull() && !api.DatasetAPIGoogleWorkspace.ViewName.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.ViewName = api.DatasetAPIGoogleWorkspace.ViewName
 		} else if state.DatasetAPIGoogleWorkspace.ViewName.IsNull() || state.DatasetAPIGoogleWorkspace.ViewName.IsUnknown() {
@@ -6758,6 +6955,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIHttp.Tags = api.DatasetAPIHttp.Tags
 		} else if state.DatasetAPIHttp.Tags.IsNull() || state.DatasetAPIHttp.Tags.IsUnknown() {
 			state.DatasetAPIHttp.Tags = types.StringNull()
+		}
+		if !api.DatasetAPIHttp.TimeCreated.IsNull() && !api.DatasetAPIHttp.TimeCreated.IsUnknown() {
+			state.DatasetAPIHttp.TimeCreated = api.DatasetAPIHttp.TimeCreated
+		} else if state.DatasetAPIHttp.TimeCreated.IsNull() || state.DatasetAPIHttp.TimeCreated.IsUnknown() {
+			state.DatasetAPIHttp.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAPIHttp.ViewName.IsNull() && !api.DatasetAPIHttp.ViewName.IsUnknown() {
 			state.DatasetAPIHttp.ViewName = api.DatasetAPIHttp.ViewName
@@ -6853,6 +7055,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPILogAnalytics.Tags.IsNull() || state.DatasetAPILogAnalytics.Tags.IsUnknown() {
 			state.DatasetAPILogAnalytics.Tags = types.StringNull()
 		}
+		if !api.DatasetAPILogAnalytics.TimeCreated.IsNull() && !api.DatasetAPILogAnalytics.TimeCreated.IsUnknown() {
+			state.DatasetAPILogAnalytics.TimeCreated = api.DatasetAPILogAnalytics.TimeCreated
+		} else if state.DatasetAPILogAnalytics.TimeCreated.IsNull() || state.DatasetAPILogAnalytics.TimeCreated.IsUnknown() {
+			state.DatasetAPILogAnalytics.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPILogAnalytics.ViewName.IsNull() && !api.DatasetAPILogAnalytics.ViewName.IsUnknown() {
 			state.DatasetAPILogAnalytics.ViewName = api.DatasetAPILogAnalytics.ViewName
 		} else if state.DatasetAPILogAnalytics.ViewName.IsNull() || state.DatasetAPILogAnalytics.ViewName.IsUnknown() {
@@ -6940,6 +7147,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIMsgraph.Tags.IsNull() || state.DatasetAPIMsgraph.Tags.IsUnknown() {
 			state.DatasetAPIMsgraph.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIMsgraph.TimeCreated.IsNull() && !api.DatasetAPIMsgraph.TimeCreated.IsUnknown() {
+			state.DatasetAPIMsgraph.TimeCreated = api.DatasetAPIMsgraph.TimeCreated
+		} else if state.DatasetAPIMsgraph.TimeCreated.IsNull() || state.DatasetAPIMsgraph.TimeCreated.IsUnknown() {
+			state.DatasetAPIMsgraph.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIMsgraph.ViewName.IsNull() && !api.DatasetAPIMsgraph.ViewName.IsUnknown() {
 			state.DatasetAPIMsgraph.ViewName = api.DatasetAPIMsgraph.ViewName
 		} else if state.DatasetAPIMsgraph.ViewName.IsNull() || state.DatasetAPIMsgraph.ViewName.IsUnknown() {
@@ -7023,6 +7235,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPINgsiem.Tags = api.DatasetAPINgsiem.Tags
 		} else if state.DatasetAPINgsiem.Tags.IsNull() || state.DatasetAPINgsiem.Tags.IsUnknown() {
 			state.DatasetAPINgsiem.Tags = types.StringNull()
+		}
+		if !api.DatasetAPINgsiem.TimeCreated.IsNull() && !api.DatasetAPINgsiem.TimeCreated.IsUnknown() {
+			state.DatasetAPINgsiem.TimeCreated = api.DatasetAPINgsiem.TimeCreated
+		} else if state.DatasetAPINgsiem.TimeCreated.IsNull() || state.DatasetAPINgsiem.TimeCreated.IsUnknown() {
+			state.DatasetAPINgsiem.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAPINgsiem.ViewName.IsNull() && !api.DatasetAPINgsiem.ViewName.IsUnknown() {
 			state.DatasetAPINgsiem.ViewName = api.DatasetAPINgsiem.ViewName
@@ -7110,6 +7327,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIOkta.Tags = api.DatasetAPIOkta.Tags
 		} else if state.DatasetAPIOkta.Tags.IsNull() || state.DatasetAPIOkta.Tags.IsUnknown() {
 			state.DatasetAPIOkta.Tags = types.StringNull()
+		}
+		if !api.DatasetAPIOkta.TimeCreated.IsNull() && !api.DatasetAPIOkta.TimeCreated.IsUnknown() {
+			state.DatasetAPIOkta.TimeCreated = api.DatasetAPIOkta.TimeCreated
+		} else if state.DatasetAPIOkta.TimeCreated.IsNull() || state.DatasetAPIOkta.TimeCreated.IsUnknown() {
+			state.DatasetAPIOkta.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAPIOkta.ViewName.IsNull() && !api.DatasetAPIOkta.ViewName.IsUnknown() {
 			state.DatasetAPIOkta.ViewName = api.DatasetAPIOkta.ViewName
@@ -7200,6 +7422,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIOpensearch.Tags.IsNull() || state.DatasetAPIOpensearch.Tags.IsUnknown() {
 			state.DatasetAPIOpensearch.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIOpensearch.TimeCreated.IsNull() && !api.DatasetAPIOpensearch.TimeCreated.IsUnknown() {
+			state.DatasetAPIOpensearch.TimeCreated = api.DatasetAPIOpensearch.TimeCreated
+		} else if state.DatasetAPIOpensearch.TimeCreated.IsNull() || state.DatasetAPIOpensearch.TimeCreated.IsUnknown() {
+			state.DatasetAPIOpensearch.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIOpensearch.ViewName.IsNull() && !api.DatasetAPIOpensearch.ViewName.IsUnknown() {
 			state.DatasetAPIOpensearch.ViewName = api.DatasetAPIOpensearch.ViewName
 		} else if state.DatasetAPIOpensearch.ViewName.IsNull() || state.DatasetAPIOpensearch.ViewName.IsUnknown() {
@@ -7286,6 +7513,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPITailscale.Tags = api.DatasetAPITailscale.Tags
 		} else if state.DatasetAPITailscale.Tags.IsNull() || state.DatasetAPITailscale.Tags.IsUnknown() {
 			state.DatasetAPITailscale.Tags = types.StringNull()
+		}
+		if !api.DatasetAPITailscale.TimeCreated.IsNull() && !api.DatasetAPITailscale.TimeCreated.IsUnknown() {
+			state.DatasetAPITailscale.TimeCreated = api.DatasetAPITailscale.TimeCreated
+		} else if state.DatasetAPITailscale.TimeCreated.IsNull() || state.DatasetAPITailscale.TimeCreated.IsUnknown() {
+			state.DatasetAPITailscale.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAPITailscale.ViewName.IsNull() && !api.DatasetAPITailscale.ViewName.IsUnknown() {
 			state.DatasetAPITailscale.ViewName = api.DatasetAPITailscale.ViewName
@@ -7374,6 +7606,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIZoom.Tags.IsNull() || state.DatasetAPIZoom.Tags.IsUnknown() {
 			state.DatasetAPIZoom.Tags = types.StringNull()
 		}
+		if !api.DatasetAPIZoom.TimeCreated.IsNull() && !api.DatasetAPIZoom.TimeCreated.IsUnknown() {
+			state.DatasetAPIZoom.TimeCreated = api.DatasetAPIZoom.TimeCreated
+		} else if state.DatasetAPIZoom.TimeCreated.IsNull() || state.DatasetAPIZoom.TimeCreated.IsUnknown() {
+			state.DatasetAPIZoom.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetAPIZoom.ViewName.IsNull() && !api.DatasetAPIZoom.ViewName.IsUnknown() {
 			state.DatasetAPIZoom.ViewName = api.DatasetAPIZoom.ViewName
 		} else if state.DatasetAPIZoom.ViewName.IsNull() || state.DatasetAPIZoom.ViewName.IsUnknown() {
@@ -7452,6 +7689,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAzureBlob.Tags = api.DatasetAzureBlob.Tags
 		} else if state.DatasetAzureBlob.Tags.IsNull() || state.DatasetAzureBlob.Tags.IsUnknown() {
 			state.DatasetAzureBlob.Tags = types.StringNull()
+		}
+		if !api.DatasetAzureBlob.TimeCreated.IsNull() && !api.DatasetAzureBlob.TimeCreated.IsUnknown() {
+			state.DatasetAzureBlob.TimeCreated = api.DatasetAzureBlob.TimeCreated
+		} else if state.DatasetAzureBlob.TimeCreated.IsNull() || state.DatasetAzureBlob.TimeCreated.IsUnknown() {
+			state.DatasetAzureBlob.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetAzureBlob.ViewName.IsNull() && !api.DatasetAzureBlob.ViewName.IsUnknown() {
 			state.DatasetAzureBlob.ViewName = api.DatasetAzureBlob.ViewName
@@ -7546,6 +7788,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetClickhouse.Tags = api.DatasetClickhouse.Tags
 		} else if state.DatasetClickhouse.Tags.IsNull() || state.DatasetClickhouse.Tags.IsUnknown() {
 			state.DatasetClickhouse.Tags = types.StringNull()
+		}
+		if !api.DatasetClickhouse.TimeCreated.IsNull() && !api.DatasetClickhouse.TimeCreated.IsUnknown() {
+			state.DatasetClickhouse.TimeCreated = api.DatasetClickhouse.TimeCreated
+		} else if state.DatasetClickhouse.TimeCreated.IsNull() || state.DatasetClickhouse.TimeCreated.IsUnknown() {
+			state.DatasetClickhouse.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetClickhouse.ViewName.IsNull() && !api.DatasetClickhouse.ViewName.IsUnknown() {
 			state.DatasetClickhouse.ViewName = api.DatasetClickhouse.ViewName
@@ -7644,6 +7891,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblEdge.Tags.IsNull() || state.DatasetCriblEdge.Tags.IsUnknown() {
 			state.DatasetCriblEdge.Tags = types.StringNull()
 		}
+		if !api.DatasetCriblEdge.TimeCreated.IsNull() && !api.DatasetCriblEdge.TimeCreated.IsUnknown() {
+			state.DatasetCriblEdge.TimeCreated = api.DatasetCriblEdge.TimeCreated
+		} else if state.DatasetCriblEdge.TimeCreated.IsNull() || state.DatasetCriblEdge.TimeCreated.IsUnknown() {
+			state.DatasetCriblEdge.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetCriblEdge.ViewName.IsNull() && !api.DatasetCriblEdge.ViewName.IsUnknown() {
 			state.DatasetCriblEdge.ViewName = api.DatasetCriblEdge.ViewName
 		} else if state.DatasetCriblEdge.ViewName.IsNull() || state.DatasetCriblEdge.ViewName.IsUnknown() {
@@ -7722,6 +7974,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblLake.Tags = api.DatasetCriblLake.Tags
 		} else if state.DatasetCriblLake.Tags.IsNull() || state.DatasetCriblLake.Tags.IsUnknown() {
 			state.DatasetCriblLake.Tags = types.StringNull()
+		}
+		if !api.DatasetCriblLake.TimeCreated.IsNull() && !api.DatasetCriblLake.TimeCreated.IsUnknown() {
+			state.DatasetCriblLake.TimeCreated = api.DatasetCriblLake.TimeCreated
+		} else if state.DatasetCriblLake.TimeCreated.IsNull() || state.DatasetCriblLake.TimeCreated.IsUnknown() {
+			state.DatasetCriblLake.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetCriblLake.ViewName.IsNull() && !api.DatasetCriblLake.ViewName.IsUnknown() {
 			state.DatasetCriblLake.ViewName = api.DatasetCriblLake.ViewName
@@ -7817,6 +8074,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblLeader.Tags.IsNull() || state.DatasetCriblLeader.Tags.IsUnknown() {
 			state.DatasetCriblLeader.Tags = types.StringNull()
 		}
+		if !api.DatasetCriblLeader.TimeCreated.IsNull() && !api.DatasetCriblLeader.TimeCreated.IsUnknown() {
+			state.DatasetCriblLeader.TimeCreated = api.DatasetCriblLeader.TimeCreated
+		} else if state.DatasetCriblLeader.TimeCreated.IsNull() || state.DatasetCriblLeader.TimeCreated.IsUnknown() {
+			state.DatasetCriblLeader.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetCriblLeader.ViewName.IsNull() && !api.DatasetCriblLeader.ViewName.IsUnknown() {
 			state.DatasetCriblLeader.ViewName = api.DatasetCriblLeader.ViewName
 		} else if state.DatasetCriblLeader.ViewName.IsNull() || state.DatasetCriblLeader.ViewName.IsUnknown() {
@@ -7895,6 +8157,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblLocal.Tags = api.DatasetCriblLocal.Tags
 		} else if state.DatasetCriblLocal.Tags.IsNull() || state.DatasetCriblLocal.Tags.IsUnknown() {
 			state.DatasetCriblLocal.Tags = types.StringNull()
+		}
+		if !api.DatasetCriblLocal.TimeCreated.IsNull() && !api.DatasetCriblLocal.TimeCreated.IsUnknown() {
+			state.DatasetCriblLocal.TimeCreated = api.DatasetCriblLocal.TimeCreated
+		} else if state.DatasetCriblLocal.TimeCreated.IsNull() || state.DatasetCriblLocal.TimeCreated.IsUnknown() {
+			state.DatasetCriblLocal.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetCriblLocal.ViewName.IsNull() && !api.DatasetCriblLocal.ViewName.IsUnknown() {
 			state.DatasetCriblLocal.ViewName = api.DatasetCriblLocal.ViewName
@@ -7983,6 +8250,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblMeta.Tags.IsNull() || state.DatasetCriblMeta.Tags.IsUnknown() {
 			state.DatasetCriblMeta.Tags = types.StringNull()
 		}
+		if !api.DatasetCriblMeta.TimeCreated.IsNull() && !api.DatasetCriblMeta.TimeCreated.IsUnknown() {
+			state.DatasetCriblMeta.TimeCreated = api.DatasetCriblMeta.TimeCreated
+		} else if state.DatasetCriblMeta.TimeCreated.IsNull() || state.DatasetCriblMeta.TimeCreated.IsUnknown() {
+			state.DatasetCriblMeta.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetCriblMeta.ViewName.IsNull() && !api.DatasetCriblMeta.ViewName.IsUnknown() {
 			state.DatasetCriblMeta.ViewName = api.DatasetCriblMeta.ViewName
 		} else if state.DatasetCriblMeta.ViewName.IsNull() || state.DatasetCriblMeta.ViewName.IsUnknown() {
@@ -8061,6 +8333,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblSearch.Tags = api.DatasetCriblSearch.Tags
 		} else if state.DatasetCriblSearch.Tags.IsNull() || state.DatasetCriblSearch.Tags.IsUnknown() {
 			state.DatasetCriblSearch.Tags = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.TimeCreated.IsNull() && !api.DatasetCriblSearch.TimeCreated.IsUnknown() {
+			state.DatasetCriblSearch.TimeCreated = api.DatasetCriblSearch.TimeCreated
+		} else if state.DatasetCriblSearch.TimeCreated.IsNull() || state.DatasetCriblSearch.TimeCreated.IsUnknown() {
+			state.DatasetCriblSearch.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetCriblSearch.ViewName.IsNull() && !api.DatasetCriblSearch.ViewName.IsUnknown() {
 			state.DatasetCriblSearch.ViewName = api.DatasetCriblSearch.ViewName
@@ -8255,6 +8532,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetGcs.Tags.IsNull() || state.DatasetGcs.Tags.IsUnknown() {
 			state.DatasetGcs.Tags = types.StringNull()
 		}
+		if !api.DatasetGcs.TimeCreated.IsNull() && !api.DatasetGcs.TimeCreated.IsUnknown() {
+			state.DatasetGcs.TimeCreated = api.DatasetGcs.TimeCreated
+		} else if state.DatasetGcs.TimeCreated.IsNull() || state.DatasetGcs.TimeCreated.IsUnknown() {
+			state.DatasetGcs.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetGcs.ViewName.IsNull() && !api.DatasetGcs.ViewName.IsUnknown() {
 			state.DatasetGcs.ViewName = api.DatasetGcs.ViewName
 		} else if state.DatasetGcs.ViewName.IsNull() || state.DatasetGcs.ViewName.IsUnknown() {
@@ -8349,6 +8631,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetPrometheus.Tags.IsNull() || state.DatasetPrometheus.Tags.IsUnknown() {
 			state.DatasetPrometheus.Tags = types.StringNull()
 		}
+		if !api.DatasetPrometheus.TimeCreated.IsNull() && !api.DatasetPrometheus.TimeCreated.IsUnknown() {
+			state.DatasetPrometheus.TimeCreated = api.DatasetPrometheus.TimeCreated
+		} else if state.DatasetPrometheus.TimeCreated.IsNull() || state.DatasetPrometheus.TimeCreated.IsUnknown() {
+			state.DatasetPrometheus.TimeCreated = types.Int64Null()
+		}
 		if !api.DatasetPrometheus.ViewName.IsNull() && !api.DatasetPrometheus.ViewName.IsUnknown() {
 			state.DatasetPrometheus.ViewName = api.DatasetPrometheus.ViewName
 		} else if state.DatasetPrometheus.ViewName.IsNull() || state.DatasetPrometheus.ViewName.IsUnknown() {
@@ -8427,6 +8714,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetS3.Tags = api.DatasetS3.Tags
 		} else if state.DatasetS3.Tags.IsNull() || state.DatasetS3.Tags.IsUnknown() {
 			state.DatasetS3.Tags = types.StringNull()
+		}
+		if !api.DatasetS3.TimeCreated.IsNull() && !api.DatasetS3.TimeCreated.IsUnknown() {
+			state.DatasetS3.TimeCreated = api.DatasetS3.TimeCreated
+		} else if state.DatasetS3.TimeCreated.IsNull() || state.DatasetS3.TimeCreated.IsUnknown() {
+			state.DatasetS3.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetS3.ViewName.IsNull() && !api.DatasetS3.ViewName.IsUnknown() {
 			state.DatasetS3.ViewName = api.DatasetS3.ViewName
@@ -8589,6 +8881,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetSnowflake.Tags = api.DatasetSnowflake.Tags
 		} else if state.DatasetSnowflake.Tags.IsNull() || state.DatasetSnowflake.Tags.IsUnknown() {
 			state.DatasetSnowflake.Tags = types.StringNull()
+		}
+		if !api.DatasetSnowflake.TimeCreated.IsNull() && !api.DatasetSnowflake.TimeCreated.IsUnknown() {
+			state.DatasetSnowflake.TimeCreated = api.DatasetSnowflake.TimeCreated
+		} else if state.DatasetSnowflake.TimeCreated.IsNull() || state.DatasetSnowflake.TimeCreated.IsUnknown() {
+			state.DatasetSnowflake.TimeCreated = types.Int64Null()
 		}
 		if !api.DatasetSnowflake.ViewName.IsNull() && !api.DatasetSnowflake.ViewName.IsUnknown() {
 			state.DatasetSnowflake.ViewName = api.DatasetSnowflake.ViewName
