@@ -47,6 +47,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "DatabaseConnection Resource",
 		Attributes: map[string]schema.Attribute{
+			"account_identifier": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).`,
+			},
 			"auth_type": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
@@ -142,6 +148,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Description: `Database Connections returned in the response envelope.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"account_identifier": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).`,
+						},
 						"auth_type": schema.StringAttribute{
 							Required:    true,
 							Optional:    false,
@@ -233,6 +245,20 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Sensitive:   true,
 							Description: `Database password for authentication. Used with Oracle connections.`,
 						},
+						"pem": schema.SingleNestedAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `RSA private key configuration for Snowflake key-pair authentication.`,
+							Attributes: map[string]schema.Attribute{
+								"key_name": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `RSA private key (PEM format) for Snowflake key-pair authentication.`,
+								},
+							},
+						},
 						"request_timeout": schema.Int64Attribute{
 							Required:    false,
 							Optional:    true,
@@ -241,6 +267,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Validators: []validator.Int64{
 								int64validator.AtLeast(1000),
 							},
+						},
+						"role": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Snowflake role to use for the session. When set, requests a role-scoped token.`,
 						},
 						"sslmode": schema.StringAttribute{
 							Required:    false,
@@ -334,6 +366,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Computed:    false,
 							Description: `Database username for authentication. Used with Oracle connections.`,
 						},
+						"warehouse": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Snowflake warehouse to use for queries.`,
+						},
 					},
 				},
 			},
@@ -350,6 +388,20 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Sensitive:   true,
 				Description: `Database password for authentication. Used with Oracle connections.`,
 			},
+			"pem": schema.SingleNestedAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `RSA private key configuration for Snowflake key-pair authentication.`,
+				Attributes: map[string]schema.Attribute{
+					"key_name": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `RSA private key (PEM format) for Snowflake key-pair authentication.`,
+					},
+				},
+			},
 			"request_timeout": schema.Int64Attribute{
 				Required:    false,
 				Optional:    true,
@@ -358,6 +410,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Validators: []validator.Int64{
 					int64validator.AtLeast(1000),
 				},
+			},
+			"role": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Snowflake role to use for the session. When set, requests a role-scoped token.`,
 			},
 			"sslmode": schema.StringAttribute{
 				Required:    false,
@@ -450,6 +508,12 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Optional:    true,
 				Computed:    false,
 				Description: `Database username for authentication. Used with Oracle connections.`,
+			},
+			"warehouse": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Snowflake warehouse to use for queries.`,
 			},
 		},
 	}
@@ -603,6 +667,11 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 	if api == nil || state == nil {
 		return
 	}
+	if !preserveInputs || (fillMissingInputs && (state.AccountIDentifier.IsNull() || state.AccountIDentifier.IsUnknown())) {
+		if !api.AccountIDentifier.IsNull() && !api.AccountIDentifier.IsUnknown() {
+			state.AccountIDentifier = api.AccountIDentifier
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.AuthType.IsNull() || state.AuthType.IsUnknown())) {
 		if !api.AuthType.IsNull() && !api.AuthType.IsUnknown() {
 			state.AuthType = api.AuthType
@@ -683,9 +752,22 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 			state.Password = stringFromAPIOrPrior(api.Password.ValueString(), state.Password)
 		}
 	}
+	if !preserveInputs || (fillMissingInputs && (state.Pem.IsNull() || state.Pem.IsUnknown())) {
+		if !api.Pem.IsNull() && !api.Pem.IsUnknown() {
+			state.Pem = api.Pem
+		}
+	}
+	if len(state.Pem.AttributeTypes(context.Background())) == 0 {
+		state.Pem = types.ObjectNull(DatabaseConnectionPemAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.RequestTimeout.IsNull() || state.RequestTimeout.IsUnknown())) {
 		if !api.RequestTimeout.IsNull() && !api.RequestTimeout.IsUnknown() {
 			state.RequestTimeout = api.RequestTimeout
+		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Role.IsNull() || state.Role.IsUnknown())) {
+		if !api.Role.IsNull() && !api.Role.IsUnknown() {
+			state.Role = api.Role
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Sslmode.IsNull() || state.Sslmode.IsUnknown())) {
@@ -714,6 +796,11 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 	if !preserveInputs || (fillMissingInputs && (state.User.IsNull() || state.User.IsUnknown())) {
 		if !api.User.IsNull() && !api.User.IsUnknown() {
 			state.User = api.User
+		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Warehouse.IsNull() || state.Warehouse.IsUnknown())) {
+		if !api.Warehouse.IsNull() && !api.Warehouse.IsUnknown() {
+			state.Warehouse = api.Warehouse
 		}
 	}
 }

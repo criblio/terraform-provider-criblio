@@ -26758,6 +26758,8 @@ type InputPrometheusModel struct {
 	FieldPerMetric                  types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
 	DiscoveryType                   types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
 	Interval                        types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	IntervalUnit                    types.String  `tfsdk:"interval_unit" json:"intervalUnit,omitempty"`
+	MaxConcurrentRuns               types.Float64 `tfsdk:"max_concurrent_runs" json:"maxConcurrentRuns,omitempty"`
 	LogLevel                        types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
 	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	Timeout                         types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
@@ -26814,6 +26816,8 @@ func InputPrometheusModelAttrTypes() map[string]attr.Type {
 		"field_per_metric":                   types.BoolType,
 		"discovery_type":                     types.StringType,
 		"interval":                           types.Float64Type,
+		"interval_unit":                      types.StringType,
+		"max_concurrent_runs":                types.Float64Type,
 		"log_level":                          types.StringType,
 		"reject_unauthorized":                types.BoolType,
 		"timeout":                            types.Float64Type,
@@ -26960,6 +26964,20 @@ func (m InputPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert interval to API value: %v", err)
 		}
 		output["interval"] = value
+	}
+	if !m.IntervalUnit.IsNull() && !m.IntervalUnit.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IntervalUnit)
+		if err != nil {
+			return nil, fmt.Errorf("convert interval_unit to API value: %v", err)
+		}
+		output["intervalUnit"] = value
+	}
+	if !m.MaxConcurrentRuns.IsNull() && !m.MaxConcurrentRuns.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxConcurrentRuns)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_concurrent_runs to API value: %v", err)
+		}
+		output["maxConcurrentRuns"] = value
 	}
 	if !m.LogLevel.IsNull() && !m.LogLevel.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.LogLevel)
@@ -27361,6 +27379,24 @@ func (m *InputPrometheusModel) unmarshalPayload(input map[string]any) error {
 		m.Interval = value.(types.Float64)
 	} else {
 		m.Interval = types.Float64Null()
+	}
+	if item, ok := input["intervalUnit"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert intervalUnit from API value: %v", err)
+		}
+		m.IntervalUnit = value.(types.String)
+	} else {
+		m.IntervalUnit = types.StringNull()
+	}
+	if item, ok := input["maxConcurrentRuns"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConcurrentRuns from API value: %v", err)
+		}
+		m.MaxConcurrentRuns = value.(types.Float64)
+	} else {
+		m.MaxConcurrentRuns = types.Float64Null()
 	}
 	if item, ok := input["logLevel"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -28670,6 +28706,7 @@ type InputOffice365MgmtModel struct {
 	TenantID              types.String  `tfsdk:"tenant_id" json:"tenantId,omitempty"`
 	AppID                 types.String  `tfsdk:"app_id" json:"appId,omitempty"`
 	Timeout               types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	RejectUnauthorized    types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
 	JobTimeout            types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
@@ -28703,6 +28740,7 @@ func InputOffice365MgmtModelAttrTypes() map[string]attr.Type {
 		"tenant_id":               types.StringType,
 		"app_id":                  types.StringType,
 		"timeout":                 types.Float64Type,
+		"reject_unauthorized":     types.BoolType,
 		"keep_alive_time":         types.Float64Type,
 		"job_timeout":             types.StringType,
 		"max_missed_keep_alives":  types.Float64Type,
@@ -28826,6 +28864,13 @@ func (m InputOffice365MgmtModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout to API value: %v", err)
 		}
 		output["timeout"] = value
+	}
+	if !m.RejectUnauthorized.IsNull() && !m.RejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert reject_unauthorized to API value: %v", err)
+		}
+		output["rejectUnauthorized"] = value
 	}
 	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.KeepAliveTime)
@@ -29067,6 +29112,15 @@ func (m *InputOffice365MgmtModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Timeout = types.Float64Null()
 	}
+	if item, ok := input["rejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert rejectUnauthorized from API value: %v", err)
+		}
+		m.RejectUnauthorized = value.(types.Bool)
+	} else {
+		m.RejectUnauthorized = types.BoolNull()
+	}
 	if item, ok := input["keepAliveTime"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -29212,6 +29266,7 @@ type InputOffice365ServiceModel struct {
 	TenantID              types.String  `tfsdk:"tenant_id" json:"tenantId,omitempty"`
 	AppID                 types.String  `tfsdk:"app_id" json:"appId,omitempty"`
 	Timeout               types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	RejectUnauthorized    types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
 	JobTimeout            types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
@@ -29243,6 +29298,7 @@ func InputOffice365ServiceModelAttrTypes() map[string]attr.Type {
 		"tenant_id":               types.StringType,
 		"app_id":                  types.StringType,
 		"timeout":                 types.Float64Type,
+		"reject_unauthorized":     types.BoolType,
 		"keep_alive_time":         types.Float64Type,
 		"job_timeout":             types.StringType,
 		"max_missed_keep_alives":  types.Float64Type,
@@ -29364,6 +29420,13 @@ func (m InputOffice365ServiceModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout to API value: %v", err)
 		}
 		output["timeout"] = value
+	}
+	if !m.RejectUnauthorized.IsNull() && !m.RejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert reject_unauthorized to API value: %v", err)
+		}
+		output["rejectUnauthorized"] = value
 	}
 	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.KeepAliveTime)
@@ -29590,6 +29653,15 @@ func (m *InputOffice365ServiceModel) unmarshalPayload(input map[string]any) erro
 		m.Timeout = value.(types.Float64)
 	} else {
 		m.Timeout = types.Float64Null()
+	}
+	if item, ok := input["rejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert rejectUnauthorized from API value: %v", err)
+		}
+		m.RejectUnauthorized = value.(types.Bool)
+	} else {
+		m.RejectUnauthorized = types.BoolNull()
 	}
 	if item, ok := input["keepAliveTime"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -38329,6 +38401,8 @@ type InputCrowdstrikeModel struct {
 	Checkpointing              types.Object  `tfsdk:"checkpointing" json:"checkpointing,omitempty"`
 	PollTimeout                types.Float64 `tfsdk:"poll_timeout" json:"pollTimeout,omitempty"`
 	Encoding                   types.String  `tfsdk:"encoding" json:"encoding,omitempty"`
+	VisibilityTimeoutWarning   types.String  `tfsdk:"visibility_timeout_warning" json:"visibilityTimeoutWarning,omitempty"`
+	EnableFanout               types.Bool    `tfsdk:"enable_fanout" json:"enableFanout,omitempty"`
 	Description                types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                  types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                  types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
@@ -38385,6 +38459,8 @@ func InputCrowdstrikeModelAttrTypes() map[string]attr.Type {
 		"checkpointing":                types.ObjectType{AttrTypes: InputCrowdstrikeCheckpointingAttrTypes()},
 		"poll_timeout":                 types.Float64Type,
 		"encoding":                     types.StringType,
+		"visibility_timeout_warning":   types.StringType,
+		"enable_fanout":                types.BoolType,
 		"description":                  types.StringType,
 		"aws_api_key":                  types.StringType,
 		"aws_secret":                   types.StringType,
@@ -38681,6 +38757,20 @@ func (m InputCrowdstrikeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert encoding to API value: %v", err)
 		}
 		output["encoding"] = value
+	}
+	if !m.VisibilityTimeoutWarning.IsNull() && !m.VisibilityTimeoutWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.VisibilityTimeoutWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert visibility_timeout_warning to API value: %v", err)
+		}
+		output["visibilityTimeoutWarning"] = value
+	}
+	if !m.EnableFanout.IsNull() && !m.EnableFanout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableFanout)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_fanout to API value: %v", err)
+		}
+		output["enableFanout"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -39132,6 +39222,24 @@ func (m *InputCrowdstrikeModel) unmarshalPayload(input map[string]any) error {
 		m.Encoding = value.(types.String)
 	} else {
 		m.Encoding = types.StringNull()
+	}
+	if item, ok := input["visibilityTimeoutWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert visibilityTimeoutWarning from API value: %v", err)
+		}
+		m.VisibilityTimeoutWarning = value.(types.String)
+	} else {
+		m.VisibilityTimeoutWarning = types.StringNull()
+	}
+	if item, ok := input["enableFanout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableFanout from API value: %v", err)
+		}
+		m.EnableFanout = value.(types.Bool)
+	} else {
+		m.EnableFanout = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -44663,90 +44771,106 @@ func (m *InputSnmpModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputOpenTelemetryModel struct {
-	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	Host                  types.String  `tfsdk:"host" json:"host,omitempty"`
-	Port                  types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	MaxActiveReq          types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
-	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
-	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
-	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
-	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
-	KeepAliveTimeout      types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
-	EnableHealthCheck     types.Bool    `tfsdk:"enable_health_check" json:"enableHealthCheck,omitempty"`
-	IpAllowlistRegex      types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
-	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
-	Protocol              types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
-	ExtractSpans          types.Bool    `tfsdk:"extract_spans" json:"extractSpans,omitempty"`
-	ExtractMetrics        types.Bool    `tfsdk:"extract_metrics" json:"extractMetrics,omitempty"`
-	OtlpVersion           types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
-	AuthType              types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	AuthMethodsExt        types.List    `tfsdk:"auth_methods_ext" json:"authMethodsExt,omitempty"`
-	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	MaxActiveCxn          types.Float64 `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
-	MaxMessageSizeKB      types.Float64 `tfsdk:"max_message_size_kb" json:"maxMessageSizeKB,omitempty"`
-	MaxConcurrentStreams  types.Float64 `tfsdk:"max_concurrent_streams" json:"maxConcurrentStreams,omitempty"`
-	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
-	Username              types.String  `tfsdk:"username" json:"username,omitempty"`
-	Password              types.String  `tfsdk:"password" json:"password,omitempty"`
-	Token                 types.String  `tfsdk:"token" json:"token,omitempty"`
-	CredentialsSecret     types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
-	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
-	ExtractLogs           types.Bool    `tfsdk:"extract_logs" json:"extractLogs,omitempty"`
+	ID                            types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                          types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                      types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                      types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                  types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                   types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                     types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                    types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance         types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                   types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                            types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                          types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                          types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	TLS                           types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq                  types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket          types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	CaptureHeadersWarning         types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	RequestTimeout                types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout                 types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout              types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	EnableHealthCheck             types.Bool    `tfsdk:"enable_health_check" json:"enableHealthCheck,omitempty"`
+	IpAllowlistRegex              types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex               types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	Protocol                      types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
+	ExtractSpans                  types.Bool    `tfsdk:"extract_spans" json:"extractSpans,omitempty"`
+	ExtractMetrics                types.Bool    `tfsdk:"extract_metrics" json:"extractMetrics,omitempty"`
+	OtlpVersion                   types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
+	AuthType                      types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	AuthMethodsExt                types.List    `tfsdk:"auth_methods_ext" json:"authMethodsExt,omitempty"`
+	Metadata                      types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	MaxActiveCxn                  types.Float64 `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
+	MaxMessageSizeKB              types.Float64 `tfsdk:"max_message_size_kb" json:"maxMessageSizeKB,omitempty"`
+	MaxConcurrentStreams          types.Float64 `tfsdk:"max_concurrent_streams" json:"maxConcurrentStreams,omitempty"`
+	MaxConnectionAgeSec           types.Float64 `tfsdk:"max_connection_age_sec" json:"maxConnectionAgeSec,omitempty"`
+	MaxConnectionAgeGraceSec      types.Float64 `tfsdk:"max_connection_age_grace_sec" json:"maxConnectionAgeGraceSec,omitempty"`
+	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
+	Username                      types.String  `tfsdk:"username" json:"username,omitempty"`
+	Password                      types.String  `tfsdk:"password" json:"password,omitempty"`
+	Token                         types.String  `tfsdk:"token" json:"token,omitempty"`
+	CredentialsSecret             types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	ExtractLogs                   types.Bool    `tfsdk:"extract_logs" json:"extractLogs,omitempty"`
+	AccessControlAllowOrigin      types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders     types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	AccessControlAllowMethods     types.List    `tfsdk:"access_control_allow_methods" json:"accessControlAllowMethods,omitempty"`
+	AccessControlExposeHeaders    types.List    `tfsdk:"access_control_expose_headers" json:"accessControlExposeHeaders,omitempty"`
+	AccessControlAllowCredentials types.Bool    `tfsdk:"access_control_allow_credentials" json:"accessControlAllowCredentials,omitempty"`
+	AccessControlMaxAge           types.Int64   `tfsdk:"access_control_max_age" json:"accessControlMaxAge,omitempty"`
 }
 
 func InputOpenTelemetryModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                      types.StringType,
-		"type":                    types.StringType,
-		"disabled":                types.BoolType,
-		"pipeline":                types.StringType,
-		"send_to_routes":          types.BoolType,
-		"environment":             types.StringType,
-		"pq_enabled":              types.BoolType,
-		"streamtags":              types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance": types.ObjectType{AttrTypes: InputOpenTelemetryCriblSourceProvenanceAttrTypes()},
-		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryConnectionsAttrTypes()}},
-		"pq":                      types.ObjectType{AttrTypes: InputOpenTelemetryPqAttrTypes()},
-		"host":                    types.StringType,
-		"port":                    types.Float64Type,
-		"tls":                     types.ObjectType{AttrTypes: InputOpenTelemetryTLSAttrTypes()},
-		"max_active_req":          types.Float64Type,
-		"max_requests_per_socket": types.Int64Type,
-		"capture_headers_warning": types.StringType,
-		"request_timeout":         types.Float64Type,
-		"socket_timeout":          types.Float64Type,
-		"keep_alive_timeout":      types.Float64Type,
-		"enable_health_check":     types.BoolType,
-		"ip_allowlist_regex":      types.StringType,
-		"ip_denylist_regex":       types.StringType,
-		"protocol":                types.StringType,
-		"extract_spans":           types.BoolType,
-		"extract_metrics":         types.BoolType,
-		"otlp_version":            types.StringType,
-		"auth_type":               types.StringType,
-		"auth_methods_ext":        types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()}},
-		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()}},
-		"max_active_cxn":          types.Float64Type,
-		"max_message_size_kb":     types.Float64Type,
-		"max_concurrent_streams":  types.Float64Type,
-		"description":             types.StringType,
-		"username":                types.StringType,
-		"password":                types.StringType,
-		"token":                   types.StringType,
-		"credentials_secret":      types.StringType,
-		"text_secret":             types.StringType,
-		"extract_logs":            types.BoolType,
+		"id":                               types.StringType,
+		"type":                             types.StringType,
+		"disabled":                         types.BoolType,
+		"pipeline":                         types.StringType,
+		"send_to_routes":                   types.BoolType,
+		"environment":                      types.StringType,
+		"pq_enabled":                       types.BoolType,
+		"streamtags":                       types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":          types.ObjectType{AttrTypes: InputOpenTelemetryCriblSourceProvenanceAttrTypes()},
+		"connections":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryConnectionsAttrTypes()}},
+		"pq":                               types.ObjectType{AttrTypes: InputOpenTelemetryPqAttrTypes()},
+		"host":                             types.StringType,
+		"port":                             types.Float64Type,
+		"tls":                              types.ObjectType{AttrTypes: InputOpenTelemetryTLSAttrTypes()},
+		"max_active_req":                   types.Float64Type,
+		"max_requests_per_socket":          types.Int64Type,
+		"capture_headers_warning":          types.StringType,
+		"request_timeout":                  types.Float64Type,
+		"socket_timeout":                   types.Float64Type,
+		"keep_alive_timeout":               types.Float64Type,
+		"enable_health_check":              types.BoolType,
+		"ip_allowlist_regex":               types.StringType,
+		"ip_denylist_regex":                types.StringType,
+		"protocol":                         types.StringType,
+		"extract_spans":                    types.BoolType,
+		"extract_metrics":                  types.BoolType,
+		"otlp_version":                     types.StringType,
+		"auth_type":                        types.StringType,
+		"auth_methods_ext":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()}},
+		"metadata":                         types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()}},
+		"max_active_cxn":                   types.Float64Type,
+		"max_message_size_kb":              types.Float64Type,
+		"max_concurrent_streams":           types.Float64Type,
+		"max_connection_age_sec":           types.Float64Type,
+		"max_connection_age_grace_sec":     types.Float64Type,
+		"description":                      types.StringType,
+		"username":                         types.StringType,
+		"password":                         types.StringType,
+		"token":                            types.StringType,
+		"credentials_secret":               types.StringType,
+		"text_secret":                      types.StringType,
+		"extract_logs":                     types.BoolType,
+		"access_control_allow_origin":      types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers":     types.ListType{ElemType: types.StringType},
+		"access_control_allow_methods":     types.ListType{ElemType: types.StringType},
+		"access_control_expose_headers":    types.ListType{ElemType: types.StringType},
+		"access_control_allow_credentials": types.BoolType,
+		"access_control_max_age":           types.Int64Type,
 	}
 }
 
@@ -44983,6 +45107,20 @@ func (m InputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxConcurrentStreams"] = value
 	}
+	if !m.MaxConnectionAgeSec.IsNull() && !m.MaxConnectionAgeSec.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxConnectionAgeSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_age_sec to API value: %v", err)
+		}
+		output["maxConnectionAgeSec"] = value
+	}
+	if !m.MaxConnectionAgeGraceSec.IsNull() && !m.MaxConnectionAgeGraceSec.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxConnectionAgeGraceSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_age_grace_sec to API value: %v", err)
+		}
+		output["maxConnectionAgeGraceSec"] = value
+	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
 		if err != nil {
@@ -45031,6 +45169,48 @@ func (m InputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert extract_logs to API value: %v", err)
 		}
 		output["extractLogs"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.AccessControlAllowMethods.IsNull() && !m.AccessControlAllowMethods.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowMethods)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_methods to API value: %v", err)
+		}
+		output["accessControlAllowMethods"] = value
+	}
+	if !m.AccessControlExposeHeaders.IsNull() && !m.AccessControlExposeHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlExposeHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_expose_headers to API value: %v", err)
+		}
+		output["accessControlExposeHeaders"] = value
+	}
+	if !m.AccessControlAllowCredentials.IsNull() && !m.AccessControlAllowCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_credentials to API value: %v", err)
+		}
+		output["accessControlAllowCredentials"] = value
+	}
+	if !m.AccessControlMaxAge.IsNull() && !m.AccessControlMaxAge.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlMaxAge)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_max_age to API value: %v", err)
+		}
+		output["accessControlMaxAge"] = value
 	}
 	if _, ok := output["type"]; !ok {
 		output["type"] = "open_telemetry"
@@ -45336,6 +45516,24 @@ func (m *InputOpenTelemetryModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.MaxConcurrentStreams = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionAgeSec"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionAgeSec from API value: %v", err)
+		}
+		m.MaxConnectionAgeSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionAgeSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionAgeGraceSec"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionAgeGraceSec from API value: %v", err)
+		}
+		m.MaxConnectionAgeGraceSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionAgeGraceSec = types.Float64Null()
+	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -45398,6 +45596,60 @@ func (m *InputOpenTelemetryModel) unmarshalPayload(input map[string]any) error {
 		m.ExtractLogs = value.(types.Bool)
 	} else {
 		m.ExtractLogs = types.BoolNull()
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowMethods"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowMethods from API value: %v", err)
+		}
+		m.AccessControlAllowMethods = value.(types.List)
+	} else {
+		m.AccessControlAllowMethods = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlExposeHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlExposeHeaders from API value: %v", err)
+		}
+		m.AccessControlExposeHeaders = value.(types.List)
+	} else {
+		m.AccessControlExposeHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowCredentials from API value: %v", err)
+		}
+		m.AccessControlAllowCredentials = value.(types.Bool)
+	} else {
+		m.AccessControlAllowCredentials = types.BoolNull()
+	}
+	if item, ok := input["accessControlMaxAge"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert accessControlMaxAge from API value: %v", err)
+		}
+		m.AccessControlMaxAge = value.(types.Int64)
+	} else {
+		m.AccessControlMaxAge = types.Int64Null()
 	}
 	return nil
 }
@@ -49562,6 +49814,7 @@ type InputWinEventLogsModel struct {
 	Description              types.String  `tfsdk:"description" json:"description,omitempty"`
 	DisableJSONRendering     types.Bool    `tfsdk:"disable_json_rendering" json:"disableJsonRendering,omitempty"`
 	IncludeEmptyJSONFields   types.Bool    `tfsdk:"include_empty_json_fields" json:"includeEmptyJsonFields,omitempty"`
+	ResolveParameterCodes    types.Bool    `tfsdk:"resolve_parameter_codes" json:"resolveParameterCodes,omitempty"`
 	DisableXmlRendering      types.Bool    `tfsdk:"disable_xml_rendering" json:"disableXmlRendering,omitempty"`
 }
 
@@ -49590,6 +49843,7 @@ func InputWinEventLogsModelAttrTypes() map[string]attr.Type {
 		"description":                 types.StringType,
 		"disable_json_rendering":      types.BoolType,
 		"include_empty_json_fields":   types.BoolType,
+		"resolve_parameter_codes":     types.BoolType,
 		"disable_xml_rendering":       types.BoolType,
 	}
 }
@@ -49756,6 +50010,13 @@ func (m InputWinEventLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert include_empty_json_fields to API value: %v", err)
 		}
 		output["includeEmptyJsonFields"] = value
+	}
+	if !m.ResolveParameterCodes.IsNull() && !m.ResolveParameterCodes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ResolveParameterCodes)
+		if err != nil {
+			return nil, fmt.Errorf("convert resolve_parameter_codes to API value: %v", err)
+		}
+		output["resolveParameterCodes"] = value
 	}
 	if !m.DisableXmlRendering.IsNull() && !m.DisableXmlRendering.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.DisableXmlRendering)
@@ -49977,6 +50238,15 @@ func (m *InputWinEventLogsModel) unmarshalPayload(input map[string]any) error {
 		m.IncludeEmptyJSONFields = value.(types.Bool)
 	} else {
 		m.IncludeEmptyJSONFields = types.BoolNull()
+	}
+	if item, ok := input["resolveParameterCodes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert resolveParameterCodes from API value: %v", err)
+		}
+		m.ResolveParameterCodes = value.(types.Bool)
+	} else {
+		m.ResolveParameterCodes = types.BoolNull()
 	}
 	if item, ok := input["disableXmlRendering"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
@@ -63765,6 +64035,7 @@ type InputOktaModel struct {
 	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
 	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
 	OktaDomain            types.String  `tfsdk:"okta_domain" json:"oktaDomain,omitempty"`
+	OktaDomainSuffix      types.String  `tfsdk:"okta_domain_suffix" json:"oktaDomainSuffix,omitempty"`
 	OktaToken             types.String  `tfsdk:"okta_token" json:"oktaToken,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	CronSchedule          types.String  `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
@@ -63796,6 +64067,7 @@ func InputOktaModelAttrTypes() map[string]attr.Type {
 		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOktaConnectionsAttrTypes()}},
 		"pq":                      types.ObjectType{AttrTypes: InputOktaPqAttrTypes()},
 		"okta_domain":             types.StringType,
+		"okta_domain_suffix":      types.StringType,
 		"okta_token":              types.StringType,
 		"text_secret":             types.StringType,
 		"cron_schedule":           types.StringType,
@@ -63899,6 +64171,13 @@ func (m InputOktaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert okta_domain to API value: %v", err)
 		}
 		output["oktaDomain"] = value
+	}
+	if !m.OktaDomainSuffix.IsNull() && !m.OktaDomainSuffix.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.OktaDomainSuffix)
+		if err != nil {
+			return nil, fmt.Errorf("convert okta_domain_suffix to API value: %v", err)
+		}
+		output["oktaDomainSuffix"] = value
 	}
 	if !m.OktaToken.IsNull() && !m.OktaToken.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.OktaToken)
@@ -64119,6 +64398,15 @@ func (m *InputOktaModel) unmarshalPayload(input map[string]any) error {
 		m.OktaDomain = value.(types.String)
 	} else {
 		m.OktaDomain = types.StringNull()
+	}
+	if item, ok := input["oktaDomainSuffix"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert oktaDomainSuffix from API value: %v", err)
+		}
+		m.OktaDomainSuffix = value.(types.String)
+	} else {
+		m.OktaDomainSuffix = types.StringNull()
 	}
 	if item, ok := input["oktaToken"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)

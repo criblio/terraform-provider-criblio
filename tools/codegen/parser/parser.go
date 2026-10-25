@@ -10,6 +10,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/criblio/terraform-provider-criblio/tools/specschema"
 	"github.com/pb33f/libopenapi"
 	"go.yaml.in/yaml/v3"
 )
@@ -1260,6 +1261,14 @@ func objectSchemaForProperty(property, schemas *yaml.Node) (*yaml.Node, bool, er
 }
 
 func objectSchema(schema, schemas *yaml.Node) (*yaml.Node, bool, error) {
+	if boolAnnotation(schema, "x-terraform-flatten-object-unions") {
+		resolved, err := specschema.Flatten(schema, schemas)
+		if err != nil {
+			return nil, false, err
+		}
+		_, ok := mappingValue(resolved, "properties")
+		return resolved, ok, nil
+	}
 	if properties, ok := mappingValue(schema, "properties"); ok && properties.Kind == yaml.MappingNode {
 		return schema, true, nil
 	}

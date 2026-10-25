@@ -163,7 +163,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -345,7 +346,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -453,7 +455,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													Description: `Client ID to use for OAuth authentication`,
 												},
 												"oauth_secret_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Source of the OAuth client secret.`,
 												},
 												"client_text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -495,7 +498,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Disabled`,
+													Description: `Whether TLS is disabled for this connection.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -529,11 +532,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 												},
 												"min_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Minimum TLS version`,
+													Description: `Minimum TLS version to use for the connection.`,
 												},
 												"max_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Maximum TLS version`,
+													Description: `Maximum TLS version to use for the connection.`,
 												},
 											},
 										},
@@ -625,7 +628,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Description: `Client ID to use for OAuth authentication`,
 										},
 										"oauth_secret_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Source of the OAuth client secret.`,
 										},
 										"client_text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -671,7 +675,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -705,11 +709,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -865,7 +869,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -1012,7 +1017,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													Description: `Client ID to use for OAuth authentication`,
 												},
 												"oauth_secret_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Source of the OAuth client secret.`,
 												},
 												"client_text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -1054,7 +1060,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Disabled`,
+													Description: `Whether TLS is disabled for this connection.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -1088,11 +1094,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 												},
 												"min_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Minimum TLS version`,
+													Description: `Minimum TLS version to use for the connection.`,
 												},
 												"max_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Maximum TLS version`,
+													Description: `Maximum TLS version to use for the connection.`,
 												},
 											},
 										},
@@ -1177,7 +1183,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -1211,11 +1217,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -1341,7 +1347,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -1443,11 +1450,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -1468,7 +1475,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -1632,7 +1640,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -1728,11 +1737,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -1923,7 +1932,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2085,7 +2095,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -2246,7 +2257,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2392,11 +2404,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -2417,7 +2429,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -2600,7 +2613,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2755,7 +2769,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Select or create a stored text secret`,
 								},
 								"certificate": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for the Azure service principal.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -2848,7 +2863,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2983,7 +2999,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Select or create a stored text secret`,
 								},
 								"certificate": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for the Azure service principal.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -3076,7 +3093,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -3172,11 +3190,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -3197,7 +3215,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -3272,7 +3291,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"proxy_mode": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Proxy mode settings for Elasticsearch requests.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3426,7 +3446,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -3482,7 +3503,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -3516,11 +3537,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -3582,7 +3603,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													Description: `Client ID to use for OAuth authentication`,
 												},
 												"oauth_secret_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Source of the OAuth client secret.`,
 												},
 												"client_text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -3624,7 +3646,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Disabled`,
+													Description: `Whether TLS is disabled for this connection.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -3658,11 +3680,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 												},
 												"min_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Minimum TLS version`,
+													Description: `Minimum TLS version to use for the connection.`,
 												},
 												"max_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Maximum TLS version`,
+													Description: `Maximum TLS version to use for the connection.`,
 												},
 											},
 										},
@@ -3754,7 +3776,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Description: `Client ID to use for OAuth authentication`,
 										},
 										"oauth_secret_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Source of the OAuth client secret.`,
 										},
 										"client_text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -3946,7 +3969,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4042,11 +4066,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -4067,7 +4091,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4106,7 +4131,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.`,
 								},
 								"prometheus_auth": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication settings for Prometheus Remote Write requests.`,
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
 											Computed:    true,
@@ -4137,7 +4163,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"loki_auth": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication settings for Loki requests.`,
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
 											Computed:    true,
@@ -4272,7 +4299,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4368,11 +4396,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -4393,7 +4421,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4558,7 +4587,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4654,11 +4684,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -4679,7 +4709,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4844,7 +4875,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4904,7 +4936,15 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"interval": schema.Float64Attribute{
 									Computed:    true,
-									Description: `How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.`,
+									Description: `How often to scrape targets for metrics, in the unit set by Interval unit. Maximum of 60. 60 must be evenly divisible by the value you enter.`,
+								},
+								"interval_unit": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unit for the poll interval. Choose Seconds for sub-minute scraping. Each Worker Process generates and registers the scrape job, and the Leader keeps one schedule for the @{group}. Before enabling Seconds, upgrade every @{node} in the @{group}: a Worker Process on @{product} version 4.20.2 or older registers a minute-based cron and replaces that @{group} schedule.`,
+								},
+								"max_concurrent_runs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of scrape runs that can overlap. Set this (for example, to 1) for sub-minute intervals, so a slow scrape cycle can't pile up overlapping runs.`,
 								},
 								"log_level": schema.StringAttribute{
 									Computed:    true,
@@ -5181,7 +5221,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -5575,7 +5616,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -5635,6 +5677,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `HTTP request inactivity timeout, use 0 to disable`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
 									Computed:    true,
@@ -5709,7 +5755,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Use this setting to account for ingestion lag. This is necessary because there can be a lag of 60 - 90 minutes (or longer) before Microsoft 365 events are available for retrieval.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -5848,7 +5895,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -5908,6 +5956,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `HTTP request inactivity timeout, use 0 to disable`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
 									Computed:    true,
@@ -5974,7 +6026,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -6113,7 +6166,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -6235,7 +6289,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Log Level (verbosity) for collection runtime behavior.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -6315,7 +6370,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 								},
 								"cert_options": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for Microsoft OAuth authentication.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -6421,7 +6477,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -6547,7 +6604,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Log Level (verbosity) for collection runtime behavior.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -6623,7 +6681,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 								},
 								"cert_options": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for Microsoft OAuth authentication.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -6729,7 +6788,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -6871,14 +6931,17 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Description: `Select or create a stored certificate`,
 										},
 										"cert_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Path to the client certificate file.`,
 										},
 										"priv_key_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Path to the client private key file.`,
 										},
 										"passphrase": schema.StringAttribute{
-											Computed:  true,
-											Sensitive: true,
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase used to decrypt the client private key.`,
 										},
 										"oauth_endpoint": schema.StringAttribute{
 											Computed:    true,
@@ -7067,7 +7130,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7121,7 +7185,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `The consumer group this instance belongs to. Default is '$Default'.`,
 								},
 								"auth": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication settings for the Event Hubs AMQP connection.`,
 									Attributes: map[string]schema.Attribute{
 										"mechanism": schema.StringAttribute{
 											Computed:    true,
@@ -7140,7 +7205,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Description: `Select or create a stored text secret`,
 										},
 										"certificate": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Certificate credentials for OAuth authentication.`,
 											Attributes: map[string]schema.Attribute{
 												"certificate_name": schema.StringAttribute{
 													Computed:    true,
@@ -7180,7 +7246,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Azure Blob Storage settings used to persist Event Hubs checkpoints.`,
 									Attributes: map[string]schema.Attribute{
 										"blob_store": schema.SingleNestedAttribute{
 											Computed:    true,
@@ -7223,7 +7290,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													Description: `Select or create a stored text secret`,
 												},
 												"certificate": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Certificate credentials for the Azure service principal.`,
 													Attributes: map[string]schema.Attribute{
 														"certificate_name": schema.StringAttribute{
 															Computed:    true,
@@ -7388,7 +7456,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7575,7 +7644,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7631,7 +7701,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									Description: `Shared secrets to be provided by any client (x-amz-firehose-access-key: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
@@ -7677,11 +7747,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -7702,7 +7772,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -7837,7 +7908,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8045,7 +8117,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8091,7 +8164,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"filter": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Filter expression used to select internal Cribl log events.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -8198,7 +8272,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8294,11 +8369,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -8451,7 +8526,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8567,11 +8643,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -8592,7 +8668,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -8727,7 +8804,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8829,11 +8907,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -8854,7 +8932,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -9018,7 +9097,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9114,11 +9194,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -9268,7 +9348,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9318,17 +9399,20 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Time, in seconds, between consecutive metric collections. Default is 10 seconds.`,
 								},
 								"host": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select level of detail for host metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
 											Description: `Select level of detail for host metrics`,
 										},
 										"custom": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Custom host metric collection settings.`,
 											Attributes: map[string]schema.Attribute{
 												"system": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for system metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9341,7 +9425,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"cpu": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for CPU metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9362,7 +9447,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"memory": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for memory metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9375,7 +9461,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"network": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for network metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9401,7 +9488,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"disk": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for disk metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9441,7 +9529,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"process": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Process metric collection settings.`,
 									Attributes: map[string]schema.Attribute{
 										"sets": schema.ListNestedAttribute{
 											Computed:    true,
@@ -9466,7 +9555,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"container": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select the level of detail for container metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9508,7 +9598,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"gpu": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select the level of detail for GPU metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9659,7 +9750,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9725,7 +9817,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"collectors": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `System state collectors to enable and configure.`,
 									Attributes: map[string]schema.Attribute{
 										"hostsfile": schema.SingleNestedAttribute{
 											Computed:    true,
@@ -9840,7 +9933,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Disk spooling settings for collected system state data.`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -9965,7 +10059,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10173,7 +10268,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10390,7 +10486,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10556,7 +10653,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10606,17 +10704,20 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Time, in seconds, between consecutive metric collections. Default is 10 seconds.`,
 								},
 								"host": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select level of detail for host metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
 											Description: `Select level of detail for host metrics`,
 										},
 										"custom": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Custom host metric collection settings.`,
 											Attributes: map[string]schema.Attribute{
 												"system": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for system metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10629,7 +10730,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"cpu": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for CPU metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10650,7 +10752,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"memory": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for memory metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10663,7 +10766,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"network": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for network metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10689,7 +10793,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													},
 												},
 												"disk": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for disk metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10715,7 +10820,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"process": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Process metric collection settings.`,
 									Attributes: map[string]schema.Attribute{
 										"sets": schema.ListNestedAttribute{
 											Computed:    true,
@@ -10740,7 +10846,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"gpu": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select the level of detail for GPU metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10895,7 +11002,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10992,11 +11100,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"visibility_timeout": schema.Float64Attribute{
 									Computed:    true,
-									Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+									Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. New Sources default to 600 sec. (10 minutes); existing Sources keep their configured value. You can set this as high as 43200 sec. (12 hours), but a long timeout keeps a message invisible to other pollers for that whole window after a non-graceful shutdown, so redelivery can be hours away.`,
 								},
 								"num_receivers": schema.Float64Attribute{
 									Computed:    true,
-									Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+									Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead. Not applied when fan-out is enabled.`,
 								},
 								"socket_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -11004,7 +11112,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"skip_on_error": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.`,
+									Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Not applied when fan-out is enabled.`,
 								},
 								"include_sqs_metadata": schema.BoolAttribute{
 									Computed:    true,
@@ -11040,7 +11148,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"preprocess": schema.SingleNestedAttribute{
 									Computed:    true,
-									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion. Not applied when fan-out is enabled.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11074,7 +11182,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption. Not applied when fan-out is enabled.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11093,6 +11202,14 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								"encoding": schema.StringAttribute{
 									Computed:    true,
 									Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
+								},
+								"visibility_timeout_warning": schema.StringAttribute{
+									Computed:    true,
+									Description: `Warning displayed when the visibility timeout is configured high.`,
+								},
+								"enable_fanout": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Spread this Source's file processing across all Worker Processes on the Worker, instead of having one Worker Process handle every file of an SQS message. When enabled, Number of receivers, Skip file on error, Checkpointing and Custom command are not applied.`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -11133,7 +11250,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -11228,7 +11346,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11324,11 +11443,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -11349,7 +11468,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -11424,7 +11544,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"proxy_mode": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Proxy mode settings for Datadog Agent requests.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11525,7 +11646,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11691,7 +11813,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11793,11 +11916,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -11818,7 +11941,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -11911,7 +12035,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"access_control_allow_methods": schema.ListAttribute{
 									Computed:    true,
-									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight.`,
+									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight`,
 									ElementType: types.StringType,
 								},
 								"access_control_expose_headers": schema.ListAttribute{
@@ -12016,7 +12140,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12079,7 +12204,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"payload_format": schema.StringAttribute{
 									Computed:    true,
-									Description: `Format of data inside the Kinesis Stream records. Gzip compression is automatically detected.`,
+									Description: `Format of data inside the Kinesis Stream records. Gzip compression is automatically detected. Cloudwatch Logs records become one event per log event, keeping the event id, message type, log group, log stream, owner, and subscription filters; other fields are dropped.`,
 								},
 								"get_records_limit": schema.Float64Attribute{
 									Computed:    true,
@@ -12260,7 +12385,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12418,7 +12544,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12530,11 +12657,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -12647,7 +12774,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12834,7 +12962,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -12993,7 +13122,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -13180,7 +13310,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -13247,7 +13378,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -13342,7 +13474,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -13414,11 +13547,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
 														Computed:    true,
-														Description: `V3 name`,
+														Description: `SNMPv3 security name.`,
 													},
 													"auth_protocol": schema.StringAttribute{
 														Computed:    true,
-														Description: `Authentication protocol`,
+														Description: `Authentication protocol for the SNMPv3 user.`,
 													},
 													"auth_key_type": schema.StringAttribute{
 														Computed:    true,
@@ -13427,7 +13560,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													"auth_key": schema.StringAttribute{
 														Computed:    true,
 														Sensitive:   true,
-														Description: `V3 authentication key`,
+														Description: `Authentication key for the SNMPv3 user.`,
 													},
 													"auth_key_secret": schema.StringAttribute{
 														Computed:    true,
@@ -13444,7 +13577,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 													"priv_key": schema.StringAttribute{
 														Computed:    true,
 														Sensitive:   true,
-														Description: `V3 privacy key`,
+														Description: `Privacy key for the SNMPv3 user.`,
 													},
 													"priv_key_secret": schema.StringAttribute{
 														Computed:    true,
@@ -13580,7 +13713,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -13676,11 +13810,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -13693,7 +13827,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"request_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -13842,6 +13977,14 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Computed:    true,
 									Description: `Maximum number of concurrent HTTP/2 streams allowed on a single gRPC connection. Combined with Maximum message size, this bounds per-connection receive and decompress state. Active connection limit only bounds connections.`,
 								},
+								"max_connection_age_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time a gRPC connection may stay open, including while idle, before @{product} closes it and frees the slot for new clients. Use 0 for unlimited; maximum 86400 sec. (24 hours).`,
+								},
+								"max_connection_age_grace_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After the maximum connection age is reached, how long @{product} waits for in-flight requests to complete before forcibly closing the connection. Only applies when Maximum connection age is not 0. Maximum 3600 sec. (1 hour).`,
+								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional description for this configuration.`,
@@ -13871,6 +14014,34 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								"extract_logs": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable to extract each incoming log record to a separate event`,
+								},
+								"access_control_allow_origin": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers. Leave empty to allow all requested headers from an allowed origin. Origin matching and authentication still apply.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_methods": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight`,
+									ElementType: types.StringType,
+								},
+								"access_control_expose_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `Headers the browser is allowed to access from the response`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Include credentials in cross-origin requests. Cannot be used with wildcard origins.`,
+								},
+								"access_control_max_age": schema.Int64Attribute{
+									Computed:    true,
+									Description: `How long browsers should cache the preflight response, in whole seconds. Fractional values are invalid; browsers that cannot parse the header fall back to 5 seconds.`,
 								},
 							},
 						},
@@ -13957,7 +14128,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14053,11 +14225,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -14182,7 +14354,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14418,7 +14591,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14575,11 +14749,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -14704,7 +14878,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14956,7 +15131,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -15052,11 +15228,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -15238,7 +15414,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -15337,7 +15514,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port.`,
 								},
 								"filter": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Rules that select processes for AppScope instrumentation.`,
 									Attributes: map[string]schema.Attribute{
 										"allow": schema.ListNestedAttribute{
 											Computed:    true,
@@ -15454,11 +15632,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -15564,7 +15742,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -15697,7 +15876,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"keep_alive_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -15933,7 +16113,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16039,6 +16220,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Computed:    true,
 									Description: `Preserve fields with empty values (such as '-') in the JSON output instead of omitting them`,
 								},
+								"resolve_parameter_codes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Resolve Windows message table parameter codes (%%NNNN) in EventData fields to their human-readable strings (for example: %%14592 → Inbound)`,
+								},
 								"disable_xml_rendering": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)`,
@@ -16128,7 +16313,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16286,7 +16472,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16468,7 +16655,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16663,7 +16851,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16755,6 +16944,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											},
 											"manage_state": schema.MapAttribute{
 												Computed:    true,
+												Description: `Controls for viewing and managing the collector state.`,
 												ElementType: types.StringType,
 											},
 											"content_query": schema.StringAttribute{
@@ -16834,7 +17024,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -16973,7 +17164,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -17065,6 +17257,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											},
 											"manage_state": schema.MapAttribute{
 												Computed:    true,
+												Description: `Controls for viewing and managing the collector state.`,
 												ElementType: types.StringType,
 											},
 											"request_params": schema.ListNestedAttribute{
@@ -17193,7 +17386,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -17319,7 +17513,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -17421,11 +17616,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -17446,7 +17641,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -17641,7 +17837,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -17831,7 +18028,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18018,7 +18216,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -18077,7 +18276,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -18172,7 +18372,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18359,7 +18560,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -18418,7 +18620,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -18513,7 +18716,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18664,7 +18868,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -18775,6 +18980,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 							},
@@ -18862,7 +19068,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18925,7 +19132,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -18959,11 +19166,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -19080,7 +19287,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19226,11 +19434,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -19251,7 +19459,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -19409,7 +19618,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19555,11 +19765,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -19580,7 +19790,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -19743,7 +19954,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19889,11 +20101,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -19914,7 +20126,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -20068,7 +20281,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -20214,11 +20428,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -20239,7 +20453,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -20393,7 +20608,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -20539,11 +20755,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -20564,7 +20780,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -20718,7 +20935,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -20864,11 +21082,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -20889,7 +21107,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -21024,7 +21243,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -21170,11 +21390,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -21195,7 +21415,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -21349,7 +21570,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -21495,11 +21717,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -21516,7 +21738,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -21674,7 +21897,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -21806,7 +22030,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -21875,6 +22100,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 							},
@@ -21962,7 +22188,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -22054,6 +22281,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22096,6 +22324,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22138,6 +22367,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22180,6 +22410,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22222,6 +22453,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22344,7 +22576,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -22470,7 +22703,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -22623,7 +22857,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -22749,7 +22984,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -22846,6 +23082,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 								"timeout": schema.Float64Attribute{
@@ -22889,7 +23126,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -22944,7 +23182,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Select or create a secret that references the client secret from your app registration`,
 								},
 								"cert_options": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for Microsoft Graph OAuth authentication.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -23050,7 +23289,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -23097,7 +23337,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"okta_domain": schema.StringAttribute{
 									Computed:    true,
-									Description: `Your Okta domain (example: your-org). Do not include .okta.com, https://, or trailing slashes.`,
+									Description: `Your Okta subdomain (example: your-org). Do not include the domain suffix, https://, or trailing slashes.`,
+								},
+								"okta_domain_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `Host suffix for your Okta cell/region. Defaults to okta.com (US commercial). Choose okta-emea.com (EMEA), oktapreview.com (preview), okta-gov.com (US gov), or okta.mil (US military).`,
 								},
 								"okta_token": schema.StringAttribute{
 									Computed:    true,
@@ -23122,6 +23366,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 								"job_timeout": schema.StringAttribute{
@@ -23165,7 +23410,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -23291,7 +23537,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -23437,11 +23684,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -23462,7 +23709,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -23601,7 +23849,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -23747,11 +23996,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -23772,7 +24021,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -23926,7 +24176,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -24072,11 +24323,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -24097,7 +24348,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -24251,7 +24503,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -24397,11 +24650,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -24422,7 +24675,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -24576,7 +24830,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -24722,11 +24977,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -24747,7 +25002,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -24905,7 +25161,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -25051,11 +25308,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -25076,7 +25333,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -25225,7 +25483,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -25371,11 +25630,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -25396,7 +25655,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -25550,7 +25810,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -25696,11 +25957,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -25721,7 +25982,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -25875,7 +26137,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -26021,11 +26284,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -26046,7 +26309,8 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -26246,9 +26510,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -26535,9 +26800,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -26727,9 +26993,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Description: `Client ID to use for OAuth authentication`,
 									},
 									"oauth_secret_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Source of the OAuth client secret.`,
 									},
 									"client_text_secret": schema.StringAttribute{
 										Required:    false,
@@ -26789,7 +27056,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Disabled`,
+										Description: `Whether TLS is disabled for this connection.`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -26839,13 +27106,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Minimum TLS version`,
+										Description: `Minimum TLS version to use for the connection.`,
 									},
 									"max_version": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Maximum TLS version`,
+										Description: `Maximum TLS version to use for the connection.`,
 									},
 								},
 							},
@@ -27003,9 +27270,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Description: `Client ID to use for OAuth authentication`,
 							},
 							"oauth_secret_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Source of the OAuth client secret.`,
 							},
 							"client_text_secret": schema.StringAttribute{
 								Required:    false,
@@ -27069,7 +27337,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -27119,13 +27387,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -27373,9 +27641,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -27625,9 +27894,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Description: `Client ID to use for OAuth authentication`,
 									},
 									"oauth_secret_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Source of the OAuth client secret.`,
 									},
 									"client_text_secret": schema.StringAttribute{
 										Required:    false,
@@ -27687,7 +27957,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Disabled`,
+										Description: `Whether TLS is disabled for this connection.`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -27737,13 +28007,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Minimum TLS version`,
+										Description: `Minimum TLS version to use for the connection.`,
 									},
 									"max_version": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Maximum TLS version`,
+										Description: `Maximum TLS version to use for the connection.`,
 									},
 								},
 							},
@@ -27899,7 +28169,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -27949,13 +28219,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -28156,9 +28426,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -28326,13 +28597,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -28367,9 +28638,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -28630,9 +28902,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -28792,13 +29065,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -29092,9 +29365,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -29358,9 +29632,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -29612,9 +29887,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -29848,13 +30124,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -29889,9 +30165,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -30190,9 +30467,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -30455,9 +30733,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Select or create a stored text secret`,
 					},
 					"certificate": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Certificate credentials for the Azure service principal.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    true,
@@ -30594,9 +30873,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -30826,9 +31106,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Select or create a stored text secret`,
 					},
 					"certificate": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Certificate credentials for the Azure service principal.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    true,
@@ -30965,9 +31246,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -31127,13 +31409,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -31168,9 +31450,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -31292,9 +31575,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"proxy_mode": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Proxy mode settings for Elasticsearch requests.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -31527,9 +31811,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -31630,7 +31915,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -31680,13 +31965,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -31789,9 +32074,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Description: `Client ID to use for OAuth authentication`,
 									},
 									"oauth_secret_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Source of the OAuth client secret.`,
 									},
 									"client_text_secret": schema.StringAttribute{
 										Required:    false,
@@ -31851,7 +32137,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Disabled`,
+										Description: `Whether TLS is disabled for this connection.`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -31901,13 +32187,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Minimum TLS version`,
+										Description: `Minimum TLS version to use for the connection.`,
 									},
 									"max_version": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    false,
-										Description: `Maximum TLS version`,
+										Description: `Maximum TLS version to use for the connection.`,
 									},
 								},
 							},
@@ -32065,9 +32351,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Description: `Client ID to use for OAuth authentication`,
 							},
 							"oauth_secret_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Source of the OAuth client secret.`,
 							},
 							"client_text_secret": schema.StringAttribute{
 								Required:    false,
@@ -32365,9 +32652,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -32527,13 +32815,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -32568,9 +32856,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -32645,9 +32934,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"prometheus_auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication settings for Prometheus Remote Write requests.`,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
 								Required:    false,
@@ -32690,9 +32980,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"loki_auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication settings for Loki requests.`,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
 								Required:    false,
@@ -32889,9 +33180,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -33051,13 +33343,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -33092,9 +33384,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -33352,9 +33645,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -33514,13 +33808,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -33555,9 +33849,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -33815,9 +34110,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -33923,9 +34219,24 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
-						Description: `How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.`,
+						Description: `How often to scrape targets for metrics, in the unit set by Interval unit. Maximum of 60. 60 must be evenly divisible by the value you enter.`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 60),
+						},
+					},
+					"interval_unit": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Unit for the poll interval. Choose Seconds for sub-minute scraping. Each Worker Process generates and registers the scrape job, and the Leader keeps one schedule for the @{group}. Before enabling Seconds, upgrade every @{node} in the @{group}: a Worker Process on @{product} version 4.20.2 or older registers a minute-based cron and replaces that @{group} schedule.`,
+					},
+					"max_concurrent_runs": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of scrape runs that can overlap. Set this (for example, to 1) for sub-minute intervals, so a slow scrape cycle can't pile up overlapping runs.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
 						},
 					},
 					"log_level": schema.StringAttribute{
@@ -34372,9 +34683,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -35008,9 +35320,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -35116,6 +35429,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Validators: []validator.Float64{
 							float64validator.Between(0, 2400),
 						},
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
@@ -35240,9 +35559,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -35459,9 +35779,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -35567,6 +35888,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Validators: []validator.Float64{
 							float64validator.Between(0, 2400),
 						},
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
@@ -35676,9 +36003,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -35895,9 +36223,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -36111,9 +36440,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Log Level (verbosity) for collection runtime behavior.`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -36241,9 +36571,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 					},
 					"cert_options": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Certificate credentials for Microsoft OAuth authentication.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    false,
@@ -36399,9 +36730,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -36624,9 +36956,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Log Level (verbosity) for collection runtime behavior.`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -36751,9 +37084,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 					},
 					"cert_options": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Certificate credentials for Microsoft OAuth authentication.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    false,
@@ -36909,9 +37243,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -37166,20 +37501,23 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Description: `Select or create a stored certificate`,
 							},
 							"cert_path": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path to the client certificate file.`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path to the client private key file.`,
 							},
 							"passphrase": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  false,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Sensitive:   true,
+								Description: `Passphrase used to decrypt the client private key.`,
 							},
 							"oauth_endpoint": schema.StringAttribute{
 								Required:    false,
@@ -37476,9 +37814,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -37577,9 +37916,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication settings for the Event Hubs AMQP connection.`,
 						Attributes: map[string]schema.Attribute{
 							"mechanism": schema.StringAttribute{
 								Required:    true,
@@ -37606,9 +37946,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Description: `Select or create a stored text secret`,
 							},
 							"certificate": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Certificate credentials for OAuth authentication.`,
 								Attributes: map[string]schema.Attribute{
 									"certificate_name": schema.StringAttribute{
 										Required:    true,
@@ -37664,9 +38005,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Azure Blob Storage settings used to persist Event Hubs checkpoints.`,
 						Attributes: map[string]schema.Attribute{
 							"blob_store": schema.SingleNestedAttribute{
 								Required:    true,
@@ -37733,9 +38075,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Description: `Select or create a stored text secret`,
 									},
 									"certificate": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Certificate credentials for the Azure service principal.`,
 										Attributes: map[string]schema.Attribute{
 											"certificate_name": schema.StringAttribute{
 												Required:    true,
@@ -38006,9 +38349,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -38307,9 +38651,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -38409,7 +38754,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Sensitive:   true,
-						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						Description: `Shared secrets to be provided by any client (x-amz-firehose-access-key: <token>). If empty, unauthorized access is permitted.`,
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
@@ -38477,13 +38822,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -38518,9 +38863,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -38731,9 +39077,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -39063,9 +39410,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -39146,9 +39494,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"filter": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Filter expression used to select internal Cribl log events.`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -39305,9 +39654,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -39467,13 +39817,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -39708,9 +40058,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -39898,13 +40249,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -39939,9 +40290,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -40152,9 +40504,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -40322,13 +40675,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -40363,9 +40716,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -40626,9 +40980,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -40788,13 +41143,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -41026,9 +41381,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -41118,9 +41474,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"host": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select level of detail for host metrics`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -41129,14 +41486,16 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Description: `Select level of detail for host metrics`,
 							},
 							"custom": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Custom host metric collection settings.`,
 								Attributes: map[string]schema.Attribute{
 									"system": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of detail for system metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -41153,9 +41512,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"cpu": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of detail for CPU metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -41184,9 +41544,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"memory": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of detail for memory metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -41203,9 +41564,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"network": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of detail for network metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -41241,9 +41603,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"disk": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of detail for disk metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -41297,9 +41660,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"process": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Process metric collection settings.`,
 						Attributes: map[string]schema.Attribute{
 							"sets": schema.ListNestedAttribute{
 								Required:    false,
@@ -41332,9 +41696,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"container": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select the level of detail for container metrics`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -41395,9 +41760,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"gpu": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select the level of detail for GPU metrics`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -41624,9 +41990,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -41738,9 +42105,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"collectors": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `System state collectors to enable and configure.`,
 						Attributes: map[string]schema.Attribute{
 							"hostsfile": schema.SingleNestedAttribute{
 								Required:    false,
@@ -41899,9 +42267,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Disk spooling settings for collected system state data.`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -42092,9 +42461,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -42422,9 +42792,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -42771,9 +43142,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -43030,9 +43402,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -43122,9 +43495,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"host": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select level of detail for host metrics`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -43133,14 +43507,16 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Description: `Select level of detail for host metrics`,
 							},
 							"custom": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Custom host metric collection settings.`,
 								Attributes: map[string]schema.Attribute{
 									"system": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of details for system metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -43157,9 +43533,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"cpu": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of details for CPU metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -43188,9 +43565,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"memory": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of details for memory metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -43207,9 +43585,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"network": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of details for network metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -43245,9 +43624,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 									"disk": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select the level of details for disk metrics`,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
 												Required:    false,
@@ -43281,9 +43661,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"process": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Process metric collection settings.`,
 						Attributes: map[string]schema.Attribute{
 							"sets": schema.ListNestedAttribute{
 								Required:    false,
@@ -43316,9 +43697,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"gpu": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select the level of detail for GPU metrics`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -43551,9 +43933,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -43717,7 +44100,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. New Sources default to 600 sec. (10 minutes); existing Sources keep their configured value. You can set this as high as 43200 sec. (12 hours), but a long timeout keeps a message invisible to other pollers for that whole window after a non-graceful shutdown, so redelivery can be hours away.`,
 						Validators: []validator.Float64{
 							float64validator.Between(0, 43200),
 						},
@@ -43726,7 +44109,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead. Not applied when fan-out is enabled.`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 100),
 						},
@@ -43744,7 +44127,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.`,
+						Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Not applied when fan-out is enabled.`,
 					},
 					"include_sqs_metadata": schema.BoolAttribute{
 						Required:    false,
@@ -43805,7 +44188,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion. Not applied when fan-out is enabled.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -43851,9 +44234,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Checkpoint settings used to resume processing after an interruption. Not applied when fan-out is enabled.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -43886,6 +44270,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
+					},
+					"visibility_timeout_warning": schema.StringAttribute{
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when the visibility timeout is configured high.`,
+					},
+					"enable_fanout": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Spread this Source's file processing across all Worker Processes on the Worker, instead of having one Worker Process handle every file of an SQS message. When enabled, Number of receivers, Skip file on error, Checkpointing and Custom command are not applied.`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -43951,9 +44347,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Whether to add a tag to each S3 object after processing.`,
 					},
 					"processed_tag_key": schema.StringAttribute{
 						Required:    false,
@@ -44094,9 +44491,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -44256,13 +44654,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -44297,9 +44695,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -44433,9 +44832,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"proxy_mode": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Proxy mode settings for Datadog Agent requests.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -44584,9 +44984,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -44849,9 +45250,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -45019,13 +45421,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -45060,9 +45462,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -45224,7 +45627,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight.`,
+						Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(0),
 							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
@@ -45390,9 +45793,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -45503,7 +45907,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Format of data inside the Kinesis Stream records. Gzip compression is automatically detected.`,
+						Description: `Format of data inside the Kinesis Stream records. Gzip compression is automatically detected. Cloudwatch Logs records become one event per log event, keeping the event id, message type, log group, log stream, owner, and subscription filters; other fields are dropped.`,
 					},
 					"get_records_limit": schema.Float64Attribute{
 						Required:    false,
@@ -45783,9 +46187,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -46032,9 +46437,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -46224,13 +46630,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -46398,9 +46804,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -46716,9 +47123,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Checkpoint settings used to resume processing after an interruption.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -46966,9 +47374,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -47284,9 +47693,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Checkpoint settings used to resume processing after an interruption.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -47399,9 +47809,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Whether to add a tag to each S3 object after processing.`,
 					},
 					"processed_tag_key": schema.StringAttribute{
 						Required:    false,
@@ -47542,9 +47953,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -47671,7 +48083,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Required:    true,
 											Optional:    false,
 											Computed:    false,
-											Description: `V3 name`,
+											Description: `SNMPv3 security name.`,
 											Validators: []validator.String{
 												stringvalidator.UTF8LengthAtLeast(1),
 											},
@@ -47680,7 +48092,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Required:    false,
 											Optional:    true,
 											Computed:    false,
-											Description: `Authentication protocol`,
+											Description: `Authentication protocol for the SNMPv3 user.`,
 										},
 										"auth_key_type": schema.StringAttribute{
 											Required:    false,
@@ -47693,7 +48105,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Optional:    true,
 											Computed:    false,
 											Sensitive:   true,
-											Description: `V3 authentication key`,
+											Description: `Authentication key for the SNMPv3 user.`,
 										},
 										"auth_key_secret": schema.StringAttribute{
 											Required:    false,
@@ -47718,7 +48130,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Optional:    true,
 											Computed:    false,
 											Sensitive:   true,
-											Description: `V3 privacy key`,
+											Description: `Privacy key for the SNMPv3 user.`,
 										},
 										"priv_key_secret": schema.StringAttribute{
 											Required:    false,
@@ -47922,9 +48334,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -48084,13 +48497,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -48113,9 +48526,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -48381,6 +48795,24 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 							float64validator.Between(1, 10000),
 						},
 					},
+					"max_connection_age_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum time a gRPC connection may stay open, including while idle, before @{product} closes it and frees the slot for new clients. Use 0 for unlimited; maximum 86400 sec. (24 hours).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"max_connection_age_grace_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `After the maximum connection age is reached, how long @{product} waits for in-flight requests to complete before forcibly closing the connection. Only applies when Maximum connection age is not 0. Maximum 3600 sec. (1 hour).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
 					"description": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -48424,6 +48856,65 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Enable to extract each incoming log record to a separate event`,
+					},
+					"access_control_allow_origin": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.RegexMatches(regexp.MustCompile(`^[\t\x20-\x7e\x80-\xff]+$`), "must match pattern ^[\\t\\x20-\\x7e\\x80-\\xff]+$"), stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_allow_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers. Leave empty to allow all requested headers from an allowed origin. Origin matching and authentication still apply.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.RegexMatches(regexp.MustCompile(`^[\t\x20-\x7e\x80-\xff]+$`), "must match pattern ^[\\t\\x20-\\x7e\\x80-\\xff]+$"), stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_allow_methods": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.RegexMatches(regexp.MustCompile(`^[\t\x20-\x7e\x80-\xff]+$`), "must match pattern ^[\\t\\x20-\\x7e\\x80-\\xff]+$"), stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_expose_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Headers the browser is allowed to access from the response`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.RegexMatches(regexp.MustCompile(`^[\t\x20-\x7e\x80-\xff]+$`), "must match pattern ^[\\t\\x20-\\x7e\\x80-\\xff]+$"), stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_allow_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Include credentials in cross-origin requests. Cannot be used with wildcard origins.`,
+					},
+					"access_control_max_age": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long browsers should cache the preflight response, in whole seconds. Fractional values are invalid; browsers that cannot parse the header fall back to 5 seconds.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 				},
 			},
@@ -48552,9 +49043,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -48714,13 +49206,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -48915,9 +49407,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -49299,9 +49792,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -49573,13 +50067,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -49765,9 +50259,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -50172,9 +50667,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -50334,13 +50830,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -50621,9 +51117,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -50796,9 +51293,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port.`,
 					},
 					"filter": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Rules that select processes for AppScope instrumentation.`,
 						Attributes: map[string]schema.Attribute{
 							"allow": schema.ListNestedAttribute{
 								Required:    false,
@@ -50978,13 +51476,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -51140,9 +51638,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -51361,9 +51860,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -51722,9 +52222,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -51907,6 +52408,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Computed:    false,
 						Description: `Preserve fields with empty values (such as '-') in the JSON output instead of omitting them`,
 					},
+					"resolve_parameter_codes": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Resolve Windows message table parameter codes (%%NNNN) in EventData fields to their human-readable strings (for example: %%14592 → Inbound)`,
+					},
 					"disable_xml_rendering": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
@@ -52040,9 +52547,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -52292,9 +52800,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -52586,9 +53095,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -52891,9 +53401,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -53050,6 +53561,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 								"content_query": schema.StringAttribute{
@@ -53184,9 +53696,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -53403,9 +53916,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -53556,6 +54070,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 								"request_params": schema.ListNestedAttribute{
@@ -53756,9 +54271,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -53956,9 +54472,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -54126,13 +54643,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -54167,9 +54684,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -54473,9 +54991,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -54779,9 +55298,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -55097,9 +55617,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Checkpoint settings used to resume processing after an interruption.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -55197,9 +55718,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Whether to add a tag to each S3 object after processing.`,
 					},
 					"processed_tag_key": schema.StringAttribute{
 						Required:    false,
@@ -55340,9 +55862,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -55658,9 +56181,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Checkpoint settings used to resume processing after an interruption.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    true,
@@ -55758,9 +56282,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Whether to add a tag to each S3 object after processing.`,
 					},
 					"processed_tag_key": schema.StringAttribute{
 						Required:    false,
@@ -55901,9 +56426,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -56178,9 +56704,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -56359,6 +56886,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
+						Description: `Controls for viewing and managing the collector state.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -56488,9 +57016,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -56598,7 +57127,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -56648,13 +57177,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -56842,9 +57371,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -57078,13 +57608,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -57119,9 +57649,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -57380,9 +57911,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -57616,13 +58148,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -57657,9 +58189,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -57928,9 +58461,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -58164,13 +58698,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -58205,9 +58739,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -58460,9 +58995,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -58696,13 +59232,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -58737,9 +59273,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -58992,9 +59529,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -59228,13 +59766,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -59269,9 +59807,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -59524,9 +60063,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -59760,13 +60300,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -59801,9 +60341,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -60017,9 +60558,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -60253,13 +60795,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -60294,9 +60836,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -60549,9 +61092,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -60785,13 +61329,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -60820,9 +61364,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -61081,9 +61626,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -61311,9 +61857,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -61432,6 +61979,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
+						Description: `Controls for viewing and managing the collector state.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -61561,9 +62109,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -61717,6 +62266,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Controls for viewing and managing the collector state.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -61782,6 +62332,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Controls for viewing and managing the collector state.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -61847,6 +62398,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Controls for viewing and managing the collector state.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -61912,6 +62464,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Controls for viewing and managing the collector state.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -61977,6 +62530,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Controls for viewing and managing the collector state.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -62178,9 +62732,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -62378,9 +62933,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -62637,9 +63193,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -62837,9 +63394,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -63013,6 +63571,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
+						Description: `Controls for viewing and managing the collector state.`,
 						ElementType: types.StringType,
 					},
 					"timeout": schema.Float64Attribute{
@@ -63089,9 +63648,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -63185,9 +63745,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Select or create a secret that references the client secret from your app registration`,
 					},
 					"cert_options": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Certificate credentials for Microsoft Graph OAuth authentication.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    false,
@@ -63343,9 +63904,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -63429,7 +63991,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
-						Description: `Your Okta domain (example: your-org). Do not include .okta.com, https://, or trailing slashes.`,
+						Description: `Your Okta subdomain (example: your-org). Do not include the domain suffix, https://, or trailing slashes.`,
+					},
+					"okta_domain_suffix": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Host suffix for your Okta cell/region. Defaults to okta.com (US commercial). Choose okta-emea.com (EMEA), oktapreview.com (preview), okta-gov.com (US gov), or okta.mil (US military).`,
 					},
 					"okta_token": schema.StringAttribute{
 						Required:    false,
@@ -63466,6 +64034,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
+						Description: `Controls for viewing and managing the collector state.`,
 						ElementType: types.StringType,
 					},
 					"job_timeout": schema.StringAttribute{
@@ -63542,9 +64111,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP retry behavior for failed collection requests.`,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required:    true,
@@ -63742,9 +64312,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -63978,13 +64549,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -64019,9 +64590,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -64241,9 +64813,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -64477,13 +65050,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -64518,9 +65091,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -64773,9 +65347,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -65009,13 +65584,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -65050,9 +65625,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -65305,9 +65881,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -65541,13 +66118,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -65582,9 +66159,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -65837,9 +66415,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -66073,13 +66652,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -66114,9 +66693,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -66375,9 +66955,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -66611,13 +67192,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -66652,9 +67233,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -66896,9 +67478,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -67132,13 +67715,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -67173,9 +67756,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -67428,9 +68012,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -67664,13 +68249,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -67705,9 +68290,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -67960,9 +68546,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent queue settings for this Source.`,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
 								Required:    false,
@@ -68196,13 +68783,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to accept from clients.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to accept from clients.`,
 							},
 						},
 					},
@@ -68237,9 +68824,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field`,
 					},
 					"capture_headers_warning": schema.StringAttribute{
-						Required: false,
-						Optional: false,
-						Computed: true,
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Warning displayed when request-header capture is enabled.`,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -72816,6 +73404,20 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputPrometheus.Interval = types.Float64Null()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.IntervalUnit.IsNull() || state.InputPrometheus.IntervalUnit.IsUnknown())) {
+			if !api.InputPrometheus.IntervalUnit.IsNull() && !api.InputPrometheus.IntervalUnit.IsUnknown() {
+				state.InputPrometheus.IntervalUnit = api.InputPrometheus.IntervalUnit
+			} else if state.InputPrometheus.IntervalUnit.IsNull() || state.InputPrometheus.IntervalUnit.IsUnknown() {
+				state.InputPrometheus.IntervalUnit = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.MaxConcurrentRuns.IsNull() || state.InputPrometheus.MaxConcurrentRuns.IsUnknown())) {
+			if !api.InputPrometheus.MaxConcurrentRuns.IsNull() && !api.InputPrometheus.MaxConcurrentRuns.IsUnknown() {
+				state.InputPrometheus.MaxConcurrentRuns = api.InputPrometheus.MaxConcurrentRuns
+			} else if state.InputPrometheus.MaxConcurrentRuns.IsNull() || state.InputPrometheus.MaxConcurrentRuns.IsUnknown() {
+				state.InputPrometheus.MaxConcurrentRuns = types.Float64Null()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.LogLevel.IsNull() || state.InputPrometheus.LogLevel.IsUnknown())) {
 			if !api.InputPrometheus.LogLevel.IsNull() && !api.InputPrometheus.LogLevel.IsUnknown() {
 				state.InputPrometheus.LogLevel = api.InputPrometheus.LogLevel
@@ -73633,6 +74235,13 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOffice365Mgmt.Timeout = types.Float64Null()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.RejectUnauthorized.IsNull() || state.InputOffice365Mgmt.RejectUnauthorized.IsUnknown())) {
+			if !api.InputOffice365Mgmt.RejectUnauthorized.IsNull() && !api.InputOffice365Mgmt.RejectUnauthorized.IsUnknown() {
+				state.InputOffice365Mgmt.RejectUnauthorized = api.InputOffice365Mgmt.RejectUnauthorized
+			} else if state.InputOffice365Mgmt.RejectUnauthorized.IsNull() || state.InputOffice365Mgmt.RejectUnauthorized.IsUnknown() {
+				state.InputOffice365Mgmt.RejectUnauthorized = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.KeepAliveTime.IsNull() || state.InputOffice365Mgmt.KeepAliveTime.IsUnknown())) {
 			if !api.InputOffice365Mgmt.KeepAliveTime.IsNull() && !api.InputOffice365Mgmt.KeepAliveTime.IsUnknown() {
 				state.InputOffice365Mgmt.KeepAliveTime = api.InputOffice365Mgmt.KeepAliveTime
@@ -73864,6 +74473,13 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOffice365Service.Timeout = api.InputOffice365Service.Timeout
 			} else if state.InputOffice365Service.Timeout.IsNull() || state.InputOffice365Service.Timeout.IsUnknown() {
 				state.InputOffice365Service.Timeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.RejectUnauthorized.IsNull() || state.InputOffice365Service.RejectUnauthorized.IsUnknown())) {
+			if !api.InputOffice365Service.RejectUnauthorized.IsNull() && !api.InputOffice365Service.RejectUnauthorized.IsUnknown() {
+				state.InputOffice365Service.RejectUnauthorized = api.InputOffice365Service.RejectUnauthorized
+			} else if state.InputOffice365Service.RejectUnauthorized.IsNull() || state.InputOffice365Service.RejectUnauthorized.IsUnknown() {
+				state.InputOffice365Service.RejectUnauthorized = types.BoolNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.KeepAliveTime.IsNull() || state.InputOffice365Service.KeepAliveTime.IsUnknown())) {
@@ -77992,6 +78608,18 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCrowdstrike.Encoding = types.StringNull()
 			}
 		}
+		if !api.InputCrowdstrike.VisibilityTimeoutWarning.IsNull() && !api.InputCrowdstrike.VisibilityTimeoutWarning.IsUnknown() {
+			state.InputCrowdstrike.VisibilityTimeoutWarning = api.InputCrowdstrike.VisibilityTimeoutWarning
+		} else if state.InputCrowdstrike.VisibilityTimeoutWarning.IsNull() || state.InputCrowdstrike.VisibilityTimeoutWarning.IsUnknown() {
+			state.InputCrowdstrike.VisibilityTimeoutWarning = types.StringNull()
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.EnableFanout.IsNull() || state.InputCrowdstrike.EnableFanout.IsUnknown())) {
+			if !api.InputCrowdstrike.EnableFanout.IsNull() && !api.InputCrowdstrike.EnableFanout.IsUnknown() {
+				state.InputCrowdstrike.EnableFanout = api.InputCrowdstrike.EnableFanout
+			} else if state.InputCrowdstrike.EnableFanout.IsNull() || state.InputCrowdstrike.EnableFanout.IsUnknown() {
+				state.InputCrowdstrike.EnableFanout = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Description.IsNull() || state.InputCrowdstrike.Description.IsUnknown())) {
 			if !api.InputCrowdstrike.Description.IsNull() && !api.InputCrowdstrike.Description.IsUnknown() {
 				state.InputCrowdstrike.Description = api.InputCrowdstrike.Description
@@ -80638,6 +81266,20 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOpenTelemetry.MaxConcurrentStreams = types.Float64Null()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.MaxConnectionAgeSec.IsNull() || state.InputOpenTelemetry.MaxConnectionAgeSec.IsUnknown())) {
+			if !api.InputOpenTelemetry.MaxConnectionAgeSec.IsNull() && !api.InputOpenTelemetry.MaxConnectionAgeSec.IsUnknown() {
+				state.InputOpenTelemetry.MaxConnectionAgeSec = api.InputOpenTelemetry.MaxConnectionAgeSec
+			} else if state.InputOpenTelemetry.MaxConnectionAgeSec.IsNull() || state.InputOpenTelemetry.MaxConnectionAgeSec.IsUnknown() {
+				state.InputOpenTelemetry.MaxConnectionAgeSec = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.MaxConnectionAgeGraceSec.IsNull() || state.InputOpenTelemetry.MaxConnectionAgeGraceSec.IsUnknown())) {
+			if !api.InputOpenTelemetry.MaxConnectionAgeGraceSec.IsNull() && !api.InputOpenTelemetry.MaxConnectionAgeGraceSec.IsUnknown() {
+				state.InputOpenTelemetry.MaxConnectionAgeGraceSec = api.InputOpenTelemetry.MaxConnectionAgeGraceSec
+			} else if state.InputOpenTelemetry.MaxConnectionAgeGraceSec.IsNull() || state.InputOpenTelemetry.MaxConnectionAgeGraceSec.IsUnknown() {
+				state.InputOpenTelemetry.MaxConnectionAgeGraceSec = types.Float64Null()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Description.IsNull() || state.InputOpenTelemetry.Description.IsUnknown())) {
 			if !api.InputOpenTelemetry.Description.IsNull() && !api.InputOpenTelemetry.Description.IsUnknown() {
 				state.InputOpenTelemetry.Description = api.InputOpenTelemetry.Description
@@ -80685,6 +81327,60 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOpenTelemetry.ExtractLogs = api.InputOpenTelemetry.ExtractLogs
 			} else if state.InputOpenTelemetry.ExtractLogs.IsNull() || state.InputOpenTelemetry.ExtractLogs.IsUnknown() {
 				state.InputOpenTelemetry.ExtractLogs = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.AccessControlAllowOrigin.IsNull() || state.InputOpenTelemetry.AccessControlAllowOrigin.IsUnknown())) {
+			if !api.InputOpenTelemetry.AccessControlAllowOrigin.IsNull() && !api.InputOpenTelemetry.AccessControlAllowOrigin.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowOrigin = api.InputOpenTelemetry.AccessControlAllowOrigin
+			} else if state.InputOpenTelemetry.AccessControlAllowOrigin.IsNull() || state.InputOpenTelemetry.AccessControlAllowOrigin.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowOrigin = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputOpenTelemetry.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputOpenTelemetry.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.AccessControlAllowHeaders.IsNull() || state.InputOpenTelemetry.AccessControlAllowHeaders.IsUnknown())) {
+			if !api.InputOpenTelemetry.AccessControlAllowHeaders.IsNull() && !api.InputOpenTelemetry.AccessControlAllowHeaders.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowHeaders = api.InputOpenTelemetry.AccessControlAllowHeaders
+			} else if state.InputOpenTelemetry.AccessControlAllowHeaders.IsNull() || state.InputOpenTelemetry.AccessControlAllowHeaders.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowHeaders = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputOpenTelemetry.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputOpenTelemetry.AccessControlAllowHeaders = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.AccessControlAllowMethods.IsNull() || state.InputOpenTelemetry.AccessControlAllowMethods.IsUnknown())) {
+			if !api.InputOpenTelemetry.AccessControlAllowMethods.IsNull() && !api.InputOpenTelemetry.AccessControlAllowMethods.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowMethods = api.InputOpenTelemetry.AccessControlAllowMethods
+			} else if state.InputOpenTelemetry.AccessControlAllowMethods.IsNull() || state.InputOpenTelemetry.AccessControlAllowMethods.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowMethods = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputOpenTelemetry.AccessControlAllowMethods.ElementType(context.Background()); elementType == nil {
+			state.InputOpenTelemetry.AccessControlAllowMethods = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.AccessControlExposeHeaders.IsNull() || state.InputOpenTelemetry.AccessControlExposeHeaders.IsUnknown())) {
+			if !api.InputOpenTelemetry.AccessControlExposeHeaders.IsNull() && !api.InputOpenTelemetry.AccessControlExposeHeaders.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlExposeHeaders = api.InputOpenTelemetry.AccessControlExposeHeaders
+			} else if state.InputOpenTelemetry.AccessControlExposeHeaders.IsNull() || state.InputOpenTelemetry.AccessControlExposeHeaders.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlExposeHeaders = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputOpenTelemetry.AccessControlExposeHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputOpenTelemetry.AccessControlExposeHeaders = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.AccessControlAllowCredentials.IsNull() || state.InputOpenTelemetry.AccessControlAllowCredentials.IsUnknown())) {
+			if !api.InputOpenTelemetry.AccessControlAllowCredentials.IsNull() && !api.InputOpenTelemetry.AccessControlAllowCredentials.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowCredentials = api.InputOpenTelemetry.AccessControlAllowCredentials
+			} else if state.InputOpenTelemetry.AccessControlAllowCredentials.IsNull() || state.InputOpenTelemetry.AccessControlAllowCredentials.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlAllowCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.AccessControlMaxAge.IsNull() || state.InputOpenTelemetry.AccessControlMaxAge.IsUnknown())) {
+			if !api.InputOpenTelemetry.AccessControlMaxAge.IsNull() && !api.InputOpenTelemetry.AccessControlMaxAge.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlMaxAge = api.InputOpenTelemetry.AccessControlMaxAge
+			} else if state.InputOpenTelemetry.AccessControlMaxAge.IsNull() || state.InputOpenTelemetry.AccessControlMaxAge.IsUnknown() {
+				state.InputOpenTelemetry.AccessControlMaxAge = types.Int64Null()
 			}
 		}
 	}
@@ -82621,6 +83317,13 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputWinEventLogs.IncludeEmptyJSONFields = api.InputWinEventLogs.IncludeEmptyJSONFields
 			} else if state.InputWinEventLogs.IncludeEmptyJSONFields.IsNull() || state.InputWinEventLogs.IncludeEmptyJSONFields.IsUnknown() {
 				state.InputWinEventLogs.IncludeEmptyJSONFields = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.ResolveParameterCodes.IsNull() || state.InputWinEventLogs.ResolveParameterCodes.IsUnknown())) {
+			if !api.InputWinEventLogs.ResolveParameterCodes.IsNull() && !api.InputWinEventLogs.ResolveParameterCodes.IsUnknown() {
+				state.InputWinEventLogs.ResolveParameterCodes = api.InputWinEventLogs.ResolveParameterCodes
+			} else if state.InputWinEventLogs.ResolveParameterCodes.IsNull() || state.InputWinEventLogs.ResolveParameterCodes.IsUnknown() {
+				state.InputWinEventLogs.ResolveParameterCodes = types.BoolNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.DisableXmlRendering.IsNull() || state.InputWinEventLogs.DisableXmlRendering.IsUnknown())) {
@@ -88670,6 +89373,13 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOkta.OktaDomain = api.InputOkta.OktaDomain
 			} else if state.InputOkta.OktaDomain.IsNull() || state.InputOkta.OktaDomain.IsUnknown() {
 				state.InputOkta.OktaDomain = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOkta.OktaDomainSuffix.IsNull() || state.InputOkta.OktaDomainSuffix.IsUnknown())) {
+			if !api.InputOkta.OktaDomainSuffix.IsNull() && !api.InputOkta.OktaDomainSuffix.IsUnknown() {
+				state.InputOkta.OktaDomainSuffix = api.InputOkta.OktaDomainSuffix
+			} else if state.InputOkta.OktaDomainSuffix.IsNull() || state.InputOkta.OktaDomainSuffix.IsUnknown() {
+				state.InputOkta.OktaDomainSuffix = types.StringNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.OktaToken.IsNull() || state.InputOkta.OktaToken.IsUnknown())) {

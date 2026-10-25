@@ -28,8 +28,10 @@ type SearchEngineModel struct {
 	IsComputeDeprovisioned types.Bool   `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned types.Bool   `tfsdk:"is_storage_deprovisioned" json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      types.Int64  `tfsdk:"last_provisioned_ms" json:"lastProvisionedMs,omitempty"`
+	MaximumTierSize        types.String `tfsdk:"maximum_tier_size" json:"maximumTierSize,omitempty"`
 	MetricsDatasetID       types.String `tfsdk:"metrics_dataset_id" json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt types.Int64  `tfsdk:"metrics_last_published_at" json:"metricsLastPublishedAt,omitempty"`
+	MinimumTierSize        types.String `tfsdk:"minimum_tier_size" json:"minimumTierSize,omitempty"`
 	Status                 types.String `tfsdk:"status" json:"status,omitempty"`
 	TierSize               types.String `tfsdk:"tier_size" json:"tierSize,omitempty"`
 }
@@ -46,8 +48,10 @@ type SearchEngineResourceModel struct {
 	IsComputeDeprovisioned types.Bool     `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned types.Bool     `tfsdk:"is_storage_deprovisioned" json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      types.Int64    `tfsdk:"last_provisioned_ms" json:"lastProvisionedMs,omitempty"`
+	MaximumTierSize        types.String   `tfsdk:"maximum_tier_size" json:"maximumTierSize,omitempty"`
 	MetricsDatasetID       types.String   `tfsdk:"metrics_dataset_id" json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt types.Int64    `tfsdk:"metrics_last_published_at" json:"metricsLastPublishedAt,omitempty"`
+	MinimumTierSize        types.String   `tfsdk:"minimum_tier_size" json:"minimumTierSize,omitempty"`
 	Status                 types.String   `tfsdk:"status" json:"status,omitempty"`
 	TierSize               types.String   `tfsdk:"tier_size" json:"tierSize,omitempty"`
 }
@@ -64,8 +68,10 @@ type SearchEngineDataSourceModel struct {
 	IsComputeDeprovisioned types.Bool     `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned types.Bool     `tfsdk:"is_storage_deprovisioned" json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      types.Int64    `tfsdk:"last_provisioned_ms" json:"lastProvisionedMs,omitempty"`
+	MaximumTierSize        types.String   `tfsdk:"maximum_tier_size" json:"maximumTierSize,omitempty"`
 	MetricsDatasetID       types.String   `tfsdk:"metrics_dataset_id" json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt types.Int64    `tfsdk:"metrics_last_published_at" json:"metricsLastPublishedAt,omitempty"`
+	MinimumTierSize        types.String   `tfsdk:"minimum_tier_size" json:"minimumTierSize,omitempty"`
 	Status                 types.String   `tfsdk:"status" json:"status,omitempty"`
 	TierSize               types.String   `tfsdk:"tier_size" json:"tierSize,omitempty"`
 }
@@ -82,8 +88,10 @@ type SearchEngineAPIModel struct {
 	IsComputeDeprovisioned *bool    `json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned *bool    `json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      *int64   `json:"lastProvisionedMs,omitempty"`
+	MaximumTierSize        *string  `json:"maximumTierSize,omitempty"`
 	MetricsDatasetID       *string  `json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt *int64   `json:"metricsLastPublishedAt,omitempty"`
+	MinimumTierSize        *string  `json:"minimumTierSize,omitempty"`
 	Status                 *string  `json:"status,omitempty"`
 	TierSize               *string  `json:"tierSize,omitempty"`
 }
@@ -396,6 +404,11 @@ func (m *SearchEngineModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.LastProvisionedMs = types.Int64Null()
 	}
+	if input.MaximumTierSize != nil {
+		m.MaximumTierSize = types.StringValue(*input.MaximumTierSize)
+	} else {
+		m.MaximumTierSize = types.StringNull()
+	}
 	if input.MetricsDatasetID != nil {
 		m.MetricsDatasetID = types.StringValue(*input.MetricsDatasetID)
 	} else {
@@ -405,6 +418,11 @@ func (m *SearchEngineModel) UnmarshalJSON(data []byte) error {
 		m.MetricsLastPublishedAt = types.Int64Value(*input.MetricsLastPublishedAt)
 	} else {
 		m.MetricsLastPublishedAt = types.Int64Null()
+	}
+	if input.MinimumTierSize != nil {
+		m.MinimumTierSize = types.StringValue(*input.MinimumTierSize)
+	} else {
+		m.MinimumTierSize = types.StringNull()
 	}
 	if input.Status != nil {
 		m.Status = types.StringValue(*input.Status)

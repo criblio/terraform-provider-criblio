@@ -90,6 +90,9 @@ func runWithConfig(config mergeConfig) error {
 	if err := applyOverlayFile(spec, config.OverlayPath); err != nil {
 		return err
 	}
+	if err := applyCollectorSchemas(spec, config.OverlayPath); err != nil {
+		return err
+	}
 	if err := unwrapCountedResponses(spec); err != nil {
 		return err
 	}
@@ -487,6 +490,16 @@ func applyOverlayFile(spec *yaml.Node, overlayPath string) error {
 		targetNode, err := lookupTarget(documentMapping(spec), target)
 		if err != nil {
 			return fmt.Errorf("overlay action %d target %q: %v", index, target, err)
+		}
+		if sourcePath, ok := mappingValue(action, "copy_from"); ok {
+			if sourcePath.Kind != yaml.ScalarNode {
+				return fmt.Errorf("overlay action %d: copy_from must be a scalar", index)
+			}
+			source, err := lookupTarget(documentMapping(spec), sourcePath.Value)
+			if err != nil {
+				return fmt.Errorf("overlay action %d copy_from: %w", index, err)
+			}
+			*targetNode = *cloneNode(source)
 		}
 		if replace {
 			*targetNode = *cloneNode(update)

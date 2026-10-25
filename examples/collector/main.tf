@@ -58,8 +58,9 @@ resource "criblio_collector" "splunk_access_log_collector" {
       enabled             = true
       max_concurrent_runs = 1
       run = {
-        earliest                 = 0
-        expression               = "index=main earliest=-1h@h"
+        earliest = 0
+        # Cribl event filter (JavaScript); the Splunk query belongs in conf.search.
+        expression               = "true"
         job_timeout              = "30m"
         latest                   = 1
         log_level                = "info"

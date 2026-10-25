@@ -35,6 +35,10 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "SearchSavedQuery Data Source",
 		Attributes: map[string]schema.Attribute{
+			"app_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `App identifier used to attribute search/platform usage to a driving app.`,
+			},
 			"chart_config": schema.SingleNestedAttribute{
 				Computed:    true,
 				Description: `Chart configuration for scheduled or Dashboard-backed runs.`,

@@ -130,6 +130,8 @@ type InputCollectorSplunkScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorSplunkScheduleRunAPIModel struct {
@@ -146,6 +148,8 @@ type InputCollectorSplunkScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorSplunkScheduleRunAttrTypes() map[string]attr.Type {
@@ -163,6 +167,8 @@ func InputCollectorSplunkScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorSplunkScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -262,81 +268,177 @@ func InputCollectorSplunkInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorSplunkCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorSplunkCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorSplunkCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorSplunkCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorSplunkCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorSplunkCollectorConfModel struct {
-	SearchHead         types.String `tfsdk:"search_head" json:"searchHead,omitempty"`
-	Search             types.String `tfsdk:"search" json:"search,omitempty"`
-	Earliest           types.String `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest             types.String `tfsdk:"latest" json:"latest,omitempty"`
-	Endpoint           types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	OutputMode         types.String `tfsdk:"output_mode" json:"outputMode,omitempty"`
-	Authentication     types.String `tfsdk:"authentication" json:"authentication,omitempty"`
-	Timeout            types.Int64  `tfsdk:"timeout" json:"timeout,omitempty"`
-	UseRoundRobinDns   types.Bool   `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
-	DisableTimeFilter  types.Bool   `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
-	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	HandleEscapedChars types.Bool   `tfsdk:"handle_escaped_chars" json:"handleEscapedChars,omitempty"`
-	Username           types.String `tfsdk:"username" json:"username,omitempty"`
-	Password           types.String `tfsdk:"password" json:"password,omitempty"`
-	CredentialsSecret  types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
-	Token              types.String `tfsdk:"token" json:"token,omitempty"`
-	TokenSecret        types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	SearchHead            types.String `tfsdk:"search_head" json:"searchHead,omitempty"`
+	Search                types.String `tfsdk:"search" json:"search,omitempty"`
+	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                types.String `tfsdk:"latest" json:"latest,omitempty"`
+	Endpoint              types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	OutputMode            types.String `tfsdk:"output_mode" json:"outputMode,omitempty"`
+	Authentication        types.String `tfsdk:"authentication" json:"authentication,omitempty"`
+	Timeout               types.Int64  `tfsdk:"timeout" json:"timeout,omitempty"`
+	UseRoundRobinDns      types.Bool   `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
+	DisableTimeFilter     types.Bool   `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
+	RejectUnauthorized    types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	HandleEscapedChars    types.Bool   `tfsdk:"handle_escaped_chars" json:"handleEscapedChars,omitempty"`
+	Username              types.String `tfsdk:"username" json:"username,omitempty"`
+	Password              types.String `tfsdk:"password" json:"password,omitempty"`
+	CredentialsSecret     types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	CollectRequestParams  types.List   `tfsdk:"collect_request_params" json:"collectRequestParams,omitempty"`
+	CollectRequestHeaders types.List   `tfsdk:"collect_request_headers" json:"collectRequestHeaders,omitempty"`
+	RetryRules            types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	LoginURL              types.String `tfsdk:"login_url" json:"loginUrl,omitempty"`
+	LoginBody             types.String `tfsdk:"login_body" json:"loginBody,omitempty"`
+	TokenRespAttribute    types.String `tfsdk:"token_resp_attribute" json:"tokenRespAttribute,omitempty"`
+	AuthHeaderExpr        types.String `tfsdk:"auth_header_expr" json:"authHeaderExpr,omitempty"`
 }
 
 type InputCollectorSplunkCollectorConfAPIModel struct {
-	SearchHead         *string `json:"searchHead,omitempty"`
-	Search             *string `json:"search,omitempty"`
-	Earliest           *string `json:"earliest,omitempty"`
-	Latest             *string `json:"latest,omitempty"`
-	Endpoint           *string `json:"endpoint,omitempty"`
-	OutputMode         *string `json:"outputMode,omitempty"`
-	Authentication     *string `json:"authentication,omitempty"`
-	Timeout            *int64  `json:"timeout,omitempty"`
-	UseRoundRobinDns   *bool   `json:"useRoundRobinDns,omitempty"`
-	DisableTimeFilter  *bool   `json:"disableTimeFilter,omitempty"`
-	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
-	HandleEscapedChars *bool   `json:"handleEscapedChars,omitempty"`
-	Username           *string `json:"username,omitempty"`
-	Password           *string `json:"password,omitempty"`
-	CredentialsSecret  *string `json:"credentialsSecret,omitempty"`
-	Token              *string `json:"token,omitempty"`
-	TokenSecret        *string `json:"tokenSecret,omitempty"`
+	SearchHead            *string `json:"searchHead,omitempty"`
+	Search                *string `json:"search,omitempty"`
+	Earliest              *string `json:"earliest,omitempty"`
+	Latest                *string `json:"latest,omitempty"`
+	Endpoint              *string `json:"endpoint,omitempty"`
+	OutputMode            *string `json:"outputMode,omitempty"`
+	Authentication        *string `json:"authentication,omitempty"`
+	Timeout               *int64  `json:"timeout,omitempty"`
+	UseRoundRobinDns      *bool   `json:"useRoundRobinDns,omitempty"`
+	DisableTimeFilter     *bool   `json:"disableTimeFilter,omitempty"`
+	RejectUnauthorized    *bool   `json:"rejectUnauthorized,omitempty"`
+	HandleEscapedChars    *bool   `json:"handleEscapedChars,omitempty"`
+	Username              *string `json:"username,omitempty"`
+	Password              *string `json:"password,omitempty"`
+	CredentialsSecret     *string `json:"credentialsSecret,omitempty"`
+	Token                 *string `json:"token,omitempty"`
+	TokenSecret           *string `json:"tokenSecret,omitempty"`
+	CollectRequestParams  any     `json:"collectRequestParams,omitempty"`
+	CollectRequestHeaders any     `json:"collectRequestHeaders,omitempty"`
+	RetryRules            any     `json:"retryRules,omitempty"`
+	LoginURL              *string `json:"loginUrl,omitempty"`
+	LoginBody             *string `json:"loginBody,omitempty"`
+	TokenRespAttribute    *string `json:"tokenRespAttribute,omitempty"`
+	AuthHeaderExpr        *string `json:"authHeaderExpr,omitempty"`
 }
 
 func InputCollectorSplunkCollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"search_head":          types.StringType,
-		"search":               types.StringType,
-		"earliest":             types.StringType,
-		"latest":               types.StringType,
-		"endpoint":             types.StringType,
-		"output_mode":          types.StringType,
-		"authentication":       types.StringType,
-		"timeout":              types.Int64Type,
-		"use_round_robin_dns":  types.BoolType,
-		"disable_time_filter":  types.BoolType,
-		"reject_unauthorized":  types.BoolType,
-		"handle_escaped_chars": types.BoolType,
-		"username":             types.StringType,
-		"password":             types.StringType,
-		"credentials_secret":   types.StringType,
-		"token":                types.StringType,
-		"token_secret":         types.StringType,
+		"search_head":             types.StringType,
+		"search":                  types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"endpoint":                types.StringType,
+		"output_mode":             types.StringType,
+		"authentication":          types.StringType,
+		"timeout":                 types.Int64Type,
+		"use_round_robin_dns":     types.BoolType,
+		"disable_time_filter":     types.BoolType,
+		"reject_unauthorized":     types.BoolType,
+		"handle_escaped_chars":    types.BoolType,
+		"username":                types.StringType,
+		"password":                types.StringType,
+		"credentials_secret":      types.StringType,
+		"token":                   types.StringType,
+		"token_secret":            types.StringType,
+		"collect_request_params":  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorSplunkCollectorConfCollectRequestParamsAttrTypes()}},
+		"collect_request_headers": types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorSplunkCollectorConfCollectRequestHeadersAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputCollectorSplunkCollectorConfRetryRulesAttrTypes()},
+		"login_url":               types.StringType,
+		"login_body":              types.StringType,
+		"token_resp_attribute":    types.StringType,
+		"auth_header_expr":        types.StringType,
+	}
+}
+
+type InputCollectorSplunkCollectorConfCollectRequestParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorSplunkCollectorConfCollectRequestParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorSplunkCollectorConfCollectRequestParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorSplunkCollectorConfCollectRequestHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorSplunkCollectorConfCollectRequestHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorSplunkCollectorConfCollectRequestHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorSplunkCollectorConfRetryRulesModel struct {
+	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
+	Interval            types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	Limit               types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
+	Codes               types.List    `tfsdk:"codes" json:"codes,omitempty"`
+	EnableHeader        types.Bool    `tfsdk:"enable_header" json:"enableHeader,omitempty"`
+	RetryConnectTimeout types.Bool    `tfsdk:"retry_connect_timeout" json:"retryConnectTimeout,omitempty"`
+	RetryConnectReset   types.Bool    `tfsdk:"retry_connect_reset" json:"retryConnectReset,omitempty"`
+	Multiplier          types.Float64 `tfsdk:"multiplier" json:"multiplier,omitempty"`
+}
+
+type InputCollectorSplunkCollectorConfRetryRulesAPIModel struct {
+	Type                *string   `json:"type,omitempty"`
+	Interval            *float64  `json:"interval,omitempty"`
+	Limit               *float64  `json:"limit,omitempty"`
+	Codes               []float64 `json:"codes,omitempty"`
+	EnableHeader        *bool     `json:"enableHeader,omitempty"`
+	RetryConnectTimeout *bool     `json:"retryConnectTimeout,omitempty"`
+	RetryConnectReset   *bool     `json:"retryConnectReset,omitempty"`
+	Multiplier          *float64  `json:"multiplier,omitempty"`
+}
+
+func InputCollectorSplunkCollectorConfRetryRulesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                  types.StringType,
+		"interval":              types.Float64Type,
+		"limit":                 types.Float64Type,
+		"codes":                 types.ListType{ElemType: types.Float64Type},
+		"enable_header":         types.BoolType,
+		"retry_connect_timeout": types.BoolType,
+		"retry_connect_reset":   types.BoolType,
+		"multiplier":            types.Float64Type,
 	}
 }
 
@@ -383,6 +485,8 @@ type InputCollectorRestScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorRestScheduleRunAPIModel struct {
@@ -399,6 +503,8 @@ type InputCollectorRestScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorRestScheduleRunAttrTypes() map[string]attr.Type {
@@ -416,6 +522,8 @@ func InputCollectorRestScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorRestScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -515,19 +623,25 @@ func InputCollectorRestInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorRestCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorRestCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorRestCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorRestCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorRestCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
@@ -566,6 +680,17 @@ type InputCollectorRestCollectorConfModel struct {
 	Pagination                      types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
 	RetryRules                      types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
 	ClientSecretParamValue          types.String `tfsdk:"client_secret_param_value" json:"clientSecretParamValue,omitempty"`
+	MaxResponseBodySize             types.String `tfsdk:"max_response_body_size" json:"maxResponseBodySize,omitempty"`
+	StopOnEmptyResults              types.Bool   `tfsdk:"stop_on_empty_results" json:"stopOnEmptyResults,omitempty"`
+	MicrosoftGraphDelta             types.Object `tfsdk:"microsoft_graph_delta" json:"microsoftGraphDelta,omitempty"`
+	GetAuthTokenFromHeader          types.Bool   `tfsdk:"get_auth_token_from_header" json:"getAuthTokenFromHeader,omitempty"`
+	RefreshTokenField               types.String `tfsdk:"refresh_token_field" json:"refreshTokenField,omitempty"`
+	RotateRefreshToken              types.Bool   `tfsdk:"rotate_refresh_token" json:"rotateRefreshToken,omitempty"`
+	RefreshURL                      types.String `tfsdk:"refresh_url" json:"refreshUrl,omitempty"`
+	RefreshRequestParams            types.List   `tfsdk:"refresh_request_params" json:"refreshRequestParams,omitempty"`
+	TextSecret                      types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	HmacFunctionID                  types.String `tfsdk:"hmac_function_id" json:"hmacFunctionId,omitempty"`
+	CollectVerb                     types.String `tfsdk:"collect_verb" json:"collectVerb,omitempty"`
 }
 
 type InputCollectorRestCollectorConfAPIModel struct {
@@ -603,6 +728,17 @@ type InputCollectorRestCollectorConfAPIModel struct {
 	Pagination                      any      `json:"pagination,omitempty"`
 	RetryRules                      any      `json:"retryRules,omitempty"`
 	ClientSecretParamValue          *string  `json:"clientSecretParamValue,omitempty"`
+	MaxResponseBodySize             *string  `json:"maxResponseBodySize,omitempty"`
+	StopOnEmptyResults              *bool    `json:"stopOnEmptyResults,omitempty"`
+	MicrosoftGraphDelta             any      `json:"microsoftGraphDelta,omitempty"`
+	GetAuthTokenFromHeader          *bool    `json:"getAuthTokenFromHeader,omitempty"`
+	RefreshTokenField               *string  `json:"refreshTokenField,omitempty"`
+	RotateRefreshToken              *bool    `json:"rotateRefreshToken,omitempty"`
+	RefreshURL                      *string  `json:"refreshUrl,omitempty"`
+	RefreshRequestParams            any      `json:"refreshRequestParams,omitempty"`
+	TextSecret                      *string  `json:"textSecret,omitempty"`
+	HmacFunctionID                  *string  `json:"hmacFunctionId,omitempty"`
+	CollectVerb                     *string  `json:"collectVerb,omitempty"`
 }
 
 func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
@@ -641,6 +777,17 @@ func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
 		"pagination":                         types.ObjectType{AttrTypes: InputCollectorRestCollectorConfPaginationAttrTypes()},
 		"retry_rules":                        types.ObjectType{AttrTypes: InputCollectorRestCollectorConfRetryRulesAttrTypes()},
 		"client_secret_param_value":          types.StringType,
+		"max_response_body_size":             types.StringType,
+		"stop_on_empty_results":              types.BoolType,
+		"microsoft_graph_delta":              types.ObjectType{AttrTypes: InputCollectorRestCollectorConfMicrosoftGraphDeltaAttrTypes()},
+		"get_auth_token_from_header":         types.BoolType,
+		"refresh_token_field":                types.StringType,
+		"rotate_refresh_token":               types.BoolType,
+		"refresh_url":                        types.StringType,
+		"refresh_request_params":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestCollectorConfRefreshRequestParamsAttrTypes()}},
+		"text_secret":                        types.StringType,
+		"hmac_function_id":                   types.StringType,
+		"collect_verb":                       types.StringType,
 	}
 }
 
@@ -713,68 +860,79 @@ func InputCollectorRestCollectorConfCollectRequestParamsAttrTypes() map[string]a
 }
 
 type InputCollectorRestCollectorConfDiscoveryModel struct {
-	DiscoverType           types.String `tfsdk:"discover_type" json:"discoverType,omitempty"`
-	DiscoverMethod         types.String `tfsdk:"discover_method" json:"discoverMethod,omitempty"`
-	Pagination             types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
-	EnableDiscoverCode     types.Bool   `tfsdk:"enable_discover_code" json:"enableDiscoverCode,omitempty"`
-	ItemList               types.List   `tfsdk:"item_list" json:"itemList,omitempty"`
-	DiscoverURL            types.String `tfsdk:"discover_url" json:"discoverUrl,omitempty"`
-	DiscoverRequestHeaders types.List   `tfsdk:"discover_request_headers" json:"discoverRequestHeaders,omitempty"`
-	ManualDiscoverResult   types.String `tfsdk:"manual_discover_result" json:"manualDiscoverResult,omitempty"`
-	DiscoverRequestParams  types.List   `tfsdk:"discover_request_params" json:"discoverRequestParams,omitempty"`
-	DiscoverBody           types.String `tfsdk:"discover_body" json:"discoverBody,omitempty"`
-	FormatResultCode       types.String `tfsdk:"format_result_code" json:"formatResultCode,omitempty"`
-	DiscoverDataField      types.String `tfsdk:"discover_data_field" json:"discoverDataField,omitempty"`
+	DiscoverType                types.String `tfsdk:"discover_type" json:"discoverType,omitempty"`
+	DiscoverMethod              types.String `tfsdk:"discover_method" json:"discoverMethod,omitempty"`
+	Pagination                  types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
+	EnableDiscoverCode          types.Bool   `tfsdk:"enable_discover_code" json:"enableDiscoverCode,omitempty"`
+	ItemList                    types.List   `tfsdk:"item_list" json:"itemList,omitempty"`
+	DiscoverURL                 types.String `tfsdk:"discover_url" json:"discoverUrl,omitempty"`
+	DiscoverRequestHeaders      types.List   `tfsdk:"discover_request_headers" json:"discoverRequestHeaders,omitempty"`
+	ManualDiscoverResult        types.String `tfsdk:"manual_discover_result" json:"manualDiscoverResult,omitempty"`
+	DiscoverRequestParams       types.List   `tfsdk:"discover_request_params" json:"discoverRequestParams,omitempty"`
+	DiscoverBody                types.String `tfsdk:"discover_body" json:"discoverBody,omitempty"`
+	FormatResultCode            types.String `tfsdk:"format_result_code" json:"formatResultCode,omitempty"`
+	DiscoverDataField           types.String `tfsdk:"discover_data_field" json:"discoverDataField,omitempty"`
+	EnableStrictDiscoverParsing types.Bool   `tfsdk:"enable_strict_discover_parsing" json:"enableStrictDiscoverParsing,omitempty"`
+	DiscoverResponseFormat      types.String `tfsdk:"discover_response_format" json:"discoverResponseFormat,omitempty"`
+	DiscoverVerb                types.String `tfsdk:"discover_verb" json:"discoverVerb,omitempty"`
 }
 
 type InputCollectorRestCollectorConfDiscoveryAPIModel struct {
-	DiscoverType           *string  `json:"discoverType,omitempty"`
-	DiscoverMethod         *string  `json:"discoverMethod,omitempty"`
-	Pagination             any      `json:"pagination,omitempty"`
-	EnableDiscoverCode     *bool    `json:"enableDiscoverCode,omitempty"`
-	ItemList               []string `json:"itemList,omitempty"`
-	DiscoverURL            *string  `json:"discoverUrl,omitempty"`
-	DiscoverRequestHeaders any      `json:"discoverRequestHeaders,omitempty"`
-	ManualDiscoverResult   *string  `json:"manualDiscoverResult,omitempty"`
-	DiscoverRequestParams  any      `json:"discoverRequestParams,omitempty"`
-	DiscoverBody           *string  `json:"discoverBody,omitempty"`
-	FormatResultCode       *string  `json:"formatResultCode,omitempty"`
-	DiscoverDataField      *string  `json:"discoverDataField,omitempty"`
+	DiscoverType                *string  `json:"discoverType,omitempty"`
+	DiscoverMethod              *string  `json:"discoverMethod,omitempty"`
+	Pagination                  any      `json:"pagination,omitempty"`
+	EnableDiscoverCode          *bool    `json:"enableDiscoverCode,omitempty"`
+	ItemList                    []string `json:"itemList,omitempty"`
+	DiscoverURL                 *string  `json:"discoverUrl,omitempty"`
+	DiscoverRequestHeaders      any      `json:"discoverRequestHeaders,omitempty"`
+	ManualDiscoverResult        *string  `json:"manualDiscoverResult,omitempty"`
+	DiscoverRequestParams       any      `json:"discoverRequestParams,omitempty"`
+	DiscoverBody                *string  `json:"discoverBody,omitempty"`
+	FormatResultCode            *string  `json:"formatResultCode,omitempty"`
+	DiscoverDataField           *string  `json:"discoverDataField,omitempty"`
+	EnableStrictDiscoverParsing *bool    `json:"enableStrictDiscoverParsing,omitempty"`
+	DiscoverResponseFormat      *string  `json:"discoverResponseFormat,omitempty"`
+	DiscoverVerb                *string  `json:"discoverVerb,omitempty"`
 }
 
 func InputCollectorRestCollectorConfDiscoveryAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"discover_type":            types.StringType,
-		"discover_method":          types.StringType,
-		"pagination":               types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryPaginationAttrTypes()},
-		"enable_discover_code":     types.BoolType,
-		"item_list":                types.ListType{ElemType: types.StringType},
-		"discover_url":             types.StringType,
-		"discover_request_headers": types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryDiscoverRequestHeadersAttrTypes()}},
-		"manual_discover_result":   types.StringType,
-		"discover_request_params":  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryDiscoverRequestParamsAttrTypes()}},
-		"discover_body":            types.StringType,
-		"format_result_code":       types.StringType,
-		"discover_data_field":      types.StringType,
+		"discover_type":                  types.StringType,
+		"discover_method":                types.StringType,
+		"pagination":                     types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryPaginationAttrTypes()},
+		"enable_discover_code":           types.BoolType,
+		"item_list":                      types.ListType{ElemType: types.StringType},
+		"discover_url":                   types.StringType,
+		"discover_request_headers":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryDiscoverRequestHeadersAttrTypes()}},
+		"manual_discover_result":         types.StringType,
+		"discover_request_params":        types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryDiscoverRequestParamsAttrTypes()}},
+		"discover_body":                  types.StringType,
+		"format_result_code":             types.StringType,
+		"discover_data_field":            types.StringType,
+		"enable_strict_discover_parsing": types.BoolType,
+		"discover_response_format":       types.StringType,
+		"discover_verb":                  types.StringType,
 	}
 }
 
 type InputCollectorRestCollectorConfDiscoveryPaginationModel struct {
-	Type                  types.String `tfsdk:"type" json:"type,omitempty"`
-	OffsetField           types.String `tfsdk:"offset_field" json:"offsetField,omitempty"`
-	LimitField            types.String `tfsdk:"limit_field" json:"limitField,omitempty"`
-	Limit                 types.Int64  `tfsdk:"limit" json:"limit,omitempty"`
-	MaxPages              types.Int64  `tfsdk:"max_pages" json:"maxPages,omitempty"`
-	ZeroIndexed           types.Bool   `tfsdk:"zero_indexed" json:"zeroIndexed,omitempty"`
-	PageField             types.String `tfsdk:"page_field" json:"pageField,omitempty"`
-	SizeField             types.String `tfsdk:"size_field" json:"sizeField,omitempty"`
-	Size                  types.Int64  `tfsdk:"size" json:"size,omitempty"`
-	Attribute             types.List   `tfsdk:"attribute" json:"attribute,omitempty"`
-	LastPageExpr          types.String `tfsdk:"last_page_expr" json:"lastPageExpr,omitempty"`
-	Offset                types.Int64  `tfsdk:"offset" json:"offset,omitempty"`
-	TotalRecordField      types.String `tfsdk:"total_record_field" json:"totalRecordField,omitempty"`
-	NextRelationAttribute types.String `tfsdk:"next_relation_attribute" json:"nextRelationAttribute,omitempty"`
-	CurRelationAttribute  types.String `tfsdk:"cur_relation_attribute" json:"curRelationAttribute,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	OffsetField           types.String  `tfsdk:"offset_field" json:"offsetField,omitempty"`
+	LimitField            types.String  `tfsdk:"limit_field" json:"limitField,omitempty"`
+	Limit                 types.Int64   `tfsdk:"limit" json:"limit,omitempty"`
+	MaxPages              types.Int64   `tfsdk:"max_pages" json:"maxPages,omitempty"`
+	ZeroIndexed           types.Bool    `tfsdk:"zero_indexed" json:"zeroIndexed,omitempty"`
+	PageField             types.String  `tfsdk:"page_field" json:"pageField,omitempty"`
+	SizeField             types.String  `tfsdk:"size_field" json:"sizeField,omitempty"`
+	Size                  types.Int64   `tfsdk:"size" json:"size,omitempty"`
+	Attribute             types.List    `tfsdk:"attribute" json:"attribute,omitempty"`
+	LastPageExpr          types.String  `tfsdk:"last_page_expr" json:"lastPageExpr,omitempty"`
+	Offset                types.Int64   `tfsdk:"offset" json:"offset,omitempty"`
+	TotalRecordField      types.String  `tfsdk:"total_record_field" json:"totalRecordField,omitempty"`
+	NextRelationAttribute types.String  `tfsdk:"next_relation_attribute" json:"nextRelationAttribute,omitempty"`
+	CurRelationAttribute  types.String  `tfsdk:"cur_relation_attribute" json:"curRelationAttribute,omitempty"`
+	Page                  types.Float64 `tfsdk:"page" json:"page,omitempty"`
+	TotalPageField        types.String  `tfsdk:"total_page_field" json:"totalPageField,omitempty"`
 }
 
 type InputCollectorRestCollectorConfDiscoveryPaginationAPIModel struct {
@@ -793,6 +951,8 @@ type InputCollectorRestCollectorConfDiscoveryPaginationAPIModel struct {
 	TotalRecordField      *string  `json:"totalRecordField,omitempty"`
 	NextRelationAttribute *string  `json:"nextRelationAttribute,omitempty"`
 	CurRelationAttribute  *string  `json:"curRelationAttribute,omitempty"`
+	Page                  *float64 `json:"page,omitempty"`
+	TotalPageField        *string  `json:"totalPageField,omitempty"`
 }
 
 func InputCollectorRestCollectorConfDiscoveryPaginationAttrTypes() map[string]attr.Type {
@@ -812,6 +972,8 @@ func InputCollectorRestCollectorConfDiscoveryPaginationAttrTypes() map[string]at
 		"total_record_field":      types.StringType,
 		"next_relation_attribute": types.StringType,
 		"cur_relation_attribute":  types.StringType,
+		"page":                    types.Float64Type,
+		"total_page_field":        types.StringType,
 	}
 }
 
@@ -850,21 +1012,23 @@ func InputCollectorRestCollectorConfDiscoveryDiscoverRequestParamsAttrTypes() ma
 }
 
 type InputCollectorRestCollectorConfPaginationModel struct {
-	Type                  types.String `tfsdk:"type" json:"type,omitempty"`
-	OffsetField           types.String `tfsdk:"offset_field" json:"offsetField,omitempty"`
-	LimitField            types.String `tfsdk:"limit_field" json:"limitField,omitempty"`
-	Limit                 types.Int64  `tfsdk:"limit" json:"limit,omitempty"`
-	MaxPages              types.Int64  `tfsdk:"max_pages" json:"maxPages,omitempty"`
-	ZeroIndexed           types.Bool   `tfsdk:"zero_indexed" json:"zeroIndexed,omitempty"`
-	PageField             types.String `tfsdk:"page_field" json:"pageField,omitempty"`
-	SizeField             types.String `tfsdk:"size_field" json:"sizeField,omitempty"`
-	Size                  types.Int64  `tfsdk:"size" json:"size,omitempty"`
-	Attribute             types.List   `tfsdk:"attribute" json:"attribute,omitempty"`
-	LastPageExpr          types.String `tfsdk:"last_page_expr" json:"lastPageExpr,omitempty"`
-	Offset                types.Int64  `tfsdk:"offset" json:"offset,omitempty"`
-	TotalRecordField      types.String `tfsdk:"total_record_field" json:"totalRecordField,omitempty"`
-	NextRelationAttribute types.String `tfsdk:"next_relation_attribute" json:"nextRelationAttribute,omitempty"`
-	CurRelationAttribute  types.String `tfsdk:"cur_relation_attribute" json:"curRelationAttribute,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	OffsetField           types.String  `tfsdk:"offset_field" json:"offsetField,omitempty"`
+	LimitField            types.String  `tfsdk:"limit_field" json:"limitField,omitempty"`
+	Limit                 types.Int64   `tfsdk:"limit" json:"limit,omitempty"`
+	MaxPages              types.Int64   `tfsdk:"max_pages" json:"maxPages,omitempty"`
+	ZeroIndexed           types.Bool    `tfsdk:"zero_indexed" json:"zeroIndexed,omitempty"`
+	PageField             types.String  `tfsdk:"page_field" json:"pageField,omitempty"`
+	SizeField             types.String  `tfsdk:"size_field" json:"sizeField,omitempty"`
+	Size                  types.Int64   `tfsdk:"size" json:"size,omitempty"`
+	Attribute             types.List    `tfsdk:"attribute" json:"attribute,omitempty"`
+	LastPageExpr          types.String  `tfsdk:"last_page_expr" json:"lastPageExpr,omitempty"`
+	Offset                types.Int64   `tfsdk:"offset" json:"offset,omitempty"`
+	TotalRecordField      types.String  `tfsdk:"total_record_field" json:"totalRecordField,omitempty"`
+	NextRelationAttribute types.String  `tfsdk:"next_relation_attribute" json:"nextRelationAttribute,omitempty"`
+	CurRelationAttribute  types.String  `tfsdk:"cur_relation_attribute" json:"curRelationAttribute,omitempty"`
+	Page                  types.Float64 `tfsdk:"page" json:"page,omitempty"`
+	TotalPageField        types.String  `tfsdk:"total_page_field" json:"totalPageField,omitempty"`
 }
 
 type InputCollectorRestCollectorConfPaginationAPIModel struct {
@@ -883,6 +1047,8 @@ type InputCollectorRestCollectorConfPaginationAPIModel struct {
 	TotalRecordField      *string  `json:"totalRecordField,omitempty"`
 	NextRelationAttribute *string  `json:"nextRelationAttribute,omitempty"`
 	CurRelationAttribute  *string  `json:"curRelationAttribute,omitempty"`
+	Page                  *float64 `json:"page,omitempty"`
+	TotalPageField        *string  `json:"totalPageField,omitempty"`
 }
 
 func InputCollectorRestCollectorConfPaginationAttrTypes() map[string]attr.Type {
@@ -902,6 +1068,8 @@ func InputCollectorRestCollectorConfPaginationAttrTypes() map[string]attr.Type {
 		"total_record_field":      types.StringType,
 		"next_relation_attribute": types.StringType,
 		"cur_relation_attribute":  types.StringType,
+		"page":                    types.Float64Type,
+		"total_page_field":        types.StringType,
 	}
 }
 
@@ -943,6 +1111,37 @@ func InputCollectorRestCollectorConfRetryRulesAttrTypes() map[string]attr.Type {
 		"retry_connect_timeout": types.BoolType,
 		"retry_connect_reset":   types.BoolType,
 		"retry_header_name":     types.StringType,
+	}
+}
+
+type InputCollectorRestCollectorConfMicrosoftGraphDeltaModel struct {
+	DeltaLinkAttribute types.String `tfsdk:"delta_link_attribute" json:"deltaLinkAttribute,omitempty"`
+}
+
+type InputCollectorRestCollectorConfMicrosoftGraphDeltaAPIModel struct {
+	DeltaLinkAttribute *string `json:"deltaLinkAttribute,omitempty"`
+}
+
+func InputCollectorRestCollectorConfMicrosoftGraphDeltaAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"delta_link_attribute": types.StringType,
+	}
+}
+
+type InputCollectorRestCollectorConfRefreshRequestParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorRestCollectorConfRefreshRequestParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorRestCollectorConfRefreshRequestParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -989,6 +1188,8 @@ type InputCollectorS3ScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorS3ScheduleRunAPIModel struct {
@@ -1005,6 +1206,8 @@ type InputCollectorS3ScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorS3ScheduleRunAttrTypes() map[string]attr.Type {
@@ -1022,6 +1225,8 @@ func InputCollectorS3ScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorS3ScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -1121,60 +1326,105 @@ func InputCollectorS3InputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorS3CollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorS3CollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorS3CollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorS3CollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorS3CollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorS3CollectorConfModel struct {
-	Bucket                  types.String `tfsdk:"bucket" json:"bucket,omitempty"`
-	Region                  types.String `tfsdk:"region" json:"region,omitempty"`
-	Path                    types.String `tfsdk:"path" json:"path,omitempty"`
-	AwsAuthenticationMethod types.String `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               types.String `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecretKey            types.String `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	AwsSecret               types.String `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
-	Recurse                 types.Bool   `tfsdk:"recurse" json:"recurse,omitempty"`
-	Extractors              types.List   `tfsdk:"extractors" json:"extractors,omitempty"`
-	MaxBatchSize            types.Int64  `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	Bucket                      types.String  `tfsdk:"bucket" json:"bucket,omitempty"`
+	Region                      types.String  `tfsdk:"region" json:"region,omitempty"`
+	Path                        types.String  `tfsdk:"path" json:"path,omitempty"`
+	AwsAuthenticationMethod     types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsAPIKey                   types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecretKey                types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	Recurse                     types.Bool    `tfsdk:"recurse" json:"recurse,omitempty"`
+	Extractors                  types.List    `tfsdk:"extractors" json:"extractors,omitempty"`
+	MaxBatchSize                types.Int64   `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	OutputName                  types.String  `tfsdk:"output_name" json:"outputName,omitempty"`
+	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
+	PartitioningScheme          types.String  `tfsdk:"partitioning_scheme" json:"partitioningScheme,omitempty"`
+	Endpoint                    types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	EnableAssumeRole            types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn               types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID        types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds             types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	ReuseConnections            types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	RejectUnauthorized          types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	VerifyPermissions           types.Bool    `tfsdk:"verify_permissions" json:"verifyPermissions,omitempty"`
+	DisableTimeFilter           types.Bool    `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
 }
 
 type InputCollectorS3CollectorConfAPIModel struct {
-	Bucket                  *string `json:"bucket,omitempty"`
-	Region                  *string `json:"region,omitempty"`
-	Path                    *string `json:"path,omitempty"`
-	AwsAuthenticationMethod *string `json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               *string `json:"awsApiKey,omitempty"`
-	AwsSecretKey            *string `json:"awsSecretKey,omitempty"`
-	AwsSecret               *string `json:"awsSecret,omitempty"`
-	Recurse                 *bool   `json:"recurse,omitempty"`
-	Extractors              any     `json:"extractors,omitempty"`
-	MaxBatchSize            *int64  `json:"maxBatchSize,omitempty"`
+	Bucket                      *string  `json:"bucket,omitempty"`
+	Region                      *string  `json:"region,omitempty"`
+	Path                        *string  `json:"path,omitempty"`
+	AwsAuthenticationMethod     *string  `json:"awsAuthenticationMethod,omitempty"`
+	AwsAPIKey                   *string  `json:"awsApiKey,omitempty"`
+	AwsSecretKey                *string  `json:"awsSecretKey,omitempty"`
+	AwsSecret                   *string  `json:"awsSecret,omitempty"`
+	Recurse                     *bool    `json:"recurse,omitempty"`
+	Extractors                  any      `json:"extractors,omitempty"`
+	MaxBatchSize                *int64   `json:"maxBatchSize,omitempty"`
+	OutputName                  *string  `json:"outputName,omitempty"`
+	ParquetChunkSizeMB          *float64 `json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout *float64 `json:"parquetChunkDownloadTimeout,omitempty"`
+	PartitioningScheme          *string  `json:"partitioningScheme,omitempty"`
+	Endpoint                    *string  `json:"endpoint,omitempty"`
+	EnableAssumeRole            *bool    `json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn               *string  `json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID        *string  `json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds             *float64 `json:"durationSeconds,omitempty"`
+	ReuseConnections            *bool    `json:"reuseConnections,omitempty"`
+	RejectUnauthorized          *bool    `json:"rejectUnauthorized,omitempty"`
+	VerifyPermissions           *bool    `json:"verifyPermissions,omitempty"`
+	DisableTimeFilter           *bool    `json:"disableTimeFilter,omitempty"`
 }
 
 func InputCollectorS3CollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"bucket":                    types.StringType,
-		"region":                    types.StringType,
-		"path":                      types.StringType,
-		"aws_authentication_method": types.StringType,
-		"aws_api_key":               types.StringType,
-		"aws_secret_key":            types.StringType,
-		"aws_secret":                types.StringType,
-		"recurse":                   types.BoolType,
-		"extractors":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorS3CollectorConfExtractorsAttrTypes()}},
-		"max_batch_size":            types.Int64Type,
+		"bucket":                         types.StringType,
+		"region":                         types.StringType,
+		"path":                           types.StringType,
+		"aws_authentication_method":      types.StringType,
+		"aws_api_key":                    types.StringType,
+		"aws_secret_key":                 types.StringType,
+		"aws_secret":                     types.StringType,
+		"recurse":                        types.BoolType,
+		"extractors":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorS3CollectorConfExtractorsAttrTypes()}},
+		"max_batch_size":                 types.Int64Type,
+		"output_name":                    types.StringType,
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"partitioning_scheme":            types.StringType,
+		"endpoint":                       types.StringType,
+		"enable_assume_role":             types.BoolType,
+		"assume_role_arn":                types.StringType,
+		"assume_role_external_id":        types.StringType,
+		"duration_seconds":               types.Float64Type,
+		"reuse_connections":              types.BoolType,
+		"reject_unauthorized":            types.BoolType,
+		"verify_permissions":             types.BoolType,
+		"disable_time_filter":            types.BoolType,
 	}
 }
 
@@ -1241,6 +1491,8 @@ type InputCollectorAzureBlobScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorAzureBlobScheduleRunAPIModel struct {
@@ -1257,6 +1509,8 @@ type InputCollectorAzureBlobScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorAzureBlobScheduleRunAttrTypes() map[string]attr.Type {
@@ -1274,6 +1528,8 @@ func InputCollectorAzureBlobScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorAzureBlobScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -1409,6 +1665,15 @@ type InputCollectorAzureBlobCollectorConfModel struct {
 	DisableTimeFilter           types.Bool    `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
 	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
 	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
+	OutputName                  types.String  `tfsdk:"output_name" json:"outputName,omitempty"`
+	BlobTypes                   types.List    `tfsdk:"blob_types" json:"blobTypes,omitempty"`
+	TextSecret                  types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	TenantID                    types.String  `tfsdk:"tenant_id" json:"tenantId,omitempty"`
+	ClientID                    types.String  `tfsdk:"client_id" json:"clientId,omitempty"`
+	ClientTextSecret            types.String  `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	EndpointSuffix              types.String  `tfsdk:"endpoint_suffix" json:"endpointSuffix,omitempty"`
+	AzureCloud                  types.String  `tfsdk:"azure_cloud" json:"azureCloud,omitempty"`
+	Certificate                 types.Object  `tfsdk:"certificate" json:"certificate,omitempty"`
 }
 
 type InputCollectorAzureBlobCollectorConfAPIModel struct {
@@ -1425,6 +1690,15 @@ type InputCollectorAzureBlobCollectorConfAPIModel struct {
 	DisableTimeFilter           *bool    `json:"disableTimeFilter,omitempty"`
 	ParquetChunkSizeMB          *float64 `json:"parquetChunkSizeMB,omitempty"`
 	ParquetChunkDownloadTimeout *float64 `json:"parquetChunkDownloadTimeout,omitempty"`
+	OutputName                  *string  `json:"outputName,omitempty"`
+	BlobTypes                   []string `json:"blobTypes,omitempty"`
+	TextSecret                  *string  `json:"textSecret,omitempty"`
+	TenantID                    *string  `json:"tenantId,omitempty"`
+	ClientID                    *string  `json:"clientId,omitempty"`
+	ClientTextSecret            *string  `json:"clientTextSecret,omitempty"`
+	EndpointSuffix              *string  `json:"endpointSuffix,omitempty"`
+	AzureCloud                  *string  `json:"azureCloud,omitempty"`
+	Certificate                 any      `json:"certificate,omitempty"`
 }
 
 func InputCollectorAzureBlobCollectorConfAttrTypes() map[string]attr.Type {
@@ -1442,6 +1716,15 @@ func InputCollectorAzureBlobCollectorConfAttrTypes() map[string]attr.Type {
 		"disable_time_filter":            types.BoolType,
 		"parquet_chunk_size_mb":          types.Float64Type,
 		"parquet_chunk_download_timeout": types.Float64Type,
+		"output_name":                    types.StringType,
+		"blob_types":                     types.ListType{ElemType: types.StringType},
+		"text_secret":                    types.StringType,
+		"tenant_id":                      types.StringType,
+		"client_id":                      types.StringType,
+		"client_text_secret":             types.StringType,
+		"endpoint_suffix":                types.StringType,
+		"azure_cloud":                    types.StringType,
+		"certificate":                    types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfCertificateAttrTypes()},
 	}
 }
 
@@ -1462,6 +1745,20 @@ func InputCollectorAzureBlobCollectorConfExtractorsAttrTypes() map[string]attr.T
 		"key":        types.StringType,
 		"expression": types.StringType,
 		"pattern":    types.StringType,
+	}
+}
+
+type InputCollectorAzureBlobCollectorConfCertificateModel struct {
+	CertificateName types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+}
+
+type InputCollectorAzureBlobCollectorConfCertificateAPIModel struct {
+	CertificateName *string `json:"certificateName,omitempty"`
+}
+
+func InputCollectorAzureBlobCollectorConfCertificateAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"certificate_name": types.StringType,
 	}
 }
 
@@ -1508,6 +1805,8 @@ type InputCollectorCriblLakeScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorCriblLakeScheduleRunAPIModel struct {
@@ -1524,6 +1823,8 @@ type InputCollectorCriblLakeScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorCriblLakeScheduleRunAttrTypes() map[string]attr.Type {
@@ -1541,6 +1842,8 @@ func InputCollectorCriblLakeScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorCriblLakeScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -1640,33 +1943,42 @@ func InputCollectorCriblLakeInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorCriblLakeCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorCriblLakeCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorCriblLakeCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorCriblLakeCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorCriblLakeCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorCriblLakeCollectorConfModel struct {
-	Dataset types.String `tfsdk:"dataset" json:"dataset,omitempty"`
+	Dataset           types.String `tfsdk:"dataset" json:"dataset,omitempty"`
+	StorageLocationID types.String `tfsdk:"storage_location_id" json:"storageLocationId,omitempty"`
 }
 
 type InputCollectorCriblLakeCollectorConfAPIModel struct {
-	Dataset *string `json:"dataset,omitempty"`
+	Dataset           *string `json:"dataset,omitempty"`
+	StorageLocationID *string `json:"storageLocationId,omitempty"`
 }
 
 func InputCollectorCriblLakeCollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"dataset": types.StringType,
+		"dataset":             types.StringType,
+		"storage_location_id": types.StringType,
 	}
 }
 
@@ -1713,6 +2025,8 @@ type InputCollectorDatabaseScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorDatabaseScheduleRunAPIModel struct {
@@ -1729,6 +2043,8 @@ type InputCollectorDatabaseScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorDatabaseScheduleRunAttrTypes() map[string]attr.Type {
@@ -1746,6 +2062,8 @@ func InputCollectorDatabaseScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorDatabaseScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -1753,12 +2071,14 @@ type InputCollectorDatabaseScheduleRunStateTrackingModel struct {
 	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
 	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
 	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	TrackingColumn        types.String `tfsdk:"tracking_column" json:"trackingColumn,omitempty"`
 }
 
 type InputCollectorDatabaseScheduleRunStateTrackingAPIModel struct {
 	StateUpdateExpression *string `json:"stateUpdateExpression,omitempty"`
 	StateMergeExpression  *string `json:"stateMergeExpression,omitempty"`
 	Enabled               *bool   `json:"enabled,omitempty"`
+	TrackingColumn        *string `json:"trackingColumn,omitempty"`
 }
 
 func InputCollectorDatabaseScheduleRunStateTrackingAttrTypes() map[string]attr.Type {
@@ -1766,6 +2086,7 @@ func InputCollectorDatabaseScheduleRunStateTrackingAttrTypes() map[string]attr.T
 		"state_update_expression": types.StringType,
 		"state_merge_expression":  types.StringType,
 		"enabled":                 types.BoolType,
+		"tracking_column":         types.StringType,
 	}
 }
 
@@ -1845,19 +2166,25 @@ func InputCollectorDatabaseInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorDatabaseCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorDatabaseCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorDatabaseCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorDatabaseCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorDatabaseCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
@@ -1924,6 +2251,8 @@ type InputCollectorGCSScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorGCSScheduleRunAPIModel struct {
@@ -1940,6 +2269,8 @@ type InputCollectorGCSScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorGCSScheduleRunAttrTypes() map[string]attr.Type {
@@ -1957,6 +2288,8 @@ func InputCollectorGCSScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorGCSScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -2056,51 +2389,75 @@ func InputCollectorGCSInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorGCSCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorGCSCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorGCSCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorGCSCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorGCSCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorGCSCollectorConfModel struct {
-	ServiceAccountCredentials types.String `tfsdk:"service_account_credentials" json:"serviceAccountCredentials,omitempty"`
-	Bucket                    types.String `tfsdk:"bucket" json:"bucket,omitempty"`
-	Path                      types.String `tfsdk:"path" json:"path,omitempty"`
-	AuthType                  types.String `tfsdk:"auth_type" json:"authType,omitempty"`
-	Recurse                   types.Bool   `tfsdk:"recurse" json:"recurse,omitempty"`
-	Extractors                types.List   `tfsdk:"extractors" json:"extractors,omitempty"`
-	MaxBatchSize              types.Int64  `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	ServiceAccountCredentials   types.String  `tfsdk:"service_account_credentials" json:"serviceAccountCredentials,omitempty"`
+	Bucket                      types.String  `tfsdk:"bucket" json:"bucket,omitempty"`
+	Path                        types.String  `tfsdk:"path" json:"path,omitempty"`
+	AuthType                    types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Recurse                     types.Bool    `tfsdk:"recurse" json:"recurse,omitempty"`
+	Extractors                  types.List    `tfsdk:"extractors" json:"extractors,omitempty"`
+	MaxBatchSize                types.Int64   `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	OutputName                  types.String  `tfsdk:"output_name" json:"outputName,omitempty"`
+	Endpoint                    types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	DisableTimeFilter           types.Bool    `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
+	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
+	TextSecret                  types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
 type InputCollectorGCSCollectorConfAPIModel struct {
-	ServiceAccountCredentials *string `json:"serviceAccountCredentials,omitempty"`
-	Bucket                    *string `json:"bucket,omitempty"`
-	Path                      *string `json:"path,omitempty"`
-	AuthType                  *string `json:"authType,omitempty"`
-	Recurse                   *bool   `json:"recurse,omitempty"`
-	Extractors                any     `json:"extractors,omitempty"`
-	MaxBatchSize              *int64  `json:"maxBatchSize,omitempty"`
+	ServiceAccountCredentials   *string  `json:"serviceAccountCredentials,omitempty"`
+	Bucket                      *string  `json:"bucket,omitempty"`
+	Path                        *string  `json:"path,omitempty"`
+	AuthType                    *string  `json:"authType,omitempty"`
+	Recurse                     *bool    `json:"recurse,omitempty"`
+	Extractors                  any      `json:"extractors,omitempty"`
+	MaxBatchSize                *int64   `json:"maxBatchSize,omitempty"`
+	OutputName                  *string  `json:"outputName,omitempty"`
+	Endpoint                    *string  `json:"endpoint,omitempty"`
+	DisableTimeFilter           *bool    `json:"disableTimeFilter,omitempty"`
+	ParquetChunkSizeMB          *float64 `json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout *float64 `json:"parquetChunkDownloadTimeout,omitempty"`
+	TextSecret                  *string  `json:"textSecret,omitempty"`
 }
 
 func InputCollectorGCSCollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"service_account_credentials": types.StringType,
-		"bucket":                      types.StringType,
-		"path":                        types.StringType,
-		"auth_type":                   types.StringType,
-		"recurse":                     types.BoolType,
-		"extractors":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorGCSCollectorConfExtractorsAttrTypes()}},
-		"max_batch_size":              types.Int64Type,
+		"service_account_credentials":    types.StringType,
+		"bucket":                         types.StringType,
+		"path":                           types.StringType,
+		"auth_type":                      types.StringType,
+		"recurse":                        types.BoolType,
+		"extractors":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorGCSCollectorConfExtractorsAttrTypes()}},
+		"max_batch_size":                 types.Int64Type,
+		"output_name":                    types.StringType,
+		"endpoint":                       types.StringType,
+		"disable_time_filter":            types.BoolType,
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"text_secret":                    types.StringType,
 	}
 }
 
@@ -2167,6 +2524,8 @@ type InputCollectorHealthCheckScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorHealthCheckScheduleRunAPIModel struct {
@@ -2183,6 +2542,8 @@ type InputCollectorHealthCheckScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorHealthCheckScheduleRunAttrTypes() map[string]attr.Type {
@@ -2200,6 +2561,8 @@ func InputCollectorHealthCheckScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorHealthCheckScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -2299,54 +2662,306 @@ func InputCollectorHealthCheckInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorHealthCheckCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorHealthCheckCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorHealthCheckCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorHealthCheckCollectorConfModel struct {
-	CollectURL         types.String `tfsdk:"collect_url" json:"collectUrl,omitempty"`
-	CollectMethod      types.String `tfsdk:"collect_method" json:"collectMethod,omitempty"`
-	Authentication     types.String `tfsdk:"authentication" json:"authentication,omitempty"`
-	Timeout            types.Int64  `tfsdk:"timeout" json:"timeout,omitempty"`
-	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	Username           types.String `tfsdk:"username" json:"username,omitempty"`
-	Password           types.String `tfsdk:"password" json:"password,omitempty"`
-	CredentialsSecret  types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	CollectURL             types.String `tfsdk:"collect_url" json:"collectUrl,omitempty"`
+	CollectMethod          types.String `tfsdk:"collect_method" json:"collectMethod,omitempty"`
+	Authentication         types.String `tfsdk:"authentication" json:"authentication,omitempty"`
+	Timeout                types.Int64  `tfsdk:"timeout" json:"timeout,omitempty"`
+	RejectUnauthorized     types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	Username               types.String `tfsdk:"username" json:"username,omitempty"`
+	Password               types.String `tfsdk:"password" json:"password,omitempty"`
+	CredentialsSecret      types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	Discovery              types.Object `tfsdk:"discovery" json:"discovery,omitempty"`
+	CollectRequestHeaders  types.List   `tfsdk:"collect_request_headers" json:"collectRequestHeaders,omitempty"`
+	AuthenticateCollect    types.Bool   `tfsdk:"authenticate_collect" json:"authenticateCollect,omitempty"`
+	SafeHeaders            types.List   `tfsdk:"safe_headers" json:"safeHeaders,omitempty"`
+	RetryRules             types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	LoginURL               types.String `tfsdk:"login_url" json:"loginUrl,omitempty"`
+	LoginBody              types.String `tfsdk:"login_body" json:"loginBody,omitempty"`
+	TokenRespAttribute     types.String `tfsdk:"token_resp_attribute" json:"tokenRespAttribute,omitempty"`
+	AuthHeaderExpr         types.String `tfsdk:"auth_header_expr" json:"authHeaderExpr,omitempty"`
+	AuthRequestHeaders     types.List   `tfsdk:"auth_request_headers" json:"authRequestHeaders,omitempty"`
+	ClientSecretParamName  types.String `tfsdk:"client_secret_param_name" json:"clientSecretParamName,omitempty"`
+	ClientSecretParamValue types.String `tfsdk:"client_secret_param_value" json:"clientSecretParamValue,omitempty"`
+	AuthRequestParams      types.List   `tfsdk:"auth_request_params" json:"authRequestParams,omitempty"`
+	RefreshTokenField      types.String `tfsdk:"refresh_token_field" json:"refreshTokenField,omitempty"`
+	RotateRefreshToken     types.Bool   `tfsdk:"rotate_refresh_token" json:"rotateRefreshToken,omitempty"`
+	RefreshURL             types.String `tfsdk:"refresh_url" json:"refreshUrl,omitempty"`
+	RefreshRequestParams   types.List   `tfsdk:"refresh_request_params" json:"refreshRequestParams,omitempty"`
+	TextSecret             types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	CollectRequestParams   types.List   `tfsdk:"collect_request_params" json:"collectRequestParams,omitempty"`
+	CollectBody            types.String `tfsdk:"collect_body" json:"collectBody,omitempty"`
 }
 
 type InputCollectorHealthCheckCollectorConfAPIModel struct {
-	CollectURL         *string `json:"collectUrl,omitempty"`
-	CollectMethod      *string `json:"collectMethod,omitempty"`
-	Authentication     *string `json:"authentication,omitempty"`
-	Timeout            *int64  `json:"timeout,omitempty"`
-	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
-	Username           *string `json:"username,omitempty"`
-	Password           *string `json:"password,omitempty"`
-	CredentialsSecret  *string `json:"credentialsSecret,omitempty"`
+	CollectURL             *string  `json:"collectUrl,omitempty"`
+	CollectMethod          *string  `json:"collectMethod,omitempty"`
+	Authentication         *string  `json:"authentication,omitempty"`
+	Timeout                *int64   `json:"timeout,omitempty"`
+	RejectUnauthorized     *bool    `json:"rejectUnauthorized,omitempty"`
+	Username               *string  `json:"username,omitempty"`
+	Password               *string  `json:"password,omitempty"`
+	CredentialsSecret      *string  `json:"credentialsSecret,omitempty"`
+	Discovery              any      `json:"discovery,omitempty"`
+	CollectRequestHeaders  any      `json:"collectRequestHeaders,omitempty"`
+	AuthenticateCollect    *bool    `json:"authenticateCollect,omitempty"`
+	SafeHeaders            []string `json:"safeHeaders,omitempty"`
+	RetryRules             any      `json:"retryRules,omitempty"`
+	LoginURL               *string  `json:"loginUrl,omitempty"`
+	LoginBody              *string  `json:"loginBody,omitempty"`
+	TokenRespAttribute     *string  `json:"tokenRespAttribute,omitempty"`
+	AuthHeaderExpr         *string  `json:"authHeaderExpr,omitempty"`
+	AuthRequestHeaders     any      `json:"authRequestHeaders,omitempty"`
+	ClientSecretParamName  *string  `json:"clientSecretParamName,omitempty"`
+	ClientSecretParamValue *string  `json:"clientSecretParamValue,omitempty"`
+	AuthRequestParams      any      `json:"authRequestParams,omitempty"`
+	RefreshTokenField      *string  `json:"refreshTokenField,omitempty"`
+	RotateRefreshToken     *bool    `json:"rotateRefreshToken,omitempty"`
+	RefreshURL             *string  `json:"refreshUrl,omitempty"`
+	RefreshRequestParams   any      `json:"refreshRequestParams,omitempty"`
+	TextSecret             *string  `json:"textSecret,omitempty"`
+	CollectRequestParams   any      `json:"collectRequestParams,omitempty"`
+	CollectBody            *string  `json:"collectBody,omitempty"`
 }
 
 func InputCollectorHealthCheckCollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"collect_url":         types.StringType,
-		"collect_method":      types.StringType,
-		"authentication":      types.StringType,
-		"timeout":             types.Int64Type,
-		"reject_unauthorized": types.BoolType,
-		"username":            types.StringType,
-		"password":            types.StringType,
-		"credentials_secret":  types.StringType,
+		"collect_url":               types.StringType,
+		"collect_method":            types.StringType,
+		"authentication":            types.StringType,
+		"timeout":                   types.Int64Type,
+		"reject_unauthorized":       types.BoolType,
+		"username":                  types.StringType,
+		"password":                  types.StringType,
+		"credentials_secret":        types.StringType,
+		"discovery":                 types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfDiscoveryAttrTypes()},
+		"collect_request_headers":   types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfCollectRequestHeadersAttrTypes()}},
+		"authenticate_collect":      types.BoolType,
+		"safe_headers":              types.ListType{ElemType: types.StringType},
+		"retry_rules":               types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfRetryRulesAttrTypes()},
+		"login_url":                 types.StringType,
+		"login_body":                types.StringType,
+		"token_resp_attribute":      types.StringType,
+		"auth_header_expr":          types.StringType,
+		"auth_request_headers":      types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfAuthRequestHeadersAttrTypes()}},
+		"client_secret_param_name":  types.StringType,
+		"client_secret_param_value": types.StringType,
+		"auth_request_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfAuthRequestParamsAttrTypes()}},
+		"refresh_token_field":       types.StringType,
+		"rotate_refresh_token":      types.BoolType,
+		"refresh_url":               types.StringType,
+		"refresh_request_params":    types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfRefreshRequestParamsAttrTypes()}},
+		"text_secret":               types.StringType,
+		"collect_request_params":    types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfCollectRequestParamsAttrTypes()}},
+		"collect_body":              types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfDiscoveryModel struct {
+	DiscoverType           types.String `tfsdk:"discover_type" json:"discoverType,omitempty"`
+	DiscoverURL            types.String `tfsdk:"discover_url" json:"discoverUrl,omitempty"`
+	DiscoverMethod         types.String `tfsdk:"discover_method" json:"discoverMethod,omitempty"`
+	DiscoverRequestHeaders types.List   `tfsdk:"discover_request_headers" json:"discoverRequestHeaders,omitempty"`
+	DiscoverDataField      types.String `tfsdk:"discover_data_field" json:"discoverDataField,omitempty"`
+	ManualDiscoverResult   types.String `tfsdk:"manual_discover_result" json:"manualDiscoverResult,omitempty"`
+	ItemList               types.List   `tfsdk:"item_list" json:"itemList,omitempty"`
+	DiscoverRequestParams  types.List   `tfsdk:"discover_request_params" json:"discoverRequestParams,omitempty"`
+	DiscoverBody           types.String `tfsdk:"discover_body" json:"discoverBody,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfDiscoveryAPIModel struct {
+	DiscoverType           *string  `json:"discoverType,omitempty"`
+	DiscoverURL            *string  `json:"discoverUrl,omitempty"`
+	DiscoverMethod         *string  `json:"discoverMethod,omitempty"`
+	DiscoverRequestHeaders any      `json:"discoverRequestHeaders,omitempty"`
+	DiscoverDataField      *string  `json:"discoverDataField,omitempty"`
+	ManualDiscoverResult   *string  `json:"manualDiscoverResult,omitempty"`
+	ItemList               []string `json:"itemList,omitempty"`
+	DiscoverRequestParams  any      `json:"discoverRequestParams,omitempty"`
+	DiscoverBody           *string  `json:"discoverBody,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfDiscoveryAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"discover_type":            types.StringType,
+		"discover_url":             types.StringType,
+		"discover_method":          types.StringType,
+		"discover_request_headers": types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestHeadersAttrTypes()}},
+		"discover_data_field":      types.StringType,
+		"manual_discover_result":   types.StringType,
+		"item_list":                types.ListType{ElemType: types.StringType},
+		"discover_request_params":  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestParamsAttrTypes()}},
+		"discover_body":            types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfDiscoveryDiscoverRequestParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfCollectRequestHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfCollectRequestHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfCollectRequestHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfRetryRulesModel struct {
+	Type         types.String  `tfsdk:"type" json:"type,omitempty"`
+	Interval     types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	Limit        types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
+	Codes        types.List    `tfsdk:"codes" json:"codes,omitempty"`
+	EnableHeader types.Bool    `tfsdk:"enable_header" json:"enableHeader,omitempty"`
+	Multiplier   types.Float64 `tfsdk:"multiplier" json:"multiplier,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfRetryRulesAPIModel struct {
+	Type         *string   `json:"type,omitempty"`
+	Interval     *float64  `json:"interval,omitempty"`
+	Limit        *float64  `json:"limit,omitempty"`
+	Codes        []float64 `json:"codes,omitempty"`
+	EnableHeader *bool     `json:"enableHeader,omitempty"`
+	Multiplier   *float64  `json:"multiplier,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfRetryRulesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":          types.StringType,
+		"interval":      types.Float64Type,
+		"limit":         types.Float64Type,
+		"codes":         types.ListType{ElemType: types.Float64Type},
+		"enable_header": types.BoolType,
+		"multiplier":    types.Float64Type,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfAuthRequestHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfAuthRequestHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfAuthRequestHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfAuthRequestParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfAuthRequestParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfAuthRequestParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfRefreshRequestParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfRefreshRequestParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfRefreshRequestParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorHealthCheckCollectorConfCollectRequestParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorHealthCheckCollectorConfCollectRequestParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorHealthCheckCollectorConfCollectRequestParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2393,6 +3008,8 @@ type InputCollectorScriptScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorScriptScheduleRunAPIModel struct {
@@ -2409,6 +3026,8 @@ type InputCollectorScriptScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorScriptScheduleRunAttrTypes() map[string]attr.Type {
@@ -2426,6 +3045,8 @@ func InputCollectorScriptScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorScriptScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -2525,19 +3146,25 @@ func InputCollectorScriptInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorScriptCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorScriptCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorScriptCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorScriptCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorScriptCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
@@ -2545,12 +3172,14 @@ type InputCollectorScriptCollectorConfModel struct {
 	Shell          types.String `tfsdk:"shell" json:"shell,omitempty"`
 	DiscoverScript types.String `tfsdk:"discover_script" json:"discoverScript,omitempty"`
 	CollectScript  types.String `tfsdk:"collect_script" json:"collectScript,omitempty"`
+	EnvVars        types.List   `tfsdk:"env_vars" json:"envVars,omitempty"`
 }
 
 type InputCollectorScriptCollectorConfAPIModel struct {
 	Shell          *string `json:"shell,omitempty"`
 	DiscoverScript *string `json:"discoverScript,omitempty"`
 	CollectScript  *string `json:"collectScript,omitempty"`
+	EnvVars        any     `json:"envVars,omitempty"`
 }
 
 func InputCollectorScriptCollectorConfAttrTypes() map[string]attr.Type {
@@ -2558,6 +3187,24 @@ func InputCollectorScriptCollectorConfAttrTypes() map[string]attr.Type {
 		"shell":           types.StringType,
 		"discover_script": types.StringType,
 		"collect_script":  types.StringType,
+		"env_vars":        types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorScriptCollectorConfEnvVarsAttrTypes()}},
+	}
+}
+
+type InputCollectorScriptCollectorConfEnvVarsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorScriptCollectorConfEnvVarsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorScriptCollectorConfEnvVarsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2604,6 +3251,8 @@ type InputCollectorFilesystemScheduleRunModel struct {
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
 	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
 	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	Type                   types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampTimezone      types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
 }
 
 type InputCollectorFilesystemScheduleRunAPIModel struct {
@@ -2620,6 +3269,8 @@ type InputCollectorFilesystemScheduleRunAPIModel struct {
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
 	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
 	StateTracking          any               `json:"stateTracking,omitempty"`
+	Type                   *string           `json:"type,omitempty"`
+	TimestampTimezone      *string           `json:"timestampTimezone,omitempty"`
 }
 
 func InputCollectorFilesystemScheduleRunAttrTypes() map[string]attr.Type {
@@ -2637,6 +3288,8 @@ func InputCollectorFilesystemScheduleRunAttrTypes() map[string]attr.Type {
 		"max_task_size":            types.StringType,
 		"time_warning":             types.MapType{ElemType: types.StringType},
 		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleRunStateTrackingAttrTypes()},
+		"type":                     types.StringType,
+		"timestamp_timezone":       types.StringType,
 	}
 }
 
@@ -2763,6 +3416,7 @@ type InputCollectorFilesystemCollectorConfModel struct {
 	Extractors   types.List   `tfsdk:"extractors" json:"extractors,omitempty"`
 	Recurse      types.Bool   `tfsdk:"recurse" json:"recurse,omitempty"`
 	MaxBatchSize types.Int64  `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	OutputName   types.String `tfsdk:"output_name" json:"outputName,omitempty"`
 }
 
 type InputCollectorFilesystemCollectorConfAPIModel struct {
@@ -2770,6 +3424,7 @@ type InputCollectorFilesystemCollectorConfAPIModel struct {
 	Extractors   any     `json:"extractors,omitempty"`
 	Recurse      *bool   `json:"recurse,omitempty"`
 	MaxBatchSize *int64  `json:"maxBatchSize,omitempty"`
+	OutputName   *string `json:"outputName,omitempty"`
 }
 
 func InputCollectorFilesystemCollectorConfAttrTypes() map[string]attr.Type {
@@ -2778,6 +3433,7 @@ func InputCollectorFilesystemCollectorConfAttrTypes() map[string]attr.Type {
 		"extractors":     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorConfExtractorsAttrTypes()}},
 		"recurse":        types.BoolType,
 		"max_batch_size": types.Int64Type,
+		"output_name":    types.StringType,
 	}
 }
 
@@ -3279,6 +3935,7 @@ type InputCollectorSplunkModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -3295,6 +3952,7 @@ func InputCollectorSplunkModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorSplunkInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorSplunkCollectorAttrTypes()},
 	}
 }
@@ -3377,6 +4035,13 @@ func (m InputCollectorSplunkModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -3494,6 +4159,15 @@ func (m *InputCollectorSplunkModel) unmarshalPayload(input map[string]any) error
 	} else {
 		m.Input = types.ObjectNull(InputCollectorSplunkInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorSplunkCollectorAttrTypes()})
 		if err != nil {
@@ -3518,6 +4192,7 @@ type InputCollectorRestModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -3534,6 +4209,7 @@ func InputCollectorRestModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorRestInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorRestCollectorAttrTypes()},
 	}
 }
@@ -3616,6 +4292,13 @@ func (m InputCollectorRestModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -3733,6 +4416,15 @@ func (m *InputCollectorRestModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Input = types.ObjectNull(InputCollectorRestInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorRestCollectorAttrTypes()})
 		if err != nil {
@@ -3757,6 +4449,7 @@ type InputCollectorS3Model struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -3773,6 +4466,7 @@ func InputCollectorS3ModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorS3InputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorS3CollectorAttrTypes()},
 	}
 }
@@ -3855,6 +4549,13 @@ func (m InputCollectorS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -3972,6 +4673,15 @@ func (m *InputCollectorS3Model) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Input = types.ObjectNull(InputCollectorS3InputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorS3CollectorAttrTypes()})
 		if err != nil {
@@ -3996,6 +4706,7 @@ type InputCollectorAzureBlobModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -4012,6 +4723,7 @@ func InputCollectorAzureBlobModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorAzureBlobInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorAttrTypes()},
 	}
 }
@@ -4094,6 +4806,13 @@ func (m InputCollectorAzureBlobModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -4211,6 +4930,15 @@ func (m *InputCollectorAzureBlobModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.Input = types.ObjectNull(InputCollectorAzureBlobInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorAttrTypes()})
 		if err != nil {
@@ -4235,6 +4963,7 @@ type InputCollectorCriblLakeModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -4251,6 +4980,7 @@ func InputCollectorCriblLakeModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorCriblLakeInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorCriblLakeCollectorAttrTypes()},
 	}
 }
@@ -4333,6 +5063,13 @@ func (m InputCollectorCriblLakeModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -4450,6 +5187,15 @@ func (m *InputCollectorCriblLakeModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.Input = types.ObjectNull(InputCollectorCriblLakeInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorCriblLakeCollectorAttrTypes()})
 		if err != nil {
@@ -4474,6 +5220,7 @@ type InputCollectorDatabaseModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -4490,6 +5237,7 @@ func InputCollectorDatabaseModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorDatabaseInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorDatabaseCollectorAttrTypes()},
 	}
 }
@@ -4572,6 +5320,13 @@ func (m InputCollectorDatabaseModel) terraformPayload() (map[string]any, error) 
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -4689,6 +5444,15 @@ func (m *InputCollectorDatabaseModel) unmarshalPayload(input map[string]any) err
 	} else {
 		m.Input = types.ObjectNull(InputCollectorDatabaseInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorDatabaseCollectorAttrTypes()})
 		if err != nil {
@@ -4713,6 +5477,7 @@ type InputCollectorGCSModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -4729,6 +5494,7 @@ func InputCollectorGCSModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorGCSInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorGCSCollectorAttrTypes()},
 	}
 }
@@ -4811,6 +5577,13 @@ func (m InputCollectorGCSModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -4928,6 +5701,15 @@ func (m *InputCollectorGCSModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Input = types.ObjectNull(InputCollectorGCSInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorGCSCollectorAttrTypes()})
 		if err != nil {
@@ -4952,6 +5734,7 @@ type InputCollectorHealthCheckModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -4968,6 +5751,7 @@ func InputCollectorHealthCheckModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorHealthCheckInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorAttrTypes()},
 	}
 }
@@ -5050,6 +5834,13 @@ func (m InputCollectorHealthCheckModel) terraformPayload() (map[string]any, erro
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -5167,6 +5958,15 @@ func (m *InputCollectorHealthCheckModel) unmarshalPayload(input map[string]any) 
 	} else {
 		m.Input = types.ObjectNull(InputCollectorHealthCheckInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorAttrTypes()})
 		if err != nil {
@@ -5191,6 +5991,7 @@ type InputCollectorScriptModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -5207,6 +6008,7 @@ func InputCollectorScriptModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorScriptInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorScriptCollectorAttrTypes()},
 	}
 }
@@ -5289,6 +6091,13 @@ func (m InputCollectorScriptModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -5406,6 +6215,15 @@ func (m *InputCollectorScriptModel) unmarshalPayload(input map[string]any) error
 	} else {
 		m.Input = types.ObjectNull(InputCollectorScriptInputAttrTypes())
 	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorScriptCollectorAttrTypes()})
 		if err != nil {
@@ -5430,6 +6248,7 @@ type InputCollectorFilesystemModel struct {
 	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String `tfsdk:"description" json:"description,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
@@ -5446,6 +6265,7 @@ func InputCollectorFilesystemModelAttrTypes() map[string]attr.Type {
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
 		"input":                   types.ObjectType{AttrTypes: InputCollectorFilesystemInputAttrTypes()},
+		"description":             types.StringType,
 		"collector":               types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorAttrTypes()},
 	}
 }
@@ -5528,6 +6348,13 @@ func (m InputCollectorFilesystemModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert input to API value: %v", err)
 		}
 		output["input"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
 		value, err := CollectorTerraformValueToJSON(m.Collector)
@@ -5644,6 +6471,15 @@ func (m *InputCollectorFilesystemModel) unmarshalPayload(input map[string]any) e
 		m.Input = value.(types.Object)
 	} else {
 		m.Input = types.ObjectNull(InputCollectorFilesystemInputAttrTypes())
+	}
+	if item, ok := input["description"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
 	}
 	if item, ok := input["collector"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorAttrTypes()})

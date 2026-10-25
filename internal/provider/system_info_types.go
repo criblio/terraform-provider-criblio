@@ -23,6 +23,7 @@ type SystemInfoModel struct {
 	Conf                 types.Object  `tfsdk:"conf" json:"conf,omitempty"`
 	ConfigPath           types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
 	CriblSecurityEnabled types.Bool    `tfsdk:"cribl_security_enabled" json:"criblSecurityEnabled,omitempty"`
+	Deployment           types.Object  `tfsdk:"deployment" json:"deployment,omitempty"`
 	DistMode             types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
 	Env                  types.Map     `tfsdk:"env" json:"env,omitempty"`
 	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
@@ -46,6 +47,7 @@ type SystemInfoResourceModel struct {
 	Conf                 types.Object  `tfsdk:"conf" json:"conf,omitempty"`
 	ConfigPath           types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
 	CriblSecurityEnabled types.Bool    `tfsdk:"cribl_security_enabled" json:"criblSecurityEnabled,omitempty"`
+	Deployment           types.Object  `tfsdk:"deployment" json:"deployment,omitempty"`
 	DistMode             types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
 	Env                  types.Map     `tfsdk:"env" json:"env,omitempty"`
 	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
@@ -69,6 +71,7 @@ type SystemInfoDataSourceModel struct {
 	Conf                 types.Object  `tfsdk:"conf" json:"conf,omitempty"`
 	ConfigPath           types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
 	CriblSecurityEnabled types.Bool    `tfsdk:"cribl_security_enabled" json:"criblSecurityEnabled,omitempty"`
+	Deployment           types.Object  `tfsdk:"deployment" json:"deployment,omitempty"`
 	DistMode             types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
 	Env                  types.Map     `tfsdk:"env" json:"env,omitempty"`
 	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
@@ -92,6 +95,7 @@ type SystemInfoAPIModel struct {
 	Conf                 any               `json:"conf,omitempty"`
 	ConfigPath           *string           `json:"configPath,omitempty"`
 	CriblSecurityEnabled *bool             `json:"criblSecurityEnabled,omitempty"`
+	Deployment           any               `json:"deployment,omitempty"`
 	DistMode             *string           `json:"distMode,omitempty"`
 	Env                  map[string]string `json:"env,omitempty"`
 	Guid                 *string           `json:"guid,omitempty"`
@@ -137,6 +141,26 @@ func SystemInfoConfAttrTypes() map[string]attr.Type {
 		"pipelines":    types.Float64Type,
 		"routes":       types.Float64Type,
 		"rules":        types.Float64Type,
+	}
+}
+
+type SystemInfoDeploymentModel struct {
+	Cloud types.String `tfsdk:"cloud" json:"cloud,omitempty"`
+	Env   types.String `tfsdk:"env" json:"env,omitempty"`
+	Type  types.String `tfsdk:"type" json:"type,omitempty"`
+}
+
+type SystemInfoDeploymentAPIModel struct {
+	Cloud *string `json:"cloud,omitempty"`
+	Env   *string `json:"env,omitempty"`
+	Type  *string `json:"type,omitempty"`
+}
+
+func SystemInfoDeploymentAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"cloud": types.StringType,
+		"env":   types.StringType,
+		"type":  types.StringType,
 	}
 }
 
@@ -661,6 +685,13 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 		}
 		output["criblSecurityEnabled"] = value
 	}
+	if !m.Deployment.IsNull() && !m.Deployment.IsUnknown() {
+		value, err := SystemInfoTerraformValueToJSON(m.Deployment)
+		if err != nil {
+			return nil, fmt.Errorf("convert deployment to API value: %v", err)
+		}
+		output["deployment"] = value
+	}
 	if !m.DistMode.IsNull() && !m.DistMode.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.DistMode)
 		if err != nil {
@@ -804,6 +835,15 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 		m.CriblSecurityEnabled = types.BoolValue(*input.CriblSecurityEnabled)
 	} else {
 		m.CriblSecurityEnabled = types.BoolNull()
+	}
+	if input.Deployment != nil {
+		value, err := SystemInfoAPIValueToTerraformValue(input.Deployment, types.ObjectType{AttrTypes: SystemInfoDeploymentAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert deployment from API value: %v", err)
+		}
+		m.Deployment = value.(types.Object)
+	} else {
+		m.Deployment = types.ObjectNull(SystemInfoDeploymentAttrTypes())
 	}
 	if input.DistMode != nil {
 		m.DistMode = types.StringValue(*input.DistMode)

@@ -35,6 +35,7 @@ resource "criblio_search_saved_query" "my_search_saved_query" {
 
 ### Optional
 
+- `app_id` (String) App identifier used to attribute search/platform usage to a driving app.
 - `chart_config` (Attributes) Chart configuration for scheduled or Dashboard-backed runs. (see [below for nested schema](#nestedatt--chart_config))
 - `description` (String) Brief description of the saved search.
 - `earliest` (String) Start of the search time range. Accepts a relative time string or an absolute timestamp.

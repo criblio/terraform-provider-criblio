@@ -44,6 +44,12 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "SearchSavedQuery Resource",
 		Attributes: map[string]schema.Attribute{
+			"app_id": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `App identifier used to attribute search/platform usage to a driving app.`,
+			},
 			"chart_config": schema.SingleNestedAttribute{
 				Required:    false,
 				Optional:    true,
@@ -945,6 +951,11 @@ func isSearchSavedQueryImportState(state *SearchSavedQueryModel) bool {
 func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSavedQueryModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
+	}
+	if !preserveInputs || (fillMissingInputs && (state.AppID.IsNull() || state.AppID.IsUnknown())) {
+		if !api.AppID.IsNull() && !api.AppID.IsUnknown() {
+			state.AppID = api.AppID
+		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.ChartConfig.IsNull() || state.ChartConfig.IsUnknown())) {
 		if !api.ChartConfig.IsNull() && !api.ChartConfig.IsUnknown() {

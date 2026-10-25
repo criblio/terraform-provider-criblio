@@ -970,187 +970,195 @@ resource "criblio_collector" "my_collector" {
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_splunk--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_splunk--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
+- `description` (String) Description
+- `collector` (Attributes) Splunk collector configuration (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
 
 <a id="nestedatt--input_collector_rest"></a>
 ### Nested Schema for `input_collector_rest`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_rest--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_rest--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector))
+- `description` (String) Description
+- `collector` (Attributes) Rest collector configuration (see [below for nested schema](#nestedatt--input_collector_rest--collector))
 
 <a id="nestedatt--input_collector_s3"></a>
 ### Nested Schema for `input_collector_s3`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_s3--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_s3--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector))
+- `description` (String) Description
+- `collector` (Attributes) S3 collector configuration (see [below for nested schema](#nestedatt--input_collector_s3--collector))
 
 <a id="nestedatt--input_collector_azure_blob"></a>
 ### Nested Schema for `input_collector_azure_blob`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
+- `description` (String) Description
+- `collector` (Attributes) AzureBlob collector configuration (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
 
 <a id="nestedatt--input_collector_cribl_lake"></a>
 ### Nested Schema for `input_collector_cribl_lake`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
+- `description` (String) Description
+- `collector` (Attributes) CriblLake collector configuration (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
 
 <a id="nestedatt--input_collector_database"></a>
 ### Nested Schema for `input_collector_database`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_database--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_database--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector))
+- `description` (String) Description
+- `collector` (Attributes) Database collector configuration (see [below for nested schema](#nestedatt--input_collector_database--collector))
 
 <a id="nestedatt--input_collector_gcs"></a>
 ### Nested Schema for `input_collector_gcs`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_gcs--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_gcs--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
+- `description` (String) Description
+- `collector` (Attributes) GoogleCloudStorage collector configuration (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
 
 <a id="nestedatt--input_collector_health_check"></a>
 ### Nested Schema for `input_collector_health_check`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_health_check--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_health_check--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
+- `description` (String) Description
+- `collector` (Attributes) HealthCheck collector configuration (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
 
 <a id="nestedatt--input_collector_script"></a>
 ### Nested Schema for `input_collector_script`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_script--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_script--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector))
+- `description` (String) Description
+- `collector` (Attributes) Script collector configuration (see [below for nested schema](#nestedatt--input_collector_script--collector))
 
 <a id="nestedatt--input_collector_filesystem"></a>
 ### Nested Schema for `input_collector_filesystem`
 
 Optional:
 
-- `id` (String)
-- `ttl` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `remove_fields` (List of String)
-- `resume_on_boot` (Boolean)
-- `environment` (String)
+- `id` (String) Unique ID for this Job
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
+- `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `saved_state` (Map of String) Saved state for the collector
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_filesystem--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 - `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_filesystem--input))
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_filesystem--collector))
+- `description` (String) Description
+- `collector` (Attributes) Filesystem collector configuration (see [below for nested schema](#nestedatt--input_collector_filesystem--collector))
 
 <a id="nestedatt--input_collector_splunk--schedule"></a>
-<a id="nestedatt--input_collector_rest--schedule"></a>
 <a id="nestedatt--input_collector_s3--schedule"></a>
 <a id="nestedatt--input_collector_azure_blob--schedule"></a>
 <a id="nestedatt--input_collector_cribl_lake--schedule"></a>
-<a id="nestedatt--input_collector_database--schedule"></a>
 <a id="nestedatt--input_collector_gcs--schedule"></a>
 <a id="nestedatt--input_collector_health_check--schedule"></a>
 <a id="nestedatt--input_collector_script--schedule"></a>
@@ -1164,7 +1172,7 @@ Optional:
 - `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
 - `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
 - `resume_missed` (Boolean) Resume missed scheduled runs
-- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--schedule--run))
+- `run` (Attributes) Run settings that control how the scheduled job executes, including log level, task sizing, and timeout. (see [below for nested schema](#nestedatt--input_collector_splunk--schedule--run))
 
 <a id="nestedatt--input_collector_splunk--schedule--run"></a>
 <a id="nestedatt--input_collector_rest--schedule--run"></a>
@@ -1185,7 +1193,7 @@ Optional:
 - `log_level` (String) Level at which to set task logging
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
-- `time_range_type` (String)
+- `time_range_type` (String) Time range
 - `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
 - `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
@@ -1193,13 +1201,13 @@ Optional:
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
 - `time_warning` (Map of String) Time warning configuration
 - `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_splunk--schedule--run--state_tracking))
+- `type` (String) Resource type identifier.
+- `timestamp_timezone` (String) IANA timezone name for interpreting timestamp values in the collection time range.
 
 <a id="nestedatt--input_collector_splunk--schedule--run--state_tracking"></a>
-<a id="nestedatt--input_collector_rest--schedule--run--state_tracking"></a>
 <a id="nestedatt--input_collector_s3--schedule--run--state_tracking"></a>
 <a id="nestedatt--input_collector_azure_blob--schedule--run--state_tracking"></a>
 <a id="nestedatt--input_collector_cribl_lake--schedule--run--state_tracking"></a>
-<a id="nestedatt--input_collector_database--schedule--run--state_tracking"></a>
 <a id="nestedatt--input_collector_gcs--schedule--run--state_tracking"></a>
 <a id="nestedatt--input_collector_health_check--schedule--run--state_tracking"></a>
 <a id="nestedatt--input_collector_script--schedule--run--state_tracking"></a>
@@ -1226,11 +1234,11 @@ Optional:
 
 Optional:
 
-- `type` (String)
+- `type` (String) Resource type identifier.
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input--preprocess))
+- `preprocess` (Attributes) Optional preprocessing step that pipes collected data through an external command before ingestion. (see [below for nested schema](#nestedatt--input_collector_splunk--input--preprocess))
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_splunk--input--metadata))
 - `pipeline` (String) Pipeline to process results
@@ -1250,7 +1258,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `args` (List of String) Arguments to be added to the custom command
 
@@ -1268,7 +1276,7 @@ Optional:
 
 Optional:
 
-- `name` (String)
+- `name` (String) Name of the metadata field.
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 <a id="nestedatt--input_collector_splunk--collector"></a>
@@ -1283,8 +1291,10 @@ Optional:
 
 Optional:
 
-- `type` (String)
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf))
+- `type` (String) Collector type
+- `conf` (Attributes) Collector configuration (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf))
+- `destructive` (Boolean) Delete any files collected (where applicable)
+- `encoding` (String) Character encoding to use when parsing ingested data.
 
 <a id="nestedatt--input_collector_splunk--collector--conf"></a>
 ### Nested Schema for `input_collector_splunk.collector.conf`
@@ -1296,28 +1306,87 @@ Optional:
 - `earliest` (String) Earliest time boundary for the search
 - `latest` (String) Latest time boundary for the search
 - `endpoint` (String) REST API endpoint used to create a search
-- `output_mode` (String)
-- `authentication` (String)
-- `timeout` (Integer)
-- `use_round_robin_dns` (Boolean)
-- `disable_time_filter` (Boolean)
-- `reject_unauthorized` (Boolean)
-- `handle_escaped_chars` (Boolean)
-- `username` (String)
-- `password` (String, Sensitive)
-- `credentials_secret` (String)
-- `token` (String, Sensitive)
-- `token_secret` (String)
+- `output_mode` (String) Format of the returned output
+- `authentication` (String) Authentication method for Discover and Collect REST calls
+- `timeout` (Integer) HTTP request inactivity timeout. Use 0 for no timeout.
+- `use_round_robin_dns` (Boolean) Use round-robin DNS lookup. Suitable when DNS server returns multiple addresses in sort order.
+- `disable_time_filter` (Boolean) Disable collector event time filtering when a date range is specified
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)
+- `handle_escaped_chars` (Boolean) Escape characters (\") in search queries will be passed directly to Splunk
+- `username` (String) Basic authentication username
+- `password` (String, Sensitive) Basic authentication password
+- `credentials_secret` (String) Select or create a stored secret that references your credentials
+- `token` (String, Sensitive) Bearer token
+- `token_secret` (String) Select or create a stored secret that references your Bearer token
+- `collect_request_params` (Attributes List) Optional collect request parameters (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf--collect_request_params))
+- `collect_request_headers` (Attributes List) Optional collect request headers (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf--collect_request_headers))
+- `retry_rules` (Attributes) Settings that control how the Collector retries failed HTTP requests. (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf--retry_rules))
+- `login_url` (String) URL to use for login API call. This call is expected to be a POST.
+- `login_body` (String) Template for POST body to send with login request. ${username} and ${password} are used to specify location of these attributes in the message.
+- `token_resp_attribute` (String) Path to token attribute in login response body. Nested attributes are allowed.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header to pass in discover and collect calls. The value ${token} is used to reference the token obtained from login.
+
+<a id="nestedatt--input_collector_splunk--collector--conf--collect_request_params"></a>
+### Nested Schema for `input_collector_splunk.collector.conf.collect_request_params`
+
+Optional:
+
+- `name` (String) Parameter Name
+- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values without delimiters (earliest) are evaluated as strings.
+
+<a id="nestedatt--input_collector_splunk--collector--conf--collect_request_headers"></a>
+### Nested Schema for `input_collector_splunk.collector.conf.collect_request_headers`
+
+Optional:
+
+- `name` (String) Header Name
+- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values without delimiters (earliest) are evaluated as strings.
+
+<a id="nestedatt--input_collector_splunk--collector--conf--retry_rules"></a>
+### Nested Schema for `input_collector_splunk.collector.conf.retry_rules`
+
+Optional:
+
+- `type` (String) The algorithm to use when performing HTTP retries
+- `interval` (Number) Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).
+- `limit` (Number) The maximum number of times to retry a failed HTTP request
+- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
+- `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
+- `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
+- `retry_connect_reset` (Boolean) Retry request when a connection reset error (ECONNRESET) error occurs
+- `multiplier` (Number) Base for exponential backoff. For example, base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on.
+
+<a id="nestedatt--input_collector_rest--schedule"></a>
+<a id="nestedatt--input_collector_database--schedule"></a>
+### Nested Schema for `input_collector_rest.schedule`
+
+Optional:
+
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) Internal settings for scheduled execution of this Collector. (see [below for nested schema](#nestedatt--input_collector_rest--schedule--run))
+
+<a id="nestedatt--input_collector_rest--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_rest.schedule.run.state_tracking`
+
+Optional:
+
+- `state_update_expression` (String)
+- `state_merge_expression` (String)
+- `enabled` (Boolean) Track collection progress between consecutive scheduled executions
 
 <a id="nestedatt--input_collector_rest--collector--conf"></a>
 ### Nested Schema for `input_collector_rest.collector.conf`
 
 Optional:
 
-- `authentication` (String)
-- `username` (String)
-- `password` (String, Sensitive)
-- `credentials_secret` (String)
+- `authentication` (String) Authentication method for Discover and Collect REST calls. You can specify API key–based authentication by adding the appropriate Collect headers.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
+- `credentials_secret` (String) Select or create a stored secret that references your credentials
 - `token` (String, Sensitive)
 - `token_secret` (String)
 - `scopes` (List of String) OAuth scopes when authentication is google_oauth or google_oauthSecret
@@ -1328,26 +1397,37 @@ Optional:
 - `login_body` (String) Body content for login request
 - `auth_header_key` (String) Header key for authentication
 - `auth_header_expr` (String) Expression for auth header value
-- `client_secret_param_name` (String)
-- `auth_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--auth_request_params))
+- `client_secret_param_name` (String) Defaults to 'client_secret'. Automatically added to request parameters using the value specified.
+- `auth_request_params` (Attributes List) OAuth request parameters added to the POST body. The Content-Type header will automatically be set to application/x-www-form-urlencoded. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--auth_request_params))
 - `token_resp_attribute` (String) Attribute name for token in response
-- `auth_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--auth_request_headers))
+- `auth_request_headers` (Attributes List) Authentication headers (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--auth_request_headers))
 - `collect_url` (String) URL to use for the Collect operation
-- `collect_method` (String)
-- `collect_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_headers))
-- `collect_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_params))
+- `collect_method` (String) Collect method
+- `collect_request_headers` (Attributes List) Headers to send with each Collect request. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_headers))
+- `collect_request_params` (Attributes List) Collect parameters (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_params))
 - `collect_body` (String) Body content for the collect request, used with the post_with_body collect method
-- `timeout` (Integer)
-- `use_round_robin_dns` (Boolean)
-- `disable_time_filter` (Boolean)
-- `decode_url` (Boolean)
-- `reject_unauthorized` (Boolean)
-- `capture_headers` (Boolean)
-- `safe_headers` (List of String)
-- `discovery` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
-- `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--pagination))
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--retry_rules))
+- `timeout` (Integer) HTTP request inactivity timeout. Use 0 to disable.
+- `use_round_robin_dns` (Boolean) Use round-robin DNS lookup. Suitable when DNS server returns multiple addresses in sort order.
+- `disable_time_filter` (Boolean) Disable Collector event time filtering when a date range is specified
+- `decode_url` (Boolean) Decode the URL before sending requests (including pagination requests)
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)
+- `capture_headers` (Boolean) Enable to add response headers to the resHeaders field under the __collectible object
+- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `discovery` (Attributes) Settings that control how the Collector discovers Collect tasks. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
+- `pagination` (Attributes) Settings that control how the Collector paginates through Collect results. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--pagination))
+- `retry_rules` (Attributes) Settings that control how the Collector retries failed HTTP requests. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--retry_rules))
 - `client_secret_param_value` (String, Sensitive) OAuth client secret value added using the configured client secret parameter name.
+- `max_response_body_size` (String) Maximum amount of data to buffer from a single response body. Responses exceeding this limit will be rejected. Maximum allowed value is 512 MB. Leave unset to rely on default error handling.
+- `stop_on_empty_results` (Boolean) Stop pagination when the Event Breaker produces no events
+- `microsoft_graph_delta` (Attributes) Internal opt-in for the Microsoft Graph deltaLink state-tracking hook. Set programmatically by the Microsoft Graph source when the configured URL targets a /delta endpoint; not user-configurable. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--microsoft_graph_delta))
+- `get_auth_token_from_header` (Boolean) Extract the auth token from the HTTP 'Authorization' response header instead of the standard JSON body of the login response
+- `refresh_token_field` (String) Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, the Collector uses the refresh token to obtain new access tokens without re-sending credentials.
+- `rotate_refresh_token` (Boolean) The Collector will update its stored value on each successful refresh. Enable if the server issues a new refresh token on every use.
+- `refresh_url` (String) Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.
+- `refresh_request_params` (Attributes List) Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, the Collector sends only grant_type, refresh_token, and client_secret. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--refresh_request_params))
+- `text_secret` (String) Select or create a text secret that contains the client secret's value
+- `hmac_function_id` (String) Select or create an HMAC Function to use with authentication
+- `collect_verb` (String) Custom HTTP method to use for the Collect operation
 
 <a id="nestedatt--input_collector_rest--collector--conf--auth_request_params"></a>
 <a id="nestedatt--input_collector_rest--collector--conf--auth_request_headers"></a>
@@ -1359,64 +1439,107 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Name
+- `value` (String) JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.
 
 <a id="nestedatt--input_collector_rest--collector--conf--discovery"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.discovery`
 
 Optional:
 
-- `discover_type` (String)
+- `discover_type` (String) Defines how task discovery will be performed. Each entry returned by the Discover operation will result in a Collect task.
 - `discover_method` (String) protocol used for http discovery, required for 'http' type
-- `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--pagination))
-- `enable_discover_code` (Boolean)
+- `pagination` (Attributes) Settings that control how the Collector paginates through Discover results. (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--pagination))
+- `enable_discover_code` (Boolean) Format discover result with custom code
 - `item_list` (List of String) comma separated list of strings to return from discovery section required for 'list' discoverType
 - `discover_url` (String) URL to hit for rest type collectors, required for 'http' discoverType
-- `discover_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers))
+- `discover_request_headers` (Attributes List) Discover headers (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers))
 - `manual_discover_result` (String) json payload to return manually, required for 'json' discoverType
-- `discover_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params))
-- `discover_body` (String)
-- `format_result_code` (String)
-- `discover_data_field` (String)
+- `discover_request_params` (Attributes List) Discover parameters (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params))
+- `discover_body` (String) Template for POST body to send with the discover request. To reference global variables or functions, use template parameters: `{ myVar: ${C.vars.myVar}, secret: ${C.Secret('mySecret','text').value} }`
+- `format_result_code` (String) Custom JavaScript code to format the discover result through the __e variable which is a JSON object or array containing the original discover results. The object or array passed should be manipulated to contain the desired discover results, i.e.: __e['myResult'] = [{lat: -1.1234, long: 2.345, zip: 11111},{lat: -1.235, long 2.346, zip: 22222}] or ['11111','22222']. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
+- `discover_data_field` (String) Path to field in the response object that contains discovery results (ex: level1.name). Leave blank if the result is an array.
+- `enable_strict_discover_parsing` (Boolean) Explicitly set the discover response format. When disabled, best effort parsing is used.
+- `discover_response_format` (String) If 'Strict discover response parsing' parsing is enabled, provide the response format
+- `discover_verb` (String) Custom HTTP method to use for the Discover operation
 
 <a id="nestedatt--input_collector_rest--collector--conf--discovery--pagination"></a>
-<a id="nestedatt--input_collector_rest--collector--conf--pagination"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.discovery.pagination`
 
 Optional:
 
-- `type` (String)
-- `offset_field` (String)
-- `limit_field` (String)
-- `limit` (Integer)
-- `max_pages` (Integer)
-- `zero_indexed` (Boolean)
-- `page_field` (String)
-- `size_field` (String)
-- `size` (Integer)
-- `attribute` (List of String)
-- `last_page_expr` (String)
-- `offset` (Integer)
-- `total_record_field` (String)
+- `type` (String) Pagination
+- `offset_field` (String) Query string parameter that sets the index from which to begin returning records. Example: /api/v1/query?term=cribl&limit=100&offset=0
+- `limit_field` (String) Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&limit=100&offset=0
+- `limit` (Integer) Maximum number of records to retrieve per request
+- `max_pages` (Integer) Maximum number of pages to retrieve for the discover task. Defaults to 50 pages. Set to 0 to retrieve all pages.
+- `zero_indexed` (Boolean) Enable to indicate that the first page in the requested data is at index 0. Disabled by default, which indicates index 1.
+- `page_field` (String) Query string parameter that sets the page index to be returned. Example: /api/v1/query?term=cribl&page_size=100&page_number=0
+- `size_field` (String) Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&page_size=100&page_number=0
+- `size` (Integer) Maximum number of records to retrieve per page
+- `attribute` (List of String) Names of attributes within the response that contain next-page information
+- `last_page_expr` (String) JavaScript expression used to determine when the last page has been reached. The values tested by this expression must be in the Response attributes section.
+- `offset` (Integer) Offset index from which to start request. Defaults to undefined, which will start discovery from the first record.
+- `total_record_field` (String) Name of the attribute in the response that contains the total number of records for the query
 - `next_relation_attribute` (String) Used for RFC 5988 Link header pagination (response_header_link)
 - `cur_relation_attribute` (String) Optional relation for the current page in Link header pagination
+- `page` (Number) Page number from which to start request. Defaults to undefined, which will start discovery from the first page.
+- `total_page_field` (String) Name of the attribute in the response that contains the total number of pages for the query
+
+<a id="nestedatt--input_collector_rest--collector--conf--pagination"></a>
+### Nested Schema for `input_collector_rest.collector.conf.pagination`
+
+Optional:
+
+- `type` (String) Pagination
+- `offset_field` (String) Query string parameter that sets the index from which to begin returning records. Example: /api/v1/query?term=cribl&limit=100&offset=0
+- `limit_field` (String) Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&limit=100&offset=0
+- `limit` (Integer) Maximum number of records to collect per request
+- `max_pages` (Integer) Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.
+- `zero_indexed` (Boolean) Enable to indicate that the first page in the requested data is at index 0. Disabled by default, which indicates index 1.
+- `page_field` (String) Query string parameter that sets the page index to be returned. Example: /api/v1/query?term=cribl&page_size=100&page_number=0
+- `size_field` (String) Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&page_size=100&page_number=0
+- `size` (Integer) Maximum number of records to collect per page
+- `attribute` (List of String) Names of attributes within the response that contain next-page information
+- `last_page_expr` (String) JavaScript expression used to determine when the last page has been reached. The values tested by this expression must be in the Response attributes section.
+- `offset` (Integer) Offset index from which to start request. Defaults to undefined, which will start collection from the first record.
+- `total_record_field` (String) Name of the attribute in the response that contains the total number of records for the query
+- `next_relation_attribute` (String) Used for RFC 5988 Link header pagination (response_header_link)
+- `cur_relation_attribute` (String) Optional relation for the current page in Link header pagination
+- `page` (Number) Page number from which to start request. Defaults to undefined, which will start collection from the first page.
+- `total_page_field` (String) Name of the attribute in the response that contains the total number of pages for the query
 
 <a id="nestedatt--input_collector_rest--collector--conf--retry_rules"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.retry_rules`
 
 Optional:
 
-- `type` (String)
-- `interval` (Integer)
-- `limit` (Integer)
-- `multiplier` (Number)
-- `max_interval_ms` (Integer)
-- `codes` (List of Integer)
-- `enable_header` (Boolean)
-- `retry_connect_timeout` (Boolean)
-- `retry_connect_reset` (Boolean)
-- `retry_header_name` (String)
+- `type` (String) The algorithm to use when performing HTTP retries
+- `interval` (Integer) Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).
+- `limit` (Integer) Maximum number of times to retry a failed HTTP request
+- `multiplier` (Number) Base for exponential backoff. Example: base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on.
+- `max_interval_ms` (Integer) Longest interval between retries (ms)
+- `codes` (List of Integer) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
+- `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to the `Longest interval between retries (ms)` value, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
+- `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
+- `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs
+- `retry_header_name` (String) Retry-After header name
+
+<a id="nestedatt--input_collector_rest--collector--conf--microsoft_graph_delta"></a>
+### Nested Schema for `input_collector_rest.collector.conf.microsoft_graph_delta`
+
+Optional:
+
+- `delta_link_attribute` (String) Response-body field name to extract as the delta link (typically '@odata.deltaLink')
+
+<a id="nestedatt--input_collector_rest--collector--conf--refresh_request_params"></a>
+<a id="nestedatt--input_collector_health_check--collector--conf--refresh_request_params"></a>
+### Nested Schema for `input_collector_rest.collector.conf.refresh_request_params`
+
+Optional:
+
+- `name` (String) Parameter name.
+- `value` (String) Parameter value.
 
 <a id="nestedatt--input_collector_s3--collector--conf"></a>
 ### Nested Schema for `input_collector_s3.collector.conf`
@@ -1426,13 +1549,26 @@ Optional:
 - `bucket` (String) S3 Bucket from which to collect data
 - `region` (String) AWS region from which to retrieve data
 - `path` (String) Directory where data will be collected
-- `aws_authentication_method` (String)
-- `aws_api_key` (String, Sensitive)
-- `aws_secret_key` (String, Sensitive)
-- `aws_secret` (String)
-- `recurse` (Boolean)
-- `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_s3--collector--conf--extractors))
-- `max_batch_size` (Integer)
+- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
+- `aws_api_key` (String, Sensitive) Access key. If not present, will fall back to env.AWS_ACCESS_KEY_ID, or to the metadata endpoint for IAM creds. Optional when running on AWS. This value can be a constant or a JavaScript expression.
+- `aws_secret_key` (String, Sensitive) Secret key. If not present, will fall back to env.AWS_SECRET_ACCESS_KEY, or to the metadata endpoint for IAM creds. Optional when running on AWS. This value can be a constant or a JavaScript expression.
+- `aws_secret` (String) Select or create a stored secret that references AWS access key and secret key.
+- `recurse` (Boolean) Traverse and include files from subdirectories. Leave this option enabled to ensure that all nested directories are searched and their contents collected.
+- `extractors` (Attributes List) Allows using template tokens as context for expressions that enrich discovery results. For example, given a template /path/${epoch}, an extractor under key "epoch" with an expression {date: new Date(+value*1000)}, will enrich discovery results with a human readable "date" field. (see [below for nested schema](#nestedatt--input_collector_s3--collector--conf--extractors))
+- `max_batch_size` (Integer) Maximum number of metadata objects to batch before recording as results
+- `output_name` (String) Name of the predefined Destination that will be used to auto-populate Collector settings
+- `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
+- `parquet_chunk_download_timeout` (Number) Maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.
+- `partitioning_scheme` (String) Partitioning scheme used for this dataset. Using a known scheme like DDSS enables more efficient data reading and retrieval.
+- `endpoint` (String) Must point to an S3-compatible endpoint. If empty, defaults to an AWS region-specific endpoint.
+- `enable_assume_role` (Boolean) Use AssumeRole credentials
+- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
+- `assume_role_external_id` (String) External ID to use when assuming role
+- `duration_seconds` (Number) Duration of the Assumed Role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
+- `reuse_connections` (Boolean) Reuse connections between requests to improve performance
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as a self-signed certificate)
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Resolves errors of the form "discover task initialization failed...error: Forbidden".
+- `disable_time_filter` (Boolean) Disable Collector event time filtering when a date range is specified
 
 <a id="nestedatt--input_collector_s3--collector--conf--extractors"></a>
 <a id="nestedatt--input_collector_azure_blob--collector--conf--extractors"></a>
@@ -1450,8 +1586,8 @@ Optional:
 
 Optional:
 
-- `type` (String)
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf))
+- `type` (String) Collector type
+- `conf` (Attributes) Collector configuration (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf))
 - `destructive` (Boolean) Delete files after they are collected.
 - `encoding` (String) Character encoding used to parse collected data.
 
@@ -1461,18 +1597,34 @@ Optional:
 Optional:
 
 - `container_name` (String) Azure container to collect from
-- `storage_account_name` (String)
+- `storage_account_name` (String) The name of your Azure storage account
 - `connection_string` (String) Azure storage account Connection String
-- `auth_type` (String)
+- `auth_type` (String) Enter authentication data directly, or select a secret referencing your auth data
 - `path` (String) Directory where data will be collected
-- `recurse` (Boolean)
-- `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf--extractors))
-- `max_batch_size` (Integer)
+- `recurse` (Boolean) Recurse through subdirectories
+- `extractors` (Attributes List) Extractors allow use of template tokens as context for expressions that enrich discovery results. For example, given a template /path/${epoch}, an extractor under key "epoch" with an expression {date: new Date(+value*1000)} will enrich discovery results with a human-readable "date" field. (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf--extractors))
+- `max_batch_size` (Integer) Maximum number of metadata objects to batch before recording as results
 - `include_metadata` (Boolean) Include Azure Blob metadata in collected events.
 - `include_tags` (Boolean) Include Azure Blob tags in collected events.
 - `disable_time_filter` (Boolean) Disable Collector event time filtering when a date range is specified.
 - `parquet_chunk_size_mb` (Number) Maximum file size in MB for each Parquet chunk.
 - `parquet_chunk_download_timeout` (Number) Maximum time in seconds allowed to download a Parquet chunk.
+- `output_name` (String) An optional predefined Destination that will be used to auto-populate Collector settings
+- `blob_types` (List of String) Azure blob types to include during collection. At least one type must be selected. Append blobs may cause data duplication when collected before they are finalized.
+- `text_secret` (String) Text secret
+- `tenant_id` (String) The service principal's tenant ID
+- `client_id` (String) The service principal's client ID
+- `client_text_secret` (String) Text secret containing the client secret
+- `endpoint_suffix` (String) The endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
+- `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
+- `certificate` (Attributes) Certificate credentials for the service principal. (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf--certificate))
+
+<a id="nestedatt--input_collector_azure_blob--collector--conf--certificate"></a>
+### Nested Schema for `input_collector_azure_blob.collector.conf.certificate`
+
+Optional:
+
+- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal
 
 <a id="nestedatt--input_collector_cribl_lake--collector--conf"></a>
 ### Nested Schema for `input_collector_cribl_lake.collector.conf`
@@ -1480,6 +1632,17 @@ Optional:
 Optional:
 
 - `dataset` (String) Lake dataset to collect data from
+- `storage_location_id` (String) Storage location for the Lake Dataset
+
+<a id="nestedatt--input_collector_database--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_database.schedule.run.state_tracking`
+
+Optional:
+
+- `state_update_expression` (String)
+- `state_merge_expression` (String)
+- `enabled` (Boolean) Enable tracking of collection progress between consecutive scheduled executions.
+- `tracking_column` (String) A numeric database column whose greatest seen value is tracked. Return this column in monotonically increasing order when state tracking is enabled.
 
 <a id="nestedatt--input_collector_database--collector--conf"></a>
 ### Nested Schema for `input_collector_database.collector.conf`
@@ -1488,20 +1651,26 @@ Optional:
 
 - `connection_id` (String) Select an existing Database Connection
 - `query` (String) Query string for selecting data from the database
-- `query_validation_enabled` (Boolean)
+- `query_validation_enabled` (Boolean) Enforces a basic query validation that allows only a single 'select' statement. Disable for more complex queries or when using semicolons. Caution: Disabling query validation allows DDL and DML statements to be executed, which could be destructive to your database.
 
 <a id="nestedatt--input_collector_gcs--collector--conf"></a>
 ### Nested Schema for `input_collector_gcs.collector.conf`
 
 Optional:
 
-- `service_account_credentials` (String, Sensitive)
+- `service_account_credentials` (String, Sensitive) Contents of Google Cloud service account credentials (JSON keys) file. To upload a file, click the upload button at this field's upper right.
 - `bucket` (String) GCS Bucket from which to collect data
 - `path` (String) Directory where data will be collected
-- `auth_type` (String)
-- `recurse` (Boolean)
-- `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_gcs--collector--conf--extractors))
-- `max_batch_size` (Integer)
+- `auth_type` (String) Enter account credentials manually, select a secret that references your credentials, or use Google Application Default Credentials
+- `recurse` (Boolean) Recurse through subdirectories
+- `extractors` (Attributes List) Allows using template tokens as context for expressions that enrich discovery results. For example, given a template /path/${epoch}, an extractor under key "epoch" with an expression {date: new Date(+value*1000)}, will enrich discovery results with a human readable "date" field. (see [below for nested schema](#nestedatt--input_collector_gcs--collector--conf--extractors))
+- `max_batch_size` (Integer) Maximum number of metadata objects to batch before recording as results
+- `output_name` (String) Name of the predefined Destination that will be used to auto-populate Collector settings
+- `endpoint` (String) Google Cloud Storage service endpoint. If empty, the endpoint will default to https://storage.googleapis.com.
+- `disable_time_filter` (Boolean) Used to disable Collector event time filtering when a date range is specified
+- `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
+- `parquet_chunk_download_timeout` (Number) The maximum time allowed for downloading a Parquet chunk. Processing will abort if a chunk cannot be downloaded within the time specified.
+- `text_secret` (String) Select or create a stored text secret that references your credentials
 
 <a id="nestedatt--input_collector_health_check--collector--conf"></a>
 ### Nested Schema for `input_collector_health_check.collector.conf`
@@ -1509,32 +1678,129 @@ Optional:
 Optional:
 
 - `collect_url` (String) URL to use for the Collect operation
-- `collect_method` (String)
-- `authentication` (String)
-- `timeout` (Integer)
-- `reject_unauthorized` (Boolean)
-- `username` (String)
-- `password` (String, Sensitive)
-- `credentials_secret` (String)
+- `collect_method` (String) Health check HTTP method.
+- `authentication` (String) Authentication method for Discover and Collect REST calls. You can specify API Key–based authentication by adding the appropriate Collect headers.
+- `timeout` (Integer) HTTP request inactivity timeout, use 0 to disable
+- `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
+- `username` (String) Basic authentication username
+- `password` (String, Sensitive) Basic authentication password
+- `credentials_secret` (String) Select or create a stored secret that references your credentials
+- `discovery` (Attributes) Settings that control how the Collector discovers Collect tasks. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--discovery))
+- `collect_request_headers` (Attributes List) Optional health check request headers. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--collect_request_headers))
+- `authenticate_collect` (Boolean) Enable to make auth health check call.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text.
+- `retry_rules` (Attributes) Settings that control how the Collector retries failed HTTP requests. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--retry_rules))
+- `login_url` (String) URL to use for login API call. This call is expected to be a POST.
+- `login_body` (String) Template for POST body to send with login request, ${username} and ${password} are used to specify location of these attributes in the message
+- `token_resp_attribute` (String) Path to token attribute in login response body. Nested attributes are OK. Leave blank if the response content type is text/plain; the entire response body will be used to derive the authorization header.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header to pass in discover and collect calls. The value ${token} is used to reference the token obtained from login.
+- `auth_request_headers` (Attributes List) Optional authentication request headers. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--auth_request_headers))
+- `client_secret_param_name` (String) Parameter name that contains client secret. Defaults to 'client_secret', and is automatically added to request parameters.
+- `client_secret_param_value` (String) Secret value to add to HTTP requests as the 'client secret' parameter. Stored on disk encrypted, and is automatically added to request parameters
+- `auth_request_params` (Attributes List) OAuth request parameters added to the POST body. The Content-Type header will automatically be set to application/x-www-form-urlencoded. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--auth_request_params))
+- `refresh_token_field` (String) Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, the Collector uses the refresh token to obtain new access tokens without re-sending credentials.
+- `rotate_refresh_token` (Boolean) The Collector will update its stored value on each successful refresh. Enable if the server issues a new refresh token on every use.
+- `refresh_url` (String) Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.
+- `refresh_request_params` (Attributes List) Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, the Collector sends only grant_type, refresh_token, and client_secret. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--refresh_request_params))
+- `text_secret` (String) Select or create a text secret that contains the client secret's value.
+- `collect_request_params` (Attributes List) Optional health check request parameters. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--collect_request_params))
+- `collect_body` (String) Template for POST body to send with the health check request. You can reference parameters from the Discover response, using template params of the form: ${variable}.
+
+<a id="nestedatt--input_collector_health_check--collector--conf--discovery"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.discovery`
+
+Optional:
+
+- `discover_type` (String) Defines how task discovery will be performed. Use None to skip the discovery. Use HTTP Request to make a REST call to discover tasks. Use Item List to enumerate items for collect to retrieve. Use JSON Response to manually define discover tasks as a JSON array of objects. Each entry returned by the discover operation will result in a collect task.
+- `discover_url` (String) Expression to derive URL to use for the Discover operation (can be a constant).
+- `discover_method` (String) Discover HTTP method.
+- `discover_request_headers` (Attributes List) Optional discover request headers. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--discovery--discover_request_headers))
+- `discover_data_field` (String) Path to field in the response object which contains discover results (e.g.: level1.name), leave blank if the result is an array.
+- `manual_discover_result` (String) Allows hard-coding the Discover result. Must be a JSON object. Works with the Discover Data field.
+- `item_list` (List of String) Comma-separated list of items to return from the Discover task. Each item returned will generate a collect task, and can be referenced using `${id}` in the collect URL, headers, or parameters.
+- `discover_request_params` (Attributes List) Optional discover request parameters. (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf--discovery--discover_request_params))
+- `discover_body` (String) Template for POST body to send with the discover request.
+
+<a id="nestedatt--input_collector_health_check--collector--conf--discovery--discover_request_headers"></a>
+<a id="nestedatt--input_collector_health_check--collector--conf--auth_request_headers"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.discovery.discover_request_headers`
+
+Optional:
+
+- `name` (String) Header name.
+- `value` (String) JavaScript expression to compute the header value (can be a constant).
+
+<a id="nestedatt--input_collector_health_check--collector--conf--discovery--discover_request_params"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.discovery.discover_request_params`
+
+Optional:
+
+- `name` (String) Parameter name.
+- `value` (String) JavaScript expression to compute the parameter value (can be a constant).
+
+<a id="nestedatt--input_collector_health_check--collector--conf--collect_request_headers"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.collect_request_headers`
+
+Optional:
+
+- `name` (String) Header Name
+- `value` (String) JavaScript expression to compute the header value (can be a constant).
+
+<a id="nestedatt--input_collector_health_check--collector--conf--retry_rules"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.retry_rules`
+
+Optional:
+
+- `type` (String) The algorithm to use when performing HTTP retries
+- `interval` (Number) Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).
+- `limit` (Number) The maximum number of times to retry a failed HTTP request
+- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
+- `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
+- `multiplier` (Number) Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on
+
+<a id="nestedatt--input_collector_health_check--collector--conf--auth_request_params"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.auth_request_params`
+
+Optional:
+
+- `name` (String) Parameter name.
+- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+
+<a id="nestedatt--input_collector_health_check--collector--conf--collect_request_params"></a>
+### Nested Schema for `input_collector_health_check.collector.conf.collect_request_params`
+
+Optional:
+
+- `name` (String) Parameter name
+- `value` (String) JavaScript expression to compute the parameter value (can be a constant).
 
 <a id="nestedatt--input_collector_script--collector--conf"></a>
 ### Nested Schema for `input_collector_script.collector.conf`
 
 Optional:
 
-- `shell` (String)
-- `discover_script` (String)
-- `collect_script` (String)
+- `shell` (String) Shell to use to execute scripts.
+- `discover_script` (String) Script to discover what to collect. Should output one task per line in stdout.
+- `collect_script` (String) Script to run to perform data collections. Task passed in as $CRIBL_COLLECT_ARG. Should output results to stdout.
+- `env_vars` (Attributes List) Environment variables to expose to the discover and collect scripts. (see [below for nested schema](#nestedatt--input_collector_script--collector--conf--env_vars))
+
+<a id="nestedatt--input_collector_script--collector--conf--env_vars"></a>
+### Nested Schema for `input_collector_script.collector.conf.env_vars`
+
+Optional:
+
+- `name` (String) Environment variable name
+- `value` (String) JavaScript expression to compute environment variable's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 <a id="nestedatt--input_collector_filesystem--collector"></a>
 ### Nested Schema for `input_collector_filesystem.collector`
 
 Optional:
 
-- `type` (String)
+- `type` (String) Collector type
 - `destructive` (Boolean) Delete any files collected.
 - `encoding` (String) Character encoding to use when parsing ingested data.
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_filesystem--collector--conf))
+- `conf` (Attributes) Collector configuration (see [below for nested schema](#nestedatt--input_collector_filesystem--collector--conf))
 
 <a id="nestedatt--input_collector_filesystem--collector--conf"></a>
 ### Nested Schema for `input_collector_filesystem.collector.conf`
@@ -1545,14 +1811,15 @@ Optional:
 - `extractors` (Attributes List) Enrich discovery results from template path tokens. (see [below for nested schema](#nestedatt--input_collector_filesystem--collector--conf--extractors))
 - `recurse` (Boolean) Recurse through subdirectories.
 - `max_batch_size` (Integer) Maximum number of metadata files to batch before recording as results.
+- `output_name` (String) Select a predefined configuration (a Destination) to auto-populate Collector settings
 
 <a id="nestedatt--input_collector_filesystem--collector--conf--extractors"></a>
 ### Nested Schema for `input_collector_filesystem.collector.conf.extractors`
 
 Optional:
 
-- `key` (String)
-- `expression` (String)
+- `key` (String) A token from the template directory, such as epoch
+- `expression` (String) JavaScript expression that receives token under "value" variable, and evaluates to populate event fields, such as {date: new Date(+value*1000)}
 
 ## Import
 

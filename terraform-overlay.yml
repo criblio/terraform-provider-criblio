@@ -15,6 +15,23 @@ schema_imports:
       - SnsTarget
       - SmtpTarget
 
+# Derive wrappers from upstream saved-job and concrete collector schemas.
+# Imported InputCollector definitions preserve the existing Terraform contract.
+collector_schemas:
+  job: SavedJobCollection
+  base: InputCollectorBase
+  variants:
+    InputCollectorSplunk: CollectorSplunk
+    InputCollectorRest: CollectorRest
+    InputCollectorS3: CollectorS3
+    InputCollectorAzureBlob: CollectorAzureBlob
+    InputCollectorCriblLake: CollectorCriblLake
+    InputCollectorDatabase: CollectorDatabase
+    InputCollectorGCS: CollectorGoogleCloudStorage
+    InputCollectorHealthCheck: CollectorHealthCheck
+    InputCollectorScript: CollectorScript
+    InputCollectorFilesystem: CollectorFilesystem
+
 actions:
   - target: "$.components.schemas.OutputFilesystem.properties.fileNameSuffix"
     update:
@@ -2346,7 +2363,13 @@ actions:
   - target: "$.components.schemas.LocalSearchEngineApi.properties.lastProvisionedMs"
     update:
       x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.maximumTierSize"
+    update:
+      x-terraform-computed: true
   - target: "$.components.schemas.LocalSearchEngineApi.properties.metricsLastPublishedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.minimumTierSize"
     update:
       x-terraform-computed: true
   - target: "$.components.schemas.LocalSearchEngineApi.properties.status"
@@ -3221,7 +3244,7 @@ actions:
   - target: "$.paths./m/{groupId}/search/datatypes/{id}.delete"
     update:
       x-terraform-delete: SearchDatatype
-  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties"
+  - target: "$.components.schemas.DataTypeDescriptorPart0Type.properties"
     update:
       minRawLength:
         type: integer
@@ -3235,11 +3258,11 @@ actions:
         description: Search execution version used by the Datatype.
         x-terraform-optional-computed: true
         x-terraform-enum-validator: true
-  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties.id"
+  - target: "$.components.schemas.DataTypeDescriptorPart0Type.properties.id"
     update:
       x-terraform-force-new: true
       x-terraform-suppress-diff: explicit
-  - target: "$.components.schemas.DataTypeDescriptor.allOf.1.oneOf.0.properties.dataFormat"
+  - target: "$.components.schemas.DataTypeDescriptorDataFormatNdjsonWithAutomaticExtractionConstraint.properties.dataFormat"
     update:
       x-terraform-request-computed: true
 
@@ -3822,7 +3845,7 @@ actions:
     update:
       token:
         x-terraform-sensitive: true
-  - target: "$.components.schemas.AuthTypeTemplatemanualApiKeyAuthType.properties"
+  - target: "$.components.schemas.AuthTypeHttp.properties"
     update:
       manualAPIKey:
         x-terraform-sensitive: true
@@ -4478,3 +4501,59 @@ actions:
     update:
       clientSecret:
         x-terraform-sensitive: true
+
+  # Copy the final compatibility base so this missing product field is exposed
+  # only on database collectors, including pack collectors using the same union.
+  - target: "$.components.schemas.InputCollectorDatabase.allOf.0"
+    copy_from: "$.components.schemas.InputCollectorBase"
+    update:
+      properties:
+        schedule:
+          properties:
+            run:
+              properties:
+                stateTracking:
+                  properties:
+                    trackingColumn:
+                      type: string
+                      description: A numeric database column whose greatest seen value is tracked. Return this column in monotonically increasing order when state tracking is enabled.
+                      x-terraform-optional-computed: true
+
+  # This upstream API key contains punctuation, and its field-name constraint
+  # uses lookahead unsupported by Go RE2. Keep the API key and original pattern.
+  - target: "$.components.schemas.DatatypeSchemaMaps.properties"
+    update:
+      OCSF v1.8:
+        x-terraform-name: ocsf_v1_8
+        items:
+          properties:
+            fieldName:
+              x-terraform-pattern-validator: false
+
+  # Retain attributes accepted by earlier provider schemas even when a newer
+  # published spec omits them. Existing HCL and Terraform state must still decode.
+  - target: "$.components.schemas.AppRequestBody.properties.cribl.properties"
+    update:
+      hidden:
+        type: boolean
+        description: Install the App without listing it in the Apps list in the UI.
+  - target: "$.components.schemas.SystemInfo.properties"
+    update:
+      isHighside:
+        type: boolean
+        description: Whether this instance runs in the Highside deployment mode.
+  - target: "$.components.schemas.DataTypeDescriptorPart0Type.properties"
+    update:
+      schemaMap:
+        type: array
+        description: Field mappings to rename or alias extracted fields, retained for compatibility with earlier configurations.
+        items:
+          $ref: "#/components/schemas/FieldMappingType"
+  # These fields were previously lost when inline allOf was parsed. Expose them
+  # without making previously valid extraction configurations require new inputs.
+  - target: "$.components.schemas.DataTypeDescriptorAdditionalExtractionsItemsType.properties"
+    update:
+      name:
+        x-terraform-optional-computed: true
+      sourceField:
+        x-terraform-optional-computed: true

@@ -21,7 +21,7 @@ func TestCredentialOverlayAnnotations(t *testing.T) {
 		"InputHttpRaw.properties.authTokens",
 		"InputHttpRaw.properties.authTokensExt.items.properties.token",
 		"InputHttp.properties.authTokens",
-		"AuthTypeTemplatemanualApiKeyAuthType.properties.manualAPIKey",
+		"AuthTypeHttp.properties.manualAPIKey",
 		"OutputGoogleChronicle.properties.serviceAccountCredentials",
 		"InputCollectorRest.allOf.1.properties.collector.properties.conf.properties.password",
 		"InputCollectorRest.allOf.1.properties.collector.properties.conf.properties.token",

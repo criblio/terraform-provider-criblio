@@ -2,6 +2,7 @@ package provider
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -20,10 +21,17 @@ func TestCollectorMarshalJSONIncludesRestOAuthClientSecret(t *testing.T) {
 	confValues["authentication"] = types.StringValue("oauth")
 	confValues["client_secret_param_name"] = types.StringValue("client_secret")
 	confValues["client_secret_param_value"] = types.StringValue("vault-sourced-secret")
-	collector := types.ObjectValueMust(InputCollectorRestCollectorAttrTypes(), map[string]attr.Value{
-		"type": types.StringValue("rest"),
-		"conf": types.ObjectValueMust(InputCollectorRestCollectorConfAttrTypes(), confValues),
-	})
+	collectorValues := make(map[string]attr.Value, len(InputCollectorRestCollectorAttrTypes()))
+	for name, typ := range InputCollectorRestCollectorAttrTypes() {
+		value, err := CollectorTerraformNullValue(typ)
+		if err != nil {
+			t.Fatalf("null collector value for %s: %v", name, err)
+		}
+		collectorValues[name] = value
+	}
+	collectorValues["type"] = types.StringValue("rest")
+	collectorValues["conf"] = types.ObjectValueMust(InputCollectorRestCollectorConfAttrTypes(), confValues)
+	collector := types.ObjectValueMust(InputCollectorRestCollectorAttrTypes(), collectorValues)
 	model := CollectorModel{InputCollectorRest: &InputCollectorRestModel{
 		ID:        types.StringValue("salesforce"),
 		Collector: collector,
@@ -266,5 +274,53 @@ func TestCollectorModelUnmarshalNumericScheduleRangeAsStrings(t *testing.T) {
 	}
 	if got := run["latest"].(types.String).ValueString(); got != "-10.5" {
 		t.Fatalf("latest = %q", got)
+	}
+}
+
+func TestCollectorLatestFieldsRoundTrip(t *testing.T) {
+	tests := []struct {
+		name    string
+		payload string
+		field   string
+		want    any
+	}{
+		{"database tracking", `{"type":"collection","collector":{"type":"database","conf":{"connectionId":"db","query":"select id from events order by id"}},"schedule":{"run":{"stateTracking":{"enabled":true,"trackingColumn":"id"}}}}`, "schedule.run.stateTracking.trackingColumn", "id"},
+		{"s3 new endpoint", `{"type":"collection","collector":{"type":"s3","conf":{"bucket":"events","endpoint":"https://s3.example.com","recurse":true}}}`, "collector.conf.endpoint", "https://s3.example.com"},
+		{"s3 legacy recurse", `{"type":"collection","collector":{"type":"s3","conf":{"bucket":"events","endpoint":"https://s3.example.com","recurse":true}}}`, "collector.conf.recurse", true},
+		{"rest new refresh URL", `{"type":"collection","collector":{"type":"rest","conf":{"collectUrl":"https://example.com/events","refreshUrl":"https://example.com/refresh","token":"legacy-token"}}}`, "collector.conf.refreshUrl", "https://example.com/refresh"},
+		{"rest legacy token", `{"type":"collection","collector":{"type":"rest","conf":{"collectUrl":"https://example.com/events","refreshUrl":"https://example.com/refresh","token":"legacy-token"}}}`, "collector.conf.token", "legacy-token"},
+		{"rest page pagination", `{"collector":{"type":"rest","conf":{"pagination":{"type":"request_page","page":3,"totalPageField":"total"}}}}`, "collector.conf.pagination.page", float64(3)},
+		{"rest discovery format", `{"collector":{"type":"rest","conf":{"discovery":{"discoverType":"http","discoverResponseFormat":"json"}}}}`, "collector.conf.discovery.discoverResponseFormat", "json"},
+		{"splunk backoff branch", `{"collector":{"type":"splunk","conf":{"retryRules":{"type":"backoff","multiplier":2}}}}`, "collector.conf.retryRules.multiplier", float64(2)},
+		{"health check body branch", `{"collector":{"type":"health_check","conf":{"collectMethod":"post_with_body","collectBody":"{}"}}}`, "collector.conf.collectBody", "{}"},
+		{"schedule timezone", `{"collector":{"type":"database"},"schedule":{"run":{"timestampTimezone":"Australia/Melbourne"}}}`, "schedule.run.timestampTimezone", "Australia/Melbourne"},
+		{"legacy GCS discriminator", `{"collector":{"type":"gcs","conf":{"bucket":"events"}}}`, "collector.type", "gcs"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var model CollectorModel
+			if err := json.Unmarshal([]byte(tt.payload), &model); err != nil {
+				t.Fatal(err)
+			}
+			data, err := json.Marshal(model)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var body map[string]any
+			if err := json.Unmarshal(data, &body); err != nil {
+				t.Fatal(err)
+			}
+			var value any = body
+			for _, name := range strings.Split(tt.field, ".") {
+				object, ok := value.(map[string]any)
+				if !ok {
+					t.Fatalf("%s is missing from round-trip payload %s", tt.field, data)
+				}
+				value = object[name]
+			}
+			if value != tt.want {
+				t.Fatalf("%s = %#v, want %#v; payload=%s", tt.field, value, tt.want, data)
+			}
+		})
 	}
 }

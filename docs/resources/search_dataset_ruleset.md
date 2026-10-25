@@ -78,6 +78,8 @@ Optional:
 - `disabled` (Boolean) If <code>true</code>, the rule is ignored for routing.
 - `extend_expression` (String) KQL-style extend expression to add or transform fields on matched events.
 - `extend_expression_enabled` (Boolean) If <code>true</code>, the <code>extendExpression</code> is applied for the rule.
+- `schema_mapping` (String) Target schema type to map matching events to when <code>schemaMappingMode</code> is <code>add</code> or <code>replace</code>.
+- `schema_mapping_mode` (String) How schema mappings are applied when enabled: <code>none</code>, <code>add</code>, or <code>replace</code>.
 - `send_data_to` (String) To send matching events to a Dataset, <code>destinationDataset</code>. To drop matching events, <code>drop</code>.
 
 ## Import

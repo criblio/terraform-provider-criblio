@@ -355,15 +355,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -422,7 +423,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -465,13 +466,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -1069,15 +1070,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -1134,6 +1136,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
 						},
+					},
+					"secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"refresh_token_field": schema.StringAttribute{
 						Required:    false,
@@ -1360,13 +1369,6 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
-					},
-					"secret": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Sensitive:   true,
-						Description: `Secret parameter value to pass in request body`,
 					},
 					"oauth_text_secret": schema.StringAttribute{
 						Required:    false,
@@ -1684,7 +1686,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1734,13 +1736,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -1963,7 +1965,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -2013,13 +2015,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -2294,7 +2296,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -2344,13 +2346,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -2736,7 +2738,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -2779,13 +2781,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -2951,15 +2953,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -3250,7 +3253,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -3293,13 +3296,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -3459,15 +3462,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -3742,7 +3746,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -3792,13 +3796,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -4262,15 +4266,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -4637,15 +4642,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -4968,9 +4974,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -5430,9 +5437,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -5866,9 +5874,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -6128,9 +6137,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Select or create a stored text secret`,
 					},
 					"certificate": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Certificate credentials for the Azure service principal.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    false,
@@ -6277,9 +6287,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Select or create a stored text secret`,
 					},
 					"certificate": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Certificate credentials for OAuth authentication.`,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
 								Required:    false,
@@ -6549,9 +6560,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Add the Output ID value to staging location`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -6754,15 +6766,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -7041,9 +7054,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"compress": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Legacy compression setting retained for compatibility; Azure Logs does not support compression.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -7177,15 +7191,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -7845,15 +7860,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -8251,20 +8267,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Description: `Select or create a stored certificate`,
 							},
 							"cert_path": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path to the client certificate file.`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path to the client private key file.`,
 							},
 							"passphrase": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase used to decrypt the client private key.`,
 							},
 							"oauth_endpoint": schema.StringAttribute{
 								Required:    false,
@@ -8754,15 +8773,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -9356,9 +9376,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -10264,7 +10285,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -10308,13 +10329,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -10833,9 +10854,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -11199,9 +11221,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Description: `Client ID to use for OAuth authentication`,
 									},
 									"oauth_secret_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Source of the OAuth client secret.`,
 									},
 									"client_text_secret": schema.StringAttribute{
 										Required:    false,
@@ -11261,7 +11284,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Disabled`,
+										Description: `Whether TLS is disabled for this connection.`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -11311,13 +11334,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Minimum TLS version`,
+										Description: `Minimum TLS version to use for the connection.`,
 									},
 									"max_version": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Maximum TLS version`,
+										Description: `Maximum TLS version to use for the connection.`,
 									},
 								},
 							},
@@ -11487,9 +11510,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Description: `Client ID to use for OAuth authentication`,
 							},
 							"oauth_secret_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Source of the OAuth client secret.`,
 							},
 							"client_text_secret": schema.StringAttribute{
 								Required:    false,
@@ -11553,7 +11577,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -11603,13 +11627,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -11795,7 +11819,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -11845,13 +11869,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -11979,9 +12003,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Description: `Client ID to use for OAuth authentication`,
 									},
 									"oauth_secret_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Source of the OAuth client secret.`,
 									},
 									"client_text_secret": schema.StringAttribute{
 										Required:    false,
@@ -12041,7 +12066,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Disabled`,
+										Description: `Whether TLS is disabled for this connection.`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -12091,13 +12116,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Minimum TLS version`,
+										Description: `Minimum TLS version to use for the connection.`,
 									},
 									"max_version": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Maximum TLS version`,
+										Description: `Maximum TLS version to use for the connection.`,
 									},
 								},
 							},
@@ -12267,9 +12292,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Description: `Client ID to use for OAuth authentication`,
 							},
 							"oauth_secret_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Source of the OAuth client secret.`,
 							},
 							"client_text_secret": schema.StringAttribute{
 								Required:    false,
@@ -12619,9 +12645,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Description: `Client ID to use for OAuth authentication`,
 									},
 									"oauth_secret_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Source of the OAuth client secret.`,
 									},
 									"client_text_secret": schema.StringAttribute{
 										Required:    false,
@@ -12681,7 +12708,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Disabled`,
+										Description: `Whether TLS is disabled for this connection.`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -12731,13 +12758,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Minimum TLS version`,
+										Description: `Minimum TLS version to use for the connection.`,
 									},
 									"max_version": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Maximum TLS version`,
+										Description: `Maximum TLS version to use for the connection.`,
 									},
 								},
 							},
@@ -12905,7 +12932,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -12955,13 +12982,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -13307,15 +13334,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -13375,15 +13403,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication settings for HTTP requests.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Authentication Disabled`,
+								Description: `Whether authentication is disabled for HTTP requests.`,
 							},
 							"username": schema.StringAttribute{
 								Required:    false,
@@ -13803,15 +13832,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication settings for HTTP requests.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Authentication Disabled`,
+								Description: `Whether authentication is disabled for HTTP requests.`,
 							},
 							"username": schema.StringAttribute{
 								Required:    false,
@@ -13915,15 +13945,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14308,15 +14339,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14381,9 +14413,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Custom New Relic Logs API endpoint URL.`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
 						},
@@ -14712,15 +14745,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14776,9 +14810,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Custom New Relic Events API endpoint URL.`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
 						},
@@ -15122,15 +15157,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15816,9 +15852,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -17678,15 +17715,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18104,15 +18142,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18177,9 +18216,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Custom Datadog intake endpoint URL.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -18393,9 +18433,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
 					},
 					"prometheus_auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication settings for Grafana Cloud requests.`,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
 								Required:    false,
@@ -18438,9 +18479,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"loki_auth": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication settings for Grafana Cloud requests.`,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
 								Required:    false,
@@ -18632,15 +18674,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -19034,15 +19077,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -19508,15 +19552,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -19891,15 +19936,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -20676,15 +20722,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -20731,7 +20778,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -20775,13 +20822,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -21199,15 +21246,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -21254,7 +21302,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -21298,13 +21346,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -21526,15 +21574,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -21711,9 +21760,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Custom Cribl API endpoint URL.`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
 						},
@@ -21905,7 +21955,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -21955,13 +22005,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -22283,7 +22333,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -22333,13 +22383,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -22518,15 +22568,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22826,7 +22877,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -22876,13 +22927,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -23061,15 +23112,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -23536,15 +23588,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -23921,15 +23974,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -24337,9 +24391,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -24826,9 +24881,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -25223,9 +25279,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -25295,35 +25352,40 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Lake dataset to send the data to.`,
 					},
 					"format": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Data format to use for files written to the Lake Dataset.`,
 					},
 					"dynamic_dataset": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether the Destination selects the Lake Dataset dynamically.`,
 					},
 					"max_closing_files_to_backpressure": schema.Float64Attribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of files waiting to close before the Destination applies backpressure.`,
 						Validators: []validator.Float64{
 							float64validator.Between(10, 1000),
 						},
 					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of file parts to upload concurrently.`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 10),
 						},
 					},
 					"freshness_grace_period_sec": schema.Float64Attribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Additional time, in seconds, allowed before a completed file is considered late.`,
 						Validators: []validator.Float64{
 							float64validator.AtLeast(5),
 						},
@@ -25659,7 +25721,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -25702,13 +25764,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -25868,15 +25930,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -26205,7 +26268,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -26248,13 +26311,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -26414,15 +26477,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -26751,7 +26815,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -26794,13 +26858,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -26960,15 +27024,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -27023,56 +27088,164 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
+					"exception_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry automatically when ClickHouse reports a matching exception code, such as 241 (memory limit exceeded) or 202 (too many simultaneous queries). These settings take precedence over Settings for failed HTTP requests.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"ch_error_code": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The ClickHouse exception code (from the x-clickhouse-exception-code header) that triggers retries`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
+								},
+							},
+						},
+					},
 					"stats_destination": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Internal destination settings for batch metadata and statistics.`,
 						Attributes: map[string]schema.Attribute{
 							"url": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `URL of the database that stores batch metadata and statistics.`,
 							},
 							"database": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Name of the database that stores batch metadata and statistics.`,
 							},
 							"table_name": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Name of the table that stores batch metadata and statistics.`,
 							},
 							"auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Authentication method for the statistics destination.`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username for the statistics destination.`,
 							},
 							"sql_username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `SQL username for the statistics destination.`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password for the statistics destination.`,
 							},
 							"wait_for_async_inserts": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Whether to wait for asynchronous inserts to complete.`,
 							},
 							"concurrency": schema.Float64Attribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Maximum number of concurrent requests to the statistics destination.`,
+							},
+							"exception_retry_settings": schema.ListNestedAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry automatically when ClickHouse reports a matching exception code, such as 241 (memory limit exceeded) or 202 (too many simultaneous queries). These settings take precedence over Settings for failed HTTP requests.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"ch_error_code": schema.Float64Attribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `The ClickHouse exception code (from the x-clickhouse-exception-code header) that triggers retries`,
+											Validators: []validator.Float64{
+												float64validator.AtLeast(0),
+											},
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											Validators: []validator.Float64{
+												float64validator.Between(0, 600000),
+											},
+										},
+										"backoff_rate": schema.Float64Attribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											Validators: []validator.Float64{
+												float64validator.Between(1, 20),
+											},
+										},
+										"max_backoff": schema.Float64Attribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											Validators: []validator.Float64{
+												float64validator.Between(10000, 180000),
+											},
+										},
+									},
+								},
 							},
 						},
 					},
@@ -27457,15 +27630,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -28015,15 +28189,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -28559,15 +28734,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -29092,15 +29268,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -29147,7 +29324,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Disabled`,
+								Description: `Whether TLS is disabled for this connection.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -29191,13 +29368,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Minimum TLS version`,
+								Description: `Minimum TLS version to use for the connection.`,
 							},
 							"max_version": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Maximum TLS version`,
+								Description: `Maximum TLS version to use for the connection.`,
 							},
 						},
 					},
@@ -29494,15 +29671,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -29868,15 +30046,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -30393,9 +30572,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -30918,15 +31098,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for HTTP requests that exceed the request timeout.`,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Retry timed-out HTTP requests`,
+								Description: `Whether to retry HTTP requests that exceed the request timeout.`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -31275,20 +31456,23 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Description: `Select or create a stored certificate`,
 							},
 							"cert_path": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path to the client certificate file.`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path to the client private key file.`,
 							},
 							"passphrase": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase used to decrypt the client private key.`,
 							},
 							"oauth_endpoint": schema.StringAttribute{
 								Required:    false,
@@ -31663,9 +31847,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -32122,9 +32307,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -32556,9 +32742,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -32990,9 +33177,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -33430,9 +33618,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -33885,9 +34074,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -34340,9 +34530,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -34774,9 +34965,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -35254,9 +35446,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retry settings for failed file uploads.`,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Required:    false,
@@ -36757,6 +36950,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinel.LoginURL.IsNull() || state.OutputSentinel.LoginURL.IsUnknown() {
 			state.OutputSentinel.LoginURL = types.StringNull()
 		}
+		if !api.OutputSentinel.Secret.IsNull() && !api.OutputSentinel.Secret.IsUnknown() {
+			state.OutputSentinel.Secret = stringFromAPIOrPrior(api.OutputSentinel.Secret.ValueString(), state.OutputSentinel.Secret)
+		} else if state.OutputSentinel.Secret.IsNull() || state.OutputSentinel.Secret.IsUnknown() {
+			state.OutputSentinel.Secret = types.StringNull()
+		}
 		if !api.OutputSentinel.RefreshTokenField.IsNull() && !api.OutputSentinel.RefreshTokenField.IsUnknown() {
 			state.OutputSentinel.RefreshTokenField = api.OutputSentinel.RefreshTokenField
 		} else if state.OutputSentinel.RefreshTokenField.IsNull() || state.OutputSentinel.RefreshTokenField.IsUnknown() {
@@ -36916,11 +37114,6 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputSentinel.PqControls = api.OutputSentinel.PqControls
 		} else if state.OutputSentinel.PqControls.IsNull() || state.OutputSentinel.PqControls.IsUnknown() {
 			state.OutputSentinel.PqControls = types.MapNull(types.StringType)
-		}
-		if !api.OutputSentinel.Secret.IsNull() && !api.OutputSentinel.Secret.IsUnknown() {
-			state.OutputSentinel.Secret = stringFromAPIOrPrior(api.OutputSentinel.Secret.ValueString(), state.OutputSentinel.Secret)
-		} else if state.OutputSentinel.Secret.IsNull() || state.OutputSentinel.Secret.IsUnknown() {
-			state.OutputSentinel.Secret = types.StringNull()
 		}
 		if !api.OutputSentinel.OauthTextSecret.IsNull() && !api.OutputSentinel.OauthTextSecret.IsUnknown() {
 			state.OutputSentinel.OauthTextSecret = api.OutputSentinel.OauthTextSecret
@@ -51969,6 +52162,16 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputLocalSearchStorage.OnBackpressure = api.OutputLocalSearchStorage.OnBackpressure
 		} else if state.OutputLocalSearchStorage.OnBackpressure.IsNull() || state.OutputLocalSearchStorage.OnBackpressure.IsUnknown() {
 			state.OutputLocalSearchStorage.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputLocalSearchStorage.ExceptionRetrySettings.IsNull() && !api.OutputLocalSearchStorage.ExceptionRetrySettings.IsUnknown() {
+			state.OutputLocalSearchStorage.ExceptionRetrySettings = api.OutputLocalSearchStorage.ExceptionRetrySettings
+		} else if state.OutputLocalSearchStorage.ExceptionRetrySettings.IsNull() || state.OutputLocalSearchStorage.ExceptionRetrySettings.IsUnknown() {
+			state.OutputLocalSearchStorage.ExceptionRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageExceptionRetrySettingsAttrTypes()})
+		}
+		if state.OutputLocalSearchStorage.ExceptionRetrySettings.IsNull() || state.OutputLocalSearchStorage.ExceptionRetrySettings.IsUnknown() {
+			state.OutputLocalSearchStorage.ExceptionRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageExceptionRetrySettingsAttrTypes()})
+		} else if len(state.OutputLocalSearchStorage.ExceptionRetrySettings.Elements()) == 0 {
+			state.OutputLocalSearchStorage.ExceptionRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputLocalSearchStorageExceptionRetrySettingsAttrTypes()}, nil)
 		}
 		if !api.OutputLocalSearchStorage.StatsDestination.IsNull() && !api.OutputLocalSearchStorage.StatsDestination.IsUnknown() {
 			state.OutputLocalSearchStorage.StatsDestination = api.OutputLocalSearchStorage.StatsDestination

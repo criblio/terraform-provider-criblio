@@ -21,6 +21,7 @@ commit history, and tag-to-tag diffs.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
+- Syncing 4.20.3 upstream spec.
 
 ### Fixed
 - Allowed export discovery to continue when local_search list endpoints return HTTP 500 with "No workers registered".

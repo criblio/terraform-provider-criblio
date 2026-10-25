@@ -205,7 +205,9 @@ func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 		IsComputeDeprovisioned: types.BoolValue(false),
 		IsStorageDeprovisioned: types.BoolValue(false),
 		LastProvisionedMs:      types.Int64Value(1771983246699),
+		MaximumTierSize:        types.StringValue("large"),
 		MetricsLastPublishedAt: types.Int64Value(1771983246699),
+		MinimumTierSize:        types.StringValue("xsmall"),
 		Status:                 types.StringValue("ready"),
 		TierSize:               types.StringValue("small"),
 	}
@@ -223,7 +225,9 @@ func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 		"is_compute_deprovisioned",
 		"is_storage_deprovisioned",
 		"last_provisioned_ms",
+		"maximum_tier_size",
 		"metrics_last_published_at",
+		"minimum_tier_size",
 		"status",
 		"group_id",
 	} {
