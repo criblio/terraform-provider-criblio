@@ -323,26 +323,12 @@ func (m SearchEngineModel) MarshalJSON() ([]byte, error) {
 		}
 		output["id"] = value
 	}
-	if !m.MaximumTierSize.IsNull() && !m.MaximumTierSize.IsUnknown() {
-		value, err := SearchEngineTerraformValueToJSON(m.MaximumTierSize)
-		if err != nil {
-			return nil, fmt.Errorf("convert maximum_tier_size to API value: %v", err)
-		}
-		output["maximumTierSize"] = value
-	}
 	if !m.MetricsDatasetID.IsNull() && !m.MetricsDatasetID.IsUnknown() {
 		value, err := SearchEngineTerraformValueToJSON(m.MetricsDatasetID)
 		if err != nil {
 			return nil, fmt.Errorf("convert metrics_dataset_id to API value: %v", err)
 		}
 		output["metricsDatasetId"] = value
-	}
-	if !m.MinimumTierSize.IsNull() && !m.MinimumTierSize.IsUnknown() {
-		value, err := SearchEngineTerraformValueToJSON(m.MinimumTierSize)
-		if err != nil {
-			return nil, fmt.Errorf("convert minimum_tier_size to API value: %v", err)
-		}
-		output["minimumTierSize"] = value
 	}
 	if !m.TierSize.IsNull() && !m.TierSize.IsUnknown() {
 		value, err := SearchEngineTerraformValueToJSON(m.TierSize)

@@ -31,9 +31,7 @@ resource "criblio_search_engine" "my_search_engine" {
 ### Optional
 
 - `description` (String) Brief description of the lakehouse engine.
-- `maximum_tier_size` (String) Largest engine size to which this lakehouse engine may be resized. Omitted when no additional maximum applies. Derived on read and ignored in request bodies.
 - `metrics_dataset_id` (String) The <code>id</code> of the Cribl-managed customer-metrics Dataset linked to this engine, resolved by ownership (not by name). Absent when the engine has no metrics Dataset we own.
-- `minimum_tier_size` (String) Smallest engine size to which this lakehouse engine may be resized. Omitted when no additional minimum applies. Derived on read and ignored in request bodies.
 
 ### Read-Only
 
@@ -45,7 +43,9 @@ resource "criblio_search_engine" "my_search_engine" {
 - `is_compute_deprovisioned` (Boolean) If <code>true</code>, compute for the lakehouse engine has been deprovisioned after termination.
 - `is_storage_deprovisioned` (Boolean) If <code>true</code>, the storage backing the lakehouse engine has been deprovisioned and fully cleaned up after termination.
 - `last_provisioned_ms` (Integer) Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.
+- `maximum_tier_size` (String) Largest engine size to which this lakehouse engine may be resized. Omitted when no additional maximum applies. Derived on read and ignored in request bodies.
 - `metrics_last_published_at` (Integer) Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.
+- `minimum_tier_size` (String) Smallest engine size to which this lakehouse engine may be resized. Omitted when no additional minimum applies. Derived on read and ignored in request bodies.
 - `status` (String) Provisioning lifecycle status of the lakehouse engine.
 
 ## Import

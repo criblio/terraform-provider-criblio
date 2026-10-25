@@ -2363,7 +2363,13 @@ actions:
   - target: "$.components.schemas.LocalSearchEngineApi.properties.lastProvisionedMs"
     update:
       x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.maximumTierSize"
+    update:
+      x-terraform-computed: true
   - target: "$.components.schemas.LocalSearchEngineApi.properties.metricsLastPublishedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.minimumTierSize"
     update:
       x-terraform-computed: true
   - target: "$.components.schemas.LocalSearchEngineApi.properties.status"
