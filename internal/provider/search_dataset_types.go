@@ -22,20 +22,20 @@ type SearchDatasetModel struct {
 	ProviderID                  types.String                      `tfsdk:"provider_id" json:"provider,omitempty"`
 	Type                        types.String                      `tfsdk:"type" json:"type,omitempty"`
 	DatasetAmazonSecurityLake   *DatasetAmazonSecurityLakeModel   `tfsdk:"aws_security_lake_dataset" json:"DatasetAmazonSecurityLake,omitempty"`
-	DatasetAPIAws               *DatasetAPIAwsModel               `tfsdk:"api_aws_dataset" json:"DatasetApiAws,omitempty"`
-	DatasetAPIAzure             *DatasetAPIAzureModel             `tfsdk:"api_azure_dataset" json:"DatasetApiAzure,omitempty"`
-	DatasetAPIAzureDataExplorer *DatasetAPIAzureDataExplorerModel `tfsdk:"api_azure_data_explorer_dataset" json:"DatasetApiAzureDataExplorer,omitempty"`
-	DatasetAPIElasticsearch     *DatasetAPIElasticsearchModel     `tfsdk:"api_elastic_search_dataset" json:"DatasetApiElasticsearch,omitempty"`
-	DatasetAPIGcp               *DatasetAPIGcpModel               `tfsdk:"api_gcp_dataset" json:"DatasetApiGcp,omitempty"`
-	DatasetAPIGoogleWorkspace   *DatasetAPIGoogleWorkspaceModel   `tfsdk:"api_google_workspace_dataset" json:"DatasetApiGoogleWorkspace,omitempty"`
-	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetApiHttp,omitempty"`
-	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetApiLogAnalytics,omitempty"`
-	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetApiMsgraph,omitempty"`
-	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetApiNgsiem,omitempty"`
-	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetApiOkta,omitempty"`
-	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetApiOpensearch,omitempty"`
-	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetApiTailscale,omitempty"`
-	DatasetAPIZoom              *DatasetAPIZoomModel              `tfsdk:"api_zoom_dataset" json:"DatasetApiZoom,omitempty"`
+	DatasetAPIAws               *DatasetAPIAwsModel               `tfsdk:"api_aws_dataset" json:"DatasetAPIAws,omitempty"`
+	DatasetAPIAzure             *DatasetAPIAzureModel             `tfsdk:"api_azure_dataset" json:"DatasetAPIAzure,omitempty"`
+	DatasetAPIAzureDataExplorer *DatasetAPIAzureDataExplorerModel `tfsdk:"api_azure_data_explorer_dataset" json:"DatasetAPIAzureDataExplorer,omitempty"`
+	DatasetAPIElasticsearch     *DatasetAPIElasticsearchModel     `tfsdk:"api_elastic_search_dataset" json:"DatasetAPIElasticsearch,omitempty"`
+	DatasetAPIGcp               *DatasetAPIGcpModel               `tfsdk:"api_gcp_dataset" json:"DatasetAPIGcp,omitempty"`
+	DatasetAPIGoogleWorkspace   *DatasetAPIGoogleWorkspaceModel   `tfsdk:"api_google_workspace_dataset" json:"DatasetAPIGoogleWorkspace,omitempty"`
+	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetAPIHttp,omitempty"`
+	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetAPILogAnalytics,omitempty"`
+	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetAPIMsgraph,omitempty"`
+	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetAPINgsiem,omitempty"`
+	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetAPIOkta,omitempty"`
+	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetAPIOpensearch,omitempty"`
+	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetAPITailscale,omitempty"`
+	DatasetAPIZoom              *DatasetAPIZoomModel              `tfsdk:"api_zoom_dataset" json:"DatasetAPIZoom,omitempty"`
 	DatasetAzureBlob            *DatasetAzureBlobModel            `tfsdk:"azure_blob_dataset" json:"DatasetAzureBlob,omitempty"`
 	DatasetClickhouse           *DatasetClickhouseModel           `tfsdk:"click_house_dataset" json:"DatasetClickhouse,omitempty"`
 	DatasetCriblEdge            *DatasetCriblEdgeModel            `tfsdk:"edge_dataset" json:"DatasetCriblEdge,omitempty"`
@@ -56,20 +56,20 @@ type SearchDatasetResourceModel struct {
 	ProviderID                  types.String                      `tfsdk:"provider_id" json:"provider,omitempty"`
 	Type                        types.String                      `tfsdk:"type" json:"type,omitempty"`
 	DatasetAmazonSecurityLake   *DatasetAmazonSecurityLakeModel   `tfsdk:"aws_security_lake_dataset" json:"DatasetAmazonSecurityLake,omitempty"`
-	DatasetAPIAws               *DatasetAPIAwsModel               `tfsdk:"api_aws_dataset" json:"DatasetApiAws,omitempty"`
-	DatasetAPIAzure             *DatasetAPIAzureModel             `tfsdk:"api_azure_dataset" json:"DatasetApiAzure,omitempty"`
-	DatasetAPIAzureDataExplorer *DatasetAPIAzureDataExplorerModel `tfsdk:"api_azure_data_explorer_dataset" json:"DatasetApiAzureDataExplorer,omitempty"`
-	DatasetAPIElasticsearch     *DatasetAPIElasticsearchModel     `tfsdk:"api_elastic_search_dataset" json:"DatasetApiElasticsearch,omitempty"`
-	DatasetAPIGcp               *DatasetAPIGcpModel               `tfsdk:"api_gcp_dataset" json:"DatasetApiGcp,omitempty"`
-	DatasetAPIGoogleWorkspace   *DatasetAPIGoogleWorkspaceModel   `tfsdk:"api_google_workspace_dataset" json:"DatasetApiGoogleWorkspace,omitempty"`
-	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetApiHttp,omitempty"`
-	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetApiLogAnalytics,omitempty"`
-	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetApiMsgraph,omitempty"`
-	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetApiNgsiem,omitempty"`
-	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetApiOkta,omitempty"`
-	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetApiOpensearch,omitempty"`
-	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetApiTailscale,omitempty"`
-	DatasetAPIZoom              *DatasetAPIZoomModel              `tfsdk:"api_zoom_dataset" json:"DatasetApiZoom,omitempty"`
+	DatasetAPIAws               *DatasetAPIAwsModel               `tfsdk:"api_aws_dataset" json:"DatasetAPIAws,omitempty"`
+	DatasetAPIAzure             *DatasetAPIAzureModel             `tfsdk:"api_azure_dataset" json:"DatasetAPIAzure,omitempty"`
+	DatasetAPIAzureDataExplorer *DatasetAPIAzureDataExplorerModel `tfsdk:"api_azure_data_explorer_dataset" json:"DatasetAPIAzureDataExplorer,omitempty"`
+	DatasetAPIElasticsearch     *DatasetAPIElasticsearchModel     `tfsdk:"api_elastic_search_dataset" json:"DatasetAPIElasticsearch,omitempty"`
+	DatasetAPIGcp               *DatasetAPIGcpModel               `tfsdk:"api_gcp_dataset" json:"DatasetAPIGcp,omitempty"`
+	DatasetAPIGoogleWorkspace   *DatasetAPIGoogleWorkspaceModel   `tfsdk:"api_google_workspace_dataset" json:"DatasetAPIGoogleWorkspace,omitempty"`
+	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetAPIHttp,omitempty"`
+	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetAPILogAnalytics,omitempty"`
+	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetAPIMsgraph,omitempty"`
+	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetAPINgsiem,omitempty"`
+	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetAPIOkta,omitempty"`
+	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetAPIOpensearch,omitempty"`
+	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetAPITailscale,omitempty"`
+	DatasetAPIZoom              *DatasetAPIZoomModel              `tfsdk:"api_zoom_dataset" json:"DatasetAPIZoom,omitempty"`
 	DatasetAzureBlob            *DatasetAzureBlobModel            `tfsdk:"azure_blob_dataset" json:"DatasetAzureBlob,omitempty"`
 	DatasetClickhouse           *DatasetClickhouseModel           `tfsdk:"click_house_dataset" json:"DatasetClickhouse,omitempty"`
 	DatasetCriblEdge            *DatasetCriblEdgeModel            `tfsdk:"edge_dataset" json:"DatasetCriblEdge,omitempty"`
@@ -90,20 +90,20 @@ type SearchDatasetDataSourceModel struct {
 	ProviderID                  types.String                      `tfsdk:"provider_id" json:"provider,omitempty"`
 	Type                        types.String                      `tfsdk:"type" json:"type,omitempty"`
 	DatasetAmazonSecurityLake   *DatasetAmazonSecurityLakeModel   `tfsdk:"aws_security_lake_dataset" json:"DatasetAmazonSecurityLake,omitempty"`
-	DatasetAPIAws               *DatasetAPIAwsModel               `tfsdk:"api_aws_dataset" json:"DatasetApiAws,omitempty"`
-	DatasetAPIAzure             *DatasetAPIAzureModel             `tfsdk:"api_azure_dataset" json:"DatasetApiAzure,omitempty"`
-	DatasetAPIAzureDataExplorer *DatasetAPIAzureDataExplorerModel `tfsdk:"api_azure_data_explorer_dataset" json:"DatasetApiAzureDataExplorer,omitempty"`
-	DatasetAPIElasticsearch     *DatasetAPIElasticsearchModel     `tfsdk:"api_elastic_search_dataset" json:"DatasetApiElasticsearch,omitempty"`
-	DatasetAPIGcp               *DatasetAPIGcpModel               `tfsdk:"api_gcp_dataset" json:"DatasetApiGcp,omitempty"`
-	DatasetAPIGoogleWorkspace   *DatasetAPIGoogleWorkspaceModel   `tfsdk:"api_google_workspace_dataset" json:"DatasetApiGoogleWorkspace,omitempty"`
-	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetApiHttp,omitempty"`
-	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetApiLogAnalytics,omitempty"`
-	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetApiMsgraph,omitempty"`
-	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetApiNgsiem,omitempty"`
-	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetApiOkta,omitempty"`
-	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetApiOpensearch,omitempty"`
-	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetApiTailscale,omitempty"`
-	DatasetAPIZoom              *DatasetAPIZoomModel              `tfsdk:"api_zoom_dataset" json:"DatasetApiZoom,omitempty"`
+	DatasetAPIAws               *DatasetAPIAwsModel               `tfsdk:"api_aws_dataset" json:"DatasetAPIAws,omitempty"`
+	DatasetAPIAzure             *DatasetAPIAzureModel             `tfsdk:"api_azure_dataset" json:"DatasetAPIAzure,omitempty"`
+	DatasetAPIAzureDataExplorer *DatasetAPIAzureDataExplorerModel `tfsdk:"api_azure_data_explorer_dataset" json:"DatasetAPIAzureDataExplorer,omitempty"`
+	DatasetAPIElasticsearch     *DatasetAPIElasticsearchModel     `tfsdk:"api_elastic_search_dataset" json:"DatasetAPIElasticsearch,omitempty"`
+	DatasetAPIGcp               *DatasetAPIGcpModel               `tfsdk:"api_gcp_dataset" json:"DatasetAPIGcp,omitempty"`
+	DatasetAPIGoogleWorkspace   *DatasetAPIGoogleWorkspaceModel   `tfsdk:"api_google_workspace_dataset" json:"DatasetAPIGoogleWorkspace,omitempty"`
+	DatasetAPIHttp              *DatasetAPIHttpModel              `tfsdk:"apihttp_dataset" json:"DatasetAPIHttp,omitempty"`
+	DatasetAPILogAnalytics      *DatasetAPILogAnalyticsModel      `tfsdk:"dataset_api_log_analytics" json:"DatasetAPILogAnalytics,omitempty"`
+	DatasetAPIMsgraph           *DatasetAPIMsgraphModel           `tfsdk:"api_ms_graph_dataset" json:"DatasetAPIMsgraph,omitempty"`
+	DatasetAPINgsiem            *DatasetAPINgsiemModel            `tfsdk:"dataset_api_ngsiem" json:"DatasetAPINgsiem,omitempty"`
+	DatasetAPIOkta              *DatasetAPIOktaModel              `tfsdk:"api_okta_dataset" json:"DatasetAPIOkta,omitempty"`
+	DatasetAPIOpensearch        *DatasetAPIOpensearchModel        `tfsdk:"api_open_search_dataset" json:"DatasetAPIOpensearch,omitempty"`
+	DatasetAPITailscale         *DatasetAPITailscaleModel         `tfsdk:"api_tailscale_dataset" json:"DatasetAPITailscale,omitempty"`
+	DatasetAPIZoom              *DatasetAPIZoomModel              `tfsdk:"api_zoom_dataset" json:"DatasetAPIZoom,omitempty"`
 	DatasetAzureBlob            *DatasetAzureBlobModel            `tfsdk:"azure_blob_dataset" json:"DatasetAzureBlob,omitempty"`
 	DatasetClickhouse           *DatasetClickhouseModel           `tfsdk:"click_house_dataset" json:"DatasetClickhouse,omitempty"`
 	DatasetCriblEdge            *DatasetCriblEdgeModel            `tfsdk:"edge_dataset" json:"DatasetCriblEdge,omitempty"`

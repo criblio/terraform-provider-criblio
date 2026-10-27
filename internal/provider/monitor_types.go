@@ -36,18 +36,18 @@ type MonitorModel struct {
 	OutlierConfig                   *OutlierConfigModel                   `tfsdk:"outlier_config" json:"OutlierConfig,omitempty"`
 	ForecastConfig                  *ForecastConfigModel                  `tfsdk:"forecast_config" json:"ForecastConfig,omitempty"`
 	FiringCondition                 *FiringConditionModel                 `tfsdk:"firing_condition" json:"FiringCondition,omitempty"`
-	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"Inheritable,omitempty"`
+	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"FiringConditionInheritable,omitempty"`
 	FiringRule                      *FiringRuleModel                      `tfsdk:"firing_rule" json:"FiringRule,omitempty"`
-	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"Inheritable,omitempty"`
+	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"FiringRuleInheritable,omitempty"`
 	AetosMetadata                   *AetosMetadataModel                   `tfsdk:"aetos_metadata" json:"AetosMetadata,omitempty"`
-	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"Inheritable,omitempty"`
+	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"MetadataInheritable,omitempty"`
 	MonitorPolicyNotificationConfig *MonitorPolicyNotificationConfigModel `tfsdk:"monitor_policy_notification_config" json:"MonitorPolicyNotificationConfig,omitempty"`
 	MonitorTargetNotificationConfig *MonitorTargetNotificationConfigModel `tfsdk:"monitor_target_notification_config" json:"MonitorTargetNotificationConfig,omitempty"`
-	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"Inheritable,omitempty"`
-	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"ScalarValue,omitempty"`
-	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"Inheritable,omitempty"`
-	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"ScalarValue,omitempty"`
-	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"Inheritable,omitempty"`
+	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"NotificationInheritable,omitempty"`
+	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"PriorityScalarValue,omitempty"`
+	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"PriorityInheritable,omitempty"`
+	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"TeamScalarValue,omitempty"`
+	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"TeamInheritable,omitempty"`
 }
 
 type MonitorResourceModel struct {
@@ -70,18 +70,18 @@ type MonitorResourceModel struct {
 	OutlierConfig                   *OutlierConfigModel                   `tfsdk:"outlier_config" json:"OutlierConfig,omitempty"`
 	ForecastConfig                  *ForecastConfigModel                  `tfsdk:"forecast_config" json:"ForecastConfig,omitempty"`
 	FiringCondition                 *FiringConditionModel                 `tfsdk:"firing_condition" json:"FiringCondition,omitempty"`
-	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"Inheritable,omitempty"`
+	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"FiringConditionInheritable,omitempty"`
 	FiringRule                      *FiringRuleModel                      `tfsdk:"firing_rule" json:"FiringRule,omitempty"`
-	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"Inheritable,omitempty"`
+	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"FiringRuleInheritable,omitempty"`
 	AetosMetadata                   *AetosMetadataModel                   `tfsdk:"aetos_metadata" json:"AetosMetadata,omitempty"`
-	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"Inheritable,omitempty"`
+	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"MetadataInheritable,omitempty"`
 	MonitorPolicyNotificationConfig *MonitorPolicyNotificationConfigModel `tfsdk:"monitor_policy_notification_config" json:"MonitorPolicyNotificationConfig,omitempty"`
 	MonitorTargetNotificationConfig *MonitorTargetNotificationConfigModel `tfsdk:"monitor_target_notification_config" json:"MonitorTargetNotificationConfig,omitempty"`
-	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"Inheritable,omitempty"`
-	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"ScalarValue,omitempty"`
-	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"Inheritable,omitempty"`
-	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"ScalarValue,omitempty"`
-	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"Inheritable,omitempty"`
+	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"NotificationInheritable,omitempty"`
+	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"PriorityScalarValue,omitempty"`
+	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"PriorityInheritable,omitempty"`
+	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"TeamScalarValue,omitempty"`
+	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"TeamInheritable,omitempty"`
 }
 
 type MonitorDataSourceModel struct {
@@ -104,18 +104,18 @@ type MonitorDataSourceModel struct {
 	OutlierConfig                   *OutlierConfigModel                   `tfsdk:"outlier_config" json:"OutlierConfig,omitempty"`
 	ForecastConfig                  *ForecastConfigModel                  `tfsdk:"forecast_config" json:"ForecastConfig,omitempty"`
 	FiringCondition                 *FiringConditionModel                 `tfsdk:"firing_condition" json:"FiringCondition,omitempty"`
-	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"Inheritable,omitempty"`
+	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"FiringConditionInheritable,omitempty"`
 	FiringRule                      *FiringRuleModel                      `tfsdk:"firing_rule" json:"FiringRule,omitempty"`
-	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"Inheritable,omitempty"`
+	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"FiringRuleInheritable,omitempty"`
 	AetosMetadata                   *AetosMetadataModel                   `tfsdk:"aetos_metadata" json:"AetosMetadata,omitempty"`
-	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"Inheritable,omitempty"`
+	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"MetadataInheritable,omitempty"`
 	MonitorPolicyNotificationConfig *MonitorPolicyNotificationConfigModel `tfsdk:"monitor_policy_notification_config" json:"MonitorPolicyNotificationConfig,omitempty"`
 	MonitorTargetNotificationConfig *MonitorTargetNotificationConfigModel `tfsdk:"monitor_target_notification_config" json:"MonitorTargetNotificationConfig,omitempty"`
-	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"Inheritable,omitempty"`
-	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"ScalarValue,omitempty"`
-	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"Inheritable,omitempty"`
-	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"ScalarValue,omitempty"`
-	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"Inheritable,omitempty"`
+	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"NotificationInheritable,omitempty"`
+	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"PriorityScalarValue,omitempty"`
+	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"PriorityInheritable,omitempty"`
+	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"TeamScalarValue,omitempty"`
+	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"TeamInheritable,omitempty"`
 }
 
 type MonitorAPIModel struct {
