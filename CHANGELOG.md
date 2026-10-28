@@ -10,6 +10,8 @@ commit history, and tag-to-tag diffs.
 
 ### Added
 - Added changelog update script to run within make generate.
+- Added criblio_monitor resource + data sources.
+- Added model outlier detection config fields.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
@@ -19,6 +21,7 @@ commit history, and tag-to-tag diffs.
 - Excluded the internal `metrics_ingest` pipeline from import CLI exports.
 - Fixed import issues when duplicate params exist.
 - Fixed worker group id replacement issue.
+- Fixed restore template_params opaque-JSON protection (INFRA-12649).
 
 ## [1.25.55] - 2026-08-19
 
