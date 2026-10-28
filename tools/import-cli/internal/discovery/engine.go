@@ -560,6 +560,11 @@ func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e
 			}
 			ids := map[string]string{"dataset_id": id}
 			_, err = restclient.Get[map[string]any](ctx, client.REST, renderRESTPath(e.RESTGetPath, ids))
+			if isDatasetIntelligenceFeatureUnavailable(err) {
+				// AI availability is workspace-wide. Disabled AI or missing consent
+				// must not prevent exporting unrelated resources.
+				return nil, nil
+			}
 			if restclient.IsNotFound(err) {
 				continue
 			}
@@ -571,6 +576,20 @@ func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e
 		return identifiers, nil
 	}
 	return identifiersFromRawItems(items, scope, e)
+}
+
+func isDatasetIntelligenceFeatureUnavailable(err error) bool {
+	var httpErr *restclient.HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusForbidden {
+		return false
+	}
+	var response struct {
+		Error string `json:"error"`
+	}
+	if err := json.Unmarshal([]byte(httpErr.Body), &response); err != nil {
+		return false
+	}
+	return response.Error == "AI is disabled" || response.Error == "AI consent not accepted"
 }
 
 func isLocalSearchWorkersUnavailable(path string, err error) bool {

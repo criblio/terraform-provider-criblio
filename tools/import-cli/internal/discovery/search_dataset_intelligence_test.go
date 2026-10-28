@@ -32,6 +32,9 @@ func TestSearchDatasetIntelligenceDiscovery(t *testing.T) {
 				case "/api/v1/ai/settings/dataset-intelligence/logs":
 					if denied {
 						w.WriteHeader(http.StatusForbidden)
+						if _, err := w.Write([]byte(`{"error":"You do not have permission to read this dataset"}`)); err != nil {
+							t.Errorf("write permission error: %v", err)
+						}
 						return
 					}
 					body = `{"datasetId":"logs","status":"processing","generatedAt":100}`

@@ -4,6 +4,7 @@ package tests
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
@@ -12,6 +13,9 @@ import (
 
 // Requires a workspace with V2 Notifications enabled.
 func TestNotificationTemplate(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("The on-prem acceptance fixture does not enable V2 Notifications")
+	}
 	id := "tf-template-" + acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
 	const name = "criblio_notification_template.test"
 	resource.Test(t, resource.TestCase{

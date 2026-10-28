@@ -12,6 +12,9 @@ import (
 
 // Requires an existing dataset, enabled agentic Search, and accepted AI consent.
 func TestSearchDatasetIntelligence(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("The on-prem acceptance fixture does not provide Search and AI prerequisites")
+	}
 	datasetID := os.Getenv("CRIBL_TEST_DATASET_ID")
 	if datasetID == "" {
 		datasetID = "cribl_edge_logs"

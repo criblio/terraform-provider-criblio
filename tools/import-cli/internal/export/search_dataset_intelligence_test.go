@@ -5,13 +5,16 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	frameworkprovider "github.com/hashicorp/terraform-plugin-framework/provider"
@@ -19,12 +22,71 @@ import (
 	frameworkresource "github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/stretchr/testify/require"
 )
 
 type datasetIntelligenceExportTestProvider struct{ provider.CriblioProvider }
 
 func (p *datasetIntelligenceExportTestProvider) Configure(_ context.Context, _ frameworkprovider.ConfigureRequest, resp *frameworkprovider.ConfigureResponse) {
 	resp.ResourceData = &provider.ProviderClients{RC: restclient.New(restclient.Config{BaseURL: "https://example.invalid", BearerToken: "test-token"})}
+}
+
+func TestDefaultExportWithoutDatasetIntelligencePrerequisites(t *testing.T) {
+	for _, message := range []string{"AI is disabled", "AI consent not accepted"} {
+		t.Run(message, func(t *testing.T) {
+			var probes atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				body := `{"items":[]}`
+				switch req.URL.Path {
+				case "/api/v1/products/stream/groups", "/api/v1/products/edge/groups":
+					body = `{"items":[{"id":"default","name":"default"}]}`
+				case "/api/v1/m/default_search/search/datasets":
+					body = `{"items":[{"id":"logs"},{"id":"other"}]}`
+				case "/api/v1/ai/settings/dataset-intelligence/logs", "/api/v1/ai/settings/dataset-intelligence/other":
+					probes.Add(1)
+					w.WriteHeader(http.StatusForbidden)
+					body = fmt.Sprintf(`{"error":%q}`, message)
+				}
+				if _, err := w.Write([]byte(body)); err != nil {
+					t.Errorf("write response: %v", err)
+				}
+			}))
+			defer server.Close()
+			client := &importclient.Client{REST: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test-token"})}
+			ctx := context.Background()
+			reg := buildTestRegistry(t)
+			// Use the same unfiltered discovery and export stages as the default CLI.
+			results, err := discovery.Discover(ctx, client, reg, nil, nil, nil, false)
+			require.NoError(t, err)
+			foundIntelligence := false
+			for _, result := range results {
+				require.NoError(t, result.Err, result.TypeName)
+				if result.TypeName == "criblio_search_dataset_intelligence" {
+					foundIntelligence = true
+					require.Zero(t, result.Count)
+					require.Empty(t, result.Identifiers)
+					require.True(t, result.InventoryComplete)
+				}
+			}
+			require.True(t, foundIntelligence)
+			require.EqualValues(t, 1, probes.Load(), "workspace-wide unavailability should stop further probes")
+			result, err := ToResourceItems(ctx, client, reg, results, []string{"default", "default_search"}, nil, 1, false, IncludeOverride{}, nil)
+			require.NoError(t, err)
+			require.NotEmpty(t, result.Items, "unrelated resources should still be exported")
+			foundGroup := false
+			for _, item := range result.Items {
+				require.NotEqual(t, "criblio_search_dataset_intelligence", item.TypeName)
+				if item.TypeName == "criblio_group" {
+					foundGroup = true
+				}
+			}
+			require.True(t, foundGroup)
+			outputDir := t.TempDir()
+			err = generator.WriteAllModuleDirectories(outputDir, result.Items, hcl.DefaultResourceBlockOptions(), nil)
+			require.NoError(t, err, "default export should reach Terraform file generation")
+		})
+	}
 }
 
 func (p *datasetIntelligenceExportTestProvider) Resources(context.Context) []func() frameworkresource.Resource {

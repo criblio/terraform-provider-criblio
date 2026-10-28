@@ -3374,6 +3374,9 @@ import (
 
 // Requires an existing dataset, enabled agentic Search, and accepted AI consent.
 func TestSearchDatasetIntelligence(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("The on-prem acceptance fixture does not provide Search and AI prerequisites")
+	}
 	datasetID := os.Getenv("CRIBL_TEST_DATASET_ID")
 	if datasetID == "" {
 		datasetID = "cribl_edge_logs"
@@ -3406,6 +3409,7 @@ data "criblio_search_dataset_intelligence" "test" {
 {{- else if eq .StructName "NotificationTemplate" }}
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
@@ -3414,6 +3418,9 @@ import (
 
 // Requires a workspace with V2 Notifications enabled.
 func TestNotificationTemplate(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("The on-prem acceptance fixture does not enable V2 Notifications")
+	}
 	id := "tf-template-" + acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
 	const name = "criblio_notification_template.test"
 	resource.Test(t, resource.TestCase{

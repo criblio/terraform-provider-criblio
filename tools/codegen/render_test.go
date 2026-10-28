@@ -31,7 +31,8 @@ func TestSearchDatasetIntelligenceGeneration(t *testing.T) {
 	test := renderTemplate(t, "test", definition)
 	assertContains(t, test, "CRIBL_TEST_DATASET_ID")
 	assertContains(t, test, `datasetID = "cribl_edge_logs"`)
-	assertNotContains(t, test, "t.Skip(")
+	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
+	assertNotContains(t, test, "CRIBL_TEST_DATASET_ID must")
 }
 
 func TestNotificationTemplateFixedEngineRouting(t *testing.T) {
@@ -53,7 +54,9 @@ func TestNotificationTemplateFixedEngineRouting(t *testing.T) {
 	assertContains(t, list, `url.QueryEscape("handlebars")`)
 	assertNotContains(t, list, "Engine types.String")
 	assertNotContains(t, list, `"engine": schema.StringAttribute`)
-	assertContains(t, renderTemplate(t, "test", definition), "func TestNotificationTemplate(t *testing.T)")
+	test := renderTemplate(t, "test", definition)
+	assertContains(t, test, "func TestNotificationTemplate(t *testing.T)")
+	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
 }
 
 func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
