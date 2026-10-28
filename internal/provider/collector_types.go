@@ -3921,6 +3921,21 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
 		raw["savedState"] = map[string]any{}
 	}
+	if savedState, ok := raw["savedState"].(map[string]any); ok {
+		for _, value := range savedState {
+			if value == nil {
+				continue
+			}
+			if _, ok := value.(string); !ok {
+				// Runtime checkpoints may contain nested objects, arrays, or
+				// scalars that the legacy saved_state map(string) cannot hold.
+				// Ignore the entire checkpoint so updates cannot send it back
+				// to the API with a different shape. Keep legacy string maps.
+				delete(raw, "savedState")
+				break
+			}
+		}
+	}
 }
 
 type InputCollectorSplunkModel struct {

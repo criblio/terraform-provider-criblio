@@ -499,6 +499,10 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, collectorTypes, `case "azureblob", "azure_blob":`)
 	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
 	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
+	assertContains(t, collectorTypes, `delete(raw, "savedState")`)
+	for _, name := range []string{"Collector", "PackCollector"} {
+		assertContains(t, renderTemplate(t, "doc", parser.ResourceDef{StructName: name}), "API runtime checkpoints containing nested objects, arrays, numbers, or booleans are ignored during refresh and import")
+	}
 
 	searchDatasetResource := renderTemplate(t, "resource", parser.ResourceDef{
 		StructName: "SearchDataset",

@@ -1133,6 +1133,21 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
 		raw["savedState"] = map[string]any{}
 	}
+	if savedState, ok := raw["savedState"].(map[string]any); ok {
+		for _, value := range savedState {
+			if value == nil {
+				continue
+			}
+			if _, ok := value.(string); !ok {
+				// Runtime checkpoints may contain nested objects, arrays, or
+				// scalars that the legacy saved_state map(string) cannot hold.
+				// Ignore the entire checkpoint so updates cannot send it back
+				// to the API with a different shape. Keep legacy string maps.
+				delete(raw, "savedState")
+				break
+			}
+		}
+	}
 }
 {{- end }}
 {{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource") (eq .StructName "PackCollector")) }}
@@ -3187,6 +3202,10 @@ description: |-
 # {{ resourceType . }} (Resource)
 
 {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+
+The legacy ` + "`saved_state`" + ` attribute accepts a map of strings. API runtime checkpoints containing nested objects, arrays, numbers, or booleans are ignored during refresh and import, so collectors remain manageable after state tracking runs. Existing configured string maps are preserved.
+{{- end }}
 {{- if eq .StructName "SearchDatasetIntelligence" }}
 
 Enables intelligence for an existing Search dataset. Creating the resource starts an asynchronous analysis; Terraform records the returned generation status without waiting for completion. Refresh state to read the latest status and generated Markdown. A ` + "`partial` or `failed`" + ` run remains managed and is not automatically retried.

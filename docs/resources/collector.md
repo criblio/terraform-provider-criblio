@@ -10,6 +10,8 @@ description: |-
 
 Collector Resource
 
+The legacy `saved_state` attribute accepts a map of strings. API runtime checkpoints containing nested objects, arrays, numbers, or booleans are ignored during refresh and import, so collectors remain manageable after state tracking runs. Existing configured string maps are preserved.
+
 ## Example Usage
 
 ```terraform
