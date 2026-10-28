@@ -3704,14 +3704,83 @@ actions:
     update:
       x-terraform-delete: Monitor
 
-  # $profileRef is UI-only linkage to a shared monitor profile; no criblio_monitor_profile
-  # resource exists yet to create the IDs it references. $configRefs is the equivalent linkage
-  # surface on the shared Inheritable schema used by every profile-linkable field below. Both
-  # excluded until profile-linked resources exist -- not a permanent limitation.
+  # MON-1453 follow-up: criblio_monitor_config_profile -- Aetos monitor config profiles.
+  # Route /products/lakehouse_engine_metrics/config-profiles; clean CRUD schema
+  # (MonitorConfigProfile: configIds[], name, description?, parentId?, id).
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: MonitorConfigProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles.get"
+    update:
+      x-terraform-list: MonitorConfigProfile
+      x-terraform-list-name: MonitorConfigProfiles
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.get"
+    update:
+      x-terraform-read: MonitorConfigProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.patch"
+    update:
+      x-terraform-update: MonitorConfigProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.delete"
+    update:
+      x-terraform-delete: MonitorConfigProfile
+
+  # MON-1453 follow-up: criblio_shared_config -- reusable partial-monitor configs that profiles
+  # compose. Route /products/lakehouse_engine_metrics/shared-configs. config is a Partial<monitor>
+  # blob (nested unions) -> opaque JSON; fingerprint is a server-computed content hash -> computed.
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SharedConfig
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs.get"
+    update:
+      x-terraform-list: SharedConfig
+      x-terraform-list-name: SharedConfigs
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs/{id}.get"
+    update:
+      x-terraform-read: SharedConfig
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs/{id}.patch"
+    update:
+      x-terraform-update: SharedConfig
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs/{id}.delete"
+    update:
+      x-terraform-delete: SharedConfig
+  - target: "$.components.schemas.SharedConfig.properties.config"
+    update:
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+  - target: "$.components.schemas.SharedConfig.properties.fingerprint"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SharedConfig"
+    update:
+      required:
+        - config
+        - id
+
+  # MON-1453 follow-up: monitor -> config-profile reference modeled. Inheritance flows
+  # monitor.$profileRef -> criblio_monitor_config_profile -> criblio_shared_config(s) via the
+  # profile's config_ids. fingerprint is a server-stamped drift hash stamped post-persist
+  # (reconcile), so it is never in the create response and the public profile GET omits it ->
+  # exclude it entirely. profile_ref is read-only (Computed): backend owns monitor<->profile
+  # linking; TF reflects it on read, never authors. Typed authoring deferred (MON-1453 stretch).
   - target: "$.components.schemas.AetosMonitorConf.properties"
     update:
       "$profileRef":
-        x-terraform-ignore: true
+        x-terraform-name: profile_ref
+        x-terraform-computed: true
+        x-terraform-computed-recursive: true
+  - target: "$.components.schemas.ProfileRef.properties.fingerprint"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.ProfileRef"
+    update:
+      required:
+        - id
+  # $configRefs stays EXCLUDED: per-field refs are SERVER-DERIVED -- UpdateManager.reconcile()
+  # rebuilds them from the linked profile's attached shared-configs and overwrites any client-set
+  # value, so exposing them writable would cause "provider produced inconsistent result"/drift.
+  # Inheritance is structural (profile_ref + the profile's config_ids), not per-field on the monitor.
   - target: "$.components.schemas.Inheritable.properties"
     update:
       "$configRefs":
@@ -3740,25 +3809,22 @@ actions:
       x-terraform-object-as-json: true
       description: "Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } })."
 
-  # notification and silence are both listed in AetosMonitorConf.required upstream, but a live
-  # probe against a real backend (POST with neither field present) returned 200 -- the backend
-  # does not actually enforce either. Restate required without both so codegen renders them as
-  # genuinely optional instead of forcing every monitor (including plain threshold monitors) to
-  # fabricate a throwaway notification block or an empty silence list.
+  # The backend schema is open ({type:object}) and does not enforce required fields; several are
+  # also Inheritable<T> oneOf fields a profile-linked monitor OMITS to inherit from its profile's
+  # shared-configs (verified live: POST with them absent + $profileRef returns 200 and the server
+  # fills $configRefs). The client's generated "exactly one oneOf variant" marshal guard otherwise
+  # blocks inherit-by-omission. Restate required without the inheritable fields (notification,
+  # silence, priority, team, firingCondition, firingRule, metadata) so each can be set inline OR
+  # left to the profile. Structural essentials the author always provides stay required.
   - target: "$.components.schemas.AetosMonitorConf"
     update:
       required:
         - datasetId
         - enabled
         - expr
-        - firingCondition
-        - firingRule
         - id
-        - metadata
         - name
-        - priority
         - query
-        - team
         - type
 
   # notification is a real 2-branch discriminated union (policy-based routing vs direct

@@ -109,6 +109,16 @@ func (d *MonitorsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 							Computed:    true,
 							Description: `Human-readable name for the monitor.`,
 						},
+						"profile_ref": schema.SingleNestedAttribute{
+							Computed:    true,
+							Description: `Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited.`,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the profile.`,
+								},
+							},
+						},
 						"query": schema.MapNestedAttribute{
 							Computed:    true,
 							Description: `Monitor queries keyed by query label. Each query is inheritable from a linked profile.`,
@@ -691,7 +701,7 @@ func (d *MonitorsDataSource) Read(ctx context.Context, req datasource.ReadReques
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(MonitorsItemAttrTypes(), map[string]attr.Value{"dataset_id": item.DatasetID, "description": item.Description, "enabled": item.Enabled, "expr": item.Expr, "id": item.ID, "managed_by": item.ManagedBy, "name": item.Name, "query": item.Query, "search_mode": item.SearchMode, "silence": item.Silence, "template_params": item.TemplateParams, "type": item.Type, "unit": item.Unit, "anomaly_config": MonitorsAnomalyConfigObjectValue(item.AnomalyConfig), "change_config": MonitorsChangeConfigObjectValue(item.ChangeConfig), "outlier_config": MonitorsOutlierConfigObjectValue(item.OutlierConfig), "forecast_config": MonitorsForecastConfigObjectValue(item.ForecastConfig), "firing_condition": MonitorsFiringConditionObjectValue(item.FiringCondition), "firing_condition_inheritable": MonitorsFiringConditionInheritableObjectValue(item.FiringConditionInheritable), "firing_rule": MonitorsFiringRuleObjectValue(item.FiringRule), "firing_rule_inheritable": MonitorsFiringRuleInheritableObjectValue(item.FiringRuleInheritable), "aetos_metadata": MonitorsAetosMetadataObjectValue(item.AetosMetadata), "metadata_inheritable": MonitorsMetadataInheritableObjectValue(item.MetadataInheritable), "monitor_policy_notification_config": MonitorsMonitorPolicyNotificationConfigObjectValue(item.MonitorPolicyNotificationConfig), "monitor_target_notification_config": MonitorsMonitorTargetNotificationConfigObjectValue(item.MonitorTargetNotificationConfig), "notification_inheritable": MonitorsNotificationInheritableObjectValue(item.NotificationInheritable), "priority_scalar_value": MonitorsPriorityScalarValueObjectValue(item.PriorityScalarValue), "priority_inheritable": MonitorsPriorityInheritableObjectValue(item.PriorityInheritable), "team_scalar_value": MonitorsTeamScalarValueObjectValue(item.TeamScalarValue), "team_inheritable": MonitorsTeamInheritableObjectValue(item.TeamInheritable)}))
+			values = append(values, types.ObjectValueMust(MonitorsItemAttrTypes(), map[string]attr.Value{"dataset_id": item.DatasetID, "description": item.Description, "enabled": item.Enabled, "expr": item.Expr, "id": item.ID, "managed_by": item.ManagedBy, "name": item.Name, "profile_ref": item.ProfileRef, "query": item.Query, "search_mode": item.SearchMode, "silence": item.Silence, "template_params": item.TemplateParams, "type": item.Type, "unit": item.Unit, "anomaly_config": MonitorsAnomalyConfigObjectValue(item.AnomalyConfig), "change_config": MonitorsChangeConfigObjectValue(item.ChangeConfig), "outlier_config": MonitorsOutlierConfigObjectValue(item.OutlierConfig), "forecast_config": MonitorsForecastConfigObjectValue(item.ForecastConfig), "firing_condition": MonitorsFiringConditionObjectValue(item.FiringCondition), "firing_condition_inheritable": MonitorsFiringConditionInheritableObjectValue(item.FiringConditionInheritable), "firing_rule": MonitorsFiringRuleObjectValue(item.FiringRule), "firing_rule_inheritable": MonitorsFiringRuleInheritableObjectValue(item.FiringRuleInheritable), "aetos_metadata": MonitorsAetosMetadataObjectValue(item.AetosMetadata), "metadata_inheritable": MonitorsMetadataInheritableObjectValue(item.MetadataInheritable), "monitor_policy_notification_config": MonitorsMonitorPolicyNotificationConfigObjectValue(item.MonitorPolicyNotificationConfig), "monitor_target_notification_config": MonitorsMonitorTargetNotificationConfigObjectValue(item.MonitorTargetNotificationConfig), "notification_inheritable": MonitorsNotificationInheritableObjectValue(item.NotificationInheritable), "priority_scalar_value": MonitorsPriorityScalarValueObjectValue(item.PriorityScalarValue), "priority_inheritable": MonitorsPriorityInheritableObjectValue(item.PriorityInheritable), "team_scalar_value": MonitorsTeamScalarValueObjectValue(item.TeamScalarValue), "team_inheritable": MonitorsTeamInheritableObjectValue(item.TeamInheritable)}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: MonitorsItemAttrTypes()}, values)
@@ -707,6 +717,7 @@ func MonitorsItemAttrTypes() map[string]attr.Type {
 		"id":                                 types.StringType,
 		"managed_by":                         types.StringType,
 		"name":                               types.StringType,
+		"profile_ref":                        types.ObjectType{AttrTypes: MonitorProfileRefAttrTypes()},
 		"query":                              types.MapType{ElemType: types.ObjectType{AttrTypes: MonitorQueryAttrTypes()}},
 		"search_mode":                        types.StringType,
 		"silence":                            types.ListType{ElemType: types.StringType},

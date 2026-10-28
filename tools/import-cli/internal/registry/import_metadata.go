@@ -74,6 +74,8 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_lookup_file":                  {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_mapping_ruleset":              {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_monitor":                      {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: "id"},
+	"criblio_monitor_config_profile":       {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""}, // not importable while profile linking is deferred
+	"criblio_shared_config":                {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_notification":                 {SDKService: "Notifications", ListMethod: "ListNotification", GetMethod: "GetNotificationByID", ImportIDFormat: "json:group,id"},
 	"criblio_notification_target":          {SDKService: "NotificationTargets", ListMethod: "ListNotificationTarget", GetMethod: "GetNotificationTargetByID", ImportIDFormat: "", OneOf: oneOfNotificationTarget},
 	"criblio_pack":                         {SDKService: "Packs", ListMethod: "GetPacksByGroup", GetMethod: "GetPacksByID", ImportIDFormat: ""},

@@ -145,6 +145,20 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Computed:    false,
 				Description: `Human-readable name for the monitor.`,
 			},
+			"profile_ref": schema.SingleNestedAttribute{
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited.`,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    false,
+						Computed:    true,
+						Description: `Unique identifier for the profile.`,
+					},
+				},
+			},
 			"query": schema.MapNestedAttribute{
 				Required:    true,
 				Optional:    false,
@@ -1082,6 +1096,14 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		if !api.Name.IsNull() && !api.Name.IsUnknown() {
 			state.Name = api.Name
 		}
+	}
+	if !api.ProfileRef.IsNull() && !api.ProfileRef.IsUnknown() {
+		state.ProfileRef = api.ProfileRef
+	} else if state.ProfileRef.IsNull() || state.ProfileRef.IsUnknown() {
+		state.ProfileRef = types.ObjectNull(MonitorProfileRefAttrTypes())
+	}
+	if len(state.ProfileRef.AttributeTypes(context.Background())) == 0 {
+		state.ProfileRef = types.ObjectNull(MonitorProfileRefAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Query.IsNull() || state.Query.IsUnknown())) {
 		if !api.Query.IsNull() && !api.Query.IsUnknown() {
