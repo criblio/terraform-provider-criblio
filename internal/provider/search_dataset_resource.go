@@ -27,6 +27,7 @@ var _ = types.String{}
 var _ resource.Resource = &SearchDatasetResource{}
 var _ resource.ResourceWithConfigure = &SearchDatasetResource{}
 var _ resource.ResourceWithImportState = &SearchDatasetResource{}
+var _ resource.ResourceWithModifyPlan = &SearchDatasetResource{}
 
 type SearchDatasetResource struct {
 	client *restclient.Client
@@ -5968,6 +5969,83 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 		},
+	}
+}
+
+// ModifyPlan exposes the configured dataset identity to dependent resources before
+// creation. Read configuration rather than the plan so omitted or unknown IDs are
+// left for the API to resolve.
+func (r *SearchDatasetResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+	var priorID types.String
+	if !req.State.Raw.IsNull() {
+		resp.Diagnostics.Append(req.State.GetAttribute(ctx, path.Root("id"), &priorID)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
+	hasPriorID := !priorID.IsNull() && !priorID.IsUnknown()
+	for _, blockName := range []string{
+		"aws_security_lake_dataset",
+		"api_aws_dataset",
+		"api_azure_dataset",
+		"api_azure_data_explorer_dataset",
+		"api_elastic_search_dataset",
+		"api_gcp_dataset",
+		"api_google_workspace_dataset",
+		"apihttp_dataset",
+		"dataset_api_log_analytics",
+		"api_ms_graph_dataset",
+		"dataset_api_ngsiem",
+		"api_okta_dataset",
+		"api_open_search_dataset",
+		"api_tailscale_dataset",
+		"api_zoom_dataset",
+		"azure_blob_dataset",
+		"click_house_dataset",
+		"edge_dataset",
+		"cribl_lake_dataset",
+		"cribl_leader_dataset",
+		"cribl_local_dataset",
+		"meta_dataset",
+		"cribl_search_dataset",
+		"gcs_dataset",
+		"prometheus_dataset",
+		"s3_dataset",
+		"snowflake_dataset",
+	} {
+		root := path.Root(blockName)
+		var block types.Object
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, root, &block)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		if block.IsNull() {
+			continue
+		}
+		if block.IsUnknown() {
+			if hasPriorID {
+				resp.RequiresReplace = append(resp.RequiresReplace, root)
+			}
+			return
+		}
+		var id types.String
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, root.AtName("id"), &id)...)
+		if resp.Diagnostics.HasError() || id.IsNull() {
+			return
+		}
+		if hasPriorID && !priorID.Equal(id) {
+			// The API addresses updates using the ID, so changing it requires a
+			// new dataset. An explicitly unknown ID may resolve to a different
+			// identity, so it must also plan replacement rather than an update.
+			resp.RequiresReplace = append(resp.RequiresReplace, root.AtName("id"))
+		}
+		if !id.IsUnknown() {
+			resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("id"), id)...)
+		}
+		return
 	}
 }
 

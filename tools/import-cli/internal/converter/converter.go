@@ -266,6 +266,7 @@ func restPathValues(requestParams map[string]string) map[string]string {
 		"id":         requestParams["ID"],
 		"pack":       requestParams["Pack"],
 		"project_id": requestParams["ProjectID"],
+		"dataset_id": requestParams["DatasetID"],
 		"lake_id":    requestParams["LakeID"],
 		"product":    requestParams["Product"],
 	}

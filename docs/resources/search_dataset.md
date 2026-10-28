@@ -10,6 +10,8 @@ description: |-
 
 SearchDataset Resource
 
+Configure the ID in the dataset type attribute, for example `s3_dataset.id`. The computed top-level `id` is available during planning when that configured ID is known, so dependent resources can reference it before creation. Unknown or omitted IDs are resolved after creation. Changing the configured ID replaces the Dataset.
+
 ## Example Usage
 
 ```terraform

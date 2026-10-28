@@ -13,17 +13,21 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
+- Added `criblio_notification_template` resource and single/list data sources for custom Handlebars templates, with import and export support. Requires V2 Notifications; built-in templates remain available through data sources and are excluded from resource exports.
 - Added `conf.trigger` for custom Search notification conditions in notifications and scheduled dashboard notifications, allowing saved results to be retained while alerts remain selective.
 - Added support for custom keys and values in `criblio_pack.tags`, alongside predefined tag fields.
 - Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.
 - Added changelog update script to run within make generate.
 - Added metrics search support in search dashboards. (#234).
+- Added notification_template and search_ai resources.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
 - Syncing 4.20.3 upstream spec.
 
 ### Fixed
+- Kept bulk export working when AI is disabled or consent is missing, while retaining dataset permission errors, and skipped the new intelligence/template acceptance tests on the on-prem fixture that lacks their prerequisites.
 - Allowed export discovery to continue when local_search list endpoints return HTTP 500 with "No workers registered".
 - Preserved metric dashboard search sources, datasets, step strategies, query builder settings, and input variants during API updates, reads, and imports.
 - Fixed configured TTL updates in `criblio_collector` and `criblio_pack_collector` while retaining existing behavior for omitted TTL and other collector fields.

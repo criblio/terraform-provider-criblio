@@ -1251,6 +1251,9 @@ func emptyJSONValue(field parser.FieldDef) string {
 func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	for _, field := range append(resource.List.PathParams, resource.List.QueryParams...) {
+		if field.QueryParam && field.FixedValue != "" {
+			continue
+		}
 		if fixedPathParamValue(resource, field) != "" {
 			continue
 		}
@@ -2376,6 +2379,10 @@ func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 		args = append(args, "model."+param.GoName+".ValueString()")
 	}
 	for _, param := range op.QueryParams {
+		if param.FixedValue != "" {
+			args = append(args, "url.QueryEscape("+fmt.Sprintf("%q", param.FixedValue)+")")
+			continue
+		}
 		args = append(args, "url.QueryEscape(model."+param.GoName+".ValueString())")
 	}
 	if len(args) == 1 {

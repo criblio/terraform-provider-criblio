@@ -7769,16 +7769,45 @@ func InputHttpRawMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputHttpRawAuthTokensExtModel struct {
-	AuthType types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	AuthType    types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token       types.String `tfsdk:"token" json:"token,omitempty"`
+	Description types.String `tfsdk:"description" json:"description,omitempty"`
+	Metadata    types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
 }
 
 type InputHttpRawAuthTokensExtAPIModel struct {
-	AuthType *string `json:"authType,omitempty"`
+	AuthType    *string `json:"authType,omitempty"`
+	TokenSecret *string `json:"tokenSecret,omitempty"`
+	Token       *string `json:"token,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Metadata    any     `json:"metadata,omitempty"`
 }
 
 func InputHttpRawAuthTokensExtAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"auth_type": types.StringType,
+		"auth_type":    types.StringType,
+		"token_secret": types.StringType,
+		"token":        types.StringType,
+		"description":  types.StringType,
+		"metadata":     types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtMetadataAttrTypes()}},
+	}
+}
+
+type InputHttpRawAuthTokensExtMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputHttpRawAuthTokensExtMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputHttpRawAuthTokensExtMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -17146,6 +17175,7 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	normalizeHTTPRawExtendedAuthTokens(raw)
 	setSourceLegacyItemsFromRaw(m, raw)
 	var input SourceAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
