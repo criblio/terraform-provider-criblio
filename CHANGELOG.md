@@ -13,6 +13,8 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
+- Added `criblio_notification_template` resource and single/list data sources for custom Handlebars templates, with import and export support. Requires V2 Notifications; built-in templates remain available through data sources and are excluded from resource exports.
 - Added `conf.trigger` for custom Search notification conditions in notifications and scheduled dashboard notifications, allowing saved results to be retained while alerts remain selective.
 - Added support for custom keys and values in `criblio_pack.tags`, alongside predefined tag fields.
 - Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.

@@ -545,6 +545,31 @@ func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e
 	if err != nil {
 		return nil, err
 	}
+	if e.TypeName == "criblio_search_dataset_intelligence" {
+		// There is no intelligence list API. Include only datasets that already
+		// have a saved envelope, including built-ins with intelligence enabled.
+		var identifiers []map[string]string
+		for _, raw := range items {
+			item, err := rawMap(raw)
+			if err != nil {
+				return nil, err
+			}
+			id := rawString(item, "id", "ID")
+			if id == "" {
+				continue
+			}
+			ids := map[string]string{"dataset_id": id}
+			_, err = restclient.Get[map[string]any](ctx, client.REST, renderRESTPath(e.RESTGetPath, ids))
+			if restclient.IsNotFound(err) {
+				continue
+			}
+			if err != nil {
+				return nil, fmt.Errorf("read intelligence for dataset %q: %w", id, err)
+			}
+			identifiers = append(identifiers, ids)
+		}
+		return identifiers, nil
+	}
 	return identifiersFromRawItems(items, scope, e)
 }
 

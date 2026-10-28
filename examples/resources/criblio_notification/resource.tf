@@ -1,38 +1,18 @@
 resource "criblio_notification" "my_notification" {
-  condition = "true"
+  condition = "high-volume"
+  group     = "default"
+  id        = "high-volume-http-src"
   conf = {
-    data_volume          = "1TB"
-    message              = "Message for notification"
-    name                 = "splunk:in_splunk_tcp"
-    notify_on_resolution = true
-    saved_query_id       = "savedQueryId"
+    name                 = "in_http"
     time_window          = "60s"
-    trigger_comparator   = ">"
-    trigger_count        = 10
-    trigger_type         = "resultsCount"
-    usage_threshold      = 90
-    worker_group         = "...my_worker_group..."
+    data_volume          = "1GB"
+    notify_on_resolution = true
   }
-  disabled = false
-  group    = "myNotificationGroup"
-  id       = "myUniqueNotificationId"
-  metadata = [
-    {
-      name  = "env"
-      value = "production"
-    }
-  ]
-  target_configs = [
-    {
-      conf = {
-        attachment_type = "attachment"
-        include_results = true
-      }
-      id = "myTargetConfigId"
-    }
-  ]
-  targets = [
-    "target1",
-    "target2",
-  ]
+
+  mode = "direct"
+  template_target_pairs = [{
+    target_id   = "system_email"
+    template_id = "default-email"
+  }]
+  targets = ["system_email"]
 }

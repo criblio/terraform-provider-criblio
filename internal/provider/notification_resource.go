@@ -169,7 +169,7 @@ func (r *NotificationResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"mode": schema.StringAttribute{
 				Required:    false,
-				Optional:    false,
+				Optional:    true,
 				Computed:    true,
 				Description: `Delivery mode for Notifications.<br/><br/> <code>direct</code>: Notification is sent directly to Notification targets that are defined in <code>templateTargetPairs</code>.<br/><br/> <code>policy</code>: Notification is routed through Notification Policies, which match alerts by labels and route them to Notification targets without relying on <code>templateTargetPairs</code>.`,
 			},
@@ -272,7 +272,7 @@ func (r *NotificationResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"template_target_pairs": schema.ListNestedAttribute{
 				Required:    false,
-				Optional:    false,
+				Optional:    true,
 				Computed:    true,
 				Description: `If <code>mode</code> is <code>direct</code>, the key-value pairs that define the Notification templates and targets to use for sending Notifications.`,
 				NestedObject: schema.NestedAttributeObject{
@@ -502,8 +502,9 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	}
 	if !api.Mode.IsNull() && !api.Mode.IsUnknown() {
 		state.Mode = api.Mode
-	} else if state.Mode.IsNull() || state.Mode.IsUnknown() {
-		state.Mode = types.StringValue("")
+	}
+	if state.Mode.IsUnknown() {
+		state.Mode = types.StringNull()
 	}
 	if !api.Pack.IsNull() && !api.Pack.IsUnknown() {
 		state.Pack = api.Pack
@@ -542,8 +543,9 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	}
 	if !api.TemplateTargetPairs.IsNull() && !api.TemplateTargetPairs.IsUnknown() {
 		state.TemplateTargetPairs = api.TemplateTargetPairs
-	} else if state.TemplateTargetPairs.IsNull() || state.TemplateTargetPairs.IsUnknown() {
-		state.TemplateTargetPairs = types.ListValueMust(types.ObjectType{AttrTypes: NotificationTemplateTargetPairsAttrTypes()}, nil)
+	}
+	if state.TemplateTargetPairs.IsUnknown() {
+		state.TemplateTargetPairs = types.ListNull(types.ObjectType{AttrTypes: NotificationTemplateTargetPairsAttrTypes()})
 	}
 	if state.TemplateTargetPairs.IsNull() || state.TemplateTargetPairs.IsUnknown() {
 		state.TemplateTargetPairs = types.ListNull(types.ObjectType{AttrTypes: NotificationTemplateTargetPairsAttrTypes()})

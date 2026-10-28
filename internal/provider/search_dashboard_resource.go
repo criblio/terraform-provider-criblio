@@ -1286,7 +1286,7 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Required:    false,
-											Optional:    false,
+											Optional:    true,
 											Computed:    true,
 											Description: `Delivery mode for Notifications.<br/><br/> <code>direct</code>: Notification is sent directly to Notification targets that are defined in <code>templateTargetPairs</code>.<br/><br/> <code>policy</code>: Notification is routed through Notification Policies, which match alerts by labels and route them to Notification targets without relying on <code>templateTargetPairs</code>.`,
 										},
@@ -1389,7 +1389,7 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 										},
 										"template_target_pairs": schema.ListNestedAttribute{
 											Required:    false,
-											Optional:    false,
+											Optional:    true,
 											Computed:    true,
 											Description: `If <code>mode</code> is <code>direct</code>, the key-value pairs that define the Notification templates and targets to use for sending Notifications.`,
 											NestedObject: schema.NestedAttributeObject{

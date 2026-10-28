@@ -80,6 +80,10 @@ func Parse(content []byte) ([]ResourceDef, error) {
 		resource := resources[name]
 		if resource.SchemaName == "" {
 			resource.SchemaName = resource.Create.RequestSchema
+			if resource.SchemaName == "" {
+				// A bodyless create can return the durable resource directly.
+				resource.SchemaName = resource.Create.ResponseSchema
+			}
 		}
 		if err := populateFields(resource, schemas); err != nil {
 			return nil, err
@@ -979,7 +983,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		if !ok {
 			return FieldDef{}, fmt.Errorf("%s.%s array field missing items schema", modelName, apiName)
 		}
-		if schemaName := schemaRefName(items); schemaName != "" {
+		if schemaName := schemaRefName(items); schemaName != "" && !boolAnnotation(items, "x-terraform-flatten-object-unions") {
 			var found bool
 			items, found = mappingValue(schemas, schemaName)
 			if !found {
@@ -1249,6 +1253,9 @@ func objectSchemaForProperty(property, schemas *yaml.Node) (*yaml.Node, bool, er
 	if scalarValue(property, "type") == "array" {
 		return nil, false, nil
 	}
+	if boolAnnotation(property, "x-terraform-flatten-object-unions") {
+		return objectSchema(property, schemas)
+	}
 	schema := property
 	if schemaName := schemaRefName(property); schemaName != "" {
 		var found bool
@@ -1441,6 +1448,11 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		existing[field.TerraformName] = true
 	}
 	for _, param := range params {
+		// Fixed query selectors are part of API routing, not configuration.
+		// A response property with the same name retains its schema semantics.
+		if param.FixedValue != "" {
+			continue
+		}
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {

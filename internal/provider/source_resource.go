@@ -12004,12 +12004,41 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"auth_tokens_ext": schema.ListNestedAttribute{
 									Computed:    true,
-									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									Description: `Shared secrets to be provided by any client (Authorization token). Empty placeholder objects returned by the API are omitted from state and exported configuration. Populated entries, including legacy entries without authType, retain their values.`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
 												Computed:    true,
-												Description: `Discriminator value.`,
+												Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+											"token": schema.StringAttribute{
+												Computed:    true,
+												Sensitive:   true,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"metadata": schema.ListNestedAttribute{
+												Computed:    true,
+												Description: `Fields to add to events referencing this token`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Name of the metadata field.`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
 											},
 										},
 									},
@@ -45580,14 +45609,55 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						Description: `Shared secrets to be provided by any client (Authorization token). Empty placeholder objects returned by the API are omitted from state and exported configuration. Populated entries, including legacy entries without authType, retain their values.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
+									Required:    false,
+									Optional:    true,
 									Computed:    false,
-									Description: `Discriminator value.`,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"token_secret": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select or create a stored text secret`,
+								},
+								"token": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Sensitive:   true,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+								},
+								"description": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Fields to add to events referencing this token`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
 								},
 							},
 						},
@@ -69008,6 +69078,9 @@ func (r *SourceResource) Read(ctx context.Context, req resource.ReadRequest, res
 	priorPlainAuth := snapshotSourcePlainAuthTokensPriorRead(&model)
 	applySourceAPIToState(apiModel, &model, true, isSourceImportState(&model))
 	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+	if model.InputHttpRaw != nil {
+		model.InputHttpRaw.AuthTokensExt = normalizeHTTPRawExtendedAuthTokenState(model.InputHttpRaw.AuthTokensExt)
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

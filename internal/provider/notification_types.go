@@ -483,6 +483,13 @@ func (m NotificationModel) MarshalJSON() ([]byte, error) {
 		}
 		output["metadata"] = value
 	}
+	if !m.Mode.IsNull() && !m.Mode.IsUnknown() {
+		value, err := NotificationTerraformValueToJSON(m.Mode)
+		if err != nil {
+			return nil, fmt.Errorf("convert mode to API value: %v", err)
+		}
+		output["mode"] = value
+	}
 	if !m.TargetConfigs.IsNull() && !m.TargetConfigs.IsUnknown() {
 		value, err := NotificationTerraformValueToJSON(m.TargetConfigs)
 		if err != nil {
@@ -503,6 +510,13 @@ func (m NotificationModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert targets to API value: %v", err)
 		}
 		output["targets"] = value
+	}
+	if !m.TemplateTargetPairs.IsNull() && !m.TemplateTargetPairs.IsUnknown() {
+		value, err := NotificationTerraformValueToJSON(m.TemplateTargetPairs)
+		if err != nil {
+			return nil, fmt.Errorf("convert template_target_pairs to API value: %v", err)
+		}
+		output["templateTargetPairs"] = value
 	}
 	return json.Marshal(output)
 }

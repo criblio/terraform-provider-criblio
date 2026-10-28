@@ -923,6 +923,7 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	}
 {{- end }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	normalizeHTTPRawExtendedAuthTokens(raw)
 	set{{ .StructName }}LegacyItemsFromRaw(m, raw)
 {{- end }}
 {{- end }}
@@ -1437,6 +1438,8 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 		return nil, err
 	}
 	return apiModel, nil
+{{- else if not .Create.RequestSchema }}
+	return restclient.{{ restWriteCall .Create }}[map[string]any, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, map[string]any{})
 {{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
@@ -1601,6 +1604,9 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
 	return &model, nil
+{{- else if not .Update.Path }}
+	// Resources with only a replaceable identity have no update operation.
+	return a.Read(ctx, model)
 {{- else if .NoRead }}
 	err := restclient.{{ restWriteCall .Update }}NoResponse(ctx, a.client, {{ pathExpr . .Update }}, model)
 	return &model, err
@@ -1982,6 +1988,9 @@ var _ = types.String{}
 var _ resource.Resource = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithConfigure = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithImportState = &{{ .StructName }}Resource{}
+{{- if eq .StructName "SearchDataset" }}
+var _ resource.ResourceWithModifyPlan = &{{ .StructName }}Resource{}
+{{- end }}
 {{- if eq .StructName "Collector" }}
 var _ resource.ResourceWithUpgradeState = &{{ .StructName }}Resource{}
 {{- end }}
@@ -2026,6 +2035,65 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		},
 	}
 }
+
+{{- if eq .StructName "SearchDataset" }}
+// ModifyPlan exposes the configured dataset identity to dependent resources before
+// creation. Read configuration rather than the plan so omitted or unknown IDs are
+// left for the API to resolve.
+func (r *SearchDatasetResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+	var priorID types.String
+	if !req.State.Raw.IsNull() {
+		resp.Diagnostics.Append(req.State.GetAttribute(ctx, path.Root("id"), &priorID)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
+	hasPriorID := !priorID.IsNull() && !priorID.IsUnknown()
+	for _, blockName := range []string{
+{{- range $variant := .OneOfVariants }}
+{{- range .Fields }}
+{{- if eq .TerraformName "id" }}
+		{{ printf "%q" $variant.TerraformName }},
+{{- end }}
+{{- end }}
+{{- end }}
+	} {
+		root := path.Root(blockName)
+		var block types.Object
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, root, &block)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		if block.IsNull() {
+			continue
+		}
+		if block.IsUnknown() {
+			if hasPriorID {
+				resp.RequiresReplace = append(resp.RequiresReplace, root)
+			}
+			return
+		}
+		var id types.String
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, root.AtName("id"), &id)...)
+		if resp.Diagnostics.HasError() || id.IsNull() {
+			return
+		}
+		if hasPriorID && !priorID.Equal(id) {
+			// The API addresses updates using the ID, so changing it requires a
+			// new dataset. An explicitly unknown ID may resolve to a different
+			// identity, so it must also plan replacement rather than an update.
+			resp.RequiresReplace = append(resp.RequiresReplace, root.AtName("id"))
+		}
+		if !id.IsUnknown() {
+			resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("id"), id)...)
+		}
+		return
+	}
+}
+{{- end }}
 
 func (r *{{ .StructName }}Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
@@ -2121,11 +2189,29 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 {{- else if eq .StructName "PackSource" }}
 	priorPlainAuth := snapshotPackSourcePlainAuthTokensPriorRead(&model)
 {{- end }}
+{{- if or (eq .StructName "NotificationTemplate") (eq .StructName "SearchDatasetIntelligence") }}
+{{- if eq .StructName "NotificationTemplate" }}
+	// Template fields are returned verbatim. Refresh from the API so changes
+	// outside Terraform, including a removed description, appear in the plan.
+{{- else }}
+	// Generation can replace or remove optional output fields. Refresh the
+	// entire envelope so old content and failure details do not linger.
+{{- end }}
+	if apiModel != nil {
+		model = *apiModel
+	}
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
+{{- end }}
 {{- if eq .StructName "Source" }}
 	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
 {{- else if eq .StructName "PackSource" }}
 	restorePackSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+{{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	if model.InputHttpRaw != nil {
+		model.InputHttpRaw.AuthTokensExt = normalizeHTTPRawExtendedAuthTokenState(model.InputHttpRaw.AuthTokensExt)
+	}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -2386,6 +2472,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if api == nil || state == nil {
 		return
 	}
+{{- if eq .StructName "SearchDatasetIntelligence" }}
+	// The API returns the full envelope; absent optional outputs remain null.
+	*state = *api
+{{- else }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
 	sync{{ .StructName }}LegacyItems(api, state)
 	syncSourceLikeActiveInput(api, state)
@@ -2619,6 +2709,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		!state.OutputRouter.Rules.IsNull() && !state.OutputRouter.Rules.IsUnknown() {
 		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
 	}
+{{- end }}
 {{- end }}
 }
 
@@ -3096,6 +3187,26 @@ description: |-
 # {{ resourceType . }} (Resource)
 
 {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
+{{- if eq .StructName "SearchDatasetIntelligence" }}
+
+Enables intelligence for an existing Search dataset. Creating the resource starts an asynchronous analysis; Terraform records the returned generation status without waiting for completion. Refresh state to read the latest status and generated Markdown. A ` + "`partial` or `failed`" + ` run remains managed and is not automatically retried.
+
+AI and agentic Search must be enabled, AI consent accepted, and the caller must have read and maintainer access to the dataset. Built-in datasets require Search admin privileges to manage intelligence.
+
+Destroying the resource removes the saved intelligence without deleting the dataset. To disable intelligence conditionally, use ` + "`count` or `for_each`" + `. To regenerate it explicitly, run ` + "`terraform apply -replace=criblio_search_dataset_intelligence.example`" + `. Import adopts existing intelligence without starting another analysis. Generated content and lifecycle metadata are read-only.
+{{- end }}
+{{- if eq .StructName "SearchDataset" }}
+
+Configure the ID in the dataset type attribute, for example ` + "`s3_dataset.id`" + `. The computed top-level ` + "`id`" + ` is available during planning when that configured ID is known, so dependent resources can reference it before creation. Unknown or omitted IDs are resolved after creation. Changing the configured ID replaces the Dataset.
+{{- end }}
+{{- if eq .StructName "NotificationTemplate" }}
+
+Manages custom Handlebars notification templates in the current workspace. Requires V2 Notifications to be enabled. The provider selects ` + "`engine=handlebars`" + ` automatically.
+
+Use ` + "`criblio_notification_template.<name>.id`" + ` as the ` + "`template_id`" + ` in a notification's ` + "`template_target_pairs`" + `. The template's ` + "`type`" + ` must match the notification target's type. SMTP, Slack, and PagerDuty templates normally contain a JSON payload; Handlebars expressions remain literal template text.
+
+Built-in templates (` + "`default-email`, `default-slack`, `default-sns`, and `default-pagerduty`" + `) cannot be created, updated, or deleted. Read them using the ` + "`criblio_notification_template`" + ` or ` + "`criblio_notification_templates`" + ` data source. The import CLI excludes these built-in templates from exported resources.
+{{- end }}
 
 ## Example Usage
 
@@ -3251,6 +3362,96 @@ func Test{{ .StructName }}(t *testing.T) {
 			},
 		})
 	})
+}
+{{- else if eq .StructName "SearchDatasetIntelligence" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+// Requires an existing dataset, enabled agentic Search, and accepted AI consent.
+func TestSearchDatasetIntelligence(t *testing.T) {
+	datasetID := os.Getenv("CRIBL_TEST_DATASET_ID")
+	if datasetID == "" {
+		datasetID = "cribl_edge_logs"
+	}
+	config := fmt.Sprintf(` + "`" + `resource "criblio_search_dataset_intelligence" "test" {
+  dataset_id = %q
+}
+data "criblio_search_dataset_intelligence" "test" {
+  dataset_id = criblio_search_dataset_intelligence.test.dataset_id
+  depends_on = [criblio_search_dataset_intelligence.test]
+}` + "`" + `, datasetID)
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories: providerFactory,
+		Steps: []resource.TestStep{
+			{Config: config, Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr("criblio_search_dataset_intelligence.test", "dataset_id", datasetID),
+				resource.TestCheckResourceAttr("data.criblio_search_dataset_intelligence.test", "dataset_id", datasetID),
+			)},
+			{Config: config, PlanOnly: true},
+			{
+				ResourceName: "criblio_search_dataset_intelligence.test", ImportState: true,
+				ImportStateId: datasetID, ImportStateVerify: true,
+				ImportStateVerifyIdentifierAttribute: "dataset_id",
+				// The agent may finish between reading the saved state and importing.
+				ImportStateVerifyIgnore: []string{"content", "status", "failure_reason"},
+			},
+		},
+	})
+}
+{{- else if eq .StructName "NotificationTemplate" }}
+import (
+	"fmt"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+// Requires a workspace with V2 Notifications enabled.
+func TestNotificationTemplate(t *testing.T) {
+	id := "tf-template-" + acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	const name = "criblio_notification_template.test"
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories: providerFactory,
+		Steps: []resource.TestStep{
+			{
+				Config: notificationTemplateConfig(id, "Alert notification"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(name, "id", id),
+					resource.TestCheckResourceAttr(name, "type", "sns"),
+					resource.TestCheckResourceAttr(name, "engine", "handlebars"),
+					resource.TestCheckResourceAttr("data.criblio_notification_template.by_id", "id", id),
+				),
+			},
+			{Config: notificationTemplateConfig(id, "Alert notification"), PlanOnly: true},
+			{
+				Config: notificationTemplateConfig(id, "Updated notification"),
+				Check: resource.TestCheckResourceAttr(name, "content", "Updated notification"),
+			},
+			{Config: notificationTemplateConfig(id, "Updated notification"), PlanOnly: true},
+			{ResourceName: name, ImportState: true, ImportStateId: id, ImportStateVerify: true},
+		},
+	})
+}
+
+func notificationTemplateConfig(id, content string) string {
+	return fmt.Sprintf(` + "`" + `resource "criblio_notification_template" "test" {
+  id = %q
+  type = "sns"
+  content = %q
+}
+data "criblio_notification_template" "by_id" {
+  id = criblio_notification_template.test.id
+  depends_on = [criblio_notification_template.test]
+}
+data "criblio_notification_templates" "all" {
+  depends_on = [criblio_notification_template.test]
+}` + "`" + `, id, content)
 }
 {{- else if eq .StructName "GlobalVar" }}
 import (

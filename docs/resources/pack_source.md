@@ -1882,7 +1882,7 @@ Optional:
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--metadata))
 - `allowed_paths` (List of String) List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.
 - `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.
-- `auth_tokens_ext` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
+- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization token). Empty placeholder objects returned by the API are omitted from state and exported configuration. Populated entries, including legacy entries without authType, retain their values. (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
 - `access_control_allow_origin` (List of String) HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.
 - `access_control_allow_headers` (List of String) HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers.
 - `access_control_allow_methods` (List of String) HTTP methods echoed in Access-Control-Allow-Methods on preflight
@@ -4294,6 +4294,7 @@ Optional:
 <a id="nestedatt--input_datadog_agent--metadata"></a>
 <a id="nestedatt--input_datagen--metadata"></a>
 <a id="nestedatt--input_http_raw--metadata"></a>
+<a id="nestedatt--input_http_raw--auth_tokens_ext--metadata"></a>
 <a id="nestedatt--input_kinesis--metadata"></a>
 <a id="nestedatt--input_criblmetrics--metadata"></a>
 <a id="nestedatt--input_metrics--metadata"></a>
@@ -5212,11 +5213,16 @@ Required:
 - `events_per_sec` (Number) Maximum number of events to generate per second per Worker Node. Defaults to 10.
 
 <a id="nestedatt--input_http_raw--auth_tokens_ext"></a>
+<a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
 ### Nested Schema for `input_http_raw.auth_tokens_ext`
 
-Required:
+Optional:
 
-- `auth_type` (String) Discriminator value.
+- `auth_type` (String)
+- `token_secret` (String)
+- `token` (String, Sensitive)
+- `description` (String)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext--metadata))
 
 <a id="nestedatt--input_snmp--snmp_v3_auth"></a>
 ### Nested Schema for `input_snmp.snmp_v3_auth`
@@ -5422,17 +5428,6 @@ Read-Only:
 - `content_description` (String)
 - `collect_path` (String) OpenAI Organization API path
 - `docs_url` (String) Docs URL
-
-<a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
-### Nested Schema for `input_wiz_webhook.auth_tokens_ext`
-
-Optional:
-
-- `auth_type` (String)
-- `token_secret` (String)
-- `token` (String, Sensitive)
-- `description` (String)
-- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext--metadata))
 
 <a id="nestedatt--input_servicenow_table--oauth_params"></a>
 ### Nested Schema for `input_servicenow_table.oauth_params`

@@ -22,6 +22,12 @@ var InternalGroupIDs = map[string]bool{
 // SkipExportIDs lists resource IDs to never export, by type.
 // Use for resources that fail apply (e.g. missing required attrs, API restrictions).
 var SkipExportIDs = map[string]map[string]bool{
+	"criblio_notification_template": {
+		"default-email":     true, // API-owned templates cannot be created, updated, or deleted.
+		"default-slack":     true,
+		"default-sns":       true,
+		"default-pagerduty": true,
+	},
 	"criblio_group": {
 		"search": true, // Defense in depth for the internal Local Search worker group.
 	},
