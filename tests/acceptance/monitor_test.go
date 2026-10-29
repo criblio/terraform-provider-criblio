@@ -74,6 +74,8 @@ func TestMonitor(t *testing.T) {
 	})
 
 	t.Run("outlier-dispatch", func(t *testing.T) {
+		t.Skip("Outlier monitor acceptance test is disabled: the backend rejects outlier as an unsupported detection type")
+
 		resourceName := "criblio_monitor.example_outlier"
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories:  providerFactory,
