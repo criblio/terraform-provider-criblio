@@ -100,7 +100,7 @@ type SourceModel struct {
 	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
 	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
 	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
-	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIDentityPingone,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
 	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
 	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
 	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
@@ -194,7 +194,7 @@ type SourceResourceModel struct {
 	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
 	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
 	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
-	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIDentityPingone,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
 	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
 	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
 	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`
@@ -288,7 +288,7 @@ type SourceDataSourceModel struct {
 	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
 	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
 	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
-	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIDentityPingone,omitempty"`
+	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
 	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
 	InputVectraAiHec                  *InputVectraAiHecModel                  `tfsdk:"input_vectra_ai_hec" json:"InputVectraAiHec,omitempty"`
 	InputF5BigIp                      *InputF5BigIpModel                      `tfsdk:"input_f5_big_ip" json:"InputF5BigIp,omitempty"`

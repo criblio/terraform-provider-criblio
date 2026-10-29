@@ -20,21 +20,21 @@ type SearchDatasetProviderModel struct {
 	Description                  types.String                       `tfsdk:"description" json:"description,omitempty"`
 	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
 	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	APIHttpProvider              *APIHttpProviderModel              `tfsdk:"apihttp" json:"APIHttpProvider,omitempty"`
-	APIAwsProvider               *APIAwsProviderModel               `tfsdk:"api_aws" json:"APIAwsProvider,omitempty"`
-	APIAzureProvider             *APIAzureProviderModel             `tfsdk:"api_azure" json:"APIAzureProvider,omitempty"`
-	APIGcpProvider               *APIGcpProviderModel               `tfsdk:"api_gcp" json:"APIGcpProvider,omitempty"`
-	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProviderModel   `tfsdk:"api_google_workspace" json:"APIGoogleWorkspaceProvider,omitempty"`
-	APIMsGraphProvider           *APIMsGraphProviderModel           `tfsdk:"api_msgraph" json:"APIMsGraphProvider,omitempty"`
-	APIOktaProvider              *APIOktaProviderModel              `tfsdk:"api_okta" json:"APIOktaProvider,omitempty"`
-	APITailscaleProvider         *APITailscaleProviderModel         `tfsdk:"api_tailscale" json:"APITailscaleProvider,omitempty"`
-	APIZoomProvider              *APIZoomProviderModel              `tfsdk:"api_zoom" json:"APIZoomProvider,omitempty"`
-	APIAzureDataExplorerProvider *APIAzureDataExplorerProviderModel `tfsdk:"api_azure_data_explorer" json:"APIAzureDataExplorerProvider,omitempty"`
+	APIHttpProvider              *APIHttpProviderModel              `tfsdk:"apihttp" json:"ApiHttpProvider,omitempty"`
+	APIAwsProvider               *APIAwsProviderModel               `tfsdk:"api_aws" json:"ApiAwsProvider,omitempty"`
+	APIAzureProvider             *APIAzureProviderModel             `tfsdk:"api_azure" json:"ApiAzureProvider,omitempty"`
+	APIGcpProvider               *APIGcpProviderModel               `tfsdk:"api_gcp" json:"ApiGcpProvider,omitempty"`
+	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProviderModel   `tfsdk:"api_google_workspace" json:"ApiGoogleWorkspaceProvider,omitempty"`
+	APIMsGraphProvider           *APIMsGraphProviderModel           `tfsdk:"api_msgraph" json:"ApiMsGraphProvider,omitempty"`
+	APIOktaProvider              *APIOktaProviderModel              `tfsdk:"api_okta" json:"ApiOktaProvider,omitempty"`
+	APITailscaleProvider         *APITailscaleProviderModel         `tfsdk:"api_tailscale" json:"ApiTailscaleProvider,omitempty"`
+	APIZoomProvider              *APIZoomProviderModel              `tfsdk:"api_zoom" json:"ApiZoomProvider,omitempty"`
+	APIAzureDataExplorerProvider *APIAzureDataExplorerProviderModel `tfsdk:"api_azure_data_explorer" json:"ApiAzureDataExplorerProvider,omitempty"`
 	SnowflakeProvider            *SnowflakeProviderModel            `tfsdk:"snowflake" json:"SnowflakeProvider,omitempty"`
 	ClickHouseProvider           *ClickHouseProviderModel           `tfsdk:"clickhouse" json:"ClickHouseProvider,omitempty"`
 	PrometheusProvider           *PrometheusProviderModel           `tfsdk:"prometheus" json:"PrometheusProvider,omitempty"`
-	APIOpenSearchProvider        *APIOpenSearchProviderModel        `tfsdk:"api_opensearch" json:"APIOpenSearchProvider,omitempty"`
-	APIElasticSearchProvider     *APIElasticSearchProviderModel     `tfsdk:"api_elasticsearch" json:"APIElasticSearchProvider,omitempty"`
+	APIOpenSearchProvider        *APIOpenSearchProviderModel        `tfsdk:"api_opensearch" json:"ApiOpenSearchProvider,omitempty"`
+	APIElasticSearchProvider     *APIElasticSearchProviderModel     `tfsdk:"api_elasticsearch" json:"ApiElasticSearchProvider,omitempty"`
 	AwsSecurityLakeProvider      *AwsSecurityLakeProviderModel      `tfsdk:"amazon_security_lake" json:"AwsSecurityLakeProvider,omitempty"`
 	S3Provider                   *S3ProviderModel                   `tfsdk:"s3" json:"S3Provider,omitempty"`
 	CriblLeaderProvider          *CriblLeaderProviderModel          `tfsdk:"cribl_leader" json:"CriblLeaderProvider,omitempty"`
@@ -49,21 +49,21 @@ type SearchDatasetProviderResourceModel struct {
 	Description                  types.String                       `tfsdk:"description" json:"description,omitempty"`
 	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
 	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	APIHttpProvider              *APIHttpProviderModel              `tfsdk:"apihttp" json:"APIHttpProvider,omitempty"`
-	APIAwsProvider               *APIAwsProviderModel               `tfsdk:"api_aws" json:"APIAwsProvider,omitempty"`
-	APIAzureProvider             *APIAzureProviderModel             `tfsdk:"api_azure" json:"APIAzureProvider,omitempty"`
-	APIGcpProvider               *APIGcpProviderModel               `tfsdk:"api_gcp" json:"APIGcpProvider,omitempty"`
-	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProviderModel   `tfsdk:"api_google_workspace" json:"APIGoogleWorkspaceProvider,omitempty"`
-	APIMsGraphProvider           *APIMsGraphProviderModel           `tfsdk:"api_msgraph" json:"APIMsGraphProvider,omitempty"`
-	APIOktaProvider              *APIOktaProviderModel              `tfsdk:"api_okta" json:"APIOktaProvider,omitempty"`
-	APITailscaleProvider         *APITailscaleProviderModel         `tfsdk:"api_tailscale" json:"APITailscaleProvider,omitempty"`
-	APIZoomProvider              *APIZoomProviderModel              `tfsdk:"api_zoom" json:"APIZoomProvider,omitempty"`
-	APIAzureDataExplorerProvider *APIAzureDataExplorerProviderModel `tfsdk:"api_azure_data_explorer" json:"APIAzureDataExplorerProvider,omitempty"`
+	APIHttpProvider              *APIHttpProviderModel              `tfsdk:"apihttp" json:"ApiHttpProvider,omitempty"`
+	APIAwsProvider               *APIAwsProviderModel               `tfsdk:"api_aws" json:"ApiAwsProvider,omitempty"`
+	APIAzureProvider             *APIAzureProviderModel             `tfsdk:"api_azure" json:"ApiAzureProvider,omitempty"`
+	APIGcpProvider               *APIGcpProviderModel               `tfsdk:"api_gcp" json:"ApiGcpProvider,omitempty"`
+	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProviderModel   `tfsdk:"api_google_workspace" json:"ApiGoogleWorkspaceProvider,omitempty"`
+	APIMsGraphProvider           *APIMsGraphProviderModel           `tfsdk:"api_msgraph" json:"ApiMsGraphProvider,omitempty"`
+	APIOktaProvider              *APIOktaProviderModel              `tfsdk:"api_okta" json:"ApiOktaProvider,omitempty"`
+	APITailscaleProvider         *APITailscaleProviderModel         `tfsdk:"api_tailscale" json:"ApiTailscaleProvider,omitempty"`
+	APIZoomProvider              *APIZoomProviderModel              `tfsdk:"api_zoom" json:"ApiZoomProvider,omitempty"`
+	APIAzureDataExplorerProvider *APIAzureDataExplorerProviderModel `tfsdk:"api_azure_data_explorer" json:"ApiAzureDataExplorerProvider,omitempty"`
 	SnowflakeProvider            *SnowflakeProviderModel            `tfsdk:"snowflake" json:"SnowflakeProvider,omitempty"`
 	ClickHouseProvider           *ClickHouseProviderModel           `tfsdk:"clickhouse" json:"ClickHouseProvider,omitempty"`
 	PrometheusProvider           *PrometheusProviderModel           `tfsdk:"prometheus" json:"PrometheusProvider,omitempty"`
-	APIOpenSearchProvider        *APIOpenSearchProviderModel        `tfsdk:"api_opensearch" json:"APIOpenSearchProvider,omitempty"`
-	APIElasticSearchProvider     *APIElasticSearchProviderModel     `tfsdk:"api_elasticsearch" json:"APIElasticSearchProvider,omitempty"`
+	APIOpenSearchProvider        *APIOpenSearchProviderModel        `tfsdk:"api_opensearch" json:"ApiOpenSearchProvider,omitempty"`
+	APIElasticSearchProvider     *APIElasticSearchProviderModel     `tfsdk:"api_elasticsearch" json:"ApiElasticSearchProvider,omitempty"`
 	AwsSecurityLakeProvider      *AwsSecurityLakeProviderModel      `tfsdk:"amazon_security_lake" json:"AwsSecurityLakeProvider,omitempty"`
 	S3Provider                   *S3ProviderModel                   `tfsdk:"s3" json:"S3Provider,omitempty"`
 	CriblLeaderProvider          *CriblLeaderProviderModel          `tfsdk:"cribl_leader" json:"CriblLeaderProvider,omitempty"`
@@ -78,21 +78,21 @@ type SearchDatasetProviderDataSourceModel struct {
 	Description                  types.String                       `tfsdk:"description" json:"description,omitempty"`
 	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
 	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	APIHttpProvider              *APIHttpProviderModel              `tfsdk:"apihttp" json:"APIHttpProvider,omitempty"`
-	APIAwsProvider               *APIAwsProviderModel               `tfsdk:"api_aws" json:"APIAwsProvider,omitempty"`
-	APIAzureProvider             *APIAzureProviderModel             `tfsdk:"api_azure" json:"APIAzureProvider,omitempty"`
-	APIGcpProvider               *APIGcpProviderModel               `tfsdk:"api_gcp" json:"APIGcpProvider,omitempty"`
-	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProviderModel   `tfsdk:"api_google_workspace" json:"APIGoogleWorkspaceProvider,omitempty"`
-	APIMsGraphProvider           *APIMsGraphProviderModel           `tfsdk:"api_msgraph" json:"APIMsGraphProvider,omitempty"`
-	APIOktaProvider              *APIOktaProviderModel              `tfsdk:"api_okta" json:"APIOktaProvider,omitempty"`
-	APITailscaleProvider         *APITailscaleProviderModel         `tfsdk:"api_tailscale" json:"APITailscaleProvider,omitempty"`
-	APIZoomProvider              *APIZoomProviderModel              `tfsdk:"api_zoom" json:"APIZoomProvider,omitempty"`
-	APIAzureDataExplorerProvider *APIAzureDataExplorerProviderModel `tfsdk:"api_azure_data_explorer" json:"APIAzureDataExplorerProvider,omitempty"`
+	APIHttpProvider              *APIHttpProviderModel              `tfsdk:"apihttp" json:"ApiHttpProvider,omitempty"`
+	APIAwsProvider               *APIAwsProviderModel               `tfsdk:"api_aws" json:"ApiAwsProvider,omitempty"`
+	APIAzureProvider             *APIAzureProviderModel             `tfsdk:"api_azure" json:"ApiAzureProvider,omitempty"`
+	APIGcpProvider               *APIGcpProviderModel               `tfsdk:"api_gcp" json:"ApiGcpProvider,omitempty"`
+	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProviderModel   `tfsdk:"api_google_workspace" json:"ApiGoogleWorkspaceProvider,omitempty"`
+	APIMsGraphProvider           *APIMsGraphProviderModel           `tfsdk:"api_msgraph" json:"ApiMsGraphProvider,omitempty"`
+	APIOktaProvider              *APIOktaProviderModel              `tfsdk:"api_okta" json:"ApiOktaProvider,omitempty"`
+	APITailscaleProvider         *APITailscaleProviderModel         `tfsdk:"api_tailscale" json:"ApiTailscaleProvider,omitempty"`
+	APIZoomProvider              *APIZoomProviderModel              `tfsdk:"api_zoom" json:"ApiZoomProvider,omitempty"`
+	APIAzureDataExplorerProvider *APIAzureDataExplorerProviderModel `tfsdk:"api_azure_data_explorer" json:"ApiAzureDataExplorerProvider,omitempty"`
 	SnowflakeProvider            *SnowflakeProviderModel            `tfsdk:"snowflake" json:"SnowflakeProvider,omitempty"`
 	ClickHouseProvider           *ClickHouseProviderModel           `tfsdk:"clickhouse" json:"ClickHouseProvider,omitempty"`
 	PrometheusProvider           *PrometheusProviderModel           `tfsdk:"prometheus" json:"PrometheusProvider,omitempty"`
-	APIOpenSearchProvider        *APIOpenSearchProviderModel        `tfsdk:"api_opensearch" json:"APIOpenSearchProvider,omitempty"`
-	APIElasticSearchProvider     *APIElasticSearchProviderModel     `tfsdk:"api_elasticsearch" json:"APIElasticSearchProvider,omitempty"`
+	APIOpenSearchProvider        *APIOpenSearchProviderModel        `tfsdk:"api_opensearch" json:"ApiOpenSearchProvider,omitempty"`
+	APIElasticSearchProvider     *APIElasticSearchProviderModel     `tfsdk:"api_elasticsearch" json:"ApiElasticSearchProvider,omitempty"`
 	AwsSecurityLakeProvider      *AwsSecurityLakeProviderModel      `tfsdk:"amazon_security_lake" json:"AwsSecurityLakeProvider,omitempty"`
 	S3Provider                   *S3ProviderModel                   `tfsdk:"s3" json:"S3Provider,omitempty"`
 	CriblLeaderProvider          *CriblLeaderProviderModel          `tfsdk:"cribl_leader" json:"CriblLeaderProvider,omitempty"`

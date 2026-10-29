@@ -34,7 +34,7 @@ type {{ .StructName }}Model struct {
 	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
-	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .GoName }},omitempty\"`" + `
+	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
 }
 
@@ -46,7 +46,7 @@ type {{ .StructName }}ResourceModel struct {
 	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
-	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .GoName }},omitempty\"`" + `
+	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
 }
 
@@ -58,7 +58,7 @@ type {{ .StructName }}DataSourceModel struct {
 	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
-	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .GoName }},omitempty\"`" + `
+	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
 }
 
