@@ -95,6 +95,8 @@ func PackCollectorTerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, nil
 	}
 	switch typed := value.(type) {
+	case types.Dynamic:
+		return dynamicValueToJSON(typed)
 	case types.Bool:
 		return typed.ValueBool(), nil
 	case types.Int64:
@@ -176,6 +178,9 @@ func PackCollectorTerraformNameToAPIName(name string) string {
 }
 
 func PackCollectorAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.DynamicType) {
+		return dynamicValueFromAPI(value)
+	}
 	if value == nil {
 		return PackCollectorTerraformNullValue(typ)
 	}
@@ -281,6 +286,9 @@ func PackCollectorAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value
 }
 
 func PackCollectorTerraformNullValue(typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.DynamicType) {
+		return types.DynamicNull(), nil
+	}
 	if typ.Equal(types.BoolType) {
 		return types.BoolNull(), nil
 	}
@@ -439,6 +447,9 @@ func (m PackCollectorModel) MarshalJSON() ([]byte, error) {
 func (m *PackCollectorModel) UnmarshalJSON(data []byte) error {
 	var raw map[string]any
 	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	if err := decodeCollectorSavedState(data, raw); err != nil {
 		return err
 	}
 	normalizeCollectorUnionValues(raw)

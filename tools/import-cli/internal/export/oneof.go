@@ -24,7 +24,7 @@ func addOneOfBlockFromFirstItem(model interface{}, attrs map[string]hcl.Value, o
 	if len(itemMap) == 0 {
 		switch model.(type) {
 		case *provider.SourceResourceModel, *provider.SourceModel, *provider.PackSourceResourceModel, *provider.PackSourceModel,
-			*provider.CollectorResourceModel, *provider.CollectorModel:
+			*provider.CollectorResourceModel, *provider.CollectorModel, *provider.PackCollectorResourceModel, *provider.PackCollectorModel:
 			return addOneOfFromGeneratedInputBlocks(model, attrs, oneOf)
 		}
 		return nil
@@ -165,7 +165,11 @@ func addOneOfFromGeneratedInputBlocks(model interface{}, attrs map[string]hcl.Va
 		if field.Kind() != reflect.Pointer || field.IsNil() {
 			continue
 		}
-		blockMap, err := hcl.ModelToValue(field.Interface(), nil)
+		var options *hcl.Options
+		if strings.HasPrefix(fieldInfo.Tag.Get("tfsdk"), "input_collector_") {
+			options = &hcl.Options{SkipAttributes: map[string]bool{"saved_state": true}}
+		}
+		blockMap, err := hcl.ModelToValue(field.Interface(), options)
 		if err != nil {
 			return err
 		}

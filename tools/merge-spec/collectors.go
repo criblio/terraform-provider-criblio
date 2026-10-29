@@ -51,6 +51,9 @@ func applyCollectorSchemas(spec *yaml.Node, overlayPath string) error {
 	}
 	properties, _ := mappingValue(nativeBase, "properties")
 	deleteMappingKey(properties, "collector")
+	if err := applyCollectorRuntimeSchema(nativeBase, schemas, config); err != nil {
+		return err
+	}
 	setMappingValue(schemas, scalar(base.Value), nativeBase)
 	for i := 0; i < len(variants.Content); i += 2 {
 		legacyName, nativeName := variants.Content[i].Value, variants.Content[i+1].Value
@@ -88,11 +91,41 @@ func applyCollectorSchemas(spec *yaml.Node, overlayPath string) error {
 				}
 				properties, _ := mappingValue(privateBase, "properties")
 				deleteMappingKey(properties, "collector")
+				if err := applyCollectorRuntimeSchema(privateBase, schemas, config); err != nil {
+					return err
+				}
 				allOf.Content[0] = privateBase
 			}
 		}
 		setMappingValue(schemas, scalar(legacyName), wrapper)
 	}
+	return nil
+}
+
+// Keep the upstream runtime shape while retaining the Terraform compatibility annotations.
+func applyCollectorRuntimeSchema(base, schemas, config *yaml.Node) error {
+	runtime, ok := mappingValue(config, "runtime")
+	if !ok {
+		return nil
+	}
+	schema, ok := mappingValue(schemas, runtime.Value)
+	if !ok {
+		return fmt.Errorf("collector runtime schema %q not found", runtime.Value)
+	}
+	upstream, err := lookupTarget(schema, "$.properties.savedState")
+	if err != nil {
+		return fmt.Errorf("collector runtime savedState: %w", err)
+	}
+	properties, _ := mappingValue(base, "properties")
+	state := cloneNode(upstream)
+	if legacy, ok := mappingValue(properties, "savedState"); ok {
+		for i := 0; i < len(legacy.Content); i += 2 {
+			if strings.HasPrefix(legacy.Content[i].Value, "x-terraform-") {
+				setMappingValue(state, cloneNode(legacy.Content[i]), cloneNode(legacy.Content[i+1]))
+			}
+		}
+	}
+	setMappingValue(properties, scalar("savedState"), state)
 	return nil
 }
 

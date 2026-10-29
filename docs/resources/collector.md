@@ -10,6 +10,8 @@ description: |-
 
 Collector Resource
 
+The `saved_state` attribute accepts both legacy string maps and nested objects. When omitted, it exposes runtime checkpoints returned by Cribl. Configured values are preserved during refresh; computed checkpoints are omitted from create and update requests. Existing string-map state is upgraded automatically. For resources created with older providers, legacy saved values are retained until an apply records whether `saved_state` is configured.
+
 ## Example Usage
 
 ```terraform
@@ -976,7 +978,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_splunk--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -995,7 +997,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_rest--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1014,7 +1016,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_s3--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1033,7 +1035,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1052,7 +1054,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1071,7 +1073,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_database--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1090,7 +1092,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_gcs--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1109,7 +1111,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_health_check--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1128,7 +1130,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_script--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
@@ -1147,7 +1149,7 @@ Optional:
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 - `resume_on_boot` (Boolean) Resume the ad hoc job if a failure condition causes Stream to restart during job execution
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `saved_state` (Map of String) Saved state for the collector
+- `saved_state` (Dynamic) Runtime collection state.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_filesystem--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node

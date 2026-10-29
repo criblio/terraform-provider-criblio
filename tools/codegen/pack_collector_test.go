@@ -28,7 +28,6 @@ func TestPackCollectorSharesVariantImplementations(t *testing.T) {
 	}
 	got = renderTemplate(t, "resource", resource)
 	assertContains(t, got, "oneOfRequestModelWithHoistedIdentity(model)")
-	if strings.Contains(got, "ResourceWithUpgradeState") {
-		t.Fatal("new pack collector resource must not inherit legacy collector state upgrades")
-	}
+	assertContains(t, got, "ResourceWithUpgradeState")
+	assertContains(t, got, "Version: 1,")
 }

@@ -19,6 +19,7 @@ schema_imports:
 # Imported InputCollector definitions preserve the existing Terraform contract.
 collector_schemas:
   job: SavedJobCollection
+  runtime: SavedJobResponseEnrichedFields
   base: InputCollectorBase
   variants:
     InputCollectorSplunk: CollectorSplunk
@@ -184,6 +185,10 @@ actions:
   - target: "$.components.schemas.InputCollectorBase.properties.type"
     update:
       x-terraform-ignore: true
+  - target: "$.components.schemas.InputCollectorBase.properties.savedState"
+    update:
+      x-terraform-custom-type: types.DynamicType{}
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.InputCollectorBase.properties.input"
     update:
       description: 'Input configuration for a collection job. Set type to "collection".'

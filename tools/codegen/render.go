@@ -242,6 +242,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"nestedObject":                     nestedObject,
 		"objectAsJSON":                     objectAsJSON,
 		"normalizedString":                 normalizedString,
+		"hasDynamic":                       hasDynamic,
 		"hasObjectAsJSON":                  hasObjectAsJSON,
 		"nestedObjectFields":               nestedObjectFields,
 		"attrType":                         attrType,
@@ -562,6 +563,9 @@ func schemaSections(resource parser.ResourceDef) schemaDocSections {
 }
 
 func goType(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "types.Dynamic"
+	}
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		return "jsontypes.Normalized"
 	}
@@ -626,6 +630,9 @@ func legacyGoType(field parser.FieldDef) string {
 }
 
 func apiType(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "any"
+	}
 	if objectAsJSON(field) {
 		return "any"
 	}
@@ -667,6 +674,9 @@ func apiType(field parser.FieldDef) string {
 }
 
 func schemaAttribute(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "schema.DynamicAttribute"
+	}
 	if objectAsJSON(field) {
 		return "schema.StringAttribute"
 	}
@@ -820,7 +830,7 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
-	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field)) {
+	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field) && field.CustomType != "types.DynamicType{}") {
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
@@ -893,7 +903,7 @@ func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, in
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
-	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field)) {
+	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field) && field.CustomType != "types.DynamicType{}") {
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
@@ -907,6 +917,9 @@ func goStringLiteral(value string) string {
 }
 
 func schemaTypeName(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "Dynamic"
+	}
 	if objectAsJSON(field) {
 		return "String"
 	}
@@ -945,6 +958,9 @@ func schemaTypeName(field parser.FieldDef) string {
 }
 
 func zeroValue(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "types.DynamicNull()"
+	}
 	if nestedObjectList(field) {
 		return "types.ListValueMust(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}, nil)"
 	}
@@ -973,6 +989,9 @@ func zeroValue(field parser.FieldDef) string {
 }
 
 func nullValue(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "types.DynamicNull()"
+	}
 	if nestedObjectList(field) {
 		return "types.ListNull(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()})"
 	}
@@ -1155,6 +1174,15 @@ func normalizedString(field parser.FieldDef) bool {
 	return field.Type == "string" && field.CustomType == "jsontypes.NormalizedType{}"
 }
 
+func hasDynamic(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if field.CustomType == "types.DynamicType{}" {
+			return true
+		}
+	}
+	return false
+}
+
 func hasObjectAsJSON(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
 		if objectAsJSON(field) {
@@ -1194,6 +1222,9 @@ func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 }
 
 func attrType(field parser.FieldDef) string {
+	if field.CustomType == "types.DynamicType{}" {
+		return "types.DynamicType"
+	}
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		return "jsontypes.NormalizedType{}"
 	}

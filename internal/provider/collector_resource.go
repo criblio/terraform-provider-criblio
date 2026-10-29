@@ -30,6 +30,7 @@ var _ = types.String{}
 var _ resource.Resource = &CollectorResource{}
 var _ resource.ResourceWithConfigure = &CollectorResource{}
 var _ resource.ResourceWithImportState = &CollectorResource{}
+var _ resource.ResourceWithModifyPlan = &CollectorResource{}
 var _ resource.ResourceWithUpgradeState = &CollectorResource{}
 
 type CollectorResource struct {
@@ -47,7 +48,7 @@ func (r *CollectorResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Version:             1,
+		Version:             2,
 		MarkdownDescription: "Collector Resource",
 		Attributes: map[string]schema.Attribute{
 			"environment": schema.StringAttribute{
@@ -139,12 +140,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -766,12 +766,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -1913,12 +1912,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -2474,12 +2472,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -3027,12 +3024,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -3422,12 +3418,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -3830,12 +3825,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -4323,12 +4317,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -5102,12 +5095,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -5528,12 +5520,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Required:      false,
@@ -5924,6 +5915,11 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 	}
 }
 
+// ModifyPlan switches removed configured checkpoints back to API-owned state.
+func (r *CollectorResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	modifyCollectorSavedStatePlan(ctx, req, resp)
+}
+
 func (r *CollectorResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
@@ -5955,12 +5951,23 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
 	apiModel, err := r.api.Create(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
 	applyCollectorAPIToState(apiModel, &model, true, false)
+	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
+	if resp.Private != nil {
+		resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...)
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -5979,7 +5986,14 @@ func (r *CollectorResource) Read(ctx context.Context, req resource.ReadRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+	priorSavedState := collectorSavedStates(model)
+	configuredSavedState, savedStateDiags := readCollectorSavedStateConfig(ctx, req.Private, priorSavedState)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	applyCollectorAPIToState(apiModel, &model, true, isCollectorImportState(&model))
+	restoreCollectorConfiguredSavedState(&model, priorSavedState, configuredSavedState)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -5998,12 +6012,23 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
 	apiModel, err := r.api.Update(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
 	applyCollectorAPIToState(apiModel, &model, true, false)
+	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
+	if resp.Private != nil {
+		resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...)
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -6174,11 +6199,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorSplunk.Environment.IsNull() || state.InputCollectorSplunk.Environment.IsUnknown() {
 			state.InputCollectorSplunk.Environment = types.StringNull()
 		}
-		if !api.InputCollectorSplunk.SavedState.IsNull() && !api.InputCollectorSplunk.SavedState.IsUnknown() {
-			state.InputCollectorSplunk.SavedState = api.InputCollectorSplunk.SavedState
-		} else if state.InputCollectorSplunk.SavedState.IsNull() || state.InputCollectorSplunk.SavedState.IsUnknown() {
-			state.InputCollectorSplunk.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorSplunk.SavedState = api.InputCollectorSplunk.SavedState
 		if !api.InputCollectorSplunk.Schedule.IsNull() && !api.InputCollectorSplunk.Schedule.IsUnknown() {
 			state.InputCollectorSplunk.Schedule = api.InputCollectorSplunk.Schedule
 		} else if state.InputCollectorSplunk.Schedule.IsNull() || state.InputCollectorSplunk.Schedule.IsUnknown() {
@@ -6259,11 +6280,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorRest.Environment.IsNull() || state.InputCollectorRest.Environment.IsUnknown() {
 			state.InputCollectorRest.Environment = types.StringNull()
 		}
-		if !api.InputCollectorRest.SavedState.IsNull() && !api.InputCollectorRest.SavedState.IsUnknown() {
-			state.InputCollectorRest.SavedState = api.InputCollectorRest.SavedState
-		} else if state.InputCollectorRest.SavedState.IsNull() || state.InputCollectorRest.SavedState.IsUnknown() {
-			state.InputCollectorRest.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorRest.SavedState = api.InputCollectorRest.SavedState
 		if !api.InputCollectorRest.Schedule.IsNull() && !api.InputCollectorRest.Schedule.IsUnknown() {
 			state.InputCollectorRest.Schedule = api.InputCollectorRest.Schedule
 		} else if state.InputCollectorRest.Schedule.IsNull() || state.InputCollectorRest.Schedule.IsUnknown() {
@@ -6344,11 +6361,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorS3.Environment.IsNull() || state.InputCollectorS3.Environment.IsUnknown() {
 			state.InputCollectorS3.Environment = types.StringNull()
 		}
-		if !api.InputCollectorS3.SavedState.IsNull() && !api.InputCollectorS3.SavedState.IsUnknown() {
-			state.InputCollectorS3.SavedState = api.InputCollectorS3.SavedState
-		} else if state.InputCollectorS3.SavedState.IsNull() || state.InputCollectorS3.SavedState.IsUnknown() {
-			state.InputCollectorS3.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorS3.SavedState = api.InputCollectorS3.SavedState
 		if !api.InputCollectorS3.Schedule.IsNull() && !api.InputCollectorS3.Schedule.IsUnknown() {
 			state.InputCollectorS3.Schedule = api.InputCollectorS3.Schedule
 		} else if state.InputCollectorS3.Schedule.IsNull() || state.InputCollectorS3.Schedule.IsUnknown() {
@@ -6429,11 +6442,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorAzureBlob.Environment.IsNull() || state.InputCollectorAzureBlob.Environment.IsUnknown() {
 			state.InputCollectorAzureBlob.Environment = types.StringNull()
 		}
-		if !api.InputCollectorAzureBlob.SavedState.IsNull() && !api.InputCollectorAzureBlob.SavedState.IsUnknown() {
-			state.InputCollectorAzureBlob.SavedState = api.InputCollectorAzureBlob.SavedState
-		} else if state.InputCollectorAzureBlob.SavedState.IsNull() || state.InputCollectorAzureBlob.SavedState.IsUnknown() {
-			state.InputCollectorAzureBlob.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorAzureBlob.SavedState = api.InputCollectorAzureBlob.SavedState
 		if !api.InputCollectorAzureBlob.Schedule.IsNull() && !api.InputCollectorAzureBlob.Schedule.IsUnknown() {
 			state.InputCollectorAzureBlob.Schedule = api.InputCollectorAzureBlob.Schedule
 		} else if state.InputCollectorAzureBlob.Schedule.IsNull() || state.InputCollectorAzureBlob.Schedule.IsUnknown() {
@@ -6514,11 +6523,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorCriblLake.Environment.IsNull() || state.InputCollectorCriblLake.Environment.IsUnknown() {
 			state.InputCollectorCriblLake.Environment = types.StringNull()
 		}
-		if !api.InputCollectorCriblLake.SavedState.IsNull() && !api.InputCollectorCriblLake.SavedState.IsUnknown() {
-			state.InputCollectorCriblLake.SavedState = api.InputCollectorCriblLake.SavedState
-		} else if state.InputCollectorCriblLake.SavedState.IsNull() || state.InputCollectorCriblLake.SavedState.IsUnknown() {
-			state.InputCollectorCriblLake.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorCriblLake.SavedState = api.InputCollectorCriblLake.SavedState
 		if !api.InputCollectorCriblLake.Schedule.IsNull() && !api.InputCollectorCriblLake.Schedule.IsUnknown() {
 			state.InputCollectorCriblLake.Schedule = api.InputCollectorCriblLake.Schedule
 		} else if state.InputCollectorCriblLake.Schedule.IsNull() || state.InputCollectorCriblLake.Schedule.IsUnknown() {
@@ -6599,11 +6604,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorDatabase.Environment.IsNull() || state.InputCollectorDatabase.Environment.IsUnknown() {
 			state.InputCollectorDatabase.Environment = types.StringNull()
 		}
-		if !api.InputCollectorDatabase.SavedState.IsNull() && !api.InputCollectorDatabase.SavedState.IsUnknown() {
-			state.InputCollectorDatabase.SavedState = api.InputCollectorDatabase.SavedState
-		} else if state.InputCollectorDatabase.SavedState.IsNull() || state.InputCollectorDatabase.SavedState.IsUnknown() {
-			state.InputCollectorDatabase.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorDatabase.SavedState = api.InputCollectorDatabase.SavedState
 		if !api.InputCollectorDatabase.Schedule.IsNull() && !api.InputCollectorDatabase.Schedule.IsUnknown() {
 			state.InputCollectorDatabase.Schedule = api.InputCollectorDatabase.Schedule
 		} else if state.InputCollectorDatabase.Schedule.IsNull() || state.InputCollectorDatabase.Schedule.IsUnknown() {
@@ -6684,11 +6685,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorGCS.Environment.IsNull() || state.InputCollectorGCS.Environment.IsUnknown() {
 			state.InputCollectorGCS.Environment = types.StringNull()
 		}
-		if !api.InputCollectorGCS.SavedState.IsNull() && !api.InputCollectorGCS.SavedState.IsUnknown() {
-			state.InputCollectorGCS.SavedState = api.InputCollectorGCS.SavedState
-		} else if state.InputCollectorGCS.SavedState.IsNull() || state.InputCollectorGCS.SavedState.IsUnknown() {
-			state.InputCollectorGCS.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorGCS.SavedState = api.InputCollectorGCS.SavedState
 		if !api.InputCollectorGCS.Schedule.IsNull() && !api.InputCollectorGCS.Schedule.IsUnknown() {
 			state.InputCollectorGCS.Schedule = api.InputCollectorGCS.Schedule
 		} else if state.InputCollectorGCS.Schedule.IsNull() || state.InputCollectorGCS.Schedule.IsUnknown() {
@@ -6769,11 +6766,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorHealthCheck.Environment.IsNull() || state.InputCollectorHealthCheck.Environment.IsUnknown() {
 			state.InputCollectorHealthCheck.Environment = types.StringNull()
 		}
-		if !api.InputCollectorHealthCheck.SavedState.IsNull() && !api.InputCollectorHealthCheck.SavedState.IsUnknown() {
-			state.InputCollectorHealthCheck.SavedState = api.InputCollectorHealthCheck.SavedState
-		} else if state.InputCollectorHealthCheck.SavedState.IsNull() || state.InputCollectorHealthCheck.SavedState.IsUnknown() {
-			state.InputCollectorHealthCheck.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorHealthCheck.SavedState = api.InputCollectorHealthCheck.SavedState
 		if !api.InputCollectorHealthCheck.Schedule.IsNull() && !api.InputCollectorHealthCheck.Schedule.IsUnknown() {
 			state.InputCollectorHealthCheck.Schedule = api.InputCollectorHealthCheck.Schedule
 		} else if state.InputCollectorHealthCheck.Schedule.IsNull() || state.InputCollectorHealthCheck.Schedule.IsUnknown() {
@@ -6854,11 +6847,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorScript.Environment.IsNull() || state.InputCollectorScript.Environment.IsUnknown() {
 			state.InputCollectorScript.Environment = types.StringNull()
 		}
-		if !api.InputCollectorScript.SavedState.IsNull() && !api.InputCollectorScript.SavedState.IsUnknown() {
-			state.InputCollectorScript.SavedState = api.InputCollectorScript.SavedState
-		} else if state.InputCollectorScript.SavedState.IsNull() || state.InputCollectorScript.SavedState.IsUnknown() {
-			state.InputCollectorScript.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorScript.SavedState = api.InputCollectorScript.SavedState
 		if !api.InputCollectorScript.Schedule.IsNull() && !api.InputCollectorScript.Schedule.IsUnknown() {
 			state.InputCollectorScript.Schedule = api.InputCollectorScript.Schedule
 		} else if state.InputCollectorScript.Schedule.IsNull() || state.InputCollectorScript.Schedule.IsUnknown() {
@@ -6939,11 +6928,7 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorFilesystem.Environment.IsNull() || state.InputCollectorFilesystem.Environment.IsUnknown() {
 			state.InputCollectorFilesystem.Environment = types.StringNull()
 		}
-		if !api.InputCollectorFilesystem.SavedState.IsNull() && !api.InputCollectorFilesystem.SavedState.IsUnknown() {
-			state.InputCollectorFilesystem.SavedState = api.InputCollectorFilesystem.SavedState
-		} else if state.InputCollectorFilesystem.SavedState.IsNull() || state.InputCollectorFilesystem.SavedState.IsUnknown() {
-			state.InputCollectorFilesystem.SavedState = types.MapNull(types.StringType)
-		}
+		state.InputCollectorFilesystem.SavedState = api.InputCollectorFilesystem.SavedState
 		if !api.InputCollectorFilesystem.Schedule.IsNull() && !api.InputCollectorFilesystem.Schedule.IsUnknown() {
 			state.InputCollectorFilesystem.Schedule = api.InputCollectorFilesystem.Schedule
 		} else if state.InputCollectorFilesystem.Schedule.IsNull() || state.InputCollectorFilesystem.Schedule.IsUnknown() {
