@@ -17,6 +17,7 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type MonitorModel struct {
+	AlertExpression                 types.String                          `tfsdk:"alert_expression" json:"alertExpression,omitempty"`
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
@@ -24,6 +25,7 @@ type MonitorModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
+	Queries                         types.List                            `tfsdk:"queries" json:"queries,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         types.List                            `tfsdk:"silence" json:"silence,omitempty"`
@@ -35,21 +37,22 @@ type MonitorModel struct {
 	OutlierConfig                   *OutlierConfigModel                   `tfsdk:"outlier_config" json:"OutlierConfig,omitempty"`
 	ForecastConfig                  *ForecastConfigModel                  `tfsdk:"forecast_config" json:"ForecastConfig,omitempty"`
 	FiringCondition                 *FiringConditionModel                 `tfsdk:"firing_condition" json:"FiringCondition,omitempty"`
-	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"FiringConditionInheritable,omitempty"`
+	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"Inheritable,omitempty"`
 	FiringRule                      *FiringRuleModel                      `tfsdk:"firing_rule" json:"FiringRule,omitempty"`
-	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"FiringRuleInheritable,omitempty"`
+	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"Inheritable,omitempty"`
 	AetosMetadata                   *AetosMetadataModel                   `tfsdk:"aetos_metadata" json:"AetosMetadata,omitempty"`
-	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"MetadataInheritable,omitempty"`
+	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"Inheritable,omitempty"`
 	MonitorPolicyNotificationConfig *MonitorPolicyNotificationConfigModel `tfsdk:"monitor_policy_notification_config" json:"MonitorPolicyNotificationConfig,omitempty"`
 	MonitorTargetNotificationConfig *MonitorTargetNotificationConfigModel `tfsdk:"monitor_target_notification_config" json:"MonitorTargetNotificationConfig,omitempty"`
-	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"NotificationInheritable,omitempty"`
-	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"PriorityScalarValue,omitempty"`
-	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"PriorityInheritable,omitempty"`
-	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"TeamScalarValue,omitempty"`
-	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"TeamInheritable,omitempty"`
+	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"Inheritable,omitempty"`
+	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"ScalarValue,omitempty"`
+	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"Inheritable,omitempty"`
+	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"ScalarValue,omitempty"`
+	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"Inheritable,omitempty"`
 }
 
 type MonitorResourceModel struct {
+	AlertExpression                 types.String                          `tfsdk:"alert_expression" json:"alertExpression,omitempty"`
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
@@ -57,6 +60,7 @@ type MonitorResourceModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
+	Queries                         types.List                            `tfsdk:"queries" json:"queries,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
@@ -68,21 +72,22 @@ type MonitorResourceModel struct {
 	OutlierConfig                   *OutlierConfigModel                   `tfsdk:"outlier_config" json:"OutlierConfig,omitempty"`
 	ForecastConfig                  *ForecastConfigModel                  `tfsdk:"forecast_config" json:"ForecastConfig,omitempty"`
 	FiringCondition                 *FiringConditionModel                 `tfsdk:"firing_condition" json:"FiringCondition,omitempty"`
-	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"FiringConditionInheritable,omitempty"`
+	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"Inheritable,omitempty"`
 	FiringRule                      *FiringRuleModel                      `tfsdk:"firing_rule" json:"FiringRule,omitempty"`
-	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"FiringRuleInheritable,omitempty"`
+	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"Inheritable,omitempty"`
 	AetosMetadata                   *AetosMetadataModel                   `tfsdk:"aetos_metadata" json:"AetosMetadata,omitempty"`
-	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"MetadataInheritable,omitempty"`
+	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"Inheritable,omitempty"`
 	MonitorPolicyNotificationConfig *MonitorPolicyNotificationConfigModel `tfsdk:"monitor_policy_notification_config" json:"MonitorPolicyNotificationConfig,omitempty"`
 	MonitorTargetNotificationConfig *MonitorTargetNotificationConfigModel `tfsdk:"monitor_target_notification_config" json:"MonitorTargetNotificationConfig,omitempty"`
-	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"NotificationInheritable,omitempty"`
-	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"PriorityScalarValue,omitempty"`
-	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"PriorityInheritable,omitempty"`
-	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"TeamScalarValue,omitempty"`
-	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"TeamInheritable,omitempty"`
+	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"Inheritable,omitempty"`
+	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"ScalarValue,omitempty"`
+	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"Inheritable,omitempty"`
+	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"ScalarValue,omitempty"`
+	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"Inheritable,omitempty"`
 }
 
 type MonitorDataSourceModel struct {
+	AlertExpression                 types.String                          `tfsdk:"alert_expression" json:"alertExpression,omitempty"`
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
@@ -90,6 +95,7 @@ type MonitorDataSourceModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
+	Queries                         types.List                            `tfsdk:"queries" json:"queries,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
@@ -101,34 +107,36 @@ type MonitorDataSourceModel struct {
 	OutlierConfig                   *OutlierConfigModel                   `tfsdk:"outlier_config" json:"OutlierConfig,omitempty"`
 	ForecastConfig                  *ForecastConfigModel                  `tfsdk:"forecast_config" json:"ForecastConfig,omitempty"`
 	FiringCondition                 *FiringConditionModel                 `tfsdk:"firing_condition" json:"FiringCondition,omitempty"`
-	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"FiringConditionInheritable,omitempty"`
+	FiringConditionInheritable      *FiringConditionInheritableModel      `tfsdk:"firing_condition_inheritable" json:"Inheritable,omitempty"`
 	FiringRule                      *FiringRuleModel                      `tfsdk:"firing_rule" json:"FiringRule,omitempty"`
-	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"FiringRuleInheritable,omitempty"`
+	FiringRuleInheritable           *FiringRuleInheritableModel           `tfsdk:"firing_rule_inheritable" json:"Inheritable,omitempty"`
 	AetosMetadata                   *AetosMetadataModel                   `tfsdk:"aetos_metadata" json:"AetosMetadata,omitempty"`
-	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"MetadataInheritable,omitempty"`
+	MetadataInheritable             *MetadataInheritableModel             `tfsdk:"metadata_inheritable" json:"Inheritable,omitempty"`
 	MonitorPolicyNotificationConfig *MonitorPolicyNotificationConfigModel `tfsdk:"monitor_policy_notification_config" json:"MonitorPolicyNotificationConfig,omitempty"`
 	MonitorTargetNotificationConfig *MonitorTargetNotificationConfigModel `tfsdk:"monitor_target_notification_config" json:"MonitorTargetNotificationConfig,omitempty"`
-	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"NotificationInheritable,omitempty"`
-	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"PriorityScalarValue,omitempty"`
-	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"PriorityInheritable,omitempty"`
-	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"TeamScalarValue,omitempty"`
-	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"TeamInheritable,omitempty"`
+	NotificationInheritable         *NotificationInheritableModel         `tfsdk:"notification_inheritable" json:"Inheritable,omitempty"`
+	PriorityScalarValue             *PriorityScalarValueModel             `tfsdk:"priority_scalar_value" json:"ScalarValue,omitempty"`
+	PriorityInheritable             *PriorityInheritableModel             `tfsdk:"priority_inheritable" json:"Inheritable,omitempty"`
+	TeamScalarValue                 *TeamScalarValueModel                 `tfsdk:"team_scalar_value" json:"ScalarValue,omitempty"`
+	TeamInheritable                 *TeamInheritableModel                 `tfsdk:"team_inheritable" json:"Inheritable,omitempty"`
 }
 
 type MonitorAPIModel struct {
-	DatasetID      *string  `json:"datasetId,omitempty"`
-	Description    *string  `json:"description,omitempty"`
-	Enabled        *bool    `json:"enabled,omitempty"`
-	Expr           any      `json:"expr,omitempty"`
-	ID             *string  `json:"id,omitempty"`
-	ManagedBy      *string  `json:"managedBy,omitempty"`
-	Name           *string  `json:"name,omitempty"`
-	Query          any      `json:"query,omitempty"`
-	SearchMode     *string  `json:"searchMode,omitempty"`
-	Silence        []string `json:"silence,omitempty"`
-	TemplateParams any      `json:"templateParams,omitempty"`
-	Type           *string  `json:"type,omitempty"`
-	Unit           *string  `json:"unit,omitempty"`
+	AlertExpression *string  `json:"alertExpression,omitempty"`
+	DatasetID       *string  `json:"datasetId,omitempty"`
+	Description     *string  `json:"description,omitempty"`
+	Enabled         *bool    `json:"enabled,omitempty"`
+	Expr            any      `json:"expr,omitempty"`
+	ID              *string  `json:"id,omitempty"`
+	ManagedBy       *string  `json:"managedBy,omitempty"`
+	Name            *string  `json:"name,omitempty"`
+	Queries         any      `json:"queries,omitempty"`
+	Query           any      `json:"query,omitempty"`
+	SearchMode      *string  `json:"searchMode,omitempty"`
+	Silence         []string `json:"silence,omitempty"`
+	TemplateParams  any      `json:"templateParams,omitempty"`
+	Type            *string  `json:"type,omitempty"`
+	Unit            *string  `json:"unit,omitempty"`
 }
 
 type MonitorExprModel struct {
@@ -163,6 +171,153 @@ func MonitorExprAttrTypes() map[string]attr.Type {
 		"right":        types.StringType,
 		"scalar":       types.Float64Type,
 		"text":         types.StringType,
+	}
+}
+
+type MonitorQueriesModel struct {
+	Builder     types.Object `tfsdk:"builder" json:"builder,omitempty"`
+	DatasetID   types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
+	DisplayName types.String `tfsdk:"display_name" json:"displayName,omitempty"`
+	LogsBuilder types.Object `tfsdk:"logs_builder" json:"logsBuilder,omitempty"`
+	Mode        types.String `tfsdk:"mode" json:"mode,omitempty"`
+	Params      types.Map    `tfsdk:"params" json:"params,omitempty"`
+	Promql      types.String `tfsdk:"promql" json:"promql,omitempty"`
+}
+
+type MonitorQueriesAPIModel struct {
+	Builder     any               `json:"builder,omitempty"`
+	DatasetID   *string           `json:"datasetId,omitempty"`
+	DisplayName *string           `json:"displayName,omitempty"`
+	LogsBuilder any               `json:"logsBuilder,omitempty"`
+	Mode        *string           `json:"mode,omitempty"`
+	Params      map[string]string `json:"params,omitempty"`
+	Promql      *string           `json:"promql,omitempty"`
+}
+
+func MonitorQueriesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"builder":      types.ObjectType{AttrTypes: MonitorQueriesBuilderAttrTypes()},
+		"dataset_id":   types.StringType,
+		"display_name": types.StringType,
+		"logs_builder": types.ObjectType{AttrTypes: MonitorQueriesLogsBuilderAttrTypes()},
+		"mode":         types.StringType,
+		"params":       types.MapType{ElemType: types.StringType},
+		"promql":       types.StringType,
+	}
+}
+
+type MonitorQueriesBuilderModel struct {
+	Aggregation      types.String `tfsdk:"aggregation" json:"aggregation,omitempty"`
+	EvaluationWindow types.Object `tfsdk:"evaluation_window" json:"evaluationWindow,omitempty"`
+	GroupBy          types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
+	LabelFilters     types.List   `tfsdk:"label_filters" json:"labelFilters,omitempty"`
+	Metric           types.String `tfsdk:"metric" json:"metric,omitempty"`
+	Units            types.String `tfsdk:"units" json:"units,omitempty"`
+}
+
+type MonitorQueriesBuilderAPIModel struct {
+	Aggregation      *string  `json:"aggregation,omitempty"`
+	EvaluationWindow any      `json:"evaluationWindow,omitempty"`
+	GroupBy          []string `json:"groupBy,omitempty"`
+	LabelFilters     any      `json:"labelFilters,omitempty"`
+	Metric           *string  `json:"metric,omitempty"`
+	Units            *string  `json:"units,omitempty"`
+}
+
+func MonitorQueriesBuilderAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"aggregation":       types.StringType,
+		"evaluation_window": types.ObjectType{AttrTypes: MonitorQueriesBuilderEvaluationWindowAttrTypes()},
+		"group_by":          types.ListType{ElemType: types.StringType},
+		"label_filters":     types.ListType{ElemType: types.ObjectType{AttrTypes: MonitorQueriesBuilderLabelFiltersAttrTypes()}},
+		"metric":            types.StringType,
+		"units":             types.StringType,
+	}
+}
+
+type MonitorQueriesBuilderEvaluationWindowModel struct {
+	Unit  types.String `tfsdk:"unit" json:"unit,omitempty"`
+	Value types.Int64  `tfsdk:"value" json:"value,omitempty"`
+}
+
+type MonitorQueriesBuilderEvaluationWindowAPIModel struct {
+	Unit  *string `json:"unit,omitempty"`
+	Value *int64  `json:"value,omitempty"`
+}
+
+func MonitorQueriesBuilderEvaluationWindowAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"unit":  types.StringType,
+		"value": types.Int64Type,
+	}
+}
+
+type MonitorQueriesBuilderLabelFiltersModel struct {
+	Key   types.String `tfsdk:"key" json:"key,omitempty"`
+	Op    types.String `tfsdk:"op" json:"op,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type MonitorQueriesBuilderLabelFiltersAPIModel struct {
+	Key   *string `json:"key,omitempty"`
+	Op    *string `json:"op,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func MonitorQueriesBuilderLabelFiltersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key":   types.StringType,
+		"op":    types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type MonitorQueriesLogsBuilderModel struct {
+	Dataset          types.String `tfsdk:"dataset" json:"dataset,omitempty"`
+	EvaluationWindow types.Object `tfsdk:"evaluation_window" json:"evaluationWindow,omitempty"`
+	Field            types.String `tfsdk:"field" json:"field,omitempty"`
+	GroupBy          types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
+	Operator         types.String `tfsdk:"operator" json:"operator,omitempty"`
+	ParentSearch     types.String `tfsdk:"parent_search" json:"parentSearch,omitempty"`
+	SavedSearchID    types.String `tfsdk:"saved_search_id" json:"savedSearchId,omitempty"`
+}
+
+type MonitorQueriesLogsBuilderAPIModel struct {
+	Dataset          *string  `json:"dataset,omitempty"`
+	EvaluationWindow any      `json:"evaluationWindow,omitempty"`
+	Field            *string  `json:"field,omitempty"`
+	GroupBy          []string `json:"groupBy,omitempty"`
+	Operator         *string  `json:"operator,omitempty"`
+	ParentSearch     *string  `json:"parentSearch,omitempty"`
+	SavedSearchID    *string  `json:"savedSearchId,omitempty"`
+}
+
+func MonitorQueriesLogsBuilderAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"dataset":           types.StringType,
+		"evaluation_window": types.ObjectType{AttrTypes: MonitorQueriesLogsBuilderEvaluationWindowAttrTypes()},
+		"field":             types.StringType,
+		"group_by":          types.ListType{ElemType: types.StringType},
+		"operator":          types.StringType,
+		"parent_search":     types.StringType,
+		"saved_search_id":   types.StringType,
+	}
+}
+
+type MonitorQueriesLogsBuilderEvaluationWindowModel struct {
+	Unit  types.String `tfsdk:"unit" json:"unit,omitempty"`
+	Value types.Int64  `tfsdk:"value" json:"value,omitempty"`
+}
+
+type MonitorQueriesLogsBuilderEvaluationWindowAPIModel struct {
+	Unit  *string `json:"unit,omitempty"`
+	Value *int64  `json:"value,omitempty"`
+}
+
+func MonitorQueriesLogsBuilderEvaluationWindowAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"unit":  types.StringType,
+		"value": types.Int64Type,
 	}
 }
 
@@ -1023,6 +1178,11 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
 	}
+	if input.AlertExpression != nil {
+		m.AlertExpression = types.StringValue(*input.AlertExpression)
+	} else {
+		m.AlertExpression = types.StringNull()
+	}
 	if input.DatasetID != nil {
 		m.DatasetID = types.StringValue(*input.DatasetID)
 	} else {
@@ -1061,6 +1221,15 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 		m.Name = types.StringValue(*input.Name)
 	} else {
 		m.Name = types.StringNull()
+	}
+	if input.Queries != nil {
+		value, err := MonitorAPIValueToTerraformValue(input.Queries, types.ListType{ElemType: types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert queries from API value: %v", err)
+		}
+		m.Queries = value.(types.List)
+	} else {
+		m.Queries = types.ListNull(types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()})
 	}
 	if input.Query != nil {
 		value, err := MonitorAPIValueToTerraformValue(input.Query, types.MapType{ElemType: types.ObjectType{AttrTypes: MonitorQueryAttrTypes()}})

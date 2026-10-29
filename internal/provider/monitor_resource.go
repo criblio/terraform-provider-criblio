@@ -7,6 +7,7 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -43,6 +44,12 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Monitor Resource",
 		Attributes: map[string]schema.Attribute{
+			"alert_expression": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Optional Alert Query expression over the operand labels (for example "A + B"). Omitted: a single query uses its own label; multiple queries default to the sum.`,
+			},
 			"dataset_id": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
@@ -62,10 +69,11 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Description: `Whether the monitor is active and evaluated.`,
 			},
 			"expr": schema.ListNestedAttribute{
-				Required:    true,
-				Optional:    false,
-				Computed:    false,
-				Description: `Query expressions evaluated to produce the monitor's series.`,
+				Required:      false,
+				Optional:      true,
+				Computed:      true,
+				Description:   `Query expressions evaluated to produce the monitor's series.`,
+				PlanModifiers: monitorExprSynthesize(),
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"dataset_id": schema.StringAttribute{
@@ -145,11 +153,202 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Computed:    false,
 				Description: `Human-readable name for the monitor.`,
 			},
-			"query": schema.MapNestedAttribute{
-				Required:    true,
-				Optional:    false,
+			"queries": schema.ListNestedAttribute{
+				Required:    false,
+				Optional:    true,
 				Computed:    false,
-				Description: `Monitor queries keyed by query label. Each query is inheritable from a linked profile.`,
+				Description: `Operand queries in order. The provider assigns labels A, B, C... and builds the query map; reference them by letter in alert_expression.`,
+				Validators: []validator.List{
+					listvalidator.SizeAtLeast(1),
+				},
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"builder": schema.SingleNestedAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Structured builder representation of this query. Present when authored via the visual builder UI.`,
+							Attributes: map[string]schema.Attribute{
+								"aggregation": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Aggregation operator applied to the metric series.`,
+								},
+								"evaluation_window": schema.SingleNestedAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Evaluation window over which the metric query is evaluated.`,
+									Attributes: map[string]schema.Attribute{
+										"unit": schema.StringAttribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Time unit for the evaluation window magnitude.`,
+										},
+										"value": schema.Int64Attribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
+										},
+									},
+								},
+								"group_by": schema.ListAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Label keys to group the aggregated metric results by.`,
+									ElementType: types.StringType,
+								},
+								"label_filters": schema.ListNestedAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Label filters applied to the metric query in builder mode.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Label key to filter on.`,
+											},
+											"op": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Comparison operator for the label filter. Supports PromQL semantics: <code>=</code>, <code>!=</code>, <code>=</code>, <code>!</code>.`,
+											},
+											"value": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Value to match against the label, interpreted according to the operator.`,
+											},
+										},
+									},
+								},
+								"metric": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metric to query in builder mode.`,
+								},
+								"units": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unit label applied to the query's values.`,
+								},
+							},
+						},
+						"dataset_id": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Per-query dataset override. Falls back to the monitor's <code>datasetId</code> when absent.`,
+						},
+						"display_name": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `User-editable display label for the query card. Defaults to the stable query key.`,
+						},
+						"logs_builder": schema.SingleNestedAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Structured builder fields for a logs-mode query.`,
+							Attributes: map[string]schema.Attribute{
+								"dataset": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Dataset to query for log events.`,
+								},
+								"evaluation_window": schema.SingleNestedAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Evaluation window over which the logs query is evaluated.`,
+									Attributes: map[string]schema.Attribute{
+										"unit": schema.StringAttribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Time unit for the evaluation window magnitude.`,
+										},
+										"value": schema.Int64Attribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
+										},
+									},
+								},
+								"field": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Field to aggregate over. Required for operators other than <code>count_all</code>.`,
+								},
+								"group_by": schema.ListAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Label keys to group the aggregated log results by.`,
+									ElementType: types.StringType,
+								},
+								"operator": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Aggregation operator applied to the log events.`,
+								},
+								"parent_search": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Optional parent search that scopes the logs query.`,
+								},
+								"saved_search_id": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Identifier of a saved search to run instead of an authored query.`,
+								},
+							},
+						},
+						"mode": schema.StringAttribute{
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Query authoring mode: <code>builder</code> for the visual builder or <code>promql</code> for raw PromQL.`,
+						},
+						"params": schema.MapAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Template parameter bindings applied to the query before evaluation.`,
+							ElementType: types.StringType,
+						},
+						"promql": schema.StringAttribute{
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `PromQL query string that the monitor evaluates.`,
+						},
+					},
+				},
+			},
+			"query": schema.MapNestedAttribute{
+				Required:      false,
+				Optional:      true,
+				Computed:      true,
+				Description:   `Monitor queries keyed by query label. Each query is inheritable from a linked profile.`,
+				PlanModifiers: monitorQuerySynthesize(),
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"builder": schema.SingleNestedAttribute{
@@ -641,7 +840,7 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 												Required:    false,
 												Optional:    true,
 												Computed:    false,
-												Description: `Comparison operator applied to the threshold limit. Defaults to <code>gt</code> when absent.`,
+												Description: `Comparison operator applied to the threshold limit.`,
 											},
 											"severity": schema.StringAttribute{
 												Required:    true,
@@ -704,7 +903,7 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
-									Description: `Comparison operator applied to the threshold limit. Defaults to <code>gt</code> when absent.`,
+									Description: `Comparison operator applied to the threshold limit.`,
 								},
 								"severity": schema.StringAttribute{
 									Required:    true,
@@ -1022,13 +1221,7 @@ func isMonitorImportState(state *MonitorModel) bool {
 	if state.Enabled.IsNull() || state.Enabled.IsUnknown() {
 		return true
 	}
-	if state.Expr.IsNull() || state.Expr.IsUnknown() {
-		return true
-	}
 	if state.Name.IsNull() || state.Name.IsUnknown() {
-		return true
-	}
-	if state.Query.IsNull() || state.Query.IsUnknown() {
 		return true
 	}
 	if state.Type.IsNull() || state.Type.IsUnknown() {
@@ -1040,6 +1233,11 @@ func isMonitorImportState(state *MonitorModel) bool {
 func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
+	}
+	if !preserveInputs || (fillMissingInputs && (state.AlertExpression.IsNull() || state.AlertExpression.IsUnknown())) {
+		if !api.AlertExpression.IsNull() && !api.AlertExpression.IsUnknown() {
+			state.AlertExpression = api.AlertExpression
+		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.DatasetID.IsNull() || state.DatasetID.IsUnknown())) {
 		if !api.DatasetID.IsNull() && !api.DatasetID.IsUnknown() {
@@ -1056,10 +1254,11 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 			state.Enabled = api.Enabled
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Expr.IsNull() || state.Expr.IsUnknown())) || (!api.Expr.IsNull() && !api.Expr.IsUnknown() && !state.Expr.IsNull() && !state.Expr.IsUnknown() && len(state.Expr.Elements()) == 0) {
-		if !api.Expr.IsNull() && !api.Expr.IsUnknown() {
-			state.Expr = api.Expr
-		}
+	if !api.Expr.IsNull() && !api.Expr.IsUnknown() {
+		state.Expr = api.Expr
+	}
+	if state.Expr.IsUnknown() {
+		state.Expr = types.ListNull(types.ObjectType{AttrTypes: MonitorExprAttrTypes()})
 	}
 	if state.Expr.IsNull() || state.Expr.IsUnknown() {
 		state.Expr = types.ListNull(types.ObjectType{AttrTypes: MonitorExprAttrTypes()})
@@ -1083,10 +1282,21 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 			state.Name = api.Name
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Query.IsNull() || state.Query.IsUnknown())) {
-		if !api.Query.IsNull() && !api.Query.IsUnknown() {
-			state.Query = api.Query
+	if !preserveInputs || (fillMissingInputs && (state.Queries.IsNull() || state.Queries.IsUnknown())) || (!api.Queries.IsNull() && !api.Queries.IsUnknown() && !state.Queries.IsNull() && !state.Queries.IsUnknown() && len(state.Queries.Elements()) == 0) {
+		if !api.Queries.IsNull() && !api.Queries.IsUnknown() {
+			state.Queries = api.Queries
 		}
+	}
+	if state.Queries.IsNull() || state.Queries.IsUnknown() {
+		state.Queries = types.ListNull(types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()})
+	} else if len(state.Queries.Elements()) == 0 {
+		state.Queries = types.ListValueMust(types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()}, nil)
+	}
+	if !api.Query.IsNull() && !api.Query.IsUnknown() {
+		state.Query = api.Query
+	}
+	if state.Query.IsUnknown() {
+		state.Query = types.MapNull(types.ObjectType{AttrTypes: MonitorQueryAttrTypes()})
 	}
 	if state.Query.IsNull() || state.Query.IsUnknown() {
 		state.Query = types.MapNull(types.ObjectType{AttrTypes: MonitorQueryAttrTypes()})
