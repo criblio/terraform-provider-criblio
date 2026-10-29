@@ -179,7 +179,7 @@ Optional:
 - `description` (String) Human-readable description of the provider
 - `account_identifier` (String) The Snowflake account identifier, in the format <orgname>-<account_name>
 - `username` (String) The Snowflake user for key pair authentication
-- `priv_key` (String) The private key string out of the key file, from the pair of keys generated for authentication
+- `priv_key` (String, Sensitive) The private key string out of the key file, from the pair of keys generated for authentication
 - `passphrase` (String, Sensitive) The key password for the private key
 - `max_concurrency` (Integer) Total number of concurrent executors for processing Snowflake partitions
 - `endpoint` (String) Optional endpoint to override default REST API endpoint
@@ -255,7 +255,7 @@ Optional:
 - `aws_authentication_method` (String) AWS authentication method
 - `assume_role_arn` (String) ARN of the role to assume
 - `assume_role_external_id` (String) External ID for role assumption
-- `aws_api_key` (String) AWS access key
+- `aws_api_key` (String, Sensitive) AWS access key
 - `aws_secret_key` (String, Sensitive) AWS secret key
 - `bucket` (String) S3 bucket name
 - `region` (String) AWS region
@@ -329,7 +329,7 @@ Optional:
 - `id` (String) Unique identifier for the provider
 - `type` (String)
 - `description` (String) Human-readable description of the provider
-- `service_account_credentials` (String) Contents of Google Cloud service account credentials (JSON keys) file
+- `service_account_credentials` (String, Sensitive) Contents of Google Cloud service account credentials (JSON keys) file
 - `endpoint` (String) Google Cloud Storage service endpoint
 
 <a id="nestedatt--apihttp--available_endpoints"></a>
@@ -358,7 +358,7 @@ Optional:
 
 - `assume_role_arn` (String) IAM role ARN to assume when using automatic credentials.
 - `assume_role_external_id` (String) External ID required by the role trust policy when assuming the role.
-- `aws_api_key` (String) AWS access key ID when using manual key authentication.
+- `aws_api_key` (String, Sensitive) AWS access key ID when using manual key authentication.
 - `aws_secret_key` (String, Sensitive) AWS secret access key when using manual key authentication.
 - `aws_session_token` (String) Temporary session token for short-lived credentials.
 - `name` (String) Display name that identifies the account configuration.
@@ -379,7 +379,7 @@ Optional:
 Optional:
 
 - `name` (String) Display name that identifies the account configuration.
-- `service_account_credentials` (String) JSON key downloaded from Google Cloud Console for a service account that can call GCP APIs.
+- `service_account_credentials` (String, Sensitive) JSON key downloaded from Google Cloud Console for a service account that can call GCP APIs.
 
 <a id="nestedatt--api_google_workspace--account_configs"></a>
 ### Nested Schema for `api_google_workspace.account_configs`
@@ -387,7 +387,7 @@ Optional:
 Optional:
 
 - `name` (String) Display name that identifies the account configuration.
-- `service_account_credentials` (String) JSON key material for a Google Workspace domain-wide delegated service account.
+- `service_account_credentials` (String, Sensitive) JSON key material for a Google Workspace domain-wide delegated service account.
 - `subject` (String) Admin user email address that the service account impersonates for Reports API access.
 
 <a id="nestedatt--api_msgraph--account_configs"></a>

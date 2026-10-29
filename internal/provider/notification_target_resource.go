@@ -122,6 +122,7 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Authentication token`,
 					},
 					"username": schema.StringAttribute{
@@ -134,6 +135,7 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Basic authentication password`,
 					},
 				},
@@ -169,6 +171,7 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `32-character integration key for an integration on a service or global ruleset`,
 					},
 					"group": schema.StringAttribute{
@@ -228,6 +231,7 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `Slack's Incoming Webhook URL`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`), "must match pattern ^https?://[a-zA-Z0-9-.]+"),
@@ -284,12 +288,14 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `AWS access key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `AWS secret key`,
 					},
 					"region": schema.StringAttribute{
@@ -401,6 +407,7 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Sensitive:   true,
 						Description: `SMTP authentication password`,
 					},
 					"encryption_option": schema.StringAttribute{

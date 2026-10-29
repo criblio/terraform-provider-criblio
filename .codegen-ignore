@@ -21,4 +21,7 @@ internal/provider/custombanner_data_source.go
 internal/provider/custombanner_resource.go
 internal/provider/pack_id_resolve.go
 internal/provider/pack_resource.go
-tests/acceptance/monitor_test.go
+internal/provider/pack_data_source.go
+
+# Collector saved_state conversion, provenance, and state migration are provider-owned.
+internal/provider/collector_saved_state.go

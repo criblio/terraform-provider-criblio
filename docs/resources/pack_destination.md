@@ -186,7 +186,7 @@ Optional:
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_webhook--response_retry_settings))
-- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_webhook--timeout_retry_settings))
+- `timeout_retry_settings` (Attributes) Retry settings for HTTP requests that exceed the request timeout. (see [below for nested schema](#nestedatt--output_webhook--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `auth_type` (String) Authentication method to use for the HTTP request
@@ -267,6 +267,7 @@ Optional:
 - `on_backpressure` (String)
 - `auth_type` (String) Discriminator value.
 - `login_url` (String)
+- `secret` (String, Sensitive)
 - `refresh_token_field` (String)
 - `rotate_refresh_token` (Boolean)
 - `refresh_url` (String)
@@ -298,7 +299,6 @@ Optional:
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String)
 - `pq_controls` (Map of String)
-- `secret` (String, Sensitive)
 - `oauth_text_secret` (String) Select or create a stored text secret for the OAuth secret value
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
 - `dcr_id` (String) Immutable ID for the Data Collection Rule (DCR)
@@ -724,7 +724,7 @@ Optional:
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
-- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_filesystem--retry_settings))
+- `retry_settings` (Attributes) Retry settings for failed file uploads. (see [below for nested schema](#nestedatt--output_filesystem--retry_settings))
 - `orphans` (Attributes) Orphan file recovery (see [below for nested schema](#nestedatt--output_filesystem--orphans))
 - `description` (String)
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered
@@ -795,7 +795,7 @@ Optional:
 - `server_side_encryption` (String) Server-side encryption to use for uploaded objects
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
 - `description` (String)
-- `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
+- `aws_api_key` (String, Sensitive) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -877,7 +877,7 @@ Optional:
 - `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
 - `endpoint_suffix` (String) Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
 - `client_text_secret` (String) Select or create a stored text secret
-- `certificate` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--certificate))
+- `certificate` (Attributes) Certificate credentials for the Azure service principal. (see [below for nested schema](#nestedatt--output_azure_blob--certificate))
 
 <a id="nestedatt--output_azure_data_explorer"></a>
 ### Nested Schema for `output_azure_data_explorer`
@@ -903,7 +903,7 @@ Optional:
 - `description` (String)
 - `client_secret` (String, Sensitive) The client secret that you generated for your app in the Azure portal
 - `text_secret` (String)
-- `certificate` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--certificate))
+- `certificate` (Attributes) Certificate credentials for OAuth authentication. (see [below for nested schema](#nestedatt--output_azure_data_explorer--certificate))
 - `format` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -988,7 +988,7 @@ Optional:
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
 - `max_payload_events` (Number)
-- `compress` (Boolean)
+- `compress` (Boolean) Legacy compression setting retained for compatibility; Azure Logs does not support compression.
 - `reject_unauthorized` (Boolean)
 - `timeout_sec` (Number)
 - `max_connection_reuse_sec` (Number)
@@ -1017,7 +1017,7 @@ Optional:
 - `pq_max_buffer_size_bytes` (String)
 - `pq_controls` (Map of String)
 - `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
-- `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
+- `workspace_key` (String, Sensitive) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
 - `keypair_secret` (String) Select or create a stored secret that references your access key and secret key
 
 <a id="nestedatt--output_kinesis"></a>
@@ -1050,7 +1050,7 @@ Optional:
 - `as_ndjson` (Boolean) Batch events into a single record as NDJSON
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String) Access key
+- `aws_api_key` (String, Sensitive) Access key
 - `aws_secret` (String)
 - `max_events_per_flush` (Number) Maximum number of records to send in a single request
 - `pq_strict_ordering` (Boolean)
@@ -1233,7 +1233,7 @@ Optional:
 - `udm_type` (String) Defines the specific format for UDM events sent to Google SecOps. This must match the type of UDM data being sent.
 - `api_key` (String, Sensitive) Organization's API key in Google SecOps
 - `api_key_secret` (String) Select or create a stored text secret
-- `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
+- `service_account_credentials` (String, Sensitive) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `service_account_credentials_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -1306,7 +1306,7 @@ Optional:
 - `directory_batch_size` (Number)
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
-- `aws_api_key` (String) HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
+- `aws_api_key` (String, Sensitive) HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String, Sensitive) HMAC secret. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `aws_secret` (String)
 
@@ -1331,7 +1331,7 @@ Optional:
 - `severity_expression` (String) JavaScript expression to compute the value of the severity field. Must evaluate to one of the severity values supported by Google Cloud Logging [here](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity) (case insensitive). Defaults to "DEFAULT".
 - `insert_id_expression` (String) JavaScript expression to compute the value of the insert ID field.
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `secret` (String, Sensitive)
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body.
 - `max_payload_events` (Number) Max number of events to include in the request body. Default is 0 (unlimited).
@@ -1447,7 +1447,7 @@ Optional:
 - `ordered_delivery` (Boolean) If enabled, send events in the order they were added to the queue. For this to work correctly, the process receiving events must have ordering enabled.
 - `region` (String) Region to publish messages to. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
 - `google_auth_method` (String)
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `secret` (String, Sensitive)
 - `batch_size` (Number) The maximum number of items the Google API should batch before it sends them to the topic.
 - `batch_timeout` (Number) The maximum amount of time, in milliseconds, that the Google API should wait to send a batch (if the Batch size is not reached).
@@ -1510,7 +1510,7 @@ Optional:
 - `forwarder` (String) JavaScript expression for the host that forwarded the log, evaluated per event. Static values must be quoted or backticked (for example, 'fwd-1'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${__forwarder}`. Emitted as the "forwarder" metadata field; omitted when empty or not a usable scalar.
 - `origin` (String) JavaScript expression that must resolve to an object describing the interim agent collector, such as {hostname: origin_host, '@timestamp': _time, path: source}. Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "origin" metadata field; omitted when the result is not a non-empty object.
 - `logtags` (String) JavaScript expression that must resolve to an object of custom metadata key/value pairs (searchable in Exabeam as m_c_logtags_<name>). Assemble the object upstream and reference it here (example: __exabeam_logtags), or build it inline (example: {department: dept, servertype: stype}). Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "logtags" metadata field; omitted when the result is not a non-empty object.
-- `aws_api_key` (String) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
+- `aws_api_key` (String, Sensitive) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String, Sensitive) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `description` (String)
 - `empty_dir_cleanup_sec` (Number)
@@ -1654,7 +1654,7 @@ Optional:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--tls))
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `protobuf_library_id` (String)
 - `protobuf_encoding_id` (String)
@@ -1700,7 +1700,7 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
 - `extra_params` (Attributes List) Extra parameters (see [below for nested schema](#nestedatt--output_elastic--extra_params))
-- `auth` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--auth))
+- `auth` (Attributes) Authentication settings for HTTP requests. (see [below for nested schema](#nestedatt--output_elastic--auth))
 - `elastic_version` (String) Optional Elasticsearch version, used to format events. If not specified, will auto-discover version.
 - `elastic_pipeline` (String) Optional Elasticsearch destination pipeline
 - `include_doc_id` (Boolean) Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)
@@ -1807,7 +1807,7 @@ Optional:
 - `auth_type` (String)
 - `total_memory_limit_kb` (Number)
 - `description` (String)
-- `custom_url` (String)
+- `custom_url` (String) Custom New Relic Logs API endpoint URL.
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -1855,7 +1855,7 @@ Optional:
 - `on_backpressure` (String)
 - `auth_type` (String)
 - `description` (String)
-- `custom_url` (String)
+- `custom_url` (String) Custom New Relic Events API endpoint URL.
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -1954,7 +1954,7 @@ Optional:
 - `flush_period_sec` (Number)
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -2014,7 +2014,7 @@ Optional:
 - `storage_class` (String)
 - `server_side_encryption` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -2180,7 +2180,7 @@ Optional:
 - `duration_seconds` (Number)
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -2227,7 +2227,7 @@ Optional:
 - `max_in_progress` (Number)
 - `on_backpressure` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -2346,7 +2346,7 @@ Optional:
 - `auth_type` (String)
 - `total_memory_limit_kb` (Number)
 - `description` (String)
-- `custom_url` (String)
+- `custom_url` (String) Custom Datadog intake endpoint URL.
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -2379,8 +2379,8 @@ Optional:
 - `message_format` (String) Format to use when sending logs to Loki (Protobuf or JSON)
 - `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}' (see [below for nested schema](#nestedatt--output_grafana_cloud--labels))
 - `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--prometheus_auth))
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--loki_auth))
+- `prometheus_auth` (Attributes) Authentication settings for Grafana Cloud requests. (see [below for nested schema](#nestedatt--output_grafana_cloud--prometheus_auth))
+- `loki_auth` (Attributes) Authentication settings for Grafana Cloud requests. (see [below for nested schema](#nestedatt--output_grafana_cloud--loki_auth))
 - `concurrency` (Number) Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
@@ -2758,7 +2758,7 @@ Optional:
 - `auth_type` (String)
 - `total_memory_limit_kb` (Number)
 - `description` (String)
-- `custom_url` (String)
+- `custom_url` (String) Custom Cribl API endpoint URL.
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -3064,7 +3064,7 @@ Optional:
 - `kms_key_id` (String)
 - `partitioning_fields` (List of String) List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -3142,7 +3142,7 @@ Optional:
 - `enable_write_page_index` (Boolean)
 - `enable_page_checksum` (Boolean)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `empty_dir_cleanup_sec` (Number)
 - `directory_batch_size` (Number)
@@ -3180,11 +3180,11 @@ Optional:
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake--orphans))
 - `storage_location_id` (String) Storage location that contains the target Lake dataset.
 - `dest_path` (String) Lake dataset to send the data to.
-- `format` (String)
-- `dynamic_dataset` (Boolean)
-- `max_closing_files_to_backpressure` (Number)
-- `max_concurrent_file_parts` (Number)
-- `freshness_grace_period_sec` (Number)
+- `format` (String) Data format to use for files written to the Lake Dataset.
+- `dynamic_dataset` (Boolean) Whether the Destination selects the Lake Dataset dynamically.
+- `max_closing_files_to_backpressure` (Number) Maximum number of files waiting to close before the Destination applies backpressure.
+- `max_concurrent_file_parts` (Number) Maximum number of file parts to upload concurrently.
+- `freshness_grace_period_sec` (Number) Additional time, in seconds, allowed before a completed file is considered late.
 - `description` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -3377,7 +3377,8 @@ Optional:
 - `workload` (String)
 - `dump_format_errors_to_disk` (Boolean)
 - `on_backpressure` (String)
-- `stats_destination` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--stats_destination))
+- `exception_retry_settings` (Attributes List) Retry automatically when ClickHouse reports a matching exception code, such as 241 (memory limit exceeded) or 202 (too many simultaneous queries). These settings take precedence over Settings for failed HTTP requests. (see [below for nested schema](#nestedatt--output_local_search_storage--exception_retry_settings))
+- `stats_destination` (Attributes) Internal destination settings for batch metadata and statistics. (see [below for nested schema](#nestedatt--output_local_search_storage--stats_destination))
 - `description` (String)
 - `username` (String)
 - `password` (String, Sensitive)
@@ -3742,7 +3743,7 @@ Optional:
 - `custom_labels` (Attributes List) Custom labels to be added to every event (see [below for nested schema](#nestedatt--output_chronicle--custom_labels))
 - `endpoint` (String) Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)
 - `description` (String)
-- `service_account_credentials` (String)
+- `service_account_credentials` (String, Sensitive)
 - `service_account_credentials_secret` (String)
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
@@ -4633,7 +4634,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean) Retry timed-out HTTP requests
+- `timeout_retry` (Boolean) Whether to retry HTTP requests that exceed the request timeout.
 - `initial_backoff` (Number)
 - `backoff_rate` (Number)
 - `max_backoff` (Number)
@@ -4648,15 +4649,15 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean) Disabled
+- `disabled` (Boolean) Whether TLS is disabled for this connection.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
 - `passphrase` (String, Sensitive) Passphrase to use to decrypt private key
-- `min_version` (String) Minimum TLS version
-- `max_version` (String) Maximum TLS version
+- `min_version` (String) Minimum TLS version to use for the connection.
+- `max_version` (String) Maximum TLS version to use for the connection.
 
 <a id="nestedatt--output_webhook--oauth_params"></a>
 <a id="nestedatt--output_open_telemetry--oauth_params"></a>
@@ -4888,7 +4889,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `auth_type` (String) Enter password directly, or select a stored secret
 - `password` (String, Sensitive) Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace
 - `text_secret` (String)
@@ -4898,9 +4899,9 @@ Optional:
 - `client_secret` (String, Sensitive) client_secret to pass in the OAuth request parameter
 - `client_text_secret` (String)
 - `certificate_name` (String) Select or create a stored certificate
-- `cert_path` (String)
-- `priv_key_path` (String)
-- `passphrase` (String, Sensitive)
+- `cert_path` (String) Path to the client certificate file.
+- `priv_key_path` (String) Path to the client private key file.
+- `passphrase` (String, Sensitive) Passphrase used to decrypt the client private key.
 - `oauth_endpoint` (String)
 - `client_id` (String)
 - `tenant_id` (String)
@@ -4978,7 +4979,7 @@ Optional:
 - `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
 - `token_url` (String) URL of the token endpoint to use for OAuth authentication
 - `client_id` (String) Client ID to use for OAuth authentication
-- `oauth_secret_type` (String)
+- `oauth_secret_type` (String) Source of the OAuth client secret.
 - `client_text_secret` (String)
 - `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--output_kafka--kafka_schema_registry--auth--oauth_params))
 - `identity_pool_id` (String) Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.
@@ -5026,12 +5027,12 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean) Authentication Disabled
+- `disabled` (Boolean) Whether authentication is disabled for HTTP requests.
 - `username` (String)
 - `password` (String, Sensitive)
 - `auth_type` (String)
 - `credentials_secret` (String)
-- `manual_apikey` (String) Enter API key directly
+- `manual_apikey` (String, Sensitive) Enter API key directly
 - `text_secret` (String)
 
 <a id="nestedatt--output_elastic--urls"></a>
@@ -5119,20 +5120,32 @@ Optional:
 - `column_type` (String) Type of the column in the ClickHouse database
 - `column_value_expression` (String) JavaScript expression to compute value to be inserted into ClickHouse table
 
+<a id="nestedatt--output_local_search_storage--exception_retry_settings"></a>
+<a id="nestedatt--output_local_search_storage--stats_destination--exception_retry_settings"></a>
+### Nested Schema for `output_local_search_storage.exception_retry_settings`
+
+Optional:
+
+- `ch_error_code` (Number) The ClickHouse exception code (from the x-clickhouse-exception-code header) that triggers retries
+- `initial_backoff` (Number)
+- `backoff_rate` (Number)
+- `max_backoff` (Number)
+
 <a id="nestedatt--output_local_search_storage--stats_destination"></a>
 ### Nested Schema for `output_local_search_storage.stats_destination`
 
 Optional:
 
-- `url` (String)
-- `database` (String)
-- `table_name` (String)
-- `auth_type` (String)
-- `username` (String)
-- `sql_username` (String)
-- `password` (String, Sensitive)
-- `wait_for_async_inserts` (Boolean)
-- `concurrency` (Number)
+- `url` (String) URL of the database that stores batch metadata and statistics.
+- `database` (String) Name of the database that stores batch metadata and statistics.
+- `table_name` (String) Name of the table that stores batch metadata and statistics.
+- `auth_type` (String) Authentication method for the statistics destination.
+- `username` (String) Username for the statistics destination.
+- `sql_username` (String) SQL username for the statistics destination.
+- `password` (String, Sensitive) Password for the statistics destination.
+- `wait_for_async_inserts` (Boolean) Whether to wait for asynchronous inserts to complete.
+- `concurrency` (Number) Maximum number of concurrent requests to the statistics destination.
+- `exception_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_local_search_storage--stats_destination--exception_retry_settings))
 
 <a id="nestedatt--output_local_search_storage--column_mappings"></a>
 ### Nested Schema for `output_local_search_storage.column_mappings`

@@ -1488,6 +1488,7 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	normalizeHTTPRawExtendedAuthTokens(raw)
 	setPackSourceLegacyItemsFromRaw(m, raw)
 	var input PackSourceAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {

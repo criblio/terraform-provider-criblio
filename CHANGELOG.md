@@ -8,20 +8,36 @@ commit history, and tag-to-tag diffs.
 
 ## [Unreleased]
 
+### Security
+- Marked literal credentials sensitive through Terraform overlay annotations on sources, collectors, destinations, notification targets, their pack variants, and corresponding data sources, including HTTP authentication token lists and Slack webhook URLs.
+- Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
+
 ### Added
+- Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
+- Added `criblio_notification_template` resource and single/list data sources for custom Handlebars templates, with import and export support. Requires V2 Notifications; built-in templates remain available through data sources and are excluded from resource exports.
+- Added `conf.trigger` for custom Search notification conditions in notifications and scheduled dashboard notifications, allowing saved results to be retained while alerts remain selective.
+- Added support for custom keys and values in `criblio_pack.tags`, alongside predefined tag fields.
+- Added `criblio_pack_collector` and its data source, reusing collector schemas for pack-scoped collectors, with import and export support.
 - Added changelog update script to run within make generate.
-- Added criblio_monitor resource + data sources.
-- Added model outlier detection config fields.
+- Added metrics search support in search dashboards. (#234).
+- Added notification_template and search_ai resources.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
+- Syncing 4.20.3 upstream spec.
 
 ### Fixed
+- Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)
+- Kept bulk export working when AI is disabled or consent is missing, while retaining dataset permission errors, and skipped the new intelligence/template acceptance tests on the on-prem fixture that lacks their prerequisites.
+- Allowed export discovery to continue when local_search list endpoints return HTTP 500 with "No workers registered".
+- Preserved metric dashboard search sources, datasets, step strategies, query builder settings, and input variants during API updates, reads, and imports.
+- Fixed configured TTL updates in `criblio_collector` and `criblio_pack_collector` while retaining existing behavior for omitted TTL and other collector fields.
 - Retried HTTP 429 responses using server-provided `Retry-After` delays up to 60 seconds, including Config Helper admission throttling during bulk group and fleet operations, while preserving command cancellation and bounding cumulative import CLI retry waits.
 - Excluded the internal `metrics_ingest` pipeline from import CLI exports.
 - Fixed import issues when duplicate params exist.
 - Fixed worker group id replacement issue.
-- Fixed restore template_params opaque-JSON protection (INFRA-12649).
+- Fixed saved_state field within collectors.
+- Fixed removal of configured collector `saved_state` so omitting it or setting it to null restores runtime checkpoint tracking without changing another field.
 
 ## [1.25.55] - 2026-08-19
 

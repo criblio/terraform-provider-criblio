@@ -6,6 +6,15 @@ resource "criblio_pack" "edge_supervisor_health" {
   display_name = "EdgeSupervisorHealth"
   version      = "1.0.0"
   author       = "Observability Team"
+  tags = {
+    data_type    = ["logs"]
+    domain       = ["observability"]
+    streamtags   = ["processing"]
+    technology   = ["aws"]
+    ManagedByTFE = "true"
+    product_id   = "123456"
+    used_for     = "non_prod"
+  }
 }
 
 # Pipeline for EdgeSupervisorHealth - processes Supervisor health check data

@@ -291,6 +291,27 @@ func TestResourceBlock_preservesConfiguredEmptyMaps(t *testing.T) {
 	assert.Contains(t, string(got), "conf = {}")
 }
 
+func TestResourceBlockPackTagsPreservesEmptyObject(t *testing.T) {
+	for _, test := range []struct {
+		name string
+		tags Value
+		want string
+	}{
+		{"empty object", Value{Kind: KindMap, Map: map[string]Value{}}, "tags = {}"},
+		{"omitted", Value{Kind: KindNull}, ""},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			generated, err := ResourceBlockBytes("criblio_pack", "test", map[string]Value{"tags": test.tags}, DefaultResourceBlockOptions())
+			require.NoError(t, err)
+			if test.want == "" {
+				require.NotContains(t, string(generated), "tags")
+				return
+			}
+			require.Contains(t, string(generated), test.want)
+		})
+	}
+}
+
 func TestResourceBlockRendersPrunedHeterogeneousObjectsAsValidHCL(t *testing.T) {
 	attrs := map[string]Value{
 		"items": {Kind: KindList, List: []Value{

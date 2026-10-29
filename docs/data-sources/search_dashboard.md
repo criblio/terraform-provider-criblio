@@ -107,6 +107,7 @@ Read-Only:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--title_action))
 - `type` (String)
+- `variant` (String)
 
 <a id="nestedatt--elements--dashboard_element_input--layout"></a>
 ### Nested Schema for `elements.dashboard_element_input.layout`
@@ -166,6 +167,11 @@ Read-Only:
 
 Read-Only:
 
+- `dataset_id` (String)
+- `expected_output_type` (String)
+- `source` (String)
+- `timezone` (String)
+- `step_strategy` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--step_strategy))
 - `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--earliest))
 - `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--latest))
 - `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--queries))
@@ -194,9 +200,44 @@ Read-Only:
 
 Read-Only:
 
+- `dataset_id` (String)
+- `enabled` (Boolean)
+- `mode` (String)
+- `show_promql_preview` (Boolean)
+- `builder` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--queries--builder))
 - `alias` (String)
 - `local_id` (String)
 - `query` (String)
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries--builder"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.queries.builder`
+
+Read-Only:
+
+- `agg` (String) Aggregation function to apply when deriving PromQL from the visual builder.
+- `filters` (Attributes List) Label filters applied to the selected metric before aggregation. (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--queries--builder--filters))
+- `group_by` (List of String) Label names used to split the aggregate series.
+- `metric` (String) Customer metric name selected in the visual builder.
+- `range` (String) PromQL range-vector window used by rate-style visual queries. Defaults to <code>5m</code> when omitted.
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries--builder--filters"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.queries.builder.filters`
+
+Read-Only:
+
+- `k` (String) Metric label name to filter.
+- `op` (String) PromQL label-match operator.
+- `v` (String) Label value or regular expression used by the filter.
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--step_strategy"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.step_strategy`
+
+Read-Only:
+
+- `step` (Number) Fixed PromQL query step in seconds, used when type is fixed.
+- `target_points` (Number) Desired maximum chart point count, used when type is auto.
+- `type` (String) Step resolution strategy, either auto or fixed.
+
 
 
 
@@ -305,6 +346,11 @@ Read-Only:
 
 Read-Only:
 
+- `dataset_id` (String)
+- `expected_output_type` (String)
+- `source` (String)
+- `timezone` (String)
+- `step_strategy` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--step_strategy))
 - `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--earliest))
 - `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--latest))
 - `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries))
@@ -333,9 +379,44 @@ Read-Only:
 
 Read-Only:
 
+- `dataset_id` (String)
+- `enabled` (Boolean)
+- `mode` (String)
+- `show_promql_preview` (Boolean)
+- `builder` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder))
 - `alias` (String)
 - `local_id` (String)
 - `query` (String)
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.queries.builder`
+
+Read-Only:
+
+- `agg` (String) Aggregation function to apply when deriving PromQL from the visual builder.
+- `filters` (Attributes List) Label filters applied to the selected metric before aggregation. (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder--filters))
+- `group_by` (List of String) Label names used to split the aggregate series.
+- `metric` (String) Customer metric name selected in the visual builder.
+- `range` (String) PromQL range-vector window used by rate-style visual queries. Defaults to <code>5m</code> when omitted.
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries--builder--filters"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.queries.builder.filters`
+
+Read-Only:
+
+- `k` (String) Metric label name to filter.
+- `op` (String) PromQL label-match operator.
+- `v` (String) Label value or regular expression used by the filter.
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--step_strategy"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.step_strategy`
+
+Read-Only:
+
+- `step` (Number) Fixed PromQL query step in seconds, used when type is fixed.
+- `target_points` (Number) Desired maximum chart point count, used when type is auto.
+- `type` (String) Step resolution strategy, either auto or fixed.
+
 
 
 

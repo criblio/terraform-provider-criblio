@@ -35,6 +35,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "DatabaseConnection Data Source",
 		Attributes: map[string]schema.Attribute{
+			"account_identifier": schema.StringAttribute{
+				Computed:    true,
+				Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).`,
+			},
 			"auth_type": schema.StringAttribute{
 				Computed:    true,
 				Description: `Authentication method for the Database Connection. Determines how credentials are provided.`,
@@ -91,6 +95,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 				Description: `Database Connections returned in the response envelope.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"account_identifier": schema.StringAttribute{
+							Computed:    true,
+							Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).`,
+						},
 						"auth_type": schema.StringAttribute{
 							Computed:    true,
 							Description: `Authentication method for the Database Connection. Determines how credentials are provided.`,
@@ -147,9 +155,23 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 							Sensitive:   true,
 							Description: `Database password for authentication. Used with Oracle connections.`,
 						},
+						"pem": schema.SingleNestedAttribute{
+							Computed:    true,
+							Description: `RSA private key configuration for Snowflake key-pair authentication.`,
+							Attributes: map[string]schema.Attribute{
+								"key_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `RSA private key (PEM format) for Snowflake key-pair authentication.`,
+								},
+							},
+						},
 						"request_timeout": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+						},
+						"role": schema.StringAttribute{
+							Computed:    true,
+							Description: `Snowflake role to use for the session. When set, requests a role-scoped token.`,
 						},
 						"sslmode": schema.StringAttribute{
 							Computed:    true,
@@ -213,6 +235,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 							Computed:    true,
 							Description: `Database username for authentication. Used with Oracle connections.`,
 						},
+						"warehouse": schema.StringAttribute{
+							Computed:    true,
+							Description: `Snowflake warehouse to use for queries.`,
+						},
 					},
 				},
 			},
@@ -225,9 +251,23 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 				Sensitive:   true,
 				Description: `Database password for authentication. Used with Oracle connections.`,
 			},
+			"pem": schema.SingleNestedAttribute{
+				Computed:    true,
+				Description: `RSA private key configuration for Snowflake key-pair authentication.`,
+				Attributes: map[string]schema.Attribute{
+					"key_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `RSA private key (PEM format) for Snowflake key-pair authentication.`,
+					},
+				},
+			},
 			"request_timeout": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+			},
+			"role": schema.StringAttribute{
+				Computed:    true,
+				Description: `Snowflake role to use for the session. When set, requests a role-scoped token.`,
 			},
 			"sslmode": schema.StringAttribute{
 				Computed:    true,
@@ -290,6 +330,10 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 			"user": schema.StringAttribute{
 				Computed:    true,
 				Description: `Database username for authentication. Used with Oracle connections.`,
+			},
+			"warehouse": schema.StringAttribute{
+				Computed:    true,
+				Description: `Snowflake warehouse to use for queries.`,
 			},
 		},
 	}

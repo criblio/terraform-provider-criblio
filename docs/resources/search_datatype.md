@@ -55,7 +55,8 @@ resource "criblio_search_datatype" "example" {
 - `local_search` (Attributes) Configuration for lakehouse engine, such as auto-detection expressions. (see [below for nested schema](#nestedatt--local_search))
 - `max_event_bytes` (Integer) Maximum event size before truncation, in bytes.
 - `min_raw_length` (Integer) Minimum raw event length used when identifying the Datatype.
-- `schema_map` (Attributes List) Field mappings to rename or alias extracted fields. (see [below for nested schema](#nestedatt--schema_map))
+- `schema_map` (Attributes List) Field mappings to rename or alias extracted fields, retained for compatibility with earlier configurations. (see [below for nested schema](#nestedatt--schema_map))
+- `schema_maps` (Attributes) Out-of-box schema mappings keyed by target schema type. Applied at ingest when enabled by a dataset rule. (see [below for nested schema](#nestedatt--schema_maps))
 - `search_version` (String) Search execution version used by the Datatype.
 - `should_use_data_raw` (Boolean) If <code>true</code>, applies v1-style nested <code>_raw</code> JSON semantics for Cribl Lake Search v2 Datasets.
 - `tags` (String) Comma-separated tags for the Datatype.
@@ -78,6 +79,8 @@ Required:
 
 Optional:
 
+- `name` (String) Name of the additional extraction.
+- `source_field` (String) Field to use as input for the extraction.
 - `contains_header_row` (Boolean) Indicates that the source file contains a header row.
 - `escape` (String) Escape character for embedded quotes or special characters.
 - `field_list` (List of String) Optional list of fields to extract.
@@ -103,6 +106,21 @@ Required:
 
 - `log_type` (String) Log type for the FuzzKit generator.
 - `vendor` (String) Vendor name for the FuzzKit generator.
+
+<a id="nestedatt--schema_maps"></a>
+### Nested Schema for `schema_maps`
+
+Optional:
+
+- `ocsf_v1_8` (Attributes List) (see [below for nested schema](#nestedatt--schema_maps--ocsf_v1_8))
+
+<a id="nestedatt--schema_maps--ocsf_v1_8"></a>
+### Nested Schema for `schema_maps.ocsf_v1_8`
+
+Required:
+
+- `field_name` (String) Field Name
+- `source` (String) Kusto expression that denotes the value of the field. May be a simple field name or a more complex expression for a computed value.
 
 <a id="nestedatt--timestamp_extraction"></a>
 ### Nested Schema for `timestamp_extraction`

@@ -10,6 +10,8 @@ description: |-
 
 SearchDataset Resource
 
+Configure the ID in the dataset type attribute, for example `s3_dataset.id`. The computed top-level `id` is available during planning when that configured ID is known, so dependent resources can reference it before creation. Unknown or omitted IDs are resolved after creation. Changing the configured ID replaces the Dataset.
+
 ## Example Usage
 
 ```terraform
@@ -94,6 +96,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_aws_dataset"></a>
@@ -114,6 +117,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_azure_dataset"></a>
@@ -134,6 +138,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_azure_data_explorer_dataset"></a>
@@ -158,6 +163,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_elastic_search_dataset"></a>
@@ -178,6 +184,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_gcp_dataset"></a>
@@ -197,6 +204,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_google_workspace_dataset"></a>
@@ -216,6 +224,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--apihttp_dataset"></a>
@@ -235,6 +244,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--dataset_api_log_analytics"></a>
@@ -256,6 +266,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_ms_graph_dataset"></a>
@@ -275,6 +286,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--dataset_api_ngsiem"></a>
@@ -294,6 +306,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_okta_dataset"></a>
@@ -313,6 +326,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_open_search_dataset"></a>
@@ -333,6 +347,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_tailscale_dataset"></a>
@@ -352,6 +367,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--api_zoom_dataset"></a>
@@ -371,6 +387,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--azure_blob_dataset"></a>
@@ -389,6 +406,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--click_house_dataset"></a>
@@ -410,6 +428,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--edge_dataset"></a>
@@ -431,6 +450,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--cribl_lake_dataset"></a>
@@ -449,6 +469,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--cribl_leader_dataset"></a>
@@ -469,6 +490,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--cribl_local_dataset"></a>
@@ -487,6 +509,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--meta_dataset"></a>
@@ -506,6 +529,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--cribl_search_dataset"></a>
@@ -524,6 +548,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 - `stale_channel_flush_ms` (Integer) Time, in milliseconds, after which an inactive ingest channel is flushed.
 - `retention_period` (Integer) Dataset retention period, in days.
@@ -561,6 +586,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--prometheus_dataset"></a>
@@ -582,6 +608,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--s3_dataset"></a>
@@ -600,6 +627,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 - `auto_detect_region` (Boolean) Whether to automatically detect the region.
 - `bucket` (String) S3 bucket name.
@@ -632,6 +660,7 @@ Optional:
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `time_created` (Integer) Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.
 - `view_name` (String) Lakehouse cache view name, when applicable.
 
 <a id="nestedatt--aws_security_lake_dataset--cache_connection_info"></a>

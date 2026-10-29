@@ -31,6 +31,7 @@ type PackDataSourceModel struct {
 	GroupID  types.String      `tfsdk:"group_id"`
 	ID       types.String      `tfsdk:"id"`
 	Items    []packInstallInfo `tfsdk:"items"`
+	Tags     types.Dynamic     `tfsdk:"tags"`
 	With     types.String      `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
 }
 
@@ -127,6 +128,10 @@ func (r *PackDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 					},
 				},
 			},
+			"tags": schema.DynamicAttribute{
+				Computed:    true,
+				Description: "Pack tags from pack settings, preserving arbitrary keys and values.",
+			},
 			"with": schema.StringAttribute{
 				Optional:    true,
 				Description: `Comma separated list of entities, "outputs", "inputs"`,
@@ -183,7 +188,20 @@ func (r *PackDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("unexpected response from API", "empty response body")
 		return
 	}
+	settingsTags, found, err := readPackSettingsTags(ctx, r.client, data.GroupID.ValueString(), packID)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to read pack settings", err.Error())
+		return
+	}
+	if found {
+		apiModel.Tags, err = decodePackTags(settingsTags)
+		if err != nil {
+			resp.Diagnostics.AddError("invalid pack settings tags", err.Error())
+			return
+		}
+	}
 	data.Items = []packInstallInfo{packInstallInfoFromAPI(apiModel)}
+	data.Tags = packRequestBodyTagsObjectFromAPI(apiModel.Tags)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

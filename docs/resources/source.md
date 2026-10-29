@@ -380,7 +380,7 @@ Optional:
 - `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `cribl_source_provenance` (Attributes) Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create. (see [below for nested schema](#nestedatt--input_collection--cribl_source_provenance))
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_collection--connections))
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_collection--pq))
+- `pq` (Attributes) Persistent queue settings for this Source. (see [below for nested schema](#nestedatt--input_collection--pq))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `preprocess` (Attributes) Optional preprocessing step that pipes collected data through an external command before ingestion. (see [below for nested schema](#nestedatt--input_collection--preprocess))
@@ -472,7 +472,7 @@ Optional:
 - `backoff_rate` (Number)
 - `authentication_timeout` (Number)
 - `reauthentication_threshold` (Number)
-- `aws_secret_key` (String) Secret key
+- `aws_secret_key` (String, Sensitive) Secret key
 - `endpoint` (String) MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -488,7 +488,7 @@ Optional:
 - `max_socket_errors` (Number)
 - `auto_parse` (Boolean)
 - `description` (String)
-- `aws_api_key` (String) Access key
+- `aws_api_key` (String, Sensitive) Access key
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 
 <a id="nestedatt--input_http"></a>
@@ -512,7 +512,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_http--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_http--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_http--pq))
-- `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
+- `auth_tokens` (List of String, Sensitive) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
 - `tls` (Attributes) TLS settings (server side) (see [below for nested schema](#nestedatt--input_http--tls))
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Integer) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
@@ -535,7 +535,7 @@ Optional:
 
 Read-Only:
 
-- `capture_headers_warning` (String)
+- `capture_headers_warning` (String) Warning displayed when request-header capture is enabled.
 
 <a id="nestedatt--input_splunk"></a>
 ### Nested Schema for `input_splunk`
@@ -617,13 +617,13 @@ Optional:
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_splunk_search--metadata))
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_search--retry_rules))
+- `retry_rules` (Attributes) HTTP retry behavior for failed collection requests. (see [below for nested schema](#nestedatt--input_splunk_search--retry_rules))
 - `breaker_rulesets` (List of String)
 - `stale_channel_flush_ms` (Number)
 - `description` (String)
 - `username` (String) Username
-- `password` (String) Password
-- `token` (String) Bearer token to include in the authorization header
+- `password` (String, Sensitive) Password
+- `token` (String, Sensitive) Bearer token to include in the authorization header
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `text_secret` (String) Select or create a stored text secret
 
@@ -722,7 +722,7 @@ Optional:
 - `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
 - `endpoint_suffix` (String) Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
 - `client_text_secret` (String) Select or create a stored text secret
-- `certificate` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--certificate))
+- `certificate` (Attributes) Certificate credentials for the Azure service principal. (see [below for nested schema](#nestedatt--input_azure_blob--certificate))
 
 <a id="nestedatt--input_azure_vnet_flow_log"></a>
 ### Nested Schema for `input_azure_vnet_flow_log`
@@ -802,12 +802,12 @@ Optional:
 - `api_version` (String) The API version to use for communicating with the server
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--input_elastic--extra_http_headers))
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_elastic--metadata))
-- `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--proxy_mode))
+- `proxy_mode` (Attributes) Proxy mode settings for Elasticsearch requests. (see [below for nested schema](#nestedatt--input_elastic--proxy_mode))
 - `description` (String)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
-- `auth_tokens` (List of String) Bearer tokens to include in the authorization header
+- `auth_tokens` (List of String, Sensitive) Bearer tokens to include in the authorization header
 - `custom_apiversion` (String) Custom version information to respond to requests
 
 Read-Only:
@@ -895,8 +895,8 @@ Optional:
 - `ip_denylist_regex` (String)
 - `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured.
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--prometheus_auth))
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--loki_auth))
+- `prometheus_auth` (Attributes) Authentication settings for Prometheus Remote Write requests. (see [below for nested schema](#nestedatt--input_grafana--prometheus_auth))
+- `loki_auth` (Attributes) Authentication settings for Loki requests. (see [below for nested schema](#nestedatt--input_grafana--loki_auth))
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_grafana--metadata))
 - `description` (String)
 
@@ -942,8 +942,8 @@ Optional:
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_loki--metadata))
 - `description` (String)
 - `username` (String)
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `credentials_secret` (String)
 - `text_secret` (String)
 
@@ -989,8 +989,8 @@ Optional:
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_prometheus_rw--metadata))
 - `description` (String)
 - `username` (String)
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `credentials_secret` (String)
 - `text_secret` (String)
 
@@ -1003,7 +1003,7 @@ Read-Only:
 
 Required:
 
-- `interval` (Number) How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.
+- `interval` (Number) How often to scrape targets for metrics, in the unit set by Interval unit. Maximum of 60. 60 must be evenly divisible by the value you enter.
 - `log_level` (String) Collector runtime log level
 
 Optional:
@@ -1022,6 +1022,8 @@ Optional:
 - `dimension_list` (List of String) Other dimensions to include in events
 - `field_per_metric` (Boolean) When enabled, each metric name is used as the event field key (example: go_threads: 9) instead of the default _metric/_value format.
 - `discovery_type` (String) Target discovery mechanism. Use static to manually enter a list of targets.
+- `interval_unit` (String) Unit for the poll interval. Choose Seconds for sub-minute scraping. Each Worker Process generates and registers the scrape job, and the Leader keeps one schedule for the @{group}. Before enabling Seconds, upgrade every @{node} in the @{group}: a Worker Process on @{product} version 4.20.2 or older registers a minute-based cron and replaces that @{group} schedule.
+- `max_concurrent_runs` (Number) Maximum number of scrape runs that can overlap. Set this (for example, to 1) for sub-minute intervals, so a slow scrape cycle can't pile up overlapping runs.
 - `reject_unauthorized` (Boolean)
 - `timeout` (Number) Time, in seconds, before aborting HTTP connection attempts; use 0 for no timeout
 - `keep_alive_time` (Number)
@@ -1039,11 +1041,11 @@ Optional:
 - `scrape_protocol` (String) Protocol to use when collecting metrics
 - `scrape_path` (String) Path to use when collecting metrics from discovered targets
 - `aws_authentication_method` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `use_public_ip` (Boolean) Use public IP address for discovered targets. Disable to use the private IP address.
 - `search_filter` (Attributes List) Filter to apply when searching for EC2 instances (see [below for nested schema](#nestedatt--input_prometheus--search_filter))
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String) Region where the EC2 is located
 - `endpoint` (String) EC2 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to EC2-compatible endpoint.
 - `reuse_connections` (Boolean)
@@ -1056,7 +1058,7 @@ Optional:
 - `http_discovery_reject_unauthorized` (Boolean) Reject TLS certificates that cannot be verified for the discovery endpoint. Falls back to the source-level setting if not specified.
 - `max_response_body_size` (String) Maximum size of the HTTP SD response body. Responses exceeding this limit will be rejected. Defaults to 20 MB.
 - `username` (String) Username for Prometheus Basic authentication
-- `password` (String) Password for Prometheus Basic authentication
+- `password` (String, Sensitive) Password for Prometheus Basic authentication
 - `credentials_secret` (String)
 
 <a id="nestedatt--input_edge_prometheus"></a>
@@ -1094,11 +1096,11 @@ Optional:
 - `scrape_protocol` (String)
 - `scrape_path` (String)
 - `aws_authentication_method` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `use_public_ip` (Boolean)
 - `search_filter` (Attributes List) (see [below for nested schema](#nestedatt--input_edge_prometheus--search_filter))
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String)
 - `endpoint` (String)
 - `reuse_connections` (Boolean)
@@ -1117,7 +1119,7 @@ Optional:
 - `http_discovery_reject_unauthorized` (Boolean)
 - `max_response_body_size` (String)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
 
 <a id="nestedatt--input_office365_mgmt"></a>
@@ -1143,6 +1145,7 @@ Optional:
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_office365_mgmt--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--pq))
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable
+- `reject_unauthorized` (Boolean)
 - `keep_alive_time` (Number)
 - `job_timeout` (String)
 - `max_missed_keep_alives` (Number)
@@ -1155,7 +1158,7 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--retry_rules))
 - `auth_type` (String) Enter client secret directly, or select a stored secret
 - `description` (String)
-- `client_secret` (String) Microsoft 365 Azure client secret
+- `client_secret` (String, Sensitive) Microsoft 365 Azure client secret
 - `text_secret` (String)
 
 <a id="nestedatt--input_office365_service"></a>
@@ -1181,6 +1184,7 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--pq))
 - `plan_type` (String)
 - `timeout` (Number)
+- `reject_unauthorized` (Boolean)
 - `keep_alive_time` (Number)
 - `job_timeout` (String)
 - `max_missed_keep_alives` (Number)
@@ -1191,7 +1195,7 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--retry_rules))
 - `auth_type` (String)
 - `description` (String)
-- `client_secret` (String)
+- `client_secret` (String, Sensitive)
 - `text_secret` (String)
 
 <a id="nestedatt--input_office365_msg_trace"></a>
@@ -1232,15 +1236,15 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--retry_rules))
 - `description` (String)
 - `username` (String) Username to run Message Trace API call.
-- `password` (String) Password to run Message Trace API call.
+- `password` (String, Sensitive) Password to run Message Trace API call.
 - `credentials_secret` (String) Select or create a secret that references your credentials.
-- `client_secret` (String) client_secret to pass in the OAuth request parameter.
+- `client_secret` (String, Sensitive) client_secret to pass in the OAuth request parameter.
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
 - `client_id` (String) client_id to pass in the OAuth request parameter.
 - `resource` (String) Resource to pass in the OAuth request parameter.
 - `plan_type` (String)
 - `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
-- `cert_options` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--cert_options))
+- `cert_options` (Attributes) Certificate credentials for Microsoft OAuth authentication. (see [below for nested schema](#nestedatt--input_office365_msg_trace--cert_options))
 
 <a id="nestedatt--input_microsoft_graph"></a>
 ### Nested Schema for `input_microsoft_graph`
@@ -1282,7 +1286,7 @@ Optional:
 - `breaker_rulesets` (List of String)
 - `stale_channel_flush_ms` (Number)
 - `description` (String)
-- `client_secret` (String)
+- `client_secret` (String, Sensitive)
 - `tenant_id` (String)
 - `client_id` (String)
 - `resource` (String)
@@ -1342,7 +1346,7 @@ Optional:
 Required:
 
 - `consumer_group` (String) The consumer group this instance belongs to. Default is '$Default'.
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub_amqp--checkpointing))
+- `checkpointing` (Attributes) Azure Blob Storage settings used to persist Event Hubs checkpoints. (see [below for nested schema](#nestedatt--input_eventhub_amqp--checkpointing))
 
 Optional:
 
@@ -1358,7 +1362,7 @@ Optional:
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_eventhub_amqp--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub_amqp--pq))
 - `event_hub_name` (String) The name of the Event Hub to consume from
-- `auth` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub_amqp--auth))
+- `auth` (Attributes) Authentication settings for the Event Hubs AMQP connection. (see [below for nested schema](#nestedatt--input_eventhub_amqp--auth))
 - `from_beginning` (Boolean)
 - `max_batch_size` (Integer) Maximum number of events in each batch delivered to the consumer
 - `max_wait_time_in_seconds` (Integer) Maximum time to wait for a batch of events before delivering a partial batch
@@ -1426,7 +1430,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_firehose--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--pq))
-- `auth_tokens` (List of String)
+- `auth_tokens` (List of String, Sensitive) Shared secrets to be provided by any client (x-amz-firehose-access-key: <token>). If empty, unauthorized access is permitted.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--tls))
 - `max_active_req` (Number)
 - `max_requests_per_socket` (Integer)
@@ -1472,8 +1476,8 @@ Optional:
 - `create_subscription` (Boolean) Create subscription if it does not exist
 - `region` (String) Region to retrieve messages from. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
-- `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
-- `secret` (String) Select or create a stored text secret
+- `service_account_credentials` (String, Sensitive) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
+- `secret` (String, Sensitive) Select or create a stored text secret
 - `max_backlog` (Number) If Destination exerts backpressure, this setting limits how many inbound events Stream will queue for processing before it stops retrieving events
 - `concurrency` (Number) How many streams to pull messages from at one time. Doubling the value doubles the number of messages this Source pulls from the topic (if available), while consuming more CPU and memory. Defaults to 5.
 - `request_timeout` (Number) Pull request timeout, in milliseconds
@@ -1498,7 +1502,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_cribl--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--pq))
-- `filter` (String)
+- `filter` (String) Filter expression used to select internal Cribl log events.
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_cribl--metadata))
 - `description` (String)
 
@@ -1596,7 +1600,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_cribl_lake_http--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--pq))
-- `auth_tokens` (List of String)
+- `auth_tokens` (List of String, Sensitive)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--tls))
 - `max_active_req` (Number)
 - `max_requests_per_socket` (Integer)
@@ -1653,7 +1657,7 @@ Optional:
 - `enable_load_balancing` (Boolean)
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
 - `description` (String)
-- `auth_token` (String) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
+- `auth_token` (String, Sensitive) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
 - `text_secret` (String)
 
 <a id="nestedatt--input_system_metrics"></a>
@@ -1673,10 +1677,10 @@ Optional:
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_system_metrics--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--pq))
 - `interval` (Number) Time, in seconds, between consecutive metric collections. Default is 10 seconds.
-- `host` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host))
-- `process` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--process))
-- `container` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--container))
-- `gpu` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--gpu))
+- `host` (Attributes) Select level of detail for host metrics (see [below for nested schema](#nestedatt--input_system_metrics--host))
+- `process` (Attributes) Process metric collection settings. (see [below for nested schema](#nestedatt--input_system_metrics--process))
+- `container` (Attributes) Select the level of detail for container metrics (see [below for nested schema](#nestedatt--input_system_metrics--container))
+- `gpu` (Attributes) Select the level of detail for GPU metrics (see [below for nested schema](#nestedatt--input_system_metrics--gpu))
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_system_metrics--metadata))
 - `persistence` (Attributes) persistence (see [below for nested schema](#nestedatt--input_system_metrics--persistence))
 - `description` (String)
@@ -1699,8 +1703,8 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--pq))
 - `interval` (Number) Time, in seconds, between consecutive state collections. Default is 300 seconds (5 minutes).
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_system_state--metadata))
-- `collectors` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--collectors))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--persistence))
+- `collectors` (Attributes) System state collectors to enable and configure. (see [below for nested schema](#nestedatt--input_system_state--collectors))
+- `persistence` (Attributes) Disk spooling settings for collected system state data. (see [below for nested schema](#nestedatt--input_system_state--persistence))
 - `disable_native_module` (Boolean) Enable to use built-in tools (PowerShell) to collect events instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)
 - `disable_native_last_log_module` (Boolean) Enable only to collect LastLog data via legacy implementation. This option will be removed in a future release. Please contact Support before enabling. [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)
 - `description` (String)
@@ -1824,7 +1828,7 @@ Optional:
 - `file_filter` (String)
 - `aws_account_id` (String) SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `reuse_connections` (Boolean)
@@ -1832,10 +1836,10 @@ Optional:
 - `breaker_rulesets` (List of String)
 - `stale_channel_flush_ms` (Number)
 - `max_messages` (Number) The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-- `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
-- `num_receivers` (Number)
+- `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. New Sources default to 600 sec. (10 minutes); existing Sources keep their configured value. You can set this as high as 43200 sec. (12 hours), but a long timeout keeps a message invisible to other pollers for that whole window after a non-graceful shutdown, so redelivery can be hours away.
+- `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead. Not applied when fan-out is enabled.
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.
-- `skip_on_error` (Boolean)
+- `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Not applied when fan-out is enabled.
 - `include_sqs_metadata` (Boolean) Attach SQS notification metadata to a __sqsMetadata field on each event
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access Amazon S3
 - `assume_role_arn` (String)
@@ -1844,23 +1848,28 @@ Optional:
 - `enable_sqsassume_role` (Boolean) Use Assume Role credentials when accessing Amazon SQS
 - `shared_credentials` (Boolean) Use the same credential settings for S3 and SQS
 - `shared_assume_role_arn` (Boolean) Use the same settings for S3 and SQS
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--preprocess))
+- `preprocess` (Attributes) Optional preprocessing step that pipes collected data through an external command before ingestion. Not applied when fan-out is enabled. (see [below for nested schema](#nestedatt--input_crowdstrike--preprocess))
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_crowdstrike--metadata))
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--checkpointing))
+- `checkpointing` (Attributes) Checkpoint settings used to resume processing after an interruption. Not applied when fan-out is enabled. (see [below for nested schema](#nestedatt--input_crowdstrike--checkpointing))
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
 - `encoding` (String)
+- `enable_fanout` (Boolean) Spread this Source's file processing across all Worker Processes on the Worker, instead of having one Worker Process handle every file of an SQS message. When enabled, Number of receivers, Skip file on error, Checkpointing and Custom command are not applied.
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `sqsassume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `sqsassume_role_external_id` (String) External ID to use when assuming role
 - `sqsduration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
 - `sqsaws_authentication_method` (String) Choose Auto to use IAM roles
 - `sqsaws_secret` (String) Select or create a stored secret that references your access key and secret key
-- `sqsaws_secret_key` (String) SQS secret key
-- `tag_after_processing` (String)
+- `sqsaws_secret_key` (String, Sensitive) SQS secret key
+- `tag_after_processing` (String) Whether to add a tag to each S3 object after processing.
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+
+Read-Only:
+
+- `visibility_timeout_warning` (String) Warning displayed when the visibility timeout is configured high.
 
 <a id="nestedatt--input_datadog_agent"></a>
 ### Nested Schema for `input_datadog_agent`
@@ -1899,7 +1908,7 @@ Optional:
 - `sampling_rate` (Number) The rate_by_service hint sent to connected tracers as the catch-all sampling rate. Applies to any service/environment not explicitly listed in Per-Service Sampling Rules. 1.0 = keep all traces (default); 0.0 = suggest dropping all.
 - `sampling_rules` (Attributes List) Per-service sampling rate hints. Each row maps to a "service:SERVICE,env:ENVIRONMENT" key in the rate_by_service response sent to tracers. (see [below for nested schema](#nestedatt--input_datadog_agent--sampling_rules))
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_datadog_agent--metadata))
-- `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--proxy_mode))
+- `proxy_mode` (Attributes) Proxy mode settings for Datadog Agent requests. (see [below for nested schema](#nestedatt--input_datadog_agent--proxy_mode))
 - `description` (String)
 
 Read-Only:
@@ -1950,7 +1959,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--pq))
-- `auth_tokens` (List of String)
+- `auth_tokens` (List of String, Sensitive)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--tls))
 - `max_active_req` (Number)
 - `max_requests_per_socket` (Integer)
@@ -1969,10 +1978,10 @@ Optional:
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--metadata))
 - `allowed_paths` (List of String) List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.
 - `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.
-- `auth_tokens_ext` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
+- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization token). Empty placeholder objects returned by the API are omitted from state and exported configuration. Populated entries, including legacy entries without authType, retain their values. (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
 - `access_control_allow_origin` (List of String) HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.
 - `access_control_allow_headers` (List of String) HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers.
-- `access_control_allow_methods` (List of String) HTTP methods echoed in Access-Control-Allow-Methods on preflight.
+- `access_control_allow_methods` (List of String) HTTP methods echoed in Access-Control-Allow-Methods on preflight
 - `access_control_expose_headers` (List of String) Headers the browser is allowed to access from the response
 - `access_control_allow_credentials` (Boolean) Include credentials in cross-origin requests. Cannot be used with wildcard origins.
 - `access_control_max_age` (Number) How long browsers should cache the preflight response
@@ -2006,12 +2015,12 @@ Optional:
 - `service_interval` (Number) Time interval in minutes between consecutive service calls
 - `shard_expr` (String) A JavaScript expression to be called with each shardId for the stream. If the expression evaluates to a truthy value, the shard will be processed.
 - `shard_iterator_type` (String) Location at which to start reading a shard for the first time
-- `payload_format` (String) Format of data inside the Kinesis Stream records. Gzip compression is automatically detected.
+- `payload_format` (String) Format of data inside the Kinesis Stream records. Gzip compression is automatically detected. Cloudwatch Logs records become one event per log event, keeping the event id, message type, log group, log stream, owner, and subscription filters; other fields are dropped.
 - `get_records_limit` (Number) Maximum number of records per getRecords call
 - `get_records_limit_total` (Number) Maximum number of records, across all shards, to pull down at once per Worker Process
 - `load_balancing_algorithm` (String) The load-balancing algorithm to use for spreading out shards across Workers and Worker Processes
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `endpoint` (String) Kinesis stream service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Kinesis stream-compatible endpoint.
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -2024,7 +2033,7 @@ Optional:
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_kinesis--metadata))
 - `auto_parse` (Boolean)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 
 <a id="nestedatt--input_criblmetrics"></a>
@@ -2101,7 +2110,7 @@ Optional:
 - `file_filter` (String)
 - `aws_account_id` (String)
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String)
 - `endpoint` (String)
 - `reuse_connections` (Boolean)
@@ -2109,7 +2118,7 @@ Optional:
 - `breaker_rulesets` (List of String)
 - `stale_channel_flush_ms` (Number)
 - `max_messages` (Number)
-- `visibility_timeout` (Number)
+- `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 - `num_receivers` (Number)
 - `socket_timeout` (Number)
 - `skip_on_error` (Boolean)
@@ -2125,20 +2134,20 @@ Optional:
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_s3--metadata))
 - `parquet_chunk_size_mb` (Number)
 - `parquet_chunk_download_timeout` (Number)
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_s3--checkpointing))
+- `checkpointing` (Attributes) Checkpoint settings used to resume processing after an interruption. (see [below for nested schema](#nestedatt--input_s3--checkpointing))
 - `poll_timeout` (Number)
 - `encoding` (String)
 - `tag_after_processing` (Boolean) Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.
 - `auto_parse` (Boolean)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `sqsassume_role_arn` (String)
 - `sqsassume_role_external_id` (String)
 - `sqsduration_seconds` (Number)
 - `sqsaws_authentication_method` (String)
 - `sqsaws_secret` (String)
-- `sqsaws_secret_key` (String)
+- `sqsaws_secret_key` (String, Sensitive)
 - `processed_tag_key` (String)
 - `processed_tag_value` (String)
 
@@ -2165,7 +2174,7 @@ Optional:
 - `file_filter` (String)
 - `aws_account_id` (String)
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String)
 - `endpoint` (String)
 - `reuse_connections` (Boolean)
@@ -2195,14 +2204,14 @@ Optional:
 - `max_manifest_size_kb` (Integer) Maximum download size (KB) of each manifest or checksum file. Manifest files larger than this size will not be read. Defaults to 4096.
 - `validate_inventory_files` (Boolean) If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `sqsassume_role_arn` (String)
 - `sqsassume_role_external_id` (String)
 - `sqsduration_seconds` (Number)
 - `sqsaws_authentication_method` (String)
 - `sqsaws_secret` (String)
-- `sqsaws_secret_key` (String)
+- `sqsaws_secret_key` (String, Sensitive)
 - `tag_after_processing` (String)
 - `processed_tag_key` (String)
 - `processed_tag_value` (String)
@@ -2277,13 +2286,21 @@ Optional:
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. This does not limit concurrent HTTP/2 streams on a connection; use Maximum concurrent streams and Maximum message size for that bound.
 - `max_message_size_kb` (Number) Maximum size, in KB, of a single received gRPC message (OTLP export request). Requests exceeding this limit are rejected before processing. Compressed requests are checked against their decompressed size.
 - `max_concurrent_streams` (Number) Maximum number of concurrent HTTP/2 streams allowed on a single gRPC connection. Combined with Maximum message size, this bounds per-connection receive and decompress state. Active connection limit only bounds connections.
+- `max_connection_age_sec` (Number) Maximum time a gRPC connection may stay open, including while idle, before @{product} closes it and frees the slot for new clients. Use 0 for unlimited; maximum 86400 sec. (24 hours).
+- `max_connection_age_grace_sec` (Number) After the maximum connection age is reached, how long @{product} waits for in-flight requests to complete before forcibly closing the connection. Only applies when Maximum connection age is not 0. Maximum 3600 sec. (1 hour).
 - `description` (String)
 - `username` (String)
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `credentials_secret` (String)
 - `text_secret` (String)
 - `extract_logs` (Boolean) Enable to extract each incoming log record to a separate event
+- `access_control_allow_origin` (List of String)
+- `access_control_allow_headers` (List of String) HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers. Leave empty to allow all requested headers from an allowed origin. Origin matching and authentication still apply.
+- `access_control_allow_methods` (List of String)
+- `access_control_expose_headers` (List of String)
+- `access_control_allow_credentials` (Boolean)
+- `access_control_max_age` (Integer) How long browsers should cache the preflight response, in whole seconds. Fractional values are invalid; browsers that cannot parse the header fall back to 5 seconds.
 
 Read-Only:
 
@@ -2342,7 +2359,7 @@ Optional:
 - `aws_account_id` (String)
 - `create_queue` (Boolean) Create queue if it does not exist
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String) AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `endpoint` (String) SQS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SQS-compatible endpoint.
 - `reuse_connections` (Boolean)
@@ -2357,7 +2374,7 @@ Optional:
 - `poll_timeout` (Number)
 - `auto_parse` (Boolean)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `num_receivers` (Number)
 
@@ -2484,7 +2501,7 @@ Optional:
 - `enable_header` (Boolean) Client will pass the header record with every new connection. The header can contain an authToken, and an object with a list of fields and values to add to every event. These fields can be used to simplify Event Breaker selection, routing, etc. Header has this format, and must be followed by a newline: { "authToken" : "myToken", "fields": { "field1": "value1", "field2": "value2" } }
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--preprocess))
 - `description` (String)
-- `auth_token` (String)
+- `auth_token` (String, Sensitive)
 - `auth_type` (String)
 - `text_secret` (String)
 
@@ -2514,7 +2531,7 @@ Optional:
 - `breaker_rulesets` (List of String)
 - `stale_channel_flush_ms` (Number)
 - `enable_unix_path` (Boolean) Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port.
-- `filter` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--filter))
+- `filter` (Attributes) Rules that select processes for AppScope instrumentation. (see [below for nested schema](#nestedatt--input_appscope--filter))
 - `persistence` (Attributes) Persistence (see [below for nested schema](#nestedatt--input_appscope--persistence))
 - `auth_type` (String)
 - `description` (String)
@@ -2523,7 +2540,7 @@ Optional:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--tls))
 - `unix_socket_path` (String) Path to the UNIX domain socket to listen on.
 - `unix_socket_perms` (String) Permissions to set for socket e.g., 777. If empty, falls back to the runtime user's default permissions.
-- `auth_token` (String)
+- `auth_token` (String, Sensitive)
 - `text_secret` (String)
 
 <a id="nestedatt--input_wef"></a>
@@ -2602,6 +2619,7 @@ Optional:
 - `description` (String)
 - `disable_json_rendering` (Boolean) Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)
 - `include_empty_json_fields` (Boolean) Preserve fields with empty values (such as '-') in the JSON output instead of omitting them
+- `resolve_parameter_codes` (Boolean) Resolve Windows message table parameter codes (%%NNNN) in EventData fields to their human-readable strings (for example: %%14592 → Inbound)
 - `disable_xml_rendering` (Boolean) Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)
 
 <a id="nestedatt--input_apple_unified_logs"></a>
@@ -2723,7 +2741,7 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_wiz--retry_rules))
 - `auth_type` (String)
 - `description` (String)
-- `client_secret` (String) The client secret of the Wiz application
+- `client_secret` (String, Sensitive) The client secret of the Wiz application
 - `text_secret` (String)
 
 <a id="nestedatt--input_openai"></a>
@@ -2750,7 +2768,7 @@ Optional:
 - `openai_organization` (String) Optional `OpenAI-Organization` request header value, typically `org-xxxxxxxxxxxxxxxxxxxxxxxx`
 - `openai_project` (String) Optional `OpenAI-Project` request header value, typically `proj_xxxxxxxxxxxxxxxxxxxxxxxx`
 - `request_timeout` (Number)
-- `api_key` (String) API key
+- `api_key` (String, Sensitive) API key
 - `keep_alive_time` (Number)
 - `max_missed_keep_alives` (Number)
 - `ttl` (String)
@@ -2780,7 +2798,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_wiz_webhook--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--pq))
-- `auth_tokens` (List of String)
+- `auth_tokens` (List of String, Sensitive)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--tls))
 - `max_active_req` (Number)
 - `max_requests_per_socket` (Integer)
@@ -2860,7 +2878,7 @@ Optional:
 - `file_filter` (String)
 - `aws_account_id` (String)
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String)
 - `endpoint` (String)
 - `reuse_connections` (Boolean)
@@ -2888,14 +2906,14 @@ Optional:
 - `poll_timeout` (Number)
 - `encoding` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `sqsassume_role_arn` (String)
 - `sqsassume_role_external_id` (String)
 - `sqsduration_seconds` (Number)
 - `sqsaws_authentication_method` (String)
 - `sqsaws_secret` (String)
-- `sqsaws_secret_key` (String)
+- `sqsaws_secret_key` (String, Sensitive)
 - `tag_after_processing` (String)
 - `processed_tag_key` (String)
 - `processed_tag_value` (String)
@@ -2923,7 +2941,7 @@ Optional:
 - `file_filter` (String)
 - `aws_account_id` (String)
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String)
+- `aws_secret_key` (String, Sensitive)
 - `region` (String)
 - `endpoint` (String)
 - `reuse_connections` (Boolean)
@@ -2951,14 +2969,14 @@ Optional:
 - `poll_timeout` (Number)
 - `encoding` (String)
 - `description` (String)
-- `aws_api_key` (String)
+- `aws_api_key` (String, Sensitive)
 - `aws_secret` (String)
 - `sqsassume_role_arn` (String)
 - `sqsassume_role_external_id` (String)
 - `sqsduration_seconds` (Number)
 - `sqsaws_authentication_method` (String)
 - `sqsaws_secret` (String)
-- `sqsaws_secret_key` (String)
+- `sqsaws_secret_key` (String, Sensitive)
 - `tag_after_processing` (String)
 - `processed_tag_key` (String)
 - `processed_tag_value` (String)
@@ -3018,7 +3036,7 @@ Optional:
 - `client_text_secret` (String) Select or create a stored text secret for the OAuth client secret value
 - `state_update_expression` (String) JavaScript expression that defines how to update the state from an event. This source defaults to checking that `_time` is a finite number (not only `__timestampExtracted`), so state still advances when the event breaker assigns a fallback time. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields).
 - `state_merge_expression` (String) JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates `prevState` and `newState` variables, resolving to the state to keep.
-- `manage_state` (Map of String)
+- `manage_state` (Map of String) Controls for viewing and managing the collector state.
 
 <a id="nestedatt--input_proofpoint_pod"></a>
 ### Nested Schema for `input_proofpoint_pod`
@@ -3432,7 +3450,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_openai_compliance_logs--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_openai_compliance_logs--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_openai_compliance_logs--pq))
-- `api_key` (String)
+- `api_key` (String, Sensitive)
 - `earliest` (String) Relative to the current time. Format: [+|-]<time_integer><time_unit>
 - `latest` (String) Relative to the current time. Format: [+|-]<time_integer><time_unit>
 - `job_timeout` (String) Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.
@@ -3477,7 +3495,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_anthropic_compliance--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_anthropic_compliance--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_anthropic_compliance--pq))
-- `api_key` (String)
+- `api_key` (String, Sensitive)
 - `activities` (Attributes) Activities (see [below for nested schema](#nestedatt--input_anthropic_compliance--activities))
 - `chats` (Attributes) Chats (see [below for nested schema](#nestedatt--input_anthropic_compliance--chats))
 - `projects` (Attributes) Projects (see [below for nested schema](#nestedatt--input_anthropic_compliance--projects))
@@ -3519,7 +3537,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_anthropic_enterprise_analytics--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_anthropic_enterprise_analytics--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_anthropic_enterprise_analytics--pq))
-- `api_key` (String)
+- `api_key` (String, Sensitive)
 - `request_timeout` (Number)
 - `breaker_rulesets` (List of String)
 - `stale_channel_flush_ms` (Number)
@@ -3575,14 +3593,14 @@ Optional:
 - `stale_channel_flush_ms` (Number)
 - `description` (String)
 - `text_secret` (String) Select or create a secret that references the client secret from your app registration
-- `cert_options` (Attributes) (see [below for nested schema](#nestedatt--input_microsoft_copilot--cert_options))
+- `cert_options` (Attributes) Certificate credentials for Microsoft Graph OAuth authentication. (see [below for nested schema](#nestedatt--input_microsoft_copilot--cert_options))
 
 <a id="nestedatt--input_okta"></a>
 ### Nested Schema for `input_okta`
 
 Required:
 
-- `okta_domain` (String) Your Okta domain (example: your-org). Do not include .okta.com, https://, or trailing slashes.
+- `okta_domain` (String) Your Okta subdomain (example: your-org). Do not include the domain suffix, https://, or trailing slashes.
 - `text_secret` (String)
 
 Optional:
@@ -3598,7 +3616,8 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_okta--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_okta--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_okta--pq))
-- `okta_token` (String) Your Okta API token for authentication
+- `okta_domain_suffix` (String) Host suffix for your Okta cell/region. Defaults to okta.com (US commercial). Choose okta-emea.com (EMEA), oktapreview.com (preview), okta-gov.com (US gov), or okta.mil (US military).
+- `okta_token` (String, Sensitive) Your Okta API token for authentication
 - `cron_schedule` (String) Schedule on which to run this collection job
 - `earliest` (String) Earliest time for data collection, relative to now
 - `latest` (String)
@@ -4371,6 +4390,7 @@ Optional:
 <a id="nestedatt--input_datadog_agent--metadata"></a>
 <a id="nestedatt--input_datagen--metadata"></a>
 <a id="nestedatt--input_http_raw--metadata"></a>
+<a id="nestedatt--input_http_raw--auth_tokens_ext--metadata"></a>
 <a id="nestedatt--input_kinesis--metadata"></a>
 <a id="nestedatt--input_criblmetrics--metadata"></a>
 <a id="nestedatt--input_metrics--metadata"></a>
@@ -4478,7 +4498,7 @@ Optional:
 - `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
 - `token_url` (String) URL of the token endpoint to use for OAuth authentication
 - `client_id` (String) Client ID to use for OAuth authentication
-- `oauth_secret_type` (String)
+- `oauth_secret_type` (String) Source of the OAuth client secret.
 - `client_text_secret` (String)
 - `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--input_kafka--kafka_schema_registry--auth--oauth_params))
 - `identity_pool_id` (String) Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.
@@ -4508,16 +4528,16 @@ Required:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Whether TLS is disabled for this connection.
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `passphrase` (String) Passphrase to use to decrypt private key
-- `min_version` (String) Minimum TLS version
-- `max_version` (String) Maximum TLS version
+- `passphrase` (String, Sensitive) Passphrase to use to decrypt private key
+- `min_version` (String) Minimum TLS version to use for the connection.
+- `max_version` (String) Maximum TLS version to use for the connection.
 
 <a id="nestedatt--input_kafka--sasl"></a>
 <a id="nestedatt--input_confluent_cloud--sasl"></a>
@@ -4530,7 +4550,7 @@ Required:
 Optional:
 
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `auth_type` (String)
 - `credentials_secret` (String)
 - `mechanism` (String) SASL mechanism
@@ -4602,10 +4622,10 @@ Optional:
 - `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `certificate_name` (String)
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `passphrase` (String)
+- `passphrase` (String, Sensitive)
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-- `min_version` (String)
-- `max_version` (String)
+- `min_version` (String) Minimum TLS version to accept from clients.
+- `max_version` (String) Maximum TLS version to accept from clients.
 
 <a id="nestedatt--input_http--auth_tokens_ext"></a>
 <a id="nestedatt--input_cribl_lake_http--auth_tokens_ext"></a>
@@ -4613,7 +4633,7 @@ Optional:
 
 Required:
 
-- `token` (String) Shared secret provided by clients for authentication
+- `token` (String, Sensitive) Shared secret provided by clients for authentication
 
 <a id="nestedatt--input_splunk--auth_tokens"></a>
 ### Nested Schema for `input_splunk.auth_tokens`
@@ -4622,7 +4642,7 @@ Optional:
 
 - `auth_type` (String)
 - `token_secret` (String) Select or create a stored text secret
-- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
+- `token` (String, Sensitive) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 - `description` (String) Description
 
 <a id="nestedatt--input_splunk_search--endpoint_params"></a>
@@ -4670,7 +4690,7 @@ Optional:
 
 Required:
 
-- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
+- `token` (String, Sensitive) Shared secret to be provided by any client (Authorization: <token>)
 
 Optional:
 
@@ -4712,7 +4732,7 @@ Optional:
 
 - `auth_type` (String)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
 - `url` (String) URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200
 - `reject_unauthorized` (Boolean)
@@ -4726,8 +4746,8 @@ Optional:
 
 - `auth_type` (String)
 - `username` (String)
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `credentials_secret` (String)
 - `text_secret` (String)
 
@@ -4738,8 +4758,8 @@ Optional:
 
 - `auth_type` (String)
 - `username` (String)
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `credentials_secret` (String)
 - `text_secret` (String)
 
@@ -4852,7 +4872,7 @@ Required:
 Optional:
 
 - `certificate_name` (String) The name of the predefined certificate.
-- `passphrase` (String) Passphrase to use to decrypt the private key.
+- `passphrase` (String, Sensitive) Passphrase to use to decrypt the private key.
 
 <a id="nestedatt--input_eventhub--sasl"></a>
 ### Nested Schema for `input_eventhub.sasl`
@@ -4864,17 +4884,17 @@ Required:
 Optional:
 
 - `auth_type` (String) Enter password directly, or select a stored secret
-- `password` (String) Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace
+- `password` (String, Sensitive) Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace
 - `text_secret` (String)
 - `mechanism` (String)
 - `username` (String) The username for authentication. For Event Hubs, this should always be $ConnectionString.
 - `client_secret_auth_type` (String) Authentication method
-- `client_secret` (String) client_secret to pass in the OAuth request parameter
+- `client_secret` (String, Sensitive) client_secret to pass in the OAuth request parameter
 - `client_text_secret` (String)
 - `certificate_name` (String) Select or create a stored certificate
-- `cert_path` (String)
-- `priv_key_path` (String)
-- `passphrase` (String)
+- `cert_path` (String) Path to the client certificate file.
+- `priv_key_path` (String) Path to the client private key file.
+- `passphrase` (String, Sensitive) Passphrase used to decrypt the client private key.
 - `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure
 - `client_id` (String) client_id to pass in the OAuth request parameter
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory
@@ -4903,7 +4923,7 @@ Optional:
 - `text_secret` (String)
 - `client_secret_auth_type` (String)
 - `client_text_secret` (String)
-- `certificate` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub_amqp--auth--certificate))
+- `certificate` (Attributes) Certificate credentials for OAuth authentication. (see [below for nested schema](#nestedatt--input_eventhub_amqp--auth--certificate))
 - `oauth_endpoint` (String)
 - `client_id` (String)
 - `tenant_id` (String)
@@ -4920,7 +4940,7 @@ Required:
 
 Optional:
 
-- `passphrase` (String)
+- `passphrase` (String, Sensitive)
 
 <a id="nestedatt--input_eventhub_amqp--checkpointing"></a>
 ### Nested Schema for `input_eventhub_amqp.checkpointing`
@@ -4968,19 +4988,18 @@ Optional:
 Optional:
 
 - `mode` (String) Select level of detail for host metrics
-- `custom` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom))
+- `custom` (Attributes) Custom host metric collection settings. (see [below for nested schema](#nestedatt--input_system_metrics--host--custom))
 
 <a id="nestedatt--input_system_metrics--host--custom"></a>
-<a id="nestedatt--input_windows_metrics--host--custom"></a>
 ### Nested Schema for `input_system_metrics.host.custom`
 
 Optional:
 
-- `system` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--system))
-- `cpu` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--cpu))
-- `memory` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--memory))
-- `network` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--network))
-- `disk` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--disk))
+- `system` (Attributes) Select the level of detail for system metrics (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--system))
+- `cpu` (Attributes) Select the level of detail for CPU metrics (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--cpu))
+- `memory` (Attributes) Select the level of detail for memory metrics (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--memory))
+- `network` (Attributes) Select the level of detail for network metrics (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--network))
+- `disk` (Attributes) Select the level of detail for disk metrics (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--disk))
 
 <a id="nestedatt--input_system_metrics--host--custom--system"></a>
 ### Nested Schema for `input_system_metrics.host.custom.system`
@@ -5176,6 +5195,17 @@ Optional:
 
 - `description` (String)
 
+<a id="nestedatt--input_windows_metrics--host--custom"></a>
+### Nested Schema for `input_windows_metrics.host.custom`
+
+Optional:
+
+- `system` (Attributes) Select the level of details for system metrics (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--system))
+- `cpu` (Attributes) Select the level of details for CPU metrics (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--cpu))
+- `memory` (Attributes) Select the level of details for memory metrics (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--memory))
+- `network` (Attributes) Select the level of details for network metrics (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--network))
+- `disk` (Attributes) Select the level of details for disk metrics (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--disk))
+
 <a id="nestedatt--input_windows_metrics--host--custom--system"></a>
 ### Nested Schema for `input_windows_metrics.host.custom.system`
 
@@ -5279,11 +5309,16 @@ Required:
 - `events_per_sec` (Number) Maximum number of events to generate per second per Worker Node. Defaults to 10.
 
 <a id="nestedatt--input_http_raw--auth_tokens_ext"></a>
+<a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
 ### Nested Schema for `input_http_raw.auth_tokens_ext`
 
-Required:
+Optional:
 
-- `auth_type` (String) Discriminator value.
+- `auth_type` (String)
+- `token_secret` (String)
+- `token` (String, Sensitive)
+- `description` (String)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext--metadata))
 
 <a id="nestedatt--input_snmp--snmp_v3_auth"></a>
 ### Nested Schema for `input_snmp.snmp_v3_auth`
@@ -5302,17 +5337,17 @@ Optional:
 
 Required:
 
-- `name` (String) V3 name
+- `name` (String) SNMPv3 security name.
 
 Optional:
 
-- `auth_protocol` (String) Authentication protocol
+- `auth_protocol` (String) Authentication protocol for the SNMPv3 user.
 - `auth_key_type` (String) Select Manual to enter the key directly, or Secret to use a stored text secret
-- `auth_key` (String) V3 authentication key
+- `auth_key` (String, Sensitive) Authentication key for the SNMPv3 user.
 - `auth_key_secret` (String) Select or create a stored text secret
 - `priv_protocol` (String) Privacy protocol
 - `priv_key_type` (String) Select Manual to enter the key directly, or Secret to use a stored text secret
-- `priv_key` (String) V3 privacy key
+- `priv_key` (String, Sensitive) Privacy key for the SNMPv3 user.
 - `priv_key_secret` (String) Select or create a stored text secret
 
 <a id="nestedatt--input_open_telemetry--auth_methods_ext"></a>
@@ -5324,13 +5359,13 @@ Required:
 
 Optional:
 
-- `token` (String) Bearer token for Authorization header
+- `token` (String, Sensitive) Bearer token for Authorization header
 - `description` (String)
 - `metadata` (Attributes List) Fields to add to events referencing this auth method (see [below for nested schema](#nestedatt--input_open_telemetry--auth_methods_ext--metadata))
 - `enabled` (Boolean) Enable
 - `token_secret` (String)
 - `username` (String)
-- `password` (String)
+- `password` (String, Sensitive)
 - `credentials_secret` (String)
 - `issuer` (String) Expected token issuer (iss claim)
 - `jwks_uri` (String) URL of the JWKS endpoint used to fetch signing keys
@@ -5384,10 +5419,10 @@ Optional:
 - `reject_unauthorized` (Boolean) Required for WEF certificate authentication
 - `request_cert` (Boolean) Required for WEF certificate authentication
 - `certificate_name` (String) Name of the predefined certificate
-- `passphrase` (String)
+- `passphrase` (String, Sensitive)
 - `common_name_regex` (String)
-- `min_version` (String)
-- `max_version` (String)
+- `min_version` (String) Minimum TLS version
+- `max_version` (String) Maximum TLS version
 - `ocsp_check` (Boolean) Enable OCSP check of certificate
 - `ocsp_check_fail_close` (Boolean) If enabled, checks will fail on any OCSP error. Otherwise, checks will fail only when a certificate is revoked, ignoring other errors.
 
@@ -5490,17 +5525,6 @@ Read-Only:
 - `collect_path` (String) OpenAI Organization API path
 - `docs_url` (String) Docs URL
 
-<a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
-### Nested Schema for `input_wiz_webhook.auth_tokens_ext`
-
-Optional:
-
-- `auth_type` (String)
-- `token_secret` (String)
-- `token` (String)
-- `description` (String)
-- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext--metadata))
-
 <a id="nestedatt--input_servicenow_table--oauth_params"></a>
 ### Nested Schema for `input_servicenow_table.oauth_params`
 
@@ -5522,7 +5546,7 @@ Required:
 
 Required:
 
-- `token` (String)
+- `token` (String, Sensitive)
 
 Optional:
 
@@ -5555,7 +5579,7 @@ Optional:
 
 - `auth_type` (String) Select Secret to use a text secret to authenticate
 - `token_secret` (String)
-- `token` (String)
+- `token` (String, Sensitive)
 - `enabled` (Boolean)
 - `description` (String)
 - `allowed_indexes_at_token` (List of String)
@@ -5573,7 +5597,7 @@ Optional:
 - `common_name_regex` (String)
 - `certificate_name` (String)
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS. Defaults to the built-in Cribl private key when TLS is enabled.
-- `passphrase` (String)
+- `passphrase` (String, Sensitive)
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS. Defaults to the built-in Cribl certificate when TLS is enabled.
 - `min_version` (String)
 - `max_version` (String)
@@ -5657,7 +5681,7 @@ Required:
 Optional:
 
 - `certificate_name` (String) The name of a predefined certificate
-- `passphrase` (String) Passphrase to decrypt the private key
+- `passphrase` (String, Sensitive) Passphrase to decrypt the private key
 
 ## Import
 

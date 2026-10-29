@@ -172,6 +172,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -308,6 +312,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -443,6 +451,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -594,6 +606,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -727,6 +743,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -870,6 +890,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -1001,6 +1025,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -1131,6 +1159,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -1270,6 +1302,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -1401,6 +1437,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -1530,6 +1570,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -1661,6 +1705,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -1796,6 +1844,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -1926,6 +1978,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -2058,6 +2114,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -2183,6 +2243,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -2321,6 +2385,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -2461,6 +2529,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -2586,6 +2658,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -2733,6 +2809,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -2858,6 +2938,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -2990,6 +3074,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -3115,6 +3203,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -3362,6 +3454,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -3500,6 +3596,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
 					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
+					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
@@ -3625,6 +3725,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,
@@ -3875,6 +3979,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"tags": schema.StringAttribute{
 						Computed:    true,
 						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"time_created": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Unix time (in milliseconds) when the Dataset was created. Absent on Datasets created before this field was introduced.`,
 					},
 					"view_name": schema.StringAttribute{
 						Computed:    true,

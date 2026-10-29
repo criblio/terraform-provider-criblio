@@ -1,0 +1,1 @@
+../resources/criblio_pack_collector/resource.tf

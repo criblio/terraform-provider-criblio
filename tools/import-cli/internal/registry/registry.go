@@ -5,6 +5,7 @@ package registry
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 	"strings"
 
@@ -22,6 +23,8 @@ type Entry struct {
 	// ModelTypeName is the Go type name of the resource's state model (e.g. SourceResourceModel).
 	// Used for reflection-based conversion and HCL generation.
 	ModelTypeName string
+	// SensitivePaths records schema attribute paths without collection indexes.
+	SensitivePaths map[string]bool
 	// SDKService is the name of the service field on REST discovery (e.g. "Inputs", "Pipelines").
 	// Empty if not known; used by discovery to call List*.
 	SDKService string
@@ -94,6 +97,12 @@ func NewFromResources(ctx context.Context, constructors []func() resource.Resour
 
 		modelTypeName := modelTypeNameFromResource(res)
 		e := Entry{TypeName: typeName, ModelTypeName: modelTypeName}
+		var schemaResponse resource.SchemaResponse
+		res.Schema(ctx, resource.SchemaRequest{}, &schemaResponse)
+		if schemaResponse.Diagnostics.HasError() {
+			return nil, fmt.Errorf("read %s schema: %v", typeName, schemaResponse.Diagnostics)
+		}
+		e.SensitivePaths = sensitiveSchemaPaths(schemaResponse.Schema)
 
 		if meta, ok := metadata[typeName]; ok {
 			e.SDKService = meta.SDKService

@@ -17,10 +17,13 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
+	hclv2 "github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
 
 func TestToResourceItems_empty_results(t *testing.T) {
@@ -34,6 +37,71 @@ func TestToResourceItems_empty_results(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Empty(t, result.Items)
+}
+
+func TestToResourceItemsPackCustomTags(t *testing.T) {
+	const rawTags = `{"streamtags":["ui-label"],"ManagedByTFE":"true","product_id":"001234","used_for":"non_prod","values":["label",true,42],"metadata":{"empty":{},"empty_list":[],"nullable":null,"array":[null,"x"],"objects":[{"enabled":true},{"enabled":"label"}],"all_null":{"value":null}},"Count":9007199254740993}`
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Header().Set("Content-Type", "application/json")
+		switch request.URL.Path {
+		case "/api/v1/m/default/packs/sample-pack":
+			_, err := writer.Write([]byte(`{"items":[{"id":"sample-pack","version":"1.0.0","tags":{"streamtags":["inventory-label"]}}]}`))
+			require.NoError(t, err)
+		case "/api/v1/m/default/p/sample-pack/pack/settings":
+			_, err := writer.Write([]byte(`{"items":[{"id":"settings","package":{"tags":` + rawTags + `}}]}`))
+			require.NoError(t, err)
+		default:
+			http.NotFound(writer, request)
+		}
+	}))
+	defer server.Close()
+	client := &importclient.Client{REST: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}
+	result, err := ToResourceItems(context.Background(), client, buildTestRegistry(t), []discovery.Result{{
+		TypeName: "criblio_pack", Count: 1, InventoryComplete: true,
+		Identifiers: []map[string]string{{"group_id": "default", "id": "sample-pack"}},
+	}}, []string{"default"}, nil, 1, false, IncludeOverride{}, nil)
+	require.NoError(t, err)
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+	tags := result.Items[0].Attrs["tags"].Map
+	assert.Equal(t, "ui-label", tags["streamtags"].List[0].String)
+	assert.Equal(t, "true", tags["ManagedByTFE"].String)
+	assert.Equal(t, "001234", tags["product_id"].String)
+	assert.Equal(t, "non_prod", tags["used_for"].String)
+	assert.NotContains(t, tags, "managed_by_tfe")
+	assert.NotContains(t, tags, "custom")
+	assert.NotContains(t, tags, "domain")
+	assert.NotContains(t, result.Items[0].Attrs, "custom_tags")
+	item := result.Items[0]
+	file, err := hcl.FileWithResources([]hcl.ResourceInput{{TypeName: item.TypeName, Name: item.Name, Attrs: item.Attrs}}, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	parsed, diagnostics := hclsyntax.ParseConfig(file.Bytes(), "pack.tf", hclv2.InitialPos)
+	require.False(t, diagnostics.HasErrors(), "%s", diagnostics.Error())
+	body := parsed.Body.(*hclsyntax.Body)
+	exportedTags, diagnostics := body.Blocks[0].Body.Attributes["tags"].Expr.Value(nil)
+	require.False(t, diagnostics.HasErrors(), "%s", diagnostics.Error())
+	rawExported, err := ctyjson.Marshal(exportedTags, exportedTags.Type())
+	require.NoError(t, err)
+	want, err := provider.PackTagsFromAPIJSON([]byte(rawTags))
+	require.NoError(t, err)
+	got, err := provider.PackTagsFromAPIJSON(rawExported)
+	require.NoError(t, err)
+	require.True(t, want.Equal(got), "export changed tags: %s", rawExported)
+}
+
+func TestFlattenPackItemsPreservesDynamicTags(t *testing.T) {
+	tags := hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{"ManagedByTFE": {Kind: hcl.KindString, String: "true"}}}
+	attrs := map[string]hcl.Value{
+		"tags": tags,
+		"items": {Kind: hcl.KindList, List: []hcl.Value{{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"display_name": {Kind: hcl.KindString, String: "Sample"},
+			"tags":         {Kind: hcl.KindMap, Map: map[string]hcl.Value{"domain": {Kind: hcl.KindList}}},
+		}}}},
+	}
+	flattenResourceItemsToTopLevel("criblio_pack", attrs)
+	assert.Equal(t, tags, attrs["tags"])
+	assert.Equal(t, "Sample", attrs["display_name"].String)
+	assert.NotContains(t, attrs, "items")
 }
 
 func TestToResourceItemsSkipsSystemManagedSecret(t *testing.T) {
@@ -560,6 +628,18 @@ func TestCollectorRegistrySupportsFilesystemOneOfBlock(t *testing.T) {
 	require.True(t, ok)
 	require.NotNil(t, entry.OneOf)
 	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_filesystem")
+}
+
+func TestPackCollectorRegistry(t *testing.T) {
+	entry, ok := buildTestRegistry(t).ByTypeName("criblio_pack_collector")
+	require.True(t, ok)
+	require.NotNil(t, entry.OneOf)
+	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_rest")
+	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_cribl_lake")
+	assert.Equal(t, "collector.type", entry.OneOf.NestedDiscriminatorField)
+	assert.Equal(t, "json:group_id,id,pack", entry.ImportIDFormat)
+	assert.Equal(t, "/m/{group_id}/p/{pack}/lib/jobs", entry.RESTListPath)
+	assert.Equal(t, "/m/{group_id}/p/{pack}/lib/jobs/{id}", entry.RESTGetPath)
 }
 
 func TestResolveNestedDiscriminator(t *testing.T) {

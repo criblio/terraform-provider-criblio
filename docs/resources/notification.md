@@ -23,8 +23,15 @@ resource "criblio_notification" "my_notification" {
   }
   group = "default"
   id = "high-volume-http-src"
+  mode = "direct"
   targets = [
-    "system_notifications",
+    "system_email",
+  ]
+  template_target_pairs = [
+    {
+      target_id = "system_email"
+      template_id = "default-email"
+    }
   ]
 }
 ```
@@ -43,15 +50,15 @@ resource "criblio_notification" "my_notification" {
 - `disabled` (Boolean) If <code>true</code>, the Notification is disabled and the specified condition will not trigger it.
 - `group` (String) The <code>id</code> of the Worker Group or Edge Fleet that the Notification applies to.
 - `metadata` (Attributes List) Metadata tags for the Notification. (see [below for nested schema](#nestedatt--metadata))
+- `mode` (String) Delivery mode for Notifications.<br/><br/> <code>direct</code>: Notification is sent directly to Notification targets that are defined in <code>templateTargetPairs</code>.<br/><br/> <code>policy</code>: Notification is routed through Notification Policies, which match alerts by labels and route them to Notification targets without relying on <code>templateTargetPairs</code>.
 - `target_configs` (Attributes List) Override settings to apply for each referenced Notification target. (see [below for nested schema](#nestedatt--target_configs))
 - `target_details` (Attributes List) Additional details about referenced Notification targets. Optionally populated on request. (see [below for nested schema](#nestedatt--target_details))
 - `targets` (List of String) List of the <code>id</code> values for the Notification targets to send the Notification to.
+- `template_target_pairs` (Attributes List) If <code>mode</code> is <code>direct</code>, the key-value pairs that define the Notification templates and targets to use for sending Notifications. (see [below for nested schema](#nestedatt--template_target_pairs))
 
 ### Read-Only
 
-- `mode` (String) Delivery mode for Notifications.<br/><br/> <code>direct</code>: Notification is sent directly to Notification targets that are defined in <code>templateTargetPairs</code>.<br/><br/> <code>policy</code>: Notification is routed through Notification Policies, which match alerts by labels and route them to Notification targets without relying on <code>templateTargetPairs</code>.
 - `pack` (String) The <code>id</code> of the Pack the Notification belongs to. Automatically populated and returned in responses.
-- `template_target_pairs` (Attributes List) If <code>mode</code> is <code>direct</code>, the key-value pairs that define the Notification templates and targets to use for sending Notifications. (see [below for nested schema](#nestedatt--template_target_pairs))
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -60,7 +67,8 @@ Optional:
 
 - `saved_query_id` (String) ID of the saved query this notification is associated with.
 - `message` (String) Message template for the notification.
-- `trigger_type` (String) Type of trigger.
+- `trigger` (String) Custom expression evaluated against Search results when triggerType is custom. Filters notification matches without removing saved query results.
+- `trigger_type` (String) Type of trigger. Use custom to evaluate trigger against Search results, or resultsCount to compare the number of results.
 - `trigger_comparator` (String) Comparison operator.
 - `trigger_count` (Number) Threshold count for the trigger.
 - `name` (String) Input or source ID for Stream notifications.

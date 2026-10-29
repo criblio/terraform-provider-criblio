@@ -10,6 +10,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/criblio/terraform-provider-criblio/tools/specschema"
 	"github.com/pb33f/libopenapi"
 	"go.yaml.in/yaml/v3"
 )
@@ -79,6 +80,10 @@ func Parse(content []byte) ([]ResourceDef, error) {
 		resource := resources[name]
 		if resource.SchemaName == "" {
 			resource.SchemaName = resource.Create.RequestSchema
+			if resource.SchemaName == "" {
+				// A bodyless create can return the durable resource directly.
+				resource.SchemaName = resource.Create.ResponseSchema
+			}
 		}
 		if err := populateFields(resource, schemas); err != nil {
 			return nil, err
@@ -378,7 +383,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		resource.Fields = fields
 		for index := range resource.OneOfVariants {
 			makeFieldsOptionalComputed(resource.OneOfVariants[index].Fields)
-			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
+			preserveDestinationCredentialState(resource.OneOfVariants[index].Fields)
 		}
 	}
 	if resource.StructName == "Source" || resource.StructName == "PackSource" {
@@ -396,7 +401,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		resource.Fields = fields
 	}
 	makeDirectDiscriminatorsOptionalComputed(resource.OneOfVariants)
-	if resource.StructName == "Collector" {
+	if resource.StructName == "Collector" || resource.StructName == "PackCollector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
 	if resource.StructName == "SearchDataset" {
@@ -408,7 +413,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		makeSearchDatasetProviderHoistedFieldsComputed(resource.Fields)
 		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
 		for index := range resource.OneOfVariants {
-			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
+			preserveDestinationCredentialState(resource.OneOfVariants[index].Fields)
 		}
 	}
 	if resource.StructName != "MappingRuleset" {
@@ -447,21 +452,22 @@ func makeDirectDiscriminatorsOptionalComputed(variants []OneOfVariantDef) {
 	}
 }
 
-func markDestinationSensitiveFields(fields []FieldDef) {
+// preserveDestinationCredentialState retains legacy API merge behavior. Sensitivity
+// itself is supplied by the schema's x-terraform-sensitive annotations.
+func preserveDestinationCredentialState(fields []FieldDef) {
 	for index := range fields {
 		field := &fields[index]
-		if destinationSensitiveField(*field) {
-			field.Sensitive = true
+		if destinationCredentialPreservesState(*field) {
 			field.PreferState = true
 			field.ApplyStrategy = "stringFromAPIOrPrior"
 		}
 		if len(field.Fields) > 0 {
-			markDestinationSensitiveFields(field.Fields)
+			preserveDestinationCredentialState(field.Fields)
 		}
 	}
 }
 
-func destinationSensitiveField(field FieldDef) bool {
+func destinationCredentialPreservesState(field FieldDef) bool {
 	if field.Type != "string" || strings.HasPrefix(field.TerraformName, "__template_") {
 		return false
 	}
@@ -977,7 +983,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		if !ok {
 			return FieldDef{}, fmt.Errorf("%s.%s array field missing items schema", modelName, apiName)
 		}
-		if schemaName := schemaRefName(items); schemaName != "" {
+		if schemaName := schemaRefName(items); schemaName != "" && !boolAnnotation(items, "x-terraform-flatten-object-unions") {
 			var found bool
 			items, found = mappingValue(schemas, schemaName)
 			if !found {
@@ -999,7 +1005,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		field.NestedAPIModelName = nestedName + "APIModel"
 		field.NestedAttrTypes = nestedName + "AttrTypes"
 	}
-	if field.Type == "object" && !field.ObjectAsJSON {
+	if field.Type == "object" && !field.ObjectAsJSON && field.CustomType != "types.DynamicType{}" {
 		objectSchema := schemaForType
 		if resolved, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 			return FieldDef{}, err
@@ -1247,6 +1253,9 @@ func objectSchemaForProperty(property, schemas *yaml.Node) (*yaml.Node, bool, er
 	if scalarValue(property, "type") == "array" {
 		return nil, false, nil
 	}
+	if boolAnnotation(property, "x-terraform-flatten-object-unions") {
+		return objectSchema(property, schemas)
+	}
 	schema := property
 	if schemaName := schemaRefName(property); schemaName != "" {
 		var found bool
@@ -1259,6 +1268,14 @@ func objectSchemaForProperty(property, schemas *yaml.Node) (*yaml.Node, bool, er
 }
 
 func objectSchema(schema, schemas *yaml.Node) (*yaml.Node, bool, error) {
+	if boolAnnotation(schema, "x-terraform-flatten-object-unions") {
+		resolved, err := specschema.Flatten(schema, schemas)
+		if err != nil {
+			return nil, false, err
+		}
+		_, ok := mappingValue(resolved, "properties")
+		return resolved, ok, nil
+	}
 	if properties, ok := mappingValue(schema, "properties"); ok && properties.Kind == yaml.MappingNode {
 		return schema, true, nil
 	}
@@ -1431,6 +1448,11 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		existing[field.TerraformName] = true
 	}
 	for _, param := range params {
+		// Fixed query selectors are part of API routing, not configuration.
+		// A response property with the same name retains its schema semantics.
+		if param.FixedValue != "" {
+			continue
+		}
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {

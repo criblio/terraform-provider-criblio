@@ -79,6 +79,7 @@ type NotificationAPIModel struct {
 type NotificationConfModel struct {
 	SavedQueryID       types.String  `tfsdk:"saved_query_id" json:"savedQueryId,omitempty"`
 	Message            types.String  `tfsdk:"message" json:"message,omitempty"`
+	Trigger            types.String  `tfsdk:"trigger" json:"trigger,omitempty"`
 	TriggerType        types.String  `tfsdk:"trigger_type" json:"triggerType,omitempty"`
 	TriggerComparator  types.String  `tfsdk:"trigger_comparator" json:"triggerComparator,omitempty"`
 	TriggerCount       types.Float64 `tfsdk:"trigger_count" json:"triggerCount,omitempty"`
@@ -92,6 +93,7 @@ type NotificationConfModel struct {
 type NotificationConfAPIModel struct {
 	SavedQueryID       *string  `json:"savedQueryId,omitempty"`
 	Message            *string  `json:"message,omitempty"`
+	Trigger            *string  `json:"trigger,omitempty"`
 	TriggerType        *string  `json:"triggerType,omitempty"`
 	TriggerComparator  *string  `json:"triggerComparator,omitempty"`
 	TriggerCount       *float64 `json:"triggerCount,omitempty"`
@@ -106,6 +108,7 @@ func NotificationConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"saved_query_id":       types.StringType,
 		"message":              types.StringType,
+		"trigger":              types.StringType,
 		"trigger_type":         types.StringType,
 		"trigger_comparator":   types.StringType,
 		"trigger_count":        types.Float64Type,
@@ -480,6 +483,13 @@ func (m NotificationModel) MarshalJSON() ([]byte, error) {
 		}
 		output["metadata"] = value
 	}
+	if !m.Mode.IsNull() && !m.Mode.IsUnknown() {
+		value, err := NotificationTerraformValueToJSON(m.Mode)
+		if err != nil {
+			return nil, fmt.Errorf("convert mode to API value: %v", err)
+		}
+		output["mode"] = value
+	}
 	if !m.TargetConfigs.IsNull() && !m.TargetConfigs.IsUnknown() {
 		value, err := NotificationTerraformValueToJSON(m.TargetConfigs)
 		if err != nil {
@@ -500,6 +510,13 @@ func (m NotificationModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert targets to API value: %v", err)
 		}
 		output["targets"] = value
+	}
+	if !m.TemplateTargetPairs.IsNull() && !m.TemplateTargetPairs.IsUnknown() {
+		value, err := NotificationTerraformValueToJSON(m.TemplateTargetPairs)
+		if err != nil {
+			return nil, fmt.Errorf("convert template_target_pairs to API value: %v", err)
+		}
+		output["templateTargetPairs"] = value
 	}
 	return json.Marshal(output)
 }

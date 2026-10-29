@@ -328,6 +328,14 @@ func (r *SourceResource) ValidateConfig(ctx context.Context, req resource.Valida
 
 func (r *CollectorResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
 	validateOneOfIdentity[CollectorModel](ctx, req, resp)
+	_, diags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(diags...)
+}
+
+func (r *PackCollectorResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	validateOneOfIdentity[PackCollectorModel](ctx, req, resp)
+	_, diags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(diags...)
 }
 
 func (r *PackSourceResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {

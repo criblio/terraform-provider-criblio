@@ -8,6 +8,69 @@ import (
 	"go.yaml.in/yaml/v3"
 )
 
+func TestBodylessCreateUsesResponseSchema(t *testing.T) {
+	defs, err := Parse([]byte(`openapi: 3.1.0
+info: {title: Test, version: '1'}
+paths:
+  /ai/settings/dataset-intelligence/{datasetId}:
+    post:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatasetIntelligence
+      parameters: [{name: datasetId, in: path, required: true, schema: {type: string}}]
+      responses:
+        '201':
+          description: Processing envelope
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Intelligence'}
+    get:
+      x-terraform-read: SearchDatasetIntelligence
+      parameters: [{name: datasetId, in: path, required: true, schema: {type: string}}]
+      responses:
+        '200':
+          description: Current envelope
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Intelligence'}
+components:
+  schemas:
+    Intelligence:
+      type: object
+      required: [datasetId, status]
+      properties:
+        datasetId: {type: string}
+        status: {type: string, readOnly: true}
+        content: {type: string, readOnly: true}
+`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(defs) != 1 || defs[0].SchemaName != "Intelligence" || defs[0].Create.RequestSchema != "" {
+		t.Fatalf("unexpected bodyless resource definition: %+v", defs)
+	}
+	id := fieldByTFName(t, defs[0].Fields, "dataset_id")
+	if !id.Required || id.Computed || !id.ForceNew || !id.PathParam {
+		t.Fatalf("unexpected identity semantics: %+v", id)
+	}
+	for _, name := range []string{"status", "content"} {
+		field := fieldByTFName(t, defs[0].Fields, name)
+		if !field.Computed || field.Required || field.Optional {
+			t.Fatalf("%s must be read-only: %+v", name, field)
+		}
+	}
+}
+
+func TestFixedQuerySelectorDoesNotBecomeConfiguration(t *testing.T) {
+	selector := FieldDef{APIName: "engine", TerraformName: "engine", GoName: "Engine", QueryParam: true, FixedValue: "handlebars"}
+	fields := appendQueryParams([]FieldDef{{APIName: "engine", TerraformName: "engine", Computed: true}}, []FieldDef{selector})
+	if len(fields) != 1 || !fields[0].Computed || fields[0].Optional || fields[0].Required || fields[0].QueryParam {
+		t.Fatalf("fixed routing selector changed the API-owned property: %+v", fields)
+	}
+	if fields := appendQueryParams(nil, []FieldDef{selector}); len(fields) != 0 {
+		t.Fatalf("fixed routing selector became a Terraform field: %+v", fields)
+	}
+}
+
 func TestApplyDiscriminatorMappingEnum(t *testing.T) {
 	var schema yaml.Node
 	err := yaml.Unmarshal([]byte(`
@@ -1214,4 +1277,103 @@ func hasField(fields []FieldDef, name string) bool {
 		}
 	}
 	return false
+}
+
+func TestObjectSchemaFlattensConditionalFieldsWhenEnabled(t *testing.T) {
+	var document yaml.Node
+	if err := yaml.Unmarshal([]byte(`x-terraform-flatten-object-unions: true
+properties:
+  type: {type: string}
+allOf:
+  - oneOf:
+      - properties:
+          interval: {type: number}
+        required: [interval]
+      - properties:
+          multiplier: {type: number}
+        required: [multiplier]
+`), &document); err != nil {
+		t.Fatal(err)
+	}
+	schema, ok, err := objectSchema(document.Content[0], &yaml.Node{Kind: yaml.MappingNode})
+	if err != nil || !ok {
+		t.Fatalf("objectSchema: ok=%v err=%v", ok, err)
+	}
+	properties, _ := mappingValue(schema, "properties")
+	for _, name := range []string{"type", "interval", "multiplier"} {
+		if _, ok := mappingValue(properties, name); !ok {
+			t.Errorf("missing %s", name)
+		}
+	}
+	if _, ok := mappingValue(schema, "required"); ok {
+		t.Fatal("conditional fields became unconditionally required")
+	}
+	// Existing resource schemas keep their established union representation until
+	// their migration deliberately enables complete inline-object normalization.
+	document.Content[0].Content = document.Content[0].Content[2:]
+	prior, ok, err := objectSchema(document.Content[0], &yaml.Node{Kind: yaml.MappingNode})
+	if err != nil || !ok {
+		t.Fatalf("legacy objectSchema: ok=%v err=%v", ok, err)
+	}
+	properties, _ = mappingValue(prior, "properties")
+	if _, ok := mappingValue(properties, "interval"); ok {
+		t.Fatal("unannotated schema behavior changed")
+	}
+}
+
+func TestFieldDefFlattensAnnotatedArrayItemObjectUnions(t *testing.T) {
+	var document yaml.Node
+	if err := yaml.Unmarshal([]byte(`type: array
+items:
+  type: object
+  x-terraform-flatten-object-unions: true
+  oneOf:
+    - required: [token]
+    - $ref: '#/components/schemas/SecretConstraint'
+  properties:
+    authType:
+      type: string
+    token:
+      type: string
+      x-terraform-sensitive: true
+    tokenSecret:
+      type: string
+    description:
+      type: string
+    metadata:
+      type: array
+      items:
+        type: object
+        properties:
+          name: {type: string}
+          value: {type: string}
+`), &document); err != nil {
+		t.Fatal(err)
+	}
+	var schemas yaml.Node
+	if err := yaml.Unmarshal([]byte(`SecretConstraint:
+  type: object
+  required: [authType, tokenSecret]
+  properties:
+    authType: {type: string}
+    tokenSecret: {type: string}
+`), &schemas); err != nil {
+		t.Fatal(err)
+	}
+	field, err := fieldDef("InputHttpRaw", "authTokensExt", document.Content[0], schemas.Content[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(field.Fields) != 5 {
+		t.Fatalf("extended-token fields = %d, want 5", len(field.Fields))
+	}
+	for _, name := range []string{"auth_type", "token", "token_secret", "description", "metadata"} {
+		child := fieldByTFName(t, field.Fields, name)
+		if child.Required || !child.Optional {
+			t.Errorf("conditional field %s became required", name)
+		}
+	}
+	if !fieldByTFName(t, field.Fields, "token").Sensitive {
+		t.Error("token lost sensitivity")
+	}
 }

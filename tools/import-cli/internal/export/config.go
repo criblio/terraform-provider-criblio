@@ -4,6 +4,8 @@ package export
 // readOnlyAttrsByType lists attribute names (tfsdk) that are read-only (Computed only) per type.
 // For oneOf resources, the OneOf.ReadOnlyAttr is added at runtime so this only needs extra entries when not using OneOf.
 var readOnlyAttrsByType = map[string][]string{
+	"criblio_collector":               {"saved_state"}, // API runtime checkpoints should not become configuration.
+	"criblio_pack_collector":          {"saved_state"},
 	"criblio_certificate":             {"cert_expiry_date", "in_use", "passphrase"}, // cert_expiry_date/in_use are Computed; passphrase is write-only/sensitive
 	"criblio_cribl_lake_house":        {"status"},                                   // status is Computed-only and cannot be configured
 	"criblio_destination":             {"environment", "pipeline", "type"},          // root attrs are Computed-only (hoisted from active output_*); configure inside output_* only
@@ -32,7 +34,9 @@ var readOnlyAttrsByType = map[string][]string{
 		"is_compute_deprovisioned",
 		"is_storage_deprovisioned",
 		"last_provisioned_ms",
+		"maximum_tier_size",
 		"metrics_last_published_at",
+		"minimum_tier_size",
 		"status",
 	},
 	"criblio_search_macro": {"created", "created_by", "modified"},
@@ -44,7 +48,9 @@ var readOnlyAttrsByType = map[string][]string{
 		"search_job_source",
 		"table_config",
 	},
-	"criblio_notification": {"mode", "pack", "template_target_pairs"},
+	"criblio_notification":                {"pack"},
+	"criblio_notification_template":       {"engine", "created_by", "last_updated"},
+	"criblio_search_dataset_intelligence": {"content", "status", "failure_reason", "generated_at", "updated_at"},
 }
 
 // flattenItemsToAttrsTypes are resource types whose API returns payload in a list (Items) and schema

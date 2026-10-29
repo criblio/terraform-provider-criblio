@@ -43,6 +43,14 @@ func flattenItemsListToTopLevel(attrs map[string]hcl.Value) {
 	delete(attrs, "items")
 }
 
+func flattenResourceItemsToTopLevel(typeName string, attrs map[string]hcl.Value) {
+	tags, hasTags := attrs["tags"]
+	flattenItemsListToTopLevel(attrs)
+	if typeName == "criblio_pack" && hasTags && !tags.IsNull() {
+		attrs["tags"] = tags
+	}
+}
+
 // filterAttrsBySchema removes from attrs any key not in the provider model's schema (tfsdk attribute names).
 // Ensures generated HCL only includes supported attributes; unsupported fields are ignored.
 func filterAttrsBySchema(attrs map[string]hcl.Value, modelTypeName string) {
@@ -126,7 +134,7 @@ func hclOptionsForType(typeName string, e registry.Entry) *hcl.Options {
 	for _, s := range skip {
 		topLevel[s] = true
 		// additional_properties appears nested (e.g. in route items); must be skipped at any level.
-		if s == "additional_properties" {
+		if s == "additional_properties" || (s == "saved_state" && (typeName == "criblio_collector" || typeName == "criblio_pack_collector")) {
 			nested[s] = true
 		}
 		// id in route items (criblio_routes, criblio_pack_routes) is Computed; skip at nested level.

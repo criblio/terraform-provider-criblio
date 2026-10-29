@@ -137,7 +137,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -319,7 +320,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -427,7 +429,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													Description: `Client ID to use for OAuth authentication`,
 												},
 												"oauth_secret_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Source of the OAuth client secret.`,
 												},
 												"client_text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -469,7 +472,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Disabled`,
+													Description: `Whether TLS is disabled for this connection.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -498,15 +501,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Minimum TLS version`,
+													Description: `Minimum TLS version to use for the connection.`,
 												},
 												"max_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Maximum TLS version`,
+													Description: `Maximum TLS version to use for the connection.`,
 												},
 											},
 										},
@@ -558,6 +562,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
@@ -597,7 +602,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Description: `Client ID to use for OAuth authentication`,
 										},
 										"oauth_secret_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Source of the OAuth client secret.`,
 										},
 										"client_text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -643,7 +649,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -672,15 +678,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -836,7 +843,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -983,7 +991,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													Description: `Client ID to use for OAuth authentication`,
 												},
 												"oauth_secret_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Source of the OAuth client secret.`,
 												},
 												"client_text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -1025,7 +1034,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Disabled`,
+													Description: `Whether TLS is disabled for this connection.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -1054,15 +1063,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Minimum TLS version`,
+													Description: `Minimum TLS version to use for the connection.`,
 												},
 												"max_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Maximum TLS version`,
+													Description: `Maximum TLS version to use for the connection.`,
 												},
 											},
 										},
@@ -1106,6 +1116,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -1146,7 +1157,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -1175,15 +1186,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -1217,6 +1229,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -1308,7 +1321,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -1363,6 +1377,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -1400,6 +1415,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -1408,11 +1424,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -1433,7 +1449,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -1502,6 +1519,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										Attributes: map[string]schema.Attribute{
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret provided by clients for authentication`,
 											},
 										},
@@ -1596,7 +1614,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -1683,6 +1702,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -1691,11 +1711,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -1767,6 +1787,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 											},
 											"description": schema.StringAttribute{
@@ -1885,7 +1906,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2047,7 +2069,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -2107,10 +2130,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -2206,7 +2231,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2274,6 +2300,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -2342,6 +2369,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -2350,11 +2378,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -2375,7 +2403,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -2558,7 +2587,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2713,7 +2743,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Select or create a stored text secret`,
 								},
 								"certificate": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for the Azure service principal.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -2806,7 +2837,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -2941,7 +2973,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Select or create a stored text secret`,
 								},
 								"certificate": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for the Azure service principal.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -3034,7 +3067,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -3121,6 +3155,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -3129,11 +3164,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -3154,7 +3189,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -3229,7 +3265,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"proxy_mode": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Proxy mode settings for Elasticsearch requests.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3245,6 +3282,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"credentials_secret": schema.StringAttribute{
@@ -3280,6 +3318,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -3288,6 +3327,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer tokens to include in the authorization header`,
 									ElementType: types.StringType,
 								},
@@ -3380,7 +3420,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -3436,7 +3477,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -3465,15 +3506,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -3535,7 +3577,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													Description: `Client ID to use for OAuth authentication`,
 												},
 												"oauth_secret_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Source of the OAuth client secret.`,
 												},
 												"client_text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -3577,7 +3620,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Disabled`,
+													Description: `Whether TLS is disabled for this connection.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -3606,15 +3649,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Minimum TLS version`,
+													Description: `Minimum TLS version to use for the connection.`,
 												},
 												"max_version": schema.StringAttribute{
 													Computed:    true,
-													Description: `Maximum TLS version`,
+													Description: `Maximum TLS version to use for the connection.`,
 												},
 											},
 										},
@@ -3666,6 +3710,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
@@ -3705,7 +3750,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Description: `Client ID to use for OAuth authentication`,
 										},
 										"oauth_secret_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Source of the OAuth client secret.`,
 										},
 										"client_text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -3897,7 +3943,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -3984,6 +4031,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -3992,11 +4040,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -4017,7 +4065,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4056,7 +4105,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.`,
 								},
 								"prometheus_auth": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication settings for Prometheus Remote Write requests.`,
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
 											Computed:    true,
@@ -4068,10 +4118,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"token": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Bearer token to include in the authorization header`,
 										},
 										"credentials_secret": schema.StringAttribute{
@@ -4085,7 +4137,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"loki_auth": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication settings for Loki requests.`,
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
 											Computed:    true,
@@ -4097,10 +4150,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Password`,
 										},
 										"token": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Bearer token to include in the authorization header`,
 										},
 										"credentials_secret": schema.StringAttribute{
@@ -4218,7 +4273,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4305,6 +4361,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -4313,11 +4370,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -4338,7 +4395,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4402,10 +4460,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -4501,7 +4561,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4588,6 +4649,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -4596,11 +4658,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -4621,7 +4683,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4685,10 +4748,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -4784,7 +4849,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -4844,7 +4910,15 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"interval": schema.Float64Attribute{
 									Computed:    true,
-									Description: `How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.`,
+									Description: `How often to scrape targets for metrics, in the unit set by Interval unit. Maximum of 60. 60 must be evenly divisible by the value you enter.`,
+								},
+								"interval_unit": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unit for the poll interval. Choose Seconds for sub-minute scraping. Each Worker Process generates and registers the scrape job, and the Leader keeps one schedule for the @{group}. Before enabling Seconds, upgrade every @{node} in the @{group}: a Worker Process on @{product} version 4.20.2 or older registers a minute-based cron and replaces that @{group} schedule.`,
+								},
+								"max_concurrent_runs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of scrape runs that can overlap. Set this (for example, to 1) for sub-minute intervals, so a slow scrape cycle can't pile up overlapping runs.`,
 								},
 								"log_level": schema.StringAttribute{
 									Computed:    true,
@@ -4934,6 +5008,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -4963,6 +5038,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -5027,6 +5103,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password for Prometheus Basic authentication`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -5118,7 +5195,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -5285,6 +5363,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -5314,6 +5393,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -5418,6 +5498,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password for Prometheus Basic authentication`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -5509,7 +5590,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -5569,6 +5651,10 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `HTTP request inactivity timeout, use 0 to disable`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
 									Computed:    true,
@@ -5643,7 +5729,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Use this setting to account for ingestion lag. This is necessary because there can be a lag of 60 - 90 minutes (or longer) before Microsoft 365 events are available for retrieval.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -5690,6 +5777,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Microsoft 365 Azure client secret`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -5781,7 +5869,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -5841,6 +5930,10 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `HTTP request inactivity timeout, use 0 to disable`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
 									Computed:    true,
@@ -5907,7 +6000,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -5954,6 +6048,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Microsoft 365 Azure client secret`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -6045,7 +6140,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -6167,7 +6263,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Log Level (verbosity) for collection runtime behavior.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -6214,6 +6311,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password to run Message Trace API call.`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -6222,6 +6320,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `client_secret to pass in the OAuth request parameter.`,
 								},
 								"tenant_id": schema.StringAttribute{
@@ -6245,7 +6344,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 								},
 								"cert_options": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for Microsoft OAuth authentication.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -6257,6 +6357,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt the private key.`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -6350,7 +6451,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -6476,7 +6578,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Log Level (verbosity) for collection runtime behavior.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -6528,6 +6631,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `client_secret to pass in the OAuth request parameter.`,
 								},
 								"tenant_id": schema.StringAttribute{
@@ -6551,7 +6655,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 								},
 								"cert_options": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for Microsoft OAuth authentication.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -6563,6 +6668,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt the private key.`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -6656,7 +6762,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -6765,6 +6872,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace`,
 										},
 										"text_secret": schema.StringAttribute{
@@ -6785,6 +6893,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"client_secret": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `client_secret to pass in the OAuth request parameter`,
 										},
 										"client_text_secret": schema.StringAttribute{
@@ -6796,13 +6905,17 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Description: `Select or create a stored certificate`,
 										},
 										"cert_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Path to the client certificate file.`,
 										},
 										"priv_key_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Path to the client private key file.`,
 										},
 										"passphrase": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase used to decrypt the client private key.`,
 										},
 										"oauth_endpoint": schema.StringAttribute{
 											Computed:    true,
@@ -6991,7 +7104,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7045,7 +7159,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `The consumer group this instance belongs to. Default is '$Default'.`,
 								},
 								"auth": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication settings for the Event Hubs AMQP connection.`,
 									Attributes: map[string]schema.Attribute{
 										"mechanism": schema.StringAttribute{
 											Computed:    true,
@@ -7064,7 +7179,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											Description: `Select or create a stored text secret`,
 										},
 										"certificate": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Certificate credentials for OAuth authentication.`,
 											Attributes: map[string]schema.Attribute{
 												"certificate_name": schema.StringAttribute{
 													Computed:    true,
@@ -7080,6 +7196,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												},
 												"passphrase": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Passphrase to use to decrypt private key`,
 												},
 											},
@@ -7103,7 +7220,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Azure Blob Storage settings used to persist Event Hubs checkpoints.`,
 									Attributes: map[string]schema.Attribute{
 										"blob_store": schema.SingleNestedAttribute{
 											Computed:    true,
@@ -7146,7 +7264,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													Description: `Select or create a stored text secret`,
 												},
 												"certificate": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Certificate credentials for the Azure service principal.`,
 													Attributes: map[string]schema.Attribute{
 														"certificate_name": schema.StringAttribute{
 															Computed:    true,
@@ -7311,7 +7430,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7498,7 +7618,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7553,7 +7674,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
-									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									Sensitive:   true,
+									Description: `Shared secrets to be provided by any client (x-amz-firehose-access-key: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
@@ -7590,6 +7712,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -7598,11 +7721,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -7623,7 +7746,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -7758,7 +7882,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -7833,10 +7958,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 								},
 								"secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Select or create a stored text secret`,
 								},
 								"max_backlog": schema.Float64Attribute{
@@ -7964,7 +8091,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8010,7 +8138,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"filter": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Filter expression used to select internal Cribl log events.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -8117,7 +8246,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8204,6 +8334,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -8212,11 +8343,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -8369,7 +8500,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8476,6 +8608,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -8484,11 +8617,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -8509,7 +8642,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -8644,7 +8778,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -8699,6 +8834,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -8736,6 +8872,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -8744,11 +8881,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -8769,7 +8906,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -8838,6 +8976,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										Attributes: map[string]schema.Attribute{
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret provided by clients for authentication`,
 											},
 										},
@@ -8932,7 +9071,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9019,6 +9159,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -9027,11 +9168,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -9089,6 +9230,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -9180,7 +9322,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9230,17 +9373,20 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Time, in seconds, between consecutive metric collections. Default is 10 seconds.`,
 								},
 								"host": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select level of detail for host metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
 											Description: `Select level of detail for host metrics`,
 										},
 										"custom": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Custom host metric collection settings.`,
 											Attributes: map[string]schema.Attribute{
 												"system": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for system metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9253,7 +9399,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"cpu": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for CPU metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9274,7 +9421,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"memory": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for memory metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9287,7 +9435,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"network": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for network metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9313,7 +9462,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"disk": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of detail for disk metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -9353,7 +9503,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"process": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Process metric collection settings.`,
 									Attributes: map[string]schema.Attribute{
 										"sets": schema.ListNestedAttribute{
 											Computed:    true,
@@ -9378,7 +9529,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"container": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select the level of detail for container metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9420,7 +9572,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"gpu": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select the level of detail for GPU metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9571,7 +9724,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -9637,7 +9791,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"collectors": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `System state collectors to enable and configure.`,
 									Attributes: map[string]schema.Attribute{
 										"hostsfile": schema.SingleNestedAttribute{
 											Computed:    true,
@@ -9752,7 +9907,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Disk spooling settings for collected system state data.`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -9877,7 +10033,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10085,7 +10242,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10302,7 +10460,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10468,7 +10627,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10518,17 +10678,20 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Time, in seconds, between consecutive metric collections. Default is 10 seconds.`,
 								},
 								"host": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select level of detail for host metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
 											Description: `Select level of detail for host metrics`,
 										},
 										"custom": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Custom host metric collection settings.`,
 											Attributes: map[string]schema.Attribute{
 												"system": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for system metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10541,7 +10704,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"cpu": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for CPU metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10562,7 +10726,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"memory": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for memory metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10575,7 +10740,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"network": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for network metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10601,7 +10767,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 												},
 												"disk": schema.SingleNestedAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Select the level of details for disk metrics`,
 													Attributes: map[string]schema.Attribute{
 														"mode": schema.StringAttribute{
 															Computed:    true,
@@ -10627,7 +10794,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"process": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Process metric collection settings.`,
 									Attributes: map[string]schema.Attribute{
 										"sets": schema.ListNestedAttribute{
 											Computed:    true,
@@ -10652,7 +10820,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"gpu": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select the level of detail for GPU metrics`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10807,7 +10976,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -10870,6 +11040,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -10903,11 +11074,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"visibility_timeout": schema.Float64Attribute{
 									Computed:    true,
-									Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+									Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. New Sources default to 600 sec. (10 minutes); existing Sources keep their configured value. You can set this as high as 43200 sec. (12 hours), but a long timeout keeps a message invisible to other pollers for that whole window after a non-graceful shutdown, so redelivery can be hours away.`,
 								},
 								"num_receivers": schema.Float64Attribute{
 									Computed:    true,
-									Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+									Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead. Not applied when fan-out is enabled.`,
 								},
 								"socket_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -10915,7 +11086,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"skip_on_error": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.`,
+									Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Not applied when fan-out is enabled.`,
 								},
 								"include_sqs_metadata": schema.BoolAttribute{
 									Computed:    true,
@@ -10951,7 +11122,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"preprocess": schema.SingleNestedAttribute{
 									Computed:    true,
-									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion. Not applied when fan-out is enabled.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -10985,7 +11156,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption. Not applied when fan-out is enabled.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11005,12 +11177,21 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Computed:    true,
 									Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 								},
+								"visibility_timeout_warning": schema.StringAttribute{
+									Computed:    true,
+									Description: `Warning displayed when the visibility timeout is configured high.`,
+								},
+								"enable_fanout": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Spread this Source's file processing across all Worker Processes on the Worker, instead of having one Worker Process handle every file of an SQS message. When enabled, Number of receivers, Skip file on error, Checkpointing and Custom command are not applied.`,
+								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -11039,10 +11220,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -11137,7 +11320,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11224,6 +11408,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -11232,11 +11417,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -11257,7 +11442,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -11332,7 +11518,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"proxy_mode": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Proxy mode settings for Datadog Agent requests.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11433,7 +11620,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11599,7 +11787,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11654,6 +11843,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -11691,6 +11881,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -11699,11 +11890,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -11724,7 +11915,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -11795,12 +11987,41 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens_ext": schema.ListNestedAttribute{
 									Computed:    true,
-									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									Description: `Shared secrets to be provided by any client (Authorization token). Empty placeholder objects returned by the API are omitted from state and exported configuration. Populated entries, including legacy entries without authType, retain their values.`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
 												Computed:    true,
-												Description: `Discriminator value.`,
+												Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+											"token": schema.StringAttribute{
+												Computed:    true,
+												Sensitive:   true,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"metadata": schema.ListNestedAttribute{
+												Computed:    true,
+												Description: `Fields to add to events referencing this token`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Name of the metadata field.`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
 											},
 										},
 									},
@@ -11817,7 +12038,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"access_control_allow_methods": schema.ListAttribute{
 									Computed:    true,
-									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight.`,
+									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight`,
 									ElementType: types.StringType,
 								},
 								"access_control_expose_headers": schema.ListAttribute{
@@ -11922,7 +12143,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -11985,7 +12207,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"payload_format": schema.StringAttribute{
 									Computed:    true,
-									Description: `Format of data inside the Kinesis Stream records. Gzip compression is automatically detected.`,
+									Description: `Format of data inside the Kinesis Stream records. Gzip compression is automatically detected. Cloudwatch Logs records become one event per log event, keeping the event id, message type, log group, log stream, owner, and subscription filters; other fields are dropped.`,
 								},
 								"get_records_limit": schema.Float64Attribute{
 									Computed:    true,
@@ -12005,6 +12227,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -12073,6 +12296,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -12164,7 +12388,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12322,7 +12547,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12425,6 +12651,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -12433,11 +12660,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -12550,7 +12777,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12613,6 +12841,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -12736,7 +12965,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -12770,6 +13000,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -12798,6 +13029,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"processed_tag_key": schema.StringAttribute{
@@ -12893,7 +13125,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -12956,6 +13189,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -13079,7 +13313,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -13113,6 +13348,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -13141,10 +13377,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -13239,7 +13477,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -13311,11 +13550,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
 														Computed:    true,
-														Description: `V3 name`,
+														Description: `SNMPv3 security name.`,
 													},
 													"auth_protocol": schema.StringAttribute{
 														Computed:    true,
-														Description: `Authentication protocol`,
+														Description: `Authentication protocol for the SNMPv3 user.`,
 													},
 													"auth_key_type": schema.StringAttribute{
 														Computed:    true,
@@ -13323,7 +13562,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 													"auth_key": schema.StringAttribute{
 														Computed:    true,
-														Description: `V3 authentication key`,
+														Sensitive:   true,
+														Description: `Authentication key for the SNMPv3 user.`,
 													},
 													"auth_key_secret": schema.StringAttribute{
 														Computed:    true,
@@ -13339,7 +13579,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 													},
 													"priv_key": schema.StringAttribute{
 														Computed:    true,
-														Description: `V3 privacy key`,
+														Sensitive:   true,
+														Description: `Privacy key for the SNMPv3 user.`,
 													},
 													"priv_key_secret": schema.StringAttribute{
 														Computed:    true,
@@ -13475,7 +13716,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -13562,6 +13804,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -13570,11 +13813,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -13587,7 +13830,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"request_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -13644,6 +13888,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Bearer token for Authorization header`,
 											},
 											"description": schema.StringAttribute{
@@ -13680,6 +13925,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"password": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Password`,
 											},
 											"credentials_secret": schema.StringAttribute{
@@ -13734,6 +13980,14 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Computed:    true,
 									Description: `Maximum number of concurrent HTTP/2 streams allowed on a single gRPC connection. Combined with Maximum message size, this bounds per-connection receive and decompress state. Active connection limit only bounds connections.`,
 								},
+								"max_connection_age_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time a gRPC connection may stay open, including while idle, before @{product} closes it and frees the slot for new clients. Use 0 for unlimited; maximum 86400 sec. (24 hours).`,
+								},
+								"max_connection_age_grace_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After the maximum connection age is reached, how long @{product} waits for in-flight requests to complete before forcibly closing the connection. Only applies when Maximum connection age is not 0. Maximum 3600 sec. (1 hour).`,
+								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional description for this configuration.`,
@@ -13744,10 +13998,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"password": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"credentials_secret": schema.StringAttribute{
@@ -13761,6 +14017,34 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								"extract_logs": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable to extract each incoming log record to a separate event`,
+								},
+								"access_control_allow_origin": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers. Leave empty to allow all requested headers from an allowed origin. Origin matching and authentication still apply.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_methods": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight`,
+									ElementType: types.StringType,
+								},
+								"access_control_expose_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `Headers the browser is allowed to access from the response`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Include credentials in cross-origin requests. Cannot be used with wildcard origins.`,
+								},
+								"access_control_max_age": schema.Int64Attribute{
+									Computed:    true,
+									Description: `How long browsers should cache the preflight response, in whole seconds. Fractional values are invalid; browsers that cannot parse the header fall back to 5 seconds.`,
 								},
 							},
 						},
@@ -13847,7 +14131,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -13934,6 +14219,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -13942,11 +14228,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -14071,7 +14357,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14138,6 +14425,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -14210,6 +14498,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -14305,7 +14594,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14453,6 +14743,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -14461,11 +14752,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -14590,7 +14881,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14842,7 +15134,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -14929,6 +15222,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -14937,11 +15231,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -15027,6 +15321,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"auth_type": schema.StringAttribute{
@@ -15122,7 +15417,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -15221,7 +15517,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port.`,
 								},
 								"filter": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Rules that select processes for AppScope instrumentation.`,
 									Attributes: map[string]schema.Attribute{
 										"allow": schema.ListNestedAttribute{
 											Computed:    true,
@@ -15329,6 +15626,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -15337,11 +15635,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -15355,6 +15653,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -15446,7 +15745,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -15529,6 +15829,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -15578,7 +15879,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"keep_alive_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -15814,7 +16116,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -15920,6 +16223,10 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Computed:    true,
 									Description: `Preserve fields with empty values (such as '-') in the JSON output instead of omitting them`,
 								},
+								"resolve_parameter_codes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Resolve Windows message table parameter codes (%%NNNN) in EventData fields to their human-readable strings (for example: %%14592 → Inbound)`,
+								},
 								"disable_xml_rendering": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)`,
@@ -16009,7 +16316,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16167,7 +16475,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16349,7 +16658,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16544,7 +16854,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16636,6 +16947,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"manage_state": schema.MapAttribute{
 												Computed:    true,
+												Description: `Controls for viewing and managing the collector state.`,
 												ElementType: types.StringType,
 											},
 											"content_query": schema.StringAttribute{
@@ -16715,7 +17027,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -16762,6 +17075,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `The client secret of the Wiz application`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -16853,7 +17167,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -16945,6 +17260,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"manage_state": schema.MapAttribute{
 												Computed:    true,
+												Description: `Controls for viewing and managing the collector state.`,
 												ElementType: types.StringType,
 											},
 											"request_params": schema.ListNestedAttribute{
@@ -17033,6 +17349,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -17072,7 +17389,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -17198,7 +17516,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -17253,6 +17572,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"auth_tokens": schema.ListAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 									ElementType: types.StringType,
 								},
@@ -17290,6 +17610,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -17298,11 +17619,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -17323,7 +17644,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -17403,6 +17725,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"description": schema.StringAttribute{
@@ -17517,7 +17840,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -17707,7 +18031,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -17770,6 +18095,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -17893,7 +18219,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -17919,6 +18246,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -17947,10 +18275,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -18045,7 +18375,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18108,6 +18439,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
@@ -18231,7 +18563,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"checkpointing": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Checkpoint settings used to resume processing after an interruption.`,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -18257,6 +18590,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
@@ -18285,10 +18619,12 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sqsaws_secret_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to add a tag to each S3 object after processing.`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -18383,7 +18719,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18534,7 +18871,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -18645,6 +18983,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 							},
@@ -18732,7 +19071,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -18795,7 +19135,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Disabled`,
+											Description: `Whether TLS is disabled for this connection.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -18824,15 +19164,16 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to use for the connection.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
 								},
@@ -18949,7 +19290,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19017,6 +19359,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -19085,6 +19428,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -19093,11 +19437,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -19118,7 +19462,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -19276,7 +19621,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19344,6 +19690,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -19412,6 +19759,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -19420,11 +19768,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -19445,7 +19793,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -19608,7 +19957,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19676,6 +20026,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -19744,6 +20095,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -19752,11 +20104,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -19777,7 +20129,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -19931,7 +20284,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -19999,6 +20353,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -20067,6 +20422,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -20075,11 +20431,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -20100,7 +20456,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -20254,7 +20611,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -20322,6 +20680,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -20390,6 +20749,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -20398,11 +20758,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -20423,7 +20783,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -20577,7 +20938,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -20645,6 +21007,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -20713,6 +21076,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -20721,11 +21085,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -20746,7 +21110,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -20881,7 +21246,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -20949,6 +21315,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -21017,6 +21384,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -21025,11 +21393,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -21050,7 +21418,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -21204,7 +21573,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -21272,6 +21642,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -21340,6 +21711,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -21348,11 +21720,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -21369,7 +21741,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -21527,7 +21900,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -21574,6 +21948,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -21658,7 +22033,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -21727,6 +22103,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 							},
@@ -21814,7 +22191,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -21861,6 +22239,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -21905,6 +22284,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -21947,6 +22327,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -21989,6 +22370,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22031,6 +22413,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22073,6 +22456,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"manage_state": schema.MapAttribute{
 											Computed:    true,
+											Description: `Controls for viewing and managing the collector state.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -22195,7 +22579,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -22321,7 +22706,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -22368,6 +22754,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_key": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -22473,7 +22860,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -22599,7 +22987,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -22696,6 +23085,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 								"timeout": schema.Float64Attribute{
@@ -22739,7 +23129,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -22794,7 +23185,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Select or create a secret that references the client secret from your app registration`,
 								},
 								"cert_options": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Certificate credentials for Microsoft Graph OAuth authentication.`,
 									Attributes: map[string]schema.Attribute{
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -22806,6 +23198,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to decrypt the private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -22899,7 +23292,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -22946,10 +23340,15 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"okta_domain": schema.StringAttribute{
 									Computed:    true,
-									Description: `Your Okta domain (example: your-org). Do not include .okta.com, https://, or trailing slashes.`,
+									Description: `Your Okta subdomain (example: your-org). Do not include the domain suffix, https://, or trailing slashes.`,
+								},
+								"okta_domain_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `Host suffix for your Okta cell/region. Defaults to okta.com (US commercial). Choose okta-emea.com (EMEA), oktapreview.com (preview), okta-gov.com (US gov), or okta.mil (US military).`,
 								},
 								"okta_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `Your Okta API token for authentication`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -22970,6 +23369,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"manage_state": schema.MapAttribute{
 									Computed:    true,
+									Description: `Controls for viewing and managing the collector state.`,
 									ElementType: types.StringType,
 								},
 								"job_timeout": schema.StringAttribute{
@@ -23013,7 +23413,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"retry_rules": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed:    true,
@@ -23139,7 +23540,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -23207,6 +23609,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -23275,6 +23678,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -23283,11 +23687,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -23308,7 +23712,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -23447,7 +23852,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -23515,6 +23921,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -23583,6 +23990,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -23591,11 +23999,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -23616,7 +24024,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -23770,7 +24179,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -23838,6 +24248,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -23906,6 +24317,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -23914,11 +24326,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -23939,7 +24351,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -24093,7 +24506,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -24161,6 +24575,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -24229,6 +24644,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -24237,11 +24653,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -24262,7 +24678,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -24416,7 +24833,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -24484,6 +24902,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -24552,6 +24971,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -24560,11 +24980,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -24585,7 +25005,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -24743,7 +25164,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -24811,6 +25233,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -24879,6 +25302,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -24887,11 +25311,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -24912,7 +25336,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -25061,7 +25486,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -25129,6 +25555,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -25197,6 +25624,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -25205,11 +25633,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -25230,7 +25658,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -25384,7 +25813,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -25452,6 +25882,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -25520,6 +25951,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -25528,11 +25960,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -25553,7 +25985,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -25707,7 +26140,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									},
 								},
 								"pq": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
 											Computed:    true,
@@ -25775,6 +26209,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
+												Sensitive:   true,
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
@@ -25843,6 +26278,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"cert_path": schema.StringAttribute{
@@ -25851,11 +26287,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 										},
 										"min_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Minimum TLS version`,
+											Description: `Minimum TLS version to accept from clients.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed:    true,
-											Description: `Maximum TLS version`,
+											Description: `Maximum TLS version to accept from clients.`,
 										},
 									},
 								},
@@ -25876,7 +26312,8 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Description: `Add request headers to events, in the __headers field`,
 								},
 								"capture_headers_warning": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -26709,6 +27146,8 @@ func SourcesInputPrometheusObjectValue(item *InputPrometheusModel) attr.Value {
 		"field_per_metric":                   item.FieldPerMetric,
 		"discovery_type":                     item.DiscoveryType,
 		"interval":                           item.Interval,
+		"interval_unit":                      item.IntervalUnit,
+		"max_concurrent_runs":                item.MaxConcurrentRuns,
 		"log_level":                          item.LogLevel,
 		"reject_unauthorized":                item.RejectUnauthorized,
 		"timeout":                            item.Timeout,
@@ -26829,6 +27268,7 @@ func SourcesInputOffice365MgmtObjectValue(item *InputOffice365MgmtModel) attr.Va
 		"tenant_id":               item.TenantID,
 		"app_id":                  item.AppID,
 		"timeout":                 item.Timeout,
+		"reject_unauthorized":     item.RejectUnauthorized,
 		"keep_alive_time":         item.KeepAliveTime,
 		"job_timeout":             item.JobTimeout,
 		"max_missed_keep_alives":  item.MaxMissedKeepAlives,
@@ -26866,6 +27306,7 @@ func SourcesInputOffice365ServiceObjectValue(item *InputOffice365ServiceModel) a
 		"tenant_id":               item.TenantID,
 		"app_id":                  item.AppID,
 		"timeout":                 item.Timeout,
+		"reject_unauthorized":     item.RejectUnauthorized,
 		"keep_alive_time":         item.KeepAliveTime,
 		"job_timeout":             item.JobTimeout,
 		"max_missed_keep_alives":  item.MaxMissedKeepAlives,
@@ -27527,6 +27968,8 @@ func SourcesInputCrowdstrikeObjectValue(item *InputCrowdstrikeModel) attr.Value 
 		"checkpointing":                item.Checkpointing,
 		"poll_timeout":                 item.PollTimeout,
 		"encoding":                     item.Encoding,
+		"visibility_timeout_warning":   item.VisibilityTimeoutWarning,
+		"enable_fanout":                item.EnableFanout,
 		"description":                  item.Description,
 		"aws_api_key":                  item.AwsAPIKey,
 		"aws_secret":                   item.AwsSecret,
@@ -27910,46 +28353,54 @@ func SourcesInputOpenTelemetryObjectValue(item *InputOpenTelemetryModel) attr.Va
 		return types.ObjectNull(InputOpenTelemetryModelAttrTypes())
 	}
 	return types.ObjectValueMust(InputOpenTelemetryModelAttrTypes(), map[string]attr.Value{
-		"id":                      item.ID,
-		"type":                    item.Type,
-		"disabled":                item.Disabled,
-		"pipeline":                item.Pipeline,
-		"send_to_routes":          item.SendToRoutes,
-		"environment":             item.Environment,
-		"pq_enabled":              item.PqEnabled,
-		"streamtags":              item.Streamtags,
-		"cribl_source_provenance": item.CriblSourceProvenance,
-		"connections":             item.Connections,
-		"pq":                      item.Pq,
-		"host":                    item.Host,
-		"port":                    item.Port,
-		"tls":                     item.TLS,
-		"max_active_req":          item.MaxActiveReq,
-		"max_requests_per_socket": item.MaxRequestsPerSocket,
-		"capture_headers_warning": item.CaptureHeadersWarning,
-		"request_timeout":         item.RequestTimeout,
-		"socket_timeout":          item.SocketTimeout,
-		"keep_alive_timeout":      item.KeepAliveTimeout,
-		"enable_health_check":     item.EnableHealthCheck,
-		"ip_allowlist_regex":      item.IpAllowlistRegex,
-		"ip_denylist_regex":       item.IpDenylistRegex,
-		"protocol":                item.Protocol,
-		"extract_spans":           item.ExtractSpans,
-		"extract_metrics":         item.ExtractMetrics,
-		"otlp_version":            item.OtlpVersion,
-		"auth_type":               item.AuthType,
-		"auth_methods_ext":        item.AuthMethodsExt,
-		"metadata":                item.Metadata,
-		"max_active_cxn":          item.MaxActiveCxn,
-		"max_message_size_kb":     item.MaxMessageSizeKB,
-		"max_concurrent_streams":  item.MaxConcurrentStreams,
-		"description":             item.Description,
-		"username":                item.Username,
-		"password":                item.Password,
-		"token":                   item.Token,
-		"credentials_secret":      item.CredentialsSecret,
-		"text_secret":             item.TextSecret,
-		"extract_logs":            item.ExtractLogs,
+		"id":                               item.ID,
+		"type":                             item.Type,
+		"disabled":                         item.Disabled,
+		"pipeline":                         item.Pipeline,
+		"send_to_routes":                   item.SendToRoutes,
+		"environment":                      item.Environment,
+		"pq_enabled":                       item.PqEnabled,
+		"streamtags":                       item.Streamtags,
+		"cribl_source_provenance":          item.CriblSourceProvenance,
+		"connections":                      item.Connections,
+		"pq":                               item.Pq,
+		"host":                             item.Host,
+		"port":                             item.Port,
+		"tls":                              item.TLS,
+		"max_active_req":                   item.MaxActiveReq,
+		"max_requests_per_socket":          item.MaxRequestsPerSocket,
+		"capture_headers_warning":          item.CaptureHeadersWarning,
+		"request_timeout":                  item.RequestTimeout,
+		"socket_timeout":                   item.SocketTimeout,
+		"keep_alive_timeout":               item.KeepAliveTimeout,
+		"enable_health_check":              item.EnableHealthCheck,
+		"ip_allowlist_regex":               item.IpAllowlistRegex,
+		"ip_denylist_regex":                item.IpDenylistRegex,
+		"protocol":                         item.Protocol,
+		"extract_spans":                    item.ExtractSpans,
+		"extract_metrics":                  item.ExtractMetrics,
+		"otlp_version":                     item.OtlpVersion,
+		"auth_type":                        item.AuthType,
+		"auth_methods_ext":                 item.AuthMethodsExt,
+		"metadata":                         item.Metadata,
+		"max_active_cxn":                   item.MaxActiveCxn,
+		"max_message_size_kb":              item.MaxMessageSizeKB,
+		"max_concurrent_streams":           item.MaxConcurrentStreams,
+		"max_connection_age_sec":           item.MaxConnectionAgeSec,
+		"max_connection_age_grace_sec":     item.MaxConnectionAgeGraceSec,
+		"description":                      item.Description,
+		"username":                         item.Username,
+		"password":                         item.Password,
+		"token":                            item.Token,
+		"credentials_secret":               item.CredentialsSecret,
+		"text_secret":                      item.TextSecret,
+		"extract_logs":                     item.ExtractLogs,
+		"access_control_allow_origin":      item.AccessControlAllowOrigin,
+		"access_control_allow_headers":     item.AccessControlAllowHeaders,
+		"access_control_allow_methods":     item.AccessControlAllowMethods,
+		"access_control_expose_headers":    item.AccessControlExposeHeaders,
+		"access_control_allow_credentials": item.AccessControlAllowCredentials,
+		"access_control_max_age":           item.AccessControlMaxAge,
 	})
 }
 
@@ -28259,6 +28710,7 @@ func SourcesInputWinEventLogsObjectValue(item *InputWinEventLogsModel) attr.Valu
 		"description":                 item.Description,
 		"disable_json_rendering":      item.DisableJSONRendering,
 		"include_empty_json_fields":   item.IncludeEmptyJSONFields,
+		"resolve_parameter_codes":     item.ResolveParameterCodes,
 		"disable_xml_rendering":       item.DisableXmlRendering,
 	})
 }
@@ -29203,6 +29655,7 @@ func SourcesInputOktaObjectValue(item *InputOktaModel) attr.Value {
 		"connections":             item.Connections,
 		"pq":                      item.Pq,
 		"okta_domain":             item.OktaDomain,
+		"okta_domain_suffix":      item.OktaDomainSuffix,
 		"okta_token":              item.OktaToken,
 		"text_secret":             item.TextSecret,
 		"cron_schedule":           item.CronSchedule,

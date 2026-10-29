@@ -15,6 +15,24 @@ schema_imports:
       - SnsTarget
       - SmtpTarget
 
+# Derive wrappers from upstream saved-job and concrete collector schemas.
+# Imported InputCollector definitions preserve the existing Terraform contract.
+collector_schemas:
+  job: SavedJobCollection
+  runtime: SavedJobResponseEnrichedFields
+  base: InputCollectorBase
+  variants:
+    InputCollectorSplunk: CollectorSplunk
+    InputCollectorRest: CollectorRest
+    InputCollectorS3: CollectorS3
+    InputCollectorAzureBlob: CollectorAzureBlob
+    InputCollectorCriblLake: CollectorCriblLake
+    InputCollectorDatabase: CollectorDatabase
+    InputCollectorGCS: CollectorGoogleCloudStorage
+    InputCollectorHealthCheck: CollectorHealthCheck
+    InputCollectorScript: CollectorScript
+    InputCollectorFilesystem: CollectorFilesystem
+
 actions:
   - target: "$.components.schemas.OutputFilesystem.properties.fileNameSuffix"
     update:
@@ -90,6 +108,53 @@ actions:
   - target: "$.paths./m/{groupId}/lib/jobs/{id}.delete"
     update:
       x-terraform-delete: Collector
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackCollector
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: pack
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the Pack.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this collector instance.
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.post.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.get"
+    update:
+      x-terraform-read: PackCollector
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.get.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.patch"
+    update:
+      x-terraform-update: PackCollector
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.patch.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs/{id}.delete"
+    update:
+      x-terraform-delete: PackCollector
   - target: "$.components.schemas.InputCollector"
     update:
       properties:
@@ -120,6 +185,10 @@ actions:
   - target: "$.components.schemas.InputCollectorBase.properties.type"
     update:
       x-terraform-ignore: true
+  - target: "$.components.schemas.InputCollectorBase.properties.savedState"
+    update:
+      x-terraform-custom-type: types.DynamicType{}
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.InputCollectorBase.properties.input"
     update:
       description: 'Input configuration for a collection job. Set type to "collection".'
@@ -1927,12 +1996,47 @@ actions:
         alias:
           type: string
           x-terraform-optional-computed: true
+        builder:
+          $ref: "#/components/schemas/MetricVisualQueryBuilder"
+          x-terraform-optional-computed: true
+        datasetId:
+          type: string
+          x-terraform-optional-computed: true
+        enabled:
+          type: boolean
+          x-terraform-optional-computed: true
         localId:
           type: string
+          x-terraform-optional-computed: true
+        mode:
+          $ref: "#/components/schemas/MetricQueryMode"
           x-terraform-optional-computed: true
         query:
           type: string
           x-terraform-optional-computed: true
+        showPromqlPreview:
+          type: boolean
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.MetricVisualQueryBuilder.properties"
+    update:
+      agg:
+        x-terraform-optional-computed: true
+      filters:
+        x-terraform-optional-computed: true
+      groupBy:
+        x-terraform-optional-computed: true
+      metric:
+        x-terraform-optional-computed: true
+      range:
+        x-terraform-optional-computed: true
+  - target: "$.components.schemas.MetricLabelFilter.properties"
+    update:
+      k:
+        x-terraform-optional-computed: true
+      op:
+        x-terraform-optional-computed: true
+      v:
+        x-terraform-optional-computed: true
   - target: "$.components.schemas"
     update:
       DashboardElementVisualization:
@@ -2001,6 +2105,9 @@ actions:
             type: string
             x-terraform-optional-computed: true
           type:
+            type: string
+            x-terraform-optional-computed: true
+          variant:
             type: string
             x-terraform-optional-computed: true
       DashboardElementMarkdown:
@@ -2090,8 +2197,14 @@ actions:
       SearchQueryMetric:
         type: object
         properties:
+          datasetId:
+            type: string
+            x-terraform-optional-computed: true
           earliest:
             $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          expectedOutputType:
+            $ref: "#/components/schemas/ExpectedOutputType"
             x-terraform-optional-computed: true
           latest:
             $ref: "#/components/schemas/SearchDashboardRelativeTime"
@@ -2101,8 +2214,35 @@ actions:
             items:
               $ref: "#/components/schemas/PanelQueryDefinition"
             x-terraform-optional-computed: true
+          source:
+            $ref: "#/components/schemas/MetricSearchSource"
+            x-terraform-optional-computed: true
+          stepStrategy:
+            $ref: "#/components/schemas/SearchDashboardMetricStepStrategy"
+            x-terraform-optional-computed: true
+          timezone:
+            type: string
+            x-terraform-optional-computed: true
           type:
             type: string
+            x-terraform-optional-computed: true
+      SearchDashboardMetricStepStrategy:
+        type: object
+        properties:
+          step:
+            type: number
+            description: Fixed PromQL query step in seconds, used when type is fixed.
+            x-terraform-optional-computed: true
+          targetPoints:
+            type: number
+            description: Desired maximum chart point count, used when type is auto.
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            description: Step resolution strategy, either auto or fixed.
+            enum:
+              - auto
+              - fixed
             x-terraform-optional-computed: true
       SearchDashboardRelativeTime:
         type: object
@@ -2228,7 +2368,13 @@ actions:
   - target: "$.components.schemas.LocalSearchEngineApi.properties.lastProvisionedMs"
     update:
       x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.maximumTierSize"
+    update:
+      x-terraform-computed: true
   - target: "$.components.schemas.LocalSearchEngineApi.properties.metricsLastPublishedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngineApi.properties.minimumTierSize"
     update:
       x-terraform-computed: true
   - target: "$.components.schemas.LocalSearchEngineApi.properties.status"
@@ -3103,7 +3249,7 @@ actions:
   - target: "$.paths./m/{groupId}/search/datatypes/{id}.delete"
     update:
       x-terraform-delete: SearchDatatype
-  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties"
+  - target: "$.components.schemas.DataTypeDescriptorPart0Type.properties"
     update:
       minRawLength:
         type: integer
@@ -3117,11 +3263,11 @@ actions:
         description: Search execution version used by the Datatype.
         x-terraform-optional-computed: true
         x-terraform-enum-validator: true
-  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties.id"
+  - target: "$.components.schemas.DataTypeDescriptorPart0Type.properties.id"
     update:
       x-terraform-force-new: true
       x-terraform-suppress-diff: explicit
-  - target: "$.components.schemas.DataTypeDescriptor.allOf.1.oneOf.0.properties.dataFormat"
+  - target: "$.components.schemas.DataTypeDescriptorDataFormatNdjsonWithAutomaticExtractionConstraint.properties.dataFormat"
     update:
       x-terraform-request-computed: true
 
@@ -3445,6 +3591,237 @@ actions:
     update:
       x-terraform-ignore: true
 
+  # Dataset intelligence is enabled by creating its saved generation envelope.
+  # Generation is asynchronous; all envelope fields except identity are outputs.
+  - target: "$.paths./ai/settings/dataset-intelligence/{datasetId}.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: "SearchDatasetIntelligence"
+  - target: "$.paths./ai/settings/dataset-intelligence/{datasetId}.get"
+    update:
+      x-terraform-read: "SearchDatasetIntelligence"
+  - target: "$.paths./ai/settings/dataset-intelligence/{datasetId}.delete"
+    update:
+      x-terraform-delete: "SearchDatasetIntelligence"
+  - target: "$.components.schemas.AiDatasetIntelligence.properties"
+    update:
+      datasetId:
+        pattern: "^[a-zA-Z0-9_-]+$"
+        description: "ID of the existing Search dataset. Changing it replaces the intelligence resource."
+      content:
+        readOnly: true
+        description: "Generated Markdown content, available when analysis has produced output."
+      status:
+        readOnly: true
+        description: "Generation status: processing, complete, partial, or failed."
+      failureReason:
+        readOnly: true
+        description: "Failure details when analysis is partial or failed."
+      generatedAt:
+        type: "integer"
+        readOnly: true
+        description: "Generation start time in milliseconds since the Unix epoch."
+      updatedAt:
+        type: "integer"
+        readOnly: true
+        description: "Last manual edit time in milliseconds since the Unix epoch, when present."
+
+  # Editable Handlebars templates are absent from upstream public OpenAPI.
+  # The fixed engine query avoids listing legacy condition templates.
+  - target: "$.components.schemas"
+    update:
+      NotificationTemplate:
+        type: "object"
+        required:
+          - "id"
+          - "type"
+          - "content"
+        properties:
+          id:
+            type: "string"
+            description: "Unique identifier for this notification template."
+            pattern: "^[a-zA-Z0-9_-]+$"
+            x-terraform-force-new: true
+          type:
+            type: "string"
+            enum:
+              - "webhook"
+              - "pager_duty"
+              - "slack"
+              - "sns"
+              - "smtp"
+            description: "Notification target type that this template supports. Immutable after creation."
+            x-terraform-force-new: true
+            x-terraform-enum-validator: true
+          content:
+            type: "string"
+            description: "Handlebars template content. Must be valid for the selected notification target type."
+          description:
+            type: "string"
+            description: "Description of the notification template. Omit to retain the API value, or use an empty string to clear it."
+            x-terraform-optional-computed: true
+          engine:
+            type: "string"
+            readOnly: true
+            description: "Template engine populated by the API (handlebars)."
+          lastUpdated:
+            type: "integer"
+            readOnly: true
+            description: "Last update timestamp in milliseconds since the Unix epoch."
+          createdBy:
+            type: "string"
+            readOnly: true
+            description: "User who created the template, populated by the API."
+      UpdateNotificationTemplate:
+        type: "object"
+        properties:
+          description:
+            type: "string"
+          content:
+            type: "string"
+      NotificationTemplateList:
+        type: "object"
+        properties:
+          items:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/NotificationTemplate"
+          count:
+            type: "integer"
+  - target: "$.paths"
+    update:
+      /notification-templates:
+        post:
+          operationId: "createNotificationTemplate"
+          x-terraform-resource-name: "NotificationTemplate"
+          parameters:
+            -
+              name: "engine"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+                const: "handlebars"
+          responses:
+            200:
+              description: "Notification template response."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NotificationTemplateList"
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotificationTemplate"
+                example:
+                  id: "custom-email"
+                  type: "smtp"
+                  description: "Custom email notification template"
+                  content: '{"to":"{{metadata.to}}","subject":"[{{status}}] {{monitor_name}}","body":"{{description}}"}'
+          x-terraform-resource: true
+        get:
+          operationId: "listNotificationTemplates"
+          x-terraform-list: "NotificationTemplate"
+          x-terraform-list-name: "NotificationTemplates"
+          parameters:
+            -
+              name: "engine"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+                const: "handlebars"
+          responses:
+            200:
+              description: "Notification template response."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NotificationTemplateList"
+      /notification-templates/{id}:
+        get:
+          operationId: "getNotificationTemplate"
+          x-terraform-read: "NotificationTemplate"
+          parameters:
+            -
+              name: "id"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+            -
+              name: "engine"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+                const: "handlebars"
+          responses:
+            200:
+              description: "Notification template response."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NotificationTemplateList"
+          x-terraform-response-item: true
+        patch:
+          operationId: "updateNotificationTemplate"
+          x-terraform-update: "NotificationTemplate"
+          parameters:
+            -
+              name: "id"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+            -
+              name: "engine"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+                const: "handlebars"
+          responses:
+            200:
+              description: "Notification template response."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NotificationTemplateList"
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UpdateNotificationTemplate"
+          x-terraform-read-after-write: true
+        delete:
+          operationId: "deleteNotificationTemplate"
+          x-terraform-delete: "NotificationTemplate"
+          parameters:
+            -
+              name: "id"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+            -
+              name: "engine"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+                const: "handlebars"
+          responses:
+            200:
+              description: "Notification template response."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NotificationTemplateList"
+
   - target: "$.paths./m/{groupId}/notifications.post"
     update:
       x-terraform-resource: true
@@ -3461,12 +3838,24 @@ actions:
   - target: "$.components.examples.CreateNotificationExamplesHighVolumeSource.value"
     update:
       group: default
+      targets: [system_email]
+      templateTargetPairs:
+        - targetId: system_email
+          templateId: default-email
   - target: "$.components.examples.CreateNotificationExamplesUnhealthyDestination.value"
     update:
       group: default
+      targets: [system_email]
+      templateTargetPairs:
+        - targetId: system_email
+          templateId: default-email
   - target: "$.components.examples.UpdateNotificationExamplesUpdateHighVolumeSource.value"
     update:
       group: default
+      targets: [system_email]
+      templateTargetPairs:
+        - targetId: system_email
+          templateId: default-email
   - target: "$.components.schemas.Notification.properties.id"
     update:
       x-terraform-force-new: true
@@ -3500,9 +3889,12 @@ actions:
         message:
           type: string
           description: Message template for the notification.
+        trigger:
+          type: string
+          description: Custom expression evaluated against Search results when triggerType is custom. Filters notification matches without removing saved query results.
         triggerType:
           type: string
-          description: Type of trigger.
+          description: Type of trigger. Use custom to evaluate trigger against Search results, or resultsCount to compare the number of results.
         triggerComparator:
           type: string
           description: Comparison operator.
@@ -3538,10 +3930,10 @@ actions:
       x-terraform-computed: true
   - target: "$.components.schemas.Notification.properties.mode"
     update:
-      x-terraform-computed: true
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.Notification.properties.templateTargetPairs"
     update:
-      x-terraform-computed: true
+      x-terraform-optional-computed: true
 
   - target: "$.paths./version/commit.post"
     update:
@@ -3682,223 +4074,742 @@ actions:
       x-terraform-use-state-for-unknown: true
       x-terraform-force-new-always: true
 
-  # MON-762: criblio_monitor -- Aetos alert monitors.
-  # Backend route is /products/lakehouse_engine_metrics/monitors (AETOS_PREFIX). Requests and
-  # responses both reference upstream's native AetosMonitorConf; annotated in place rather than
-  # duplicated, so new upstream fields arrive for free.
-  - target: "$.paths./products/lakehouse_engine_metrics/monitors.post"
+  # Literal credentials: these annotations drive both Terraform masking and
+  # import-cli sensitive variables. Stored secret names and template references
+  # deliberately remain non-sensitive. Shared schemas cover pack variants too.
+  - target: "$.components.schemas.ApiAzureDataExplorerProvider.allOf.1.properties"
     update:
-      x-terraform-resource: true
-      x-terraform-resource-name: Monitor
-  - target: "$.paths./products/lakehouse_engine_metrics/monitors.get"
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ApiElasticSearchProvider.allOf.1.properties"
     update:
-      x-terraform-list: Monitor
-      x-terraform-list-name: Monitors
-  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.get"
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ApiOpenSearchProvider.allOf.1.properties"
     update:
-      x-terraform-read: Monitor
-  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.patch"
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthTokenConfInputCloudflareHec.properties"
     update:
-      x-terraform-update: Monitor
-  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.delete"
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthTypeHttp.properties"
     update:
-      x-terraform-delete: Monitor
+      manualAPIKey:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthenticationType.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AuthenticationTypeUse.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+      passphrase:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AwsAccountConfig.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AzureAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.AzureBlobProvider.allOf.1.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.CertOptionsType.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ClickHouseProvider.allOf.1.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.GcpAccountConfig.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.GcsProvider.allOf.1.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.GoogleWorkspaceAccountConfig.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputAnthropicCompliance.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputAnthropicEnterpriseAnalytics.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputAppscope.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputBedrockS3.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCloudflareHec.properties.tls.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorGCS.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorHealthCheck.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorRest.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorS3.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCollectorSplunk.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCriblLakeHttp.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCriblLakeHttp.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputCrowdstrike.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputEdgePrometheus.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputElastic.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputElastic.properties.proxyMode.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputEventhubAmqp.properties.auth.properties.certificate.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputFirehose.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputGooglePubsub.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputGrafana.properties.lokiAuth.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputGrafana.properties.prometheusAuth.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttp.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttp.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttpAuthTokensExtItemsType.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttpRaw.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputHttpRaw.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  # Preserve the common token fields when flattening the conditional manual /
+  # stored-secret constraints. Legacy token rows may omit authType.
+  - target: "$.components.schemas.InputHttpRaw.properties.authTokensExt"
+    update:
+      description: Shared secrets to be provided by any client (Authorization token). Empty placeholder objects returned by the API are omitted from state and exported configuration. Populated entries, including legacy entries without authType, retain their values.
+  - target: "$.components.schemas.InputHttpRaw.properties.authTokensExt.items"
+    update:
+      x-terraform-flatten-object-unions: true
+  - target: "$.components.schemas.InputKinesis.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputLoki.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputMicrosoftCopilot.properties.certOptions.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputMicrosoftGraph.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputMsk.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOffice365Mgmt.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOffice365MsgTrace.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOffice365Service.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOkta.properties"
+    update:
+      oktaToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenTelemetry.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenTelemetry.properties.authMethodsExt.items.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenai.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputOpenaiComplianceLogs.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputPrometheus.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputPrometheusRw.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputS3.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputS3Inventory.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSecurityLake.properties"
+    update:
+      SQSAwsSecretKey:
+        x-terraform-sensitive: true
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSnmp.properties.snmpV3Auth.properties.v3Users.items.properties"
+    update:
+      authKey:
+        x-terraform-sensitive: true
+      privKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSplunk.properties.authTokens.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSplunkHec.properties.authTokens.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSplunkSearch.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSqs.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputTcp.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputTcpjson.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWef.properties.tls.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWiz.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWizWebhook.properties"
+    update:
+      authTokens:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputWizWebhook.properties.authTokensExt.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.InputZscalerHec.properties.authTokens.items.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.MsGraphAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputAmazonManagedPrometheus.properties"
+    update:
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputAzureDataExplorer.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputAzureLogs.properties"
+    update:
+      workspaceKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputChronicle.properties"
+    update:
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputClickHouse.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCloudflareR2.properties"
+    update:
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCloudwatch.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCrowdstrikeNextGenSiem.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputCustomerMetricsStorage.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDatadog.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDataset.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDlS3.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputDynatraceHttp.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputExabeam.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleBigquery.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleChronicle.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleCloudLogging.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleCloudObservability.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGoogleCloudStorage.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputGooglePubsub.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+      serviceAccountCredentials:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputHumioHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputInfluxdb.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputKinesis.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputLocalSearchStorage.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputLocalSearchStorage.properties.statsDestination.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputLoki.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputMicrosoftFabric.properties.sasl.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputMinio.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputMsk.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputNewrelic.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputNewrelicEvents.properties"
+    update:
+      apiKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputOpenTelemetry.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputPrometheus.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputS3.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSecurityLake.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSentinel.properties"
+    update:
+      secret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSentinelOneAiSiem.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSignalfx.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSns.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunk.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkLb.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkLb.properties.indexerDiscoveryConfigs.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSplunkLb.properties.indexerDiscoveryConfigs.properties.authTokens.items.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputSqs.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputTcpjson.properties"
+    update:
+      authToken:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputWavefront.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputWebhook.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      secret:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputWizHec.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.OutputXsiam.properties"
+    update:
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.PagerDutyTarget.properties"
+    update:
+      routingKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.PrometheusAuthType.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.PrometheusProvider.allOf.1.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.S3Provider.allOf.1.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SlackTarget.properties"
+    update:
+      url:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SmtpTarget.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SnowflakeProvider.allOf.1.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+      privKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.SnsTarget.properties"
+    update:
+      awsApiKey:
+        x-terraform-sensitive: true
+      awsSecretKey:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TailscaleAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsClientSideTypeCaPathCertPath.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsClientSideTypeCaPathCertPathExtended.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsClientSideTypeExtended.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.TlsSettingsServerSideType.properties"
+    update:
+      passphrase:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.WebhookTarget.properties"
+    update:
+      password:
+        x-terraform-sensitive: true
+      token:
+        x-terraform-sensitive: true
+  - target: "$.components.schemas.ZoomAccountConfig.properties"
+    update:
+      clientSecret:
+        x-terraform-sensitive: true
 
-  # $profileRef is UI-only linkage to a shared monitor profile; no criblio_monitor_profile
-  # resource exists yet to create the IDs it references. $configRefs is the equivalent linkage
-  # surface on the shared Inheritable schema used by every profile-linkable field below. Both
-  # excluded until profile-linked resources exist -- not a permanent limitation.
-  - target: "$.components.schemas.AetosMonitorConf.properties"
+  # Copy the final compatibility base so this missing product field is exposed
+  # only on database collectors, including pack collectors using the same union.
+  - target: "$.components.schemas.InputCollectorDatabase.allOf.0"
+    copy_from: "$.components.schemas.InputCollectorBase"
     update:
-      "$profileRef":
-        x-terraform-ignore: true
-  - target: "$.components.schemas.Inheritable.properties"
-    update:
-      "$configRefs":
-        x-terraform-ignore: true
-
-  # managedBy is stamped by the backend, never user-set; fix it at the schema level (not just
-  # Computed) so Terraform rejects any config attempt to set it to something else.
-  - target: "$.components.schemas.AetosMonitorConf.properties.managedBy"
-    update:
-      const: terraform
-      default: terraform
-      x-terraform-fixed-value: terraform
-
-  # templateParams' value is a map-of-map once narrowed (Record<label, Record<string,string>>).
-  # tools/codegen/parser.go's map-detection only recurses one level -- a value schema that's
-  # itself additionalProperties (no `properties` key) silently falls back to a flat
-  # string-valued map, losing the inner nesting. Left as opaque JSON until fixed -- a real
-  # codegen limitation (INFRA-12649), not a design choice. Confirmed both this build and the
-  # implement_monitor_resource branch (PR #225) missed this and ship the silent-flattening bug
-  # (schema.MapAttribute{ElementType: types.StringType}) instead -- this override prevents it.
-  - target: "$.components.schemas.AetosMonitorConf.properties.templateParams"
-    replace:
-      type: object
-      additionalProperties: true
-      x-terraform-custom-type: jsontypes.NormalizedType{}
-      x-terraform-object-as-json: true
-      description: "Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } })."
-
-  # notification and silence are both listed in AetosMonitorConf.required upstream, but a live
-  # probe against a real backend (POST with neither field present) returned 200 -- the backend
-  # does not actually enforce either. Restate required without both so codegen renders them as
-  # genuinely optional instead of forcing every monitor (including plain threshold monitors) to
-  # fabricate a throwaway notification block or an empty silence list.
-  - target: "$.components.schemas.AetosMonitorConf"
-    update:
-      required:
-        - datasetId
-        - enabled
-        - expr
-        - firingCondition
-        - firingRule
-        - id
-        - metadata
-        - name
-        - priority
-        - query
-        - team
-        - type
-
-  # notification is a real 2-branch discriminated union (policy-based routing vs direct
-  # target delivery), but both branches are anonymous inline schemas upstream -- codegen needs
-  # named schemas to expose them as distinct Terraform sub-blocks. Name them here, each with its
-  # own self-contained `type: const` discriminator, then narrow NotificationConfig /
-  # InheritableINotificationConfig to reference the named pair (+ Inheritable for profile
-  # linkage, excluded above but the branch itself is harmless to keep for shape completeness).
-  - target: "$.components.schemas"
-    update:
-      MonitorPolicyNotificationConfig:
-        type: object
-        properties:
-          config:
-            type: array
-            items:
-              $ref: "#/components/schemas/NotificationPolicy"
-            description: Notification policy entries for policy-based routing.
-          enabled:
-            type: boolean
-            description: Whether notifications are enabled for this monitor.
-          type:
-            type: string
-            const: policy
-            description: "Type of notification configuration: policy-based routing."
-        required:
-          - config
-          - enabled
-          - type
-      MonitorTargetNotificationConfig:
-        type: object
-        properties:
-          config:
-            type: array
-            items:
-              $ref: "#/components/schemas/TemplateTargetPair"
-            description: Template and target pairs for direct target-based delivery.
-          enabled:
-            type: boolean
-            description: Whether notifications are enabled for this monitor.
-          type:
-            type: string
-            const: target
-            description: "Type of notification configuration: direct target-based delivery."
-        required:
-          - config
-          - enabled
-          - type
-  # policy and target branches have an IDENTICAL shape ({config, enabled, type}), so codegen's
-  # shape-matching picks the first (policy) for a target notification -> "provider produced
-  # inconsistent result after apply" (verified live). Declare the self-contained `type` discriminator
-  # so codegen dispatches on it instead (policy -> policy branch, target -> target branch; the
-  # Inheritable arm has no type and falls through to the shape-match for an inherited notification).
-  - target: "$.components.schemas.NotificationConfig"
-    replace:
-      oneOf:
-        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
-        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
-      discriminator:
-        propertyName: type
-        mapping:
-          policy: "#/components/schemas/MonitorPolicyNotificationConfig"
-          target: "#/components/schemas/MonitorTargetNotificationConfig"
-      description: Notification settings for a monitor.
-      title: NotificationConfig
-  - target: "$.components.schemas.InheritableINotificationConfig"
-    replace:
-      oneOf:
-        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
-        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
-        - $ref: "#/components/schemas/Inheritable"
-      discriminator:
-        propertyName: type
-        mapping:
-          policy: "#/components/schemas/MonitorPolicyNotificationConfig"
-          target: "#/components/schemas/MonitorTargetNotificationConfig"
-
-  # detectionConfig is a real 4-branch oneOf (anomaly/change/outlier/forecast) with no
-  # discriminator declared upstream. Without one, codegen falls back to shape-matching
-  # (OneOfShapeMatches), which is unsafe here: AnomalyConfig has no strictly-required fields, so
-  # it greedily matches almost any object on read -- including forecast's payload (live-verified:
-  # a forecast monitor round-tripped back as anomaly_config with algorithm="linear"/
-  # seasonality="hourly" copied verbatim from the forecast fields, caught only by Terraform's own
-  # post-apply consistency check). Add the real discriminator -- the sibling `type` field on
-  # AetosMonitorConf itself -- so read-path dispatch is unambiguous.
-  - target: "$.components.schemas.DetectionConfigTypeAetosMonitorConf"
-    update:
-      x-terraform-discriminator-at-parent: true
-      discriminator:
-        propertyName: type
-        mapping:
-          anomaly: "#/components/schemas/AnomalyConfig"
-          change: "#/components/schemas/ChangeConfig"
-          outlier: "#/components/schemas/OutlierConfig"
-          forecast: "#/components/schemas/ForecastConfig"
-
-  # OutlierConfig: published docs spec still carries only the {algorithm:mad} stub (predates
-  # cribl/cribl @swaggerDescription backfill). Forward-port the real 7-field IOutlierConfig
-  # (MON-1392) so outlier is a typed block now; drop once the published spec catches up on sync.
-  - target: "$.components.schemas.OutlierConfig"
-    replace:
-      type: object
       properties:
-        algorithm:
-          type: string
-          const: mad
-          description: Discriminator value.
-        mode:
-          type: string
-          enum:
-            - instant
-            - windowed
-          description: "How the peer cohort is pooled: per-instant cross-section, or pooled over the window."
-        cohortLabels:
-          type: array
-          items:
-            type: string
-          description: Labels that group series into peer cohorts; empty means one global cohort across all series.
-        thresholdDirection:
-          type: string
-          enum:
-            - above
-            - below
-            - either
-          description: "Which side flags an outlier: above the cohort spread, below it, or either."
-        evaluationWindowMs:
-          type: number
-          description: Window in milliseconds the pooled cohort median/MAD is computed over.
-        pct:
-          type: number
-          description: Percentage (1-100) of a series' window points that must breach before it is flagged.
-        minCoverage:
-          type: number
-          description: Percentage (1-100) of expected window points a series needs before it is graded.
-      required:
-        - algorithm
-        - mode
-        - cohortLabels
-        - thresholdDirection
-        - evaluationWindowMs
-        - pct
-        - minCoverage
-      title: OutlierConfig
+        schedule:
+          properties:
+            run:
+              properties:
+                stateTracking:
+                  properties:
+                    trackingColumn:
+                      type: string
+                      description: A numeric database column whose greatest seen value is tracked. Return this column in monotonically increasing order when state tracking is enabled.
+                      x-terraform-optional-computed: true
+
+  # This upstream API key contains punctuation, and its field-name constraint
+  # uses lookahead unsupported by Go RE2. Keep the API key and original pattern.
+  - target: "$.components.schemas.DatatypeSchemaMaps.properties"
+    update:
+      OCSF v1.8:
+        x-terraform-name: ocsf_v1_8
+        items:
+          properties:
+            fieldName:
+              x-terraform-pattern-validator: false
+
+  # Retain attributes accepted by earlier provider schemas even when a newer
+  # published spec omits them. Existing HCL and Terraform state must still decode.
+  - target: "$.components.schemas.AppRequestBody.properties.cribl.properties"
+    update:
+      hidden:
+        type: boolean
+        description: Install the App without listing it in the Apps list in the UI.
+  - target: "$.components.schemas.SystemInfo.properties"
+    update:
+      isHighside:
+        type: boolean
+        description: Whether this instance runs in the Highside deployment mode.
+  - target: "$.components.schemas.DataTypeDescriptorPart0Type.properties"
+    update:
+      schemaMap:
+        type: array
+        description: Field mappings to rename or alias extracted fields, retained for compatibility with earlier configurations.
+        items:
+          $ref: "#/components/schemas/FieldMappingType"
+  # These fields were previously lost when inline allOf was parsed. Expose them
+  # without making previously valid extraction configurations require new inputs.
+  - target: "$.components.schemas.DataTypeDescriptorAdditionalExtractionsItemsType.properties"
+    update:
+      name:
+        x-terraform-optional-computed: true
+      sourceField:
+        x-terraform-optional-computed: true

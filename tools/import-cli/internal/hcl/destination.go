@@ -54,7 +54,7 @@ func valueToJSONableForAPI(v Value) interface{} {
 		return v.Bool
 	case KindNull:
 		return nil
-	case KindList:
+	case KindList, KindTuple:
 		out := make([]interface{}, len(v.List))
 		for i, el := range v.List {
 			out[i] = valueToJSONableForAPI(el)

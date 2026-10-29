@@ -17,6 +17,7 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type DatabaseConnectionModel struct {
+	AccountIDentifier types.String `tfsdk:"account_identifier" json:"accountIdentifier,omitempty"`
 	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
@@ -32,15 +33,19 @@ type DatabaseConnectionModel struct {
 	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
 	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	Pem               types.Object `tfsdk:"pem" json:"pem,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Role              types.String `tfsdk:"role" json:"role,omitempty"`
 	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
 	User              types.String `tfsdk:"user" json:"user,omitempty"`
+	Warehouse         types.String `tfsdk:"warehouse" json:"warehouse,omitempty"`
 }
 
 type DatabaseConnectionResourceModel struct {
+	AccountIDentifier types.String `tfsdk:"account_identifier" json:"accountIdentifier,omitempty"`
 	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
@@ -56,15 +61,19 @@ type DatabaseConnectionResourceModel struct {
 	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
 	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	Pem               types.Object `tfsdk:"pem" json:"pem,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Role              types.String `tfsdk:"role" json:"role,omitempty"`
 	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
 	User              types.String `tfsdk:"user" json:"user,omitempty"`
+	Warehouse         types.String `tfsdk:"warehouse" json:"warehouse,omitempty"`
 }
 
 type DatabaseConnectionDataSourceModel struct {
+	AccountIDentifier types.String `tfsdk:"account_identifier" json:"accountIdentifier,omitempty"`
 	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
@@ -80,15 +89,19 @@ type DatabaseConnectionDataSourceModel struct {
 	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
 	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	Pem               types.Object `tfsdk:"pem" json:"pem,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Role              types.String `tfsdk:"role" json:"role,omitempty"`
 	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
 	User              types.String `tfsdk:"user" json:"user,omitempty"`
+	Warehouse         types.String `tfsdk:"warehouse" json:"warehouse,omitempty"`
 }
 
 type DatabaseConnectionAPIModel struct {
+	AccountIDentifier *string `json:"accountIdentifier,omitempty"`
 	AuthType          *string `json:"authType,omitempty"`
 	ConfigObj         *string `json:"configObj,omitempty"`
 	ConnectionString  *string `json:"connectionString,omitempty"`
@@ -104,15 +117,19 @@ type DatabaseConnectionAPIModel struct {
 	Items             any     `json:"items,omitempty"`
 	LogOnMechanism    *string `json:"logOnMechanism,omitempty"`
 	Password          *string `json:"password,omitempty"`
+	Pem               any     `json:"pem,omitempty"`
 	RequestTimeout    *int64  `json:"requestTimeout,omitempty"`
+	Role              *string `json:"role,omitempty"`
 	Sslmode           *string `json:"sslmode,omitempty"`
 	Tags              *string `json:"tags,omitempty"`
 	TextSecret        *string `json:"textSecret,omitempty"`
 	TLS               any     `json:"tls,omitempty"`
 	User              *string `json:"user,omitempty"`
+	Warehouse         *string `json:"warehouse,omitempty"`
 }
 
 type DatabaseConnectionItemsModel struct {
+	AccountIDentifier types.String `tfsdk:"account_identifier" json:"accountIdentifier,omitempty"`
 	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
 	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
@@ -126,15 +143,19 @@ type DatabaseConnectionItemsModel struct {
 	ID                types.String `tfsdk:"id" json:"id,omitempty"`
 	LogOnMechanism    types.String `tfsdk:"log_on_mechanism" json:"logOnMechanism,omitempty"`
 	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	Pem               types.Object `tfsdk:"pem" json:"pem,omitempty"`
 	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Role              types.String `tfsdk:"role" json:"role,omitempty"`
 	Sslmode           types.String `tfsdk:"sslmode" json:"sslmode,omitempty"`
 	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
 	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
 	User              types.String `tfsdk:"user" json:"user,omitempty"`
+	Warehouse         types.String `tfsdk:"warehouse" json:"warehouse,omitempty"`
 }
 
 type DatabaseConnectionItemsAPIModel struct {
+	AccountIDentifier *string `json:"accountIdentifier,omitempty"`
 	AuthType          *string `json:"authType,omitempty"`
 	ConfigObj         *string `json:"configObj,omitempty"`
 	ConnectionString  *string `json:"connectionString,omitempty"`
@@ -148,16 +169,20 @@ type DatabaseConnectionItemsAPIModel struct {
 	ID                *string `json:"id,omitempty"`
 	LogOnMechanism    *string `json:"logOnMechanism,omitempty"`
 	Password          *string `json:"password,omitempty"`
+	Pem               any     `json:"pem,omitempty"`
 	RequestTimeout    *int64  `json:"requestTimeout,omitempty"`
+	Role              *string `json:"role,omitempty"`
 	Sslmode           *string `json:"sslmode,omitempty"`
 	Tags              *string `json:"tags,omitempty"`
 	TextSecret        *string `json:"textSecret,omitempty"`
 	TLS               any     `json:"tls,omitempty"`
 	User              *string `json:"user,omitempty"`
+	Warehouse         *string `json:"warehouse,omitempty"`
 }
 
 func DatabaseConnectionItemsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
+		"account_identifier": types.StringType,
 		"auth_type":          types.StringType,
 		"config_obj":         types.StringType,
 		"connection_string":  types.StringType,
@@ -171,12 +196,29 @@ func DatabaseConnectionItemsAttrTypes() map[string]attr.Type {
 		"id":                 types.StringType,
 		"log_on_mechanism":   types.StringType,
 		"password":           types.StringType,
+		"pem":                types.ObjectType{AttrTypes: DatabaseConnectionItemsPemAttrTypes()},
 		"request_timeout":    types.Int64Type,
+		"role":               types.StringType,
 		"sslmode":            types.StringType,
 		"tags":               types.StringType,
 		"text_secret":        types.StringType,
 		"tls":                types.ObjectType{AttrTypes: DatabaseConnectionItemsTLSAttrTypes()},
 		"user":               types.StringType,
+		"warehouse":          types.StringType,
+	}
+}
+
+type DatabaseConnectionItemsPemModel struct {
+	KeyName types.String `tfsdk:"key_name" json:"keyName,omitempty"`
+}
+
+type DatabaseConnectionItemsPemAPIModel struct {
+	KeyName *string `json:"keyName,omitempty"`
+}
+
+func DatabaseConnectionItemsPemAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key_name": types.StringType,
 	}
 }
 
@@ -218,6 +260,20 @@ func DatabaseConnectionItemsTLSAttrTypes() map[string]attr.Type {
 		"priv_key_path":       types.StringType,
 		"reject_unauthorized": types.BoolType,
 		"servername":          types.StringType,
+	}
+}
+
+type DatabaseConnectionPemModel struct {
+	KeyName types.String `tfsdk:"key_name" json:"keyName,omitempty"`
+}
+
+type DatabaseConnectionPemAPIModel struct {
+	KeyName *string `json:"keyName,omitempty"`
+}
+
+func DatabaseConnectionPemAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key_name": types.StringType,
 	}
 }
 
@@ -475,6 +531,13 @@ func DatabaseConnectionTerraformNullValue(typ attr.Type) (attr.Value, error) {
 
 func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
+	if !m.AccountIDentifier.IsNull() && !m.AccountIDentifier.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.AccountIDentifier)
+		if err != nil {
+			return nil, fmt.Errorf("convert account_identifier to API value: %v", err)
+		}
+		output["accountIdentifier"] = value
+	}
 	if !m.AuthType.IsNull() && !m.AuthType.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.AuthType)
 		if err != nil {
@@ -566,12 +629,26 @@ func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 		}
 		output["password"] = value
 	}
+	if !m.Pem.IsNull() && !m.Pem.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.Pem)
+		if err != nil {
+			return nil, fmt.Errorf("convert pem to API value: %v", err)
+		}
+		output["pem"] = value
+	}
 	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.RequestTimeout)
 		if err != nil {
 			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
 		}
 		output["requestTimeout"] = value
+	}
+	if !m.Role.IsNull() && !m.Role.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.Role)
+		if err != nil {
+			return nil, fmt.Errorf("convert role to API value: %v", err)
+		}
+		output["role"] = value
 	}
 	if !m.Sslmode.IsNull() && !m.Sslmode.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.Sslmode)
@@ -608,6 +685,13 @@ func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 		}
 		output["user"] = value
 	}
+	if !m.Warehouse.IsNull() && !m.Warehouse.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.Warehouse)
+		if err != nil {
+			return nil, fmt.Errorf("convert warehouse to API value: %v", err)
+		}
+		output["warehouse"] = value
+	}
 	return json.Marshal(output)
 }
 
@@ -615,6 +699,11 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 	var input DatabaseConnectionAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
+	}
+	if input.AccountIDentifier != nil {
+		m.AccountIDentifier = types.StringValue(*input.AccountIDentifier)
+	} else {
+		m.AccountIDentifier = types.StringNull()
 	}
 	if input.AuthType != nil {
 		m.AuthType = types.StringValue(*input.AuthType)
@@ -695,10 +784,24 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Password = types.StringNull()
 	}
+	if input.Pem != nil {
+		value, err := DatabaseConnectionAPIValueToTerraformValue(input.Pem, types.ObjectType{AttrTypes: DatabaseConnectionPemAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pem from API value: %v", err)
+		}
+		m.Pem = value.(types.Object)
+	} else {
+		m.Pem = types.ObjectNull(DatabaseConnectionPemAttrTypes())
+	}
 	if input.RequestTimeout != nil {
 		m.RequestTimeout = types.Int64Value(*input.RequestTimeout)
 	} else {
 		m.RequestTimeout = types.Int64Null()
+	}
+	if input.Role != nil {
+		m.Role = types.StringValue(*input.Role)
+	} else {
+		m.Role = types.StringNull()
 	}
 	if input.Sslmode != nil {
 		m.Sslmode = types.StringValue(*input.Sslmode)
@@ -728,6 +831,11 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 		m.User = types.StringValue(*input.User)
 	} else {
 		m.User = types.StringNull()
+	}
+	if input.Warehouse != nil {
+		m.Warehouse = types.StringValue(*input.Warehouse)
+	} else {
+		m.Warehouse = types.StringNull()
 	}
 	return nil
 }

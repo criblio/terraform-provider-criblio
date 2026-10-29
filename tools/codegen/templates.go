@@ -105,6 +105,10 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, nil
 	}
 	switch typed := value.(type) {
+	{{- if hasDynamic . }}
+	case types.Dynamic:
+		return dynamicValueToJSON(typed)
+{{- end }}
 	case types.Bool:
 		return typed.ValueBool(), nil
 	case types.Int64:
@@ -423,6 +427,9 @@ func {{ .StructName }}TerraformNameToAPIName(name string) string {
 }
 
 func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+{{- if hasDynamic . }}
+	if typ.Equal(types.DynamicType) { return dynamicValueFromAPI(value) }
+{{- end }}
 	if value == nil {
 		return {{ .StructName }}TerraformNullValue(typ)
 	}
@@ -561,6 +568,9 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 }
 
 func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
+{{- if hasDynamic . }}
+	if typ.Equal(types.DynamicType) { return types.DynamicNull(), nil }
+{{- end }}
 	if typ.Equal(types.BoolType) {
 		return types.BoolNull(), nil
 	}
@@ -732,7 +742,7 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	normalizeRoutesPayload(output)
 {{- end }}
-{{- if eq .StructName "Collector" }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 	output["type"] = "collection"
 {{- end }}
 	return json.Marshal(output)
@@ -915,7 +925,8 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
-{{- if eq .StructName "Collector" }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	if err := decodeCollectorSavedState(data, raw); err != nil { return err }
 	normalizeCollectorUnionValues(raw)
 	data, err := json.Marshal(raw)
 	if err != nil {
@@ -923,6 +934,7 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	}
 {{- end }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	normalizeHTTPRawExtendedAuthTokens(raw)
 	set{{ .StructName }}LegacyItemsFromRaw(m, raw)
 {{- end }}
 {{- end }}
@@ -1132,9 +1144,10 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
 		raw["savedState"] = map[string]any{}
 	}
+
 }
 {{- end }}
-{{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource")) }}
+{{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource") (eq .StructName "PackCollector")) }}
 {{ range .OneOfVariants }}
 type {{ .ModelName }} struct {
 {{- range .Fields }}
@@ -1437,6 +1450,8 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 		return nil, err
 	}
 	return apiModel, nil
+{{- else if not .Create.RequestSchema }}
+	return restclient.{{ restWriteCall .Create }}[map[string]any, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, map[string]any{})
 {{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
@@ -1601,6 +1616,9 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
 	return &model, nil
+{{- else if not .Update.Path }}
+	// Resources with only a replaceable identity have no update operation.
+	return a.Read(ctx, model)
 {{- else if .NoRead }}
 	err := restclient.{{ restWriteCall .Update }}NoResponse(ctx, a.client, {{ pathExpr . .Update }}, model)
 	return &model, err
@@ -1982,7 +2000,10 @@ var _ = types.String{}
 var _ resource.Resource = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithConfigure = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithImportState = &{{ .StructName }}Resource{}
-{{- if eq .StructName "Collector" }}
+{{- if or (eq .StructName "SearchDataset") (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+var _ resource.ResourceWithModifyPlan = &{{ .StructName }}Resource{}
+{{- end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 var _ resource.ResourceWithUpgradeState = &{{ .StructName }}Resource{}
 {{- end }}
 
@@ -2002,12 +2023,14 @@ func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.Met
 func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		{{- if eq .StructName "Collector" }}
+		Version: 2,
+		{{- else if eq .StructName "PackCollector" }}
 		Version: 1,
 		{{- end }}
 		{{- if .CreateDisabledMessage }}
 		MarkdownDescription: {{ printf "%q" .CreateDisabledMessage }},
 		{{- else }}
-		MarkdownDescription: "{{ .StructName }} Resource",
+		MarkdownDescription: "{{ if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}",
 		{{- end }}
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
@@ -2026,6 +2049,72 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		},
 	}
 }
+
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+// ModifyPlan switches removed configured checkpoints back to API-owned state.
+func (r *{{ .StructName }}Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	modifyCollectorSavedStatePlan(ctx, req, resp)
+}
+{{- end }}
+
+{{- if eq .StructName "SearchDataset" }}
+// ModifyPlan exposes the configured dataset identity to dependent resources before
+// creation. Read configuration rather than the plan so omitted or unknown IDs are
+// left for the API to resolve.
+func (r *SearchDatasetResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+	var priorID types.String
+	if !req.State.Raw.IsNull() {
+		resp.Diagnostics.Append(req.State.GetAttribute(ctx, path.Root("id"), &priorID)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
+	hasPriorID := !priorID.IsNull() && !priorID.IsUnknown()
+	for _, blockName := range []string{
+{{- range $variant := .OneOfVariants }}
+{{- range .Fields }}
+{{- if eq .TerraformName "id" }}
+		{{ printf "%q" $variant.TerraformName }},
+{{- end }}
+{{- end }}
+{{- end }}
+	} {
+		root := path.Root(blockName)
+		var block types.Object
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, root, &block)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		if block.IsNull() {
+			continue
+		}
+		if block.IsUnknown() {
+			if hasPriorID {
+				resp.RequiresReplace = append(resp.RequiresReplace, root)
+			}
+			return
+		}
+		var id types.String
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, root.AtName("id"), &id)...)
+		if resp.Diagnostics.HasError() || id.IsNull() {
+			return
+		}
+		if hasPriorID && !priorID.Equal(id) {
+			// The API addresses updates using the ID, so changing it requires a
+			// new dataset. An explicitly unknown ID may resolve to a different
+			// identity, so it must also plan replacement rather than an update.
+			resp.RequiresReplace = append(resp.RequiresReplace, root.AtName("id"))
+		}
+		if !id.IsUnknown() {
+			resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("id"), id)...)
+		}
+		return
+	}
+}
+{{- end }}
 
 func (r *{{ .StructName }}Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
@@ -2062,15 +2151,29 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 {{- if .Create.ReadAfterWrite }}
-{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
+{{- end }}
 	_, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	_, err := r.api.Create(ctx, model)
 {{- end }}
 {{- else }}
-{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
+{{- end }}
 	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Create(ctx, model)
@@ -2093,6 +2196,10 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
+	if resp.Private != nil { resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...) }
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 	{{- end }}
@@ -2121,11 +2228,38 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 {{- else if eq .StructName "PackSource" }}
 	priorPlainAuth := snapshotPackSourcePlainAuthTokensPriorRead(&model)
 {{- end }}
+{{- if or (eq .StructName "NotificationTemplate") (eq .StructName "SearchDatasetIntelligence") }}
+{{- if eq .StructName "NotificationTemplate" }}
+	// Template fields are returned verbatim. Refresh from the API so changes
+	// outside Terraform, including a removed description, appear in the plan.
+{{- else }}
+	// Generation can replace or remove optional output fields. Refresh the
+	// entire envelope so old content and failure details do not linger.
+{{- end }}
+	if apiModel != nil {
+		model = *apiModel
+	}
+{{- else }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	priorSavedState := collectorSavedStates(model)
+	configuredSavedState, savedStateDiags := readCollectorSavedStateConfig(ctx, req.Private, priorSavedState)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+{{- end }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	restoreCollectorConfiguredSavedState(&model, priorSavedState, configuredSavedState)
+{{- end }}
+{{- end }}
 {{- if eq .StructName "Source" }}
 	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
 {{- else if eq .StructName "PackSource" }}
 	restorePackSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+{{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	if model.InputHttpRaw != nil {
+		model.InputHttpRaw.AuthTokensExt = normalizeHTTPRawExtendedAuthTokenState(model.InputHttpRaw.AuthTokensExt)
+	}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -2156,8 +2290,15 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
-{{- if or (eq .StructName "Collector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
+{{- end }}
 	apiModel, err := r.api.Update(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Update(ctx, model)
@@ -2190,6 +2331,10 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		model.ProviderID = plannedProviderID
 	}
 {{- end }}
+{{- end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
+	if resp.Private != nil { resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...) }
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -2386,6 +2531,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if api == nil || state == nil {
 		return
 	}
+{{- if eq .StructName "SearchDatasetIntelligence" }}
+	// The API returns the full envelope; absent optional outputs remain null.
+	*state = *api
+{{- else }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
 	sync{{ .StructName }}LegacyItems(api, state)
 	syncSourceLikeActiveInput(api, state)
@@ -2548,7 +2697,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.{{ .GoName }} = &{{ .ModelName }}{}
 		}
 {{- range .Fields }}
-{{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
+{{- if and (eq .APIName "savedState") (eq .CustomType "types.DynamicType{}") }}
+        state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+{{- else if eq .ApplyStrategy "stringFromAPIOrPrior" }}
 {{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
 		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
@@ -2619,6 +2770,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		!state.OutputRouter.Rules.IsNull() && !state.OutputRouter.Rules.IsUnknown() {
 		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
 	}
+{{- end }}
 {{- end }}
 }
 
@@ -2993,7 +3145,7 @@ type {{ .ListStructName }}ListDataSourceModel struct {
 {{- range listConfigFields . }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\"`" + `
 {{- end }}
-	Items types.List ` + "`tfsdk:\"items\"`" + `
+	Items {{ if hasDynamic . }}types.Dynamic{{ else }}types.List{{ end }} ` + "`tfsdk:\"items\"`" + `
 }
 
 func New{{ .ListStructName }}DataSource() datasource.DataSource {
@@ -3009,6 +3161,9 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 		MarkdownDescription: "{{ .ListStructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
 {{ listDataSourceConfigAttributes (listConfigFields .) "\t\t\t" }}
+{{- if hasDynamic . }}
+			"items": schema.DynamicAttribute{Computed: true},
+{{- else }}
 			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
@@ -3022,6 +3177,7 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 					},
 				},
 			},
+{{- end }}
 		},
 	}
 }
@@ -3059,7 +3215,12 @@ func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasour
 			values = append(values, {{ listItemObjectValue . }})
 		}
 	}
+{{- if hasDynamic . }}
+	model.Items, err = dynamicCollectionValue(values)
+	if err != nil { resp.Diagnostics.AddError("Unable to decode collection", err.Error()); return }
+{{- else }}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: {{ .ListStructName }}ItemAttrTypes()}, values)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -3090,12 +3251,36 @@ const docTemplate = `---
 page_title: "{{ resourceType . }} Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else }}{{ .StructName }} Resource{{ end }}
+  {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
 ---
 
 # {{ resourceType . }} (Resource)
 
-{{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else }}{{ .StructName }} Resource{{ end }}
+{{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+
+The ` + "`saved_state`" + ` attribute accepts both legacy string maps and nested objects. When omitted, it exposes runtime checkpoints returned by Cribl. Configured values are preserved during refresh; computed checkpoints are omitted from create and update requests. Existing string-map state is upgraded automatically. For resources created with older providers, legacy saved values are retained until an apply records whether ` + "`saved_state`" + ` is configured.
+{{- end }}
+{{- if eq .StructName "SearchDatasetIntelligence" }}
+
+Enables intelligence for an existing Search dataset. Creating the resource starts an asynchronous analysis; Terraform records the returned generation status without waiting for completion. Refresh state to read the latest status and generated Markdown. A ` + "`partial` or `failed`" + ` run remains managed and is not automatically retried.
+
+AI and agentic Search must be enabled, AI consent accepted, and the caller must have read and maintainer access to the dataset. Built-in datasets require Search admin privileges to manage intelligence.
+
+Destroying the resource removes the saved intelligence without deleting the dataset. To disable intelligence conditionally, use ` + "`count` or `for_each`" + `. To regenerate it explicitly, run ` + "`terraform apply -replace=criblio_search_dataset_intelligence.example`" + `. Import adopts existing intelligence without starting another analysis. Generated content and lifecycle metadata are read-only.
+{{- end }}
+{{- if eq .StructName "SearchDataset" }}
+
+Configure the ID in the dataset type attribute, for example ` + "`s3_dataset.id`" + `. The computed top-level ` + "`id`" + ` is available during planning when that configured ID is known, so dependent resources can reference it before creation. Unknown or omitted IDs are resolved after creation. Changing the configured ID replaces the Dataset.
+{{- end }}
+{{- if eq .StructName "NotificationTemplate" }}
+
+Manages custom Handlebars notification templates in the current workspace. Requires V2 Notifications to be enabled. The provider selects ` + "`engine=handlebars`" + ` automatically.
+
+Use ` + "`criblio_notification_template.<name>.id`" + ` as the ` + "`template_id`" + ` in a notification's ` + "`template_target_pairs`" + `. The template's ` + "`type`" + ` must match the notification target's type. SMTP, Slack, and PagerDuty templates normally contain a JSON payload; Handlebars expressions remain literal template text.
+
+Built-in templates (` + "`default-email`, `default-slack`, `default-sns`, and `default-pagerduty`" + `) cannot be created, updated, or deleted. Read them using the ` + "`criblio_notification_template`" + ` or ` + "`criblio_notification_templates`" + ` data source. The import CLI excludes these built-in templates from exported resources.
+{{- end }}
 
 ## Example Usage
 
@@ -3251,6 +3436,103 @@ func Test{{ .StructName }}(t *testing.T) {
 			},
 		})
 	})
+}
+{{- else if eq .StructName "SearchDatasetIntelligence" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+// Requires an existing dataset, enabled agentic Search, and accepted AI consent.
+func TestSearchDatasetIntelligence(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("The on-prem acceptance fixture does not provide Search and AI prerequisites")
+	}
+	datasetID := os.Getenv("CRIBL_TEST_DATASET_ID")
+	if datasetID == "" {
+		datasetID = "cribl_edge_logs"
+	}
+	config := fmt.Sprintf(` + "`" + `resource "criblio_search_dataset_intelligence" "test" {
+  dataset_id = %q
+}
+data "criblio_search_dataset_intelligence" "test" {
+  dataset_id = criblio_search_dataset_intelligence.test.dataset_id
+  depends_on = [criblio_search_dataset_intelligence.test]
+}` + "`" + `, datasetID)
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories: providerFactory,
+		Steps: []resource.TestStep{
+			{Config: config, Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr("criblio_search_dataset_intelligence.test", "dataset_id", datasetID),
+				resource.TestCheckResourceAttr("data.criblio_search_dataset_intelligence.test", "dataset_id", datasetID),
+			)},
+			{Config: config, PlanOnly: true},
+			{
+				ResourceName: "criblio_search_dataset_intelligence.test", ImportState: true,
+				ImportStateId: datasetID, ImportStateVerify: true,
+				ImportStateVerifyIdentifierAttribute: "dataset_id",
+				// The agent may finish between reading the saved state and importing.
+				ImportStateVerifyIgnore: []string{"content", "status", "failure_reason"},
+			},
+		},
+	})
+}
+{{- else if eq .StructName "NotificationTemplate" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+// Requires a workspace with V2 Notifications enabled.
+func TestNotificationTemplate(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("The on-prem acceptance fixture does not enable V2 Notifications")
+	}
+	id := "tf-template-" + acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	const name = "criblio_notification_template.test"
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories: providerFactory,
+		Steps: []resource.TestStep{
+			{
+				Config: notificationTemplateConfig(id, "Alert notification"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(name, "id", id),
+					resource.TestCheckResourceAttr(name, "type", "sns"),
+					resource.TestCheckResourceAttr(name, "engine", "handlebars"),
+					resource.TestCheckResourceAttr("data.criblio_notification_template.by_id", "id", id),
+				),
+			},
+			{Config: notificationTemplateConfig(id, "Alert notification"), PlanOnly: true},
+			{
+				Config: notificationTemplateConfig(id, "Updated notification"),
+				Check: resource.TestCheckResourceAttr(name, "content", "Updated notification"),
+			},
+			{Config: notificationTemplateConfig(id, "Updated notification"), PlanOnly: true},
+			{ResourceName: name, ImportState: true, ImportStateId: id, ImportStateVerify: true},
+		},
+	})
+}
+
+func notificationTemplateConfig(id, content string) string {
+	return fmt.Sprintf(` + "`" + `resource "criblio_notification_template" "test" {
+  id = %q
+  type = "sns"
+  content = %q
+}
+data "criblio_notification_template" "by_id" {
+  id = criblio_notification_template.test.id
+  depends_on = [criblio_notification_template.test]
+}
+data "criblio_notification_templates" "all" {
+  depends_on = [criblio_notification_template.test]
+}` + "`" + `, id, content)
 }
 {{- else if eq .StructName "GlobalVar" }}
 import (
@@ -3583,6 +3865,9 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.type", "splunk"),
 						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.conf.authentication", "token"),
 						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.conf.disable_time_filter", "false"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.conf.search", "index=main earliest=-1h@h"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.schedule.enabled", "true"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.schedule.run.expression", "true"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "id", restID),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),

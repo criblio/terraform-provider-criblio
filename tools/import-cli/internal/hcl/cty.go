@@ -159,6 +159,15 @@ func valueToCtyInner(v Value) (cty.Value, error) {
 		return cty.BoolVal(v.Bool), nil
 	case KindNumber:
 		return cty.NumberFloatVal(v.Number), nil
+	case KindTuple:
+		elements, err := listToCtyElems(v.List)
+		if err != nil {
+			return cty.NilVal, err
+		}
+		if len(elements) == 0 {
+			return cty.EmptyTupleVal, nil
+		}
+		return cty.TupleVal(elements), nil
 	case KindList:
 		v = normalizeAndPruneList(v)
 		elems, err := listToCtyElems(v.List)

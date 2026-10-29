@@ -9,6 +9,56 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
 
+func TestSearchDatasetIntelligenceGeneration(t *testing.T) {
+	id := parser.FieldDef{APIName: "datasetId", TerraformName: "dataset_id", GoName: "DatasetID", Type: "string", Required: true, ForceNew: true, PathParam: true}
+	definition := parser.ResourceDef{
+		Name: "SearchDatasetIntelligence", StructName: "SearchDatasetIntelligence", TypeName: "criblio_search_dataset_intelligence",
+		Fields: []parser.FieldDef{id},
+		Create: parser.OperationDef{Method: "POST", Path: "/ai/settings/dataset-intelligence/{datasetId}", PathParams: []parser.FieldDef{id}},
+		Read:   parser.OperationDef{Method: "GET", Path: "/ai/settings/dataset-intelligence/{datasetId}", PathParams: []parser.FieldDef{id}},
+		Delete: parser.OperationDef{Method: "DELETE", Path: "/ai/settings/dataset-intelligence/{datasetId}", PathParams: []parser.FieldDef{id}},
+	}
+	client := renderTemplate(t, "client", definition)
+	assertContains(t, client, "restclient.Post[map[string]any, SearchDatasetIntelligenceModel]")
+	assertContains(t, client, "map[string]any{}")
+	assertContains(t, client, "return a.Read(ctx, model)")
+	assertNotContains(t, client, "restclient.Patch")
+	assertNotContains(t, client, `a.client, "", model`)
+	resource := renderTemplate(t, "resource", definition)
+	assertContains(t, resource, `path.Root("dataset_id")`)
+	assertContains(t, resource, "*state = *api")
+	assertNotContains(t, resource, "No import state operation")
+	test := renderTemplate(t, "test", definition)
+	assertContains(t, test, "CRIBL_TEST_DATASET_ID")
+	assertContains(t, test, `datasetID = "cribl_edge_logs"`)
+	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
+	assertNotContains(t, test, "CRIBL_TEST_DATASET_ID must")
+}
+
+func TestNotificationTemplateFixedEngineRouting(t *testing.T) {
+	engine := parser.FieldDef{APIName: "engine", TerraformName: "engine", GoName: "Engine", QueryParam: true, FixedValue: "handlebars"}
+	id := parser.FieldDef{APIName: "id", TerraformName: "id", GoName: "ID", PathParam: true}
+	definition := parser.ResourceDef{
+		StructName: "NotificationTemplate", ListStructName: "NotificationTemplates",
+		Create: parser.OperationDef{Path: "/notification-templates", QueryParams: []parser.FieldDef{engine}},
+		Read:   parser.OperationDef{Path: "/notification-templates/{id}", PathParams: []parser.FieldDef{id}, QueryParams: []parser.FieldDef{engine}},
+		Update: parser.OperationDef{Path: "/notification-templates/{id}", PathParams: []parser.FieldDef{id}, QueryParams: []parser.FieldDef{engine}, ReadAfterWrite: true},
+		Delete: parser.OperationDef{Path: "/notification-templates/{id}", PathParams: []parser.FieldDef{id}, QueryParams: []parser.FieldDef{engine}},
+		List:   parser.OperationDef{Path: "/notification-templates", QueryParams: []parser.FieldDef{engine}},
+	}
+	client := renderTemplate(t, "client", definition)
+	assertContains(t, client, `url.QueryEscape("handlebars")`)
+	assertNotContains(t, client, "model.Engine")
+	assertContains(t, client, "body, err := model.updateBody()")
+	list := renderTemplate(t, "list_data_source", definition)
+	assertContains(t, list, `url.QueryEscape("handlebars")`)
+	assertNotContains(t, list, "Engine types.String")
+	assertNotContains(t, list, `"engine": schema.StringAttribute`)
+	test := renderTemplate(t, "test", definition)
+	assertContains(t, test, "func TestNotificationTemplate(t *testing.T)")
+	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
+}
+
 func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
 	resource := parser.ResourceDef{Fields: []parser.FieldDef{{
 		APIName:       "collector",
@@ -25,6 +75,18 @@ func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
 	}
 	if overrides[0].APIName != "parquetChunkSizeMB" {
 		t.Fatalf("API name = %q, want parquetChunkSizeMB", overrides[0].APIName)
+	}
+}
+
+func TestSearchDashboardExampleIncludesMetricQuery(t *testing.T) {
+	resource := parser.ResourceDef{TypeName: "criblio_search_dashboard"}
+	example := exampleUsage(resource)
+	for _, expected := range []string{
+		"search_query_metric", "customerMetricsPromql", "step_strategy", "builder", "variant",
+	} {
+		if !strings.Contains(example, expected) {
+			t.Errorf("dashboard example is missing %s", expected)
+		}
 	}
 }
 
@@ -391,7 +453,13 @@ func TestRenderedSnippets(t *testing.T) {
 	sourceTypes := renderTemplate(t, "types", source)
 	assertContains(t, sourceTypes, "Items types.List")
 	assertContains(t, sourceTypes, "func SourceLegacyItemsAttrTypes() map[string]attr.Type")
+	assertContains(t, sourceTypes, "normalizeHTTPRawExtendedAuthTokens(raw)")
+	packSource := source
+	packSource.StructName = "PackSource"
+	assertContains(t, renderTemplate(t, "types", packSource), "normalizeHTTPRawExtendedAuthTokens(raw)")
 	sourceResource := renderTemplate(t, "resource", source)
+	assertContains(t, sourceResource, "normalizeHTTPRawExtendedAuthTokenState(model.InputHttpRaw.AuthTokensExt)")
+	assertContains(t, renderTemplate(t, "resource", packSource), "normalizeHTTPRawExtendedAuthTokenState(model.InputHttpRaw.AuthTokensExt)")
 	assertContains(t, sourceResource, `"items": schema.ListNestedAttribute{`)
 	assertContains(t, sourceResource, `"input_collection": schema.SingleNestedAttribute{`)
 
@@ -431,6 +499,28 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, collectorTypes, `case "azureblob", "azure_blob":`)
 	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
 	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
+	assertContains(t, collectorTypes, `decodeCollectorSavedState(data, raw)`)
+	for _, name := range []string{"Collector", "PackCollector"} {
+		assertContains(t, renderTemplate(t, "doc", parser.ResourceDef{StructName: name}), "attribute accepts both legacy string maps and nested objects")
+	}
+
+	searchDatasetResource := renderTemplate(t, "resource", parser.ResourceDef{
+		StructName: "SearchDataset",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "DatasetS3", TerraformName: "s3_dataset", Fields: []parser.FieldDef{{TerraformName: "id", GoName: "ID", Type: "string"}}},
+			{GoName: "DatasetCriblSearch", TerraformName: "cribl_search_dataset", Fields: []parser.FieldDef{{TerraformName: "id", GoName: "ID", Type: "string"}}},
+		},
+	})
+	assertContains(t, searchDatasetResource, "var _ resource.ResourceWithModifyPlan = &SearchDatasetResource{}")
+	assertContains(t, searchDatasetResource, "func (r *SearchDatasetResource) ModifyPlan(")
+	assertContains(t, searchDatasetResource, `"s3_dataset",`)
+	assertContains(t, searchDatasetResource, `"cribl_search_dataset",`)
+	assertContains(t, searchDatasetResource, `req.Config.GetAttribute(ctx, root.AtName("id"), &id)`)
+	assertContains(t, searchDatasetResource, `resp.Plan.SetAttribute(ctx, path.Root("id"), id)`)
+	assertContains(t, searchDatasetResource, `resp.RequiresReplace = append(resp.RequiresReplace, root.AtName("id"))`)
+	searchDatasetDoc := renderTemplate(t, "doc", parser.ResourceDef{StructName: "SearchDataset"})
+	assertContains(t, searchDatasetDoc, "The computed top-level `id` is available during planning")
+	assertContains(t, searchDatasetDoc, "Changing the configured ID replaces the Dataset.")
 
 	searchDatasetTypes := renderTemplate(t, "types", parser.ResourceDef{
 		StructName: "SearchDataset",

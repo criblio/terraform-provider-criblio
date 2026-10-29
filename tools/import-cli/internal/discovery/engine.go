@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
 	"slices"
@@ -538,13 +539,75 @@ func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e reg
 func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, scope map[string]string) ([]map[string]string, error) {
 	path := renderRESTPath(e.RESTListPath, scope)
 	items, err := getRESTItems(ctx, client, path)
-	if restclient.IsNotFound(err) {
+	if restclient.IsNotFound(err) || isLocalSearchWorkersUnavailable(path, err) {
 		return nil, nil
 	}
 	if err != nil {
 		return nil, err
 	}
+	if e.TypeName == "criblio_search_dataset_intelligence" {
+		// There is no intelligence list API. Include only datasets that already
+		// have a saved envelope, including built-ins with intelligence enabled.
+		var identifiers []map[string]string
+		for _, raw := range items {
+			item, err := rawMap(raw)
+			if err != nil {
+				return nil, err
+			}
+			id := rawString(item, "id", "ID")
+			if id == "" {
+				continue
+			}
+			ids := map[string]string{"dataset_id": id}
+			_, err = restclient.Get[map[string]any](ctx, client.REST, renderRESTPath(e.RESTGetPath, ids))
+			if isDatasetIntelligenceFeatureUnavailable(err) {
+				// AI availability is workspace-wide. Disabled AI or missing consent
+				// must not prevent exporting unrelated resources.
+				return nil, nil
+			}
+			if restclient.IsNotFound(err) {
+				continue
+			}
+			if err != nil {
+				return nil, fmt.Errorf("read intelligence for dataset %q: %w", id, err)
+			}
+			identifiers = append(identifiers, ids)
+		}
+		return identifiers, nil
+	}
 	return identifiersFromRawItems(items, scope, e)
+}
+
+func isDatasetIntelligenceFeatureUnavailable(err error) bool {
+	var httpErr *restclient.HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusForbidden {
+		return false
+	}
+	var response struct {
+		Error string `json:"error"`
+	}
+	if err := json.Unmarshal([]byte(httpErr.Body), &response); err != nil {
+		return false
+	}
+	return response.Error == "AI is disabled" || response.Error == "AI consent not accepted"
+}
+
+func isLocalSearchWorkersUnavailable(path string, err error) bool {
+	parsed, parseErr := url.Parse(path)
+	if parseErr != nil || !strings.Contains(parsed.Path, "/search/local_search/") {
+		return false
+	}
+	var httpErr *restclient.HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusInternalServerError {
+		return false
+	}
+	var response struct {
+		Message string `json:"message"`
+	}
+	if err := json.Unmarshal([]byte(httpErr.Body), &response); err != nil {
+		return false
+	}
+	return strings.EqualFold(strings.TrimSpace(response.Message), "No workers registered")
 }
 
 func restScopes(path string, groupIDs []string) []map[string]string {

@@ -17,6 +17,7 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type SearchSavedQueryModel struct {
+	AppID              types.String  `tfsdk:"app_id" json:"appId,omitempty"`
 	ChartConfig        types.Object  `tfsdk:"chart_config" json:"chartConfig,omitempty"`
 	Description        types.String  `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String  `tfsdk:"display_username" json:"displayUsername,omitempty"`
@@ -38,6 +39,7 @@ type SearchSavedQueryModel struct {
 }
 
 type SearchSavedQueryResourceModel struct {
+	AppID              types.String   `tfsdk:"app_id" json:"appId,omitempty"`
 	ChartConfig        types.Object   `tfsdk:"chart_config" json:"chartConfig,omitempty"`
 	Description        types.String   `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String   `tfsdk:"display_username" json:"displayUsername,omitempty"`
@@ -59,6 +61,7 @@ type SearchSavedQueryResourceModel struct {
 }
 
 type SearchSavedQueryDataSourceModel struct {
+	AppID              types.String   `tfsdk:"app_id" json:"appId,omitempty"`
 	ChartConfig        types.Object   `tfsdk:"chart_config" json:"chartConfig,omitempty"`
 	Description        types.String   `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String   `tfsdk:"display_username" json:"displayUsername,omitempty"`
@@ -80,6 +83,7 @@ type SearchSavedQueryDataSourceModel struct {
 }
 
 type SearchSavedQueryAPIModel struct {
+	AppID              *string           `json:"appId,omitempty"`
 	ChartConfig        any               `json:"chartConfig,omitempty"`
 	Description        *string           `json:"description,omitempty"`
 	DisplayUsername    *string           `json:"displayUsername,omitempty"`
@@ -802,6 +806,13 @@ func SearchSavedQueryTerraformNullValue(typ attr.Type) (attr.Value, error) {
 
 func (m SearchSavedQueryModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
+	if !m.AppID.IsNull() && !m.AppID.IsUnknown() {
+		value, err := SearchSavedQueryTerraformValueToJSON(m.AppID)
+		if err != nil {
+			return nil, fmt.Errorf("convert app_id to API value: %v", err)
+		}
+		output["appId"] = value
+	}
 	if !m.ChartConfig.IsNull() && !m.ChartConfig.IsUnknown() {
 		value, err := SearchSavedQueryTerraformValueToJSON(m.ChartConfig)
 		if err != nil {
@@ -893,6 +904,11 @@ func (m *SearchSavedQueryModel) UnmarshalJSON(data []byte) error {
 	var input SearchSavedQueryAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
+	}
+	if input.AppID != nil {
+		m.AppID = types.StringValue(*input.AppID)
+	} else {
+		m.AppID = types.StringNull()
 	}
 	if input.ChartConfig != nil {
 		value, err := SearchSavedQueryAPIValueToTerraformValue(input.ChartConfig, types.ObjectType{AttrTypes: SearchSavedQueryChartConfigAttrTypes()})

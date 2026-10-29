@@ -56,7 +56,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_azure_blob--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -131,10 +131,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_collector_azure_blob--saved_state"></a>
-### Nested Schema for `input_collector_azure_blob.saved_state`
-
-
 <a id="nestedatt--input_collector_azure_blob--schedule"></a>
 ### Nested Schema for `input_collector_azure_blob.schedule`
 
@@ -195,7 +191,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_cribl_lake--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -251,10 +247,6 @@ Read-Only:
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
 
-
-
-<a id="nestedatt--input_collector_cribl_lake--saved_state"></a>
-### Nested Schema for `input_collector_cribl_lake.saved_state`
 
 
 <a id="nestedatt--input_collector_cribl_lake--schedule"></a>
@@ -317,7 +309,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_database--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_database--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -375,10 +367,6 @@ Read-Only:
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
 
-
-
-<a id="nestedatt--input_collector_database--saved_state"></a>
-### Nested Schema for `input_collector_database.saved_state`
 
 
 <a id="nestedatt--input_collector_database--schedule"></a>
@@ -441,7 +429,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_gcs--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_gcs--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -515,10 +503,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_collector_gcs--saved_state"></a>
-### Nested Schema for `input_collector_gcs.saved_state`
-
-
 <a id="nestedatt--input_collector_gcs--schedule"></a>
 ### Nested Schema for `input_collector_gcs.schedule`
 
@@ -579,7 +563,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_health_check--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_health_check--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -644,10 +628,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_collector_health_check--saved_state"></a>
-### Nested Schema for `input_collector_health_check.saved_state`
-
-
 <a id="nestedatt--input_collector_health_check--schedule"></a>
 ### Nested Schema for `input_collector_health_check.schedule`
 
@@ -708,7 +688,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_rest--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_rest--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -945,10 +925,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_collector_rest--saved_state"></a>
-### Nested Schema for `input_collector_rest.saved_state`
-
-
 <a id="nestedatt--input_collector_rest--schedule"></a>
 ### Nested Schema for `input_collector_rest.schedule`
 
@@ -1009,7 +985,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_s3--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_s3--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -1086,10 +1062,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_collector_s3--saved_state"></a>
-### Nested Schema for `input_collector_s3.saved_state`
-
-
 <a id="nestedatt--input_collector_s3--schedule"></a>
 ### Nested Schema for `input_collector_s3.schedule`
 
@@ -1150,7 +1122,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_script--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_script--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -1208,10 +1180,6 @@ Read-Only:
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
 
-
-
-<a id="nestedatt--input_collector_script--saved_state"></a>
-### Nested Schema for `input_collector_script.saved_state`
 
 
 <a id="nestedatt--input_collector_script--schedule"></a>
@@ -1274,7 +1242,7 @@ Read-Only:
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input))
 - `remove_fields` (List of String)
 - `resume_on_boot` (Boolean)
-- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_splunk--saved_state))
+- `saved_state` (Dynamic) Runtime collection state, including nested checkpoints.
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_splunk--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String)
@@ -1346,10 +1314,6 @@ Read-Only:
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
 
-
-
-<a id="nestedatt--input_collector_splunk--saved_state"></a>
-### Nested Schema for `input_collector_splunk.saved_state`
 
 
 <a id="nestedatt--input_collector_splunk--schedule"></a>

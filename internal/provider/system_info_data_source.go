@@ -99,6 +99,24 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Computed:    true,
 							Description: `Consolidated Cribl Detect enablement status. <code>true</code> only when the <code>feature-cribl-security</code> feature flag is enabled and <code>appPlatformEnabled</code> is also <code>true</code>, since Detect ships as an App Platform app. Acts as the single source of truth for the product UI and Cloud Portal navigation entries.`,
 						},
+						"deployment": schema.SingleNestedAttribute{
+							Computed:    true,
+							Description: `Deployment this instance is running in. Commercial on-prem is <code>{ type: 'on-prem' }</code>. Highside is <code>{ type: 'on-prem', cloud: 'aws-highside' }</code>. SaaS is <code>{ type: 'saas', cloud: 'aws', env: 'commercial' | 'fedramp' }</code>.`,
+							Attributes: map[string]schema.Attribute{
+								"cloud": schema.StringAttribute{
+									Computed:    true,
+									Description: `Cloud partition. Absent for commercial on-prem.`,
+								},
+								"env": schema.StringAttribute{
+									Computed:    true,
+									Description: `SaaS environment. Present only when <code>type</code> is <code>saas</code>.`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Deployment kind.`,
+								},
+							},
+						},
 						"dist_mode": schema.StringAttribute{
 							Computed:    true,
 							Description: `Distribution mode of the Cribl instance.`,
@@ -126,7 +144,7 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 						},
 						"is_highside": schema.BoolAttribute{
 							Computed:    true,
-							Description: `If <code>true</code>, this instance runs in the Highside deployment mode (air-gapped Cribl Search and Lake).`,
+							Description: `Whether this instance runs in the Highside deployment mode.`,
 						},
 						"license": schema.SingleNestedAttribute{
 							Computed:    true,
@@ -395,7 +413,7 @@ func (d *SystemInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(SystemInfoItemAttrTypes(), map[string]attr.Value{"api_port": item.APIPort, "app_platform_enabled": item.AppPlatformEnabled, "build": item.BUILD, "conf": item.Conf, "config_path": item.ConfigPath, "cribl_security_enabled": item.CriblSecurityEnabled, "dist_mode": item.DistMode, "env": item.Env, "guid": item.Guid, "hostname": item.Hostname, "insights_enabled": item.InsightsEnabled, "install_path": item.InstallPath, "is_highside": item.IsHighside, "license": item.License, "limits": item.Limits, "openssl": item.Openssl, "os": item.Os, "system_conf": item.SystemConf, "version": item.Version, "worker_processes": item.WorkerProcesses}))
+			values = append(values, types.ObjectValueMust(SystemInfoItemAttrTypes(), map[string]attr.Value{"api_port": item.APIPort, "app_platform_enabled": item.AppPlatformEnabled, "build": item.BUILD, "conf": item.Conf, "config_path": item.ConfigPath, "cribl_security_enabled": item.CriblSecurityEnabled, "deployment": item.Deployment, "dist_mode": item.DistMode, "env": item.Env, "guid": item.Guid, "hostname": item.Hostname, "insights_enabled": item.InsightsEnabled, "install_path": item.InstallPath, "is_highside": item.IsHighside, "license": item.License, "limits": item.Limits, "openssl": item.Openssl, "os": item.Os, "system_conf": item.SystemConf, "version": item.Version, "worker_processes": item.WorkerProcesses}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: SystemInfoItemAttrTypes()}, values)
@@ -410,6 +428,7 @@ func SystemInfoItemAttrTypes() map[string]attr.Type {
 		"conf":                   types.ObjectType{AttrTypes: SystemInfoConfAttrTypes()},
 		"config_path":            types.StringType,
 		"cribl_security_enabled": types.BoolType,
+		"deployment":             types.ObjectType{AttrTypes: SystemInfoDeploymentAttrTypes()},
 		"dist_mode":              types.StringType,
 		"env":                    types.MapType{ElemType: types.StringType},
 		"guid":                   types.StringType,

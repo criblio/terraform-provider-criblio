@@ -275,25 +275,40 @@ func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryValues
 }
 
 type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricModel struct {
-	Earliest types.Object `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest   types.Object `tfsdk:"latest" json:"latest,omitempty"`
-	Queries  types.List   `tfsdk:"queries" json:"queries,omitempty"`
-	Type     types.String `tfsdk:"type" json:"type,omitempty"`
+	DatasetID          types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
+	Earliest           types.Object `tfsdk:"earliest" json:"earliest,omitempty"`
+	ExpectedOutputType types.String `tfsdk:"expected_output_type" json:"expectedOutputType,omitempty"`
+	Latest             types.Object `tfsdk:"latest" json:"latest,omitempty"`
+	Queries            types.List   `tfsdk:"queries" json:"queries,omitempty"`
+	Source             types.String `tfsdk:"source" json:"source,omitempty"`
+	StepStrategy       types.Object `tfsdk:"step_strategy" json:"stepStrategy,omitempty"`
+	Timezone           types.String `tfsdk:"timezone" json:"timezone,omitempty"`
+	Type               types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricAPIModel struct {
-	Earliest any     `json:"earliest,omitempty"`
-	Latest   any     `json:"latest,omitempty"`
-	Queries  any     `json:"queries,omitempty"`
-	Type     *string `json:"type,omitempty"`
+	DatasetID          *string `json:"datasetId,omitempty"`
+	Earliest           any     `json:"earliest,omitempty"`
+	ExpectedOutputType *string `json:"expectedOutputType,omitempty"`
+	Latest             any     `json:"latest,omitempty"`
+	Queries            any     `json:"queries,omitempty"`
+	Source             *string `json:"source,omitempty"`
+	StepStrategy       any     `json:"stepStrategy,omitempty"`
+	Timezone           *string `json:"timezone,omitempty"`
+	Type               *string `json:"type,omitempty"`
 }
 
 func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"earliest": types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricEarliestAttrTypes()},
-		"latest":   types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricLatestAttrTypes()},
-		"queries":  types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesAttrTypes()}},
-		"type":     types.StringType,
+		"dataset_id":           types.StringType,
+		"earliest":             types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricEarliestAttrTypes()},
+		"expected_output_type": types.StringType,
+		"latest":               types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricLatestAttrTypes()},
+		"queries":              types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesAttrTypes()}},
+		"source":               types.StringType,
+		"step_strategy":        types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricStepStrategyAttrTypes()},
+		"timezone":             types.StringType,
+		"type":                 types.StringType,
 	}
 }
 
@@ -332,22 +347,103 @@ func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetric
 }
 
 type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesModel struct {
-	Alias   types.String `tfsdk:"alias" json:"alias,omitempty"`
-	LocalID types.String `tfsdk:"local_id" json:"localId,omitempty"`
-	Query   types.String `tfsdk:"query" json:"query,omitempty"`
+	Alias             types.String `tfsdk:"alias" json:"alias,omitempty"`
+	Builder           types.Object `tfsdk:"builder" json:"builder,omitempty"`
+	DatasetID         types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
+	Enabled           types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	LocalID           types.String `tfsdk:"local_id" json:"localId,omitempty"`
+	Mode              types.String `tfsdk:"mode" json:"mode,omitempty"`
+	Query             types.String `tfsdk:"query" json:"query,omitempty"`
+	ShowPromqlPreview types.Bool   `tfsdk:"show_promql_preview" json:"showPromqlPreview,omitempty"`
 }
 
 type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesAPIModel struct {
-	Alias   *string `json:"alias,omitempty"`
-	LocalID *string `json:"localId,omitempty"`
-	Query   *string `json:"query,omitempty"`
+	Alias             *string `json:"alias,omitempty"`
+	Builder           any     `json:"builder,omitempty"`
+	DatasetID         *string `json:"datasetId,omitempty"`
+	Enabled           *bool   `json:"enabled,omitempty"`
+	LocalID           *string `json:"localId,omitempty"`
+	Mode              *string `json:"mode,omitempty"`
+	Query             *string `json:"query,omitempty"`
+	ShowPromqlPreview *bool   `json:"showPromqlPreview,omitempty"`
 }
 
 func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"alias":    types.StringType,
-		"local_id": types.StringType,
-		"query":    types.StringType,
+		"alias":               types.StringType,
+		"builder":             types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderAttrTypes()},
+		"dataset_id":          types.StringType,
+		"enabled":             types.BoolType,
+		"local_id":            types.StringType,
+		"mode":                types.StringType,
+		"query":               types.StringType,
+		"show_promql_preview": types.BoolType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderModel struct {
+	Agg     types.String `tfsdk:"agg" json:"agg,omitempty"`
+	Filters types.List   `tfsdk:"filters" json:"filters,omitempty"`
+	GroupBy types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
+	Metric  types.String `tfsdk:"metric" json:"metric,omitempty"`
+	Range   types.String `tfsdk:"range" json:"range,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderAPIModel struct {
+	Agg     *string  `json:"agg,omitempty"`
+	Filters any      `json:"filters,omitempty"`
+	GroupBy []string `json:"groupBy,omitempty"`
+	Metric  *string  `json:"metric,omitempty"`
+	Range   *string  `json:"range,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"agg":      types.StringType,
+		"filters":  types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderFiltersAttrTypes()}},
+		"group_by": types.ListType{ElemType: types.StringType},
+		"metric":   types.StringType,
+		"range":    types.StringType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderFiltersModel struct {
+	K  types.String `tfsdk:"k" json:"k,omitempty"`
+	Op types.String `tfsdk:"op" json:"op,omitempty"`
+	V  types.String `tfsdk:"v" json:"v,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderFiltersAPIModel struct {
+	K  *string `json:"k,omitempty"`
+	Op *string `json:"op,omitempty"`
+	V  *string `json:"v,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricQueriesBuilderFiltersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"k":  types.StringType,
+		"op": types.StringType,
+		"v":  types.StringType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricStepStrategyModel struct {
+	Step         types.Float64 `tfsdk:"step" json:"step,omitempty"`
+	TargetPoints types.Float64 `tfsdk:"target_points" json:"targetPoints,omitempty"`
+	Type         types.String  `tfsdk:"type" json:"type,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricStepStrategyAPIModel struct {
+	Step         *float64 `json:"step,omitempty"`
+	TargetPoints *float64 `json:"targetPoints,omitempty"`
+	Type         *string  `json:"type,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementVisualizationSearchSearchQueryMetricStepStrategyAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"step":          types.Float64Type,
+		"target_points": types.Float64Type,
+		"type":          types.StringType,
 	}
 }
 
@@ -381,6 +477,7 @@ type SearchDashboardElementsDashboardElementInputModel struct {
 	Search          types.Object `tfsdk:"search" json:"search,omitempty"`
 	Title           types.String `tfsdk:"title" json:"title,omitempty"`
 	Type            types.String `tfsdk:"type" json:"type,omitempty"`
+	Variant         types.String `tfsdk:"variant" json:"variant,omitempty"`
 }
 
 type SearchDashboardElementsDashboardElementInputAPIModel struct {
@@ -393,6 +490,7 @@ type SearchDashboardElementsDashboardElementInputAPIModel struct {
 	Search          any            `json:"search,omitempty"`
 	Title           *string        `json:"title,omitempty"`
 	Type            *string        `json:"type,omitempty"`
+	Variant         *string        `json:"variant,omitempty"`
 }
 
 func SearchDashboardElementsDashboardElementInputAttrTypes() map[string]attr.Type {
@@ -406,6 +504,7 @@ func SearchDashboardElementsDashboardElementInputAttrTypes() map[string]attr.Typ
 		"search":           types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchAttrTypes()},
 		"title":            types.StringType,
 		"type":             types.StringType,
+		"variant":          types.StringType,
 	}
 }
 
@@ -562,25 +661,40 @@ func SearchDashboardElementsDashboardElementInputSearchSearchQueryValuesAttrType
 }
 
 type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricModel struct {
-	Earliest types.Object `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest   types.Object `tfsdk:"latest" json:"latest,omitempty"`
-	Queries  types.List   `tfsdk:"queries" json:"queries,omitempty"`
-	Type     types.String `tfsdk:"type" json:"type,omitempty"`
+	DatasetID          types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
+	Earliest           types.Object `tfsdk:"earliest" json:"earliest,omitempty"`
+	ExpectedOutputType types.String `tfsdk:"expected_output_type" json:"expectedOutputType,omitempty"`
+	Latest             types.Object `tfsdk:"latest" json:"latest,omitempty"`
+	Queries            types.List   `tfsdk:"queries" json:"queries,omitempty"`
+	Source             types.String `tfsdk:"source" json:"source,omitempty"`
+	StepStrategy       types.Object `tfsdk:"step_strategy" json:"stepStrategy,omitempty"`
+	Timezone           types.String `tfsdk:"timezone" json:"timezone,omitempty"`
+	Type               types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricAPIModel struct {
-	Earliest any     `json:"earliest,omitempty"`
-	Latest   any     `json:"latest,omitempty"`
-	Queries  any     `json:"queries,omitempty"`
-	Type     *string `json:"type,omitempty"`
+	DatasetID          *string `json:"datasetId,omitempty"`
+	Earliest           any     `json:"earliest,omitempty"`
+	ExpectedOutputType *string `json:"expectedOutputType,omitempty"`
+	Latest             any     `json:"latest,omitempty"`
+	Queries            any     `json:"queries,omitempty"`
+	Source             *string `json:"source,omitempty"`
+	StepStrategy       any     `json:"stepStrategy,omitempty"`
+	Timezone           *string `json:"timezone,omitempty"`
+	Type               *string `json:"type,omitempty"`
 }
 
 func SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"earliest": types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricEarliestAttrTypes()},
-		"latest":   types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricLatestAttrTypes()},
-		"queries":  types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesAttrTypes()}},
-		"type":     types.StringType,
+		"dataset_id":           types.StringType,
+		"earliest":             types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricEarliestAttrTypes()},
+		"expected_output_type": types.StringType,
+		"latest":               types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricLatestAttrTypes()},
+		"queries":              types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesAttrTypes()}},
+		"source":               types.StringType,
+		"step_strategy":        types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricStepStrategyAttrTypes()},
+		"timezone":             types.StringType,
+		"type":                 types.StringType,
 	}
 }
 
@@ -619,22 +733,103 @@ func SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricLatestAt
 }
 
 type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesModel struct {
-	Alias   types.String `tfsdk:"alias" json:"alias,omitempty"`
-	LocalID types.String `tfsdk:"local_id" json:"localId,omitempty"`
-	Query   types.String `tfsdk:"query" json:"query,omitempty"`
+	Alias             types.String `tfsdk:"alias" json:"alias,omitempty"`
+	Builder           types.Object `tfsdk:"builder" json:"builder,omitempty"`
+	DatasetID         types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
+	Enabled           types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	LocalID           types.String `tfsdk:"local_id" json:"localId,omitempty"`
+	Mode              types.String `tfsdk:"mode" json:"mode,omitempty"`
+	Query             types.String `tfsdk:"query" json:"query,omitempty"`
+	ShowPromqlPreview types.Bool   `tfsdk:"show_promql_preview" json:"showPromqlPreview,omitempty"`
 }
 
 type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesAPIModel struct {
-	Alias   *string `json:"alias,omitempty"`
-	LocalID *string `json:"localId,omitempty"`
-	Query   *string `json:"query,omitempty"`
+	Alias             *string `json:"alias,omitempty"`
+	Builder           any     `json:"builder,omitempty"`
+	DatasetID         *string `json:"datasetId,omitempty"`
+	Enabled           *bool   `json:"enabled,omitempty"`
+	LocalID           *string `json:"localId,omitempty"`
+	Mode              *string `json:"mode,omitempty"`
+	Query             *string `json:"query,omitempty"`
+	ShowPromqlPreview *bool   `json:"showPromqlPreview,omitempty"`
 }
 
 func SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"alias":    types.StringType,
-		"local_id": types.StringType,
-		"query":    types.StringType,
+		"alias":               types.StringType,
+		"builder":             types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderAttrTypes()},
+		"dataset_id":          types.StringType,
+		"enabled":             types.BoolType,
+		"local_id":            types.StringType,
+		"mode":                types.StringType,
+		"query":               types.StringType,
+		"show_promql_preview": types.BoolType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderModel struct {
+	Agg     types.String `tfsdk:"agg" json:"agg,omitempty"`
+	Filters types.List   `tfsdk:"filters" json:"filters,omitempty"`
+	GroupBy types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
+	Metric  types.String `tfsdk:"metric" json:"metric,omitempty"`
+	Range   types.String `tfsdk:"range" json:"range,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderAPIModel struct {
+	Agg     *string  `json:"agg,omitempty"`
+	Filters any      `json:"filters,omitempty"`
+	GroupBy []string `json:"groupBy,omitempty"`
+	Metric  *string  `json:"metric,omitempty"`
+	Range   *string  `json:"range,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"agg":      types.StringType,
+		"filters":  types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderFiltersAttrTypes()}},
+		"group_by": types.ListType{ElemType: types.StringType},
+		"metric":   types.StringType,
+		"range":    types.StringType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderFiltersModel struct {
+	K  types.String `tfsdk:"k" json:"k,omitempty"`
+	Op types.String `tfsdk:"op" json:"op,omitempty"`
+	V  types.String `tfsdk:"v" json:"v,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderFiltersAPIModel struct {
+	K  *string `json:"k,omitempty"`
+	Op *string `json:"op,omitempty"`
+	V  *string `json:"v,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricQueriesBuilderFiltersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"k":  types.StringType,
+		"op": types.StringType,
+		"v":  types.StringType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricStepStrategyModel struct {
+	Step         types.Float64 `tfsdk:"step" json:"step,omitempty"`
+	TargetPoints types.Float64 `tfsdk:"target_points" json:"targetPoints,omitempty"`
+	Type         types.String  `tfsdk:"type" json:"type,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricStepStrategyAPIModel struct {
+	Step         *float64 `json:"step,omitempty"`
+	TargetPoints *float64 `json:"targetPoints,omitempty"`
+	Type         *string  `json:"type,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementInputSearchSearchQueryMetricStepStrategyAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"step":          types.Float64Type,
+		"target_points": types.Float64Type,
+		"type":          types.StringType,
 	}
 }
 
@@ -700,22 +895,83 @@ func SearchDashboardElementsDashboardElementLayoutAttrTypes() map[string]attr.Ty
 }
 
 type SearchDashboardElementsDashboardElementSearchModel struct {
-	Alias   types.String `tfsdk:"alias" json:"alias,omitempty"`
-	LocalID types.String `tfsdk:"local_id" json:"localId,omitempty"`
-	Query   types.String `tfsdk:"query" json:"query,omitempty"`
+	Alias             types.String `tfsdk:"alias" json:"alias,omitempty"`
+	Builder           types.Object `tfsdk:"builder" json:"builder,omitempty"`
+	DatasetID         types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
+	Enabled           types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	LocalID           types.String `tfsdk:"local_id" json:"localId,omitempty"`
+	Mode              types.String `tfsdk:"mode" json:"mode,omitempty"`
+	Query             types.String `tfsdk:"query" json:"query,omitempty"`
+	ShowPromqlPreview types.Bool   `tfsdk:"show_promql_preview" json:"showPromqlPreview,omitempty"`
 }
 
 type SearchDashboardElementsDashboardElementSearchAPIModel struct {
-	Alias   *string `json:"alias,omitempty"`
-	LocalID *string `json:"localId,omitempty"`
-	Query   *string `json:"query,omitempty"`
+	Alias             *string `json:"alias,omitempty"`
+	Builder           any     `json:"builder,omitempty"`
+	DatasetID         *string `json:"datasetId,omitempty"`
+	Enabled           *bool   `json:"enabled,omitempty"`
+	LocalID           *string `json:"localId,omitempty"`
+	Mode              *string `json:"mode,omitempty"`
+	Query             *string `json:"query,omitempty"`
+	ShowPromqlPreview *bool   `json:"showPromqlPreview,omitempty"`
 }
 
 func SearchDashboardElementsDashboardElementSearchAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"alias":    types.StringType,
-		"local_id": types.StringType,
-		"query":    types.StringType,
+		"alias":               types.StringType,
+		"builder":             types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementSearchBuilderAttrTypes()},
+		"dataset_id":          types.StringType,
+		"enabled":             types.BoolType,
+		"local_id":            types.StringType,
+		"mode":                types.StringType,
+		"query":               types.StringType,
+		"show_promql_preview": types.BoolType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementSearchBuilderModel struct {
+	Agg     types.String `tfsdk:"agg" json:"agg,omitempty"`
+	Filters types.List   `tfsdk:"filters" json:"filters,omitempty"`
+	GroupBy types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
+	Metric  types.String `tfsdk:"metric" json:"metric,omitempty"`
+	Range   types.String `tfsdk:"range" json:"range,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementSearchBuilderAPIModel struct {
+	Agg     *string  `json:"agg,omitempty"`
+	Filters any      `json:"filters,omitempty"`
+	GroupBy []string `json:"groupBy,omitempty"`
+	Metric  *string  `json:"metric,omitempty"`
+	Range   *string  `json:"range,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementSearchBuilderAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"agg":      types.StringType,
+		"filters":  types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsDashboardElementSearchBuilderFiltersAttrTypes()}},
+		"group_by": types.ListType{ElemType: types.StringType},
+		"metric":   types.StringType,
+		"range":    types.StringType,
+	}
+}
+
+type SearchDashboardElementsDashboardElementSearchBuilderFiltersModel struct {
+	K  types.String `tfsdk:"k" json:"k,omitempty"`
+	Op types.String `tfsdk:"op" json:"op,omitempty"`
+	V  types.String `tfsdk:"v" json:"v,omitempty"`
+}
+
+type SearchDashboardElementsDashboardElementSearchBuilderFiltersAPIModel struct {
+	K  *string `json:"k,omitempty"`
+	Op *string `json:"op,omitempty"`
+	V  *string `json:"v,omitempty"`
+}
+
+func SearchDashboardElementsDashboardElementSearchBuilderFiltersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"k":  types.StringType,
+		"op": types.StringType,
+		"v":  types.StringType,
 	}
 }
 
@@ -875,6 +1131,7 @@ func SearchDashboardScheduleNotificationsItemsAttrTypes() map[string]attr.Type {
 type SearchDashboardScheduleNotificationsItemsConfModel struct {
 	SavedQueryID       types.String  `tfsdk:"saved_query_id" json:"savedQueryId,omitempty"`
 	Message            types.String  `tfsdk:"message" json:"message,omitempty"`
+	Trigger            types.String  `tfsdk:"trigger" json:"trigger,omitempty"`
 	TriggerType        types.String  `tfsdk:"trigger_type" json:"triggerType,omitempty"`
 	TriggerComparator  types.String  `tfsdk:"trigger_comparator" json:"triggerComparator,omitempty"`
 	TriggerCount       types.Float64 `tfsdk:"trigger_count" json:"triggerCount,omitempty"`
@@ -888,6 +1145,7 @@ type SearchDashboardScheduleNotificationsItemsConfModel struct {
 type SearchDashboardScheduleNotificationsItemsConfAPIModel struct {
 	SavedQueryID       *string  `json:"savedQueryId,omitempty"`
 	Message            *string  `json:"message,omitempty"`
+	Trigger            *string  `json:"trigger,omitempty"`
 	TriggerType        *string  `json:"triggerType,omitempty"`
 	TriggerComparator  *string  `json:"triggerComparator,omitempty"`
 	TriggerCount       *float64 `json:"triggerCount,omitempty"`
@@ -902,6 +1160,7 @@ func SearchDashboardScheduleNotificationsItemsConfAttrTypes() map[string]attr.Ty
 	return map[string]attr.Type{
 		"saved_query_id":       types.StringType,
 		"message":              types.StringType,
+		"trigger":              types.StringType,
 		"trigger_type":         types.StringType,
 		"trigger_comparator":   types.StringType,
 		"trigger_count":        types.Float64Type,

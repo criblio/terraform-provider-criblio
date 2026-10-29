@@ -66,9 +66,9 @@ Optional:
 - `format` (String) Format of the webhook payload
 - `method` (String) HTTP method to use for the webhook
 - `auth_type` (String) Authentication method for the webhook
-- `token` (String) Authentication token
+- `token` (String, Sensitive) Authentication token
 - `username` (String) Basic authentication username
-- `password` (String) Basic authentication password
+- `password` (String, Sensitive) Basic authentication password
 
 <a id="nestedatt--pager_duty_target"></a>
 ### Nested Schema for `pager_duty_target`
@@ -78,7 +78,7 @@ Optional:
 - `id` (String) Unique ID for this notification target
 - `type` (String)
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `routing_key` (String) 32-character integration key for an integration on a service or global ruleset
+- `routing_key` (String, Sensitive) 32-character integration key for an integration on a service or global ruleset
 - `group` (String) Optional, default group value
 - `class` (String) Optional, default class value
 - `component` (String) Optional, default component value
@@ -92,7 +92,7 @@ Optional:
 - `id` (String) Unique ID for this notification target
 - `type` (String)
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `url` (String) Slack's Incoming Webhook URL
+- `url` (String, Sensitive) Slack's Incoming Webhook URL
 
 <a id="nestedatt--sns_target"></a>
 ### Nested Schema for `sns_target`
@@ -105,8 +105,8 @@ Optional:
 - `aws_authentication_method` (String) AWS authentication method
 - `assume_role_arn` (String) ARN of the role to assume
 - `assume_role_external_id` (String) External ID for role assumption
-- `aws_api_key` (String) AWS access key
-- `aws_secret_key` (String) AWS secret key
+- `aws_api_key` (String, Sensitive) AWS access key
+- `aws_secret_key` (String, Sensitive) AWS secret key
 - `region` (String) AWS region
 - `endpoint` (String) SNS endpoint URL
 - `allowlist` (List of String) Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic.
@@ -128,7 +128,7 @@ Optional:
 - `port` (Integer) SMTP server port
 - `from` (String) Email address to send from
 - `username` (String) SMTP authentication username
-- `password` (String) SMTP authentication password
+- `password` (String, Sensitive) SMTP authentication password
 - `encryption_option` (String) Encryption method for SMTP
 - `tls` (Attributes) TLS configuration options (see [below for nested schema](#nestedatt--smtp_target--tls))
 

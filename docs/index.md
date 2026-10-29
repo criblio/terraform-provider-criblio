@@ -12,6 +12,12 @@ The Cribl Terraform provider offers a streamlined, repeatable approach for confi
 
 Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.
 
+## Credentials
+
+Credential attributes marked `Sensitive` are masked in normal Terraform plan and apply output. Terraform still stores their values in state; protect state with an encrypted backend and appropriate access controls.
+
+The `cribl-tf-config-exporter` uses provider schema sensitivity to replace literal credentials with sensitive variable references. Supply these variables through your secret store or Terraform variable configuration. Stored Cribl secret names remain references in the exported configuration.
+
 ## Example Usage
 
 ```terraform
@@ -19,7 +25,7 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.25.98"
+      version = "1.25.105"
     }
   }
 }

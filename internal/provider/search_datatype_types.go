@@ -28,6 +28,7 @@ type SearchDatatypeModel struct {
 	MaxEventBytes         types.Int64  `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
 	MinRawLength          types.Int64  `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
 	SchemaMap             types.List   `tfsdk:"schema_map" json:"schemaMap,omitempty"`
+	SchemaMaps            types.Object `tfsdk:"schema_maps" json:"schemaMaps,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	ShouldUseDataRaw      types.Bool   `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
@@ -46,6 +47,7 @@ type SearchDatatypeResourceModel struct {
 	MaxEventBytes         types.Int64  `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
 	MinRawLength          types.Int64  `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
 	SchemaMap             types.List   `tfsdk:"schema_map" json:"schemaMap,omitempty"`
+	SchemaMaps            types.Object `tfsdk:"schema_maps" json:"schemaMaps,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	ShouldUseDataRaw      types.Bool   `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
@@ -64,6 +66,7 @@ type SearchDatatypeDataSourceModel struct {
 	MaxEventBytes         types.Int64  `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
 	MinRawLength          types.Int64  `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
 	SchemaMap             types.List   `tfsdk:"schema_map" json:"schemaMap,omitempty"`
+	SchemaMaps            types.Object `tfsdk:"schema_maps" json:"schemaMaps,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	ShouldUseDataRaw      types.Bool   `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
@@ -82,6 +85,7 @@ type SearchDatatypeAPIModel struct {
 	MaxEventBytes         *int64  `json:"maxEventBytes,omitempty"`
 	MinRawLength          *int64  `json:"minRawLength,omitempty"`
 	SchemaMap             any     `json:"schemaMap,omitempty"`
+	SchemaMaps            any     `json:"schemaMaps,omitempty"`
 	SearchVersion         *string `json:"searchVersion,omitempty"`
 	ShouldUseDataRaw      *bool   `json:"shouldUseDataRaw,omitempty"`
 	Tags                  *string `json:"tags,omitempty"`
@@ -106,6 +110,8 @@ func SearchDatatypeAddFieldsAttrTypes() map[string]attr.Type {
 }
 
 type SearchDatatypeAdditionalExtractionsModel struct {
+	Name              types.String `tfsdk:"name" json:"name,omitempty"`
+	SourceField       types.String `tfsdk:"source_field" json:"sourceField,omitempty"`
 	ContainsHeaderRow types.Bool   `tfsdk:"contains_header_row" json:"containsHeaderRow,omitempty"`
 	Delimiter         types.String `tfsdk:"delimiter" json:"delimiter,omitempty"`
 	Escape            types.String `tfsdk:"escape" json:"escape,omitempty"`
@@ -116,6 +122,8 @@ type SearchDatatypeAdditionalExtractionsModel struct {
 }
 
 type SearchDatatypeAdditionalExtractionsAPIModel struct {
+	Name              *string  `json:"name,omitempty"`
+	SourceField       *string  `json:"sourceField,omitempty"`
 	ContainsHeaderRow *bool    `json:"containsHeaderRow,omitempty"`
 	Delimiter         *string  `json:"delimiter,omitempty"`
 	Escape            *string  `json:"escape,omitempty"`
@@ -127,6 +135,8 @@ type SearchDatatypeAdditionalExtractionsAPIModel struct {
 
 func SearchDatatypeAdditionalExtractionsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
+		"name":                types.StringType,
+		"source_field":        types.StringType,
 		"contains_header_row": types.BoolType,
 		"delimiter":           types.StringType,
 		"escape":              types.StringType,
@@ -199,6 +209,37 @@ type SearchDatatypeSchemaMapAPIModel struct {
 }
 
 func SearchDatatypeSchemaMapAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"field_name": types.StringType,
+		"source":     types.StringType,
+	}
+}
+
+type SearchDatatypeSchemaMapsModel struct {
+	OcsfV18 types.List `tfsdk:"ocsf_v1_8" json:"OCSF v1.8,omitempty"`
+}
+
+type SearchDatatypeSchemaMapsAPIModel struct {
+	OcsfV18 any `json:"OCSF v1.8,omitempty"`
+}
+
+func SearchDatatypeSchemaMapsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"ocsf_v1_8": types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDatatypeSchemaMapsOcsfV18AttrTypes()}},
+	}
+}
+
+type SearchDatatypeSchemaMapsOcsfV18Model struct {
+	FieldName types.String `tfsdk:"field_name" json:"fieldName,omitempty"`
+	Source    types.String `tfsdk:"source" json:"source,omitempty"`
+}
+
+type SearchDatatypeSchemaMapsOcsfV18APIModel struct {
+	FieldName *string `json:"fieldName,omitempty"`
+	Source    *string `json:"source,omitempty"`
+}
+
+func SearchDatatypeSchemaMapsOcsfV18AttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"field_name": types.StringType,
 		"source":     types.StringType,
@@ -300,6 +341,10 @@ func SearchDatatypeTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "ocsf_v1_8":
+		return prefix + "OCSF v1.8"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -527,6 +572,13 @@ func (m SearchDatatypeModel) MarshalJSON() ([]byte, error) {
 		}
 		output["schemaMap"] = value
 	}
+	if !m.SchemaMaps.IsNull() && !m.SchemaMaps.IsUnknown() {
+		value, err := SearchDatatypeTerraformValueToJSON(m.SchemaMaps)
+		if err != nil {
+			return nil, fmt.Errorf("convert schema_maps to API value: %v", err)
+		}
+		output["schemaMaps"] = value
+	}
 	if !m.SearchVersion.IsNull() && !m.SearchVersion.IsUnknown() {
 		value, err := SearchDatatypeTerraformValueToJSON(m.SearchVersion)
 		if err != nil {
@@ -637,6 +689,15 @@ func (m *SearchDatatypeModel) UnmarshalJSON(data []byte) error {
 		m.SchemaMap = value.(types.List)
 	} else {
 		m.SchemaMap = types.ListNull(types.ObjectType{AttrTypes: SearchDatatypeSchemaMapAttrTypes()})
+	}
+	if input.SchemaMaps != nil {
+		value, err := SearchDatatypeAPIValueToTerraformValue(input.SchemaMaps, types.ObjectType{AttrTypes: SearchDatatypeSchemaMapsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert schemaMaps from API value: %v", err)
+		}
+		m.SchemaMaps = value.(types.Object)
+	} else {
+		m.SchemaMaps = types.ObjectNull(SearchDatatypeSchemaMapsAttrTypes())
 	}
 	if input.SearchVersion != nil {
 		m.SearchVersion = types.StringValue(*input.SearchVersion)

@@ -45,6 +45,8 @@ type SearchDatasetRulesetRulesModel struct {
 	ID                      types.String `tfsdk:"id" json:"id,omitempty"`
 	KustoExpression         types.String `tfsdk:"kusto_expression" json:"kustoExpression,omitempty"`
 	Name                    types.String `tfsdk:"name" json:"name,omitempty"`
+	SchemaMapping           types.String `tfsdk:"schema_mapping" json:"schemaMapping,omitempty"`
+	SchemaMappingMode       types.String `tfsdk:"schema_mapping_mode" json:"schemaMappingMode,omitempty"`
 	SendDataTo              types.String `tfsdk:"send_data_to" json:"sendDataTo,omitempty"`
 }
 
@@ -57,6 +59,8 @@ type SearchDatasetRulesetRulesAPIModel struct {
 	ID                      *string `json:"id,omitempty"`
 	KustoExpression         *string `json:"kustoExpression,omitempty"`
 	Name                    *string `json:"name,omitempty"`
+	SchemaMapping           *string `json:"schemaMapping,omitempty"`
+	SchemaMappingMode       *string `json:"schemaMappingMode,omitempty"`
 	SendDataTo              *string `json:"sendDataTo,omitempty"`
 }
 
@@ -70,6 +74,8 @@ func SearchDatasetRulesetRulesAttrTypes() map[string]attr.Type {
 		"id":                        types.StringType,
 		"kusto_expression":          types.StringType,
 		"name":                      types.StringType,
+		"schema_mapping":            types.StringType,
+		"schema_mapping_mode":       types.StringType,
 		"send_data_to":              types.StringType,
 	}
 }

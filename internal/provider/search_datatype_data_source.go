@@ -56,6 +56,14 @@ func (d *SearchDatatypeDataSource) Schema(_ context.Context, _ datasource.Schema
 				Description: `Additional extractions applied after the primary extraction.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							Computed:    true,
+							Description: `Name of the additional extraction.`,
+						},
+						"source_field": schema.StringAttribute{
+							Computed:    true,
+							Description: `Field to use as input for the extraction.`,
+						},
 						"contains_header_row": schema.BoolAttribute{
 							Computed:    true,
 							Description: `Indicates that the source file contains a header row.`,
@@ -152,7 +160,7 @@ func (d *SearchDatatypeDataSource) Schema(_ context.Context, _ datasource.Schema
 			},
 			"schema_map": schema.ListNestedAttribute{
 				Computed:    true,
-				Description: `Field mappings to rename or alias extracted fields.`,
+				Description: `Field mappings to rename or alias extracted fields, retained for compatibility with earlier configurations.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"field_name": schema.StringAttribute{
@@ -162,6 +170,27 @@ func (d *SearchDatatypeDataSource) Schema(_ context.Context, _ datasource.Schema
 						"source": schema.StringAttribute{
 							Computed:    true,
 							Description: `Kusto expression or field name that provides the value.`,
+						},
+					},
+				},
+			},
+			"schema_maps": schema.SingleNestedAttribute{
+				Computed:    true,
+				Description: `Out-of-box schema mappings keyed by target schema type. Applied at ingest when enabled by a dataset rule.`,
+				Attributes: map[string]schema.Attribute{
+					"ocsf_v1_8": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"field_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"source": schema.StringAttribute{
+									Computed:    true,
+									Description: `Kusto expression that denotes the value of the field. May be a simple field name or a more complex expression for a computed value.`,
+								},
+							},
 						},
 					},
 				},

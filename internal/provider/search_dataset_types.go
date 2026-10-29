@@ -3042,6 +3042,7 @@ type DatasetAmazonSecurityLakeModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -3059,6 +3060,7 @@ func DatasetAmazonSecurityLakeModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -3148,6 +3150,13 @@ func (m DatasetAmazonSecurityLakeModel) terraformPayload() (map[string]any, erro
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -3271,6 +3280,15 @@ func (m *DatasetAmazonSecurityLakeModel) unmarshalPayload(input map[string]any) 
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -3298,6 +3316,7 @@ type DatasetAPIAwsModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -3317,6 +3336,7 @@ func DatasetAPIAwsModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -3420,6 +3440,13 @@ func (m DatasetAPIAwsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -3561,6 +3588,15 @@ func (m *DatasetAPIAwsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -3588,6 +3624,7 @@ type DatasetAPIAzureModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -3607,6 +3644,7 @@ func DatasetAPIAzureModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -3710,6 +3748,13 @@ func (m DatasetAPIAzureModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -3851,6 +3896,15 @@ func (m *DatasetAPIAzureModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -3882,6 +3936,7 @@ type DatasetAPIAzureDataExplorerModel struct {
 	ProviderID             types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion          types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                   types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated            types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName               types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -3905,6 +3960,7 @@ func DatasetAPIAzureDataExplorerModelAttrTypes() map[string]attr.Type {
 		"provider_id":              types.StringType,
 		"search_version":           types.StringType,
 		"tags":                     types.StringType,
+		"time_created":             types.Int64Type,
 		"view_name":                types.StringType,
 	}
 }
@@ -4036,6 +4092,13 @@ func (m DatasetAPIAzureDataExplorerModel) terraformPayload() (map[string]any, er
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -4213,6 +4276,15 @@ func (m *DatasetAPIAzureDataExplorerModel) unmarshalPayload(input map[string]any
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -4240,6 +4312,7 @@ type DatasetAPIElasticsearchModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -4259,6 +4332,7 @@ func DatasetAPIElasticsearchModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -4362,6 +4436,13 @@ func (m DatasetAPIElasticsearchModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -4503,6 +4584,15 @@ func (m *DatasetAPIElasticsearchModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -4529,6 +4619,7 @@ type DatasetAPIGcpModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -4547,6 +4638,7 @@ func DatasetAPIGcpModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -4643,6 +4735,13 @@ func (m DatasetAPIGcpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -4775,6 +4874,15 @@ func (m *DatasetAPIGcpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -4801,6 +4909,7 @@ type DatasetAPIGoogleWorkspaceModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -4819,6 +4928,7 @@ func DatasetAPIGoogleWorkspaceModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -4915,6 +5025,13 @@ func (m DatasetAPIGoogleWorkspaceModel) terraformPayload() (map[string]any, erro
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -5047,6 +5164,15 @@ func (m *DatasetAPIGoogleWorkspaceModel) unmarshalPayload(input map[string]any) 
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -5073,6 +5199,7 @@ type DatasetAPIHttpModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -5091,6 +5218,7 @@ func DatasetAPIHttpModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -5187,6 +5315,13 @@ func (m DatasetAPIHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -5319,6 +5454,15 @@ func (m *DatasetAPIHttpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -5347,6 +5491,7 @@ type DatasetAPILogAnalyticsModel struct {
 	ProviderID             types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion          types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                   types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated            types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName               types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -5367,6 +5512,7 @@ func DatasetAPILogAnalyticsModelAttrTypes() map[string]attr.Type {
 		"provider_id":              types.StringType,
 		"search_version":           types.StringType,
 		"tags":                     types.StringType,
+		"time_created":             types.Int64Type,
 		"view_name":                types.StringType,
 	}
 }
@@ -5477,6 +5623,13 @@ func (m DatasetAPILogAnalyticsModel) terraformPayload() (map[string]any, error) 
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -5627,6 +5780,15 @@ func (m *DatasetAPILogAnalyticsModel) unmarshalPayload(input map[string]any) err
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -5653,6 +5815,7 @@ type DatasetAPIMsgraphModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -5671,6 +5834,7 @@ func DatasetAPIMsgraphModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -5767,6 +5931,13 @@ func (m DatasetAPIMsgraphModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -5899,6 +6070,15 @@ func (m *DatasetAPIMsgraphModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -5925,6 +6105,7 @@ type DatasetAPINgsiemModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -5943,6 +6124,7 @@ func DatasetAPINgsiemModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -6039,6 +6221,13 @@ func (m DatasetAPINgsiemModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -6171,6 +6360,15 @@ func (m *DatasetAPINgsiemModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -6197,6 +6395,7 @@ type DatasetAPIOktaModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -6215,6 +6414,7 @@ func DatasetAPIOktaModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -6311,6 +6511,13 @@ func (m DatasetAPIOktaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -6443,6 +6650,15 @@ func (m *DatasetAPIOktaModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -6470,6 +6686,7 @@ type DatasetAPIOpensearchModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -6489,6 +6706,7 @@ func DatasetAPIOpensearchModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -6592,6 +6810,13 @@ func (m DatasetAPIOpensearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -6733,6 +6958,15 @@ func (m *DatasetAPIOpensearchModel) unmarshalPayload(input map[string]any) error
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -6759,6 +6993,7 @@ type DatasetAPITailscaleModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -6777,6 +7012,7 @@ func DatasetAPITailscaleModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -6873,6 +7109,13 @@ func (m DatasetAPITailscaleModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -7005,6 +7248,15 @@ func (m *DatasetAPITailscaleModel) unmarshalPayload(input map[string]any) error 
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -7031,6 +7283,7 @@ type DatasetAPIZoomModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -7049,6 +7302,7 @@ func DatasetAPIZoomModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -7145,6 +7399,13 @@ func (m DatasetAPIZoomModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -7277,6 +7538,15 @@ func (m *DatasetAPIZoomModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -7302,6 +7572,7 @@ type DatasetAzureBlobModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -7319,6 +7590,7 @@ func DatasetAzureBlobModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -7408,6 +7680,13 @@ func (m DatasetAzureBlobModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -7531,6 +7810,15 @@ func (m *DatasetAzureBlobModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -7559,6 +7847,7 @@ type DatasetClickhouseModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -7579,6 +7868,7 @@ func DatasetClickhouseModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -7689,6 +7979,13 @@ func (m DatasetClickhouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -7839,6 +8136,15 @@ func (m *DatasetClickhouseModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -7867,6 +8173,7 @@ type DatasetCriblEdgeModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -7887,6 +8194,7 @@ func DatasetCriblEdgeModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -7997,6 +8305,13 @@ func (m DatasetCriblEdgeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -8147,6 +8462,15 @@ func (m *DatasetCriblEdgeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -8172,6 +8496,7 @@ type DatasetCriblLakeModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -8189,6 +8514,7 @@ func DatasetCriblLakeModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -8278,6 +8604,13 @@ func (m DatasetCriblLakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -8401,6 +8734,15 @@ func (m *DatasetCriblLakeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -8428,6 +8770,7 @@ type DatasetCriblLeaderModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -8447,6 +8790,7 @@ func DatasetCriblLeaderModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -8550,6 +8894,13 @@ func (m DatasetCriblLeaderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -8691,6 +9042,15 @@ func (m *DatasetCriblLeaderModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -8716,6 +9076,7 @@ type DatasetCriblLocalModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -8733,6 +9094,7 @@ func DatasetCriblLocalModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -8822,6 +9184,13 @@ func (m DatasetCriblLocalModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -8945,6 +9314,15 @@ func (m *DatasetCriblLocalModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -8971,6 +9349,7 @@ type DatasetCriblMetaModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -8989,6 +9368,7 @@ func DatasetCriblMetaModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -9085,6 +9465,13 @@ func (m DatasetCriblMetaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -9217,6 +9604,15 @@ func (m *DatasetCriblMetaModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -9242,6 +9638,7 @@ type DatasetCriblSearchModel struct {
 	ProviderID                types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion             types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                      types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated               types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName                  types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 	StaleChannelFlushMs       types.Int64  `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	RetentionPeriod           types.Int64  `tfsdk:"retention_period" json:"retentionPeriod,omitempty"`
@@ -9272,6 +9669,7 @@ func DatasetCriblSearchModelAttrTypes() map[string]attr.Type {
 		"provider_id":                  types.StringType,
 		"search_version":               types.StringType,
 		"tags":                         types.StringType,
+		"time_created":                 types.Int64Type,
 		"view_name":                    types.StringType,
 		"stale_channel_flush_ms":       types.Int64Type,
 		"retention_period":             types.Int64Type,
@@ -9374,6 +9772,13 @@ func (m DatasetCriblSearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -9588,6 +9993,15 @@ func (m *DatasetCriblSearchModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -9736,6 +10150,7 @@ type DatasetGcsModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -9759,6 +10174,7 @@ func DatasetGcsModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -9890,6 +10306,13 @@ func (m DatasetGcsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -10067,6 +10490,15 @@ func (m *DatasetGcsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -10095,6 +10527,7 @@ type DatasetPrometheusModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -10115,6 +10548,7 @@ func DatasetPrometheusModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -10225,6 +10659,13 @@ func (m DatasetPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -10375,6 +10816,15 @@ func (m *DatasetPrometheusModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -10400,6 +10850,7 @@ type DatasetS3Model struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 	AutoDetectRegion      types.Bool   `tfsdk:"auto_detect_region" json:"autoDetectRegion,omitempty"`
 	Bucket                types.String `tfsdk:"bucket" json:"bucket,omitempty"`
@@ -10425,6 +10876,7 @@ func DatasetS3ModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 		"auto_detect_region":      types.BoolType,
 		"bucket":                  types.StringType,
@@ -10522,6 +10974,13 @@ func (m DatasetS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -10701,6 +11160,15 @@ func (m *DatasetS3Model) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Tags = types.StringNull()
 	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
+	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -10804,6 +11272,7 @@ type DatasetSnowflakeModel struct {
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TimeCreated           types.Int64  `tfsdk:"time_created" json:"timeCreated,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
@@ -10827,6 +11296,7 @@ func DatasetSnowflakeModelAttrTypes() map[string]attr.Type {
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
 		"tags":                    types.StringType,
+		"time_created":            types.Int64Type,
 		"view_name":               types.StringType,
 	}
 }
@@ -10958,6 +11428,13 @@ func (m DatasetSnowflakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
+	}
+	if !m.TimeCreated.IsNull() && !m.TimeCreated.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.TimeCreated)
+		if err != nil {
+			return nil, fmt.Errorf("convert time_created to API value: %v", err)
+		}
+		output["timeCreated"] = value
 	}
 	if !m.ViewName.IsNull() && !m.ViewName.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.ViewName)
@@ -11134,6 +11611,15 @@ func (m *DatasetSnowflakeModel) unmarshalPayload(input map[string]any) error {
 		m.Tags = value.(types.String)
 	} else {
 		m.Tags = types.StringNull()
+	}
+	if item, ok := input["timeCreated"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeCreated from API value: %v", err)
+		}
+		m.TimeCreated = value.(types.Int64)
+	} else {
+		m.TimeCreated = types.Int64Null()
 	}
 	if item, ok := input["viewName"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
