@@ -189,9 +189,9 @@ resource "criblio_monitor" "example_policy_notification" {
   monitor_policy_notification_config = {
     enabled = true
     config = [{
-      id                    = "critical-routing"
-      order                 = 1
-      conditions            = []
+      id         = "critical-routing"
+      order      = 1
+      conditions = []
       template_target_pairs = [{
         target_id   = "nt-sns-prod"
         template_id = "default-template"
