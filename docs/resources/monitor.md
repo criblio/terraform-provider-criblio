@@ -204,9 +204,9 @@ resource "criblio_monitor" "example_policy_notification" {
   monitor_policy_notification_config = {
     enabled = true
     config = [{
-      id                    = "critical-routing"
-      order                 = 1
-      conditions            = []
+      id         = "critical-routing"
+      order      = 1
+      conditions = []
       template_target_pairs = [{
         target_id   = "nt-sns-prod"
         template_id = "default-template"
@@ -223,15 +223,17 @@ resource "criblio_monitor" "example_policy_notification" {
 
 - `dataset_id` (String) Default dataset used for query execution and alert history storage. Per-query overrides are set via the query's datasetId.
 - `enabled` (Boolean) Whether the monitor is active and evaluated.
-- `expr` (Attributes List) Query expressions evaluated to produce the monitor's series. (see [below for nested schema](#nestedatt--expr))
 - `id` (String) Unique identifier for the monitor.
 - `name` (String) Human-readable name for the monitor.
-- `query` (Attributes Map) Monitor queries keyed by query label. Each query is inheritable from a linked profile. (see [below for nested schema](#nestedatt--query))
 - `type` (String) Monitor type, which determines the detection strategy (for example threshold, change, anomaly, outlier, forecast, or logs).
 
 ### Optional
 
+- `alert_expression` (String) Optional Alert Query expression over the operand labels (for example "A + B"). Omitted: a single query uses its own label; multiple queries default to the sum.
 - `description` (String) Optional human-readable description of the monitor.
+- `expr` (Attributes List) Query expressions evaluated to produce the monitor's series. (see [below for nested schema](#nestedatt--expr))
+- `queries` (Attributes List) Operand queries in order. The provider assigns labels A, B, C... and builds the query map; reference them by letter in alert_expression. (see [below for nested schema](#nestedatt--queries))
+- `query` (Attributes Map) Monitor queries keyed by query label. Each query is inheritable from a linked profile. (see [below for nested schema](#nestedatt--query))
 - `search_mode` (String) Logs monitors only. Distinguishes authoring a fresh search ('new') from selecting a saved one ('saved'). Defaults to 'new' when omitted; ignored for non-logs monitor types.
 - `silence` (List of String) IDs of silence windows that suppress this monitor's alerts.
 - `template_params` (String) Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).
@@ -398,8 +400,9 @@ Optional:
 - `right` (String) Deprecated legacy right-hand query or expression label for a binary operation. Read only by legacy structured expressions.
 - `scalar` (Number) Deprecated legacy numeric scalar for a query-scalar binary operation. Read only by legacy structured expressions.
 
+<a id="nestedatt--queries"></a>
 <a id="nestedatt--query"></a>
-### Nested Schema for `query`
+### Nested Schema for `queries`
 
 Required:
 
@@ -408,35 +411,39 @@ Required:
 
 Optional:
 
-- `builder` (Attributes) Structured builder representation of this query. Present when authored via the visual builder UI. (see [below for nested schema](#nestedatt--query--builder))
+- `builder` (Attributes) Structured builder representation of this query. Present when authored via the visual builder UI. (see [below for nested schema](#nestedatt--queries--builder))
 - `dataset_id` (String) Per-query dataset override. Falls back to the monitor's <code>datasetId</code> when absent.
 - `display_name` (String) User-editable display label for the query card. Defaults to the stable query key.
-- `logs_builder` (Attributes) Structured builder fields for a logs-mode query. (see [below for nested schema](#nestedatt--query--logs_builder))
+- `logs_builder` (Attributes) Structured builder fields for a logs-mode query. (see [below for nested schema](#nestedatt--queries--logs_builder))
 - `params` (Map of String) Template parameter bindings applied to the query before evaluation.
 
+<a id="nestedatt--queries--builder"></a>
 <a id="nestedatt--query--builder"></a>
-### Nested Schema for `query.builder`
+### Nested Schema for `queries.builder`
 
 Required:
 
 - `aggregation` (String) Aggregation operator applied to the metric series.
-- `evaluation_window` (Attributes) Evaluation window over which the metric query is evaluated. (see [below for nested schema](#nestedatt--query--builder--evaluation_window))
+- `evaluation_window` (Attributes) Evaluation window over which the metric query is evaluated. (see [below for nested schema](#nestedatt--queries--builder--evaluation_window))
 - `group_by` (List of String) Label keys to group the aggregated metric results by.
-- `label_filters` (Attributes List) Label filters applied to the metric query in builder mode. (see [below for nested schema](#nestedatt--query--builder--label_filters))
+- `label_filters` (Attributes List) Label filters applied to the metric query in builder mode. (see [below for nested schema](#nestedatt--queries--builder--label_filters))
 - `metric` (String) Name of the metric to query in builder mode.
 - `units` (String) Unit label applied to the query's values.
 
+<a id="nestedatt--queries--builder--evaluation_window"></a>
+<a id="nestedatt--queries--logs_builder--evaluation_window"></a>
 <a id="nestedatt--query--builder--evaluation_window"></a>
 <a id="nestedatt--query--logs_builder--evaluation_window"></a>
-### Nested Schema for `query.builder.evaluation_window`
+### Nested Schema for `queries.builder.evaluation_window`
 
 Required:
 
 - `unit` (String) Time unit for the evaluation window magnitude.
 - `value` (Integer) Numeric magnitude of the evaluation window, paired with <code>unit</code>.
 
+<a id="nestedatt--queries--builder--label_filters"></a>
 <a id="nestedatt--query--builder--label_filters"></a>
-### Nested Schema for `query.builder.label_filters`
+### Nested Schema for `queries.builder.label_filters`
 
 Required:
 
@@ -444,13 +451,14 @@ Required:
 - `op` (String) Comparison operator for the label filter. Supports PromQL semantics: <code>=</code>, <code>!=</code>, <code>=</code>, <code>!</code>.
 - `value` (String) Value to match against the label, interpreted according to the operator.
 
+<a id="nestedatt--queries--logs_builder"></a>
 <a id="nestedatt--query--logs_builder"></a>
-### Nested Schema for `query.logs_builder`
+### Nested Schema for `queries.logs_builder`
 
 Required:
 
 - `dataset` (String) Dataset to query for log events.
-- `evaluation_window` (Attributes) Evaluation window over which the logs query is evaluated. (see [below for nested schema](#nestedatt--query--logs_builder--evaluation_window))
+- `evaluation_window` (Attributes) Evaluation window over which the logs query is evaluated. (see [below for nested schema](#nestedatt--queries--logs_builder--evaluation_window))
 - `group_by` (List of String) Label keys to group the aggregated log results by.
 - `operator` (String) Aggregation operator applied to the log events.
 
@@ -488,7 +496,7 @@ Required:
 
 Optional:
 
-- `operator` (String) Comparison operator applied to the threshold limit. Defaults to <code>gt</code> when absent.
+- `operator` (String) Comparison operator applied to the threshold limit.
 - `std_deviations` (Number) Per-severity anomaly sensitivity, expressed as a number of standard deviations from the baseline.
 - `times_triggered` (Integer) Number of consecutive evaluations the condition must hold before firing. Defaults to 1 when absent.
 

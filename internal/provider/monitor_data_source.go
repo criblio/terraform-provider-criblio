@@ -35,6 +35,10 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Monitor Data Source",
 		Attributes: map[string]schema.Attribute{
+			"alert_expression": schema.StringAttribute{
+				Computed:    true,
+				Description: `Optional Alert Query expression over the operand labels (for example "A + B"). Omitted: a single query uses its own label; multiple queries default to the sum.`,
+			},
 			"dataset_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Default dataset used for query execution and alert history storage. Per-query overrides are set via the query's datasetId.`,
@@ -99,6 +103,137 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Human-readable name for the monitor.`,
+			},
+			"queries": schema.ListNestedAttribute{
+				Computed:    true,
+				Description: `Operand queries in order. The provider assigns labels A, B, C... and builds the query map; reference them by letter in alert_expression.`,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"builder": schema.SingleNestedAttribute{
+							Computed:    true,
+							Description: `Structured builder representation of this query. Present when authored via the visual builder UI.`,
+							Attributes: map[string]schema.Attribute{
+								"aggregation": schema.StringAttribute{
+									Computed:    true,
+									Description: `Aggregation operator applied to the metric series.`,
+								},
+								"evaluation_window": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Evaluation window over which the metric query is evaluated.`,
+									Attributes: map[string]schema.Attribute{
+										"unit": schema.StringAttribute{
+											Computed:    true,
+											Description: `Time unit for the evaluation window magnitude.`,
+										},
+										"value": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
+										},
+									},
+								},
+								"group_by": schema.ListAttribute{
+									Computed:    true,
+									Description: `Label keys to group the aggregated metric results by.`,
+									ElementType: types.StringType,
+								},
+								"label_filters": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Label filters applied to the metric query in builder mode.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Label key to filter on.`,
+											},
+											"op": schema.StringAttribute{
+												Computed:    true,
+												Description: `Comparison operator for the label filter. Supports PromQL semantics: <code>=</code>, <code>!=</code>, <code>=</code>, <code>!</code>.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value to match against the label, interpreted according to the operator.`,
+											},
+										},
+									},
+								},
+								"metric": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the metric to query in builder mode.`,
+								},
+								"units": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unit label applied to the query's values.`,
+								},
+							},
+						},
+						"dataset_id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Per-query dataset override. Falls back to the monitor's <code>datasetId</code> when absent.`,
+						},
+						"display_name": schema.StringAttribute{
+							Computed:    true,
+							Description: `User-editable display label for the query card. Defaults to the stable query key.`,
+						},
+						"logs_builder": schema.SingleNestedAttribute{
+							Computed:    true,
+							Description: `Structured builder fields for a logs-mode query.`,
+							Attributes: map[string]schema.Attribute{
+								"dataset": schema.StringAttribute{
+									Computed:    true,
+									Description: `Dataset to query for log events.`,
+								},
+								"evaluation_window": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Evaluation window over which the logs query is evaluated.`,
+									Attributes: map[string]schema.Attribute{
+										"unit": schema.StringAttribute{
+											Computed:    true,
+											Description: `Time unit for the evaluation window magnitude.`,
+										},
+										"value": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
+										},
+									},
+								},
+								"field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field to aggregate over. Required for operators other than <code>count_all</code>.`,
+								},
+								"group_by": schema.ListAttribute{
+									Computed:    true,
+									Description: `Label keys to group the aggregated log results by.`,
+									ElementType: types.StringType,
+								},
+								"operator": schema.StringAttribute{
+									Computed:    true,
+									Description: `Aggregation operator applied to the log events.`,
+								},
+								"parent_search": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional parent search that scopes the logs query.`,
+								},
+								"saved_search_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Identifier of a saved search to run instead of an authored query.`,
+								},
+							},
+						},
+						"mode": schema.StringAttribute{
+							Computed:    true,
+							Description: `Query authoring mode: <code>builder</code> for the visual builder or <code>promql</code> for raw PromQL.`,
+						},
+						"params": schema.MapAttribute{
+							Computed:    true,
+							Description: `Template parameter bindings applied to the query before evaluation.`,
+							ElementType: types.StringType,
+						},
+						"promql": schema.StringAttribute{
+							Computed:    true,
+							Description: `PromQL query string that the monitor evaluates.`,
+						},
+					},
+				},
 			},
 			"query": schema.MapNestedAttribute{
 				Computed:    true,
@@ -446,7 +581,7 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 											},
 											"operator": schema.StringAttribute{
 												Computed:    true,
-												Description: `Comparison operator applied to the threshold limit. Defaults to <code>gt</code> when absent.`,
+												Description: `Comparison operator applied to the threshold limit.`,
 											},
 											"severity": schema.StringAttribute{
 												Computed:    true,
@@ -491,7 +626,7 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"operator": schema.StringAttribute{
 									Computed:    true,
-									Description: `Comparison operator applied to the threshold limit. Defaults to <code>gt</code> when absent.`,
+									Description: `Comparison operator applied to the threshold limit.`,
 								},
 								"severity": schema.StringAttribute{
 									Computed:    true,
