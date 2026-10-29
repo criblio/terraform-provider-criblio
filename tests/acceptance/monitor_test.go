@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"os"
 	"strconv"
 	"testing"
 
@@ -8,6 +9,10 @@ import (
 )
 
 func TestMonitor(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Monitor acceptance tests are disabled for on-prem deployments")
+	}
+
 	t.Run("plan-diff", func(t *testing.T) {
 		resourceName := "criblio_monitor.example_threshold"
 		resource.Test(t, resource.TestCase{
@@ -120,7 +125,7 @@ func monitorThreshold(limit int) string {
   }
 
   firing_rule = {
-    label = ""
+    label = "A"
     threshold = [{
       severity        = "warning"
       limit           = ` + strconv.Itoa(limit) + `
@@ -170,7 +175,7 @@ func monitorForecast() string {
   }
 
   firing_rule = {
-    label = ""
+    label = "A"
     threshold = [{
       severity        = "warning"
       limit           = 90
@@ -223,7 +228,7 @@ func monitorOutlier() string {
   }
 
   firing_rule = {
-    label = ""
+    label = "A"
     threshold = [{
       severity        = "warning"
       limit           = 90
