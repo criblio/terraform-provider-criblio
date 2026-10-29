@@ -59,6 +59,23 @@ func TestCollectorUpstreamFieldCoverage(t *testing.T) {
 	if len(collector.OneOfVariants) == 0 {
 		t.Fatal("collector variants missing")
 	}
+	merged, err := readYAML(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mergedSchemas, _ := lookupComponentsSchemas(documentMapping(merged))
+	for _, variant := range collector.OneOfVariants {
+		for _, field := range variant.Fields {
+			if field.APIName == "savedState" && (field.CustomType != "types.DynamicType{}" || !field.Optional || !field.Computed) {
+				t.Errorf("%s savedState lost dynamic compatibility: %+v", variant.SchemaName, field)
+			}
+		}
+	}
+	base, _ := mappingValue(mergedSchemas, "InputCollectorBase")
+	checkpoint, err := lookupTarget(base, "$.properties.savedState.additionalProperties.$ref")
+	if err != nil || checkpoint.Value != "#/components/schemas/AdditionalPropertiesTypeEnrichedFieldsSavedState" {
+		t.Fatalf("merged savedState lost its upstream checkpoint shape: %v", err)
+	}
 	jobName, _ := mappingValue(config, "job")
 	job, _ := mappingValue(schemas, jobName.Value)
 	jobPaths := make(map[string]bool)

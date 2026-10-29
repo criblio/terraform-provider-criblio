@@ -9,6 +9,8 @@ description: |-
 
 Reads a Collector within a Pack, including its type-specific collector configuration.
 
+The active collector object includes `saved_state` as a dynamic value containing the full runtime checkpoint, including nested objects.
+
 ## Example Usage
 
 ```terraform

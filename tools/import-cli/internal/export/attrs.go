@@ -134,7 +134,7 @@ func hclOptionsForType(typeName string, e registry.Entry) *hcl.Options {
 	for _, s := range skip {
 		topLevel[s] = true
 		// additional_properties appears nested (e.g. in route items); must be skipped at any level.
-		if s == "additional_properties" {
+		if s == "additional_properties" || (s == "saved_state" && (typeName == "criblio_collector" || typeName == "criblio_pack_collector")) {
 			nested[s] = true
 		}
 		// id in route items (criblio_routes, criblio_pack_routes) is Computed; skip at nested level.

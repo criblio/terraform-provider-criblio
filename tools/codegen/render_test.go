@@ -499,9 +499,9 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, collectorTypes, `case "azureblob", "azure_blob":`)
 	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
 	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
-	assertContains(t, collectorTypes, `delete(raw, "savedState")`)
+	assertContains(t, collectorTypes, `decodeCollectorSavedState(data, raw)`)
 	for _, name := range []string{"Collector", "PackCollector"} {
-		assertContains(t, renderTemplate(t, "doc", parser.ResourceDef{StructName: name}), "API runtime checkpoints containing nested objects, arrays, numbers, or booleans are ignored during refresh and import")
+		assertContains(t, renderTemplate(t, "doc", parser.ResourceDef{StructName: name}), "attribute accepts both legacy string maps and nested objects")
 	}
 
 	searchDatasetResource := renderTemplate(t, "resource", parser.ResourceDef{

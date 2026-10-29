@@ -27,7 +27,7 @@ commit history, and tag-to-tag diffs.
 - Syncing 4.20.3 upstream spec.
 
 ### Fixed
-- Fixed collector refresh and import failures after state tracking writes nested runtime checkpoints, while preserving the legacy `saved_state` string map. Applies to all collector types and pack collectors. (#251)
+- Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)
 - Kept bulk export working when AI is disabled or consent is missing, while retaining dataset permission errors, and skipped the new intelligence/template acceptance tests on the on-prem fixture that lacks their prerequisites.
 - Allowed export discovery to continue when local_search list endpoints return HTTP 500 with "No workers registered".
 - Preserved metric dashboard search sources, datasets, step strategies, query builder settings, and input variants during API updates, reads, and imports.
@@ -36,6 +36,8 @@ commit history, and tag-to-tag diffs.
 - Excluded the internal `metrics_ingest` pipeline from import CLI exports.
 - Fixed import issues when duplicate params exist.
 - Fixed worker group id replacement issue.
+- Fixed saved_state field within collectors.
+- Fixed removal of configured collector `saved_state` so omitting it or setting it to null restores runtime checkpoint tracking without changing another field.
 
 ## [1.25.55] - 2026-08-19
 

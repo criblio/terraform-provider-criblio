@@ -1005,7 +1005,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		field.NestedAPIModelName = nestedName + "APIModel"
 		field.NestedAttrTypes = nestedName + "AttrTypes"
 	}
-	if field.Type == "object" && !field.ObjectAsJSON {
+	if field.Type == "object" && !field.ObjectAsJSON && field.CustomType != "types.DynamicType{}" {
 		objectSchema := schemaForType
 		if resolved, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 			return FieldDef{}, err

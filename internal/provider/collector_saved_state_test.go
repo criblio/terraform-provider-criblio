@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -24,7 +23,6 @@ func TestCollectorSavedStateCompatibility(t *testing.T) {
 	tests := []struct {
 		name  string
 		state string
-		want  any
 	}{
 		{name: "database checkpoint", state: `{"databaseCollectorState":{"data":{"id":{"value":3}}}}`},
 		{name: "object checkpoint", state: `{"cursor":{"bucket":"events","objects":["one","two"]}}`},
@@ -32,10 +30,10 @@ func TestCollectorSavedStateCompatibility(t *testing.T) {
 		{name: "numeric checkpoint", state: `{"offset":3}`},
 		{name: "boolean checkpoint", state: `{"completed":true}`},
 		{name: "array checkpoint", state: `{"files":["one","two"]}`},
-		{name: "legacy strings", state: `{"cursor":"abc","offset":"3"}`, want: map[string]any{"cursor": "abc", "offset": "3"}},
-		{name: "nullable strings", state: `{"cursor":null}`, want: map[string]any{}},
-		{name: "empty object", state: `{}`, want: map[string]any{}},
-		{name: "empty array", state: `[]`, want: map[string]any{}},
+		{name: "legacy strings", state: `{"cursor":"abc","offset":"3"}`},
+		{name: "nullable strings", state: `{"cursor":null}`},
+		{name: "empty object", state: `{}`},
+		{name: "empty array", state: `[]`},
 		{name: "null", state: `null`},
 	}
 	for _, variant := range []string{"splunk", "rest", "s3", "azure_blob", "cribl_lake", "database", "google_cloud_storage", "health_check", "script", "filesystem"} {
@@ -46,23 +44,51 @@ func TestCollectorSavedStateCompatibility(t *testing.T) {
 				if err := json.Unmarshal(payload, &model); err != nil {
 					t.Fatalf("decode collector checkpoint: %v", err)
 				}
-				encoded, err := json.Marshal(model)
+				states := collectorSavedStates(model)
+				var savedState types.Dynamic
+				for _, value := range states {
+					savedState = value
+				}
+				converted, err := dynamicValueToJSON(savedState)
 				if err != nil {
-					t.Fatalf("encode collector update: %v", err)
+					t.Fatal(err)
+				}
+				if tt.state == "[]" {
+					tt.state = "{}"
+				}
+				var expected any
+				if err := json.Unmarshal([]byte(tt.state), &expected); err != nil {
+					t.Fatal(err)
+				}
+				actual, err := json.Marshal(converted)
+				if err != nil {
+					t.Fatal(err)
+				}
+				want, err := json.Marshal(expected)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if string(actual) != string(want) {
+					t.Errorf("decoded savedState = %s, want %s", actual, want)
+				}
+				request := collectorRequestSavedState(model, map[string]bool{})
+				encoded, err := json.Marshal(request)
+				if err != nil {
+					t.Fatal(err)
 				}
 				var update map[string]any
 				if err := json.Unmarshal(encoded, &update); err != nil {
 					t.Fatal(err)
 				}
-				if !reflect.DeepEqual(update["savedState"], tt.want) {
-					t.Errorf("savedState in update = %#v, want %#v", update["savedState"], tt.want)
+				if _, ok := update["savedState"]; ok {
+					t.Error("computed checkpoint leaked into update")
 				}
-				if _, ok := update["savedState"]; tt.want == nil && ok {
-					t.Error("runtime checkpoint must be omitted from updates")
+				for name, original := range states {
+					if !original.Equal(collectorSavedStates(model)[name]) {
+						t.Error("request filtering mutated the original state")
+					}
 				}
-				if update["id"] != "events" {
-					t.Errorf("collector identity = %v, want events", update["id"])
-				}
+
 			})
 		}
 	}
@@ -136,16 +162,16 @@ func TestCollectorImportAndRefreshWithRuntimeCheckpoint(t *testing.T) {
 					t.Fatalf("import collector with checkpoint: %v", imported.Diagnostics)
 				}
 				savedStatePath := path.Root(variant.block).AtName("saved_state")
-				var savedState types.Map
+				var savedState types.Dynamic
 				if diags := imported.State.GetAttribute(ctx, savedStatePath, &savedState); diags.HasError() {
 					t.Fatal(diags)
 				}
-				if !savedState.IsNull() {
-					t.Errorf("imported runtime checkpoint = %v, want null", savedState)
+				if savedState.IsNull() {
+					t.Error("import lost the runtime checkpoint")
 				}
 				// Existing configured string maps must survive refresh even when
 				// the API enriches the collector with an incompatible checkpoint.
-				legacy := types.MapValueMust(types.StringType, map[string]attr.Value{"cursor": types.StringValue("configured")})
+				legacy := types.DynamicValue(types.MapValueMust(types.StringType, map[string]attr.Value{"cursor": types.StringValue("configured")}))
 				if diags := imported.State.SetAttribute(ctx, savedStatePath, legacy); diags.HasError() {
 					t.Fatal(diags)
 				}

@@ -105,6 +105,10 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, nil
 	}
 	switch typed := value.(type) {
+	{{- if hasDynamic . }}
+	case types.Dynamic:
+		return dynamicValueToJSON(typed)
+{{- end }}
 	case types.Bool:
 		return typed.ValueBool(), nil
 	case types.Int64:
@@ -423,6 +427,9 @@ func {{ .StructName }}TerraformNameToAPIName(name string) string {
 }
 
 func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+{{- if hasDynamic . }}
+	if typ.Equal(types.DynamicType) { return dynamicValueFromAPI(value) }
+{{- end }}
 	if value == nil {
 		return {{ .StructName }}TerraformNullValue(typ)
 	}
@@ -561,6 +568,9 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 }
 
 func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
+{{- if hasDynamic . }}
+	if typ.Equal(types.DynamicType) { return types.DynamicNull(), nil }
+{{- end }}
 	if typ.Equal(types.BoolType) {
 		return types.BoolNull(), nil
 	}
@@ -916,6 +926,7 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		return err
 	}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	if err := decodeCollectorSavedState(data, raw); err != nil { return err }
 	normalizeCollectorUnionValues(raw)
 	data, err := json.Marshal(raw)
 	if err != nil {
@@ -1133,21 +1144,7 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
 		raw["savedState"] = map[string]any{}
 	}
-	if savedState, ok := raw["savedState"].(map[string]any); ok {
-		for _, value := range savedState {
-			if value == nil {
-				continue
-			}
-			if _, ok := value.(string); !ok {
-				// Runtime checkpoints may contain nested objects, arrays, or
-				// scalars that the legacy saved_state map(string) cannot hold.
-				// Ignore the entire checkpoint so updates cannot send it back
-				// to the API with a different shape. Keep legacy string maps.
-				delete(raw, "savedState")
-				break
-			}
-		}
-	}
+
 }
 {{- end }}
 {{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource") (eq .StructName "PackCollector")) }}
@@ -2003,10 +2000,10 @@ var _ = types.String{}
 var _ resource.Resource = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithConfigure = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithImportState = &{{ .StructName }}Resource{}
-{{- if eq .StructName "SearchDataset" }}
+{{- if or (eq .StructName "SearchDataset") (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 var _ resource.ResourceWithModifyPlan = &{{ .StructName }}Resource{}
 {{- end }}
-{{- if eq .StructName "Collector" }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 var _ resource.ResourceWithUpgradeState = &{{ .StructName }}Resource{}
 {{- end }}
 
@@ -2026,6 +2023,8 @@ func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.Met
 func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		{{- if eq .StructName "Collector" }}
+		Version: 2,
+		{{- else if eq .StructName "PackCollector" }}
 		Version: 1,
 		{{- end }}
 		{{- if .CreateDisabledMessage }}
@@ -2050,6 +2049,13 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		},
 	}
 }
+
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+// ModifyPlan switches removed configured checkpoints back to API-owned state.
+func (r *{{ .StructName }}Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	modifyCollectorSavedStatePlan(ctx, req, resp)
+}
+{{- end }}
 
 {{- if eq .StructName "SearchDataset" }}
 // ModifyPlan exposes the configured dataset identity to dependent resources before
@@ -2147,6 +2153,13 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- if .Create.ReadAfterWrite }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
+{{- end }}
 	_, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	_, err := r.api.Create(ctx, model)
@@ -2154,6 +2167,13 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- else }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
+{{- end }}
 	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Create(ctx, model)
@@ -2176,6 +2196,10 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
+	if resp.Private != nil { resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...) }
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 	{{- end }}
@@ -2216,7 +2240,16 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		model = *apiModel
 	}
 {{- else }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	priorSavedState := collectorSavedStates(model)
+	configuredSavedState, savedStateDiags := readCollectorSavedStateConfig(ctx, req.Private, priorSavedState)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+{{- end }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	restoreCollectorConfiguredSavedState(&model, priorSavedState, configuredSavedState)
+{{- end }}
 {{- end }}
 {{- if eq .StructName "Source" }}
 	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
@@ -2259,6 +2292,13 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- else }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") (eq .StructName "Source") (eq .StructName "Destination") (eq .StructName "PackSource") (eq .StructName "PackDestination") }}
 	requestModel := oneOfRequestModelWithHoistedIdentity(model)
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	configuredSavedState, savedStateDiags := collectorConfiguredSavedState(ctx, req.Config)
+	resp.Diagnostics.Append(savedStateDiags...)
+	if resp.Diagnostics.HasError() { return }
+	plannedSavedState := collectorSavedStates(model)
+	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
+{{- end }}
 	apiModel, err := r.api.Update(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Update(ctx, model)
@@ -2291,6 +2331,10 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		model.ProviderID = plannedProviderID
 	}
 {{- end }}
+{{- end }}
+{{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
+	if resp.Private != nil { resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...) }
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -2653,7 +2697,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.{{ .GoName }} = &{{ .ModelName }}{}
 		}
 {{- range .Fields }}
-{{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
+{{- if and (eq .APIName "savedState") (eq .CustomType "types.DynamicType{}") }}
+        state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+{{- else if eq .ApplyStrategy "stringFromAPIOrPrior" }}
 {{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
 		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
@@ -3099,7 +3145,7 @@ type {{ .ListStructName }}ListDataSourceModel struct {
 {{- range listConfigFields . }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\"`" + `
 {{- end }}
-	Items types.List ` + "`tfsdk:\"items\"`" + `
+	Items {{ if hasDynamic . }}types.Dynamic{{ else }}types.List{{ end }} ` + "`tfsdk:\"items\"`" + `
 }
 
 func New{{ .ListStructName }}DataSource() datasource.DataSource {
@@ -3115,6 +3161,9 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 		MarkdownDescription: "{{ .ListStructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
 {{ listDataSourceConfigAttributes (listConfigFields .) "\t\t\t" }}
+{{- if hasDynamic . }}
+			"items": schema.DynamicAttribute{Computed: true},
+{{- else }}
 			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
@@ -3128,6 +3177,7 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 					},
 				},
 			},
+{{- end }}
 		},
 	}
 }
@@ -3165,7 +3215,12 @@ func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasour
 			values = append(values, {{ listItemObjectValue . }})
 		}
 	}
+{{- if hasDynamic . }}
+	model.Items, err = dynamicCollectionValue(values)
+	if err != nil { resp.Diagnostics.AddError("Unable to decode collection", err.Error()); return }
+{{- else }}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: {{ .ListStructName }}ItemAttrTypes()}, values)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -3204,7 +3259,7 @@ description: |-
 {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 
-The legacy ` + "`saved_state`" + ` attribute accepts a map of strings. API runtime checkpoints containing nested objects, arrays, numbers, or booleans are ignored during refresh and import, so collectors remain manageable after state tracking runs. Existing configured string maps are preserved.
+The ` + "`saved_state`" + ` attribute accepts both legacy string maps and nested objects. When omitted, it exposes runtime checkpoints returned by Cribl. Configured values are preserved during refresh; computed checkpoints are omitted from create and update requests. Existing string-map state is upgraded automatically. For resources created with older providers, legacy saved values are retained until an apply records whether ` + "`saved_state`" + ` is configured.
 {{- end }}
 {{- if eq .StructName "SearchDatasetIntelligence" }}
 

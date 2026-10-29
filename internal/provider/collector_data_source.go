@@ -87,10 +87,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -490,10 +489,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1259,10 +1257,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1615,10 +1612,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1972,10 +1968,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2226,10 +2221,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2489,10 +2483,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2804,10 +2797,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -3314,10 +3306,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -3588,10 +3579,9 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 						Computed:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"saved_state": schema.MapAttribute{
+					"saved_state": schema.DynamicAttribute{
 						Computed:    true,
-						Description: `Saved state for the collector`,
-						ElementType: types.StringType,
+						Description: `Runtime collection state.`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed:    true,

@@ -3459,6 +3459,8 @@ func CollectorTerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, nil
 	}
 	switch typed := value.(type) {
+	case types.Dynamic:
+		return dynamicValueToJSON(typed)
 	case types.Bool:
 		return typed.ValueBool(), nil
 	case types.Int64:
@@ -3540,6 +3542,9 @@ func CollectorTerraformNameToAPIName(name string) string {
 }
 
 func CollectorAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.DynamicType) {
+		return dynamicValueFromAPI(value)
+	}
 	if value == nil {
 		return CollectorTerraformNullValue(typ)
 	}
@@ -3645,6 +3650,9 @@ func CollectorAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, er
 }
 
 func CollectorTerraformNullValue(typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.DynamicType) {
+		return types.DynamicNull(), nil
+	}
 	if typ.Equal(types.BoolType) {
 		return types.BoolNull(), nil
 	}
@@ -3805,6 +3813,9 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	if err := decodeCollectorSavedState(data, raw); err != nil {
+		return err
+	}
 	normalizeCollectorUnionValues(raw)
 	data, err := json.Marshal(raw)
 	if err != nil {
@@ -3921,37 +3932,23 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
 		raw["savedState"] = map[string]any{}
 	}
-	if savedState, ok := raw["savedState"].(map[string]any); ok {
-		for _, value := range savedState {
-			if value == nil {
-				continue
-			}
-			if _, ok := value.(string); !ok {
-				// Runtime checkpoints may contain nested objects, arrays, or
-				// scalars that the legacy saved_state map(string) cannot hold.
-				// Ignore the entire checkpoint so updates cannot send it back
-				// to the API with a different shape. Keep legacy string maps.
-				delete(raw, "savedState")
-				break
-			}
-		}
-	}
+
 }
 
 type InputCollectorSplunkModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorSplunkModelAttrTypes() map[string]attr.Type {
@@ -3962,7 +3959,7 @@ func InputCollectorSplunkModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorSplunkScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -4130,13 +4127,13 @@ func (m *InputCollectorSplunkModel) unmarshalPayload(input map[string]any) error
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorSplunkScheduleAttrTypes()})
@@ -4196,19 +4193,19 @@ func (m *InputCollectorSplunkModel) unmarshalPayload(input map[string]any) error
 }
 
 type InputCollectorRestModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorRestModelAttrTypes() map[string]attr.Type {
@@ -4219,7 +4216,7 @@ func InputCollectorRestModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorRestScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -4387,13 +4384,13 @@ func (m *InputCollectorRestModel) unmarshalPayload(input map[string]any) error {
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorRestScheduleAttrTypes()})
@@ -4453,19 +4450,19 @@ func (m *InputCollectorRestModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputCollectorS3Model struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorS3ModelAttrTypes() map[string]attr.Type {
@@ -4476,7 +4473,7 @@ func InputCollectorS3ModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorS3ScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -4644,13 +4641,13 @@ func (m *InputCollectorS3Model) unmarshalPayload(input map[string]any) error {
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorS3ScheduleAttrTypes()})
@@ -4710,19 +4707,19 @@ func (m *InputCollectorS3Model) unmarshalPayload(input map[string]any) error {
 }
 
 type InputCollectorAzureBlobModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorAzureBlobModelAttrTypes() map[string]attr.Type {
@@ -4733,7 +4730,7 @@ func InputCollectorAzureBlobModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorAzureBlobScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -4901,13 +4898,13 @@ func (m *InputCollectorAzureBlobModel) unmarshalPayload(input map[string]any) er
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorAzureBlobScheduleAttrTypes()})
@@ -4967,19 +4964,19 @@ func (m *InputCollectorAzureBlobModel) unmarshalPayload(input map[string]any) er
 }
 
 type InputCollectorCriblLakeModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorCriblLakeModelAttrTypes() map[string]attr.Type {
@@ -4990,7 +4987,7 @@ func InputCollectorCriblLakeModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorCriblLakeScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -5158,13 +5155,13 @@ func (m *InputCollectorCriblLakeModel) unmarshalPayload(input map[string]any) er
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorCriblLakeScheduleAttrTypes()})
@@ -5224,19 +5221,19 @@ func (m *InputCollectorCriblLakeModel) unmarshalPayload(input map[string]any) er
 }
 
 type InputCollectorDatabaseModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorDatabaseModelAttrTypes() map[string]attr.Type {
@@ -5247,7 +5244,7 @@ func InputCollectorDatabaseModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorDatabaseScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -5415,13 +5412,13 @@ func (m *InputCollectorDatabaseModel) unmarshalPayload(input map[string]any) err
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorDatabaseScheduleAttrTypes()})
@@ -5481,19 +5478,19 @@ func (m *InputCollectorDatabaseModel) unmarshalPayload(input map[string]any) err
 }
 
 type InputCollectorGCSModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorGCSModelAttrTypes() map[string]attr.Type {
@@ -5504,7 +5501,7 @@ func InputCollectorGCSModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorGCSScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -5672,13 +5669,13 @@ func (m *InputCollectorGCSModel) unmarshalPayload(input map[string]any) error {
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorGCSScheduleAttrTypes()})
@@ -5738,19 +5735,19 @@ func (m *InputCollectorGCSModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputCollectorHealthCheckModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorHealthCheckModelAttrTypes() map[string]attr.Type {
@@ -5761,7 +5758,7 @@ func InputCollectorHealthCheckModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorHealthCheckScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -5929,13 +5926,13 @@ func (m *InputCollectorHealthCheckModel) unmarshalPayload(input map[string]any) 
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorHealthCheckScheduleAttrTypes()})
@@ -5995,19 +5992,19 @@ func (m *InputCollectorHealthCheckModel) unmarshalPayload(input map[string]any) 
 }
 
 type InputCollectorScriptModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorScriptModelAttrTypes() map[string]attr.Type {
@@ -6018,7 +6015,7 @@ func InputCollectorScriptModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorScriptScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -6186,13 +6183,13 @@ func (m *InputCollectorScriptModel) unmarshalPayload(input map[string]any) error
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorScriptScheduleAttrTypes()})
@@ -6252,19 +6249,19 @@ func (m *InputCollectorScriptModel) unmarshalPayload(input map[string]any) error
 }
 
 type InputCollectorFilesystemModel struct {
-	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
-	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
-	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
-	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
-	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
-	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
-	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
-	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
-	Description          types.String `tfsdk:"description" json:"description,omitempty"`
-	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+	ID                   types.String  `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List    `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool    `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Dynamic `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object  `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool    `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object  `tfsdk:"input" json:"input,omitempty"`
+	Description          types.String  `tfsdk:"description" json:"description,omitempty"`
+	Collector            types.Object  `tfsdk:"collector" json:"collector,omitempty"`
 }
 
 func InputCollectorFilesystemModelAttrTypes() map[string]attr.Type {
@@ -6275,7 +6272,7 @@ func InputCollectorFilesystemModelAttrTypes() map[string]attr.Type {
 		"remove_fields":           types.ListType{ElemType: types.StringType},
 		"resume_on_boot":          types.BoolType,
 		"environment":             types.StringType,
-		"saved_state":             types.MapType{ElemType: types.StringType},
+		"saved_state":             types.DynamicType,
 		"schedule":                types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleAttrTypes()},
 		"streamtags":              types.ListType{ElemType: types.StringType},
 		"worker_affinity":         types.BoolType,
@@ -6443,13 +6440,13 @@ func (m *InputCollectorFilesystemModel) unmarshalPayload(input map[string]any) e
 		m.Environment = types.StringNull()
 	}
 	if item, ok := input["savedState"]; ok {
-		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		value, err := CollectorAPIValueToTerraformValue(item, types.DynamicType)
 		if err != nil {
 			return fmt.Errorf("convert savedState from API value: %v", err)
 		}
-		m.SavedState = value.(types.Map)
+		m.SavedState = value.(types.Dynamic)
 	} else {
-		m.SavedState = types.MapNull(types.StringType)
+		m.SavedState = types.DynamicNull()
 	}
 	if item, ok := input["schedule"]; ok {
 		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleAttrTypes()})
