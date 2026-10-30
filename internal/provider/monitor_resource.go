@@ -7,7 +7,7 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/resourcevalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -26,6 +26,7 @@ var _ = types.String{}
 var _ resource.Resource = &MonitorResource{}
 var _ resource.ResourceWithConfigure = &MonitorResource{}
 var _ resource.ResourceWithImportState = &MonitorResource{}
+var _ resource.ResourceWithConfigValidators = &MonitorResource{}
 
 type MonitorResource struct {
 	client *restclient.Client
@@ -39,17 +40,21 @@ func NewMonitorResource() resource.Resource {
 func (r *MonitorResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_monitor"
 }
+func (r *MonitorResource) ConfigValidators(_ context.Context) []resource.ConfigValidator {
+	return []resource.ConfigValidator{
+		resourcevalidator.ExactlyOneOf(path.MatchRoot("firing_condition"), path.MatchRoot("firing_condition_inheritable")),
+		resourcevalidator.ExactlyOneOf(path.MatchRoot("firing_rule"), path.MatchRoot("firing_rule_inheritable")),
+		resourcevalidator.ExactlyOneOf(path.MatchRoot("aetos_metadata"), path.MatchRoot("metadata_inheritable")),
+		resourcevalidator.ExactlyOneOf(path.MatchRoot("monitor_policy_notification_config"), path.MatchRoot("monitor_target_notification_config"), path.MatchRoot("notification_inheritable")),
+		resourcevalidator.ExactlyOneOf(path.MatchRoot("priority_scalar_value"), path.MatchRoot("priority_inheritable")),
+		resourcevalidator.ExactlyOneOf(path.MatchRoot("team_scalar_value"), path.MatchRoot("team_inheritable")),
+	}
+}
 
 func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Monitor Resource",
 		Attributes: map[string]schema.Attribute{
-			"alert_expression": schema.StringAttribute{
-				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Optional Alert Query expression over the operand labels (for example "A + B"). Omitted: a single query uses its own label; multiple queries default to the sum.`,
-			},
 			"dataset_id": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
@@ -69,11 +74,10 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Description: `Whether the monitor is active and evaluated.`,
 			},
 			"expr": schema.ListNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Query expressions evaluated to produce the monitor's series.`,
-				PlanModifiers: monitorExprSynthesize(),
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Query expressions evaluated to produce the monitor's series.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"dataset_id": schema.StringAttribute{
@@ -140,12 +144,8 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"managed_by": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    true,
-				Default:     stringdefault.StaticString("terraform"),
+				Computed:    false,
 				Description: `Identifies the external provisioner (e.g. 'terraform') that owns this monitor. When set, the monitor is read-only from the UI and non-SDK REST mutations are rejected with 403.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("terraform"),
-				},
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
@@ -153,202 +153,31 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Computed:    false,
 				Description: `Human-readable name for the monitor.`,
 			},
-			"queries": schema.ListNestedAttribute{
+			"profile_ref": schema.SingleNestedAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Operand queries in order. The provider assigns labels A, B, C... and builds the query map; reference them by letter in alert_expression.`,
-				Validators: []validator.List{
-					listvalidator.SizeAtLeast(1),
-				},
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"builder": schema.SingleNestedAttribute{
-							Required:    false,
-							Optional:    true,
-							Computed:    false,
-							Description: `Structured builder representation of this query. Present when authored via the visual builder UI.`,
-							Attributes: map[string]schema.Attribute{
-								"aggregation": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Aggregation operator applied to the metric series.`,
-								},
-								"evaluation_window": schema.SingleNestedAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Evaluation window over which the metric query is evaluated.`,
-									Attributes: map[string]schema.Attribute{
-										"unit": schema.StringAttribute{
-											Required:    true,
-											Optional:    false,
-											Computed:    false,
-											Description: `Time unit for the evaluation window magnitude.`,
-										},
-										"value": schema.Int64Attribute{
-											Required:    true,
-											Optional:    false,
-											Computed:    false,
-											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
-										},
-									},
-								},
-								"group_by": schema.ListAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Label keys to group the aggregated metric results by.`,
-									ElementType: types.StringType,
-								},
-								"label_filters": schema.ListNestedAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Label filters applied to the metric query in builder mode.`,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"key": schema.StringAttribute{
-												Required:    true,
-												Optional:    false,
-												Computed:    false,
-												Description: `Label key to filter on.`,
-											},
-											"op": schema.StringAttribute{
-												Required:    true,
-												Optional:    false,
-												Computed:    false,
-												Description: `Comparison operator for the label filter. Supports PromQL semantics: <code>=</code>, <code>!=</code>, <code>=</code>, <code>!</code>.`,
-											},
-											"value": schema.StringAttribute{
-												Required:    true,
-												Optional:    false,
-												Computed:    false,
-												Description: `Value to match against the label, interpreted according to the operator.`,
-											},
-										},
-									},
-								},
-								"metric": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Name of the metric to query in builder mode.`,
-								},
-								"units": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Unit label applied to the query's values.`,
-								},
-							},
-						},
-						"dataset_id": schema.StringAttribute{
-							Required:    false,
-							Optional:    true,
-							Computed:    false,
-							Description: `Per-query dataset override. Falls back to the monitor's <code>datasetId</code> when absent.`,
-						},
-						"display_name": schema.StringAttribute{
-							Required:    false,
-							Optional:    true,
-							Computed:    false,
-							Description: `User-editable display label for the query card. Defaults to the stable query key.`,
-						},
-						"logs_builder": schema.SingleNestedAttribute{
-							Required:    false,
-							Optional:    true,
-							Computed:    false,
-							Description: `Structured builder fields for a logs-mode query.`,
-							Attributes: map[string]schema.Attribute{
-								"dataset": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Dataset to query for log events.`,
-								},
-								"evaluation_window": schema.SingleNestedAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Evaluation window over which the logs query is evaluated.`,
-									Attributes: map[string]schema.Attribute{
-										"unit": schema.StringAttribute{
-											Required:    true,
-											Optional:    false,
-											Computed:    false,
-											Description: `Time unit for the evaluation window magnitude.`,
-										},
-										"value": schema.Int64Attribute{
-											Required:    true,
-											Optional:    false,
-											Computed:    false,
-											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
-										},
-									},
-								},
-								"field": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `Field to aggregate over. Required for operators other than <code>count_all</code>.`,
-								},
-								"group_by": schema.ListAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Label keys to group the aggregated log results by.`,
-									ElementType: types.StringType,
-								},
-								"operator": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Aggregation operator applied to the log events.`,
-								},
-								"parent_search": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `Optional parent search that scopes the logs query.`,
-								},
-								"saved_search_id": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `Identifier of a saved search to run instead of an authored query.`,
-								},
-							},
-						},
-						"mode": schema.StringAttribute{
-							Required:    true,
-							Optional:    false,
-							Computed:    false,
-							Description: `Query authoring mode: <code>builder</code> for the visual builder or <code>promql</code> for raw PromQL.`,
-						},
-						"params": schema.MapAttribute{
-							Required:    false,
-							Optional:    true,
-							Computed:    false,
-							Description: `Template parameter bindings applied to the query before evaluation.`,
-							ElementType: types.StringType,
-						},
-						"promql": schema.StringAttribute{
-							Required:    true,
-							Optional:    false,
-							Computed:    false,
-							Description: `PromQL query string that the monitor evaluates.`,
-						},
+				Description: `Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited.`,
+				Attributes: map[string]schema.Attribute{
+					"fingerprint": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Content hash of the profile, compared by readers to detect drift.`,
+					},
+					"id": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Unique identifier for the profile.`,
 					},
 				},
 			},
 			"query": schema.MapNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Monitor queries keyed by query label. Each query is inheritable from a linked profile.`,
-				PlanModifiers: monitorQuerySynthesize(),
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Monitor queries keyed by query label. Each query is inheritable from a linked profile.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"builder": schema.SingleNestedAttribute{
@@ -510,8 +339,8 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 							},
 						},
 						"mode": schema.StringAttribute{
-							Required:    true,
-							Optional:    false,
+							Required:    false,
+							Optional:    true,
 							Computed:    false,
 							Description: `Query authoring mode: <code>builder</code> for the visual builder or <code>promql</code> for raw PromQL.`,
 						},
@@ -523,10 +352,31 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 							ElementType: types.StringType,
 						},
 						"promql": schema.StringAttribute{
-							Required:    true,
-							Optional:    false,
+							Required:    false,
+							Optional:    true,
 							Computed:    false,
 							Description: `PromQL query string that the monitor evaluates.`,
+						},
+						"config_refs": schema.ListNestedAttribute{
+							Required: false,
+							Optional: true,
+							Computed: false,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"fingerprint": schema.StringAttribute{
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+									},
+									"id": schema.StringAttribute{
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Unique identifier for the shared configuration.`,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -538,8 +388,8 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Description: `Logs monitors only. Distinguishes authoring a fresh search ('new') from selecting a saved one ('saved'). Defaults to 'new' when omitted; ignored for non-logs monitor types.`,
 			},
 			"silence": schema.ListAttribute{
-				Required:    false,
-				Optional:    true,
+				Required:    true,
+				Optional:    false,
 				Computed:    false,
 				Description: `IDs of silence windows that suppress this monitor's alerts.`,
 				ElementType: types.StringType,
@@ -548,7 +398,7 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).`,
+				Description: `Template parameter bindings keyed by query label. Baseline values come from the query's shared configs; non-empty values act as user overrides.`,
 				CustomType:  jsontypes.NormalizedType{},
 			},
 			"type": schema.StringAttribute{
@@ -667,43 +517,6 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 							stringvalidator.OneOf("mad"),
 						},
 					},
-					"mode": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
-						Description: `How the peer cohort is pooled: per-instant cross-section, or pooled over the window.`,
-					},
-					"cohort_labels": schema.ListAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
-						Description: `Labels that group series into peer cohorts; empty means one global cohort across all series.`,
-						ElementType: types.StringType,
-					},
-					"threshold_direction": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
-						Description: `Which side flags an outlier: above the cohort spread, below it, or either.`,
-					},
-					"evaluation_window_ms": schema.Float64Attribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
-						Description: `Window in milliseconds the pooled cohort median/MAD is computed over.`,
-					},
-					"pct": schema.Float64Attribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
-						Description: `Percentage (1-100) of a series' window points that must breach before it is flagged.`,
-					},
-					"min_coverage": schema.Float64Attribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
-						Description: `Percentage (1-100) of expected window points a series needs before it is graded.`,
-					},
 				},
 			},
 			"forecast_config": schema.SingleNestedAttribute{
@@ -758,8 +571,30 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				},
 			},
 			"firing_condition_inheritable": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Required: true,
+						Optional: false,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"firing_rule": schema.SingleNestedAttribute{
 				Optional: true,
@@ -929,16 +764,60 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				},
 			},
 			"firing_rule_inheritable": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Required: true,
+						Optional: false,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
-			"aetos_metadata": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+			"aetos_metadata": schema.MapAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
 			},
 			"metadata_inheritable": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Required: true,
+						Optional: false,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"monitor_policy_notification_config": schema.SingleNestedAttribute{
 				Optional: true,
@@ -950,22 +829,22 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Description: `Notification policy entries for policy-based routing.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conditions": schema.ListAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									ElementType: types.StringType,
+								"conditions": schema.StringAttribute{
+									Required:   true,
+									Optional:   false,
+									Computed:   false,
+									CustomType: jsontypes.NormalizedType{},
 								},
 								"disabled": schema.BoolAttribute{
 									Required:    false,
 									Optional:    true,
-									Computed:    false,
+									Computed:    true,
 									Description: `If <code>true</code>, this policy is skipped during evaluation. Otherwise, <code>false</code>.`,
 								},
 								"final": schema.BoolAttribute{
 									Required:    false,
 									Optional:    true,
-									Computed:    false,
+									Computed:    true,
 									Description: `If <code>true</code>, this is the last policy to apply; no policies below it are evaluated or combined. Otherwise, <code>false</code>.`,
 								},
 								"group_by_labels": schema.ListAttribute{
@@ -1010,7 +889,7 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 								"wait_to_group": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
-									Computed:    false,
+									Computed:    true,
 									Description: `How long, in minutes, to wait after the first alert before sending a Notification, allowing the system to group similar alerts.`,
 								},
 							},
@@ -1078,8 +957,30 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				},
 			},
 			"notification_inheritable": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Required: true,
+						Optional: false,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"priority_scalar_value": schema.SingleNestedAttribute{
 				Optional: true,
@@ -1093,8 +994,30 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				},
 			},
 			"priority_inheritable": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Required: true,
+						Optional: false,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"team_scalar_value": schema.SingleNestedAttribute{
 				Optional: true,
@@ -1108,8 +1031,30 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				},
 			},
 			"team_inheritable": schema.SingleNestedAttribute{
-				Optional:   true,
-				Attributes: map[string]schema.Attribute{},
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Required: true,
+						Optional: false,
+						Computed: false,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -1169,7 +1114,10 @@ func (r *MonitorResource) Read(ctx context.Context, req resource.ReadRequest, re
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyMonitorAPIToState(apiModel, &model, true, isMonitorImportState(&model))
+	// Monitor configuration, including inheritance and cleared fields, is authoritative on refresh.
+	if apiModel != nil {
+		model = *apiModel
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -1221,7 +1169,16 @@ func isMonitorImportState(state *MonitorModel) bool {
 	if state.Enabled.IsNull() || state.Enabled.IsUnknown() {
 		return true
 	}
+	if state.Expr.IsNull() || state.Expr.IsUnknown() {
+		return true
+	}
 	if state.Name.IsNull() || state.Name.IsUnknown() {
+		return true
+	}
+	if state.Query.IsNull() || state.Query.IsUnknown() {
+		return true
+	}
+	if state.Silence.IsNull() || state.Silence.IsUnknown() {
 		return true
 	}
 	if state.Type.IsNull() || state.Type.IsUnknown() {
@@ -1233,11 +1190,6 @@ func isMonitorImportState(state *MonitorModel) bool {
 func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
-	}
-	if !preserveInputs || (fillMissingInputs && (state.AlertExpression.IsNull() || state.AlertExpression.IsUnknown())) {
-		if !api.AlertExpression.IsNull() && !api.AlertExpression.IsUnknown() {
-			state.AlertExpression = api.AlertExpression
-		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.DatasetID.IsNull() || state.DatasetID.IsUnknown())) {
 		if !api.DatasetID.IsNull() && !api.DatasetID.IsUnknown() {
@@ -1254,11 +1206,10 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 			state.Enabled = api.Enabled
 		}
 	}
-	if !api.Expr.IsNull() && !api.Expr.IsUnknown() {
-		state.Expr = api.Expr
-	}
-	if state.Expr.IsUnknown() {
-		state.Expr = types.ListNull(types.ObjectType{AttrTypes: MonitorExprAttrTypes()})
+	if !preserveInputs || (fillMissingInputs && (state.Expr.IsNull() || state.Expr.IsUnknown())) || (!api.Expr.IsNull() && !api.Expr.IsUnknown() && !state.Expr.IsNull() && !state.Expr.IsUnknown() && len(state.Expr.Elements()) == 0) {
+		if !api.Expr.IsNull() && !api.Expr.IsUnknown() {
+			state.Expr = api.Expr
+		}
 	}
 	if state.Expr.IsNull() || state.Expr.IsUnknown() {
 		state.Expr = types.ListNull(types.ObjectType{AttrTypes: MonitorExprAttrTypes()})
@@ -1270,33 +1221,28 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 			state.ID = api.ID
 		}
 	}
-	if !api.ManagedBy.IsNull() && !api.ManagedBy.IsUnknown() {
-		state.ManagedBy = api.ManagedBy
+	if !preserveInputs || (fillMissingInputs && (state.ManagedBy.IsNull() || state.ManagedBy.IsUnknown())) {
+		if !api.ManagedBy.IsNull() && !api.ManagedBy.IsUnknown() {
+			state.ManagedBy = api.ManagedBy
+		}
 	}
-	if state.ManagedBy.IsUnknown() {
-		state.ManagedBy = types.StringNull()
-	}
-	state.ManagedBy = types.StringValue("terraform")
 	if !preserveInputs || (fillMissingInputs && (state.Name.IsNull() || state.Name.IsUnknown())) {
 		if !api.Name.IsNull() && !api.Name.IsUnknown() {
 			state.Name = api.Name
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Queries.IsNull() || state.Queries.IsUnknown())) || (!api.Queries.IsNull() && !api.Queries.IsUnknown() && !state.Queries.IsNull() && !state.Queries.IsUnknown() && len(state.Queries.Elements()) == 0) {
-		if !api.Queries.IsNull() && !api.Queries.IsUnknown() {
-			state.Queries = api.Queries
+	if !preserveInputs || (fillMissingInputs && (state.ProfileRef.IsNull() || state.ProfileRef.IsUnknown())) {
+		if !api.ProfileRef.IsNull() && !api.ProfileRef.IsUnknown() {
+			state.ProfileRef = api.ProfileRef
 		}
 	}
-	if state.Queries.IsNull() || state.Queries.IsUnknown() {
-		state.Queries = types.ListNull(types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()})
-	} else if len(state.Queries.Elements()) == 0 {
-		state.Queries = types.ListValueMust(types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()}, nil)
+	if len(state.ProfileRef.AttributeTypes(context.Background())) == 0 {
+		state.ProfileRef = types.ObjectNull(MonitorProfileRefAttrTypes())
 	}
-	if !api.Query.IsNull() && !api.Query.IsUnknown() {
-		state.Query = api.Query
-	}
-	if state.Query.IsUnknown() {
-		state.Query = types.MapNull(types.ObjectType{AttrTypes: MonitorQueryAttrTypes()})
+	if !preserveInputs || (fillMissingInputs && (state.Query.IsNull() || state.Query.IsUnknown())) {
+		if !api.Query.IsNull() && !api.Query.IsUnknown() {
+			state.Query = api.Query
+		}
 	}
 	if state.Query.IsNull() || state.Query.IsUnknown() {
 		state.Query = types.MapNull(types.ObjectType{AttrTypes: MonitorQueryAttrTypes()})
@@ -1420,39 +1366,6 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		} else if state.OutlierConfig.Algorithm.IsNull() || state.OutlierConfig.Algorithm.IsUnknown() {
 			state.OutlierConfig.Algorithm = types.StringNull()
 		}
-		if !api.OutlierConfig.Mode.IsNull() && !api.OutlierConfig.Mode.IsUnknown() {
-			state.OutlierConfig.Mode = api.OutlierConfig.Mode
-		} else if state.OutlierConfig.Mode.IsNull() || state.OutlierConfig.Mode.IsUnknown() {
-			state.OutlierConfig.Mode = types.StringNull()
-		}
-		if !api.OutlierConfig.CohortLabels.IsNull() && !api.OutlierConfig.CohortLabels.IsUnknown() {
-			state.OutlierConfig.CohortLabels = api.OutlierConfig.CohortLabels
-		} else if state.OutlierConfig.CohortLabels.IsNull() || state.OutlierConfig.CohortLabels.IsUnknown() {
-			state.OutlierConfig.CohortLabels = types.ListNull(types.StringType)
-		}
-		if elementType := state.OutlierConfig.CohortLabels.ElementType(context.Background()); elementType == nil {
-			state.OutlierConfig.CohortLabels = types.ListNull(types.StringType)
-		}
-		if !api.OutlierConfig.ThresholdDirection.IsNull() && !api.OutlierConfig.ThresholdDirection.IsUnknown() {
-			state.OutlierConfig.ThresholdDirection = api.OutlierConfig.ThresholdDirection
-		} else if state.OutlierConfig.ThresholdDirection.IsNull() || state.OutlierConfig.ThresholdDirection.IsUnknown() {
-			state.OutlierConfig.ThresholdDirection = types.StringNull()
-		}
-		if !api.OutlierConfig.EvaluationWindowMs.IsNull() && !api.OutlierConfig.EvaluationWindowMs.IsUnknown() {
-			state.OutlierConfig.EvaluationWindowMs = api.OutlierConfig.EvaluationWindowMs
-		} else if state.OutlierConfig.EvaluationWindowMs.IsNull() || state.OutlierConfig.EvaluationWindowMs.IsUnknown() {
-			state.OutlierConfig.EvaluationWindowMs = types.Float64Null()
-		}
-		if !api.OutlierConfig.Pct.IsNull() && !api.OutlierConfig.Pct.IsUnknown() {
-			state.OutlierConfig.Pct = api.OutlierConfig.Pct
-		} else if state.OutlierConfig.Pct.IsNull() || state.OutlierConfig.Pct.IsUnknown() {
-			state.OutlierConfig.Pct = types.Float64Null()
-		}
-		if !api.OutlierConfig.MinCoverage.IsNull() && !api.OutlierConfig.MinCoverage.IsUnknown() {
-			state.OutlierConfig.MinCoverage = api.OutlierConfig.MinCoverage
-		} else if state.OutlierConfig.MinCoverage.IsNull() || state.OutlierConfig.MinCoverage.IsUnknown() {
-			state.OutlierConfig.MinCoverage = types.Float64Null()
-		}
 	}
 	if api.ForecastConfig != nil {
 		if state.ForecastConfig == nil {
@@ -1503,6 +1416,16 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		if state.FiringConditionInheritable == nil {
 			state.FiringConditionInheritable = &FiringConditionInheritableModel{}
 		}
+		if !api.FiringConditionInheritable.ConfigRefs.IsNull() && !api.FiringConditionInheritable.ConfigRefs.IsUnknown() {
+			state.FiringConditionInheritable.ConfigRefs = api.FiringConditionInheritable.ConfigRefs
+		} else if state.FiringConditionInheritable.ConfigRefs.IsNull() || state.FiringConditionInheritable.ConfigRefs.IsUnknown() {
+			state.FiringConditionInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: FiringConditionInheritableConfigRefsAttrTypes()})
+		}
+		if state.FiringConditionInheritable.ConfigRefs.IsNull() || state.FiringConditionInheritable.ConfigRefs.IsUnknown() {
+			state.FiringConditionInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: FiringConditionInheritableConfigRefsAttrTypes()})
+		} else if len(state.FiringConditionInheritable.ConfigRefs.Elements()) == 0 {
+			state.FiringConditionInheritable.ConfigRefs = types.ListValueMust(types.ObjectType{AttrTypes: FiringConditionInheritableConfigRefsAttrTypes()}, nil)
+		}
 	}
 	if api.FiringRule != nil {
 		if state.FiringRule == nil {
@@ -1543,15 +1466,33 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		if state.FiringRuleInheritable == nil {
 			state.FiringRuleInheritable = &FiringRuleInheritableModel{}
 		}
+		if !api.FiringRuleInheritable.ConfigRefs.IsNull() && !api.FiringRuleInheritable.ConfigRefs.IsUnknown() {
+			state.FiringRuleInheritable.ConfigRefs = api.FiringRuleInheritable.ConfigRefs
+		} else if state.FiringRuleInheritable.ConfigRefs.IsNull() || state.FiringRuleInheritable.ConfigRefs.IsUnknown() {
+			state.FiringRuleInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: FiringRuleInheritableConfigRefsAttrTypes()})
+		}
+		if state.FiringRuleInheritable.ConfigRefs.IsNull() || state.FiringRuleInheritable.ConfigRefs.IsUnknown() {
+			state.FiringRuleInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: FiringRuleInheritableConfigRefsAttrTypes()})
+		} else if len(state.FiringRuleInheritable.ConfigRefs.Elements()) == 0 {
+			state.FiringRuleInheritable.ConfigRefs = types.ListValueMust(types.ObjectType{AttrTypes: FiringRuleInheritableConfigRefsAttrTypes()}, nil)
+		}
 	}
 	if api.AetosMetadata != nil {
-		if state.AetosMetadata == nil {
-			state.AetosMetadata = &AetosMetadataModel{}
-		}
+		state.AetosMetadata = api.AetosMetadata
 	}
 	if api.MetadataInheritable != nil {
 		if state.MetadataInheritable == nil {
 			state.MetadataInheritable = &MetadataInheritableModel{}
+		}
+		if !api.MetadataInheritable.ConfigRefs.IsNull() && !api.MetadataInheritable.ConfigRefs.IsUnknown() {
+			state.MetadataInheritable.ConfigRefs = api.MetadataInheritable.ConfigRefs
+		} else if state.MetadataInheritable.ConfigRefs.IsNull() || state.MetadataInheritable.ConfigRefs.IsUnknown() {
+			state.MetadataInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: MetadataInheritableConfigRefsAttrTypes()})
+		}
+		if state.MetadataInheritable.ConfigRefs.IsNull() || state.MetadataInheritable.ConfigRefs.IsUnknown() {
+			state.MetadataInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: MetadataInheritableConfigRefsAttrTypes()})
+		} else if len(state.MetadataInheritable.ConfigRefs.Elements()) == 0 {
+			state.MetadataInheritable.ConfigRefs = types.ListValueMust(types.ObjectType{AttrTypes: MetadataInheritableConfigRefsAttrTypes()}, nil)
 		}
 	}
 	if api.MonitorPolicyNotificationConfig != nil {
@@ -1608,6 +1549,16 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		if state.NotificationInheritable == nil {
 			state.NotificationInheritable = &NotificationInheritableModel{}
 		}
+		if !api.NotificationInheritable.ConfigRefs.IsNull() && !api.NotificationInheritable.ConfigRefs.IsUnknown() {
+			state.NotificationInheritable.ConfigRefs = api.NotificationInheritable.ConfigRefs
+		} else if state.NotificationInheritable.ConfigRefs.IsNull() || state.NotificationInheritable.ConfigRefs.IsUnknown() {
+			state.NotificationInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: NotificationInheritableConfigRefsAttrTypes()})
+		}
+		if state.NotificationInheritable.ConfigRefs.IsNull() || state.NotificationInheritable.ConfigRefs.IsUnknown() {
+			state.NotificationInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: NotificationInheritableConfigRefsAttrTypes()})
+		} else if len(state.NotificationInheritable.ConfigRefs.Elements()) == 0 {
+			state.NotificationInheritable.ConfigRefs = types.ListValueMust(types.ObjectType{AttrTypes: NotificationInheritableConfigRefsAttrTypes()}, nil)
+		}
 	}
 	if api.PriorityScalarValue != nil {
 		if state.PriorityScalarValue == nil {
@@ -1623,6 +1574,16 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		if state.PriorityInheritable == nil {
 			state.PriorityInheritable = &PriorityInheritableModel{}
 		}
+		if !api.PriorityInheritable.ConfigRefs.IsNull() && !api.PriorityInheritable.ConfigRefs.IsUnknown() {
+			state.PriorityInheritable.ConfigRefs = api.PriorityInheritable.ConfigRefs
+		} else if state.PriorityInheritable.ConfigRefs.IsNull() || state.PriorityInheritable.ConfigRefs.IsUnknown() {
+			state.PriorityInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: PriorityInheritableConfigRefsAttrTypes()})
+		}
+		if state.PriorityInheritable.ConfigRefs.IsNull() || state.PriorityInheritable.ConfigRefs.IsUnknown() {
+			state.PriorityInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: PriorityInheritableConfigRefsAttrTypes()})
+		} else if len(state.PriorityInheritable.ConfigRefs.Elements()) == 0 {
+			state.PriorityInheritable.ConfigRefs = types.ListValueMust(types.ObjectType{AttrTypes: PriorityInheritableConfigRefsAttrTypes()}, nil)
+		}
 	}
 	if api.TeamScalarValue != nil {
 		if state.TeamScalarValue == nil {
@@ -1637,6 +1598,16 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 	if api.TeamInheritable != nil {
 		if state.TeamInheritable == nil {
 			state.TeamInheritable = &TeamInheritableModel{}
+		}
+		if !api.TeamInheritable.ConfigRefs.IsNull() && !api.TeamInheritable.ConfigRefs.IsUnknown() {
+			state.TeamInheritable.ConfigRefs = api.TeamInheritable.ConfigRefs
+		} else if state.TeamInheritable.ConfigRefs.IsNull() || state.TeamInheritable.ConfigRefs.IsUnknown() {
+			state.TeamInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: TeamInheritableConfigRefsAttrTypes()})
+		}
+		if state.TeamInheritable.ConfigRefs.IsNull() || state.TeamInheritable.ConfigRefs.IsUnknown() {
+			state.TeamInheritable.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: TeamInheritableConfigRefsAttrTypes()})
+		} else if len(state.TeamInheritable.ConfigRefs.Elements()) == 0 {
+			state.TeamInheritable.ConfigRefs = types.ListValueMust(types.ObjectType{AttrTypes: TeamInheritableConfigRefsAttrTypes()}, nil)
 		}
 	}
 }

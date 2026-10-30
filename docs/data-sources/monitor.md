@@ -1,5 +1,5 @@
 ---
-# hand-maintained -- no generator in this repo produces data-source docs, see docs/resources/monitor.md's "How this was built"
+# hand-maintained
 page_title: "criblio_monitor Data Source - terraform-provider-criblio"
 subcategory: ""
 description: |-
@@ -37,20 +37,23 @@ data "criblio_monitor" "example" {
 - `expr` (Attributes List) Query expressions evaluated to produce the monitor's series. (see resource docs for the full nested schema)
 - `firing_condition` (Attributes) (see resource docs for the full nested schema)
 - `firing_rule` (Attributes) (see resource docs for the full nested schema)
-- `aetos_metadata` (Attributes Map) Arbitrary key-value metadata.
-- `managed_by` (String) Stamped 'terraform' by the backend when provisioned via the Terraform provider (cribl/cribl#43133).
+- `aetos_metadata` (Map of String) Arbitrary metadata key/value pairs.
+- `managed_by` (String) External provisioner that owns this monitor.
+- `profile_ref` (Attributes) Linked profile ID and fingerprint.
 - `name` (String)
 - `priority_scalar_value` (Attributes) (see resource docs for the full nested schema)
 - `query` (Attributes Map) Monitor queries keyed by query label. (see resource docs for the full nested schema)
 - `search_mode` (String) Logs monitors only.
 - `silence` (List of String) IDs of silence windows that suppress this monitor's alerts.
 - `team_scalar_value` (Attributes) (see resource docs for the full nested schema)
-- `template_params` (Map of String) Per-query template parameters, keyed by query label -- still opaque JSON due to a codegen limitation with map-of-map schemas (INFRA-12649), not a design choice.
+- `template_params` (String) JSON-encoded template parameter bindings keyed by query label.
 - `type` (String)
 - `unit` (String)
 
-`detection_config` does not exist as a field -- it's four typed sub-blocks (`anomaly_config`/`change_config`/`outlier_config`/`forecast_config`), exactly one populated matching `type`, correctly nested under the API's `detectionConfig` on the wire via an explicit discriminator on the sibling `type` field (not shape-matching, which is unsafe -- see `docs/resources/monitor.md`'s "How this was built").
+Detection configuration is returned in the block matching the monitor's `type`: `anomaly_config`, `change_config`, `outlier_config`, or `forecast_config`.
 
-`priority`/`team`/`firingCondition`/`firingRule`/`metadata`/`notification` are each modeled as a pair of named sub-blocks (a concrete one and an `_inheritable` one for profile-linked values) rather than narrowed to a single branch -- see `docs/resources/monitor.md` for the full nested schemas.
+Profile-linked values are returned in `firing_condition_inheritable`, `firing_rule_inheritable`, `metadata_inheritable`, `priority_inheritable`, or `team_inheritable`, each containing `config_refs` with IDs and fingerprints. Notifications are returned in `monitor_policy_notification_config`, `monitor_target_notification_config`, or `notification_inheritable`.
+
+Inherited queries contain `config_refs` in their query-label map entry. Inline queries contain `mode` and `promql`.
 
 Full nested attribute schemas match the `criblio_monitor` resource -- see `docs/resources/monitor.md` for the complete, codegen-accurate field list.

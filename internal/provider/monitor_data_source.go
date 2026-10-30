@@ -35,10 +35,6 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Monitor Data Source",
 		Attributes: map[string]schema.Attribute{
-			"alert_expression": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional Alert Query expression over the operand labels (for example "A + B"). Omitted: a single query uses its own label; multiple queries default to the sum.`,
-			},
 			"dataset_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Default dataset used for query execution and alert history storage. Per-query overrides are set via the query's datasetId.`,
@@ -104,134 +100,17 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Computed:    true,
 				Description: `Human-readable name for the monitor.`,
 			},
-			"queries": schema.ListNestedAttribute{
+			"profile_ref": schema.SingleNestedAttribute{
 				Computed:    true,
-				Description: `Operand queries in order. The provider assigns labels A, B, C... and builds the query map; reference them by letter in alert_expression.`,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"builder": schema.SingleNestedAttribute{
-							Computed:    true,
-							Description: `Structured builder representation of this query. Present when authored via the visual builder UI.`,
-							Attributes: map[string]schema.Attribute{
-								"aggregation": schema.StringAttribute{
-									Computed:    true,
-									Description: `Aggregation operator applied to the metric series.`,
-								},
-								"evaluation_window": schema.SingleNestedAttribute{
-									Computed:    true,
-									Description: `Evaluation window over which the metric query is evaluated.`,
-									Attributes: map[string]schema.Attribute{
-										"unit": schema.StringAttribute{
-											Computed:    true,
-											Description: `Time unit for the evaluation window magnitude.`,
-										},
-										"value": schema.Int64Attribute{
-											Computed:    true,
-											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
-										},
-									},
-								},
-								"group_by": schema.ListAttribute{
-									Computed:    true,
-									Description: `Label keys to group the aggregated metric results by.`,
-									ElementType: types.StringType,
-								},
-								"label_filters": schema.ListNestedAttribute{
-									Computed:    true,
-									Description: `Label filters applied to the metric query in builder mode.`,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"key": schema.StringAttribute{
-												Computed:    true,
-												Description: `Label key to filter on.`,
-											},
-											"op": schema.StringAttribute{
-												Computed:    true,
-												Description: `Comparison operator for the label filter. Supports PromQL semantics: <code>=</code>, <code>!=</code>, <code>=</code>, <code>!</code>.`,
-											},
-											"value": schema.StringAttribute{
-												Computed:    true,
-												Description: `Value to match against the label, interpreted according to the operator.`,
-											},
-										},
-									},
-								},
-								"metric": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the metric to query in builder mode.`,
-								},
-								"units": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unit label applied to the query's values.`,
-								},
-							},
-						},
-						"dataset_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Per-query dataset override. Falls back to the monitor's <code>datasetId</code> when absent.`,
-						},
-						"display_name": schema.StringAttribute{
-							Computed:    true,
-							Description: `User-editable display label for the query card. Defaults to the stable query key.`,
-						},
-						"logs_builder": schema.SingleNestedAttribute{
-							Computed:    true,
-							Description: `Structured builder fields for a logs-mode query.`,
-							Attributes: map[string]schema.Attribute{
-								"dataset": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset to query for log events.`,
-								},
-								"evaluation_window": schema.SingleNestedAttribute{
-									Computed:    true,
-									Description: `Evaluation window over which the logs query is evaluated.`,
-									Attributes: map[string]schema.Attribute{
-										"unit": schema.StringAttribute{
-											Computed:    true,
-											Description: `Time unit for the evaluation window magnitude.`,
-										},
-										"value": schema.Int64Attribute{
-											Computed:    true,
-											Description: `Numeric magnitude of the evaluation window, paired with <code>unit</code>.`,
-										},
-									},
-								},
-								"field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Field to aggregate over. Required for operators other than <code>count_all</code>.`,
-								},
-								"group_by": schema.ListAttribute{
-									Computed:    true,
-									Description: `Label keys to group the aggregated log results by.`,
-									ElementType: types.StringType,
-								},
-								"operator": schema.StringAttribute{
-									Computed:    true,
-									Description: `Aggregation operator applied to the log events.`,
-								},
-								"parent_search": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional parent search that scopes the logs query.`,
-								},
-								"saved_search_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Identifier of a saved search to run instead of an authored query.`,
-								},
-							},
-						},
-						"mode": schema.StringAttribute{
-							Computed:    true,
-							Description: `Query authoring mode: <code>builder</code> for the visual builder or <code>promql</code> for raw PromQL.`,
-						},
-						"params": schema.MapAttribute{
-							Computed:    true,
-							Description: `Template parameter bindings applied to the query before evaluation.`,
-							ElementType: types.StringType,
-						},
-						"promql": schema.StringAttribute{
-							Computed:    true,
-							Description: `PromQL query string that the monitor evaluates.`,
-						},
+				Description: `Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited.`,
+				Attributes: map[string]schema.Attribute{
+					"fingerprint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Content hash of the profile, compared by readers to detect drift.`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the profile.`,
 					},
 				},
 			},
@@ -363,6 +242,21 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 							Computed:    true,
 							Description: `PromQL query string that the monitor evaluates.`,
 						},
+						"config_refs": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"fingerprint": schema.StringAttribute{
+										Computed:    true,
+										Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+									},
+									"id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Unique identifier for the shared configuration.`,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -377,7 +271,7 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 			},
 			"template_params": schema.StringAttribute{
 				Computed:    true,
-				Description: `Template parameter bindings keyed by query label. Use jsonencode({ A = { ... } }).`,
+				Description: `Template parameter bindings keyed by query label. Baseline values come from the query's shared configs; non-empty values act as user overrides.`,
 				CustomType:  jsontypes.NormalizedType{},
 			},
 			"type": schema.StringAttribute{
@@ -458,31 +352,6 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 						Computed:    true,
 						Description: `Discriminator value.`,
 					},
-					"mode": schema.StringAttribute{
-						Computed:    true,
-						Description: `How the peer cohort is pooled: per-instant cross-section, or pooled over the window.`,
-					},
-					"cohort_labels": schema.ListAttribute{
-						Computed:    true,
-						Description: `Labels that group series into peer cohorts; empty means one global cohort across all series.`,
-						ElementType: types.StringType,
-					},
-					"threshold_direction": schema.StringAttribute{
-						Computed:    true,
-						Description: `Which side flags an outlier: above the cohort spread, below it, or either.`,
-					},
-					"evaluation_window_ms": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Window in milliseconds the pooled cohort median/MAD is computed over.`,
-					},
-					"pct": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Percentage (1-100) of a series' window points that must breach before it is flagged.`,
-					},
-					"min_coverage": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Percentage (1-100) of expected window points a series needs before it is graded.`,
-					},
 				},
 			},
 			"forecast_config": schema.SingleNestedAttribute{
@@ -523,8 +392,24 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				},
 			},
 			"firing_condition_inheritable": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"firing_rule": schema.SingleNestedAttribute{
 				Computed: true,
@@ -646,16 +531,45 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				},
 			},
 			"firing_rule_inheritable": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
-			"aetos_metadata": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
-			},
+			"aetos_metadata": schema.MapAttribute{Computed: true, ElementType: types.StringType},
 			"metadata_inheritable": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"monitor_policy_notification_config": schema.SingleNestedAttribute{
 				Computed: true,
@@ -665,9 +579,9 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 						Description: `Notification policy entries for policy-based routing.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conditions": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
+								"conditions": schema.StringAttribute{
+									Computed:   true,
+									CustomType: jsontypes.NormalizedType{},
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -751,8 +665,24 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				},
 			},
 			"notification_inheritable": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"priority_scalar_value": schema.SingleNestedAttribute{
 				Computed: true,
@@ -764,8 +694,24 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				},
 			},
 			"priority_inheritable": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"team_scalar_value": schema.SingleNestedAttribute{
 				Computed: true,
@@ -777,8 +723,24 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				},
 			},
 			"team_inheritable": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: map[string]schema.Attribute{},
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"config_refs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"fingerprint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content hash of the shared configuration, compared by readers to detect drift.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the shared configuration.`,
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -805,9 +767,6 @@ func (d *MonitorDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
-	}
-	if model.ManagedBy.IsNull() || model.ManagedBy.IsUnknown() || model.ManagedBy.ValueString() == "" {
-		model.ManagedBy = types.StringValue("terraform")
 	}
 	apiModel, err := d.api.Read(ctx, model)
 	if err != nil {

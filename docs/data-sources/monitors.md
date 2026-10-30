@@ -1,5 +1,5 @@
 ---
-# hand-maintained -- no generator in this repo produces data-source docs, see docs/resources/monitor.md's "How this was built"
+# hand-maintained
 page_title: "criblio_monitors Data Source - terraform-provider-criblio"
 subcategory: ""
 description: |-

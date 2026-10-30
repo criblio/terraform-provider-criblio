@@ -2,6 +2,8 @@ resource "criblio_monitor" "example" {
   id         = "cpu-high"
   name       = "CPU High"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
   enabled    = true
   type       = "threshold"
 
@@ -10,6 +12,12 @@ resource "criblio_monitor" "example" {
       mode   = "promql"
       promql = "sum(rate(cpu_usage[5m]))"
     }
+  }
+
+  monitor_policy_notification_config = {
+    type    = "policy"
+    enabled = false
+    config  = []
   }
 
   expr = []
@@ -44,6 +52,8 @@ resource "criblio_monitor" "example_outlier" {
   id         = "latency-peer-outlier"
   name       = "Latency Peer Outlier"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
   enabled    = true
   type       = "outlier"
 
@@ -54,16 +64,18 @@ resource "criblio_monitor" "example_outlier" {
     }
   }
 
+  monitor_policy_notification_config = {
+    type    = "policy"
+    enabled = false
+    config  = []
+  }
+
   expr = []
 
-  # Peer-relative (pooled MAD): flag pods deviating from their service cohort. algorithm defaults to "mad".
+  # Outlier creation is currently rejected by the backend.
+  # These are the fields defined by the published upstream schema.
   outlier_config = {
-    mode                 = "instant"
-    cohort_labels        = ["service"]
-    threshold_direction  = "either"
-    evaluation_window_ms = 1800000
-    pct                  = 20
-    min_coverage         = 80
+    algorithm = "mad"
   }
 
   firing_condition = {
@@ -97,6 +109,8 @@ resource "criblio_monitor" "example_target_notification" {
   id         = "cpu-high-notify"
   name       = "CPU High (direct target notification)"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
   enabled    = true
   type       = "threshold"
 
@@ -148,6 +162,8 @@ resource "criblio_monitor" "example_policy_notification" {
   id         = "latency-high-notify"
   name       = "Latency High (policy routing)"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
   enabled    = true
   type       = "threshold"
 
@@ -187,11 +203,12 @@ resource "criblio_monitor" "example_policy_notification" {
 
   # Policy routing: ordered policies decide which target/template pairs receive each firing.
   monitor_policy_notification_config = {
+    type    = "policy"
     enabled = true
     config = [{
       id         = "critical-routing"
       order      = 1
-      conditions = []
+      conditions = jsonencode([])
       template_target_pairs = [{
         target_id   = "nt-sns-prod"
         template_id = "default-template"

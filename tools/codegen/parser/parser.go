@@ -116,9 +116,13 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.ActionResponse = boolAnnotation(operation, "x-terraform-action-response")
 			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
 			resource.CreateDisabledMessage = scalarValue(operation, "x-terraform-create-disabled-message")
+			resource.ValidateRequiredUnions = boolAnnotation(operation, "x-terraform-validate-required-unions")
+			resource.GenerateDataSourceDocs = boolAnnotation(operation, "x-terraform-generate-data-source-docs")
+			resource.RefreshFromAPI = boolAnnotation(operation, "x-terraform-refresh-from-api")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
 			resource := ensureResource(resources, name)
+			resource.GenerateDataSourceDocs = resource.GenerateDataSourceDocs || boolAnnotation(operation, "x-terraform-generate-data-source-docs")
 			resource.List = operationDef(method, path, operation, examples)
 			listName, ok := stringAnnotation(operation, "x-terraform-list-name")
 			if !ok || listName == "" {
@@ -713,6 +717,19 @@ func qualifyNestedVariantCollisions(variants []OneOfVariantDef) {
 		variant.GoName = prefix + variant.GoName
 		variant.ModelName = prefix + variant.ModelName
 		variant.TerraformName = snake(variant.NestUnder) + "_" + variant.TerraformName
+		qualifyNestedFieldModels(variant.Fields, prefix)
+	}
+}
+
+func qualifyNestedFieldModels(fields []FieldDef, prefix string) {
+	for index := range fields {
+		field := &fields[index]
+		if field.NestedModelName != "" {
+			field.NestedModelName = prefix + field.NestedModelName
+			field.NestedAPIModelName = prefix + field.NestedAPIModelName
+			field.NestedAttrTypes = prefix + field.NestedAttrTypes
+		}
+		qualifyNestedFieldModels(field.Fields, prefix)
 	}
 }
 
@@ -783,7 +800,15 @@ func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node,
 			discriminatorValue = discriminatorMappingValue(discriminator, schemaName)
 		}
 		setDiscriminatorFieldEnum(variantFields, discriminatorField, discriminatorValue)
+		mapElementType := ""
+		if additional, ok := mappingValue(variantSchema, "additionalProperties"); ok && len(variantFields) == 0 {
+			switch scalarValue(additional, "type") {
+			case "string", "boolean", "integer", "number":
+				mapElementType = scalarValue(additional, "type")
+			}
+		}
 		variants = append(variants, OneOfVariantDef{
+			MapElementType:     mapElementType,
 			APIName:            schemaName,
 			TerraformName:      snake(tfName),
 			GoName:             exportName(schemaName),

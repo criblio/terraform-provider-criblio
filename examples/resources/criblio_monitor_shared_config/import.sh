@@ -1,0 +1,1 @@
+terraform import criblio_monitor_shared_config.example platform-priority

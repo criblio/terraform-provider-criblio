@@ -17,7 +17,6 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type MonitorModel struct {
-	AlertExpression                 types.String                          `tfsdk:"alert_expression" json:"alertExpression,omitempty"`
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
@@ -25,7 +24,7 @@ type MonitorModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
-	Queries                         types.List                            `tfsdk:"queries" json:"queries,omitempty"`
+	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         types.List                            `tfsdk:"silence" json:"silence,omitempty"`
@@ -52,7 +51,6 @@ type MonitorModel struct {
 }
 
 type MonitorResourceModel struct {
-	AlertExpression                 types.String                          `tfsdk:"alert_expression" json:"alertExpression,omitempty"`
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
@@ -60,7 +58,7 @@ type MonitorResourceModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
-	Queries                         types.List                            `tfsdk:"queries" json:"queries,omitempty"`
+	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
@@ -87,7 +85,6 @@ type MonitorResourceModel struct {
 }
 
 type MonitorDataSourceModel struct {
-	AlertExpression                 types.String                          `tfsdk:"alert_expression" json:"alertExpression,omitempty"`
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
@@ -95,7 +92,7 @@ type MonitorDataSourceModel struct {
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
-	Queries                         types.List                            `tfsdk:"queries" json:"queries,omitempty"`
+	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
 	SearchMode                      types.String                          `tfsdk:"search_mode" json:"searchMode,omitempty"`
 	Silence                         []types.String                        `tfsdk:"silence" json:"silence,omitempty"`
@@ -122,21 +119,20 @@ type MonitorDataSourceModel struct {
 }
 
 type MonitorAPIModel struct {
-	AlertExpression *string  `json:"alertExpression,omitempty"`
-	DatasetID       *string  `json:"datasetId,omitempty"`
-	Description     *string  `json:"description,omitempty"`
-	Enabled         *bool    `json:"enabled,omitempty"`
-	Expr            any      `json:"expr,omitempty"`
-	ID              *string  `json:"id,omitempty"`
-	ManagedBy       *string  `json:"managedBy,omitempty"`
-	Name            *string  `json:"name,omitempty"`
-	Queries         any      `json:"queries,omitempty"`
-	Query           any      `json:"query,omitempty"`
-	SearchMode      *string  `json:"searchMode,omitempty"`
-	Silence         []string `json:"silence,omitempty"`
-	TemplateParams  any      `json:"templateParams,omitempty"`
-	Type            *string  `json:"type,omitempty"`
-	Unit            *string  `json:"unit,omitempty"`
+	DatasetID      *string  `json:"datasetId,omitempty"`
+	Description    *string  `json:"description,omitempty"`
+	Enabled        *bool    `json:"enabled,omitempty"`
+	Expr           any      `json:"expr,omitempty"`
+	ID             *string  `json:"id,omitempty"`
+	ManagedBy      *string  `json:"managedBy,omitempty"`
+	Name           *string  `json:"name,omitempty"`
+	ProfileRef     any      `json:"$profileRef,omitempty"`
+	Query          any      `json:"query,omitempty"`
+	SearchMode     *string  `json:"searchMode,omitempty"`
+	Silence        []string `json:"silence,omitempty"`
+	TemplateParams any      `json:"templateParams,omitempty"`
+	Type           *string  `json:"type,omitempty"`
+	Unit           *string  `json:"unit,omitempty"`
 }
 
 type MonitorExprModel struct {
@@ -174,150 +170,20 @@ func MonitorExprAttrTypes() map[string]attr.Type {
 	}
 }
 
-type MonitorQueriesModel struct {
-	Builder     types.Object `tfsdk:"builder" json:"builder,omitempty"`
-	DatasetID   types.String `tfsdk:"dataset_id" json:"datasetId,omitempty"`
-	DisplayName types.String `tfsdk:"display_name" json:"displayName,omitempty"`
-	LogsBuilder types.Object `tfsdk:"logs_builder" json:"logsBuilder,omitempty"`
-	Mode        types.String `tfsdk:"mode" json:"mode,omitempty"`
-	Params      types.Map    `tfsdk:"params" json:"params,omitempty"`
-	Promql      types.String `tfsdk:"promql" json:"promql,omitempty"`
+type MonitorProfileRefModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 }
 
-type MonitorQueriesAPIModel struct {
-	Builder     any               `json:"builder,omitempty"`
-	DatasetID   *string           `json:"datasetId,omitempty"`
-	DisplayName *string           `json:"displayName,omitempty"`
-	LogsBuilder any               `json:"logsBuilder,omitempty"`
-	Mode        *string           `json:"mode,omitempty"`
-	Params      map[string]string `json:"params,omitempty"`
-	Promql      *string           `json:"promql,omitempty"`
+type MonitorProfileRefAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
 }
 
-func MonitorQueriesAttrTypes() map[string]attr.Type {
+func MonitorProfileRefAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"builder":      types.ObjectType{AttrTypes: MonitorQueriesBuilderAttrTypes()},
-		"dataset_id":   types.StringType,
-		"display_name": types.StringType,
-		"logs_builder": types.ObjectType{AttrTypes: MonitorQueriesLogsBuilderAttrTypes()},
-		"mode":         types.StringType,
-		"params":       types.MapType{ElemType: types.StringType},
-		"promql":       types.StringType,
-	}
-}
-
-type MonitorQueriesBuilderModel struct {
-	Aggregation      types.String `tfsdk:"aggregation" json:"aggregation,omitempty"`
-	EvaluationWindow types.Object `tfsdk:"evaluation_window" json:"evaluationWindow,omitempty"`
-	GroupBy          types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
-	LabelFilters     types.List   `tfsdk:"label_filters" json:"labelFilters,omitempty"`
-	Metric           types.String `tfsdk:"metric" json:"metric,omitempty"`
-	Units            types.String `tfsdk:"units" json:"units,omitempty"`
-}
-
-type MonitorQueriesBuilderAPIModel struct {
-	Aggregation      *string  `json:"aggregation,omitempty"`
-	EvaluationWindow any      `json:"evaluationWindow,omitempty"`
-	GroupBy          []string `json:"groupBy,omitempty"`
-	LabelFilters     any      `json:"labelFilters,omitempty"`
-	Metric           *string  `json:"metric,omitempty"`
-	Units            *string  `json:"units,omitempty"`
-}
-
-func MonitorQueriesBuilderAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"aggregation":       types.StringType,
-		"evaluation_window": types.ObjectType{AttrTypes: MonitorQueriesBuilderEvaluationWindowAttrTypes()},
-		"group_by":          types.ListType{ElemType: types.StringType},
-		"label_filters":     types.ListType{ElemType: types.ObjectType{AttrTypes: MonitorQueriesBuilderLabelFiltersAttrTypes()}},
-		"metric":            types.StringType,
-		"units":             types.StringType,
-	}
-}
-
-type MonitorQueriesBuilderEvaluationWindowModel struct {
-	Unit  types.String `tfsdk:"unit" json:"unit,omitempty"`
-	Value types.Int64  `tfsdk:"value" json:"value,omitempty"`
-}
-
-type MonitorQueriesBuilderEvaluationWindowAPIModel struct {
-	Unit  *string `json:"unit,omitempty"`
-	Value *int64  `json:"value,omitempty"`
-}
-
-func MonitorQueriesBuilderEvaluationWindowAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"unit":  types.StringType,
-		"value": types.Int64Type,
-	}
-}
-
-type MonitorQueriesBuilderLabelFiltersModel struct {
-	Key   types.String `tfsdk:"key" json:"key,omitempty"`
-	Op    types.String `tfsdk:"op" json:"op,omitempty"`
-	Value types.String `tfsdk:"value" json:"value,omitempty"`
-}
-
-type MonitorQueriesBuilderLabelFiltersAPIModel struct {
-	Key   *string `json:"key,omitempty"`
-	Op    *string `json:"op,omitempty"`
-	Value *string `json:"value,omitempty"`
-}
-
-func MonitorQueriesBuilderLabelFiltersAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"key":   types.StringType,
-		"op":    types.StringType,
-		"value": types.StringType,
-	}
-}
-
-type MonitorQueriesLogsBuilderModel struct {
-	Dataset          types.String `tfsdk:"dataset" json:"dataset,omitempty"`
-	EvaluationWindow types.Object `tfsdk:"evaluation_window" json:"evaluationWindow,omitempty"`
-	Field            types.String `tfsdk:"field" json:"field,omitempty"`
-	GroupBy          types.List   `tfsdk:"group_by" json:"groupBy,omitempty"`
-	Operator         types.String `tfsdk:"operator" json:"operator,omitempty"`
-	ParentSearch     types.String `tfsdk:"parent_search" json:"parentSearch,omitempty"`
-	SavedSearchID    types.String `tfsdk:"saved_search_id" json:"savedSearchId,omitempty"`
-}
-
-type MonitorQueriesLogsBuilderAPIModel struct {
-	Dataset          *string  `json:"dataset,omitempty"`
-	EvaluationWindow any      `json:"evaluationWindow,omitempty"`
-	Field            *string  `json:"field,omitempty"`
-	GroupBy          []string `json:"groupBy,omitempty"`
-	Operator         *string  `json:"operator,omitempty"`
-	ParentSearch     *string  `json:"parentSearch,omitempty"`
-	SavedSearchID    *string  `json:"savedSearchId,omitempty"`
-}
-
-func MonitorQueriesLogsBuilderAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"dataset":           types.StringType,
-		"evaluation_window": types.ObjectType{AttrTypes: MonitorQueriesLogsBuilderEvaluationWindowAttrTypes()},
-		"field":             types.StringType,
-		"group_by":          types.ListType{ElemType: types.StringType},
-		"operator":          types.StringType,
-		"parent_search":     types.StringType,
-		"saved_search_id":   types.StringType,
-	}
-}
-
-type MonitorQueriesLogsBuilderEvaluationWindowModel struct {
-	Unit  types.String `tfsdk:"unit" json:"unit,omitempty"`
-	Value types.Int64  `tfsdk:"value" json:"value,omitempty"`
-}
-
-type MonitorQueriesLogsBuilderEvaluationWindowAPIModel struct {
-	Unit  *string `json:"unit,omitempty"`
-	Value *int64  `json:"value,omitempty"`
-}
-
-func MonitorQueriesLogsBuilderEvaluationWindowAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"unit":  types.StringType,
-		"value": types.Int64Type,
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
 	}
 }
 
@@ -329,6 +195,7 @@ type MonitorQueryModel struct {
 	Mode        types.String `tfsdk:"mode" json:"mode,omitempty"`
 	Params      types.Map    `tfsdk:"params" json:"params,omitempty"`
 	Promql      types.String `tfsdk:"promql" json:"promql,omitempty"`
+	ConfigRefs  types.List   `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 type MonitorQueryAPIModel struct {
@@ -339,6 +206,7 @@ type MonitorQueryAPIModel struct {
 	Mode        *string           `json:"mode,omitempty"`
 	Params      map[string]string `json:"params,omitempty"`
 	Promql      *string           `json:"promql,omitempty"`
+	ConfigRefs  any               `json:"$configRefs,omitempty"`
 }
 
 func MonitorQueryAttrTypes() map[string]attr.Type {
@@ -350,6 +218,7 @@ func MonitorQueryAttrTypes() map[string]attr.Type {
 		"mode":         types.StringType,
 		"params":       types.MapType{ElemType: types.StringType},
 		"promql":       types.StringType,
+		"config_refs":  types.ListType{ElemType: types.ObjectType{AttrTypes: MonitorQueryConfigRefsAttrTypes()}},
 	}
 }
 
@@ -468,6 +337,40 @@ func MonitorQueryLogsBuilderEvaluationWindowAttrTypes() map[string]attr.Type {
 	}
 }
 
+type MonitorQueryConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type MonitorQueryConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func MonitorQueryConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
+	}
+}
+
+type FiringConditionInheritableConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type FiringConditionInheritableConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func FiringConditionInheritableConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
+	}
+}
+
 type FiringRuleOverridesModel struct {
 	Enabled      types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
 	ExcludedTags types.List   `tfsdk:"excluded_tags" json:"excludedTags,omitempty"`
@@ -561,19 +464,53 @@ func FiringRuleThresholdAttrTypes() map[string]attr.Type {
 	}
 }
 
+type FiringRuleInheritableConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type FiringRuleInheritableConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func FiringRuleInheritableConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
+	}
+}
+
+type MetadataInheritableConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type MetadataInheritableConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func MetadataInheritableConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
+	}
+}
+
 type MonitorPolicyNotificationConfigConfigModel struct {
-	Conditions          types.List    `tfsdk:"conditions" json:"conditions,omitempty"`
-	Disabled            types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Final               types.Bool    `tfsdk:"final" json:"final,omitempty"`
-	GroupByLabels       types.List    `tfsdk:"group_by_labels" json:"groupByLabels,omitempty"`
-	ID                  types.String  `tfsdk:"id" json:"id,omitempty"`
-	Order               types.Float64 `tfsdk:"order" json:"order,omitempty"`
-	TemplateTargetPairs types.List    `tfsdk:"template_target_pairs" json:"templateTargetPairs,omitempty"`
-	WaitToGroup         types.Float64 `tfsdk:"wait_to_group" json:"waitToGroup,omitempty"`
+	Conditions          jsontypes.Normalized `tfsdk:"conditions" json:"conditions,omitempty"`
+	Disabled            types.Bool           `tfsdk:"disabled" json:"disabled,omitempty"`
+	Final               types.Bool           `tfsdk:"final" json:"final,omitempty"`
+	GroupByLabels       types.List           `tfsdk:"group_by_labels" json:"groupByLabels,omitempty"`
+	ID                  types.String         `tfsdk:"id" json:"id,omitempty"`
+	Order               types.Float64        `tfsdk:"order" json:"order,omitempty"`
+	TemplateTargetPairs types.List           `tfsdk:"template_target_pairs" json:"templateTargetPairs,omitempty"`
+	WaitToGroup         types.Float64        `tfsdk:"wait_to_group" json:"waitToGroup,omitempty"`
 }
 
 type MonitorPolicyNotificationConfigConfigAPIModel struct {
-	Conditions          []string `json:"conditions,omitempty"`
+	Conditions          any      `json:"conditions,omitempty"`
 	Disabled            *bool    `json:"disabled,omitempty"`
 	Final               *bool    `json:"final,omitempty"`
 	GroupByLabels       []string `json:"groupByLabels,omitempty"`
@@ -585,7 +522,7 @@ type MonitorPolicyNotificationConfigConfigAPIModel struct {
 
 func MonitorPolicyNotificationConfigConfigAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"conditions":            types.ListType{ElemType: types.StringType},
+		"conditions":            jsontypes.NormalizedType{},
 		"disabled":              types.BoolType,
 		"final":                 types.BoolType,
 		"group_by_labels":       types.ListType{ElemType: types.StringType},
@@ -627,6 +564,57 @@ func MonitorTargetNotificationConfigConfigAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"target_id":   types.StringType,
 		"template_id": types.StringType,
+	}
+}
+
+type NotificationInheritableConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type NotificationInheritableConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func NotificationInheritableConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
+	}
+}
+
+type PriorityInheritableConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type PriorityInheritableConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func PriorityInheritableConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
+	}
+}
+
+type TeamInheritableConfigRefsModel struct {
+	Fingerprint types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	ID          types.String `tfsdk:"id" json:"id,omitempty"`
+}
+
+type TeamInheritableConfigRefsAPIModel struct {
+	Fingerprint *string `json:"fingerprint,omitempty"`
+	ID          *string `json:"id,omitempty"`
+}
+
+func TeamInheritableConfigRefsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fingerprint": types.StringType,
+		"id":          types.StringType,
 	}
 }
 
@@ -732,8 +720,12 @@ func MonitorTerraformNameToAPIName(name string) string {
 	switch name {
 	case "clear_delay":
 		return prefix + "clear_delay"
+	case "config_refs":
+		return prefix + "$configRefs"
 	case "fire_delay":
 		return prefix + "fire_delay"
+	case "profile_ref":
+		return prefix + "$profileRef"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -932,12 +924,26 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 		}
 		output["id"] = value
 	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
+	}
 	if !m.Name.IsNull() && !m.Name.IsUnknown() {
 		value, err := MonitorTerraformValueToJSON(m.Name)
 		if err != nil {
 			return nil, fmt.Errorf("convert name to API value: %v", err)
 		}
 		output["name"] = value
+	}
+	if !m.ProfileRef.IsNull() && !m.ProfileRef.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ProfileRef)
+		if err != nil {
+			return nil, fmt.Errorf("convert profile_ref to API value: %v", err)
+		}
+		output["$profileRef"] = value
 	}
 	if !m.Query.IsNull() && !m.Query.IsUnknown() {
 		value, err := MonitorTerraformValueToJSON(m.Query)
@@ -989,6 +995,9 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.AetosMetadata == nil && m.MetadataInheritable == nil && true {
 		return nil, fmt.Errorf("exactly one oneOf variant must be configured for metadata")
+	}
+	if m.MonitorPolicyNotificationConfig == nil && m.MonitorTargetNotificationConfig == nil && m.NotificationInheritable == nil && true {
+		return nil, fmt.Errorf("exactly one oneOf variant must be configured for notification")
 	}
 	if m.PriorityScalarValue == nil && m.PriorityInheritable == nil && true {
 		return nil, fmt.Errorf("exactly one oneOf variant must be configured for priority")
@@ -1178,11 +1187,6 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
 	}
-	if input.AlertExpression != nil {
-		m.AlertExpression = types.StringValue(*input.AlertExpression)
-	} else {
-		m.AlertExpression = types.StringNull()
-	}
 	if input.DatasetID != nil {
 		m.DatasetID = types.StringValue(*input.DatasetID)
 	} else {
@@ -1222,14 +1226,14 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Name = types.StringNull()
 	}
-	if input.Queries != nil {
-		value, err := MonitorAPIValueToTerraformValue(input.Queries, types.ListType{ElemType: types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()}})
+	if input.ProfileRef != nil {
+		value, err := MonitorAPIValueToTerraformValue(input.ProfileRef, types.ObjectType{AttrTypes: MonitorProfileRefAttrTypes()})
 		if err != nil {
-			return fmt.Errorf("convert queries from API value: %v", err)
+			return fmt.Errorf("convert $profileRef from API value: %v", err)
 		}
-		m.Queries = value.(types.List)
+		m.ProfileRef = value.(types.Object)
 	} else {
-		m.Queries = types.ListNull(types.ObjectType{AttrTypes: MonitorQueriesAttrTypes()})
+		m.ProfileRef = types.ObjectNull(MonitorProfileRefAttrTypes())
 	}
 	if input.Query != nil {
 		value, err := MonitorAPIValueToTerraformValue(input.Query, types.MapType{ElemType: types.ObjectType{AttrTypes: MonitorQueryAttrTypes()}})
@@ -1301,6 +1305,7 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 				if err := m.ForecastConfig.unmarshalPayload(nested); err != nil {
 					return err
 				}
+			case "":
 			}
 		}
 	}
@@ -1315,7 +1320,7 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 				}
 				matched = true
 			}
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
+			if !matched && MonitorOneOfShapeMatches(nested, []string{"$configRefs"}, []string{"$configRefs"}) {
 				m.FiringConditionInheritable = &FiringConditionInheritableModel{}
 				if err := m.FiringConditionInheritable.unmarshalPayload(nested); err != nil {
 					return err
@@ -1335,7 +1340,7 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 				}
 				matched = true
 			}
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
+			if !matched && MonitorOneOfShapeMatches(nested, []string{"$configRefs"}, []string{"$configRefs"}) {
 				m.FiringRuleInheritable = &FiringRuleInheritableModel{}
 				if err := m.FiringRuleInheritable.unmarshalPayload(nested); err != nil {
 					return err
@@ -1348,14 +1353,14 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 		nested, ok := raw["metadata"].(map[string]any)
 		if ok {
 			matched := false
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
+			if !matched && MonitorOneOfMapMatches(nested, "string") {
 				m.AetosMetadata = &AetosMetadataModel{}
 				if err := m.AetosMetadata.unmarshalPayload(nested); err != nil {
 					return err
 				}
 				matched = true
 			}
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
+			if !matched && MonitorOneOfShapeMatches(nested, []string{"$configRefs"}, []string{"$configRefs"}) {
 				m.MetadataInheritable = &MetadataInheritableModel{}
 				if err := m.MetadataInheritable.unmarshalPayload(nested); err != nil {
 					return err
@@ -1382,6 +1387,13 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 				if err := m.MonitorTargetNotificationConfig.unmarshalPayload(nested); err != nil {
 					return err
 				}
+			case "":
+				if MonitorOneOfShapeMatches(nested, []string{"$configRefs"}, []string{"$configRefs"}) {
+					m.NotificationInheritable = &NotificationInheritableModel{}
+					if err := m.NotificationInheritable.unmarshalPayload(nested); err != nil {
+						return err
+					}
+				}
 			}
 		}
 	}
@@ -1396,7 +1408,7 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 				}
 				matched = true
 			}
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
+			if !matched && MonitorOneOfShapeMatches(nested, []string{"$configRefs"}, []string{"$configRefs"}) {
 				m.PriorityInheritable = &PriorityInheritableModel{}
 				if err := m.PriorityInheritable.unmarshalPayload(nested); err != nil {
 					return err
@@ -1416,7 +1428,7 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 				}
 				matched = true
 			}
-			if !matched && MonitorOneOfShapeMatches(nested, nil, nil) {
+			if !matched && MonitorOneOfShapeMatches(nested, []string{"$configRefs"}, []string{"$configRefs"}) {
 				m.TeamInheritable = &TeamInheritableModel{}
 				if err := m.TeamInheritable.unmarshalPayload(nested); err != nil {
 					return err
@@ -1715,24 +1727,12 @@ func (m *ChangeConfigModel) unmarshalPayload(input map[string]any) error {
 }
 
 type OutlierConfigModel struct {
-	Algorithm          types.String  `tfsdk:"algorithm" json:"algorithm,omitempty"`
-	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
-	CohortLabels       types.List    `tfsdk:"cohort_labels" json:"cohortLabels,omitempty"`
-	ThresholdDirection types.String  `tfsdk:"threshold_direction" json:"thresholdDirection,omitempty"`
-	EvaluationWindowMs types.Float64 `tfsdk:"evaluation_window_ms" json:"evaluationWindowMs,omitempty"`
-	Pct                types.Float64 `tfsdk:"pct" json:"pct,omitempty"`
-	MinCoverage        types.Float64 `tfsdk:"min_coverage" json:"minCoverage,omitempty"`
+	Algorithm types.String `tfsdk:"algorithm" json:"algorithm,omitempty"`
 }
 
 func OutlierConfigModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"algorithm":            types.StringType,
-		"mode":                 types.StringType,
-		"cohort_labels":        types.ListType{ElemType: types.StringType},
-		"threshold_direction":  types.StringType,
-		"evaluation_window_ms": types.Float64Type,
-		"pct":                  types.Float64Type,
-		"min_coverage":         types.Float64Type,
+		"algorithm": types.StringType,
 	}
 }
 
@@ -1744,48 +1744,6 @@ func (m OutlierConfigModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert algorithm to API value: %v", err)
 		}
 		output["algorithm"] = value
-	}
-	if !m.Mode.IsNull() && !m.Mode.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.Mode)
-		if err != nil {
-			return nil, fmt.Errorf("convert mode to API value: %v", err)
-		}
-		output["mode"] = value
-	}
-	if !m.CohortLabels.IsNull() && !m.CohortLabels.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.CohortLabels)
-		if err != nil {
-			return nil, fmt.Errorf("convert cohort_labels to API value: %v", err)
-		}
-		output["cohortLabels"] = value
-	}
-	if !m.ThresholdDirection.IsNull() && !m.ThresholdDirection.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.ThresholdDirection)
-		if err != nil {
-			return nil, fmt.Errorf("convert threshold_direction to API value: %v", err)
-		}
-		output["thresholdDirection"] = value
-	}
-	if !m.EvaluationWindowMs.IsNull() && !m.EvaluationWindowMs.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.EvaluationWindowMs)
-		if err != nil {
-			return nil, fmt.Errorf("convert evaluation_window_ms to API value: %v", err)
-		}
-		output["evaluationWindowMs"] = value
-	}
-	if !m.Pct.IsNull() && !m.Pct.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.Pct)
-		if err != nil {
-			return nil, fmt.Errorf("convert pct to API value: %v", err)
-		}
-		output["pct"] = value
-	}
-	if !m.MinCoverage.IsNull() && !m.MinCoverage.IsUnknown() {
-		value, err := MonitorTerraformValueToJSON(m.MinCoverage)
-		if err != nil {
-			return nil, fmt.Errorf("convert min_coverage to API value: %v", err)
-		}
-		output["minCoverage"] = value
 	}
 	return output, nil
 }
@@ -1799,60 +1757,6 @@ func (m *OutlierConfigModel) unmarshalPayload(input map[string]any) error {
 		m.Algorithm = value.(types.String)
 	} else {
 		m.Algorithm = types.StringNull()
-	}
-	if item, ok := input["mode"]; ok {
-		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
-		if err != nil {
-			return fmt.Errorf("convert mode from API value: %v", err)
-		}
-		m.Mode = value.(types.String)
-	} else {
-		m.Mode = types.StringNull()
-	}
-	if item, ok := input["cohortLabels"]; ok {
-		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
-		if err != nil {
-			return fmt.Errorf("convert cohortLabels from API value: %v", err)
-		}
-		m.CohortLabels = value.(types.List)
-	} else {
-		m.CohortLabels = types.ListNull(types.StringType)
-	}
-	if item, ok := input["thresholdDirection"]; ok {
-		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
-		if err != nil {
-			return fmt.Errorf("convert thresholdDirection from API value: %v", err)
-		}
-		m.ThresholdDirection = value.(types.String)
-	} else {
-		m.ThresholdDirection = types.StringNull()
-	}
-	if item, ok := input["evaluationWindowMs"]; ok {
-		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
-		if err != nil {
-			return fmt.Errorf("convert evaluationWindowMs from API value: %v", err)
-		}
-		m.EvaluationWindowMs = value.(types.Float64)
-	} else {
-		m.EvaluationWindowMs = types.Float64Null()
-	}
-	if item, ok := input["pct"]; ok {
-		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
-		if err != nil {
-			return fmt.Errorf("convert pct from API value: %v", err)
-		}
-		m.Pct = value.(types.Float64)
-	} else {
-		m.Pct = types.Float64Null()
-	}
-	if item, ok := input["minCoverage"]; ok {
-		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
-		if err != nil {
-			return fmt.Errorf("convert minCoverage from API value: %v", err)
-		}
-		m.MinCoverage = value.(types.Float64)
-	} else {
-		m.MinCoverage = types.Float64Null()
 	}
 	return nil
 }
@@ -2018,18 +1922,37 @@ func (m *FiringConditionModel) unmarshalPayload(input map[string]any) error {
 }
 
 type FiringConditionInheritableModel struct {
+	ConfigRefs types.List `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 func FiringConditionInheritableModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
+	return map[string]attr.Type{
+		"config_refs": types.ListType{ElemType: types.ObjectType{AttrTypes: FiringConditionInheritableConfigRefsAttrTypes()}},
+	}
 }
 
 func (m FiringConditionInheritableModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
+	if !m.ConfigRefs.IsNull() && !m.ConfigRefs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ConfigRefs)
+		if err != nil {
+			return nil, fmt.Errorf("convert config_refs to API value: %v", err)
+		}
+		output["$configRefs"] = value
+	}
 	return output, nil
 }
 
 func (m *FiringConditionInheritableModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["$configRefs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: FiringConditionInheritableConfigRefsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert $configRefs from API value: %v", err)
+		}
+		m.ConfigRefs = value.(types.List)
+	} else {
+		m.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: FiringConditionInheritableConfigRefsAttrTypes()})
+	}
 	return nil
 }
 
@@ -2123,50 +2046,99 @@ func (m *FiringRuleModel) unmarshalPayload(input map[string]any) error {
 }
 
 type FiringRuleInheritableModel struct {
+	ConfigRefs types.List `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 func FiringRuleInheritableModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
+	return map[string]attr.Type{
+		"config_refs": types.ListType{ElemType: types.ObjectType{AttrTypes: FiringRuleInheritableConfigRefsAttrTypes()}},
+	}
 }
 
 func (m FiringRuleInheritableModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
+	if !m.ConfigRefs.IsNull() && !m.ConfigRefs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ConfigRefs)
+		if err != nil {
+			return nil, fmt.Errorf("convert config_refs to API value: %v", err)
+		}
+		output["$configRefs"] = value
+	}
 	return output, nil
 }
 
 func (m *FiringRuleInheritableModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["$configRefs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: FiringRuleInheritableConfigRefsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert $configRefs from API value: %v", err)
+		}
+		m.ConfigRefs = value.(types.List)
+	} else {
+		m.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: FiringRuleInheritableConfigRefsAttrTypes()})
+	}
 	return nil
 }
 
-type AetosMetadataModel struct {
-}
-
-func AetosMetadataModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
-}
+type AetosMetadataModel map[string]types.String
 
 func (m AetosMetadataModel) terraformPayload() (map[string]any, error) {
-	output := map[string]any{}
+	output := make(map[string]any, len(m))
+	for key, item := range m {
+		value, err := MonitorTerraformValueToJSON(item)
+		if err != nil {
+			return nil, err
+		}
+		output[key] = value
+	}
 	return output, nil
 }
 
 func (m *AetosMetadataModel) unmarshalPayload(input map[string]any) error {
+	values := make(AetosMetadataModel, len(input))
+	for key, item := range input {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return err
+		}
+		values[key] = value.(types.String)
+	}
+	*m = values
 	return nil
 }
 
 type MetadataInheritableModel struct {
+	ConfigRefs types.List `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 func MetadataInheritableModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
+	return map[string]attr.Type{
+		"config_refs": types.ListType{ElemType: types.ObjectType{AttrTypes: MetadataInheritableConfigRefsAttrTypes()}},
+	}
 }
 
 func (m MetadataInheritableModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
+	if !m.ConfigRefs.IsNull() && !m.ConfigRefs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ConfigRefs)
+		if err != nil {
+			return nil, fmt.Errorf("convert config_refs to API value: %v", err)
+		}
+		output["$configRefs"] = value
+	}
 	return output, nil
 }
 
 func (m *MetadataInheritableModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["$configRefs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: MetadataInheritableConfigRefsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert $configRefs from API value: %v", err)
+		}
+		m.ConfigRefs = value.(types.List)
+	} else {
+		m.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: MetadataInheritableConfigRefsAttrTypes()})
+	}
 	return nil
 }
 
@@ -2319,18 +2291,37 @@ func (m *MonitorTargetNotificationConfigModel) unmarshalPayload(input map[string
 }
 
 type NotificationInheritableModel struct {
+	ConfigRefs types.List `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 func NotificationInheritableModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
+	return map[string]attr.Type{
+		"config_refs": types.ListType{ElemType: types.ObjectType{AttrTypes: NotificationInheritableConfigRefsAttrTypes()}},
+	}
 }
 
 func (m NotificationInheritableModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
+	if !m.ConfigRefs.IsNull() && !m.ConfigRefs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ConfigRefs)
+		if err != nil {
+			return nil, fmt.Errorf("convert config_refs to API value: %v", err)
+		}
+		output["$configRefs"] = value
+	}
 	return output, nil
 }
 
 func (m *NotificationInheritableModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["$configRefs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: NotificationInheritableConfigRefsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert $configRefs from API value: %v", err)
+		}
+		m.ConfigRefs = value.(types.List)
+	} else {
+		m.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: NotificationInheritableConfigRefsAttrTypes()})
+	}
 	return nil
 }
 
@@ -2370,18 +2361,37 @@ func (m *PriorityScalarValueModel) unmarshalPayload(input map[string]any) error 
 }
 
 type PriorityInheritableModel struct {
+	ConfigRefs types.List `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 func PriorityInheritableModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
+	return map[string]attr.Type{
+		"config_refs": types.ListType{ElemType: types.ObjectType{AttrTypes: PriorityInheritableConfigRefsAttrTypes()}},
+	}
 }
 
 func (m PriorityInheritableModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
+	if !m.ConfigRefs.IsNull() && !m.ConfigRefs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ConfigRefs)
+		if err != nil {
+			return nil, fmt.Errorf("convert config_refs to API value: %v", err)
+		}
+		output["$configRefs"] = value
+	}
 	return output, nil
 }
 
 func (m *PriorityInheritableModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["$configRefs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: PriorityInheritableConfigRefsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert $configRefs from API value: %v", err)
+		}
+		m.ConfigRefs = value.(types.List)
+	} else {
+		m.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: PriorityInheritableConfigRefsAttrTypes()})
+	}
 	return nil
 }
 
@@ -2421,18 +2431,37 @@ func (m *TeamScalarValueModel) unmarshalPayload(input map[string]any) error {
 }
 
 type TeamInheritableModel struct {
+	ConfigRefs types.List `tfsdk:"config_refs" json:"$configRefs,omitempty"`
 }
 
 func TeamInheritableModelAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{}
+	return map[string]attr.Type{
+		"config_refs": types.ListType{ElemType: types.ObjectType{AttrTypes: TeamInheritableConfigRefsAttrTypes()}},
+	}
 }
 
 func (m TeamInheritableModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
+	if !m.ConfigRefs.IsNull() && !m.ConfigRefs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ConfigRefs)
+		if err != nil {
+			return nil, fmt.Errorf("convert config_refs to API value: %v", err)
+		}
+		output["$configRefs"] = value
+	}
 	return output, nil
 }
 
 func (m *TeamInheritableModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["$configRefs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: TeamInheritableConfigRefsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert $configRefs from API value: %v", err)
+		}
+		m.ConfigRefs = value.(types.List)
+	} else {
+		m.ConfigRefs = types.ListNull(types.ObjectType{AttrTypes: TeamInheritableConfigRefsAttrTypes()})
+	}
 	return nil
 }
 
@@ -2451,4 +2480,26 @@ func MonitorOneOfShapeMatches(raw map[string]any, required []string, known []str
 		}
 	}
 	return false
+}
+
+func MonitorOneOfMapMatches(raw map[string]any, elementType string) bool {
+	for _, value := range raw {
+		switch elementType {
+		case "string":
+			if _, ok := value.(string); !ok {
+				return false
+			}
+		case "boolean":
+			if _, ok := value.(bool); !ok {
+				return false
+			}
+		case "integer", "number":
+			if _, ok := value.(float64); !ok {
+				return false
+			}
+		default:
+			return false
+		}
+	}
+	return true
 }

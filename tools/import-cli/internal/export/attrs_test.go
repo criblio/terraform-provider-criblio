@@ -281,9 +281,8 @@ func TestHclOptionsForType_certificateSkipsComputedExpiryDate(t *testing.T) {
 	assert.Equal(t, "Imported certificate", attrs["description"].String)
 }
 
-func TestHclOptionsForType_monitorSkipsManagedBy(t *testing.T) {
+func TestHclOptionsForType_monitorKeepsManagedBy(t *testing.T) {
 	opts := hclOptionsForType("criblio_monitor", registry.Entry{})
-	require.NotNil(t, opts)
 
 	model := &provider.MonitorResourceModel{
 		ID:        types.StringValue("cpu-high"),
@@ -294,7 +293,7 @@ func TestHclOptionsForType_monitorSkipsManagedBy(t *testing.T) {
 	attrs, err := hcl.ModelToValue(model, opts)
 	require.NoError(t, err)
 
-	assert.NotContains(t, attrs, "managed_by")
+	assert.Equal(t, "terraform", attrs["managed_by"].String)
 	assert.Equal(t, "cpu-high", attrs["id"].String)
 	assert.Equal(t, "CPU High", attrs["name"].String)
 }

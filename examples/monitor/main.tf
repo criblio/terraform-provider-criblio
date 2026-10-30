@@ -6,6 +6,7 @@ terraform {
   }
 }
 
+provider "criblio" {}
 
 variable "monitor_id" {
   type        = string
@@ -38,6 +39,14 @@ resource "criblio_monitor" "cpu_high" {
   dataset_id = var.dataset_id
   enabled    = true
   type       = "threshold"
+  managed_by = "terraform"
+  silence    = []
+
+  monitor_policy_notification_config = {
+    type    = "policy"
+    enabled = false
+    config  = []
+  }
 
   query = {
     A = {

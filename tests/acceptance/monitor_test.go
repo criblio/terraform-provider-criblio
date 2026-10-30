@@ -28,12 +28,15 @@ func TestMonitor(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "managed_by", "terraform"),
 						resource.TestCheckResourceAttr(resourceName, "firing_rule.threshold.0.limit", "80"),
 						resource.TestCheckResourceAttr(resourceName, "priority_scalar_value.value", "P3"),
+						resource.TestCheckResourceAttr("data.criblio_monitor.example_threshold", "id", "acc_test_threshold_monitor"),
+						testCheckListDataSourceHasItems("data.criblio_monitors.all"),
 					),
 				},
 				{
 					Config: monitorThreshold(90),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "firing_rule.threshold.0.limit", "90"),
+						resource.TestCheckResourceAttr("data.criblio_monitor.example_threshold", "firing_rule.threshold.0.limit", "90"),
 					),
 				},
 				{
@@ -57,17 +60,28 @@ func TestMonitor(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: monitorForecast(),
+					Config: monitorForecast(2),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "type", "forecast"),
 						resource.TestCheckResourceAttr(resourceName, "forecast_config.algorithm", "linear"),
 						resource.TestCheckResourceAttr(resourceName, "forecast_config.seasonality", "hourly"),
+						resource.TestCheckResourceAttr(resourceName, "forecast_config.deviations", "2"),
 						resource.TestCheckNoResourceAttr(resourceName, "anomaly_config"),
 					),
 				},
 				{
-					Config:   monitorForecast(),
+					Config: monitorForecast(3),
+					Check:  resource.TestCheckResourceAttr(resourceName, "forecast_config.deviations", "3"),
+				},
+				{
+					Config:   monitorForecast(3),
 					PlanOnly: true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     "acc_test_forecast_monitor",
+					ImportStateVerify: true,
 				},
 			},
 		})
@@ -85,8 +99,7 @@ func TestMonitor(t *testing.T) {
 					Config: monitorOutlier(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "type", "outlier"),
-						resource.TestCheckResourceAttr(resourceName, "outlier_config.mode", "instant"),
-						resource.TestCheckResourceAttr(resourceName, "outlier_config.threshold_direction", "either"),
+						resource.TestCheckResourceAttr(resourceName, "outlier_config.algorithm", "mad"),
 						resource.TestCheckNoResourceAttr(resourceName, "anomaly_config"),
 						resource.TestCheckNoResourceAttr(resourceName, "forecast_config"),
 					),
@@ -107,6 +120,14 @@ func monitorThreshold(limit int) string {
   enabled    = true
   type       = "threshold"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
+
+  monitor_policy_notification_config = {
+    type    = "policy"
+    enabled = false
+    config  = []
+  }
 
   priority_scalar_value = { value = "P3" }
   team_scalar_value     = { value = "" }
@@ -140,21 +161,37 @@ func monitorThreshold(limit int) string {
 
   aetos_metadata = {}
 }
+
+data "criblio_monitor" "example_threshold" {
+  id = criblio_monitor.example_threshold.id
+}
+
+data "criblio_monitors" "all" {
+  depends_on = [criblio_monitor.example_threshold]
+}
 `
 }
 
-func monitorForecast() string {
+func monitorForecast(deviations int) string {
 	return `resource "criblio_monitor" "example_forecast" {
   id         = "acc_test_forecast_monitor"
   name       = "Acceptance Test - Forecast Monitor"
   enabled    = true
   type       = "forecast"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
+
+  monitor_policy_notification_config = {
+    type    = "policy"
+    enabled = false
+    config  = []
+  }
 
   forecast_config = {
     algorithm   = "linear"
     window      = "1h"
-    deviations  = 2
+    deviations  = ` + strconv.Itoa(deviations) + `
     seasonality = "hourly"
   }
 
@@ -200,15 +237,17 @@ func monitorOutlier() string {
   enabled    = true
   type       = "outlier"
   dataset_id = "metrics"
+  managed_by = "terraform"
+  silence    = []
+
+  monitor_policy_notification_config = {
+    type    = "policy"
+    enabled = false
+    config  = []
+  }
 
   outlier_config = {
-    algorithm            = "mad"
-    mode                 = "instant"
-    cohort_labels        = []
-    threshold_direction  = "either"
-    evaluation_window_ms = 1800000
-    pct                  = 20
-    min_coverage         = 80
+    algorithm = "mad"
   }
 
   priority_scalar_value = { value = "P3" }

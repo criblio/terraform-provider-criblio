@@ -13,7 +13,6 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_grok":                    {"size", "tags"},                             // size/tags are API-owned and Computed-only
 	"criblio_group_system_settings":   {"items"},                                    // provider marks items as read-only; configurable attrs are top-level (api, backups, etc.)
 	"criblio_lookup_file":             {"modified", "pending_task", "version"},      // API-owned fields are Computed only
-	"criblio_monitor":                 {"managed_by"},                               // managed_by is Computed-only; stamped by backend when TF UA detected
 	"criblio_pack_vars":               {"items"},                                    // items is Computed; config comes from flattenFirstItemToAttrs (description, lib, tags, type, value)
 	"criblio_pack_breakers":           {"items"},                                    // items is read-only (Computed); id, group_id, pack are configurable
 	"criblio_pack_lookups":            {"modified", "pending_task", "version"},      // API-owned fields are Computed only
@@ -48,6 +47,8 @@ var readOnlyAttrsByType = map[string][]string{
 		"search_job_source",
 		"table_config",
 	},
+	"criblio_monitor_shared_config":       {"fingerprint"},
+	"criblio_monitor_silence":             {"created_at", "created_by"},
 	"criblio_notification":                {"pack"},
 	"criblio_notification_template":       {"engine", "created_by", "last_updated"},
 	"criblio_search_dataset_intelligence": {"content", "status", "failure_reason", "generated_at", "updated_at"},
