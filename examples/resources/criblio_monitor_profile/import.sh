@@ -1,0 +1,1 @@
+terraform import criblio_monitor_profile.example platform-profile

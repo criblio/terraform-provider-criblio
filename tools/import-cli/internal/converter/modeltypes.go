@@ -60,6 +60,10 @@ func AllAttributeNamesFromModel(modelTypeName string) []string {
 // instantiate provider models and invoke RefreshFrom* methods.
 func ResourceModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"MonitorProfileResourceModel":             reflect.TypeOf((*provider.MonitorProfileModel)(nil)).Elem(),
+		"MonitorSharedConfigResourceModel":        reflect.TypeOf((*provider.MonitorSharedConfigModel)(nil)).Elem(),
+		"MonitorSilenceResourceModel":             reflect.TypeOf((*provider.MonitorSilenceModel)(nil)).Elem(),
+		"NotificationPolicyResourceModel":         reflect.TypeOf((*provider.NotificationPolicyModel)(nil)).Elem(),
 		"AppResourceModel":                        reflect.TypeOf((*provider.AppResourceModel)(nil)).Elem(),
 		"AppscopeConfigResourceModel":             reflect.TypeOf((*provider.AppscopeConfigResourceModel)(nil)).Elem(),
 		"CertificateResourceModel":                reflect.TypeOf((*provider.CertificateResourceModel)(nil)).Elem(),
@@ -124,6 +128,10 @@ func ResourceModelTypes() map[string]reflect.Type {
 // mirror these fields but do not have the generated UnmarshalJSON methods.
 func GeneratedModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"MonitorProfileResourceModel":             reflect.TypeOf((*provider.MonitorProfileModel)(nil)).Elem(),
+		"MonitorSharedConfigResourceModel":        reflect.TypeOf((*provider.MonitorSharedConfigModel)(nil)).Elem(),
+		"MonitorSilenceResourceModel":             reflect.TypeOf((*provider.MonitorSilenceModel)(nil)).Elem(),
+		"NotificationPolicyResourceModel":         reflect.TypeOf((*provider.NotificationPolicyModel)(nil)).Elem(),
 		"AppResourceModel":                        reflect.TypeOf((*provider.AppModel)(nil)).Elem(),
 		"AppscopeConfigResourceModel":             reflect.TypeOf((*provider.AppscopeConfigModel)(nil)).Elem(),
 		"CertificateResourceModel":                reflect.TypeOf((*provider.CertificateModel)(nil)).Elem(),

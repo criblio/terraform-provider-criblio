@@ -4813,3 +4813,458 @@ actions:
         x-terraform-optional-computed: true
       sourceField:
         x-terraform-optional-computed: true
+
+  # MON-762: criblio_monitor -- Aetos alert monitors.
+  # Backend route is /products/lakehouse_engine_metrics/monitors (AETOS_PREFIX). Requests and
+  # responses both reference upstream's native AetosMonitorConf; annotated in place rather than
+  # duplicated, so new upstream fields arrive for free.
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Monitor
+      x-terraform-validate-required-unions: true
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors.get"
+    update:
+      x-terraform-list: Monitor
+      x-terraform-list-name: Monitors
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.get"
+    update:
+      x-terraform-read: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.patch"
+    update:
+      x-terraform-update: Monitor
+  - target: "$.paths./products/lakehouse_engine_metrics/monitors/{id}.delete"
+    update:
+      x-terraform-delete: Monitor
+
+  # Preserve upstream profile inheritance and wire field names while using valid HCL names.
+  - target: "$.components.schemas.AetosMonitorConf.properties.$profileRef"
+    update:
+      x-terraform-name: profile_ref
+  - target: "$.components.schemas.Inheritable.properties.$configRefs"
+    update:
+      x-terraform-name: config_refs
+  # Preserve both concrete and inherited queries within the query-label map.
+  - target: "$.components.schemas.AetosMonitorConf.properties.query.additionalProperties"
+    update:
+      x-terraform-flatten-object-unions: true
+
+  # Keep the upstream template-parameter schema intact. Represent its map of
+  # inheritance unions as JSON until codegen supports typed maps of unions.
+  - target: "$.components.schemas.AetosMonitorConf.properties.templateParams"
+    update:
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
+
+  # notification is a real 2-branch discriminated union (policy-based routing vs direct
+  # target delivery), but both branches are anonymous inline schemas upstream -- codegen needs
+  # named schemas to expose them as distinct Terraform sub-blocks. Name them here, each with its
+  # own self-contained `type: const` discriminator, then narrow NotificationConfig /
+  # InheritableINotificationConfig to reference the named pair (+ Inheritable for profile
+  # linkage).
+  - target: "$.components.schemas"
+    update:
+      MonitorPolicyNotificationConfig:
+        type: object
+        properties:
+          config:
+            type: array
+            items:
+              $ref: "#/components/schemas/NotificationPolicy"
+            description: Notification policy entries for policy-based routing.
+          enabled:
+            type: boolean
+            description: Whether notifications are enabled for this monitor.
+          type:
+            type: string
+            const: policy
+            description: "Type of notification configuration: policy-based routing."
+        required:
+          - config
+          - enabled
+          - type
+      MonitorTargetNotificationConfig:
+        type: object
+        properties:
+          config:
+            type: array
+            items:
+              $ref: "#/components/schemas/TemplateTargetPair"
+            description: Template and target pairs for direct target-based delivery.
+          enabled:
+            type: boolean
+            description: Whether notifications are enabled for this monitor.
+          type:
+            type: string
+            const: target
+            description: "Type of notification configuration: direct target-based delivery."
+        required:
+          - config
+          - enabled
+          - type
+  # policy and target branches have an IDENTICAL shape ({config, enabled, type}), so codegen's
+  # shape-matching picks the first (policy) for a target notification -> "provider produced
+  # inconsistent result after apply" (verified live). Declare the self-contained `type` discriminator
+  # so codegen dispatches on it instead (policy -> policy branch, target -> target branch; the
+  # Inheritable arm has no type and falls through to the shape-match for an inherited notification).
+  - target: "$.components.schemas.NotificationConfig"
+    replace:
+      oneOf:
+        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
+        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+      discriminator:
+        propertyName: type
+        mapping:
+          policy: "#/components/schemas/MonitorPolicyNotificationConfig"
+          target: "#/components/schemas/MonitorTargetNotificationConfig"
+      description: Notification settings for a monitor.
+      title: NotificationConfig
+  - target: "$.components.schemas.InheritableINotificationConfig"
+    replace:
+      oneOf:
+        - $ref: "#/components/schemas/MonitorPolicyNotificationConfig"
+        - $ref: "#/components/schemas/MonitorTargetNotificationConfig"
+        - $ref: "#/components/schemas/Inheritable"
+      discriminator:
+        propertyName: type
+        mapping:
+          policy: "#/components/schemas/MonitorPolicyNotificationConfig"
+          target: "#/components/schemas/MonitorTargetNotificationConfig"
+
+  # detectionConfig is a real 4-branch oneOf (anomaly/change/outlier/forecast) with no
+  # discriminator declared upstream. Without one, codegen falls back to shape-matching
+  # (OneOfShapeMatches), which is unsafe here: AnomalyConfig has no strictly-required fields, so
+  # it greedily matches almost any object on read -- including forecast's payload (live-verified:
+  # a forecast monitor round-tripped back as anomaly_config with algorithm="linear"/
+  # seasonality="hourly" copied verbatim from the forecast fields, caught only by Terraform's own
+  # post-apply consistency check). Add the real discriminator -- the sibling `type` field on
+  # AetosMonitorConf itself -- so read-path dispatch is unambiguous.
+  - target: "$.components.schemas.DetectionConfigTypeAetosMonitorConf"
+    update:
+      x-terraform-discriminator-at-parent: true
+      discriminator:
+        propertyName: type
+        mapping:
+          anomaly: "#/components/schemas/AnomalyConfig"
+          change: "#/components/schemas/ChangeConfig"
+          outlier: "#/components/schemas/OutlierConfig"
+          forecast: "#/components/schemas/ForecastConfig"
+
+  # Monitoring UI configuration resources. Keep schemas sourced from upstream.
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: MonitorProfile
+      x-terraform-generate-data-source-docs: true
+      x-terraform-refresh-from-api: true
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles.get"
+    update:
+      x-terraform-list: MonitorProfile
+      x-terraform-list-name: MonitorProfiles
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.get"
+    update:
+      x-terraform-read: MonitorProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.patch"
+    update:
+      x-terraform-update: MonitorProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/config-profiles/{id}.delete"
+    update:
+      x-terraform-delete: MonitorProfile
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: MonitorSharedConfig
+      x-terraform-generate-data-source-docs: true
+      x-terraform-refresh-from-api: true
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs.get"
+    update:
+      x-terraform-list: MonitorSharedConfig
+      x-terraform-list-name: MonitorSharedConfigs
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs/{id}.get"
+    update:
+      x-terraform-read: MonitorSharedConfig
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs/{id}.patch"
+    update:
+      x-terraform-update: MonitorSharedConfig
+  - target: "$.paths./products/lakehouse_engine_metrics/shared-configs/{id}.delete"
+    update:
+      x-terraform-delete: MonitorSharedConfig
+  - target: "$.components.schemas.SharedConfig.properties.fingerprint"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SharedConfig.properties.config"
+    update:
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+  # Conditions are OR groups of AND conditions; upstream omits their item schema.
+  # Preserve the full JSON shape, including string/number/boolean/null values.
+  - target: "$.components.schemas.NotificationPolicy.properties.conditions"
+    update:
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+  - target: "$.components.schemas.MonitorSilenceConf.properties.created_at"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.MonitorSilenceConf.properties.created_by"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.MonitorSilenceConf.properties.tags"
+    update:
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+  # These CRUD routes exist in Cribl but are not published in upstream-openapi.yml.
+  # Sources: rest/customer-metrics/Silences.ts + customerMetrics/SilenceMgr.ts;
+  # rest/endpoints/NotificationPolicies.ts + share/apitypes/notification.ts.
+  # Use the metrics app route observed in the UI network trace. Cribl retains
+  # app authorization context while rewriting to the customer-metrics handler.
+  # Reference existing upstream body/response schemas; do not duplicate them.
+  - target: "$.components.schemas"
+    update:
+      CountedNotificationPolicy:
+        type: object
+        required: [items, count]
+        properties:
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/NotificationPolicy"
+          count:
+            type: integer
+  - target: "$.paths"
+    update:
+      /a/__cribl_metrics/products/lakehouse_engine_metrics/silences:
+        post:
+          operationId: createMonitorSilence
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Create MonitorSilence
+          x-terraform-resource: true
+          x-terraform-resource-name: MonitorSilence
+          x-terraform-refresh-from-api: true
+          x-terraform-generate-data-source-docs: true
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/MonitorSilenceConf"
+          responses:
+            "200":
+              description: MonitorSilence response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+        get:
+          operationId: listMonitorSilence
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: List MonitorSilence
+          x-terraform-list: MonitorSilence
+          x-terraform-list-name: MonitorSilences
+          responses:
+            "200":
+              description: MonitorSilence response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+      /a/__cribl_metrics/products/lakehouse_engine_metrics/silences/{id}:
+        get:
+          operationId: getMonitorSilence
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Get MonitorSilence
+          x-terraform-read: MonitorSilence
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema: {type: string}
+          responses:
+            "200":
+              description: MonitorSilence response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+        patch:
+          operationId: updateMonitorSilence
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Update MonitorSilence
+          x-terraform-update: MonitorSilence
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema: {type: string}
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/MonitorSilenceConf"
+          responses:
+            "200":
+              description: MonitorSilence response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+        delete:
+          operationId: deleteMonitorSilence
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Delete MonitorSilence
+          x-terraform-delete: MonitorSilence
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema: {type: string}
+          responses:
+            "200":
+              description: MonitorSilence response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+      /notification-policies:
+        post:
+          operationId: createNotificationPolicy
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Create NotificationPolicy
+          x-terraform-resource: true
+          x-terraform-resource-name: NotificationPolicy
+          x-terraform-refresh-from-api: true
+          x-terraform-generate-data-source-docs: true
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotificationPolicy"
+          responses:
+            "200":
+              description: NotificationPolicy response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedNotificationPolicy"
+        get:
+          operationId: listNotificationPolicy
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: List NotificationPolicy
+          x-terraform-list: NotificationPolicy
+          x-terraform-list-name: NotificationPolicies
+          responses:
+            "200":
+              description: NotificationPolicy response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedNotificationPolicy"
+      /notification-policies/{id}:
+        get:
+          operationId: getNotificationPolicy
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Get NotificationPolicy
+          x-terraform-read: NotificationPolicy
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema: {type: string}
+          responses:
+            "200":
+              description: NotificationPolicy response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedNotificationPolicy"
+        patch:
+          operationId: updateNotificationPolicy
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Update NotificationPolicy
+          x-terraform-update: NotificationPolicy
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema: {type: string}
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotificationPolicy"
+          responses:
+            "200":
+              description: NotificationPolicy response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedNotificationPolicy"
+        delete:
+          operationId: deleteNotificationPolicy
+          x-cribl-api-context: [leader]
+          x-cribl-availability: both
+          summary: Delete NotificationPolicy
+          x-terraform-delete: NotificationPolicy
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema: {type: string}
+          responses:
+            "200":
+              description: NotificationPolicy response in a counted list.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedNotificationPolicy"
+  # Active alerts are runtime state, exposed as a read-only data source.
+  - target: "$.paths./products/lakehouse_engine_metrics/engines/{engineId}/datasets/{datasetId}/alert_activity/current.get"
+    update:
+      x-terraform-list: MonitorActiveAlert
+      x-terraform-list-name: MonitorActiveAlerts
+      x-terraform-generate-data-source-docs: true
+  # Profile PATCH replaces the stored object without rebuilding its graph metadata
+  # (ConfigProfileMgr inherits ConfCrudMgr.update). Recreate via the validated
+  # create path until upstream supplies a graph-safe update implementation.
+  - target: "$.components.schemas.MonitorConfigProfile.properties"
+    update:
+      configIds:
+        x-terraform-force-new-always: true
+      name:
+        x-terraform-force-new-always: true
+      description:
+        x-terraform-force-new-always: true
+      parentId:
+        x-terraform-force-new-always: true
+  # ConfCrudMgr replaces silences on PATCH. Preserve server-created audit values
+  # in update payloads; omit the unknown values on initial create.
+  - target: "$.components.schemas.MonitorSilenceConf.properties.created_at"
+    update:
+      x-terraform-use-state-for-unknown: true
+      x-terraform-request-computed: true
+  - target: "$.components.schemas.MonitorSilenceConf.properties.created_by"
+    update:
+      x-terraform-use-state-for-unknown: true
+      x-terraform-request-computed: true
+  # The V2 notification service supplies defaults during schema validation.
+  # Omitted settings may be returned by the server after create or import.
+  - target: "$.components.schemas.NotificationPolicy.properties.disabled"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.NotificationPolicy.properties.final"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.NotificationPolicy.properties.waitToGroup"
+    update:
+      x-terraform-optional-computed: true

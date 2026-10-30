@@ -149,6 +149,14 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	if shouldGenerateDataSourceAcceptanceTest(resource) {
 		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_data_source_test.go", Kind: "data_source_test"})
 	}
+	if resource.GenerateDataSourceDocs {
+		if hasGeneratedReadDataSource(resource) {
+			files = append(files, parser.OutputFile{Path: "docs/data-sources/" + resource.FileStem + ".md", Kind: "data_source_doc"})
+		}
+		if hasGeneratedListDataSource(resource) {
+			files = append(files, parser.OutputFile{Path: "docs/data-sources/" + resource.ListFileStem + ".md", Kind: "list_data_source_doc"})
+		}
+	}
 	return files
 }
 
@@ -202,6 +210,8 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"importPassthroughAttribute":       importPassthroughAttribute,
 		"singletonLegacyImportField":       singletonLegacyImportField,
 		"docSchema":                        docSchema,
+		"dataSourceDocSchema":              dataSourceDocSchema,
+		"dataSourceDocExample":             dataSourceDocExample,
 		"joinDocFields":                    joinDocFields,
 		"needsFmt":                         needsFmt,
 		"needsClientFmt":                   needsClientFmt,
@@ -264,6 +274,9 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"rootOneOfVariants":                rootOneOfVariants,
 		"hasRootOneOf":                     hasRootOneOf,
 		"nestedOneOfGroups":                nestedOneOfGroups,
+		"hasMapOneOfVariants":              hasMapOneOfVariants,
+		"variantMapElementGoType":          variantMapElementGoType,
+		"variantMapElementAttrType":        variantMapElementAttrType,
 		"needsNestedShapeMatcher":          needsNestedShapeMatcher,
 		"discriminatorCaseValues":          discriminatorCaseValues,
 		"directDiscriminatorField":         directDiscriminatorField,
@@ -367,8 +380,69 @@ func docSchema(resource parser.ResourceDef) string {
 	return renderDocSchema(resource, make(map[string]struct{}))
 }
 
+func computedDocFields(fields []parser.FieldDef) []parser.FieldDef {
+	result := append([]parser.FieldDef(nil), fields...)
+	for i := range result {
+		result[i].Required, result[i].Optional, result[i].Computed = false, false, true
+		result[i].ForceNew, result[i].StrictForceNew, result[i].PathParam = false, false, false
+		result[i].Fields = computedDocFields(result[i].Fields)
+	}
+	return result
+}
+
+func dataSourceDocSchema(resource parser.ResourceDef, list bool) string {
+	fields := computedDocFields(resource.Fields)
+	for _, variant := range resource.OneOfVariants {
+		fields = append(fields, parser.FieldDef{TerraformName: variant.TerraformName, Type: "object", ElementType: variant.MapElementType,
+			Computed: true, Fields: computedDocFields(variant.Fields)})
+	}
+	if list {
+		fields = append(listConfigFields(resource), parser.FieldDef{TerraformName: "items", Type: "array", ElementType: "object", Computed: true, Fields: fields})
+	} else {
+		for i := range fields {
+			if i < len(resource.Fields) && resource.Fields[i].PathParam {
+				fields[i].Required, fields[i].Computed = true, false
+			}
+		}
+	}
+	return docSchema(parser.ResourceDef{Fields: fields})
+}
+
+func dataSourceDocExample(resource parser.ResourceDef, list bool) string {
+	typeName := resource.TypeName
+	fields := resource.Read.PathParams
+	if list {
+		typeName, fields = resource.ListTypeName, listConfigFields(resource)
+	}
+	content, err := os.ReadFile(filepath.Join("examples", "data-sources", typeName, "data-source.tf"))
+	if err == nil {
+		return strings.TrimSpace(string(content))
+	}
+	var output strings.Builder
+	fmt.Fprintf(&output, "data %q %q {\n", typeName, "example")
+	for _, field := range fields {
+		if field.Required {
+			fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, "example")
+		}
+	}
+	output.WriteString("}")
+	return output.String()
+}
+
 func renderDocSchema(resource parser.ResourceDef, descriptions map[string]struct{}) string {
 	var output strings.Builder
+	if resource.ValidateRequiredUnions {
+		for _, group := range nestedOneOfGroups(resource.OneOfVariants) {
+			if !group.Required || !group.RequestField {
+				continue
+			}
+			var names []string
+			for _, variant := range group.Variants {
+				names = append(names, "`"+variant.TerraformName+"`")
+			}
+			fmt.Fprintf(&output, "Exactly one of %s must be configured for `%s`.\n\n", strings.Join(names, ", "), group.APIName)
+		}
+	}
 	writeDocAttributeSections(&output, "", resource.Fields, true, descriptions)
 	writeOneOfDocSections(&output, resource.OneOfVariants, descriptions)
 	var nestedSections []nestedDocSection
@@ -386,10 +460,17 @@ func writeOneOfDocSections(output *strings.Builder, variants []parser.OneOfVaria
 	}
 	output.WriteString("### Optional\n\n")
 	for _, variant := range variants {
+		if variant.MapElementType != "" {
+			fmt.Fprintf(output, "- `%s` (Map of %s)\n", variant.TerraformName, strings.TrimPrefix(variantMapElementGoType(variant), "types."))
+			continue
+		}
 		fmt.Fprintf(output, "- `%s` (Attributes) (see [below for nested schema](#nestedatt--%s))\n", variant.TerraformName, docAnchor(variant.TerraformName))
 	}
 	output.WriteString("\n")
 	for _, variant := range variants {
+		if variant.MapElementType != "" {
+			continue
+		}
 		fmt.Fprintf(output, "<a id=\"nestedatt--%s\"></a>\n", docAnchor(variant.TerraformName))
 		fmt.Fprintf(output, "### Nested Schema for `%s`\n\n", variant.TerraformName)
 		writeDocAttributeSections(output, variant.TerraformName, variant.Fields, false, descriptions)
@@ -830,7 +911,7 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
-	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field) && field.CustomType != "types.DynamicType{}") {
+	} else if !objectAsJSON(field) && (field.Type == "array" || (field.Type == "object" && field.CustomType != "types.DynamicType{}")) {
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
@@ -845,6 +926,17 @@ func writeValidatorCalls(output *strings.Builder, indent, kind string, calls []s
 }
 
 func writeOneOfSchemaAttribute(output *strings.Builder, variant parser.OneOfVariantDef, indent string, optional bool) {
+	if variant.MapElementType != "" {
+		fmt.Fprintf(output, "%s%q: schema.MapAttribute{\n", indent, variant.TerraformName)
+		if optional && (!variant.ParentComputed || variant.ParentOptionalComputed) {
+			fmt.Fprintf(output, "%s\tOptional: true,\n", indent)
+		}
+		if !optional || variant.ParentComputed {
+			fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
+		}
+		fmt.Fprintf(output, "%s\tElementType: %s,\n%s},\n", indent, variantMapElementAttrType(variant), indent)
+		return
+	}
 	fmt.Fprintf(output, "%s%q: schema.SingleNestedAttribute{\n", indent, variant.TerraformName)
 	if optional && (!variant.ParentComputed || variant.ParentOptionalComputed) {
 		fmt.Fprintf(output, "%s\tOptional: true,\n", indent)
@@ -859,6 +951,10 @@ func writeOneOfSchemaAttribute(output *strings.Builder, variant parser.OneOfVari
 }
 
 func writeOneOfDataSourceAttribute(output *strings.Builder, variant parser.OneOfVariantDef, indent string) {
+	if variant.MapElementType != "" {
+		fmt.Fprintf(output, "%s%q: schema.MapAttribute{Computed: true, ElementType: %s},\n", indent, variant.TerraformName, variantMapElementAttrType(variant))
+		return
+	}
 	fmt.Fprintf(output, "%s%q: schema.SingleNestedAttribute{\n", indent, variant.TerraformName)
 	fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
 	fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
@@ -903,7 +999,7 @@ func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, in
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
-	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field) && field.CustomType != "types.DynamicType{}") {
+	} else if !objectAsJSON(field) && (field.Type == "array" || (field.Type == "object" && field.CustomType != "types.DynamicType{}")) {
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
@@ -1167,7 +1263,7 @@ func nestedObject(field parser.FieldDef) bool {
 }
 
 func objectAsJSON(field parser.FieldDef) bool {
-	return field.Type == "object" && field.CustomType == "jsontypes.NormalizedType{}" && field.ObjectAsJSON
+	return (field.Type == "object" || field.Type == "array") && field.CustomType == "jsontypes.NormalizedType{}" && field.ObjectAsJSON
 }
 
 func normalizedString(field parser.FieldDef) bool {
@@ -1424,6 +1520,10 @@ func listItemAttrTypes(resource parser.ResourceDef) []string {
 		lines = append(lines, fmt.Sprintf("%q: %s", field.TerraformName, attrType(field)))
 	}
 	for _, variant := range resource.OneOfVariants {
+		if variant.MapElementType != "" {
+			lines = append(lines, fmt.Sprintf("%q: types.MapType{ElemType: %s}", variant.TerraformName, variantMapElementAttrType(variant)))
+			continue
+		}
 		lines = append(lines, fmt.Sprintf("%q: types.ObjectType{AttrTypes: %sAttrTypes()}", variant.TerraformName, variant.ModelName))
 	}
 	return lines
@@ -1461,6 +1561,23 @@ type oneOfVariantGroup struct {
 	DiscriminatorField    string
 	DiscriminatorAtParent bool
 	Variants              []parser.OneOfVariantDef
+}
+
+func hasMapOneOfVariants(resource parser.ResourceDef) bool {
+	for _, variant := range resource.OneOfVariants {
+		if variant.MapElementType != "" {
+			return true
+		}
+	}
+	return false
+}
+
+func variantMapElementGoType(variant parser.OneOfVariantDef) string {
+	return goType(parser.FieldDef{Type: variant.MapElementType})
+}
+
+func variantMapElementAttrType(variant parser.OneOfVariantDef) string {
+	return attrType(parser.FieldDef{Type: variant.MapElementType})
 }
 
 func nestedOneOfGroups(variants []parser.OneOfVariantDef) []oneOfVariantGroup {
@@ -1741,7 +1858,7 @@ func rangeValidatorCalls(packageName, minimum, maximum string) []string {
 }
 
 func listValidatorCalls(field parser.FieldDef) []string {
-	if field.Type != "array" {
+	if field.Type != "array" || objectAsJSON(field) {
 		return nil
 	}
 	var calls []string

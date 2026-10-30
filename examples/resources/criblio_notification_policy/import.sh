@@ -1,0 +1,1 @@
+terraform import criblio_notification_policy.example platform-alert-routing

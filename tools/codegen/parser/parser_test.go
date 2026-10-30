@@ -16,6 +16,7 @@ paths:
     post:
       x-terraform-resource: true
       x-terraform-resource-name: SearchDatasetIntelligence
+      x-terraform-validate-required-unions: true
       parameters: [{name: datasetId, in: path, required: true, schema: {type: string}}]
       responses:
         '201':
@@ -47,6 +48,9 @@ components:
 	}
 	if len(defs) != 1 || defs[0].SchemaName != "Intelligence" || defs[0].Create.RequestSchema != "" {
 		t.Fatalf("unexpected bodyless resource definition: %+v", defs)
+	}
+	if !defs[0].ValidateRequiredUnions {
+		t.Fatal("required-union validation annotation was not preserved")
 	}
 	id := fieldByTFName(t, defs[0].Fields, "dataset_id")
 	if !id.Required || id.Computed || !id.ForceNew || !id.PathParam {
@@ -355,7 +359,9 @@ components:
 
 func TestQualifyNestedVariantCollisions(t *testing.T) {
 	variants := []OneOfVariantDef{
-		{GoName: "Shared", ModelName: "SharedModel", TerraformName: "shared", NestUnder: "primaryConfig"},
+		{GoName: "Shared", ModelName: "SharedModel", TerraformName: "shared", NestUnder: "primaryConfig", Fields: []FieldDef{
+			{NestedModelName: "SharedRefsModel", NestedAPIModelName: "SharedRefsAPIModel", NestedAttrTypes: "SharedRefsAttrTypes"},
+		}},
 		{GoName: "Shared", ModelName: "SharedModel", TerraformName: "shared", NestUnder: "fallbackConfig"},
 		{GoName: "Unique", ModelName: "UniqueModel", TerraformName: "unique", NestUnder: "primaryConfig"},
 	}
@@ -370,6 +376,10 @@ func TestQualifyNestedVariantCollisions(t *testing.T) {
 	}
 	if variants[2].GoName != "Unique" || variants[2].TerraformName != "unique" {
 		t.Fatalf("unique variant was unexpectedly renamed: %#v", variants[2])
+	}
+	field := variants[0].Fields[0]
+	if field.NestedModelName != "PrimaryConfigSharedRefsModel" || field.NestedAPIModelName != "PrimaryConfigSharedRefsAPIModel" || field.NestedAttrTypes != "PrimaryConfigSharedRefsAttrTypes" {
+		t.Fatalf("nested shared models were not parent-qualified: %#v", field)
 	}
 }
 
@@ -1318,6 +1328,23 @@ allOf:
 	properties, _ = mappingValue(prior, "properties")
 	if _, ok := mappingValue(properties, "interval"); ok {
 		t.Fatal("unannotated schema behavior changed")
+	}
+}
+
+func TestScalarMapUnionVariant(t *testing.T) {
+	var union, schemas yaml.Node
+	if err := yaml.Unmarshal([]byte("oneOf:\n  - $ref: '#/components/schemas/Metadata'\n"), &union); err != nil {
+		t.Fatal(err)
+	}
+	if err := yaml.Unmarshal([]byte("Metadata:\n  type: object\n  additionalProperties: {type: string}\n"), &schemas); err != nil {
+		t.Fatal(err)
+	}
+	variants, err := parseOneOfVariants("Monitor", union.Content[0], schemas.Content[0], "metadata")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(variants) != 1 || variants[0].MapElementType != "string" {
+		t.Fatalf("metadata union: %#v", variants)
 	}
 }
 

@@ -13,6 +13,7 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added monitor muting rules, notification policies, shared configurations, and profiles, with data sources, examples, acceptance tests, and import/export support.
 - Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
 - Added `criblio_notification_template` resource and single/list data sources for custom Handlebars templates, with import and export support. Requires V2 Notifications; built-in templates remain available through data sources and are excluded from resource exports.
 - Added `conf.trigger` for custom Search notification conditions in notifications and scheduled dashboard notifications, allowing saved results to be retained while alerts remain selective.
@@ -21,10 +22,15 @@ commit history, and tag-to-tag diffs.
 - Added changelog update script to run within make generate.
 - Added metrics search support in search dashboards. (#234).
 - Added notification_template and search_ai resources.
+- Added criblio_monitor resource + data sources.
+- Added model outlier detection config fields.
+- Added restore codegen overlay for criblio_monitor.
 
 ### Changed
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
 - Syncing 4.20.3 upstream spec.
+- MON-1453: typed monitor resource + notifications (base layer).
+- Reverting codegen changes and adding example.
 
 ### Fixed
 - Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)
@@ -38,6 +44,9 @@ commit history, and tag-to-tag diffs.
 - Fixed worker group id replacement issue.
 - Fixed saved_state field within collectors.
 - Fixed removal of configured collector `saved_state` so omitting it or setting it to null restores runtime checkpoint tracking without changing another field.
+- Fixed restore template_params opaque-JSON protection (INFRA-12649).
+- Fixed fmt issues.
+- Fixed test.
 
 ## [1.25.55] - 2026-08-19
 

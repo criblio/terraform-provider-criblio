@@ -1103,11 +1103,20 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 				}
 			{{- end }}
 			{{- end }}
+			case "":
+				{{- range .Variants }}
+				{{- if not .DiscriminatorValue }}
+				if {{ $.StructName }}OneOfShapeMatches(nested, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
+					m.{{ .GoName }} = &{{ .ModelName }}{}
+					if err := m.{{ .GoName }}.unmarshalPayload(nested); err != nil { return err }
+				}
+				{{- end }}
+				{{- end }}
 			}
 			{{- else }}
 			matched := false
 			{{- range .Variants }}
-			if !matched && {{ $.StructName }}OneOfShapeMatches(nested, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
+			if !matched && {{ if .MapElementType }}{{ $.StructName }}OneOfMapMatches(nested, "{{ .MapElementType }}"){{ else }}{{ $.StructName }}OneOfShapeMatches(nested, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}){{ end }} {
 				m.{{ .GoName }} = &{{ .ModelName }}{}
 				if err := m.{{ .GoName }}.unmarshalPayload(nested); err != nil {
 					return err
@@ -1149,6 +1158,30 @@ func normalizeCollectorUnionValues(raw map[string]any) {
 {{- end }}
 {{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource") (eq .StructName "PackCollector")) }}
 {{ range .OneOfVariants }}
+{{- if .MapElementType }}
+type {{ .ModelName }} map[string]{{ variantMapElementGoType . }}
+
+func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
+	output := make(map[string]any, len(m))
+	for key, item := range m {
+		value, err := {{ $.StructName }}TerraformValueToJSON(item)
+		if err != nil { return nil, err }
+		output[key] = value
+	}
+	return output, nil
+}
+
+func (m *{{ .ModelName }}) unmarshalPayload(input map[string]any) error {
+	values := make({{ .ModelName }}, len(input))
+	for key, item := range input {
+		value, err := {{ $.StructName }}APIValueToTerraformValue(item, {{ variantMapElementAttrType . }})
+		if err != nil { return err }
+		values[key] = value.({{ variantMapElementGoType . }})
+	}
+	*m = values
+	return nil
+}
+{{- else }}
 type {{ .ModelName }} struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
@@ -1216,6 +1249,7 @@ func (m *{{ .ModelName }}) unmarshalPayload(input map[string]any) error {
 {{- end }}
 	return nil
 }
+{{- end }}
 {{ end }}
 {{- end }}
 {{- if hasRootOneOf . }}
@@ -1304,6 +1338,24 @@ func {{ .StructName }}OneOfShapeMatches(raw map[string]any, required []string, k
 		}
 	}
 	return false
+}
+{{- end }}
+{{- if hasMapOneOfVariants . }}
+
+func {{ .StructName }}OneOfMapMatches(raw map[string]any, elementType string) bool {
+	for _, value := range raw {
+		switch elementType {
+		case "string":
+			if _, ok := value.(string); !ok { return false }
+		case "boolean":
+			if _, ok := value.(bool); !ok { return false }
+		case "integer", "number":
+			if _, ok := value.(float64); !ok { return false }
+		default:
+			return false
+		}
+	}
+	return true
 }
 {{- end }}
 `
@@ -1959,6 +2011,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 {{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+{{- if .ValidateRequiredUnions }}
+	"github.com/hashicorp/terraform-plugin-framework-validators/resourcevalidator"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 {{- if needsPlanModifier . }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -2000,6 +2055,9 @@ var _ = types.String{}
 var _ resource.Resource = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithConfigure = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithImportState = &{{ .StructName }}Resource{}
+{{- if .ValidateRequiredUnions }}
+var _ resource.ResourceWithConfigValidators = &{{ .StructName }}Resource{}
+{{- end }}
 {{- if or (eq .StructName "SearchDataset") (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 var _ resource.ResourceWithModifyPlan = &{{ .StructName }}Resource{}
 {{- end }}
@@ -2019,6 +2077,18 @@ func New{{ .StructName }}Resource() resource.Resource {
 func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_{{ typeNameSuffix . }}"
 }
+
+{{- if .ValidateRequiredUnions }}
+func (r *{{ .StructName }}Resource) ConfigValidators(_ context.Context) []resource.ConfigValidator {
+	return []resource.ConfigValidator{
+{{- range nestedOneOfGroups .OneOfVariants }}
+{{- if and .Required .RequestField }}
+		resourcevalidator.ExactlyOneOf({{ range .Variants }}path.MatchRoot("{{ .TerraformName }}"), {{ end }}),
+{{- end }}
+{{- end }}
+	}
+}
+{{- end }}
 
 func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
@@ -2228,10 +2298,14 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 {{- else if eq .StructName "PackSource" }}
 	priorPlainAuth := snapshotPackSourcePlainAuthTokensPriorRead(&model)
 {{- end }}
-{{- if or (eq .StructName "NotificationTemplate") (eq .StructName "SearchDatasetIntelligence") }}
+{{- if or .RefreshFromAPI (eq .StructName "NotificationTemplate") (eq .StructName "SearchDatasetIntelligence") (eq .StructName "Monitor") }}
 {{- if eq .StructName "NotificationTemplate" }}
 	// Template fields are returned verbatim. Refresh from the API so changes
 	// outside Terraform, including a removed description, appear in the plan.
+{{- else if eq .StructName "Monitor" }}
+	// Monitor configuration, including inheritance and cleared fields, is authoritative on refresh.
+{{- else if .RefreshFromAPI }}
+	// Refresh all configuration so drift and removed values are visible.
 {{- else }}
 	// Generation can replace or remove optional output fields. Refresh the
 	// entire envelope so old content and failure details do not linger.
@@ -2611,7 +2685,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	} else if len(state.{{ .GoName }}.Elements()) == 0 {
 		state.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
 	}
-{{- else if eq .Type "array" }}
+{{- else if and (eq .Type "array") (not (objectAsJSON .)) }}
 	if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil {
 		state.{{ .GoName }} = {{ nullValue . }}
 	}
@@ -2693,6 +2767,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
 	if api.{{ .GoName }} != nil {
+{{- if .MapElementType }}
+		state.{{ .GoName }} = api.{{ .GoName }}
+{{- else }}
 		if state.{{ .GoName }} == nil {
 			state.{{ .GoName }} = &{{ .ModelName }}{}
 		}
@@ -2762,6 +2839,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- end }}
 {{- end }}
+	{{- end }}
 	}
 {{- end }}
 {{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
@@ -3234,6 +3312,12 @@ func {{ .ListStructName }}ItemAttrTypes() map[string]attr.Type {
 {{- range .OneOfVariants }}
 
 func {{ $.ListStructName }}{{ .GoName }}ObjectValue(item *{{ .ModelName }}) attr.Value {
+{{- if .MapElementType }}
+	if item == nil { return types.MapNull({{ variantMapElementAttrType . }}) }
+	values := make(map[string]attr.Value, len(*item))
+	for key, value := range *item { values[key] = value }
+	return types.MapValueMust({{ variantMapElementAttrType . }}, values)
+{{- else }}
 	if item == nil {
 		return types.ObjectNull({{ .ModelName }}AttrTypes())
 	}
@@ -3242,6 +3326,7 @@ func {{ $.ListStructName }}{{ .GoName }}ObjectValue(item *{{ .ModelName }}) attr
 		"{{ .TerraformName }}": item.{{ .GoName }},
 {{- end }}
 	})
+{{- end }}
 }
 {{- end }}
 `
@@ -3280,6 +3365,29 @@ Manages custom Handlebars notification templates in the current workspace. Requi
 Use ` + "`criblio_notification_template.<name>.id`" + ` as the ` + "`template_id`" + ` in a notification's ` + "`template_target_pairs`" + `. The template's ` + "`type`" + ` must match the notification target's type. SMTP, Slack, and PagerDuty templates normally contain a JSON payload; Handlebars expressions remain literal template text.
 
 Built-in templates (` + "`default-email`, `default-slack`, `default-sns`, and `default-pagerduty`" + `) cannot be created, updated, or deleted. Read them using the ` + "`criblio_notification_template`" + ` or ` + "`criblio_notification_templates`" + ` data source. The import CLI excludes these built-in templates from exported resources.
+{{- end }}
+
+{{- if eq .StructName "MonitorProfile" }}
+
+Groups shared configurations in order and optionally links to a parent profile. Referenced configurations and parents must exist. Cribl enforces tree uniqueness and a maximum hierarchy depth of four.
+
+Changes replace the profile because the backend PATCH path does not rebuild hierarchy metadata. Delete or unlink referencing monitors and child profiles before replacement or deletion. For Terraform-managed dependants, coordinate their replacement explicitly.
+{{- end }}
+{{- if eq .StructName "MonitorSharedConfig" }}
+
+Manages reusable monitor settings. Supply the partial upstream monitor configuration using ` + "`jsonencode(...)`" + `. The fingerprint is computed by Cribl and can be used in monitor inheritance references. Remove this configuration from profiles before deleting it.
+{{- end }}
+{{- if eq .StructName "MonitorSilence" }}
+
+Manages a muting rule for an existing customer-metrics monitor. Configure begin and expiration timestamps in Unix milliseconds. Cribl sets creation time and creator; updates preserve those audit values. Expired rules may be removed by Cribl.
+
+Optional ` + "`tags`" + ` uses a JSON map of label names to lists of allowed strings: keys are combined with AND and allowed values within a key with OR.
+{{- end }}
+{{- if eq .StructName "NotificationPolicy" }}
+
+Requires V2 Notifications. Configure ` + "`conditions`" + ` using ` + "`jsonencode(...)`" + ` to represent nested arrays of condition objects. Outer groups are combined with OR; conditions inside each group with AND. Values may be strings, numbers, booleans, or null.
+
+Each template/target pair must reference existing entities with matching target types. Lower ` + "`order`" + ` values are evaluated first.
 {{- end }}
 
 ## Example Usage
@@ -4420,13 +4528,57 @@ func Test{{ .StructName }}DataSources(t *testing.T) {
 }
 `
 
+const dataSourceDocTemplate = `---
+# generated by tools/codegen
+page_title: "{{ .TypeName }} Data Source - terraform-provider-criblio"
+subcategory: ""
+description: |-
+  Reads {{ .StructName }} configuration.
+---
+
+# {{ .TypeName }} (Data Source)
+
+## Example Usage
+
+` + "```terraform" + `
+{{ dataSourceDocExample . false }}
+` + "```" + `
+
+## Schema
+
+{{ dataSourceDocSchema . false }}
+`
+
+const listDataSourceDocTemplate = `---
+# generated by tools/codegen
+page_title: "{{ .ListTypeName }} Data Source - terraform-provider-criblio"
+subcategory: ""
+description: |-
+  Lists {{ .ListStructName }}.
+---
+
+# {{ .ListTypeName }} (Data Source)
+
+## Example Usage
+
+` + "```terraform" + `
+{{ dataSourceDocExample . true }}
+` + "```" + `
+
+## Schema
+
+{{ dataSourceDocSchema . true }}
+`
+
 var templateBodies = map[string]string{
-	"types":            typesTemplate,
-	"client":           clientTemplate,
-	"resource":         resourceTemplate,
-	"data_source":      dataSourceTemplate,
-	"list_data_source": listDataSourceTemplate,
-	"doc":              docTemplate,
-	"test":             testTemplate,
-	"data_source_test": dataSourceTestTemplate,
+	"types":                typesTemplate,
+	"client":               clientTemplate,
+	"resource":             resourceTemplate,
+	"data_source":          dataSourceTemplate,
+	"list_data_source":     listDataSourceTemplate,
+	"doc":                  docTemplate,
+	"data_source_doc":      dataSourceDocTemplate,
+	"list_data_source_doc": listDataSourceDocTemplate,
+	"test":                 testTemplate,
+	"data_source_test":     dataSourceTestTemplate,
 }

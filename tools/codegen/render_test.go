@@ -9,6 +9,52 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
 
+func TestMonitorReviewGeneration(t *testing.T) {
+	definition := parser.ResourceDef{
+		Name: "monitor", StructName: "Monitor", TypeName: "criblio_monitor", ListStructName: "Monitors",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{TerraformName: "metadata", GoName: "Metadata", ModelName: "MetadataModel", NestUnder: "metadata", MapElementType: "string", RequestField: true},
+			{TerraformName: "notification", GoName: "Notification", ModelName: "NotificationModel", NestUnder: "notification", DiscriminatorField: "type", DiscriminatorValue: "policy", RequestField: true},
+			{TerraformName: "inherited", GoName: "Inherited", ModelName: "InheritedModel", NestUnder: "notification", DiscriminatorField: "type", RequestField: true,
+				Fields: []parser.FieldDef{{APIName: "$configRefs", TerraformName: "config_refs", GoName: "ConfigRefs", Type: "array", ElementType: "string", Required: true}}},
+		},
+	}
+	types := renderTemplate(t, "types", definition)
+	assertContains(t, types, "type MetadataModel map[string]types.String")
+	assertContains(t, types, `MonitorOneOfMapMatches(nested, "string")`)
+	assertContains(t, types, `case "":`)
+	assertContains(t, types, `m.Inherited.unmarshalPayload(nested)`)
+	assertContains(t, renderTemplate(t, "resource", definition), `"metadata": schema.MapAttribute{`)
+	assertContains(t, renderTemplate(t, "data_source", definition), `"metadata": schema.MapAttribute{`)
+	assertContains(t, renderTemplate(t, "list_data_source", definition), "types.MapNull(types.StringType)")
+	assertContains(t, renderTemplate(t, "resource", definition), "model = *apiModel")
+}
+
+func TestRequiredUnionConfigValidators(t *testing.T) {
+	definition := parser.ResourceDef{
+		StructName: "Monitor", TypeName: "criblio_monitor", ValidateRequiredUnions: true,
+		OneOfVariants: []parser.OneOfVariantDef{
+			{TerraformName: "inline", NestUnder: "config", ParentRequired: true, RequestField: true},
+			{TerraformName: "inherited", NestUnder: "config", ParentRequired: true, RequestField: true},
+			{TerraformName: "optional", NestUnder: "optionalConfig", RequestField: true},
+		},
+	}
+	content := renderTemplate(t, "resource", definition)
+	if !strings.Contains(content, `resourcevalidator.ExactlyOneOf(path.MatchRoot("inline"), path.MatchRoot("inherited"),`) {
+		t.Fatal("required union must validate exactly one configured branch")
+	}
+	if strings.Contains(content, `resourcevalidator.ExactlyOneOf(path.MatchRoot("optional")`) {
+		t.Fatal("optional union must not require configuration")
+	}
+	if !strings.Contains(docSchema(definition), "Exactly one of `inline`, `inherited` must be configured for `config`.") {
+		t.Fatal("documentation must explain required union configuration")
+	}
+	definition.ValidateRequiredUnions = false
+	if strings.Contains(renderTemplate(t, "resource", definition), "ConfigValidators") {
+		t.Fatal("existing resources must not gain required-union validation without the annotation")
+	}
+}
+
 func TestSearchDatasetIntelligenceGeneration(t *testing.T) {
 	id := parser.FieldDef{APIName: "datasetId", TerraformName: "dataset_id", GoName: "DatasetID", Type: "string", Required: true, ForceNew: true, PathParam: true}
 	definition := parser.ResourceDef{
@@ -1653,5 +1699,47 @@ func assertNotContains(t *testing.T, content, want string) {
 	t.Helper()
 	if strings.Contains(content, want) {
 		t.Fatalf("expected content not to contain %q", want)
+	}
+}
+
+func TestMonitoringJSONAndDataSourceDocs(t *testing.T) {
+	definition := parser.ResourceDef{
+		Name: "NotificationPolicy", FileStem: "notification_policy", StructName: "NotificationPolicy", TypeName: "criblio_notification_policy",
+		ListFileStem: "notification_policies", ListStructName: "NotificationPolicies", ListTypeName: "criblio_notification_policies",
+		Create: parser.OperationDef{Path: "/notification-policies"}, List: parser.OperationDef{Path: "/notification-policies"},
+		GenerateDataSourceDocs: true, RefreshFromAPI: true,
+		Fields: []parser.FieldDef{
+			{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", Required: true, PathParam: true, ForceNew: true, RequestField: true},
+			{APIName: "conditions", TerraformName: "conditions", GoName: "Conditions", Type: "array", ElementType: "string", Required: true, RequestField: true, CustomType: "jsontypes.NormalizedType{}", ObjectAsJSON: true},
+		},
+	}
+	resource := renderTemplate(t, "resource", definition)
+	assertContains(t, resource, `"conditions": schema.StringAttribute{`)
+	assertNotContains(t, resource, `state.Conditions.ElementType`)
+	assertContains(t, resource, "model = *apiModel")
+	types := renderTemplate(t, "types", definition)
+	assertContains(t, types, "Conditions any")
+	assertContains(t, types, "NotificationPolicyObjectJSONFromTerraformValue(m.Conditions)")
+	single := dataSourceDocSchema(definition, false)
+	assertContains(t, single, "### Required\n\n- `id`")
+	assertContains(t, single, "### Read-Only\n\n- `conditions` (String)")
+	list := dataSourceDocSchema(definition, true)
+	assertContains(t, list, "### Read-Only\n\n- `items`")
+	assertNotContains(t, list, "Optional:")
+	files := outputFiles(definition)
+	var count int
+	for _, file := range files {
+		if strings.HasSuffix(file.Kind, "source_doc") {
+			count++
+		}
+	}
+	if count != 2 {
+		t.Fatalf("generated data source docs = %d, want 2", count)
+	}
+	definition.GenerateDataSourceDocs = false
+	for _, file := range outputFiles(definition) {
+		if strings.HasSuffix(file.Kind, "source_doc") {
+			t.Fatal("existing data source docs must remain untouched without opting in")
+		}
 	}
 }
