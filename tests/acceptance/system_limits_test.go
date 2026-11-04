@@ -17,7 +17,7 @@ func TestSystemLimits(t *testing.T) {
 	provider.NewSystemLimitsResource().Schema(context.Background(), frameworkresource.SchemaRequest{}, &schemaResponse)
 	var ignored []string
 	for name := range schemaResponse.Schema.Attributes {
-		if name != "group_id" && name != "lookup_allowed_paths" {
+		if name != "group_id" && name != "min_free_space" {
 			ignored = append(ignored, name)
 		}
 	}
@@ -25,21 +25,21 @@ func TestSystemLimits(t *testing.T) {
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
-			{Config: systemLimitsConfig(groupID, `["/tmp"]`), Check: resource.ComposeAggregateTestCheckFunc(
+			{Config: systemLimitsConfig(groupID, "2 GB"), Check: resource.ComposeAggregateTestCheckFunc(
 				resource.TestCheckResourceAttr(resourceName, "group_id", groupID),
-				resource.TestCheckResourceAttr(resourceName, "lookup_allowed_paths.0", "/tmp"),
+				resource.TestCheckResourceAttr(resourceName, "min_free_space", "2 GB"),
 			)},
-			{Config: systemLimitsConfig(groupID, `[]`), Check: resource.TestCheckResourceAttr(resourceName, "lookup_allowed_paths.#", "0")},
-			{Config: systemLimitsConfig(groupID, `[]`), PlanOnly: true},
+			{Config: systemLimitsConfig(groupID, "3 GB"), Check: resource.TestCheckResourceAttr(resourceName, "min_free_space", "3 GB")},
+			{Config: systemLimitsConfig(groupID, "3 GB"), PlanOnly: true},
 			{ResourceName: resourceName, ImportState: true, ImportStateId: groupID,
 				ImportStateVerify: true, ImportStateVerifyIdentifierAttribute: "group_id", ImportStateVerifyIgnore: ignored},
 		},
 	})
 }
 
-func systemLimitsConfig(groupID, lookupPaths string) string {
+func systemLimitsConfig(groupID, minFreeSpace string) string {
 	return fmt.Sprintf(`resource "criblio_system_limits" "test" {
   group_id             = %q
-  lookup_allowed_paths = %s
-}`, groupID, lookupPaths)
+  min_free_space = %q
+}`, groupID, minFreeSpace)
 }

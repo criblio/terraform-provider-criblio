@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"regexp"
 	"sync"
 	"testing"
 
@@ -40,7 +41,7 @@ func (p *systemLimitsTestProvider) DataSources(context.Context) []func() datasou
 	return []func() datasource.DataSource{NewSystemLimitsDataSource}
 }
 
-func TestSystemLimitsManagedLookupPaths(t *testing.T) {
+func TestSystemLimitsManagedLimits(t *testing.T) {
 	var mu sync.Mutex
 	var stored map[string]json.RawMessage
 	if err := json.Unmarshal([]byte(`{
@@ -50,7 +51,9 @@ func TestSystemLimitsManagedLookupPaths(t *testing.T) {
  "metricsWorkerIdBlacklist":[], "minFreeSpace":"2 GB",
  "samples":{"maxSize":"2 MB","futureSampleOption":9007199254740993},
  "lookupMaxSize":"50 MB", "maxEPs":0, "futureLimit":9007199254740993,
- "lookupAllowedPaths":["/previous"]
+ "metricsDropList":["old.metric"],
+ "lookupAllowedPaths":["/readonly"], "lookupMaxTotalSize":"5 GB",
+ "enableWorkerInMemory":false
  }`), &stored); err != nil {
 		t.Fatal(err)
 	}
@@ -73,7 +76,7 @@ func TestSystemLimitsManagedLookupPaths(t *testing.T) {
 			}
 			// Emulate upstream replacement, not a partial merge.
 			for key, value := range stored {
-				if key != "lookupAllowedPaths" && key != "minFreeSpace" && key != "samples" && !reflect.DeepEqual(body[key], value) {
+				if key != "metricsDropList" && key != "minFreeSpace" && key != "samples" && !reflect.DeepEqual(body[key], value) {
 					t.Errorf("replacement PATCH changed unconfigured %s", key)
 				}
 			}
@@ -107,65 +110,101 @@ func TestSystemLimitsManagedLookupPaths(t *testing.T) {
 		}
 	}))
 	defer server.Close()
-	config := func(paths, extra string) string {
+	config := func(metrics, extra string) string {
 		return fmt.Sprintf(`resource "criblio_system_limits" "test" {
  group_id = "test-fleet"
- lookup_allowed_paths = %s
+ metrics_drop_list = %s
  %s
-}`, paths, extra)
+}`, metrics, extra)
 	}
 	name := "criblio_system_limits.test"
 	var sch frameworkresource.SchemaResponse
 	NewSystemLimitsResource().Schema(context.Background(), frameworkresource.SchemaRequest{}, &sch)
 	var ignored []string
 	for key := range sch.Schema.Attributes {
-		if key != "group_id" && key != "lookup_allowed_paths" {
+		if key != "group_id" && key != "metrics_drop_list" {
 			ignored = append(ignored, key)
 		}
 	}
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: map[string]func() (tfprotov6.ProviderServer, error){"criblio": providerserver.NewProtocol6WithError(&systemLimitsTestProvider{baseURL: server.URL})},
 		Steps: []resource.TestStep{
-			{Config: config(`["/tmp"]`, ""), Check: resource.ComposeAggregateTestCheckFunc(resource.TestCheckResourceAttr(name, "lookup_allowed_paths.0", "/tmp"), resource.TestCheckNoResourceAttr(name, "min_free_space"))},
-			{Config: config(`["/tmp"]`, ""), PlanOnly: true},
+			{Config: config(`["cribl.cpu"]`, ""), Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr(name, "metrics_drop_list.0", "cribl.cpu"),
+				resource.TestCheckNoResourceAttr(name, "min_free_space"),
+				resource.TestCheckResourceAttr(name, "lookup_allowed_paths.0", "/readonly"),
+				resource.TestCheckResourceAttr(name, "lookup_max_size", "50 MB"),
+				resource.TestCheckResourceAttr(name, "lookup_max_total_size", "5 GB"),
+				resource.TestCheckResourceAttr(name, "enable_worker_in_memory", "false"),
+				resource.TestCheckResourceAttr(name, "metrics_directory", "/var/cribl/metrics"),
+				resource.TestCheckResourceAttr(name, "managed_fields.#", "1"),
+				resource.TestCheckResourceAttr(name, "managed_fields.0", "metricsDropList"),
+			)},
+			{Config: config(`["cribl.cpu"]`, ""), PlanOnly: true},
+			{PreConfig: func() {
+				mu.Lock()
+				defer mu.Unlock()
+				stored["lookupAllowedPaths"] = json.RawMessage(`["/updated"]`)
+				stored["lookupMaxSize"] = json.RawMessage(`"100 MB"`)
+				stored["lookupMaxTotalSize"] = json.RawMessage(`"10 GB"`)
+				stored["enableWorkerInMemory"] = json.RawMessage(`true`)
+				stored["metricsDirectory"] = json.RawMessage(`"/var/updated/metrics"`)
+			}, Config: config(`["cribl.cpu"]`, ""), PlanOnly: true},
+			{Config: config(`["cribl.cpu"]`, ""), Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr(name, "lookup_allowed_paths.0", "/updated"),
+				resource.TestCheckResourceAttr(name, "lookup_max_size", "100 MB"),
+				resource.TestCheckResourceAttr(name, "lookup_max_total_size", "10 GB"),
+				resource.TestCheckResourceAttr(name, "enable_worker_in_memory", "true"),
+				resource.TestCheckResourceAttr(name, "metrics_directory", "/var/updated/metrics"),
+			)},
 			{PreConfig: func() {
 				mu.Lock()
 				defer mu.Unlock()
 				stored["minFreeSpace"] = json.RawMessage(`"500 MB"`)
-			}, Config: config(`["/tmp"]`, ""), PlanOnly: true},
-			{Config: config(`[]`, ""), Check: resource.TestCheckResourceAttr(name, "lookup_allowed_paths.#", "0")},
+			}, Config: config(`["cribl.cpu"]`, ""), PlanOnly: true},
+			{Config: config(`[]`, ""), Check: resource.TestCheckResourceAttr(name, "metrics_drop_list.#", "0")},
 			{PreConfig: func() {
 				mu.Lock()
 				defer mu.Unlock()
-				stored["lookupAllowedPaths"] = json.RawMessage(`["/remote"]`)
+				stored["metricsDropList"] = json.RawMessage(`["remote.metric"]`)
 				stored["minFreeSpace"] = json.RawMessage(`"500 MB"`)
 			}, Config: config(`[]`, ""), PlanOnly: true, ExpectNonEmptyPlan: true},
-			{PreConfig: func() { mu.Lock(); defer mu.Unlock(); delete(stored, "lookupAllowedPaths") }, Config: config(`[]`, ""), PlanOnly: true, ExpectNonEmptyPlan: true},
+			{PreConfig: func() { mu.Lock(); defer mu.Unlock(); delete(stored, "metricsDropList") }, Config: config(`[]`, ""), PlanOnly: true, ExpectNonEmptyPlan: true},
 			{Config: config(`[]`, ""), PlanOnly: true, ExpectNonEmptyPlan: true},
-			{Config: config(`["/tmp","$CRIBL_HOME/shared"]`, "min_free_space = \"3 GB\"\nsamples = { max_size = \"1 MB\" }"), Check: resource.ComposeAggregateTestCheckFunc(resource.TestCheckResourceAttr(name, "lookup_allowed_paths.#", "2"), resource.TestCheckResourceAttr(name, "samples.max_size", "1 MB"))},
-			{Config: config(`["/tmp"]`, ""), Check: resource.TestCheckNoResourceAttr(name, "min_free_space")},
-			{Config: config(`["/tmp"]`, ""), PlanOnly: true},
-			{Config: config(`["/tmp"]`, "") + `
+			{Config: config(`["cribl.cpu","cribl.mem"]`, "min_free_space = \"3 GB\"\nsamples = { max_size = \"1 MB\" }"), Check: resource.ComposeAggregateTestCheckFunc(resource.TestCheckResourceAttr(name, "metrics_drop_list.#", "2"), resource.TestCheckResourceAttr(name, "samples.max_size", "1 MB"))},
+			{Config: config(`["cribl.cpu"]`, ""), Check: resource.TestCheckNoResourceAttr(name, "min_free_space")},
+			{Config: config(`["cribl.cpu"]`, ""), PlanOnly: true},
+			{Config: config(`["cribl.cpu"]`, "") + `
 data "criblio_system_limits" "test" {
   group_id = criblio_system_limits.test.group_id
 }`, Check: resource.ComposeAggregateTestCheckFunc(
 				resource.TestCheckResourceAttr("data.criblio_system_limits.test", "min_free_space", "3 GB"),
-				resource.TestCheckResourceAttr("data.criblio_system_limits.test", "lookup_allowed_paths.0", "/tmp"),
+				resource.TestCheckResourceAttr("data.criblio_system_limits.test", "metrics_drop_list.0", "cribl.cpu"),
 			)},
 			{ResourceName: name, ImportState: true, ImportStateId: "test-fleet", ImportStateVerify: true, ImportStateVerifyIdentifierAttribute: "group_id", ImportStateVerifyIgnore: ignored},
-			{Config: `resource "criblio_system_limits" "test" { group_id = "test-fleet" }`, Check: resource.TestCheckNoResourceAttr(name, "lookup_allowed_paths.#")},
+			{Config: `resource "criblio_system_limits" "test" { group_id = "test-fleet" }`, Check: resource.TestCheckNoResourceAttr(name, "metrics_drop_list.#")},
 			{PreConfig: func() {
 				mu.Lock()
 				defer mu.Unlock()
-				stored["lookupAllowedPaths"] = json.RawMessage(`["/external"]`)
+				stored["metricsDropList"] = json.RawMessage(`["external.metric"]`)
 			}, Config: `resource "criblio_system_limits" "test" { group_id = "test-fleet" }`, PlanOnly: true},
-			{Config: config(`["/tmp"]`, ""), Check: resource.TestCheckResourceAttr(name, "lookup_allowed_paths.0", "/tmp")},
+			{Config: config(`["cribl.cpu"]`, ""), Check: resource.TestCheckResourceAttr(name, "metrics_drop_list.0", "cribl.cpu")},
+			{PreConfig: func() {
+				mu.Lock()
+				defer mu.Unlock()
+				stored["lookupAllowedPaths"] = json.RawMessage(`[]`)
+			}, Config: config(`["cribl.cpu"]`, ""), Check: resource.TestCheckResourceAttr(name, "lookup_allowed_paths.#", "0")},
+			{PreConfig: func() {
+				mu.Lock()
+				defer mu.Unlock()
+				delete(stored, "lookupAllowedPaths")
+			}, Config: config(`["cribl.cpu"]`, ""), Check: resource.TestCheckNoResourceAttr(name, "lookup_allowed_paths.#")},
 		},
 	})
 	mu.Lock()
 	defer mu.Unlock()
-	if string(stored["lookupAllowedPaths"]) != `["/tmp"]` {
-		t.Fatalf("final paths: %s", stored["lookupAllowedPaths"])
+	if string(stored["metricsDropList"]) != `["cribl.cpu"]` {
+		t.Fatalf("final metrics: %s", stored["metricsDropList"])
 	}
 	if string(stored["minFreeSpace"]) != `"3 GB"` {
 		t.Fatalf("removing configuration erased server value: %s", stored["minFreeSpace"])
@@ -179,14 +218,21 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 	for _, tc := range []struct {
 		name, field, config, initial, external, prefix string
 	}{
-		{"lookup paths", "lookupAllowedPaths", `lookup_allowed_paths = ["/tmp"]`, `["/tmp"]`, `["/external"]`, ""},
+		{"metrics list", "metricsDropList", `metrics_drop_list = ["cribl.cpu"]`, `["cribl.cpu"]`, `["external.metric"]`, ""},
 		{"zero limit", "maxEPs", `max_eps = 0`, `0`, `10`, ""},
 		{"nested object", "samples", `samples = { max_size = "1 MB" }`, `{"maxSize":"1 MB"}`, `{"maxSize":"2 MB"}`, ""},
-		{"unknown path", "lookupAllowedPaths", `lookup_allowed_paths = [terraform_data.path.output]`, `["/tmp"]`, `["/external"]`, `resource "terraform_data" "path" { input = "/tmp" }`},
+		{"unknown metric", "metricsDropList", `metrics_drop_list = [terraform_data.metric.output]`, `["cribl.cpu"]`, `["external.metric"]`, `resource "terraform_data" "metric" { input = "cribl.cpu" }`},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var mu sync.Mutex
-			stored := map[string]json.RawMessage{"minFreeSpace": json.RawMessage(`"2 GB"`)}
+			stored := map[string]json.RawMessage{
+				"minFreeSpace":         json.RawMessage(`"2 GB"`),
+				"lookupAllowedPaths":   json.RawMessage(`["/readonly"]`),
+				"lookupMaxSize":        json.RawMessage(`"500 MB"`),
+				"lookupMaxTotalSize":   json.RawMessage(`"2 GB"`),
+				"enableWorkerInMemory": json.RawMessage(`false`),
+				"metricsDirectory":     json.RawMessage(`"/metrics"`),
+			}
 			patches := 0
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				mu.Lock()
@@ -230,10 +276,10 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
                 %s
             }`, tc.config)
 			steps := []resource.TestStep{{Config: configured}}
-			if tc.name == "lookup paths" {
+			if tc.name == "metrics list" {
 				steps = append(steps, resource.TestStep{Config: `resource "criblio_system_limits" "test" {
                     group_id = "test-fleet"
-                    lifecycle { ignore_changes = [lookup_allowed_paths] }
+                    lifecycle { ignore_changes = [metrics_drop_list] }
                 }`, PlanOnly: true})
 			}
 			steps = append(steps, []resource.TestStep{
@@ -241,7 +287,10 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 				{PreConfig: func() { mu.Lock(); defer mu.Unlock(); delete(stored, tc.field) }, Config: configured, PlanOnly: true, ExpectNonEmptyPlan: true},
 				{Config: configured, PlanOnly: true, ExpectNonEmptyPlan: true},
 				// Applying removal must persist ownership even when both values are null.
-				{Config: groupOnly, Check: resource.TestCheckResourceAttr("criblio_system_limits.test", "managed_fields.#", "0")},
+				{Config: groupOnly, Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("criblio_system_limits.test", "managed_fields.#", "0"),
+					resource.TestCheckResourceAttr("criblio_system_limits.test", "lookup_allowed_paths.0", "/readonly"),
+				)},
 				{PreConfig: func() { mu.Lock(); defer mu.Unlock(); stored[tc.field] = json.RawMessage(tc.external) }, Config: groupOnly, PlanOnly: true},
 				{Config: groupOnly, PlanOnly: true},
 				{Config: configured, PlanOnly: true, ExpectNonEmptyPlan: true},
@@ -258,6 +307,30 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 			if string(stored[tc.field]) != tc.external {
 				t.Fatalf("external value changed: %s", stored[tc.field])
 			}
+		})
+	}
+}
+
+func TestSystemLimitsRejectReadOnlyConfiguration(t *testing.T) {
+	for _, tc := range []struct{ field, value string }{
+		{"lookup_allowed_paths", `["/tmp"]`},
+		{"lookup_max_size", `"500 MB"`},
+		{"lookup_max_total_size", `"2 GB"`},
+		{"enable_worker_in_memory", `false`},
+		{"metrics_directory", `"/metrics"`},
+	} {
+		t.Run(tc.field, func(t *testing.T) {
+			resource.UnitTest(t, resource.TestCase{
+				ProtoV6ProviderFactories: map[string]func() (tfprotov6.ProviderServer, error){"criblio": providerserver.NewProtocol6WithError(&systemLimitsTestProvider{baseURL: "https://example.invalid"})},
+				Steps: []resource.TestStep{{
+					Config: fmt.Sprintf(`resource "criblio_system_limits" "test" {
+  group_id = "default"
+  %s = %s
+}`, tc.field, tc.value),
+					PlanOnly:    true,
+					ExpectError: regexp.MustCompile("Invalid Configuration for Read-Only Attribute"),
+				}},
+			})
 		})
 	}
 }
@@ -295,7 +368,7 @@ func TestSystemLimitsFailedReadDoesNotPatch(t *testing.T) {
 			state := tfsdk.State{Schema: sch.Schema, Raw: tftypes.NewValue(sch.Schema.Type().TerraformType(ctx), nil)}
 			plan := tfsdk.Plan{Schema: sch.Schema, Raw: state.Raw}
 			var model SystemLimitsModel
-			if err := json.Unmarshal([]byte(`{"lookupAllowedPaths":["/tmp"]}`), &model); err != nil {
+			if err := json.Unmarshal([]byte(`{"metricsDropList":["cribl.cpu"]}`), &model); err != nil {
 				t.Fatal(err)
 			}
 			model.GroupID = types.StringValue("test-fleet")

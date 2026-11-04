@@ -43,6 +43,7 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 		"metricsGCPeriod":"60s", "metricsNeverDropList":[],
 		"metricsWorkerIdBlacklist":[], "minFreeSpace":"2 GB",
 		"samples":{"maxSize":"2 MB"}, "maxPQSize":"1 TB", "maxEPs":0,
+        "lookupMaxSize":"500 MB", "lookupMaxTotalSize":"2 GB", "enableWorkerInMemory":false,
 		"eventsMetadataSources":[], "lookupAllowedPaths":[], "metricsDropList":[],
 		"managedFields":["lookupAllowedPaths"]
 	}`)
@@ -67,7 +68,7 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 	if got := item.Attrs["max_eps"]; got.Kind != hcl.KindNumber || got.Number != 0 {
 		t.Fatalf("export lost explicit zero: %#v", got)
 	}
-	for _, name := range []string{"metrics_fields_blacklist", "metrics_never_drop_list", "metrics_worker_id_blacklist", "events_metadata_sources", "lookup_allowed_paths", "metrics_drop_list"} {
+	for _, name := range []string{"metrics_fields_blacklist", "metrics_never_drop_list", "metrics_worker_id_blacklist", "events_metadata_sources", "metrics_drop_list"} {
 		if got := item.Attrs[name]; got.Kind != hcl.KindList || len(got.List) != 0 {
 			t.Fatalf("export lost empty required list %s: %#v", name, got)
 		}
@@ -78,8 +79,10 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 	if _, ok := item.Attrs["limits"]; ok {
 		t.Fatal("limits must be flat resource attributes")
 	}
-	if _, ok := item.Attrs["managed_fields"]; ok {
-		t.Fatal("provider ownership metadata must not become configuration")
+	for _, field := range []string{"managed_fields", "lookup_allowed_paths", "lookup_max_size", "lookup_max_total_size", "enable_worker_in_memory", "metrics_directory"} {
+		if _, ok := item.Attrs[field]; ok {
+			t.Fatalf("read-only attribute %s must not become configuration", field)
+		}
 	}
 	file, err := hcl.FileWithResources([]hcl.ResourceInput{{TypeName: item.TypeName, Name: item.Name, Attrs: item.Attrs}}, hcl.DefaultResourceBlockOptions())
 	if err != nil {
@@ -98,7 +101,7 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 }`, PlanOnly: true, ExpectNonEmptyPlan: true},
 			{Config: `resource "criblio_system_limits" "lookup_only" {
   group_id = "test-fleet"
-  lookup_allowed_paths = ["/tmp"]
+  metrics_drop_list = ["custom.metric"]
 }`, PlanOnly: true, ExpectNonEmptyPlan: true},
 			{Config: strings.ReplaceAll(config, "2 GB", "invalid"), PlanOnly: true, ExpectError: regexp.MustCompile("must match pattern")},
 			{Config: strings.Replace(config, "{", "{\n  default_heartbeat_seconds = 0\n", 1), PlanOnly: true, ExpectError: regexp.MustCompile("at least 1")},

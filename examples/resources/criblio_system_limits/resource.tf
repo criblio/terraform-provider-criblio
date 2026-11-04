@@ -1,7 +1,5 @@
 # The provider reads existing limits and preserves unconfigured settings.
-resource "criblio_system_limits" "lookup_paths" {
-  for_each = toset(["stream-leaders", "stream-leaders-with-insights"])
-
-  group_id             = each.value
-  lookup_allowed_paths = ["/tmp"]
+resource "criblio_system_limits" "default" {
+  group_id       = "default"
+  min_free_space = "2 GB"
 }

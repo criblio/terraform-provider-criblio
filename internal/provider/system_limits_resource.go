@@ -121,9 +121,9 @@ func (r *SystemLimitsResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"enable_worker_in_memory": schema.BoolAttribute{
 				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Do not persist connection data across restarts. Caution: Leader will restart when this setting is changed.`,
+				Optional:    false,
+				Computed:    true,
+				Description: `Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 			},
 			"events_metadata_sources": schema.ListAttribute{
 				Required:    false,
@@ -206,25 +206,25 @@ func (r *SystemLimitsResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"lookup_allowed_paths": schema.ListAttribute{
 				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Additional directories where lookup files are permitted to reside, beyond the default lookup directories under CRIBL_HOME. Use this allowlist to keep lookups on a shared mount or another location outside CRIBL_HOME. Each entry is a directory path; environment variables such as <code>$CRIBL_HOME</code> are expanded, and relative entries resolve against CRIBL_HOME. A lookup file is permitted when it resides within any listed directory. Leaving this empty restricts lookups to the default lookup directories.`,
+				Optional:    false,
+				Computed:    true,
+				Description: `Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 				ElementType: types.StringType,
 			},
 			"lookup_max_size": schema.StringAttribute{
 				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Maximum allowed disk space for persisting single lookup data file.`,
+				Optional:    false,
+				Computed:    true,
+				Description: `Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
 				},
 			},
 			"lookup_max_total_size": schema.StringAttribute{
 				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Maximum allowed disk space for persisting lookup data and metadata files.`,
+				Optional:    false,
+				Computed:    true,
+				Description: `Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
 				},
@@ -289,9 +289,9 @@ func (r *SystemLimitsResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"metrics_directory": schema.StringAttribute{
 				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Directory to store metrics on disk.`,
+				Optional:    false,
+				Computed:    true,
+				Description: `Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.`,
 			},
 			"metrics_drop_list": schema.ListAttribute{
 				Required:    false,
@@ -554,9 +554,6 @@ func isSystemLimitsImportState(state *SystemLimitsModel) bool {
 	if !state.EnableProcessInfoUsingWindowsTools.IsNull() && !state.EnableProcessInfoUsingWindowsTools.IsUnknown() {
 		return false
 	}
-	if !state.EnableWorkerInMemory.IsNull() && !state.EnableWorkerInMemory.IsUnknown() {
-		return false
-	}
 	if !state.EventsMetadataSources.IsNull() && !state.EventsMetadataSources.IsUnknown() {
 		return false
 	}
@@ -584,15 +581,6 @@ func isSystemLimitsImportState(state *SystemLimitsModel) bool {
 	if !state.LargeEventsThreshold.IsNull() && !state.LargeEventsThreshold.IsUnknown() {
 		return false
 	}
-	if !state.LookupAllowedPaths.IsNull() && !state.LookupAllowedPaths.IsUnknown() {
-		return false
-	}
-	if !state.LookupMaxSize.IsNull() && !state.LookupMaxSize.IsUnknown() {
-		return false
-	}
-	if !state.LookupMaxTotalSize.IsNull() && !state.LookupMaxTotalSize.IsUnknown() {
-		return false
-	}
 	if !state.MaxDimensionValueSize.IsNull() && !state.MaxDimensionValueSize.IsUnknown() {
 		return false
 	}
@@ -612,9 +600,6 @@ func isSystemLimitsImportState(state *SystemLimitsModel) bool {
 		return false
 	}
 	if !state.MaxReconnectInterval.IsNull() && !state.MaxReconnectInterval.IsUnknown() {
-		return false
-	}
-	if !state.MetricsDirectory.IsNull() && !state.MetricsDirectory.IsUnknown() {
 		return false
 	}
 	if !state.MetricsDropList.IsNull() && !state.MetricsDropList.IsUnknown() {
@@ -716,10 +701,10 @@ func applySystemLimitsAPIToState(api *SystemLimitsModel, state *SystemLimitsMode
 			state.EnableProcessInfoUsingWindowsTools = api.EnableProcessInfoUsingWindowsTools
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.EnableWorkerInMemory.IsNull() || state.EnableWorkerInMemory.IsUnknown())) {
-		if !api.EnableWorkerInMemory.IsNull() && !api.EnableWorkerInMemory.IsUnknown() {
-			state.EnableWorkerInMemory = api.EnableWorkerInMemory
-		}
+	if !api.EnableWorkerInMemory.IsNull() && !api.EnableWorkerInMemory.IsUnknown() {
+		state.EnableWorkerInMemory = api.EnableWorkerInMemory
+	} else if state.EnableWorkerInMemory.IsNull() || state.EnableWorkerInMemory.IsUnknown() {
+		state.EnableWorkerInMemory = types.BoolValue(false)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.EventsMetadataSources.IsNull() || state.EventsMetadataSources.IsUnknown())) {
 		if !api.EventsMetadataSources.IsNull() && !api.EventsMetadataSources.IsUnknown() {
@@ -774,23 +759,23 @@ func applySystemLimitsAPIToState(api *SystemLimitsModel, state *SystemLimitsMode
 			state.LargeEventsThreshold = api.LargeEventsThreshold
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.LookupAllowedPaths.IsNull() || state.LookupAllowedPaths.IsUnknown())) {
-		if !api.LookupAllowedPaths.IsNull() && !api.LookupAllowedPaths.IsUnknown() {
-			state.LookupAllowedPaths = api.LookupAllowedPaths
-		}
+	if !api.LookupAllowedPaths.IsNull() && !api.LookupAllowedPaths.IsUnknown() {
+		state.LookupAllowedPaths = api.LookupAllowedPaths
+	} else if state.LookupAllowedPaths.IsNull() || state.LookupAllowedPaths.IsUnknown() {
+		state.LookupAllowedPaths = types.ListValueMust(types.StringType, nil)
 	}
 	if elementType := state.LookupAllowedPaths.ElementType(context.Background()); elementType == nil {
 		state.LookupAllowedPaths = types.ListNull(types.StringType)
 	}
-	if !preserveInputs || (fillMissingInputs && (state.LookupMaxSize.IsNull() || state.LookupMaxSize.IsUnknown())) {
-		if !api.LookupMaxSize.IsNull() && !api.LookupMaxSize.IsUnknown() {
-			state.LookupMaxSize = api.LookupMaxSize
-		}
+	if !api.LookupMaxSize.IsNull() && !api.LookupMaxSize.IsUnknown() {
+		state.LookupMaxSize = api.LookupMaxSize
+	} else if state.LookupMaxSize.IsNull() || state.LookupMaxSize.IsUnknown() {
+		state.LookupMaxSize = types.StringValue("")
 	}
-	if !preserveInputs || (fillMissingInputs && (state.LookupMaxTotalSize.IsNull() || state.LookupMaxTotalSize.IsUnknown())) {
-		if !api.LookupMaxTotalSize.IsNull() && !api.LookupMaxTotalSize.IsUnknown() {
-			state.LookupMaxTotalSize = api.LookupMaxTotalSize
-		}
+	if !api.LookupMaxTotalSize.IsNull() && !api.LookupMaxTotalSize.IsUnknown() {
+		state.LookupMaxTotalSize = api.LookupMaxTotalSize
+	} else if state.LookupMaxTotalSize.IsNull() || state.LookupMaxTotalSize.IsUnknown() {
+		state.LookupMaxTotalSize = types.StringValue("")
 	}
 	if !api.ManagedFields.IsNull() && !api.ManagedFields.IsUnknown() {
 		state.ManagedFields = api.ManagedFields
@@ -835,10 +820,10 @@ func applySystemLimitsAPIToState(api *SystemLimitsModel, state *SystemLimitsMode
 			state.MaxReconnectInterval = api.MaxReconnectInterval
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.MetricsDirectory.IsNull() || state.MetricsDirectory.IsUnknown())) {
-		if !api.MetricsDirectory.IsNull() && !api.MetricsDirectory.IsUnknown() {
-			state.MetricsDirectory = api.MetricsDirectory
-		}
+	if !api.MetricsDirectory.IsNull() && !api.MetricsDirectory.IsUnknown() {
+		state.MetricsDirectory = api.MetricsDirectory
+	} else if state.MetricsDirectory.IsNull() || state.MetricsDirectory.IsUnknown() {
+		state.MetricsDirectory = types.StringValue("")
 	}
 	if !preserveInputs || (fillMissingInputs && (state.MetricsDropList.IsNull() || state.MetricsDropList.IsUnknown())) {
 		if !api.MetricsDropList.IsNull() && !api.MetricsDropList.IsUnknown() {

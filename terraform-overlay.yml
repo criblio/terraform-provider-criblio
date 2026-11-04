@@ -1150,7 +1150,7 @@ actions:
   - target: "$.paths./m/{groupId}/system/limits.get"
     update:
       x-terraform-read: SystemLimits
-  # Use the fleet lookup-allowlist example instead of the full API payload.
+  # Use the writable-limit example instead of the full API payload.
   - target: "$.paths./m/{groupId}/system/limits.patch.requestBody.content.application/json.examples"
     replace: {}
   - target: "$.components.schemas.Limits.properties.maxPQSize"
@@ -1164,6 +1164,21 @@ actions:
       x-terraform-name: kv_store_wal_max_bytes
   - target: "$.components.schemas.SystemLimitsUpdate.properties"
     update:
+      lookupAllowedPaths:
+        x-terraform-computed: true
+        description: Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      lookupMaxSize:
+        x-terraform-computed: true
+        description: Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      lookupMaxTotalSize:
+        x-terraform-computed: true
+        description: Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      enableWorkerInMemory:
+        x-terraform-computed: true
+        description: Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      metricsDirectory:
+        x-terraform-computed: true
+        description: Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.
       managedFields:
         type: array
         items:

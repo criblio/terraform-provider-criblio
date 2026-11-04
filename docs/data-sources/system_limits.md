@@ -34,7 +34,7 @@ data "criblio_system_limits" "fleet" {
 - `edge_nodes_count` (Integer) Used to pre-allocate connection handlers. Changing this value could restart currently running connection handlers, causing all Edge Nodes to reconnect.
 - `enable_metrics_persistence` (Boolean) Disable to stop writing metrics to disk.
 - `enable_process_info_using_windows_tools` (Boolean) Enable PowerShell to collect process information instead of using the native API.
-- `enable_worker_in_memory` (Boolean) Do not persist connection data across restarts. Caution: Leader will restart when this setting is changed.
+- `enable_worker_in_memory` (Boolean) Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
 - `events_metadata_sources` (List of String) List of event metadata sources to enable.
 - `hb_connection_mode` (String) Persistent: connection stays open. Ephemeral: connection can disconnect after a configured duration. Auto: treated as persistent in this version.
 - `hb_metric_spool_max_file_size` (String) Maximum file size per slice in the heartbeat metric spool. Active only in ephemeral mode.
@@ -44,9 +44,9 @@ data "criblio_system_limits" "fleet" {
 - `kv_store_service_period` (Integer) How often the KVStore syncs itself to disk. When WAL mode is enabled, deltas to the KVStore are synced to disk immediately as they happen; however, the WAL is merged back into the overall KVStore on this interval.
 - `kv_store_wal_max_bytes` (Integer) The amount of bytes to allow a WAL file to get to before committing the WAL back into the KVStore.
 - `large_events_threshold` (String) Deprecated. Large events are now tracked using a histogram with fixed buckets.
-- `lookup_allowed_paths` (List of String) Additional directories where lookup files are permitted to reside, beyond the default lookup directories under CRIBL_HOME. Use this allowlist to keep lookups on a shared mount or another location outside CRIBL_HOME. Each entry is a directory path; environment variables such as <code>$CRIBL_HOME</code> are expanded, and relative entries resolve against CRIBL_HOME. A lookup file is permitted when it resides within any listed directory. Leaving this empty restricts lookups to the default lookup directories.
-- `lookup_max_size` (String) Maximum allowed disk space for persisting single lookup data file.
-- `lookup_max_total_size` (String) Maximum allowed disk space for persisting lookup data and metadata files.
+- `lookup_allowed_paths` (List of String) Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+- `lookup_max_size` (String) Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+- `lookup_max_total_size` (String) Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
 - `managed_fields` (List of String) Provider-maintained list of configured limit field paths. Tracks ownership changes even when a managed value is absent from the API.
 - `max_dimension_value_size` (Integer) Maximum allowed length, in characters, for a metric dimension value. Metric series with a dimension value exceeding this limit are dropped.
 - `max_eps` (Integer) Maximum number of event processors (EPs) that all sources can create collectively within a worker process. When this limit is reached, new connections or requests are rejected to limit worker resources. Set to 0 to disable the limit.
@@ -55,7 +55,7 @@ data "criblio_system_limits" "fleet" {
 - `max_pipelines_per_pack` (Integer) Maximum number of pipelines allowed in a single Pack. Packs above this limit are rejected at install time, because loading very large Packs can exhaust a worker group's config helper memory. Consult Cribl Support before updating this value.
 - `max_pq_size` (String) Highest accepted value for individual integrations' persistent queue 'Max queue size' parameters. Consult Cribl Support before increasing the default 1 TB.
 - `max_reconnect_interval` (String) The maximum time to wait before attempting to reconnect to the Leader after being disconnected.
-- `metrics_directory` (String) Directory to store metrics on disk.
+- `metrics_directory` (String) Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.
 - `metrics_drop_list` (List of String) List of metric names to drop. Supports wildcards.
 - `metrics_fields_blacklist` (List of String) List of event fields for which to disable metric collection.
 - `metrics_gc_period` (String) The interval at which the system attempts to free memory by pruning stale metrics from the Stream system metrics store.

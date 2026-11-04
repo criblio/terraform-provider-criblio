@@ -38,6 +38,13 @@ type systemLimitsMask map[string]systemLimitsMask
 
 const systemLimitsManagedFieldsKey = "system_limits_managed_fields"
 
+// These fields are operator-controlled or feature-gated by the backend. They
+// remain in replacement PATCHes unchanged and are always refreshed into state.
+var systemLimitsReadOnlyFields = []string{
+	"lookupAllowedPaths", "lookupMaxSize", "lookupMaxTotalSize",
+	"enableWorkerInMemory", "metricsDirectory",
+}
+
 func (r *systemLimitsManagedResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
 	if req.Plan.Raw.IsNull() {
 		return
@@ -107,6 +114,7 @@ func (r *systemLimitsManagedResource) write(ctx context.Context, plan tfsdk.Plan
 		}
 		if reflect.DeepEqual(previous, configured) {
 			// Only ownership changed; the refreshed values already match the plan.
+			copySystemLimitsReadOnly(*prior, &model)
 			setSystemLimitsState(ctx, state, private, model, configured, diags)
 			return
 		}
@@ -121,6 +129,12 @@ func (r *systemLimitsManagedResource) write(ctx context.Context, plan tfsdk.Plan
 		diags.AddError("Unable to read existing system limits", "The API returned an empty configuration; no limits were changed.")
 		return
 	}
+	readOnly, err := systemLimitsReadOnlyModel(*current)
+	if err != nil {
+		diags.AddError("Unable to read protected system limits", err.Error())
+		return
+	}
+	copySystemLimitsReadOnly(readOnly, &model)
 	merged, err := mergeSystemLimits(*current, configured)
 	if err != nil {
 		diags.AddError("Unable to merge system limits", err.Error())
@@ -141,8 +155,8 @@ func setSystemLimitsState(ctx context.Context, state *tfsdk.State, private syste
 		return
 	}
 	model.ManagedFields = fields
-	// State contains configured fields only, so unrelated remote edits do not
-	// become plans to delete settings or unexpectedly expand Terraform ownership.
+	// Track configured writable fields and current read-only values without
+	// expanding ownership to unrelated remote settings.
 	diags.Append(state.Set(ctx, &model)...)
 	if private != nil {
 		diags.Append(writeSystemLimitsMask(ctx, private, mask)...)
@@ -194,12 +208,21 @@ func (r *systemLimitsManagedResource) Read(ctx context.Context, req resource.Rea
 			mask = systemLimitsFieldMask(configured)
 		}
 	}
+	// Older state may have owned fields that are now read-only.
+	for _, name := range systemLimitsReadOnlyFields {
+		delete(mask, name)
+	}
 	selected := *current
 	if mask != nil {
 		selected, err = selectSystemLimits(*current, mask)
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to refresh managed system limits", err.Error())
 			return
+		}
+	}
+	for _, name := range systemLimitsReadOnlyFields {
+		if value, ok := (*current)[name]; ok {
+			selected[name] = value
 		}
 	}
 	data, err := json.Marshal(selected)
@@ -231,6 +254,30 @@ func (r *systemLimitsManagedResource) Read(ctx context.Context, req resource.Rea
 	if resp.Private != nil {
 		resp.Diagnostics.Append(writeSystemLimitsMask(ctx, resp.Private, mask)...)
 	}
+}
+
+func systemLimitsReadOnlyModel(current map[string]json.RawMessage) (SystemLimitsModel, error) {
+	selected := make(map[string]json.RawMessage, len(systemLimitsReadOnlyFields))
+	for _, name := range systemLimitsReadOnlyFields {
+		if value, ok := current[name]; ok {
+			selected[name] = value
+		}
+	}
+	data, err := json.Marshal(selected)
+	if err != nil {
+		return SystemLimitsModel{}, err
+	}
+	var model SystemLimitsModel
+	err = json.Unmarshal(data, &model)
+	return model, err
+}
+
+func copySystemLimitsReadOnly(source SystemLimitsModel, target *SystemLimitsModel) {
+	target.LookupAllowedPaths = source.LookupAllowedPaths
+	target.LookupMaxSize = source.LookupMaxSize
+	target.LookupMaxTotalSize = source.LookupMaxTotalSize
+	target.EnableWorkerInMemory = source.EnableWorkerInMemory
+	target.MetricsDirectory = source.MetricsDirectory
 }
 
 func systemLimitsManagedFields(ctx context.Context, mask systemLimitsMask) (types.List, diag.Diagnostics) {

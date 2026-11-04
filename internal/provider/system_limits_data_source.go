@@ -77,7 +77,7 @@ func (d *SystemLimitsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 			},
 			"enable_worker_in_memory": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Do not persist connection data across restarts. Caution: Leader will restart when this setting is changed.`,
+				Description: `Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 			},
 			"events_metadata_sources": schema.ListAttribute{
 				Computed:    true,
@@ -122,16 +122,16 @@ func (d *SystemLimitsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 			},
 			"lookup_allowed_paths": schema.ListAttribute{
 				Computed:    true,
-				Description: `Additional directories where lookup files are permitted to reside, beyond the default lookup directories under CRIBL_HOME. Use this allowlist to keep lookups on a shared mount or another location outside CRIBL_HOME. Each entry is a directory path; environment variables such as <code>$CRIBL_HOME</code> are expanded, and relative entries resolve against CRIBL_HOME. A lookup file is permitted when it resides within any listed directory. Leaving this empty restricts lookups to the default lookup directories.`,
+				Description: `Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 				ElementType: types.StringType,
 			},
 			"lookup_max_size": schema.StringAttribute{
 				Computed:    true,
-				Description: `Maximum allowed disk space for persisting single lookup data file.`,
+				Description: `Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 			},
 			"lookup_max_total_size": schema.StringAttribute{
 				Computed:    true,
-				Description: `Maximum allowed disk space for persisting lookup data and metadata files.`,
+				Description: `Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
 			},
 			"managed_fields": schema.ListAttribute{
 				Computed:    true,
@@ -168,7 +168,7 @@ func (d *SystemLimitsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 			},
 			"metrics_directory": schema.StringAttribute{
 				Computed:    true,
-				Description: `Directory to store metrics on disk.`,
+				Description: `Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.`,
 			},
 			"metrics_drop_list": schema.ListAttribute{
 				Computed:    true,

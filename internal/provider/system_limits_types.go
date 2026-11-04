@@ -527,13 +527,6 @@ func (m SystemLimitsModel) MarshalJSON() ([]byte, error) {
 		}
 		output["enableProcessInfoUsingWindowsTools"] = value
 	}
-	if !m.EnableWorkerInMemory.IsNull() && !m.EnableWorkerInMemory.IsUnknown() {
-		value, err := SystemLimitsTerraformValueToJSON(m.EnableWorkerInMemory)
-		if err != nil {
-			return nil, fmt.Errorf("convert enable_worker_in_memory to API value: %v", err)
-		}
-		output["enableWorkerInMemory"] = value
-	}
 	if !m.EventsMetadataSources.IsNull() && !m.EventsMetadataSources.IsUnknown() {
 		value, err := SystemLimitsTerraformValueToJSON(m.EventsMetadataSources)
 		if err != nil {
@@ -597,27 +590,6 @@ func (m SystemLimitsModel) MarshalJSON() ([]byte, error) {
 		}
 		output["largeEventsThreshold"] = value
 	}
-	if !m.LookupAllowedPaths.IsNull() && !m.LookupAllowedPaths.IsUnknown() {
-		value, err := SystemLimitsTerraformValueToJSON(m.LookupAllowedPaths)
-		if err != nil {
-			return nil, fmt.Errorf("convert lookup_allowed_paths to API value: %v", err)
-		}
-		output["lookupAllowedPaths"] = value
-	}
-	if !m.LookupMaxSize.IsNull() && !m.LookupMaxSize.IsUnknown() {
-		value, err := SystemLimitsTerraformValueToJSON(m.LookupMaxSize)
-		if err != nil {
-			return nil, fmt.Errorf("convert lookup_max_size to API value: %v", err)
-		}
-		output["lookupMaxSize"] = value
-	}
-	if !m.LookupMaxTotalSize.IsNull() && !m.LookupMaxTotalSize.IsUnknown() {
-		value, err := SystemLimitsTerraformValueToJSON(m.LookupMaxTotalSize)
-		if err != nil {
-			return nil, fmt.Errorf("convert lookup_max_total_size to API value: %v", err)
-		}
-		output["lookupMaxTotalSize"] = value
-	}
 	if !m.MaxDimensionValueSize.IsNull() && !m.MaxDimensionValueSize.IsUnknown() {
 		value, err := SystemLimitsTerraformValueToJSON(m.MaxDimensionValueSize)
 		if err != nil {
@@ -666,13 +638,6 @@ func (m SystemLimitsModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert max_reconnect_interval to API value: %v", err)
 		}
 		output["maxReconnectInterval"] = value
-	}
-	if !m.MetricsDirectory.IsNull() && !m.MetricsDirectory.IsUnknown() {
-		value, err := SystemLimitsTerraformValueToJSON(m.MetricsDirectory)
-		if err != nil {
-			return nil, fmt.Errorf("convert metrics_directory to API value: %v", err)
-		}
-		output["metricsDirectory"] = value
 	}
 	if !m.MetricsDropList.IsNull() && !m.MetricsDropList.IsUnknown() {
 		value, err := SystemLimitsTerraformValueToJSON(m.MetricsDropList)
