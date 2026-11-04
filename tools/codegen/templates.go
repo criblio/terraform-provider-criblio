@@ -1991,6 +1991,9 @@ import (
 {{- if needsCustomStringValidator . }}
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 {{- end }}
+{{- if needsBooleanRequirementValidator . }}
+	custom_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 {{- if needsStringValidator . }}
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"

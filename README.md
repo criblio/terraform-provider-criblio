@@ -159,7 +159,7 @@ provider "criblio" {
 
 ### 3. On-Prem Deployments
 
-The provider supports on-prem deployments through **environment variables** or **credentials file only**. Configure on-prem using one of these methods:
+Configure the on-prem server URL and authentication through **environment variables** or a **credentials file** using one of these methods:
 
 **Note:** On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, packs, etc.) and do not support Search, Lake, Lakehouse, or workspace management features.
 
@@ -212,7 +212,29 @@ provider "criblio" {
 - On-prem deployments **do not support** Search, Lake, Lakehouse, or workspace management resources
 - The bearer token is automatically obtained via `/api/v1/auth/login` when using username/password
 - Token caching is handled automatically for efficient re-authentication
-- Configuration through the provider block is not supported - use environment variables or credentials file instead
+- Configure on-prem server URLs and username/password credentials through environment variables or the credentials file. TLS options can be set in the provider block.
+
+#### TLS Certificates
+
+TLS certificate and hostname verification is enabled by default for API and authentication requests. For Leaders using an internal CA or a self-signed certificate, supply a PEM CA bundle on the machine running Terraform:
+
+```hcl
+provider "criblio" {
+  ca_cert_file = "/path/to/company-ca.pem"
+}
+```
+
+Alternatively, set `CRIBL_CA_CERT_FILE=/path/to/company-ca.pem`. The bundle adds trusted certificates to the system CA pool and preserves certificate and hostname verification.
+
+For trusted development or testing environments, you can disable certificate and hostname verification:
+
+```hcl
+provider "criblio" {
+  insecure_skip_verify = true
+}
+```
+
+Alternatively, set `CRIBL_INSECURE_SKIP_VERIFY=true`. Prefer a custom CA for production. These settings apply to both API requests and token acquisition, including on-prem username/password login. Explicit provider values override environment variables; `insecure_skip_verify = false` keeps verification enabled even when the environment variable is `true`. TLS settings are configured through the provider block or environment variables.
 
 #### Supported Resources for On-Prem
 

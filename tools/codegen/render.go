@@ -194,6 +194,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
 		"goType":                           goType,
 		"schemaAttribute":                  schemaAttribute,
+		"needsBooleanRequirementValidator": needsBooleanRequirementValidator,
 		"schemaTypeName":                   schemaTypeName,
 		"schemaSections":                   schemaSections,
 		"zeroValue":                        zeroValue,
@@ -879,6 +880,17 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	if calls := listValidatorCalls(field); len(calls) > 0 {
 		writeValidatorCalls(output, indent, "List", calls)
 	}
+	if len(field.BooleanRequirements) > 0 {
+		var calls []string
+		for _, rule := range field.BooleanRequirements {
+			quoted := make([]string, 0, len(rule.Required))
+			for _, name := range rule.Required {
+				quoted = append(quoted, fmt.Sprintf("%q", name))
+			}
+			calls = append(calls, fmt.Sprintf("custom_objectvalidators.RequiredWhenBoolean(%q, %t, %s)", rule.Property, rule.Value, strings.Join(quoted, ", ")))
+		}
+		writeValidatorCalls(output, indent, "Object", calls)
+	}
 	if field.ListAttribute {
 		fmt.Fprintf(output, "%s\tElementType: types.ObjectType{AttrTypes: %s()},\n", indent, field.NestedAttrTypes)
 	} else if nestedObjectList(field) {
@@ -1170,6 +1182,9 @@ func needsResourceAttr(resource parser.ResourceDef) bool {
 }
 
 func needsValidator(resource parser.ResourceDef) bool {
+	if needsBooleanRequirementValidator(resource) {
+		return true
+	}
 	for _, field := range resourceFields(resource) {
 		if len(stringValidatorCalls(field)) > 0 || len(int64ValidatorCalls(field)) > 0 || len(float64ValidatorCalls(field)) > 0 || len(listValidatorCalls(field)) > 0 {
 			return true
@@ -1747,6 +1762,15 @@ func resourceFields(resource parser.ResourceDef) []parser.FieldDef {
 		walk(variant.Fields)
 	}
 	return fields
+}
+
+func needsBooleanRequirementValidator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if len(field.BooleanRequirements) > 0 {
+			return true
+		}
+	}
+	return false
 }
 
 func planModifierType(field parser.FieldDef) string {

@@ -161,6 +161,19 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						"quote_char": schema.StringAttribute{
 							Computed: true,
 						},
+						"json_array_field": schema.StringAttribute{
+							Computed:    true,
+							Description: `Path to the array in a JSON event containing the records to extract, such as <code>Records</code> or <code>level1.level2.events</code>. Leave blank if the result itself is an array.`,
+						},
+						"parent_fields_to_copy": schema.ListAttribute{
+							Computed:    true,
+							Description: `Top-level fields to copy to the output events. Nested fields are not supported. Supports <code>*</code> wildcards.`,
+							ElementType: types.StringType,
+						},
+						"json_extract_all": schema.BoolAttribute{
+							Computed:    true,
+							Description: `If <code>true</code>, automatically extract fields from JSON events. If <code>false</code>, only <code>_raw</code> and <code>_time</code> are defined on extracted events.`,
+						},
 					},
 				},
 			},

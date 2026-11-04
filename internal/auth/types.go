@@ -1,6 +1,9 @@
 package auth
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
 
 // CriblConfig holds Cribl auth and connection settings from the environment or credentials file.
 type CriblConfig struct {
@@ -13,6 +16,10 @@ type CriblConfig struct {
 	OnpremServerURL string `json:"onprem_server_url" ini:"onprem_server_url"`
 	OnpremUsername  string `json:"onprem_username" ini:"onprem_username"`
 	OnpremPassword  string `json:"onprem_password" ini:"onprem_password"`
+
+	// HTTPClient optionally supplies the authentication transport. It is runtime-only
+	// and must not be changed after the config is used to fetch a token.
+	HTTPClient *http.Client `json:"-" ini:"-"`
 }
 
 // TokenInfo holds a bearer token and its expiration time.

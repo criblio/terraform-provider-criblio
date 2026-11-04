@@ -4,14 +4,18 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -288,6 +292,367 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				Description: `Worker group ID.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+			},
+			"limits": schema.SingleNestedAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `General resource limits. Configure only the limits to manage.`,
+				Attributes: map[string]schema.Attribute{
+					"azure_blob_state_flush_interval": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How often the Azure Blob state service flushes state to the central KVStore (ms).`,
+						Validators: []validator.Int64{
+							int64validator.Between(50, 10000),
+						},
+					},
+					"bundle_download_timeout_seconds": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The maximum time a Worker will wait for a successful Leader connection before canceling a download of a new configuration bundle. Default timeout is 10 minutes.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
+					},
+					"cpu_profile_ttl": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The time to live for collected CPU profiles.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]$`), "must match pattern \\d+[sm]$"),
+						},
+					},
+					"default_heartbeat_seconds": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How many seconds a managed node will wait to send back a heartbeat to the Cribl control plane.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
+					},
+					"disable_metrics_accessor_cache": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Consult Cribl Support before adjusting this advanced setting. Disable the metrics accessor cache.`,
+					},
+					"edge_metrics_custom_expression": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `JavaScript expression to filter metrics.`,
+					},
+					"edge_metrics_mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose a set of metrics for Edge Nodes to send to the Leader, or define a custom set.`,
+					},
+					"edge_nodes_count": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Used to pre-allocate connection handlers. Changing this value could restart currently running connection handlers, causing all Edge Nodes to reconnect.`,
+						Validators: []validator.Int64{
+							int64validator.Between(0, 250000),
+						},
+					},
+					"enable_metrics_persistence": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Disable to stop writing metrics to disk.`,
+					},
+					"enable_process_info_using_windows_tools": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enable PowerShell to collect process information instead of using the native API.`,
+					},
+					"enable_worker_in_memory": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Do not persist connection data across restarts. Caution: Leader will restart when this setting is changed.`,
+					},
+					"events_metadata_sources": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List of event metadata sources to enable.`,
+						ElementType: types.StringType,
+					},
+					"hb_connection_mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistent: connection stays open. Ephemeral: connection can disconnect after a configured duration. Auto: treated as persistent in this version.`,
+					},
+					"hb_metric_spool_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum file size per slice in the heartbeat metric spool. Active only in ephemeral mode.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"hb_metric_spool_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum disk size for the heartbeat metric spool persistent queue. In ephemeral mode, 0 disables disk persistence and buffers metrics in RAM only.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"hb_offline_duration": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Time before marking node offline. Format: number plus unit (s, m, h, or d), e.g. 60s, 5m, 1h. Unitless values are treated as seconds. Minimum 2m.`,
+					},
+					"kv_store_enable_wal": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enable the write-ahead log for the KVStore.`,
+					},
+					"kv_store_service_period": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How often the KVStore syncs itself to disk. When WAL mode is enabled, deltas to the KVStore are synced to disk immediately as they happen; however, the WAL is merged back into the overall KVStore on this interval.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(10000),
+						},
+					},
+					"kv_store_wal_max_bytes": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The amount of bytes to allow a WAL file to get to before committing the WAL back into the KVStore.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1024),
+						},
+					},
+					"large_events_threshold": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Deprecated. Large events are now tracked using a histogram with fixed buckets.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"lookup_allowed_paths": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Additional directories where lookup files are permitted to reside, beyond the default lookup directories under CRIBL_HOME. Use this allowlist to keep lookups on a shared mount or another location outside CRIBL_HOME. Each entry is a directory path; environment variables such as <code>$CRIBL_HOME</code> are expanded, and relative entries resolve against CRIBL_HOME. A lookup file is permitted when it resides within any listed directory. Leaving this empty restricts lookups to the default lookup directories.`,
+						ElementType: types.StringType,
+					},
+					"lookup_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum allowed disk space for persisting single lookup data file.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"lookup_max_total_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum allowed disk space for persisting lookup data and metadata files.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"max_dimension_value_size": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum allowed length, in characters, for a metric dimension value. Metric series with a dimension value exceeding this limit are dropped.`,
+					},
+					"max_eps": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of event processors (EPs) that all sources can create collectively within a worker process. When this limit is reached, new connections or requests are rejected to limit worker resources. Set to 0 to disable the limit.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
+					},
+					"max_event_bytes_mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Consult Cribl Support before adjusting this advanced setting. How the event breaker handles a segment that exceeds maxEventBytes with no break boundary: 'drop' emits the bounded head and discards the remainder through the next boundary; 'split' preserves every byte as bounded fragments.`,
+					},
+					"max_metrics": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The system's total allowed number of metric series. Consult Cribl Support before updating this value.`,
+					},
+					"max_pq_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Highest accepted value for individual integrations' persistent queue 'Max queue size' parameters. Consult Cribl Support before increasing the default 1 TB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kmgtpKMGTP](b|B))?$`), "must match pattern ^\\d+\\s*(?:[kmgtpKMGTP](b|B))?$"),
+						},
+					},
+					"max_pipelines_per_pack": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of pipelines allowed in a single Pack. Packs above this limit are rejected at install time, because loading very large Packs can exhaust a worker group's config helper memory. Consult Cribl Support before updating this value.`,
+					},
+					"max_reconnect_interval": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The maximum time to wait before attempting to reconnect to the Leader after being disconnected.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]$`), "must match pattern ^\\d+[sm]$"),
+						},
+					},
+					"metrics_directory": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Directory to store metrics on disk.`,
+					},
+					"metrics_drop_list": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List of metric names to drop. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"metrics_fields_blacklist": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List of event fields for which to disable metric collection.`,
+						ElementType: types.StringType,
+					},
+					"metrics_gc_period": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The interval at which the system attempts to free memory by pruning stale metrics from the Stream system metrics store.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]$`), "must match pattern \\d+[sm]$"),
+						},
+					},
+					"metrics_max_cardinality": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The system's allowed number of permutations of a given metric name.`,
+					},
+					"metrics_max_disk_space": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum allowed disk space for persisting metrics to disk.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"metrics_never_drop_list": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List metric names for which to ensure delivery. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"metrics_worker_id_blacklist": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List of metric names for which to disable tracking of Worker Node ID. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"min_free_space": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The minimum amount of disk space in the system before various features will take measures to prevent disk usage (KB, MB, etc.).`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+						},
+					},
+					"min_reconnect_interval": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The minimum time to wait before attempting to reconnect to the Leader after being disconnected. The interval is doubled with each failed reconnect attempt until the maximum limit is reached.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]$`), "must match pattern ^\\d+[sm]$"),
+						},
+					},
+					"net_flow_template_flush_interval": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Consult Cribl Support before adjusting this advanced setting. It determines how often the NetFlow template service sends templates to the central KVStore.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
+					},
+					"random_reconnect_interval": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum random delay added to every connection or reconnect attempt — including the initial connection, error-backoff retries, and ephemeral-mode offline cycles. Set to a non-zero value to stagger simultaneous connection attempts across a large Fleet and avoid spiking the leader with too many attempts (aka thundering herd problem).`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]$`), "must match pattern ^\\d+[sm]$"),
+						},
+					},
+					"rate_limit_bytes_per_second": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Consult Cribl Support before adjusting this advanced setting. The maximum number of bytes per second that a worker is allowed to ingest. If 0 or not configured, no rate limiting is applied. A value of 'auto' means the limit is determined automatically based on configurations.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^((\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?)?|(\s*auto\s*))$`), "must match pattern ^((\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?)?|(\\s*auto\\s*))$"),
+						},
+					},
+					"samples": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Samples configuration.`,
+						Attributes: map[string]schema.Attribute{
+							"max_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum file size for the sample, in binary units (KB, MB). (Max. 3MB.).`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+\\s*(?:[kmgKMG](b|B))?$"),
+								},
+							},
+						},
+					},
+					"worker_max_metrics": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The maximum number of metric series allowed per worker. Consult Cribl Support before updating this value.`,
+					},
 				},
 			},
 			"pii": schema.SingleNestedAttribute{
@@ -775,6 +1140,9 @@ func isGroupSystemSettingsImportState(state *GroupSystemSettingsModel) bool {
 	if !state.CustomLogo.IsNull() && !state.CustomLogo.IsUnknown() {
 		return false
 	}
+	if !state.Limits.IsNull() && !state.Limits.IsUnknown() {
+		return false
+	}
 	if !state.Pii.IsNull() && !state.Pii.IsUnknown() {
 		return false
 	}
@@ -854,6 +1222,14 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Limits.IsNull() || state.Limits.IsUnknown())) {
+		if !api.Limits.IsNull() && !api.Limits.IsUnknown() {
+			state.Limits = api.Limits
+		}
+	}
+	if len(state.Limits.AttributeTypes(context.Background())) == 0 {
+		state.Limits = types.ObjectNull(GroupSystemSettingsLimitsAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Pii.IsNull() || state.Pii.IsUnknown())) {
 		if !api.Pii.IsNull() && !api.Pii.IsUnknown() {

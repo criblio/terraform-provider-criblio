@@ -902,6 +902,20 @@ actions:
             type: string
             title: Quote character
             x-terraform-optional-computed: true
+          jsonArrayField: {}
+          parentFieldsToCopy: {}
+          jsonExtractAll: {}
+  # The inline ruleset schema omits JSON options defined on EventBreakerRule.
+  # Copy the upstream definitions so group and pack rulesets retain these fields.
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules.items.properties.jsonArrayField"
+    copy_from: "$.components.schemas.EventBreakerRule.properties.jsonArrayField"
+    update: {}
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules.items.properties.parentFieldsToCopy"
+    copy_from: "$.components.schemas.EventBreakerRule.properties.parentFieldsToCopy"
+    update: {}
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules.items.properties.jsonExtractAll"
+    copy_from: "$.components.schemas.EventBreakerRule.properties.jsonExtractAll"
+    update: {}
 
   - target: "$.paths./m/{groupId}/lib/hmac-functions.post"
     update:
@@ -1110,6 +1124,40 @@ actions:
   - target: "$.paths./m/{groupId}/system/settings/conf.patch"
     update:
       x-terraform-update: GroupSystemSettings
+  # Settings/conf omits limits in upstream request and response schemas.
+  # Clone Limits so partial updates do not relax the shared Limits schema.
+  - target: "$.components.schemas"
+    update:
+      GroupSystemSettingsLimitsUpdate: {}
+  - target: "$.components.schemas.GroupSystemSettingsLimitsUpdate"
+    copy_from: "$.components.schemas.Limits"
+    update:
+      title: GroupSystemSettingsLimitsUpdate
+      required: []
+      properties:
+        maxPQSize:
+          x-terraform-name: max_pq_size
+        metricsGCPeriod:
+          x-terraform-name: metrics_gc_period
+        kvStoreWALMaxBytes:
+          x-terraform-name: kv_store_wal_max_bytes
+        samples:
+          required: []
+  - target: "$.components.schemas.SystemSettingsConfUpdate.properties"
+    update:
+      limits:
+        $ref: "#/components/schemas/GroupSystemSettingsLimitsUpdate"
+        description: General resource limits. Configure only the limits to manage.
+  - target: "$.components.schemas.SystemSettingsConf.properties"
+    update:
+      limits:
+        $ref: "#/components/schemas/Limits"
+        description: General resource limits.
+  - target: "$.components.schemas.SystemSettingsConfResponse.properties"
+    update:
+      limits:
+        $ref: "#/components/schemas/Limits"
+        description: General resource limits.
   - target: "$.components.schemas.SslTypeSystemSettingsConfApi.properties.passphrase"
     update:
       x-terraform-sensitive: true
@@ -2765,9 +2813,20 @@ actions:
         type:
           type: string
           description: Dataset provider type.
+  - target: "$.components.schemas.DatasetMetadata"
+    update:
+      required: [enableAcceleration, fieldList, scanMode]
+      if:
+        required: [enableAcceleration]
+        properties:
+          enableAcceleration:
+            const: true
+      then:
+        required: [earliest]
   - target: "$.components.schemas.DatasetMetadata.properties.earliest"
     update:
       x-terraform-optional-computed: true
+      description: Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).
   - target: "$.components.schemas.DatasetMetadata.properties.enableAcceleration"
     update:
       x-terraform-optional-computed: true

@@ -51,9 +51,12 @@ Read-Only:
 - `fields` (Attributes List) Key-value pairs to be added to each event (see [below for nested schema](#nestedatt--rules--fields))
 - `fields_line_regex` (String) Regex that identifies and captures the fields line when type is "header".
 - `header_line_regex` (String) Regex used to identify header lines when type is "header".
+- `json_array_field` (String) Path to the array in a JSON event containing the records to extract, such as <code>Records</code> or <code>level1.level2.events</code>. Leave blank if the result itself is an array.
+- `json_extract_all` (Boolean) If <code>true</code>, automatically extract fields from JSON events. If <code>false</code>, only <code>_raw</code> and <code>_time</code> are defined on extracted events.
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines
 - `name` (String)
 - `parser_enabled` (Boolean)
+- `parent_fields_to_copy` (List of String) Top-level fields to copy to the output events. Nested fields are not supported. Supports <code>*</code> wildcards.
 - `quote_char` (String) Quote character used for CSV parsing when type is "csv".
 - `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.
 - `timestamp` (Attributes) Auto, manual format (strptime), or current time (see [below for nested schema](#nestedatt--rules--timestamp))

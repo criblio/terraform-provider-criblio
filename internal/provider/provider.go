@@ -33,14 +33,16 @@ type CriblioProvider struct {
 
 // CriblioProviderModel describes the provider data model.
 type CriblioProviderModel struct {
-	BearerAuth     types.String `tfsdk:"bearer_auth"`
-	ClientID       types.String `tfsdk:"client_id"`
-	ClientSecret   types.String `tfsdk:"client_secret"`
-	CloudDomain    types.String `tfsdk:"cloud_domain"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	ServerURL      types.String `tfsdk:"server_url"`
-	TokenURL       types.String `tfsdk:"token_url"`
-	WorkspaceID    types.String `tfsdk:"workspace_id"`
+	BearerAuth         types.String `tfsdk:"bearer_auth"`
+	ClientID           types.String `tfsdk:"client_id"`
+	ClientSecret       types.String `tfsdk:"client_secret"`
+	CloudDomain        types.String `tfsdk:"cloud_domain"`
+	CACertFile         types.String `tfsdk:"ca_cert_file"`
+	InsecureSkipVerify types.Bool   `tfsdk:"insecure_skip_verify"`
+	OrganizationID     types.String `tfsdk:"organization_id"`
+	ServerURL          types.String `tfsdk:"server_url"`
+	TokenURL           types.String `tfsdk:"token_url"`
+	WorkspaceID        types.String `tfsdk:"workspace_id"`
 }
 
 type providerOAuthConfig struct {
@@ -57,6 +59,14 @@ func (p *CriblioProvider) Metadata(ctx context.Context, req provider.MetadataReq
 func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
+			"ca_cert_file": schema.StringAttribute{
+				MarkdownDescription: "Path to a PEM-encoded CA certificate bundle to trust in addition to system CAs for API and authentication requests. Configurable via `CRIBL_CA_CERT_FILE`.",
+				Optional:            true,
+			},
+			"insecure_skip_verify": schema.BoolAttribute{
+				MarkdownDescription: "Skip TLS certificate and hostname verification for API and authentication requests. Defaults to false. Configurable via `CRIBL_INSECURE_SKIP_VERIFY`. Use only in trusted development or testing environments; prefer `ca_cert_file` for internal CAs.",
+				Optional:            true,
+			},
 			"bearer_auth": schema.StringAttribute{
 				MarkdownDescription: `HTTP Bearer.`,
 				Optional:            true,
@@ -106,6 +116,12 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
 	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	transport, err := data.httpTransport()
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid TLS Configuration", err.Error())
 		return
 	}
 
@@ -184,7 +200,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
-		Transport:  http.DefaultTransport,
+		Transport:  transport,
 	}
 
 	httpClient := &http.Client{
@@ -192,6 +208,8 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	}
 
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
+	// Share TLS settings with authentication without logging token request bodies.
+	restCredentials.HTTPClient = &http.Client{Transport: transport}
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
 			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),

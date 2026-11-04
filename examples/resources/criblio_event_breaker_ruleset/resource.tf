@@ -1,5 +1,5 @@
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  description    = "Break HTTP access logs into events"
+  description    = "Break HTTP access logs and Cribl API JSON arrays into events"
   group_id       = "Cribl"
   id             = "access-logs-v1"
   lib            = "custom"
@@ -35,6 +35,19 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
       timestamp_latest       = "+1day"
       timestamp_timezone     = "UTC"
       type                   = "regex"
+    },
+    {
+      name                   = "cribl-api-events"
+      condition              = "source.includes(\"/api/v1/system/logs/\")"
+      type                   = "json_array"
+      json_array_field       = "items.events"
+      parent_fields_to_copy  = ["source"]
+      json_extract_all       = false
+      timestamp_anchor_regex = "/\"time\":/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
     }
   ]
   tags = "nginx,access,prod"

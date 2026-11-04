@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	custom_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -174,12 +175,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -386,12 +390,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -598,12 +605,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -841,12 +851,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -1051,12 +1064,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -1268,12 +1284,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -1467,12 +1486,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -1666,12 +1688,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -1882,12 +1907,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -2081,12 +2109,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -2282,12 +2313,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -2481,12 +2515,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -2691,12 +2728,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -2890,12 +2930,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -3089,12 +3132,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -3281,12 +3327,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -3500,12 +3549,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -3711,12 +3763,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -3903,12 +3958,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -4123,12 +4181,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -4315,12 +4376,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -4514,12 +4578,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -4706,12 +4773,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -5081,12 +5151,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -5294,12 +5367,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -5486,12 +5562,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,
@@ -5876,12 +5955,15 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
+						Validators: []validator.Object{
+							custom_objectvalidators.RequiredWhenBoolean("enable_acceleration", true, "earliest"),
+						},
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Required:    false,

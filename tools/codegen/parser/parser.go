@@ -1068,9 +1068,65 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			field.NestedModelName = nestedName + "Model"
 			field.NestedAPIModelName = nestedName + "APIModel"
 			field.NestedAttrTypes = nestedName + "AttrTypes"
+			field.BooleanRequirements, err = booleanRequirements(objectSchema, fields)
+			if err != nil {
+				return FieldDef{}, fmt.Errorf("%s.%s: %w", modelName, apiName, err)
+			}
 		}
 	}
 	return field, nil
+}
+
+// Recognize a single boolean equality condition with a required trigger. More
+// complex JSON Schema conditions need their own translation rather than guessing.
+func booleanRequirements(schema *yaml.Node, fields []FieldDef) ([]BooleanRequirement, error) {
+	condition, ok := mappingValue(schema, "if")
+	if !ok || condition.Kind != yaml.MappingNode || len(condition.Content) != 4 {
+		return nil, nil
+	}
+	properties, ok := mappingValue(condition, "properties")
+	if !ok || properties.Kind != yaml.MappingNode || len(properties.Content) != 2 {
+		return nil, nil
+	}
+	property := properties.Content[0].Value
+	triggerRequired, ok := mappingValue(condition, "required")
+	if !ok || triggerRequired.Kind != yaml.SequenceNode || len(triggerRequired.Content) != 1 || triggerRequired.Content[0].Value != property {
+		return nil, nil
+	}
+	equality := properties.Content[1]
+	constant, ok := mappingValue(equality, "const")
+	if !ok || len(equality.Content) != 2 || constant.Tag != "!!bool" {
+		return nil, nil
+	}
+	then, ok := mappingValue(schema, "then")
+	if !ok || then.Kind != yaml.MappingNode || len(then.Content) != 2 {
+		return nil, nil
+	}
+	required, ok := mappingValue(then, "required")
+	if !ok || required.Kind != yaml.SequenceNode || len(required.Content) == 0 {
+		return nil, nil
+	}
+	byAPIName := make(map[string]FieldDef, len(fields))
+	for _, field := range fields {
+		byAPIName[field.APIName] = field
+	}
+	trigger, ok := byAPIName[property]
+	if !ok || trigger.Type != "boolean" {
+		return nil, fmt.Errorf("if/then trigger %q must refer to a boolean property", property)
+	}
+	var conditionValue bool
+	if err := constant.Decode(&conditionValue); err != nil {
+		return nil, fmt.Errorf("decode boolean condition: %w", err)
+	}
+	rule := BooleanRequirement{Property: trigger.TerraformName, Value: conditionValue}
+	for _, name := range required.Content {
+		field, ok := byAPIName[name.Value]
+		if !ok {
+			return nil, fmt.Errorf("if/then required property %q not found", name.Value)
+		}
+		rule.Required = append(rule.Required, field.TerraformName)
+	}
+	return []BooleanRequirement{rule}, nil
 }
 
 type constraints struct {
