@@ -2074,7 +2074,11 @@ type {{ .StructName }}Resource struct {
 }
 
 func New{{ .StructName }}Resource() resource.Resource {
+{{- if .ResourceFactoryHook }}
+	return {{ .ResourceFactoryHook }}()
+{{- else }}
 	return &{{ .StructName }}Resource{}
+{{- end }}
 }
 
 func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -2314,6 +2318,10 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	// entire envelope so old content and failure details do not linger.
 {{- end }}
 	if apiModel != nil {
+		// Path parameters identify the resource and may be absent from API bodies.
+{{- range pathParamFields . }}
+		apiModel.{{ .GoName }} = model.{{ .GoName }}
+{{- end }}
 		model = *apiModel
 	}
 {{- else }}
@@ -3348,6 +3356,14 @@ description: |-
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 
 The ` + "`saved_state`" + ` attribute accepts both legacy string maps and nested objects. When omitted, it exposes runtime checkpoints returned by Cribl. Configured values are preserved during refresh; computed checkpoints are omitted from create and update requests. Existing string-map state is upgraded automatically. For resources created with older providers, legacy saved values are retained until an apply records whether ` + "`saved_state`" + ` is configured.
+{{- end }}
+{{- if eq .StructName "SystemLimits" }}
+
+Manages selected system limits for the Worker Group or Edge Fleet identified by ` + "`group_id`" + ` using ` + "`/m/{group_id}/system/limits`" + `. Configure one resource per group.
+
+Configure only the limits you want Terraform to manage. Before each create or update, the provider reads the current limits, merges configured attributes, and sends a complete configuration as required by the upstream PATCH endpoint. Unconfigured limits, including fields unknown to this provider version, are retained. Lists replace the existing list; use ` + "`lookup_allowed_paths = []`" + ` to clear the lookup allowlist. Removing an attribute from configuration stops managing it and retains its current server value.
+
+Refresh reports remote changes to managed attributes. Import uses the group ID and reads all supported limits; retain only the attributes you intend to manage in your configuration. Destroy removes the resource from Terraform state and leaves the server configuration in place because the API has no delete operation. Avoid simultaneous writers: the API does not provide a conditional update for the read and PATCH sequence.
 {{- end }}
 {{- if eq .StructName "SearchDatasetIntelligence" }}
 

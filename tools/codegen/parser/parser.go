@@ -119,6 +119,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.ValidateRequiredUnions = boolAnnotation(operation, "x-terraform-validate-required-unions")
 			resource.GenerateDataSourceDocs = boolAnnotation(operation, "x-terraform-generate-data-source-docs")
 			resource.RefreshFromAPI = boolAnnotation(operation, "x-terraform-refresh-from-api")
+			resource.ResourceFactoryHook = scalarValue(operation, "x-terraform-resource-factory-hook")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
 			resource := ensureResource(resources, name)

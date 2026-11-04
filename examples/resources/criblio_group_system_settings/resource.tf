@@ -38,11 +38,6 @@ resource "criblio_group_system_settings" "my_groupsystemsettings" {
     logo_image       = "/opt/cribl/custom/logo.png"
   }
   group_id = "defaultHybrid"
-  limits = {
-    min_free_space         = "2 GB"
-    max_pq_size            = "1 TB"
-    metrics_max_disk_space = "1 GB"
-  }
   pii = {
     enable_pii_detection = true
   }

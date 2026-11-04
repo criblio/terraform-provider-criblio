@@ -1116,6 +1116,8 @@ func (r *MonitorResource) Read(ctx context.Context, req resource.ReadRequest, re
 	}
 	// Monitor configuration, including inheritance and cleared fields, is authoritative on refresh.
 	if apiModel != nil {
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.ID = model.ID
 		model = *apiModel
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)

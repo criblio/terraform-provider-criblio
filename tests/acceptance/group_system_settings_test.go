@@ -27,7 +27,6 @@ func TestGroupSystemSettings(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "api.ssl.disabled", "false"),
 					resource.TestCheckResourceAttr(resourceName, "upgrade_settings.upgrade_source", "cdn"),
 					resource.TestCheckResourceAttr(resourceName, "workers.count", "4"),
-					resource.TestCheckResourceAttr(resourceName, "limits.min_free_space", "2 GB"),
 				),
 			},
 			{
@@ -35,7 +34,6 @@ func TestGroupSystemSettings(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "proxy.use_env_vars", "true"),
 					resource.TestCheckResourceAttr(resourceName, "workers.load_throttle_perc", "80"),
-					resource.TestCheckResourceAttr(resourceName, "limits.min_free_space", "3 GB"),
 				),
 			},
 			{
@@ -62,11 +60,9 @@ func TestGroupSystemSettings(t *testing.T) {
 func groupSystemSettingsConfig(updated bool) string {
 	useEnvVars := "false"
 	loadThrottlePerc := "85"
-	minFreeSpace := "2 GB"
 	if updated {
 		useEnvVars = "true"
 		loadThrottlePerc = "80"
-		minFreeSpace = "3 GB"
 	}
 	return `locals {
   streamtags_hybrid = [
@@ -122,10 +118,6 @@ resource "criblio_group_system_settings" "hybrid_group_settings" {
     enabled          = false
     logo_description = ""
     logo_image       = ""
-  }
-
-  limits = {
-    min_free_space = "` + minFreeSpace + `"
   }
 
   pii = {

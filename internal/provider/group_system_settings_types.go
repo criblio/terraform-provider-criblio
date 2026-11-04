@@ -22,7 +22,6 @@ type GroupSystemSettingsModel struct {
 	Backups              types.Object `tfsdk:"backups" json:"backups,omitempty"`
 	CustomLogo           types.Object `tfsdk:"custom_logo" json:"customLogo,omitempty"`
 	GroupID              types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	Limits               types.Object `tfsdk:"limits" json:"limits,omitempty"`
 	Pii                  types.Object `tfsdk:"pii" json:"pii,omitempty"`
 	Proxy                types.Object `tfsdk:"proxy" json:"proxy,omitempty"`
 	Rollback             types.Object `tfsdk:"rollback" json:"rollback,omitempty"`
@@ -43,7 +42,6 @@ type GroupSystemSettingsResourceModel struct {
 	Backups              types.Object `tfsdk:"backups" json:"backups,omitempty"`
 	CustomLogo           types.Object `tfsdk:"custom_logo" json:"customLogo,omitempty"`
 	GroupID              types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	Limits               types.Object `tfsdk:"limits" json:"limits,omitempty"`
 	Pii                  types.Object `tfsdk:"pii" json:"pii,omitempty"`
 	Proxy                types.Object `tfsdk:"proxy" json:"proxy,omitempty"`
 	Rollback             types.Object `tfsdk:"rollback" json:"rollback,omitempty"`
@@ -64,7 +62,6 @@ type GroupSystemSettingsDataSourceModel struct {
 	Backups              types.Object `tfsdk:"backups" json:"backups,omitempty"`
 	CustomLogo           types.Object `tfsdk:"custom_logo" json:"customLogo,omitempty"`
 	GroupID              types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	Limits               types.Object `tfsdk:"limits" json:"limits,omitempty"`
 	Pii                  types.Object `tfsdk:"pii" json:"pii,omitempty"`
 	Proxy                types.Object `tfsdk:"proxy" json:"proxy,omitempty"`
 	Rollback             types.Object `tfsdk:"rollback" json:"rollback,omitempty"`
@@ -85,7 +82,6 @@ type GroupSystemSettingsAPIModel struct {
 	Backups              any     `json:"backups,omitempty"`
 	CustomLogo           any     `json:"customLogo,omitempty"`
 	GroupID              *string `json:"groupId,omitempty"`
-	Limits               any     `json:"limits,omitempty"`
 	Pii                  any     `json:"pii,omitempty"`
 	Proxy                any     `json:"proxy,omitempty"`
 	Rollback             any     `json:"rollback,omitempty"`
@@ -254,166 +250,6 @@ func GroupSystemSettingsCustomLogoAttrTypes() map[string]attr.Type {
 		"enabled":          types.BoolType,
 		"logo_description": types.StringType,
 		"logo_image":       types.StringType,
-	}
-}
-
-type GroupSystemSettingsLimitsModel struct {
-	AzureBlobStateFlushInterval        types.Int64  `tfsdk:"azure_blob_state_flush_interval" json:"azureBlobStateFlushInterval,omitempty"`
-	BundleDownloadTimeoutSeconds       types.Int64  `tfsdk:"bundle_download_timeout_seconds" json:"bundleDownloadTimeoutSeconds,omitempty"`
-	CpuProfileTTL                      types.String `tfsdk:"cpu_profile_ttl" json:"cpuProfileTTL,omitempty"`
-	DefaultHeartbeatSeconds            types.Int64  `tfsdk:"default_heartbeat_seconds" json:"defaultHeartbeatSeconds,omitempty"`
-	DisableMetricsAccessorCache        types.Bool   `tfsdk:"disable_metrics_accessor_cache" json:"disableMetricsAccessorCache,omitempty"`
-	EdgeMetricsCustomExpression        types.String `tfsdk:"edge_metrics_custom_expression" json:"edgeMetricsCustomExpression,omitempty"`
-	EdgeMetricsMode                    types.String `tfsdk:"edge_metrics_mode" json:"edgeMetricsMode,omitempty"`
-	EdgeNodesCount                     types.Int64  `tfsdk:"edge_nodes_count" json:"edgeNodesCount,omitempty"`
-	EnableMetricsPersistence           types.Bool   `tfsdk:"enable_metrics_persistence" json:"enableMetricsPersistence,omitempty"`
-	EnableProcessInfoUsingWindowsTools types.Bool   `tfsdk:"enable_process_info_using_windows_tools" json:"enableProcessInfoUsingWindowsTools,omitempty"`
-	EnableWorkerInMemory               types.Bool   `tfsdk:"enable_worker_in_memory" json:"enableWorkerInMemory,omitempty"`
-	EventsMetadataSources              types.List   `tfsdk:"events_metadata_sources" json:"eventsMetadataSources,omitempty"`
-	HbConnectionMode                   types.String `tfsdk:"hb_connection_mode" json:"hbConnectionMode,omitempty"`
-	HbMetricSpoolMaxFileSize           types.String `tfsdk:"hb_metric_spool_max_file_size" json:"hbMetricSpoolMaxFileSize,omitempty"`
-	HbMetricSpoolMaxSize               types.String `tfsdk:"hb_metric_spool_max_size" json:"hbMetricSpoolMaxSize,omitempty"`
-	HbOfflineDuration                  types.String `tfsdk:"hb_offline_duration" json:"hbOfflineDuration,omitempty"`
-	KvStoreEnableWAL                   types.Bool   `tfsdk:"kv_store_enable_wal" json:"kvStoreEnableWAL,omitempty"`
-	KvStoreServicePeriod               types.Int64  `tfsdk:"kv_store_service_period" json:"kvStoreServicePeriod,omitempty"`
-	KvStoreWalMaxBytes                 types.Int64  `tfsdk:"kv_store_wal_max_bytes" json:"kvStoreWALMaxBytes,omitempty"`
-	LargeEventsThreshold               types.String `tfsdk:"large_events_threshold" json:"largeEventsThreshold,omitempty"`
-	LookupAllowedPaths                 types.List   `tfsdk:"lookup_allowed_paths" json:"lookupAllowedPaths,omitempty"`
-	LookupMaxSize                      types.String `tfsdk:"lookup_max_size" json:"lookupMaxSize,omitempty"`
-	LookupMaxTotalSize                 types.String `tfsdk:"lookup_max_total_size" json:"lookupMaxTotalSize,omitempty"`
-	MaxDimensionValueSize              types.Int64  `tfsdk:"max_dimension_value_size" json:"maxDimensionValueSize,omitempty"`
-	MaxEPs                             types.Int64  `tfsdk:"max_eps" json:"maxEPs,omitempty"`
-	MaxEventBytesMode                  types.String `tfsdk:"max_event_bytes_mode" json:"maxEventBytesMode,omitempty"`
-	MaxMetrics                         types.Int64  `tfsdk:"max_metrics" json:"maxMetrics,omitempty"`
-	MaxPqSize                          types.String `tfsdk:"max_pq_size" json:"maxPQSize,omitempty"`
-	MaxPipelinesPerPack                types.Int64  `tfsdk:"max_pipelines_per_pack" json:"maxPipelinesPerPack,omitempty"`
-	MaxReconnectInterval               types.String `tfsdk:"max_reconnect_interval" json:"maxReconnectInterval,omitempty"`
-	MetricsDirectory                   types.String `tfsdk:"metrics_directory" json:"metricsDirectory,omitempty"`
-	MetricsDropList                    types.List   `tfsdk:"metrics_drop_list" json:"metricsDropList,omitempty"`
-	MetricsFieldsBlacklist             types.List   `tfsdk:"metrics_fields_blacklist" json:"metricsFieldsBlacklist,omitempty"`
-	MetricsGcPeriod                    types.String `tfsdk:"metrics_gc_period" json:"metricsGCPeriod,omitempty"`
-	MetricsMaxCardinality              types.Int64  `tfsdk:"metrics_max_cardinality" json:"metricsMaxCardinality,omitempty"`
-	MetricsMaxDiskSpace                types.String `tfsdk:"metrics_max_disk_space" json:"metricsMaxDiskSpace,omitempty"`
-	MetricsNeverDropList               types.List   `tfsdk:"metrics_never_drop_list" json:"metricsNeverDropList,omitempty"`
-	MetricsWorkerIDBlacklist           types.List   `tfsdk:"metrics_worker_id_blacklist" json:"metricsWorkerIdBlacklist,omitempty"`
-	MinFreeSpace                       types.String `tfsdk:"min_free_space" json:"minFreeSpace,omitempty"`
-	MinReconnectInterval               types.String `tfsdk:"min_reconnect_interval" json:"minReconnectInterval,omitempty"`
-	NetFlowTemplateFlushInterval       types.Int64  `tfsdk:"net_flow_template_flush_interval" json:"netFlowTemplateFlushInterval,omitempty"`
-	RandomReconnectInterval            types.String `tfsdk:"random_reconnect_interval" json:"randomReconnectInterval,omitempty"`
-	RateLimitBytesPerSecond            types.String `tfsdk:"rate_limit_bytes_per_second" json:"rateLimitBytesPerSecond,omitempty"`
-	Samples                            types.Object `tfsdk:"samples" json:"samples,omitempty"`
-	WorkerMaxMetrics                   types.Int64  `tfsdk:"worker_max_metrics" json:"workerMaxMetrics,omitempty"`
-}
-
-type GroupSystemSettingsLimitsAPIModel struct {
-	AzureBlobStateFlushInterval        *int64   `json:"azureBlobStateFlushInterval,omitempty"`
-	BundleDownloadTimeoutSeconds       *int64   `json:"bundleDownloadTimeoutSeconds,omitempty"`
-	CpuProfileTTL                      *string  `json:"cpuProfileTTL,omitempty"`
-	DefaultHeartbeatSeconds            *int64   `json:"defaultHeartbeatSeconds,omitempty"`
-	DisableMetricsAccessorCache        *bool    `json:"disableMetricsAccessorCache,omitempty"`
-	EdgeMetricsCustomExpression        *string  `json:"edgeMetricsCustomExpression,omitempty"`
-	EdgeMetricsMode                    *string  `json:"edgeMetricsMode,omitempty"`
-	EdgeNodesCount                     *int64   `json:"edgeNodesCount,omitempty"`
-	EnableMetricsPersistence           *bool    `json:"enableMetricsPersistence,omitempty"`
-	EnableProcessInfoUsingWindowsTools *bool    `json:"enableProcessInfoUsingWindowsTools,omitempty"`
-	EnableWorkerInMemory               *bool    `json:"enableWorkerInMemory,omitempty"`
-	EventsMetadataSources              []string `json:"eventsMetadataSources,omitempty"`
-	HbConnectionMode                   *string  `json:"hbConnectionMode,omitempty"`
-	HbMetricSpoolMaxFileSize           *string  `json:"hbMetricSpoolMaxFileSize,omitempty"`
-	HbMetricSpoolMaxSize               *string  `json:"hbMetricSpoolMaxSize,omitempty"`
-	HbOfflineDuration                  *string  `json:"hbOfflineDuration,omitempty"`
-	KvStoreEnableWAL                   *bool    `json:"kvStoreEnableWAL,omitempty"`
-	KvStoreServicePeriod               *int64   `json:"kvStoreServicePeriod,omitempty"`
-	KvStoreWalMaxBytes                 *int64   `json:"kvStoreWALMaxBytes,omitempty"`
-	LargeEventsThreshold               *string  `json:"largeEventsThreshold,omitempty"`
-	LookupAllowedPaths                 []string `json:"lookupAllowedPaths,omitempty"`
-	LookupMaxSize                      *string  `json:"lookupMaxSize,omitempty"`
-	LookupMaxTotalSize                 *string  `json:"lookupMaxTotalSize,omitempty"`
-	MaxDimensionValueSize              *int64   `json:"maxDimensionValueSize,omitempty"`
-	MaxEPs                             *int64   `json:"maxEPs,omitempty"`
-	MaxEventBytesMode                  *string  `json:"maxEventBytesMode,omitempty"`
-	MaxMetrics                         *int64   `json:"maxMetrics,omitempty"`
-	MaxPqSize                          *string  `json:"maxPQSize,omitempty"`
-	MaxPipelinesPerPack                *int64   `json:"maxPipelinesPerPack,omitempty"`
-	MaxReconnectInterval               *string  `json:"maxReconnectInterval,omitempty"`
-	MetricsDirectory                   *string  `json:"metricsDirectory,omitempty"`
-	MetricsDropList                    []string `json:"metricsDropList,omitempty"`
-	MetricsFieldsBlacklist             []string `json:"metricsFieldsBlacklist,omitempty"`
-	MetricsGcPeriod                    *string  `json:"metricsGCPeriod,omitempty"`
-	MetricsMaxCardinality              *int64   `json:"metricsMaxCardinality,omitempty"`
-	MetricsMaxDiskSpace                *string  `json:"metricsMaxDiskSpace,omitempty"`
-	MetricsNeverDropList               []string `json:"metricsNeverDropList,omitempty"`
-	MetricsWorkerIDBlacklist           []string `json:"metricsWorkerIdBlacklist,omitempty"`
-	MinFreeSpace                       *string  `json:"minFreeSpace,omitempty"`
-	MinReconnectInterval               *string  `json:"minReconnectInterval,omitempty"`
-	NetFlowTemplateFlushInterval       *int64   `json:"netFlowTemplateFlushInterval,omitempty"`
-	RandomReconnectInterval            *string  `json:"randomReconnectInterval,omitempty"`
-	RateLimitBytesPerSecond            *string  `json:"rateLimitBytesPerSecond,omitempty"`
-	Samples                            any      `json:"samples,omitempty"`
-	WorkerMaxMetrics                   *int64   `json:"workerMaxMetrics,omitempty"`
-}
-
-func GroupSystemSettingsLimitsAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"azure_blob_state_flush_interval":         types.Int64Type,
-		"bundle_download_timeout_seconds":         types.Int64Type,
-		"cpu_profile_ttl":                         types.StringType,
-		"default_heartbeat_seconds":               types.Int64Type,
-		"disable_metrics_accessor_cache":          types.BoolType,
-		"edge_metrics_custom_expression":          types.StringType,
-		"edge_metrics_mode":                       types.StringType,
-		"edge_nodes_count":                        types.Int64Type,
-		"enable_metrics_persistence":              types.BoolType,
-		"enable_process_info_using_windows_tools": types.BoolType,
-		"enable_worker_in_memory":                 types.BoolType,
-		"events_metadata_sources":                 types.ListType{ElemType: types.StringType},
-		"hb_connection_mode":                      types.StringType,
-		"hb_metric_spool_max_file_size":           types.StringType,
-		"hb_metric_spool_max_size":                types.StringType,
-		"hb_offline_duration":                     types.StringType,
-		"kv_store_enable_wal":                     types.BoolType,
-		"kv_store_service_period":                 types.Int64Type,
-		"kv_store_wal_max_bytes":                  types.Int64Type,
-		"large_events_threshold":                  types.StringType,
-		"lookup_allowed_paths":                    types.ListType{ElemType: types.StringType},
-		"lookup_max_size":                         types.StringType,
-		"lookup_max_total_size":                   types.StringType,
-		"max_dimension_value_size":                types.Int64Type,
-		"max_eps":                                 types.Int64Type,
-		"max_event_bytes_mode":                    types.StringType,
-		"max_metrics":                             types.Int64Type,
-		"max_pq_size":                             types.StringType,
-		"max_pipelines_per_pack":                  types.Int64Type,
-		"max_reconnect_interval":                  types.StringType,
-		"metrics_directory":                       types.StringType,
-		"metrics_drop_list":                       types.ListType{ElemType: types.StringType},
-		"metrics_fields_blacklist":                types.ListType{ElemType: types.StringType},
-		"metrics_gc_period":                       types.StringType,
-		"metrics_max_cardinality":                 types.Int64Type,
-		"metrics_max_disk_space":                  types.StringType,
-		"metrics_never_drop_list":                 types.ListType{ElemType: types.StringType},
-		"metrics_worker_id_blacklist":             types.ListType{ElemType: types.StringType},
-		"min_free_space":                          types.StringType,
-		"min_reconnect_interval":                  types.StringType,
-		"net_flow_template_flush_interval":        types.Int64Type,
-		"random_reconnect_interval":               types.StringType,
-		"rate_limit_bytes_per_second":             types.StringType,
-		"samples":                                 types.ObjectType{AttrTypes: GroupSystemSettingsLimitsSamplesAttrTypes()},
-		"worker_max_metrics":                      types.Int64Type,
-	}
-}
-
-type GroupSystemSettingsLimitsSamplesModel struct {
-	MaxSize types.String `tfsdk:"max_size" json:"maxSize,omitempty"`
-}
-
-type GroupSystemSettingsLimitsSamplesAPIModel struct {
-	MaxSize *string `json:"maxSize,omitempty"`
-}
-
-func GroupSystemSettingsLimitsSamplesAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"max_size": types.StringType,
 	}
 }
 
@@ -768,22 +604,10 @@ func GroupSystemSettingsTerraformNameToAPIName(name string) string {
 		name = strings.TrimPrefix(name, prefix)
 	}
 	switch name {
-	case "cpu_profile_ttl":
-		return prefix + "cpuProfileTTL"
 	case "disable_sni_routing":
 		return prefix + "disableSNIRouting"
 	case "idle_session_ttl":
 		return prefix + "idleSessionTTL"
-	case "kv_store_enable_wal":
-		return prefix + "kvStoreEnableWAL"
-	case "kv_store_wal_max_bytes":
-		return prefix + "kvStoreWALMaxBytes"
-	case "max_eps":
-		return prefix + "maxEPs"
-	case "max_pq_size":
-		return prefix + "maxPQSize"
-	case "metrics_gc_period":
-		return prefix + "metricsGCPeriod"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -962,13 +786,6 @@ func (m GroupSystemSettingsModel) MarshalJSON() ([]byte, error) {
 		}
 		output["customLogo"] = value
 	}
-	if !m.Limits.IsNull() && !m.Limits.IsUnknown() {
-		value, err := GroupSystemSettingsTerraformValueToJSON(m.Limits)
-		if err != nil {
-			return nil, fmt.Errorf("convert limits to API value: %v", err)
-		}
-		output["limits"] = value
-	}
 	if !m.Pii.IsNull() && !m.Pii.IsUnknown() {
 		value, err := GroupSystemSettingsTerraformValueToJSON(m.Pii)
 		if err != nil {
@@ -1101,15 +918,6 @@ func (m *GroupSystemSettingsModel) UnmarshalJSON(data []byte) error {
 		m.GroupID = types.StringValue(*input.GroupID)
 	} else {
 		m.GroupID = types.StringNull()
-	}
-	if input.Limits != nil {
-		value, err := GroupSystemSettingsAPIValueToTerraformValue(input.Limits, types.ObjectType{AttrTypes: GroupSystemSettingsLimitsAttrTypes()})
-		if err != nil {
-			return fmt.Errorf("convert limits from API value: %v", err)
-		}
-		m.Limits = value.(types.Object)
-	} else {
-		m.Limits = types.ObjectNull(GroupSystemSettingsLimitsAttrTypes())
 	}
 	if input.Pii != nil {
 		value, err := GroupSystemSettingsAPIValueToTerraformValue(input.Pii, types.ObjectType{AttrTypes: GroupSystemSettingsPiiAttrTypes()})

@@ -26,6 +26,7 @@ type ResourceDef struct {
 	ValidateRequiredUnions bool
 	GenerateDataSourceDocs bool
 	RefreshFromAPI         bool
+	ResourceFactoryHook    string
 }
 
 // OperationDef describes one annotated OpenAPI operation.

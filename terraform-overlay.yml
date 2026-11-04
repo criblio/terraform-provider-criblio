@@ -1124,40 +1124,58 @@ actions:
   - target: "$.paths./m/{groupId}/system/settings/conf.patch"
     update:
       x-terraform-update: GroupSystemSettings
-  # Settings/conf omits limits in upstream request and response schemas.
-  # Clone Limits so partial updates do not relax the shared Limits schema.
+  # Allow selected limits in Terraform while a provider-owned wrapper reads and
+  # merges the complete configuration before the upstream replacement PATCH.
   - target: "$.components.schemas"
     update:
-      GroupSystemSettingsLimitsUpdate: {}
-  - target: "$.components.schemas.GroupSystemSettingsLimitsUpdate"
+      SystemLimitsUpdate: {}
+  - target: "$.components.schemas.SystemLimitsUpdate"
     copy_from: "$.components.schemas.Limits"
     update:
-      title: GroupSystemSettingsLimitsUpdate
+      title: SystemLimitsUpdate
       required: []
-      properties:
-        maxPQSize:
-          x-terraform-name: max_pq_size
-        metricsGCPeriod:
-          x-terraform-name: metrics_gc_period
-        kvStoreWALMaxBytes:
-          x-terraform-name: kv_store_wal_max_bytes
-        samples:
-          required: []
-  - target: "$.components.schemas.SystemSettingsConfUpdate.properties"
+  - target: "$.paths./m/{groupId}/system/limits.patch"
     update:
-      limits:
-        $ref: "#/components/schemas/GroupSystemSettingsLimitsUpdate"
-        description: General resource limits. Configure only the limits to manage.
-  - target: "$.components.schemas.SystemSettingsConf.properties"
+      x-terraform-resource: true
+      x-terraform-resource-name: SystemLimits
+      x-terraform-resource-factory-hook: newSystemLimitsManagedResource
+      x-terraform-update: SystemLimits
+      x-terraform-refresh-from-api: true
+      x-terraform-generate-data-source-docs: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SystemLimitsUpdate"
+  - target: "$.paths./m/{groupId}/system/limits.get"
     update:
-      limits:
-        $ref: "#/components/schemas/Limits"
-        description: General resource limits.
-  - target: "$.components.schemas.SystemSettingsConfResponse.properties"
+      x-terraform-read: SystemLimits
+  # Use the fleet lookup-allowlist example instead of the full API payload.
+  - target: "$.paths./m/{groupId}/system/limits.patch.requestBody.content.application/json.examples"
+    replace: {}
+  - target: "$.components.schemas.Limits.properties.maxPQSize"
     update:
-      limits:
-        $ref: "#/components/schemas/Limits"
-        description: General resource limits.
+      x-terraform-name: max_pq_size
+  - target: "$.components.schemas.Limits.properties.metricsGCPeriod"
+    update:
+      x-terraform-name: metrics_gc_period
+  - target: "$.components.schemas.Limits.properties.kvStoreWALMaxBytes"
+    update:
+      x-terraform-name: kv_store_wal_max_bytes
+  - target: "$.components.schemas.SystemLimitsUpdate.properties"
+    update:
+      managedFields:
+        type: array
+        items:
+          type: string
+        x-terraform-computed: true
+        description: Provider-maintained list of configured limit field paths. Tracks ownership changes even when a managed value is absent from the API.
+      maxPQSize:
+        x-terraform-name: max_pq_size
+      metricsGCPeriod:
+        x-terraform-name: metrics_gc_period
+      kvStoreWALMaxBytes:
+        x-terraform-name: kv_store_wal_max_bytes
   - target: "$.components.schemas.SslTypeSystemSettingsConfApi.properties.passphrase"
     update:
       x-terraform-sensitive: true

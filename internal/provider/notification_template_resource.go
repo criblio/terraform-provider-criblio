@@ -158,6 +158,8 @@ func (r *NotificationTemplateResource) Read(ctx context.Context, req resource.Re
 	// Template fields are returned verbatim. Refresh from the API so changes
 	// outside Terraform, including a removed description, appear in the plan.
 	if apiModel != nil {
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.ID = model.ID
 		model = *apiModel
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)

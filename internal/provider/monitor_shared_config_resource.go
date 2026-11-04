@@ -128,6 +128,8 @@ func (r *MonitorSharedConfigResource) Read(ctx context.Context, req resource.Rea
 	}
 	// Refresh all configuration so drift and removed values are visible.
 	if apiModel != nil {
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.ID = model.ID
 		model = *apiModel
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
