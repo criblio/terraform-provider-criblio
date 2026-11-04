@@ -3,7 +3,6 @@ package tests
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -12,12 +11,7 @@ import (
 )
 
 func TestSystemLimits(t *testing.T) {
-	// Destroy retains the configured lookup allowlist on the server.
-	// Only run against an explicitly selected disposable group or fleet.
-	groupID := os.Getenv("CRIBL_SYSTEM_LIMITS_TEST_GROUP_ID")
-	if groupID == "" {
-		t.Skip("Set CRIBL_SYSTEM_LIMITS_TEST_GROUP_ID to a disposable group or fleet")
-	}
+	groupID := "default"
 	resourceName := "criblio_system_limits.test"
 	var schemaResponse frameworkresource.SchemaResponse
 	provider.NewSystemLimitsResource().Schema(context.Background(), frameworkresource.SchemaRequest{}, &schemaResponse)
@@ -28,7 +22,8 @@ func TestSystemLimits(t *testing.T) {
 		}
 	}
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: providerFactory,
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{Config: systemLimitsConfig(groupID, `["/tmp"]`), Check: resource.ComposeAggregateTestCheckFunc(
 				resource.TestCheckResourceAttr(resourceName, "group_id", groupID),
