@@ -26,3 +26,9 @@ internal/provider/pack_data_source.go
 
 # Collector saved_state conversion, provenance, and state migration are provider-owned.
 internal/provider/collector_saved_state.go
+
+# System limits acceptance requires an explicitly selected disposable group.
+tests/acceptance/system_limits_test.go
+
+# System limits read/merge/write and configured-field ownership are provider-owned.
+internal/provider/system_limits_managed.go

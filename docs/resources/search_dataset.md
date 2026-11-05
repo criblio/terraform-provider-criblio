@@ -732,7 +732,7 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Rolling time window that defines how far back acceleration scans.
+- `earliest` (String) Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).
 - `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--aws_security_lake_dataset--metadata--latest_run_info))

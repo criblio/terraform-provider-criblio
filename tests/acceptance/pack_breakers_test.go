@@ -23,17 +23,24 @@ func TestPackBreakersGenerated(t *testing.T) {
 		ProtoV6ProviderFactories: providerFactory,
 		Steps: []resource.TestStep{
 			{
-				Config: packBreakersConfig(packID, breakerID),
+				Config: packBreakersConfig(packID, breakerID, "items.events"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("criblio_pack.breakers_pack", "id", packID),
 					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "id", breakerID),
 					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "group_id", "default"),
 					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "pack", packID),
-					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "rules.#", "1"),
+					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "rules.#", "2"),
+					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "rules.1.json_array_field", "items.events"),
+					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "rules.1.parent_fields_to_copy.0", "source"),
+					resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "rules.1.json_extract_all", "false"),
 				),
 			},
 			{
-				Config: packBreakersConfig(packID, breakerID),
+				Config: packBreakersConfig(packID, breakerID, "records"),
+				Check:  resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "rules.1.json_array_field", "records"),
+			},
+			{
+				Config: packBreakersConfig(packID, breakerID, "records"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectEmptyPlan(),
@@ -50,7 +57,7 @@ func TestPackBreakersGenerated(t *testing.T) {
 	})
 }
 
-func packBreakersConfig(packID, breakerID string) string {
+func packBreakersConfig(packID, breakerID, jsonArrayField string) string {
 	return fmt.Sprintf(`resource "criblio_pack" "breakers_pack" {
   id           = %q
   group_id     = "default"
@@ -89,7 +96,17 @@ resource "criblio_pack_breakers" "my_packbreakers" {
       timestamp_timezone     = "local"
       type                   = "regex"
     },
+    {
+      name                   = "api-events"
+      condition              = "true"
+      type                   = "json_array"
+      json_array_field       = %q
+      parent_fields_to_copy  = ["source"]
+      json_extract_all       = false
+      timestamp              = { length = 150, type = "auto" }
+      timestamp_anchor_regex = "/^/"
+    },
   ]
 }
-`, packID, breakerID)
+`, packID, breakerID, jsonArrayField)
 }

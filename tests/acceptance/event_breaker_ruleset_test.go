@@ -20,19 +20,25 @@ func TestEventBreakerRuleset(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: eventBreakerRulesetConfig("test"),
+				Config: eventBreakerRulesetConfig("test", "items.events"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 					resource.TestCheckResourceAttr(resourceName, "id", "test_event_breaker"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test"),
-					resource.TestCheckResourceAttr(resourceName, "rules.#", "1"),
+					resource.TestCheckResourceAttr(resourceName, "rules.#", "2"),
+					resource.TestCheckResourceAttr(resourceName, "rules.1.json_array_field", "items.events"),
+					resource.TestCheckResourceAttr(resourceName, "rules.1.parent_fields_to_copy.0", "source"),
+					resource.TestCheckResourceAttr(resourceName, "rules.1.json_extract_all", "false"),
 				),
 			},
 			{
-				Config: eventBreakerRulesetConfig("test updated"),
-				Check:  resource.TestCheckResourceAttr(resourceName, "description", "test updated"),
+				Config: eventBreakerRulesetConfig("test updated", "records"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "description", "test updated"),
+					resource.TestCheckResourceAttr(resourceName, "rules.1.json_array_field", "records"),
+				),
 			},
-			{Config: eventBreakerRulesetConfig("test updated"), PlanOnly: true},
+			{Config: eventBreakerRulesetConfig("test updated", "records"), PlanOnly: true},
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
@@ -43,7 +49,7 @@ func TestEventBreakerRuleset(t *testing.T) {
 	})
 }
 
-func eventBreakerRulesetConfig(description string) string {
+func eventBreakerRulesetConfig(description, jsonArrayField string) string {
 	return `resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   description    = "` + description + `"
   group_id       = "default"
@@ -62,6 +68,15 @@ func eventBreakerRulesetConfig(description string) string {
     timestamp              = { length = 150, type = "auto" }
     timestamp_anchor_regex = "/^/"
     type                   = "regex"
+  }, {
+    name                   = "api-events"
+    condition              = "true"
+    type                   = "json_array"
+    json_array_field       = "` + jsonArrayField + `"
+    parent_fields_to_copy  = ["source"]
+    json_extract_all       = false
+    timestamp              = { length = 150, type = "auto" }
+    timestamp_anchor_regex = "/^/"
   }]
   tags = "test"
 }

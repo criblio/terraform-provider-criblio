@@ -50,7 +50,7 @@ func GetToken(ctx context.Context, config *CriblConfig) (string, error) {
 		return "", fmt.Errorf("config is required for authentication")
 	}
 
-	key, err := tokenCacheKey(config)
+	key, err := scopedTokenCacheKey(config)
 	if err != nil {
 		return "", err
 	}
@@ -59,7 +59,7 @@ func GetToken(ctx context.Context, config *CriblConfig) (string, error) {
 		return tokenInfo.Token, nil
 	}
 
-	ch := tokenFetchGroup.DoChan(key, func() (interface{}, error) {
+	ch := tokenFetchGroup.DoChan(fmt.Sprintf("%v", key), func() (interface{}, error) {
 		if tokenInfo, ok := loadCachedToken(key); ok {
 			return tokenInfo, nil
 		}
@@ -104,7 +104,7 @@ func validCachedToken(cached interface{}) (*TokenInfo, bool) {
 	return tokenInfo, tokenInfo.ExpiresAt.After(timeNow().Add(tokenExpiryBuffer))
 }
 
-func loadCachedToken(key string) (*TokenInfo, bool) {
+func loadCachedToken(key any) (*TokenInfo, bool) {
 	cached, ok := tokenCache.Load(key)
 	if !ok {
 		return nil, false
@@ -148,7 +148,7 @@ func ClearTokenCache() {
 
 // InvalidateToken removes the cached token for config.
 func InvalidateToken(config *CriblConfig) {
-	key, err := tokenCacheKey(config)
+	key, err := scopedTokenCacheKey(config)
 	if err != nil {
 		return
 	}
@@ -157,7 +157,7 @@ func InvalidateToken(config *CriblConfig) {
 
 // InvalidateTokenValue removes the cached token for config only when it matches token.
 func InvalidateTokenValue(config *CriblConfig, token string) {
-	key, err := tokenCacheKey(config)
+	key, err := scopedTokenCacheKey(config)
 	if err != nil {
 		return
 	}
@@ -176,6 +176,28 @@ func InvalidateTokenValue(config *CriblConfig, token string) {
 func RefreshToken(ctx context.Context, config *CriblConfig) (string, error) {
 	InvalidateToken(config)
 	return GetToken(ctx, config)
+}
+
+type customTokenCacheKey struct {
+	credentials string
+	client      *http.Client
+	scope       string
+}
+
+func scopedTokenCacheKey(config *CriblConfig) (any, error) {
+	key, err := tokenCacheKey(config)
+	if err != nil {
+		return nil, err
+	}
+	// Custom clients are isolated unless their owner explicitly supplies an
+	// equivalent transport scope. Keeping the pointer also prevents address reuse.
+	if IsOnPrem(config) && config.HTTPClient != nil {
+		if config.HTTPClientCacheScope != "" {
+			return customTokenCacheKey{credentials: key, scope: config.HTTPClientCacheScope}, nil
+		}
+		return customTokenCacheKey{credentials: key, client: config.HTTPClient}, nil
+	}
+	return key, nil
 }
 
 func tokenCacheKey(config *CriblConfig) (string, error) {
@@ -236,7 +258,7 @@ func getOnPremBearerToken(ctx context.Context, config *CriblConfig) (*TokenInfo,
 		return nil, fmt.Errorf("failed to marshal request body: %v", err)
 	}
 
-	responseBody, err := doTokenRequest(ctx, http.MethodPost, authURL, "application/json", body)
+	responseBody, err := doTokenRequest(ctx, config.HTTPClient, http.MethodPost, authURL, "application/json", body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get on-prem bearer token: %v", err)
 	}
@@ -291,7 +313,7 @@ func getCloudBearerToken(ctx context.Context, config *CriblConfig) (*TokenInfo, 
 		contentType = "application/json"
 	}
 
-	responseBody, err := doTokenRequest(ctx, http.MethodPost, authURL, contentType, body)
+	responseBody, err := doTokenRequest(ctx, nil, http.MethodPost, authURL, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -375,9 +397,12 @@ func localBaseURL(input string) (string, bool, error) {
 	return "", false, nil
 }
 
-func doTokenRequest(ctx context.Context, method, requestURL, contentType string, body []byte) ([]byte, error) {
+func doTokenRequest(ctx context.Context, httpClient *http.Client, method, requestURL, contentType string, body []byte) ([]byte, error) {
 	attempts := 0
 	retryClient := retryablehttp.NewClient()
+	if httpClient != nil {
+		retryClient.HTTPClient = httpClient
+	}
 	retryClient.RetryMax = tokenRetryMax
 	retryClient.RetryWaitMin = tokenRetryWaitMin
 	retryClient.RetryWaitMax = tokenRetryWaitMax

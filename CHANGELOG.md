@@ -13,6 +13,7 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added `criblio_system_limits` resource and data source using the upstream `/system/limits` endpoint, with import/export support, safe read/merge/PATCH updates for selected writable limits, and read-only access to operator-controlled or feature-gated limits.
 - Added monitor muting rules, notification policies, shared configurations, and profiles, with data sources, examples, acceptance tests, and import/export support.
 - Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
 - Added `criblio_notification_template` resource and single/list data sources for custom Handlebars templates, with import and export support. Requires V2 Notifications; built-in templates remain available through data sources and are excluded from resource exports.

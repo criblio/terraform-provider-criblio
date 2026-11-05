@@ -26,6 +26,7 @@ type ResourceDef struct {
 	ValidateRequiredUnions bool
 	GenerateDataSourceDocs bool
 	RefreshFromAPI         bool
+	ResourceFactoryHook    string
 }
 
 // OperationDef describes one annotated OpenAPI operation.
@@ -107,6 +108,15 @@ type FieldDef struct {
 	ObjectAsJSON       bool
 	NotNull            bool
 	ValidJSON          bool
+
+	BooleanRequirements []BooleanRequirement
+}
+
+// BooleanRequirement preserves a boolean if/then required constraint on an object.
+type BooleanRequirement struct {
+	Property string
+	Value    bool
+	Required []string
 }
 
 // OneOfVariantDef describes one flattened oneOf variant model.

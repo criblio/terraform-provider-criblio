@@ -118,6 +118,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 }
 
 var importMetadataOverrides = map[string]ResourceMetadata{
+	"criblio_system_limits":                {ModelTypeName: "SystemLimitsResourceModel", ImportIDFormat: "group_id", RESTListPath: "/m/{group_id}/system/limits", RESTGetPath: "/m/{group_id}/system/limits", ListUseGroupIDAsItemID: true},
 	"criblio_app":                          {ImportIDFormat: "id", RESTListPath: "/apps", RESTGetPath: "/apps/{id}"},
 	"criblio_appscope_config":              {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/appscope-configs", RESTGetPath: "/m/{group_id}/lib/appscope-configs/{id}"},
 	"criblio_collector":                    {ListMethod: "ListCollectors", ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/jobs", RESTGetPath: "/m/{group_id}/lib/jobs/{id}"},
@@ -187,6 +188,9 @@ func ImportMetadata() map[string]ResourceMetadata {
 	}
 	for k, o := range importMetadataOverrides {
 		m := out[k]
+		if o.ModelTypeName != "" {
+			m.ModelTypeName = o.ModelTypeName
+		}
 		if o.SDKService != "" {
 			m.SDKService = o.SDKService
 		}

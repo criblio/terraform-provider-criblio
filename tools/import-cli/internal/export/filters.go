@@ -110,11 +110,11 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 		}
 	}
 	// Skip when id equals group_id (wrong format): the API returns items with their own ids (e.g. "test.csv", "my_event_breaker_rule"),
-	// not group names. Exception: criblio_group_system_settings and criblio_routes intentionally use group_id as id (one resource per group).
+	// not group names. Group singletons intentionally use group_id as id.
 	if gid := idMap["group_id"]; gid != "" {
 		if id := idMap["id"]; id != "" && id == gid {
 			switch typeName {
-			case "criblio_group", "criblio_group_system_settings", "criblio_routes":
+			case "criblio_group", "criblio_group_system_settings", "criblio_system_limits", "criblio_routes":
 				// Intentional: one resource per group, id=group_id
 			default:
 				return true

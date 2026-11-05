@@ -36,8 +36,10 @@ type OneOfConfig struct {
 	SupportedBlockNames []string
 }
 
-// ResourceMetadata holds SDK service/method names and import ID format for a resource type.
+// ResourceMetadata holds model, REST/SDK endpoint and import ID metadata for a resource type.
 type ResourceMetadata struct {
+	// ModelTypeName overrides reflection for provider-owned resource wrappers.
+	ModelTypeName  string
 	SDKService     string // e.g. "Inputs", "Pipelines"
 	ListMethod     string // e.g. "ListInput"; empty if no working list API
 	GetMethod      string // e.g. "GetInputByID"
