@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -35,7 +36,8 @@ func TestProviderReconfigurationReusesAuthentication(t *testing.T) {
 					t.Setenv("CRIBL_CA_CERT_FILE", "")
 					auth.ClearTokenCache()
 					t.Cleanup(auth.ClearTokenCache)
-					var logins atomic.Int32
+					var logins, apiConnectionCount atomic.Int32
+					var apiConnections sync.Map
 					handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 						var body any
 						switch r.URL.Path {
@@ -43,6 +45,9 @@ func TestProviderReconfigurationReusesAuthentication(t *testing.T) {
 							logins.Add(1)
 							body = map[string]any{"token": "test-token", "access_token": "test-token", "expires_in": 3600}
 						case "/api/v1/master/groups/default":
+							if _, loaded := apiConnections.LoadOrStore(r.RemoteAddr, struct{}{}); !loaded {
+								apiConnectionCount.Add(1)
+							}
 							body = map[string]any{"id": "default"}
 						default:
 							t.Errorf("unexpected path: %s", r.URL.Path)
@@ -54,7 +59,7 @@ func TestProviderReconfigurationReusesAuthentication(t *testing.T) {
 						}
 					})
 					var server *httptest.Server
-					if trust == "default" {
+					if trust == "default" || mode == "cloud" {
 						server = httptest.NewServer(handler)
 					} else {
 						server = httptest.NewTLSServer(handler)
@@ -70,7 +75,11 @@ func TestProviderReconfigurationReusesAuthentication(t *testing.T) {
 					case "skip":
 						values["insecure_skip_verify"] = true
 					case "custom-ca":
-						values["ca_cert_file"] = writeTLSCAFile(t, server)
+						if mode == "cloud" {
+							values["ca_cert_file"] = "/missing/onprem-only-ca.pem"
+						} else {
+							values["ca_cert_file"] = writeTLSCAFile(t, server)
+						}
 					}
 					for range 3 {
 						response := configureTLSProvider(t, values)
@@ -81,6 +90,9 @@ func TestProviderReconfigurationReusesAuthentication(t *testing.T) {
 						if _, err := restclient.GetRaw(context.Background(), clients.RC, "/master/groups/default"); err != nil {
 							t.Fatal(err)
 						}
+					}
+					if (mode == "cloud" || trust == "default") && apiConnectionCount.Load() != 1 {
+						t.Fatalf("API opened %d connections across configurations, want 1 reused connection", apiConnectionCount.Load())
 					}
 					if got := logins.Load(); got != 1 {
 						t.Fatalf("provider reconfiguration fetched %d tokens, want 1 cached token", got)
@@ -162,7 +174,7 @@ func TestProviderTLSRequests(t *testing.T) {
 					ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 					defer cancel()
 					_, err := restclient.GetRaw(ctx, clients.RC, "/master/groups/default")
-					if trust == "default" || trust == "explicit-false" {
+					if mode == "cloud-oauth" || trust == "default" || trust == "explicit-false" {
 						if err == nil || !strings.Contains(err.Error(), "certificate signed by unknown authority") {
 							t.Fatalf("request error = %v, want untrusted certificate", err)
 						}
@@ -192,6 +204,9 @@ func TestProviderTLSRequests(t *testing.T) {
 }
 
 func TestProviderTLSConfigurationErrors(t *testing.T) {
+	t.Setenv("CRIBL_CLIENT_ID", "test-client")
+	t.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	t.Setenv("CRIBL_ONPREM_SERVER_URL", "https://onprem.example")
 	invalidCA := filepath.Join(t.TempDir(), "invalid.pem")
 	if err := os.WriteFile(invalidCA, []byte("not a certificate"), 0600); err != nil {
 		t.Fatal(err)
@@ -223,11 +238,44 @@ func TestProviderTLSConfigurationErrors(t *testing.T) {
 	}
 }
 
+func TestProviderCloudIgnoresOnPremTLSConfiguration(t *testing.T) {
+	t.Setenv("CRIBL_CLIENT_ID", "test-client")
+	t.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	t.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	t.Setenv("CRIBL_INSECURE_SKIP_VERIFY", "invalid-onprem-setting")
+	t.Setenv("CRIBL_CA_CERT_FILE", "/missing/onprem-ca.pem")
+	server := httptest.NewTLSServer(http.NotFoundHandler())
+	defer server.Close()
+	for _, values := range []map[string]any{
+		{},
+		{"insecure_skip_verify": true},
+		{"ca_cert_file": "/missing/explicit-onprem-ca.pem"},
+		{"insecure_skip_verify": tftypes.UnknownValue, "ca_cert_file": tftypes.UnknownValue},
+	} {
+		values["server_url"] = server.URL
+		values["cloud_domain"] = server.URL
+		values["bearer_auth"] = "test-token"
+		response := configureTLSProvider(t, values)
+		if response.Diagnostics.HasError() {
+			t.Fatalf("cloud validated on-prem TLS settings: %v", response.Diagnostics)
+		}
+		clients := response.ResourceData.(*ProviderClients)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		_, err := restclient.GetRaw(ctx, clients.RC, "/master/groups/default")
+		cancel()
+		if err == nil || !strings.Contains(err.Error(), "certificate signed by unknown authority") {
+			t.Fatalf("cloud request error = %v, want default TLS verification", err)
+		}
+	}
+}
+
 func TestProviderTLSTransportIsolation(t *testing.T) {
 	t.Setenv("CRIBL_INSECURE_SKIP_VERIFY", "invalid")
 	t.Setenv("CRIBL_CA_CERT_FILE", "/missing/env-ca.pem")
-	// Explicit false and an empty CA path override environment values.
-	model := CriblioProviderModel{InsecureSkipVerify: types.BoolValue(false), CACertFile: types.StringValue("")}
+	// Explicit provider settings override environment values.
+	server := httptest.NewTLSServer(http.NotFoundHandler())
+	defer server.Close()
+	model := CriblioProviderModel{InsecureSkipVerify: types.BoolValue(false), CACertFile: types.StringValue(writeTLSCAFile(t, server))}
 	transport, _, err := model.httpTransport()
 	if err != nil {
 		t.Fatal(err)

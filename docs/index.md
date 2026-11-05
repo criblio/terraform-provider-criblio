@@ -40,6 +40,8 @@ provider "criblio" {
 
 ## TLS Certificates
 
+These settings apply only to on-prem deployments selected by `CRIBL_ONPREM_SERVER_URL` or `onprem_server_url` in the credentials file. Cribl Cloud uses its default TLS verification, authentication transport, and connection pool; it ignores these on-prem TLS settings.
+
 Certificate and hostname verification is enabled by default for all API and authentication requests, including on-prem username/password login. To trust an internal CA or self-signed certificate, supply a PEM CA bundle on the machine running Terraform:
 
 ```terraform
@@ -66,11 +68,11 @@ You can also set `CRIBL_INSECURE_SKIP_VERIFY=true`. Prefer `ca_cert_file` for pr
 ### Optional
 
 - `bearer_auth` (String, Sensitive) HTTP Bearer.
-- `ca_cert_file` (String) Path to a PEM-encoded CA certificate bundle to trust in addition to system CAs for API and authentication requests. Configurable via `CRIBL_CA_CERT_FILE`.
+- `ca_cert_file` (String) Path to a PEM-encoded CA certificate bundle to trust in addition to system CAs for on-prem API and login requests. Ignored for Cribl Cloud. Configurable via `CRIBL_CA_CERT_FILE`.
 - `client_id` (String, Sensitive) OAuth2 Client Credentials Flow client identifier. Configurable via environment variable `CRIBL_CLIENT_ID`.
 - `client_secret` (String, Sensitive) OAuth2 Client Credentials Flow client secret. Configurable via environment variable `CRIBL_CLIENT_SECRET`.
 - `cloud_domain` (String) Cribl Cloud domain name (defaults to cribl.cloud)
-- `insecure_skip_verify` (Boolean) Skip TLS certificate and hostname verification for API and authentication requests. Defaults to false. Configurable via `CRIBL_INSECURE_SKIP_VERIFY`. Use only in trusted development or testing environments; prefer `ca_cert_file` for internal CAs.
+- `insecure_skip_verify` (Boolean) Skip TLS certificate and hostname verification for on-prem API and login requests. Ignored for Cribl Cloud. Defaults to false. Configurable via `CRIBL_INSECURE_SKIP_VERIFY`. Use only in trusted development or testing environments; prefer `ca_cert_file` for internal CAs.
 - `organization_id` (String) The Organization ID (defaults to ian)
 - `server_url` (String) Server URL (defaults to https://{workspaceId}-{organizationId}.{cloudDomain})
 - `token_url` (String, Sensitive) OAuth2 Client Credentials Flow token URL.

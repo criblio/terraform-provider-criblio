@@ -60,11 +60,11 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"ca_cert_file": schema.StringAttribute{
-				MarkdownDescription: "Path to a PEM-encoded CA certificate bundle to trust in addition to system CAs for API and authentication requests. Configurable via `CRIBL_CA_CERT_FILE`.",
+				MarkdownDescription: "Path to a PEM-encoded CA certificate bundle to trust in addition to system CAs for on-prem API and login requests. Ignored for Cribl Cloud. Configurable via `CRIBL_CA_CERT_FILE`.",
 				Optional:            true,
 			},
 			"insecure_skip_verify": schema.BoolAttribute{
-				MarkdownDescription: "Skip TLS certificate and hostname verification for API and authentication requests. Defaults to false. Configurable via `CRIBL_INSECURE_SKIP_VERIFY`. Use only in trusted development or testing environments; prefer `ca_cert_file` for internal CAs.",
+				MarkdownDescription: "Skip TLS certificate and hostname verification for on-prem API and login requests. Ignored for Cribl Cloud. Defaults to false. Configurable via `CRIBL_INSECURE_SKIP_VERIFY`. Use only in trusted development or testing environments; prefer `ca_cert_file` for internal CAs.",
 				Optional:            true,
 			},
 			"bearer_auth": schema.StringAttribute{
@@ -116,12 +116,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
 	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	transport, authCacheScope, err := data.httpTransport()
-	if err != nil {
-		resp.Diagnostics.AddError("Invalid TLS Configuration", err.Error())
 		return
 	}
 
@@ -198,6 +192,22 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		clientOauth.TokenURL = data.TokenURL.ValueString()
 	}
 
+	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
+	transport := http.DefaultTransport
+	if auth.IsOnPrem(restCredentials) {
+		onPremTransport, authCacheScope, err := data.httpTransport()
+		if err != nil {
+			resp.Diagnostics.AddError("Invalid TLS Configuration", err.Error())
+			return
+		}
+		transport = onPremTransport
+		if authCacheScope != "" {
+			// Use the on-prem TLS settings for login without logging token bodies.
+			restCredentials.HTTPClient = &http.Client{Transport: transport}
+			restCredentials.HTTPClientCacheScope = authCacheScope
+		}
+	}
+
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
 		Transport:  transport,
@@ -207,10 +217,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		Transport: NewProviderHTTPTransport(providerHTTPTransportOpts),
 	}
 
-	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
-	// Share TLS settings with authentication without logging token request bodies.
-	restCredentials.HTTPClient = &http.Client{Transport: transport}
-	restCredentials.HTTPClientCacheScope = authCacheScope
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
 			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),

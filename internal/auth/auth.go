@@ -191,7 +191,7 @@ func scopedTokenCacheKey(config *CriblConfig) (any, error) {
 	}
 	// Custom clients are isolated unless their owner explicitly supplies an
 	// equivalent transport scope. Keeping the pointer also prevents address reuse.
-	if config.HTTPClient != nil {
+	if IsOnPrem(config) && config.HTTPClient != nil {
 		if config.HTTPClientCacheScope != "" {
 			return customTokenCacheKey{credentials: key, scope: config.HTTPClientCacheScope}, nil
 		}
@@ -313,7 +313,7 @@ func getCloudBearerToken(ctx context.Context, config *CriblConfig) (*TokenInfo, 
 		contentType = "application/json"
 	}
 
-	responseBody, err := doTokenRequest(ctx, config.HTTPClient, http.MethodPost, authURL, contentType, body)
+	responseBody, err := doTokenRequest(ctx, nil, http.MethodPost, authURL, contentType, body)
 	if err != nil {
 		return nil, err
 	}

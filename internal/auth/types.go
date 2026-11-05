@@ -17,11 +17,12 @@ type CriblConfig struct {
 	OnpremUsername  string `json:"onprem_username" ini:"onprem_username"`
 	OnpremPassword  string `json:"onprem_password" ini:"onprem_password"`
 
-	// HTTPClient optionally supplies the authentication transport. It is runtime-only
-	// and must not be changed after the config is used to fetch a token.
+	// HTTPClient optionally supplies the on-prem login transport. Cloud OAuth
+	// ignores it. It is runtime-only and must not be changed after the config
+	// is used to fetch a token.
 	HTTPClient *http.Client `json:"-" ini:"-"`
 
-	// HTTPClientCacheScope opts into token sharing across HTTP clients with the
+	// HTTPClientCacheScope opts into on-prem token sharing across HTTP clients with the
 	// same immutable transport and TLS trust settings. Callers must derive it
 	// from those settings, including CA contents, rather than a CA file path.
 	// When empty, custom clients remain isolated by client identity.

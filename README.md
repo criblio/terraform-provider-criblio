@@ -216,6 +216,8 @@ provider "criblio" {
 
 #### TLS Certificates
 
+These settings apply only to on-prem deployments selected by `CRIBL_ONPREM_SERVER_URL` or `onprem_server_url` in the credentials file. Cribl Cloud uses its default TLS verification, authentication transport, and connection pool; it ignores these on-prem TLS settings.
+
 TLS certificate and hostname verification is enabled by default for API and authentication requests. For Leaders using an internal CA or a self-signed certificate, supply a PEM CA bundle on the machine running Terraform:
 
 ```hcl

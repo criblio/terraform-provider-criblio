@@ -35,6 +35,9 @@ func (data CriblioProviderModel) httpTransport() (*http.Transport, string, error
 	if !ok {
 		return nil, "", fmt.Errorf("default HTTP transport must be an *http.Transport")
 	}
+	if !skipVerify && caFile == "" && (base.TLSClientConfig == nil || !base.TLSClientConfig.InsecureSkipVerify) {
+		return base, "", nil
+	}
 	transport := base.Clone()
 	if transport.TLSClientConfig == nil {
 		transport.TLSClientConfig = &tls.Config{}
@@ -60,6 +63,6 @@ func (data CriblioProviderModel) httpTransport() (*http.Transport, string, error
 	// DefaultTransport must remain immutable after use. Its identity scopes any
 	// inherited transport settings; hash CA contents so replacing a file changes
 	// the trust scope while equivalent provider configurations reuse tokens.
-	scope := fmt.Sprintf("provider-tls:%p:%t:%x", base, skipVerify, sha256.Sum256(caPEM))
+	scope := fmt.Sprintf("onprem-tls:%p:%t:%x", base, skipVerify, sha256.Sum256(caPEM))
 	return transport, scope, nil
 }
