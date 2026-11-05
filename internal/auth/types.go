@@ -20,6 +20,12 @@ type CriblConfig struct {
 	// HTTPClient optionally supplies the authentication transport. It is runtime-only
 	// and must not be changed after the config is used to fetch a token.
 	HTTPClient *http.Client `json:"-" ini:"-"`
+
+	// HTTPClientCacheScope opts into token sharing across HTTP clients with the
+	// same immutable transport and TLS trust settings. Callers must derive it
+	// from those settings, including CA contents, rather than a CA file path.
+	// When empty, custom clients remain isolated by client identity.
+	HTTPClientCacheScope string `json:"-" ini:"-"`
 }
 
 // TokenInfo holds a bearer token and its expiration time.

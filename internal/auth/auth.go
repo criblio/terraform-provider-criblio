@@ -181,6 +181,7 @@ func RefreshToken(ctx context.Context, config *CriblConfig) (string, error) {
 type customTokenCacheKey struct {
 	credentials string
 	client      *http.Client
+	scope       string
 }
 
 func scopedTokenCacheKey(config *CriblConfig) (any, error) {
@@ -188,9 +189,12 @@ func scopedTokenCacheKey(config *CriblConfig) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Keep the client in the key so custom TLS settings cannot share cached
-	// authentication with another client, even if a pointer address is reused.
+	// Custom clients are isolated unless their owner explicitly supplies an
+	// equivalent transport scope. Keeping the pointer also prevents address reuse.
 	if config.HTTPClient != nil {
+		if config.HTTPClientCacheScope != "" {
+			return customTokenCacheKey{credentials: key, scope: config.HTTPClientCacheScope}, nil
+		}
 		return customTokenCacheKey{credentials: key, client: config.HTTPClient}, nil
 	}
 	return key, nil

@@ -13,12 +13,83 @@ import (
 	"testing"
 	"time"
 
+	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 )
+
+func TestProviderReconfigurationReusesAuthentication(t *testing.T) {
+	for _, mode := range []string{"onprem", "cloud"} {
+		t.Run(mode, func(t *testing.T) {
+			for _, trust := range []string{"default", "skip", "custom-ca"} {
+				t.Run(trust, func(t *testing.T) {
+					t.Setenv("CRIBL_BEARER_TOKEN", "")
+					t.Setenv("CRIBL_CLIENT_ID", "test-client")
+					t.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+					t.Setenv("CRIBL_ONPREM_USERNAME", "test-user")
+					t.Setenv("CRIBL_ONPREM_PASSWORD", "test-password")
+					t.Setenv("CRIBL_INSECURE_SKIP_VERIFY", "")
+					t.Setenv("CRIBL_CA_CERT_FILE", "")
+					auth.ClearTokenCache()
+					t.Cleanup(auth.ClearTokenCache)
+					var logins atomic.Int32
+					handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						var body any
+						switch r.URL.Path {
+						case "/api/v1/auth/login", "/oauth/token":
+							logins.Add(1)
+							body = map[string]any{"token": "test-token", "access_token": "test-token", "expires_in": 3600}
+						case "/api/v1/master/groups/default":
+							body = map[string]any{"id": "default"}
+						default:
+							t.Errorf("unexpected path: %s", r.URL.Path)
+							http.NotFound(w, r)
+							return
+						}
+						if err := json.NewEncoder(w).Encode(body); err != nil {
+							t.Error(err)
+						}
+					})
+					var server *httptest.Server
+					if trust == "default" {
+						server = httptest.NewServer(handler)
+					} else {
+						server = httptest.NewTLSServer(handler)
+					}
+					defer server.Close()
+					onpremURL := ""
+					if mode == "onprem" {
+						onpremURL = server.URL
+					}
+					t.Setenv("CRIBL_ONPREM_SERVER_URL", onpremURL)
+					values := map[string]any{"server_url": server.URL, "cloud_domain": server.URL}
+					switch trust {
+					case "skip":
+						values["insecure_skip_verify"] = true
+					case "custom-ca":
+						values["ca_cert_file"] = writeTLSCAFile(t, server)
+					}
+					for range 3 {
+						response := configureTLSProvider(t, values)
+						if response.Diagnostics.HasError() {
+							t.Fatal(response.Diagnostics)
+						}
+						clients := response.ResourceData.(*ProviderClients)
+						if _, err := restclient.GetRaw(context.Background(), clients.RC, "/master/groups/default"); err != nil {
+							t.Fatal(err)
+						}
+					}
+					if got := logins.Load(); got != 1 {
+						t.Fatalf("provider reconfiguration fetched %d tokens, want 1 cached token", got)
+					}
+				})
+			}
+		})
+	}
+}
 
 func TestProviderTLSRequests(t *testing.T) {
 	for _, mode := range []string{"onprem-login", "onprem-bearer", "cloud-oauth"} {
@@ -108,7 +179,7 @@ func TestProviderTLSRequests(t *testing.T) {
 						t.Fatal(err)
 					}
 					wantLogins := int32(1)
-					if mode == "onprem-bearer" {
+					if mode == "onprem-bearer" || trust == "env-skip" || trust == "env-ca" {
 						wantLogins = 0
 					}
 					if loginCount.Load()-beforeLogin != wantLogins || apiCount.Load()-beforeAPI != 2 {
@@ -157,7 +228,7 @@ func TestProviderTLSTransportIsolation(t *testing.T) {
 	t.Setenv("CRIBL_CA_CERT_FILE", "/missing/env-ca.pem")
 	// Explicit false and an empty CA path override environment values.
 	model := CriblioProviderModel{InsecureSkipVerify: types.BoolValue(false), CACertFile: types.StringValue("")}
-	transport, err := model.httpTransport()
+	transport, _, err := model.httpTransport()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,13 +241,46 @@ func TestProviderTLSTransportIsolation(t *testing.T) {
 		t.Fatal("provider shares mutable transport or TLS configuration with the default transport")
 	}
 	transport.TLSClientConfig.InsecureSkipVerify = true
-	other, err := model.httpTransport()
+	other, _, err := model.httpTransport()
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer other.CloseIdleConnections()
 	if other.TLSClientConfig.InsecureSkipVerify {
 		t.Fatal("changing one provider affected another provider")
+	}
+}
+
+func TestProviderTLSAuthenticationScopeUsesCAContents(t *testing.T) {
+	t.Setenv("CRIBL_INSECURE_SKIP_VERIFY", "")
+	t.Setenv("CRIBL_CA_CERT_FILE", "")
+	server := httptest.NewTLSServer(http.NotFoundHandler())
+	defer server.Close()
+	firstFile := writeTLSCAFile(t, server)
+	secondFile := writeTLSCAFile(t, server)
+	scopeFor := func(filename string) string {
+		t.Helper()
+		model := CriblioProviderModel{CACertFile: types.StringValue(filename)}
+		transport, scope, err := model.httpTransport()
+		if err != nil {
+			t.Fatal(err)
+		}
+		transport.CloseIdleConnections()
+		return scope
+	}
+	firstScope := scopeFor(firstFile)
+	if secondScope := scopeFor(secondFile); secondScope != firstScope {
+		t.Fatal("identical CA contents at different paths have different scopes")
+	}
+	contents, err := os.ReadFile(secondFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(secondFile, append(contents, []byte("\n# updated CA bundle\n")...), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if updatedScope := scopeFor(secondFile); updatedScope == firstScope {
+		t.Fatal("replacing CA contents at the same path reused the old scope")
 	}
 }
 
@@ -189,7 +293,7 @@ func TestProviderTLSCustomCAPreservesHostnameVerification(t *testing.T) {
 		InsecureSkipVerify: types.BoolValue(false),
 		CACertFile:         types.StringValue(writeTLSCAFile(t, server)),
 	}
-	transport, err := model.httpTransport()
+	transport, _, err := model.httpTransport()
 	if err != nil {
 		t.Fatal(err)
 	}

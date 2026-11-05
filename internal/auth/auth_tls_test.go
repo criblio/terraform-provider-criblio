@@ -10,6 +10,52 @@ import (
 	"testing"
 )
 
+func TestHTTPClientCacheScope(t *testing.T) {
+	ClearTokenCache()
+	t.Cleanup(ClearTokenCache)
+	var requests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests.Add(1)
+		if err := json.NewEncoder(w).Encode(map[string]any{"access_token": "test-token", "expires_in": 3600}); err != nil {
+			t.Error(err)
+		}
+	}))
+	defer server.Close()
+	config := CriblConfig{
+		CloudDomain: server.URL, ClientID: "client", ClientSecret: "secret",
+		HTTPClient: &http.Client{}, HTTPClientCacheScope: "trust-a",
+	}
+	peer := config
+	peer.HTTPClient = &http.Client{}
+	other := peer
+	other.HTTPClientCacheScope = "trust-b"
+	ctx := context.Background()
+	for _, cfg := range []*CriblConfig{&config, &peer, &other} {
+		if _, err := GetToken(ctx, cfg); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if got := requests.Load(); got != 2 {
+		t.Fatalf("requests = %d, want 2 for separate trust scopes", got)
+	}
+	InvalidateTokenValue(&peer, "stale-token")
+	if _, err := GetToken(ctx, &config); err != nil {
+		t.Fatal(err)
+	}
+	if got := requests.Load(); got != 2 {
+		t.Fatalf("stale invalidation fetched another token: requests = %d", got)
+	}
+	InvalidateTokenValue(&peer, "test-token")
+	for _, cfg := range []*CriblConfig{&config, &other} {
+		if _, err := GetToken(ctx, cfg); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if got := requests.Load(); got != 3 {
+		t.Fatalf("requests after invalidation = %d, want 3", got)
+	}
+}
+
 func TestCustomHTTPClientTokenCacheIsolation(t *testing.T) {
 	for _, mode := range []string{"onprem", "cloud"} {
 		t.Run(mode, func(t *testing.T) {

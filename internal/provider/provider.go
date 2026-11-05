@@ -119,7 +119,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		return
 	}
 
-	transport, err := data.httpTransport()
+	transport, authCacheScope, err := data.httpTransport()
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid TLS Configuration", err.Error())
 		return
@@ -210,6 +210,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
 	// Share TLS settings with authentication without logging token request bodies.
 	restCredentials.HTTPClient = &http.Client{Transport: transport}
+	restCredentials.HTTPClientCacheScope = authCacheScope
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
 			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
