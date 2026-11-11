@@ -27,6 +27,7 @@ func (tr credentialTransport) RoundTrip(req *http.Request) (*http.Response, erro
 func TestExporterOmitsCredentialLiterals(t *testing.T) {
 	reg := buildTestRegistry(t)
 	tests := []struct{ name, typeName, body, field string }{
+		{"Workspace SSL passphrase", "criblio_workspace_system_settings", `{"api":{"ssl":{"passphrase":"ISSUE236_DUMMY"}}}`, "passphrase"},
 		{"Database connection string", "criblio_database_connection", `{"id":"example","authType":"manual","databaseType":"postgres","description":"test","connectionString":"postgresql://user:ISSUE236_DUMMY@db.example.com:5432/appdb"}`, "connection_string"},
 		{"HTTP Raw tokens", "criblio_source", `{"id":"example","type":"http_raw","host":"0.0.0.0","port":10080,"authTokens":["ISSUE236_DUMMY"]}`, "auth_tokens"},
 		{"HTTP tokens", "criblio_source", `{"id":"example","type":"http","authTokens":["ISSUE236_DUMMY"]}`, "auth_tokens"},
@@ -53,6 +54,9 @@ func TestExporterOmitsCredentialLiterals(t *testing.T) {
 			}
 			client := &importclient.Client{REST: restclient.New(restclient.Config{BaseURL: "https://example.invalid", BearerToken: "dummy", HTTPClient: &http.Client{Transport: credentialTransport{body: tt.body}}})}
 			ids := map[string]string{"group_id": "default", "id": "example"}
+			if tt.typeName == "criblio_workspace_system_settings" {
+				ids = map[string]string{"id": "conf"}
+			}
 			if strings.Contains(tt.typeName, "pack_") {
 				ids["pack"] = "example-pack"
 			}

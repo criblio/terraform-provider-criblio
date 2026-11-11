@@ -13,6 +13,7 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	"github.com/criblio/terraform-provider-criblio/internal/searchacl"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -217,6 +218,13 @@ func convertGeneratedModelFromRawItem(e registry.Entry, modelType reflect.Type, 
 func callRESTGetByID(ctx context.Context, client *importclient.Client, e registry.Entry, requestParams map[string]string) (json.RawMessage, error) {
 	if client == nil || client.REST == nil {
 		return nil, fmt.Errorf("REST client is nil")
+	}
+	if e.TypeName == "criblio_search_dataset_acl" {
+		grants, err := searchacl.New(client.REST, requestParams["DatasetID"]).Read(ctx, true, true)
+		if err != nil {
+			return nil, err
+		}
+		return json.Marshal(grants)
 	}
 	values := restPathValues(requestParams)
 	path := renderRESTPath(e.RESTGetPath, values)

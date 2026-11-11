@@ -1148,6 +1148,9 @@ func needsFmt(resource parser.ResourceDef) bool {
 }
 
 func needsClientFmt(resource parser.ResourceDef) bool {
+	if resource.ClientStub {
+		return true
+	}
 	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" || resource.StructName == "SearchDataset" || resource.StructName == "SearchDatasetProvider" {
 		return true
 	}
@@ -2342,7 +2345,13 @@ func generatedImportCommand(resource parser.ResourceDef) string {
 		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
 	}
 	if len(fields) == 0 {
-		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), "example")
+		id := "example"
+		for _, field := range resource.Fields {
+			if field.TerraformName == "id" && field.FixedValue != "" {
+				id = field.FixedValue
+			}
+		}
+		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), id)
 	}
 	parts := make([]string, 0, len(fields))
 	for _, field := range fields {
@@ -2435,10 +2444,16 @@ func generatedImportBlock(resource parser.ResourceDef) string {
 }`, resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
 	}
 	if len(fields) == 0 {
+		id := "example"
+		for _, field := range resource.Fields {
+			if field.TerraformName == "id" && field.FixedValue != "" {
+				id = field.FixedValue
+			}
+		}
 		return fmt.Sprintf(`import {
   to = %s.my_%s
-  id = "example"
-}`, resourceType(resource), resourceType(resource))
+  id = %q
+}`, resourceType(resource), resourceType(resource), id)
 	}
 	var output strings.Builder
 	fmt.Fprintf(&output, `import {

@@ -13,6 +13,8 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added `criblio_search_dataset_acl` resource and data source to reconcile explicit user, API-credential, and team dataset shares, with drift detection and import/export support.
+- Added `criblio_workspace_system_settings` resource and data source for workspace-level configuration, with import/export support, preservation of unmanaged settings, and drift detection for configured fields.
 - Added `criblio_system_limits` resource and data source using the upstream `/system/limits` endpoint, with import/export support, safe read/merge/PATCH updates for selected writable limits, and read-only access to operator-controlled or feature-gated limits.
 - Added monitor muting rules, notification policies, shared configurations, and profiles, with data sources, examples, acceptance tests, and import/export support.
 - Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
@@ -34,6 +36,7 @@ commit history, and tag-to-tag diffs.
 - Reverting codegen changes and adding example.
 
 ### Fixed
+- Fixed saved-query exports containing empty schedule notification objects so Terraform accepts them and import produces a clean plan, while preserving explicit notification enablement values.
 - Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)
 - Kept bulk export working when AI is disabled or consent is missing, while retaining dataset permission errors, and skipped the new intelligence/template acceptance tests on the on-prem fixture that lacks their prerequisites.
 - Allowed export discovery to continue when local_search list endpoints return HTTP 500 with "No workers registered".

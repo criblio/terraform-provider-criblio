@@ -118,8 +118,11 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.CreateDisabledMessage = scalarValue(operation, "x-terraform-create-disabled-message")
 			resource.ValidateRequiredUnions = boolAnnotation(operation, "x-terraform-validate-required-unions")
 			resource.GenerateDataSourceDocs = boolAnnotation(operation, "x-terraform-generate-data-source-docs")
+			resource.PartialObjectUpdates = boolAnnotation(operation, "x-terraform-partial-object-updates")
 			resource.RefreshFromAPI = boolAnnotation(operation, "x-terraform-refresh-from-api")
 			resource.ResourceFactoryHook = scalarValue(operation, "x-terraform-resource-factory-hook")
+			resource.DataSourceFactoryHook = scalarValue(operation, "x-terraform-data-source-factory-hook")
+			resource.ClientStub = boolAnnotation(operation, "x-terraform-client-stub")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
 			resource := ensureResource(resources, name)
@@ -268,7 +271,25 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	resource.Fields = fields
 	resource.OneOfVariants = variants
 	applyResourceCompatibility(resource)
+	if resource.PartialObjectUpdates {
+		makePartialObjectFields(resource.Fields)
+	}
 	return nil
+}
+
+// makePartialObjectFields allows the provider to merge selected object fields.
+// Array elements remain complete replacements and retain their required fields.
+func makePartialObjectFields(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		if field.RequestField && !field.Computed && !field.PathParam && !field.QueryParam {
+			field.Required = false
+			field.Optional = true
+		}
+		if field.Type == "object" {
+			makePartialObjectFields(field.Fields)
+		}
+	}
 }
 
 func appendMissingOneOfVariants(existing, additional []OneOfVariantDef) []OneOfVariantDef {
@@ -1505,6 +1526,10 @@ func parametersByLocation(operation *yaml.Node, location string) []FieldDef {
 			Description:   scalarValue(parameter, "description"),
 			Required:      true,
 			ForceNew:      true,
+		}
+		if renamed := scalarValue(parameter, "x-terraform-name"); renamed != "" {
+			field.TerraformName = renamed
+			field.GoName = exportName(renamed)
 		}
 		if schema, ok := mappingValue(parameter, "schema"); ok {
 			if fixedValue := fixedValueAnnotation(schema); fixedValue != "" {

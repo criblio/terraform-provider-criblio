@@ -795,9 +795,9 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Description: `Notification settings for scheduled query executions.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required:    true,
-								Optional:    false,
-								Computed:    false,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
 								Description: `If <code>true</code>, Notifications for the scheduled query are disabled. Default is <code>false</code> (Notifications enabled).`,
 							},
 						},
@@ -1068,8 +1068,48 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 	if state.User.IsUnknown() {
 		state.User = types.StringNull()
 	}
+	normalizeSearchSavedQueryScheduleNotifications(api, state)
 }
 
 func SearchSavedQueryDebug(value any) string {
 	return fmt.Sprintf("%v", value)
+}
+
+// normalizeSearchSavedQueryScheduleNotifications resolves the optional+computed
+// schedule.notifications.disabled attribute when the plan left it unknown
+// (config "notifications = {}"), preferring the API response and falling back
+// to null so applied state never carries an unknown value.
+func normalizeSearchSavedQueryScheduleNotifications(api *SearchSavedQueryModel, state *SearchSavedQueryModel) {
+	if state.Schedule.IsNull() || state.Schedule.IsUnknown() {
+		return
+	}
+	scheduleAttributes := state.Schedule.Attributes()
+	notifications, ok := scheduleAttributes["notifications"].(types.Object)
+	if !ok || notifications.IsNull() || notifications.IsUnknown() {
+		return
+	}
+	notificationAttributes := notifications.Attributes()
+	disabled, ok := notificationAttributes["disabled"].(types.Bool)
+	if !ok || !disabled.IsUnknown() {
+		return
+	}
+	value := types.BoolNull()
+	if api != nil && !api.Schedule.IsNull() && !api.Schedule.IsUnknown() {
+		if apiNotifications, ok := api.Schedule.Attributes()["notifications"].(types.Object); ok && !apiNotifications.IsNull() && !apiNotifications.IsUnknown() {
+			if apiDisabled, ok := apiNotifications.Attributes()["disabled"].(types.Bool); ok && !apiDisabled.IsNull() && !apiDisabled.IsUnknown() {
+				value = apiDisabled
+			}
+		}
+	}
+	notificationAttributes["disabled"] = value
+	normalizedNotifications, diags := types.ObjectValue(notifications.AttributeTypes(context.Background()), notificationAttributes)
+	if diags.HasError() {
+		return
+	}
+	scheduleAttributes["notifications"] = normalizedNotifications
+	normalizedSchedule, diags := types.ObjectValue(state.Schedule.AttributeTypes(context.Background()), scheduleAttributes)
+	if diags.HasError() {
+		return
+	}
+	state.Schedule = normalizedSchedule
 }

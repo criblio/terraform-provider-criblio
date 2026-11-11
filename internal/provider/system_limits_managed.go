@@ -3,10 +3,8 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/url"
 	"reflect"
-	"sort"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -26,15 +24,6 @@ var _ resource.ResourceWithImportState = &systemLimitsManagedResource{}
 var _ resource.ResourceWithModifyPlan = &systemLimitsManagedResource{}
 
 func newSystemLimitsManagedResource() resource.Resource { return &systemLimitsManagedResource{} }
-
-type systemLimitsPrivate interface {
-	GetKey(context.Context, string) ([]byte, diag.Diagnostics)
-	SetKey(context.Context, string, []byte) diag.Diagnostics
-}
-
-// Leaves are nil, objects contain the configured child fields. Persisting this
-// mask keeps ownership when the API removes a configured value during refresh.
-type systemLimitsMask map[string]systemLimitsMask
 
 const systemLimitsManagedFieldsKey = "system_limits_managed_fields"
 
@@ -67,7 +56,7 @@ func (r *systemLimitsManagedResource) ModifyPlan(ctx context.Context, req resour
 		resp.Diagnostics.AddError("Unable to record system limits ownership", err.Error())
 		return
 	}
-	fields, diags := systemLimitsManagedFields(ctx, systemLimitsFieldMask(configured))
+	fields, diags := settingsManagedFields(ctx, settingsMask(configured))
 	resp.Diagnostics.Append(diags...)
 	if !resp.Diagnostics.HasError() {
 		resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("managed_fields"), fields)...)
@@ -75,7 +64,7 @@ func (r *systemLimitsManagedResource) ModifyPlan(ctx context.Context, req resour
 }
 
 func (r *systemLimitsManagedResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var private systemLimitsPrivate
+	var private settingsPrivate
 	if resp.Private != nil {
 		private = resp.Private
 	}
@@ -83,7 +72,7 @@ func (r *systemLimitsManagedResource) Create(ctx context.Context, req resource.C
 }
 
 func (r *systemLimitsManagedResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var private systemLimitsPrivate
+	var private settingsPrivate
 	if resp.Private != nil {
 		private = resp.Private
 	}
@@ -95,7 +84,7 @@ func (r *systemLimitsManagedResource) Update(ctx context.Context, req resource.U
 	r.write(ctx, req.Plan, &prior, &resp.State, private, &resp.Diagnostics)
 }
 
-func (r *systemLimitsManagedResource) write(ctx context.Context, plan tfsdk.Plan, prior *SystemLimitsModel, state *tfsdk.State, private systemLimitsPrivate, diags *diag.Diagnostics) {
+func (r *systemLimitsManagedResource) write(ctx context.Context, plan tfsdk.Plan, prior *SystemLimitsModel, state *tfsdk.State, private settingsPrivate, diags *diag.Diagnostics) {
 	var model SystemLimitsModel
 	diags.Append(plan.Get(ctx, &model)...)
 	if diags.HasError() {
@@ -135,7 +124,7 @@ func (r *systemLimitsManagedResource) write(ctx context.Context, plan tfsdk.Plan
 		return
 	}
 	copySystemLimitsReadOnly(readOnly, &model)
-	merged, err := mergeSystemLimits(*current, configured)
+	merged, err := mergeSettingsFields(*current, configured)
 	if err != nil {
 		diags.AddError("Unable to merge system limits", err.Error())
 		return
@@ -147,9 +136,9 @@ func (r *systemLimitsManagedResource) write(ctx context.Context, plan tfsdk.Plan
 	setSystemLimitsState(ctx, state, private, model, configured, diags)
 }
 
-func setSystemLimitsState(ctx context.Context, state *tfsdk.State, private systemLimitsPrivate, model SystemLimitsModel, configured map[string]json.RawMessage, diags *diag.Diagnostics) {
-	mask := systemLimitsFieldMask(configured)
-	fields, fieldDiags := systemLimitsManagedFields(ctx, mask)
+func setSystemLimitsState(ctx context.Context, state *tfsdk.State, private settingsPrivate, model SystemLimitsModel, configured map[string]json.RawMessage, diags *diag.Diagnostics) {
+	mask := settingsMask(configured)
+	fields, fieldDiags := settingsManagedFields(ctx, mask)
 	diags.Append(fieldDiags...)
 	if diags.HasError() {
 		return
@@ -182,7 +171,7 @@ func (r *systemLimitsManagedResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError("Unable to read system limits", "The API returned an empty configuration.")
 		return
 	}
-	var mask systemLimitsMask
+	var mask settingsFieldMask
 	if req.Private != nil {
 		data, diags := req.Private.GetKey(ctx, systemLimitsManagedFieldsKey)
 		resp.Diagnostics.Append(diags...)
@@ -205,7 +194,7 @@ func (r *systemLimitsManagedResource) Read(ctx context.Context, req resource.Rea
 			return
 		}
 		if len(configured) != 0 {
-			mask = systemLimitsFieldMask(configured)
+			mask = settingsMask(configured)
 		}
 	}
 	// Older state may have owned fields that are now read-only.
@@ -214,7 +203,7 @@ func (r *systemLimitsManagedResource) Read(ctx context.Context, req resource.Rea
 	}
 	selected := *current
 	if mask != nil {
-		selected, err = selectSystemLimits(*current, mask)
+		selected, err = selectSettingsFields(*current, mask)
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to refresh managed system limits", err.Error())
 			return
@@ -242,9 +231,9 @@ func (r *systemLimitsManagedResource) Read(ctx context.Context, req resource.Rea
 			resp.Diagnostics.AddError("Unable to record system limits ownership", err.Error())
 			return
 		}
-		mask = systemLimitsFieldMask(payload)
+		mask = settingsMask(payload)
 	}
-	fields, fieldDiags := systemLimitsManagedFields(ctx, mask)
+	fields, fieldDiags := settingsManagedFields(ctx, mask)
 	resp.Diagnostics.Append(fieldDiags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -280,24 +269,6 @@ func copySystemLimitsReadOnly(source SystemLimitsModel, target *SystemLimitsMode
 	target.MetricsDirectory = source.MetricsDirectory
 }
 
-func systemLimitsManagedFields(ctx context.Context, mask systemLimitsMask) (types.List, diag.Diagnostics) {
-	fields := make([]string, 0)
-	var collect func(systemLimitsMask, string)
-	collect = func(mask systemLimitsMask, prefix string) {
-		for name, nested := range mask {
-			field := prefix + name
-			if len(nested) == 0 {
-				fields = append(fields, field)
-				continue
-			}
-			collect(nested, field+".")
-		}
-	}
-	collect(mask, "")
-	sort.Strings(fields)
-	return types.ListValueFrom(ctx, types.StringType, fields)
-}
-
 func systemLimitsEndpoint(model SystemLimitsModel) string {
 	return "/m/" + url.PathEscape(model.GroupID.ValueString()) + "/system/limits"
 }
@@ -314,77 +285,10 @@ func systemLimitsPayload(model SystemLimitsModel) (map[string]json.RawMessage, e
 	return payload, nil
 }
 
-func systemLimitsFieldMask(payload map[string]json.RawMessage) systemLimitsMask {
-	mask := make(systemLimitsMask, len(payload))
-	for name, raw := range payload {
-		var nested map[string]json.RawMessage
-		if json.Unmarshal(raw, &nested) == nil && nested != nil {
-			mask[name] = systemLimitsFieldMask(nested)
-		} else {
-			mask[name] = nil
-		}
-	}
-	return mask
-}
-
-func writeSystemLimitsMask(ctx context.Context, private systemLimitsPrivate, mask systemLimitsMask) diag.Diagnostics {
+func writeSystemLimitsMask(ctx context.Context, private settingsPrivate, mask settingsFieldMask) diag.Diagnostics {
 	data, err := json.Marshal(mask)
 	if err != nil {
 		return diag.Diagnostics{diag.NewErrorDiagnostic("Unable to record system limits ownership", err.Error())}
 	}
 	return private.SetKey(ctx, systemLimitsManagedFieldsKey, data)
-}
-
-// RawMessage preserves unknown fields and exact integer values from newer servers.
-func mergeSystemLimits(current, configured map[string]json.RawMessage) (map[string]json.RawMessage, error) {
-	merged := make(map[string]json.RawMessage, len(current)+len(configured))
-	for name, value := range current {
-		merged[name] = value
-	}
-	for name, value := range configured {
-		var requested, existing map[string]json.RawMessage
-		if json.Unmarshal(value, &requested) == nil && requested != nil {
-			if raw, ok := current[name]; ok && string(raw) != "null" {
-				if err := json.Unmarshal(raw, &existing); err != nil {
-					return nil, fmt.Errorf("existing %s is not an object: %w", name, err)
-				}
-			}
-			nested, err := mergeSystemLimits(existing, requested)
-			if err != nil {
-				return nil, err
-			}
-			value, err = json.Marshal(nested)
-			if err != nil {
-				return nil, err
-			}
-		}
-		merged[name] = value
-	}
-	return merged, nil
-}
-
-func selectSystemLimits(current map[string]json.RawMessage, mask systemLimitsMask) (map[string]json.RawMessage, error) {
-	selected := make(map[string]json.RawMessage, len(mask))
-	for name, nestedMask := range mask {
-		value, ok := current[name]
-		if !ok {
-			continue
-		}
-		if nestedMask != nil && string(value) != "null" {
-			var nested map[string]json.RawMessage
-			if err := json.Unmarshal(value, &nested); err != nil {
-				return nil, fmt.Errorf("managed %s is not an object: %w", name, err)
-			}
-			filtered, err := selectSystemLimits(nested, nestedMask)
-			if err != nil {
-				return nil, err
-			}
-			value, err = json.Marshal(filtered)
-			if err != nil {
-				return nil, err
-			}
-		}
-		selected[name] = value
-	}
-	return selected, nil
 }

@@ -32,3 +32,9 @@ tests/acceptance/system_limits_test.go
 
 # System limits read/merge/write and configured-field ownership are provider-owned.
 internal/provider/system_limits_managed.go
+
+# Workspace settings reconciliation and disposable-workspace acceptance are provider-owned.
+internal/provider/workspace_system_settings_managed.go
+internal/provider/search_dataset_acl_managed.go
+tests/acceptance/search_dataset_acl_test.go
+tests/acceptance/workspace_system_settings_test.go

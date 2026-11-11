@@ -25,8 +25,11 @@ type ResourceDef struct {
 	CreateDisabledMessage  string
 	ValidateRequiredUnions bool
 	GenerateDataSourceDocs bool
+	PartialObjectUpdates   bool
 	RefreshFromAPI         bool
 	ResourceFactoryHook    string
+	DataSourceFactoryHook  string
+	ClientStub             bool
 }
 
 // OperationDef describes one annotated OpenAPI operation.

@@ -1,0 +1,1 @@
+terraform import criblio_search_dataset_acl.example application_logs
