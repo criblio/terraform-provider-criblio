@@ -1462,6 +1462,7 @@ func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
 	return strings.HasPrefix(resource.TypeName, "criblio_search_") ||
 		resource.StructName == "Subscription" ||
 		resource.StructName == "SystemInfo" ||
+		resource.StructName == "MonitorActiveAlert" ||
 		resource.StructName == "InstanceSettings"
 }
 

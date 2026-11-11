@@ -4641,9 +4641,19 @@ func Test{{ .StructName }}DataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: {{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
+				Config: {{ if eq .StructName "MonitorActiveAlert" }}` + "`" + `data "criblio_monitor_active_alerts" "all" {
+  engine_id = "tf_testing"
+  dataset_id = "default"
+}` + "`" + `,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("data.criblio_monitor_active_alerts.all", "engine_id", "tf_testing"),
+					resource.TestCheckResourceAttr("data.criblio_monitor_active_alerts.all", "dataset_id", "default"),
+					// A healthy dataset may have no active alerts.
+					resource.TestCheckResourceAttrSet("data.criblio_monitor_active_alerts.all", "items.#"),
+				),{{ else }}{{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
 				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . "" "by_id" true }}
 				),
+{{ end }}
 			},
 		},
 	})

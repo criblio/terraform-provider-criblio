@@ -212,7 +212,7 @@ func validateWorkspaceUpgradeSettings(payload map[string]json.RawMessage) error 
 		return fmt.Errorf("decode upgrade settings: %w", err)
 	}
 	if settings.Disabled != nil && !*settings.Disabled && (settings.Period == nil || *settings.Period == "") {
-		return fmt.Errorf("Enabling automatic upgrades requires automatic_upgrade_check_period. Set it to a duration such as \"24h\"; the existing workspace settings do not contain a check period to preserve. No settings were changed.")
+		return fmt.Errorf("enabling automatic upgrades requires automatic_upgrade_check_period; set it to a duration such as \"24h\" because the existing workspace settings do not contain a check period to preserve; no settings were changed")
 	}
 	return nil
 }

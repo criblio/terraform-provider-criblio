@@ -238,9 +238,9 @@ func TestWorkspaceSettingsEnableUpgradesRequiresPeriod(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: workspaceSettingsFactories(server.URL),
 		Steps: []resource.TestStep{
-			{Config: config(false, ""), ExpectError: regexp.MustCompile("Enabling automatic upgrades requires automatic_upgrade_check_period")},
+			{Config: config(false, ""), ExpectError: regexp.MustCompile("enabling automatic upgrades requires automatic_upgrade_check_period")},
 			{PreConfig: assertNoPatch, Config: config(true, "")},
-			{Config: config(false, ""), ExpectError: regexp.MustCompile("Enabling automatic upgrades requires automatic_upgrade_check_period")},
+			{Config: config(false, ""), ExpectError: regexp.MustCompile("enabling automatic upgrades requires automatic_upgrade_check_period")},
 			{PreConfig: assertNoPatch, Config: config(false, `automatic_upgrade_check_period = "24h"`), Check: resource.ComposeAggregateTestCheckFunc(
 				resource.TestCheckResourceAttr("criblio_workspace_system_settings.test", "upgrade_settings.disable_automatic_upgrade", "false"),
 				resource.TestCheckResourceAttr("criblio_workspace_system_settings.test", "upgrade_settings.automatic_upgrade_check_period", "24h"),

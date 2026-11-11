@@ -3,12 +3,16 @@
 package tests
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestMonitorActiveAlertDataSources(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
+	}
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
@@ -16,11 +20,14 @@ func TestMonitorActiveAlertDataSources(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `data "criblio_monitor_active_alerts" "all" {
-  engine_id = "example"
-  dataset_id = "example"
+  engine_id = "tf_testing"
+  dataset_id = "default"
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					testCheckListDataSourceHasItems("data.criblio_monitor_active_alerts.all"),
+					resource.TestCheckResourceAttr("data.criblio_monitor_active_alerts.all", "engine_id", "tf_testing"),
+					resource.TestCheckResourceAttr("data.criblio_monitor_active_alerts.all", "dataset_id", "default"),
+					// A healthy dataset may have no active alerts.
+					resource.TestCheckResourceAttrSet("data.criblio_monitor_active_alerts.all", "items.#"),
 				),
 			},
 		},
