@@ -351,6 +351,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_search_dashboard](docs/resources/search_dashboard.md)
 * [criblio_search_dashboard_category](docs/resources/search_dashboard_category.md)
 * [criblio_search_dataset](docs/resources/search_dataset.md)
+* [criblio_search_dataset_acl](docs/resources/search_dataset_acl.md)
 * [criblio_search_dataset_provider](docs/resources/search_dataset_provider.md)
 * [criblio_search_dataset_ruleset](docs/resources/search_dataset_ruleset.md)
 * [criblio_search_datatype](docs/resources/search_datatype.md)
@@ -363,6 +364,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_source](docs/resources/source.md)
 * [criblio_subscription](docs/resources/subscription.md)
 * [criblio_workspace](docs/resources/workspace.md)
+* [criblio_workspace_system_settings](docs/resources/workspace_system_settings.md)
 
 ### Data Sources
 
@@ -413,6 +415,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_search_dashboard](docs/data-sources/search_dashboard.md)
 * [criblio_search_dashboard_category](docs/data-sources/search_dashboard_category.md)
 * [criblio_search_dataset](docs/data-sources/search_dataset.md)
+* [criblio_search_dataset_acl](docs/data-sources/search_dataset_acl.md)
 * [criblio_search_dataset_provider](docs/data-sources/search_dataset_provider.md)
 * [criblio_search_dataset_ruleset](docs/data-sources/search_dataset_ruleset.md)
 * [criblio_search_datatype_ruleset](docs/data-sources/search_datatype_ruleset.md)
@@ -429,6 +432,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_subscription](docs/data-sources/subscription.md)
 * [criblio_system_info](docs/data-sources/system_info.md)
 * [criblio_workspace](docs/data-sources/workspace.md)
+* [criblio_workspace_system_settings](docs/data-sources/workspace_system_settings.md)
 * [criblio_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
 

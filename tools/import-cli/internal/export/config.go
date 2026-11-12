@@ -4,6 +4,8 @@ package export
 // readOnlyAttrsByType lists attribute names (tfsdk) that are read-only (Computed only) per type.
 // For oneOf resources, the OneOf.ReadOnlyAttr is added at runtime so this only needs extra entries when not using OneOf.
 var readOnlyAttrsByType = map[string][]string{
+	"criblio_workspace_system_settings": {"managed_fields"},
+
 	"criblio_system_limits":           {"managed_fields", "lookup_allowed_paths", "lookup_max_size", "lookup_max_total_size", "enable_worker_in_memory", "metrics_directory"},
 	"criblio_collector":               {"saved_state"}, // API runtime checkpoints should not become configuration.
 	"criblio_pack_collector":          {"saved_state"},

@@ -1246,6 +1246,61 @@ actions:
     update:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true
+  # Workspace configuration uses the same settings contract as group settings,
+  # with a local singleton identity and configured-field ownership metadata.
+  - target: "$.components.schemas"
+    update:
+      WorkspaceSystemSettingsUpdate: {}
+  - target: "$.components.schemas.WorkspaceSystemSettingsUpdate"
+    copy_from: "$.components.schemas.SystemSettingsConfUpdate"
+    update:
+      title: WorkspaceSystemSettingsUpdate
+  - target: "$.components.schemas.WorkspaceSystemSettingsUpdate.properties"
+    update:
+      id:
+        type: string
+        const: conf
+        default: conf
+        x-terraform-fixed-value: conf
+        x-terraform-local-only: true
+        description: Local singleton identity. Always conf; not sent to the API.
+      managedFields:
+        type: array
+        items:
+          type: string
+        x-terraform-computed: true
+        description: Provider-maintained list of configured settings field paths.
+  - target: "$.paths./system/settings/conf.patch"
+    update:
+      operationId: updateWorkspaceSystemSettingsConf
+      x-terraform-resource: true
+      x-terraform-resource-name: WorkspaceSystemSettings
+      x-terraform-partial-object-updates: true
+      x-terraform-resource-factory-hook: newWorkspaceSystemSettingsManagedResource
+      x-terraform-update: WorkspaceSystemSettings
+      x-terraform-refresh-from-api: true
+      x-terraform-generate-data-source-docs: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspaceSystemSettingsUpdate"
+            examples:
+              automaticUpgrades:
+                value:
+                  upgradeSettings:
+                    disableAutomaticUpgrade: true
+  - target: "$.paths./system/settings/conf.patch.requestBody.content.application/json.examples"
+    replace:
+      automaticUpgrades:
+        value:
+          upgradeSettings:
+            disableAutomaticUpgrade: true
+  - target: "$.paths./system/settings/conf.get"
+    update:
+      operationId: getWorkspaceSystemSettingsConf
+      x-terraform-read: WorkspaceSystemSettings
+
   - target: "$.components.schemas.SniSettings"
     update:
       oneOf:
@@ -3493,6 +3548,11 @@ actions:
   - target: "$.components.schemas.SavedQuery.properties.user"
     update:
       x-terraform-optional-computed: true
+  # Saved queries define notifications inline, rather than referencing
+  # SavedQueryScheduleNotifications. Empty API objects must remain importable.
+  - target: "$.components.schemas.SavedQuerySchedule.properties.notifications.properties.disabled"
+    update:
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.SavedQuerySchedule.properties.notifications.properties.items"
     update:
       x-terraform-ignore: true
@@ -3729,6 +3789,86 @@ actions:
   - target: "$.components.schemas.LookupFile.properties.size"
     update:
       x-terraform-ignore: true
+
+  # Dataset ACLs are a declarative projection of separate user/team action APIs.
+  # Companion handlers read both ACL lists and reconcile only configured maps.
+  - target: "$.components.schemas"
+    update:
+      SearchDatasetAcl:
+        type: object
+        required: [datasetId]
+        properties:
+          datasetId:
+            type: string
+            minLength: 1
+            description: ID of the existing Search dataset in default_search. Changing it replaces the ACL resource.
+            x-terraform-force-new: true
+            x-terraform-local-only: true
+          users:
+            type: object
+            description: Explicit user and API-credential shares, mapping Cloud member IDs (not emails) or <client-id>@clients to DatasetRead or DatasetMaintain. Find member IDs in GET /products/search/users by matching email to id. Omit to leave user shares unmanaged; an empty map revokes all supported explicit user shares.
+            additionalProperties:
+              type: string
+          teams:
+            type: object
+            description: Explicit team shares, mapping team IDs to DatasetRead or DatasetMaintain. Omit to leave team shares unmanaged; an empty map revokes all supported explicit team shares.
+            additionalProperties:
+              type: string
+  - target: "$.paths./m/{groupId}/search/datasets/{id}/acl/apply.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatasetAcl
+      x-terraform-update: SearchDatasetAcl
+      x-terraform-resource-factory-hook: newSearchDatasetAclManagedResource
+      x-terraform-data-source-factory-hook: newSearchDatasetAclManagedDataSource
+      # The declarative schema does not match the backend's add/rm actions;
+      # stub the generated client so only the companion handlers do HTTP.
+      x-terraform-client-stub: true
+      x-terraform-generate-data-source-docs: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchDatasetAcl"
+            examples:
+              declarativeShares:
+                value:
+                  datasetId: application_logs
+                  users:
+                    "google-oauth2|example-member-id": DatasetRead
+                    example-client-id@clients: DatasetRead
+                  teams:
+                    engineering-team: DatasetRead
+  - target: "$.paths./m/{groupId}/search/datasets/{id}/acl/apply.post"
+    update:
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema: {type: string}
+        - name: id
+          in: path
+          required: true
+          x-terraform-name: dataset_id
+          schema: {type: string}
+  - target: "$.paths./m/{groupId}/search/datasets/{id}/acl.get"
+    update:
+      x-terraform-read: SearchDatasetAcl
+  - target: "$.paths./m/{groupId}/search/datasets/{id}/acl.get"
+    update:
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema: {type: string}
+        - name: id
+          in: path
+          required: true
+          x-terraform-name: dataset_id
+          schema: {type: string}
+  - target: "$.paths./m/{groupId}/search/datasets/{id}/acl.get.responses.200.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/SearchDatasetAcl"
 
   # Dataset intelligence is enabled by creating its saved generation envelope.
   # Generation is asynchronous; all envelope fields except identity are outputs.

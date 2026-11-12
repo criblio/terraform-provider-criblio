@@ -344,6 +344,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewSearchDashboardResource,
 		NewSearchDashboardCategoryResource,
 		NewSearchDatasetResource,
+		NewSearchDatasetACLResource,
 		NewSearchDatasetIntelligenceResource,
 		NewSearchDatasetProviderResource,
 		NewSearchDatasetRulesetResource,
@@ -357,6 +358,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewSourceResource,
 		NewSubscriptionResource,
 		NewWorkspaceResource,
+		NewWorkspaceSystemSettingsResource,
 	}
 }
 
@@ -429,6 +431,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSearchDashboardsDataSource,
 		NewSearchDashboardCategoryDataSource,
 		NewSearchDatasetDataSource,
+		NewSearchDatasetACLDataSource,
 		NewSearchDatasetIntelligenceDataSource,
 		NewSearchDatasetProviderDataSource,
 		NewSearchDatasetProvidersDataSource,
@@ -448,6 +451,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSubscriptionDataSource,
 		NewSystemInfoDataSource,
 		NewWorkspaceDataSource,
+		NewWorkspaceSystemSettingsDataSource,
 		NewWorkspacesDataSource,
 	}
 }

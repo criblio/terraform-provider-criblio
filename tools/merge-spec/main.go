@@ -578,8 +578,13 @@ func prefixGroupScopedPaths(spec *yaml.Node) error {
 		}
 
 		prefixedPath := groupPrefix + key.Value
+		// System configuration exists at both workspace and group scope. Keep
+		// the workspace operation while synthesizing the existing group route.
+		keepWorkspace := key.Value == "/system/settings/conf"
 		if _, exists := mappingValue(paths, prefixedPath); exists {
-			removeKeys = append(removeKeys, key.Value)
+			if !keepWorkspace {
+				removeKeys = append(removeKeys, key.Value)
+			}
 			continue
 		}
 
@@ -588,7 +593,9 @@ func prefixGroupScopedPaths(spec *yaml.Node) error {
 		valueCopy := cloneNode(value)
 		ensureGroupIDParameter(valueCopy)
 		additions = append(additions, keyCopy, valueCopy)
-		removeKeys = append(removeKeys, key.Value)
+		if !keepWorkspace {
+			removeKeys = append(removeKeys, key.Value)
+		}
 	}
 
 	for _, key := range removeKeys {

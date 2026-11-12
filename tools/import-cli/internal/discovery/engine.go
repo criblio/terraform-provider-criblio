@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	"github.com/criblio/terraform-provider-criblio/internal/searchacl"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/exclusions"
@@ -381,7 +382,7 @@ func GetGroupIDs(ctx context.Context, client *importclient.Client, groupFilter [
 
 // ListItemIdentifiers returns one identifier map per item.
 func ListItemIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) ([]map[string]string, error) {
-	if len(groupIDs) == 0 {
+	if len(groupIDs) == 0 && e.TypeName != "criblio_workspace_system_settings" {
 		return nil, nil
 	}
 	switch e.TypeName {
@@ -545,6 +546,42 @@ func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e
 	if err != nil {
 		return nil, err
 	}
+	if e.TypeName == "criblio_search_dataset_acl" {
+		var identifiers []map[string]string
+		for _, raw := range items {
+			item, err := rawMap(raw)
+			if err != nil {
+				return nil, err
+			}
+			id := rawString(item, "id", "ID")
+			if id == "" {
+				continue
+			}
+			// Read user grants first and skip the team read when they already
+			// qualify the dataset, halving the per-dataset round trips.
+			aclClient := searchacl.New(client.REST, id)
+			grants, err := aclClient.Read(ctx, true, false)
+			if restclient.IsNotFound(err) {
+				continue
+			}
+			if err != nil {
+				return nil, fmt.Errorf("read ACLs for dataset %q: %w", id, err)
+			}
+			if len(grants.Users) == 0 {
+				grants, err = aclClient.Read(ctx, false, true)
+				if restclient.IsNotFound(err) {
+					continue
+				}
+				if err != nil {
+					return nil, fmt.Errorf("read ACLs for dataset %q: %w", id, err)
+				}
+			}
+			if len(grants.Users) != 0 || len(grants.Teams) != 0 {
+				identifiers = append(identifiers, map[string]string{"dataset_id": id})
+			}
+		}
+		return identifiers, nil
+	}
 	if e.TypeName == "criblio_search_dataset_intelligence" {
 		// There is no intelligence list API. Include only datasets that already
 		// have a saved envelope, including built-ins with intelligence enabled.
@@ -638,6 +675,9 @@ func identifiersFromRawItems(items []json.RawMessage, scope map[string]string, e
 			continue
 		}
 		id := rawString(item, "id", "ID", "Id", "keyID", "keyId", "key_id", "name", "Name")
+		if e.TypeName == "criblio_workspace_system_settings" {
+			id = "conf"
+		}
 		if id == "" && e.ListUseGroupIDAsItemID && scope["group_id"] != "" {
 			id = scope["group_id"]
 		}

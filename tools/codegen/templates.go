@@ -1445,7 +1445,11 @@ func searchDatasetProviderID(model SearchDatasetProviderModel) string {
 {{- end }}
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-{{- if .Action }}
+{{- if .ClientStub }}
+	// This resource is implemented by a companion handler; the generated
+	// client does not match the backend contract and must not be called.
+	return nil, fmt.Errorf("{{ .StructName }} is managed by a companion implementation; the generated client is disabled")
+{{- else if .Action }}
 	{{- if .ActionResponse }}
 	return restclient.{{ restWriteCall .Create }}FullResponse[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 	{{- else }}
@@ -1593,7 +1597,11 @@ func createAppArchive(model AppModel) ([]byte, error) {
 {{- end }}
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-{{- if or .Action .NoRead }}
+{{- if .ClientStub }}
+	// This resource is implemented by a companion handler; the generated
+	// client does not match the backend contract and must not be called.
+	return nil, fmt.Errorf("{{ .StructName }} is managed by a companion implementation; the generated client is disabled")
+{{- else if or .Action .NoRead }}
 	return &model, nil
 {{- else }}
 {{- if eq .StructName "App" }}
@@ -1666,7 +1674,11 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 }
 
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-{{- if .Action }}
+{{- if .ClientStub }}
+	// This resource is implemented by a companion handler; the generated
+	// client does not match the backend contract and must not be called.
+	return nil, fmt.Errorf("{{ .StructName }} is managed by a companion implementation; the generated client is disabled")
+{{- else if .Action }}
 	return &model, nil
 {{- else if not .Update.Path }}
 	// Resources with only a replaceable identity have no update operation.
@@ -1742,7 +1754,11 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 }
 
 func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }}Model) error {
-{{- if .Action }}
+{{- if .ClientStub }}
+	// This resource is implemented by a companion handler; the generated
+	// client does not match the backend contract and must not be called.
+	return fmt.Errorf("{{ .StructName }} is managed by a companion implementation; the generated client is disabled")
+{{- else if .Action }}
 	return nil
 {{- else }}
 {{- if eq .StructName "MappingRuleset" }}
@@ -2107,7 +2123,7 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		{{- if .CreateDisabledMessage }}
 		MarkdownDescription: {{ printf "%q" .CreateDisabledMessage }},
 		{{- else }}
-		MarkdownDescription: "{{ if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}",
+		MarkdownDescription: "{{ if eq .StructName "WorkspaceSystemSettings" }}Manages selected system settings for the workspace configured in the provider. Unconfigured settings are preserved; destroy leaves remote settings intact.{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}",
 		{{- end }}
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
@@ -2860,12 +2876,56 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
 	}
 {{- end }}
+{{- if eq .StructName "SearchSavedQuery" }}
+	normalizeSearchSavedQueryScheduleNotifications(api, state)
+{{- end }}
 {{- end }}
 }
 
 func {{ .Name }}Debug(value any) string {
 	return fmt.Sprintf("%v", value)
 }
+
+{{- if eq .StructName "SearchSavedQuery" }}
+// normalizeSearchSavedQueryScheduleNotifications resolves the optional+computed
+// schedule.notifications.disabled attribute when the plan left it unknown
+// (config "notifications = {}"), preferring the API response and falling back
+// to null so applied state never carries an unknown value.
+func normalizeSearchSavedQueryScheduleNotifications(api *SearchSavedQueryModel, state *SearchSavedQueryModel) {
+	if state.Schedule.IsNull() || state.Schedule.IsUnknown() {
+		return
+	}
+	scheduleAttributes := state.Schedule.Attributes()
+	notifications, ok := scheduleAttributes["notifications"].(types.Object)
+	if !ok || notifications.IsNull() || notifications.IsUnknown() {
+		return
+	}
+	notificationAttributes := notifications.Attributes()
+	disabled, ok := notificationAttributes["disabled"].(types.Bool)
+	if !ok || !disabled.IsUnknown() {
+		return
+	}
+	value := types.BoolNull()
+	if api != nil && !api.Schedule.IsNull() && !api.Schedule.IsUnknown() {
+		if apiNotifications, ok := api.Schedule.Attributes()["notifications"].(types.Object); ok && !apiNotifications.IsNull() && !apiNotifications.IsUnknown() {
+			if apiDisabled, ok := apiNotifications.Attributes()["disabled"].(types.Bool); ok && !apiDisabled.IsNull() && !apiDisabled.IsUnknown() {
+				value = apiDisabled
+			}
+		}
+	}
+	notificationAttributes["disabled"] = value
+	normalizedNotifications, diags := types.ObjectValue(notifications.AttributeTypes(context.Background()), notificationAttributes)
+	if diags.HasError() {
+		return
+	}
+	scheduleAttributes["notifications"] = normalizedNotifications
+	normalizedSchedule, diags := types.ObjectValue(state.Schedule.AttributeTypes(context.Background()), scheduleAttributes)
+	if diags.HasError() {
+		return
+	}
+	state.Schedule = normalizedSchedule
+}
+{{- end }}
 
 {{- if eq .StructName "Routes" }}
 func normalizeRouteClonePlaceholders(routes types.List) types.List {
@@ -3131,7 +3191,11 @@ type {{ .StructName }}DataSource struct {
 }
 
 func New{{ .StructName }}DataSource() datasource.DataSource {
+{{- if .DataSourceFactoryHook }}
+	return {{ .DataSourceFactoryHook }}()
+{{- else }}
 	return &{{ .StructName }}DataSource{}
+{{- end }}
 }
 
 func (d *{{ .StructName }}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -3356,6 +3420,43 @@ description: |-
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 
 The ` + "`saved_state`" + ` attribute accepts both legacy string maps and nested objects. When omitted, it exposes runtime checkpoints returned by Cribl. Configured values are preserved during refresh; computed checkpoints are omitted from create and update requests. Existing string-map state is upgraded automatically. For resources created with older providers, legacy saved values are retained until an apply records whether ` + "`saved_state`" + ` is configured.
+{{- end }}
+{{- if eq .StructName "SearchDatasetACL" }}
+
+Manages explicit shares for an existing Search dataset in the provider's workspace, using the user and team ACL APIs under ` + "`/m/default_search/search/datasets/{id}/acl`" + `. This resource is available in Cribl.Cloud and does not create or delete the dataset. Configure one ACL resource per dataset.
+
+The ` + "`users`" + ` and ` + "`teams`" + ` maps associate principal IDs with ` + "`DatasetRead`" + ` or ` + "`DatasetMaintain`" + `. User keys must be Cloud member IDs, not email addresses. Find the member in ` + "`GET /products/search/users`" + ` by email and use its ` + "`id`" + ` field, for example ` + "`google-oauth2|example-member-id`" + `. API credentials use ` + "`<client-id>@clients`" + `; team keys are team IDs. Each configured map is authoritative for those two explicit policies: additional supported grants are removed, and missing or changed grants are reconciled. Omit a map to leave that principal type unmanaged; use an empty map to revoke its supported explicit grants. Removing a map from configuration relinquishes ownership without revoking its grants. Inherited access is preserved. Policies outside these access levels are preserved for principals omitted from the configured maps.
+
+The provider currently does not support creating or looking up users through user resources or data sources. Retrieve the existing user's Search member ID outside Terraform with the following command. Replace the URL placeholders with the workspace, organization, and Cloud domain configured in your provider, and set ` + "`ACCESS_TOKEN`" + ` to a valid bearer token authorized to list Search users.
+
+` + "```shell" + `
+curl --fail --silent --show-error \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  "https://<workspace>-<organization>.<cloud-domain>/api/v1/products/search/users" \
+  | jq '.items[] | {id, email}'
+` + "```" + `
+
+Find the entry with the intended user's email and use its ` + "`id`" + ` as the ` + "`users`" + ` map key. The ACL resource accepts member IDs directly and does not resolve email addresses.
+
+The provider reads both configured ACL lists before writing and sends only necessary add/remove actions. User and team changes use separate API operations; if one fails after the other succeeds, Terraform retains state so the next apply can finish reconciliation. Refresh detects external changes. Use credentials that can view and manage the intended shares; ACL reads reflect the caller's visibility.
+
+Import uses the dataset ID and reads both maps. Keep the grants you intend to retain in your configuration. Destroy revokes supported explicit grants for each managed principal type and leaves the dataset intact. The backend prevents removing the caller's own user permissions. Avoid overlapping ACL resources or concurrent writers for the same dataset and principal type.
+{{- end }}
+{{- if eq .StructName "SearchSavedQuery" }}
+
+The ` + "`schedule.notifications.disabled`" + ` field is optional. An empty ` + "`notifications = {}`" + ` object is valid and retains the backend's default notification behavior (enabled when ` + "`disabled`" + ` is absent). Explicit ` + "`disabled = true`" + ` and ` + "`disabled = false`" + ` values are preserved during export and import.
+{{- end }}
+{{- if eq .StructName "WorkspaceSystemSettings" }}
+
+Manages system configuration for the workspace selected by the provider using ` + "`/system/settings/conf`" + `. Configure one resource per workspace. Use provider aliases to manage multiple workspaces; use ` + "`criblio_group_system_settings`" + ` for Worker Group or Edge Fleet settings.
+
+Configure only the fields Terraform should manage. The provider reads current settings and merges configured fields into each touched section before PATCH, preserving unconfigured fields and fields unknown to this provider version. Lists replace existing lists; an empty list clears one. Removing a field from configuration stops managing it and retains its current server value. Refresh detects external changes to managed fields.
+
+When enabling automatic upgrades with ` + "`disable_automatic_upgrade = false`" + `, set ` + "`automatic_upgrade_check_period`" + ` to a duration such as ` + "`\"24h\"`" + ` unless the workspace already has a check period. Disabling upgrades does not require a check period. The provider validates this dependency after merging existing settings and stops before PATCH if the period is missing.
+
+Some Cloud deployments reject a PATCH that omits API settings with "Updating API host/port is disabled in this deployment". For that specific rejection, when API settings are unconfigured, the provider retries once with the complete, unchanged API section from the preceding read. This does not add those fields to Terraform ownership. The retry is skipped if the API section contains a masked SSL passphrase or the configuration explicitly includes API settings.
+
+Import uses the fixed ID ` + "`conf`" + ` and reads supported settings. Keep only the fields you intend to manage in your configuration. Destroy removes Terraform state and leaves workspace configuration in place. Available settings and write permissions depend on the deployment. Avoid simultaneous writers because the API does not provide conditional updates for the read/PATCH sequence.
 {{- end }}
 {{- if eq .StructName "SystemLimits" }}
 
@@ -4540,9 +4641,24 @@ func Test{{ .StructName }}DataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: {{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
+				Config: {{ if eq .StructName "MonitorActiveAlert" }}` + "`" + `data "criblio_search_engine" "metrics" {
+  id = "tf_testing"
+}
+
+data "criblio_monitor_active_alerts" "all" {
+  engine_id = data.criblio_search_engine.metrics.id
+  dataset_id = data.criblio_search_engine.metrics.metrics_dataset_id
+}` + "`" + `,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("data.criblio_monitor_active_alerts.all", "engine_id", "tf_testing"),
+					resource.TestCheckResourceAttrSet("data.criblio_search_engine.metrics", "metrics_dataset_id"),
+					resource.TestCheckResourceAttrPair("data.criblio_monitor_active_alerts.all", "dataset_id", "data.criblio_search_engine.metrics", "metrics_dataset_id"),
+					// A healthy dataset may have no active alerts.
+					resource.TestCheckResourceAttrSet("data.criblio_monitor_active_alerts.all", "items.#"),
+				),{{ else }}{{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
 				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . "" "by_id" true }}
 				),
+{{ end }}
 			},
 		},
 	})

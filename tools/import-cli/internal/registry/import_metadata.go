@@ -54,6 +54,7 @@ var (
 // importMetadataBase is the default metadata per type (from resource SDK usage).
 // Overrides and clearListMethodTypes are applied in ImportMetadata().
 var importMetadataBase = map[string]ResourceMetadata{
+	"criblio_search_dataset_acl":           {ModelTypeName: "SearchDatasetACLResourceModel", ImportIDFormat: "dataset_id", RESTListPath: "/m/default_search/search/datasets", RESTGetPath: "/m/default_search/search/datasets/{dataset_id}/acl"},
 	"criblio_appscope_config":              {SDKService: "AppscopeConfigs", ListMethod: "ListAppscopeLibEntry", GetMethod: "GetAppscopeLibEntryByID", ImportIDFormat: ""},
 	"criblio_certificate":                  {SDKService: "Certificates", ListMethod: "ListCertificate", GetMethod: "GetCertificateByID", ImportIDFormat: ""},
 	"criblio_custom_banner":                {SDKService: "Banners", ListMethod: "", GetMethod: "", ImportIDFormat: "id"},
@@ -119,6 +120,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 }
 
 var importMetadataOverrides = map[string]ResourceMetadata{
+	"criblio_workspace_system_settings":    {ModelTypeName: "WorkspaceSystemSettingsResourceModel", ImportIDFormat: "id", RESTListPath: "/system/settings/conf", RESTGetPath: "/system/settings/conf"},
 	"criblio_system_limits":                {ModelTypeName: "SystemLimitsResourceModel", ImportIDFormat: "group_id", RESTListPath: "/m/{group_id}/system/limits", RESTGetPath: "/m/{group_id}/system/limits", ListUseGroupIDAsItemID: true},
 	"criblio_app":                          {ImportIDFormat: "id", RESTListPath: "/apps", RESTGetPath: "/apps/{id}"},
 	"criblio_appscope_config":              {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/appscope-configs", RESTGetPath: "/m/{group_id}/lib/appscope-configs/{id}"},

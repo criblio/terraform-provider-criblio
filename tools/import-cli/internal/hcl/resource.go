@@ -23,13 +23,13 @@ type ResourceBlockOptions struct {
 	SkipEmptyListAttributes bool
 	// SkipPruneEmptyListsFor: when SkipEmptyListAttributes is true, do not prune empty lists
 	// for these resource type + attribute pairs. E.g. criblio_pack tags must keep domain=[].
-	// Map key = resource type name, value = attribute names.
+	// Map key = resource type name, value = attribute names; * matches all attributes.
 	SkipPruneEmptyListsFor map[string][]string
 	// SkipPruneNullsFor preserves explicit nulls in selected metadata attributes.
 	SkipPruneNullsFor map[string][]string
 	// AlwaysEmitEmptyListsFor: when SkipEmptyListAttributes is true, always emit these
 	// attributes even when empty (empty list is valid). E.g. criblio_project subscriptions, destinations.
-	// Map key = resource type name, value = attribute names.
+	// Map key = resource type name, value = attribute names; * matches all attributes.
 	AlwaysEmitEmptyListsFor map[string][]string
 	// AlwaysEmitEmptyMapsFor preserves selected empty object attributes instead
 	// of normalizing them to null, matching APIs that distinguish {} from null.
@@ -46,10 +46,14 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_pack": {"tags"},
 		},
 		SkipPruneEmptyListsFor: map[string][]string{
+			"criblio_workspace_system_settings": {"*"},
+
 			"criblio_pack":             {"tags"},
 			"criblio_search_dashboard": {"elements"},
 		},
 		AlwaysEmitEmptyListsFor: map[string][]string{
+			"criblio_workspace_system_settings": {"*"},
+
 			// Limits PATCH replaces the complete configuration; keep explicit empty lists.
 			"criblio_system_limits":           {"events_metadata_sources", "metrics_drop_list", "metrics_fields_blacklist", "metrics_never_drop_list", "metrics_worker_id_blacklist"},
 			"criblio_project":                 {"subscriptions", "destinations"},
@@ -58,6 +62,9 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_search_dashboard":        {"elements"},
 		},
 		AlwaysEmitEmptyMapsFor: map[string][]string{
+			"criblio_search_dataset_acl":        {"users", "teams"},
+			"criblio_workspace_system_settings": {"*"},
+
 			"criblio_pack":             {"tags"},
 			"criblio_mapping_ruleset":  {"conf"},
 			"criblio_pipeline":         {"conf"},
@@ -73,7 +80,7 @@ func attrInList(typeName, attrName string, m map[string][]string) bool {
 		return false
 	}
 	for _, a := range m[typeName] {
-		if a == attrName {
+		if a == "*" || a == attrName {
 			return true
 		}
 	}

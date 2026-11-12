@@ -10,6 +10,8 @@ description: |-
 
 SearchSavedQuery Resource
 
+The `schedule.notifications.disabled` field is optional. An empty `notifications = {}` object is valid and retains the backend's default notification behavior (enabled when `disabled` is absent). Explicit `disabled = true` and `disabled = false` values are preserved during export and import.
+
 ## Example Usage
 
 ```terraform
@@ -251,7 +253,7 @@ Optional:
 <a id="nestedatt--schedule--notifications"></a>
 ### Nested Schema for `schedule.notifications`
 
-Required:
+Optional:
 
 - `disabled` (Boolean) If <code>true</code>, Notifications for the scheduled query are disabled. Default is <code>false</code> (Notifications enabled).
 
