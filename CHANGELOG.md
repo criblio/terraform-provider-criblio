@@ -32,6 +32,7 @@ commit history, and tag-to-tag diffs.
 - Syncing 4.20.3 upstream spec.
 - MON-1453: typed monitor resource + notifications (base layer).
 - Reverting codegen changes and adding example.
+- PLAT-17563: `criblio_guard_rule` resource with single and list data sources, for managing custom Guard Rules in a Worker Group.
 
 ### Fixed
 - Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)
