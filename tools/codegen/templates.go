@@ -2311,7 +2311,17 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	// entire envelope so old content and failure details do not linger.
 {{- end }}
 	if apiModel != nil {
+{{- range .Read.PathParams }}
+		prior{{ .GoName }} := model.{{ .GoName }}
+{{- end }}
 		model = *apiModel
+{{- if .Read.PathParams }}
+		// Path parameters address the resource and are not part of the response
+		// body, so a wholesale refresh would blank them. Keep them from prior state.
+{{- end }}
+{{- range .Read.PathParams }}
+		model.{{ .GoName }} = prior{{ .GoName }}
+{{- end }}
 	}
 {{- else }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}

@@ -189,7 +189,11 @@ func (r *MonitorSilenceResource) Read(ctx context.Context, req resource.ReadRequ
 	}
 	// Refresh all configuration so drift and removed values are visible.
 	if apiModel != nil {
+		priorID := model.ID
 		model = *apiModel
+		// Path parameters address the resource and are not part of the response
+		// body, so a wholesale refresh would blank them. Keep them from prior state.
+		model.ID = priorID
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }

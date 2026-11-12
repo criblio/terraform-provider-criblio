@@ -146,7 +146,11 @@ func (r *SearchDatasetIntelligenceResource) Read(ctx context.Context, req resour
 	// Generation can replace or remove optional output fields. Refresh the
 	// entire envelope so old content and failure details do not linger.
 	if apiModel != nil {
+		priorDatasetID := model.DatasetID
 		model = *apiModel
+		// Path parameters address the resource and are not part of the response
+		// body, so a wholesale refresh would blank them. Keep them from prior state.
+		model.DatasetID = priorDatasetID
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }

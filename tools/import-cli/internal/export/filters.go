@@ -202,6 +202,14 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 			return custom.DefaultPackIDs[packName]
 		}
 		return false
+	case "criblio_guard_rule":
+		// The SDS rule API rejects create, update, and delete on Cribl-library
+		// rules. Plain "cribl" is already filtered above; customized Cribl copies
+		// are equally unmanageable, so they must not round-trip into HCL either.
+		if v, ok := attrs["lib"]; ok && v.Kind == hcl.KindString {
+			return v.String == "cribl-custom"
+		}
+		return false
 	case "criblio_grok":
 		return custom.DefaultGrokIDs[id]
 	case "criblio_parquet_schema":

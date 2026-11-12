@@ -736,6 +736,53 @@ actions:
     update:
       x-terraform-suppress-diff: explicit
 
+  # Guard Rules = custom sensitive data scanning (SDS) rules, /m/{groupId}/lib/sds-rules
+  - target: "$.paths./m/{groupId}/lib/sds-rules.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: GuardRule
+      x-terraform-generate-data-source-docs: true
+      # The rule body is returned verbatim, so refresh the whole model to make
+      # out-of-band edits and cleared fields visible in the plan.
+      x-terraform-refresh-from-api: true
+  - target: "$.paths./m/{groupId}/lib/sds-rules.get"
+    update:
+      x-terraform-list: GuardRule
+      x-terraform-list-name: GuardRules
+  - target: "$.paths./m/{groupId}/lib/sds-rules/{id}.get"
+    update:
+      x-terraform-read: GuardRule
+  - target: "$.paths./m/{groupId}/lib/sds-rules/{id}.patch"
+    update:
+      x-terraform-update: GuardRule
+  - target: "$.paths./m/{groupId}/lib/sds-rules/{id}.delete"
+    update:
+      x-terraform-delete: GuardRule
+  # The API classifies user-created rules as `custom`, so the value can be
+  # supplied or left for the API to fill in.
+  - target: "$.components.schemas.SensitiveDataRule.properties.lib"
+    update:
+      x-terraform-optional-computed: true
+  # `placement` defaults to `before` server-side. Targeted on the schema rather
+  # than through contextKeywords.items, which is a $ref upstream and would not
+  # resolve as an items path.
+  - target: "$.components.schemas.SensitiveDataContextKeyword.properties.placement"
+    update:
+      x-terraform-optional-computed: true
+  # `regex` is validated as a JavaScript regular expression *literal*, so it must
+  # be slash-delimited. The upstream examples omit the slashes and the API
+  # rejects them with HTTP 400; resource documentation is generated from the
+  # highest-coverage example, so correct all three here.
+  - target: "$.components.examples.SDSRuleExamplesCreditCard.value"
+    update:
+      regex: '/\b(?:\d[ -]*?){13,16}\b/'
+  - target: "$.components.examples.SDSRuleExamplesSocialSecurityNumber.value"
+    update:
+      regex: '/\b\d{3}-\d{2}-\d{4}\b/'
+  - target: "$.components.examples.SDSRuleExamplesEmailAddress.value"
+    update:
+      regex: '/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/'
+
   - target: "$.paths./m/{groupId}/lib/schemas.post"
     update:
       x-terraform-resource: true
