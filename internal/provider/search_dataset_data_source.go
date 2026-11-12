@@ -121,7 +121,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -261,7 +261,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -401,7 +401,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -555,7 +555,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -693,7 +693,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -839,7 +839,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -974,7 +974,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1109,7 +1109,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1251,7 +1251,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1386,7 +1386,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1520,7 +1520,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1655,7 +1655,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1793,7 +1793,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -1928,7 +1928,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2063,7 +2063,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2193,7 +2193,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2335,7 +2335,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2478,7 +2478,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2608,7 +2608,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2758,7 +2758,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -2888,7 +2888,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -3023,7 +3023,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -3153,7 +3153,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -3403,7 +3403,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -3545,7 +3545,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -3675,7 +3675,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
@@ -3929,7 +3929,7 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Attributes: map[string]schema.Attribute{
 							"earliest": schema.StringAttribute{
 								Computed:    true,
-								Description: `Rolling time window that defines how far back acceleration scans.`,
+								Description: `Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,

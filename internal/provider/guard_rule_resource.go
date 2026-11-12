@@ -43,72 +43,71 @@ func (r *GuardRuleResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 		MarkdownDescription: "GuardRule Resource",
 		Attributes: map[string]schema.Attribute{
 			"context_keywords": schema.ListNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
 				Description: `Context keywords that help match sensitive data for this rule.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"keyword": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
 							Description: `Keyword that provides additional context to help match sensitive data for the rule.`,
 						},
 						"placement": schema.StringAttribute{
-							Required: false,
-							Optional: true,
-							Computed: true,
+							Required:    false,
+							Optional:    true,
+							Computed:    true,
 							Description: `Position of the keyword relative to the match: <code>before</code> or <code>after</code>.`,
 						},
 					},
 				},
 			},
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
 				Description: `Brief description of the SDS rule.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
 				Description: `Worker group ID.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
 				Description: `Unique identifier for the SDS rule.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: true,
+				Required:    false,
+				Optional:    true,
+				Computed:    true,
 				Description: `Name of the library that the rule belongs to.`,
 			},
 			"regex": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
 				Description: `Regular expression pattern used to match sensitive data.`,
 			},
 			"rulesets": schema.ListAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
 				Description: `Rulesets that the rule belongs to.`,
 				ElementType: types.StringType,
 			},
-
-},
+		},
 	}
 }
 
@@ -168,13 +167,10 @@ func (r *GuardRuleResource) Read(ctx context.Context, req resource.ReadRequest, 
 	}
 	// Refresh all configuration so drift and removed values are visible.
 	if apiModel != nil {
-		priorGroupID := model.GroupID
-		priorID := model.ID
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.GroupID = model.GroupID
+		apiModel.ID = model.ID
 		model = *apiModel
-		// Path parameters address the resource and are not part of the response
-		// body, so a wholesale refresh would blank them. Keep them from prior state.
-		model.GroupID = priorGroupID
-		model.ID = priorID
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
@@ -218,7 +214,7 @@ func (r *GuardRuleResource) ImportState(ctx context.Context, req resource.Import
 	dec.DisallowUnknownFields()
 	var data struct {
 		GroupID string `json:"group_id"`
-		ID string `json:"id"`
+		ID      string `json:"id"`
 	}
 	if err := dec.Decode(&data); err != nil {
 		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the required path parameters: `+err.Error())
@@ -291,9 +287,9 @@ func applyGuardRuleAPIToState(api *GuardRuleModel, state *GuardRuleModel, preser
 			state.ID = api.ID
 		}
 	}
-		if !api.Lib.IsNull() && !api.Lib.IsUnknown() {
-			state.Lib = api.Lib
-		}
+	if !api.Lib.IsNull() && !api.Lib.IsUnknown() {
+		state.Lib = api.Lib
+	}
 	if state.Lib.IsUnknown() {
 		state.Lib = types.StringNull()
 	}

@@ -33,14 +33,16 @@ type CriblioProvider struct {
 
 // CriblioProviderModel describes the provider data model.
 type CriblioProviderModel struct {
-	BearerAuth     types.String `tfsdk:"bearer_auth"`
-	ClientID       types.String `tfsdk:"client_id"`
-	ClientSecret   types.String `tfsdk:"client_secret"`
-	CloudDomain    types.String `tfsdk:"cloud_domain"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	ServerURL      types.String `tfsdk:"server_url"`
-	TokenURL       types.String `tfsdk:"token_url"`
-	WorkspaceID    types.String `tfsdk:"workspace_id"`
+	BearerAuth         types.String `tfsdk:"bearer_auth"`
+	ClientID           types.String `tfsdk:"client_id"`
+	ClientSecret       types.String `tfsdk:"client_secret"`
+	CloudDomain        types.String `tfsdk:"cloud_domain"`
+	CACertFile         types.String `tfsdk:"ca_cert_file"`
+	InsecureSkipVerify types.Bool   `tfsdk:"insecure_skip_verify"`
+	OrganizationID     types.String `tfsdk:"organization_id"`
+	ServerURL          types.String `tfsdk:"server_url"`
+	TokenURL           types.String `tfsdk:"token_url"`
+	WorkspaceID        types.String `tfsdk:"workspace_id"`
 }
 
 type providerOAuthConfig struct {
@@ -57,6 +59,14 @@ func (p *CriblioProvider) Metadata(ctx context.Context, req provider.MetadataReq
 func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
+			"ca_cert_file": schema.StringAttribute{
+				MarkdownDescription: "Path to a PEM-encoded CA certificate bundle to trust in addition to system CAs for on-prem API and login requests. Ignored for Cribl Cloud. Configurable via `CRIBL_CA_CERT_FILE`.",
+				Optional:            true,
+			},
+			"insecure_skip_verify": schema.BoolAttribute{
+				MarkdownDescription: "Skip TLS certificate and hostname verification for on-prem API and login requests. Ignored for Cribl Cloud. Defaults to false. Configurable via `CRIBL_INSECURE_SKIP_VERIFY`. Use only in trusted development or testing environments; prefer `ca_cert_file` for internal CAs.",
+				Optional:            true,
+			},
 			"bearer_auth": schema.StringAttribute{
 				MarkdownDescription: `HTTP Bearer.`,
 				Optional:            true,
@@ -182,16 +192,31 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		clientOauth.TokenURL = data.TokenURL.ValueString()
 	}
 
+	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
+	transport := http.DefaultTransport
+	if auth.IsOnPrem(restCredentials) {
+		onPremTransport, authCacheScope, err := data.httpTransport()
+		if err != nil {
+			resp.Diagnostics.AddError("Invalid TLS Configuration", err.Error())
+			return
+		}
+		transport = onPremTransport
+		if authCacheScope != "" {
+			// Use the on-prem TLS settings for login without logging token bodies.
+			restCredentials.HTTPClient = &http.Client{Transport: transport}
+			restCredentials.HTTPClientCacheScope = authCacheScope
+		}
+	}
+
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
-		Transport:  http.DefaultTransport,
+		Transport:  transport,
 	}
 
 	httpClient := &http.Client{
 		Transport: NewProviderHTTPTransport(providerHTTPTransportOpts),
 	}
 
-	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
 			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
@@ -285,6 +310,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewGroupResource,
 		NewGroupSystemSettingsResource,
 		NewGuardRuleResource,
+		NewSystemLimitsResource,
 		NewHmacFunctionResource,
 		NewKeyResource,
 		NewLakehouseDatasetConnectionResource,
@@ -356,6 +382,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewGroupSystemSettingsDataSource,
 		NewGuardRuleDataSource,
 		NewGuardRulesDataSource,
+		NewSystemLimitsDataSource,
 		NewHmacFunctionDataSource,
 		NewInstanceSettingsDataSource,
 		NewKeyDataSource,

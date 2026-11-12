@@ -68,6 +68,8 @@ resource "criblio_pack_breakers" "my_packbreakers" {
       name                   = "json_array"
       condition              = "true"
       type                   = "json_array"
+      json_array_field       = "items.events"
+      parent_fields_to_copy  = ["source"]
       timestamp_anchor_regex = "/^/"
       timestamp = {
         type   = "auto"

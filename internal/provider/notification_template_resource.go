@@ -158,11 +158,9 @@ func (r *NotificationTemplateResource) Read(ctx context.Context, req resource.Re
 	// Template fields are returned verbatim. Refresh from the API so changes
 	// outside Terraform, including a removed description, appear in the plan.
 	if apiModel != nil {
-		priorID := model.ID
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.ID = model.ID
 		model = *apiModel
-		// Path parameters address the resource and are not part of the response
-		// body, so a wholesale refresh would blank them. Keep them from prior state.
-		model.ID = priorID
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }

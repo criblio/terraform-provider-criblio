@@ -105,6 +105,9 @@ func NewFromResources(ctx context.Context, constructors []func() resource.Resour
 		e.SensitivePaths = sensitiveSchemaPaths(schemaResponse.Schema)
 
 		if meta, ok := metadata[typeName]; ok {
+			if meta.ModelTypeName != "" {
+				e.ModelTypeName = meta.ModelTypeName
+			}
 			e.SDKService = meta.SDKService
 			e.ListMethod = meta.ListMethod
 			e.GetMethod = meta.GetMethod
@@ -116,8 +119,8 @@ func NewFromResources(ctx context.Context, constructors []func() resource.Resour
 			e.ListItemIDMethod = meta.ListItemIDMethod
 			e.ListUseGroupIDAsItemID = meta.ListUseGroupIDAsItemID
 			// Populate OneOf.SupportedBlockNames from provider model when callback provided.
-			if oneOfBlockNamesFromModel != nil && meta.OneOf != nil && modelTypeName != "" {
-				if names, err := oneOfBlockNamesFromModel(modelTypeName); err == nil && len(names) > 0 {
+			if oneOfBlockNamesFromModel != nil && meta.OneOf != nil && e.ModelTypeName != "" {
+				if names, err := oneOfBlockNamesFromModel(e.ModelTypeName); err == nil && len(names) > 0 {
 					oneOfCopy := *meta.OneOf
 					oneOfCopy.SupportedBlockNames = names
 					e.OneOf = &oneOfCopy

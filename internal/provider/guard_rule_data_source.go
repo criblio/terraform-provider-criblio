@@ -36,48 +36,46 @@ func (d *GuardRuleDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 		MarkdownDescription: "GuardRule Data Source",
 		Attributes: map[string]schema.Attribute{
 			"context_keywords": schema.ListNestedAttribute{
-				Computed: true,
+				Computed:    true,
 				Description: `Context keywords that help match sensitive data for this rule.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"keyword": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
 							Description: `Keyword that provides additional context to help match sensitive data for the rule.`,
 						},
 						"placement": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
 							Description: `Position of the keyword relative to the match: <code>before</code> or <code>after</code>.`,
 						},
 					},
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
 				Description: `Brief description of the SDS rule.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
 				Description: `Unique identifier for the SDS rule.`,
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
 				Description: `Name of the library that the rule belongs to.`,
 			},
 			"regex": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
 				Description: `Regular expression pattern used to match sensitive data.`,
 			},
 			"rulesets": schema.ListAttribute{
-				Computed: true,
+				Computed:    true,
 				Description: `Rulesets that the rule belongs to.`,
 				ElementType: types.StringType,
 			},
-
-
 		},
 	}
 }

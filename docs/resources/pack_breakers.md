@@ -235,6 +235,9 @@ Optional:
 - `fields_line_regex` (String)
 - `header_line_regex` (String)
 - `quote_char` (String)
+- `json_array_field` (String) Path to the array in a JSON event containing the records to extract, such as <code>Records</code> or <code>level1.level2.events</code>. Leave blank if the result itself is an array.
+- `parent_fields_to_copy` (List of String) Top-level fields to copy to the output events. Nested fields are not supported. Supports <code>*</code> wildcards.
+- `json_extract_all` (Boolean) If <code>true</code>, automatically extract fields from JSON events. If <code>false</code>, only <code>_raw</code> and <code>_time</code> are defined on extracted events.
 
 <a id="nestedatt--rules--timestamp"></a>
 ### Nested Schema for `rules.timestamp`

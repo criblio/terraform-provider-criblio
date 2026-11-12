@@ -13,6 +13,7 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added `criblio_system_limits` resource and data source using the upstream `/system/limits` endpoint, with import/export support, safe read/merge/PATCH updates for selected writable limits, and read-only access to operator-controlled or feature-gated limits.
 - Added monitor muting rules, notification policies, shared configurations, and profiles, with data sources, examples, acceptance tests, and import/export support.
 - Added `criblio_search_dataset_intelligence` resource and data source to enable or disable dataset intelligence, read asynchronous generation results, and import/export existing intelligence without regenerating it.
 - Added `criblio_notification_template` resource and single/list data sources for custom Handlebars templates, with import and export support. Requires V2 Notifications; built-in templates remain available through data sources and are excluded from resource exports.
@@ -31,6 +32,7 @@ commit history, and tag-to-tag diffs.
 - Syncing 4.20.3 upstream spec.
 - MON-1453: typed monitor resource + notifications (base layer).
 - Reverting codegen changes and adding example.
+- Adds criblio_guard_rule plus criblio_guard_rule and criblio_guard_rules data sources for /m/{groupId}/lib/sds-rules, managing custom Guard Rules within a Worker Group. All four CRUD operations were already in the published spec, so no spec sync or backend change was required.
 
 ### Fixed
 - Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)

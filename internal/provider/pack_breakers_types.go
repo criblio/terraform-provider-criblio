@@ -81,29 +81,35 @@ type PackBreakersRulesModel struct {
 	FieldsLineRegex      types.String `tfsdk:"fields_line_regex" json:"fieldsLineRegex,omitempty"`
 	HeaderLineRegex      types.String `tfsdk:"header_line_regex" json:"headerLineRegex,omitempty"`
 	QuoteChar            types.String `tfsdk:"quote_char" json:"quoteChar,omitempty"`
+	JSONArrayField       types.String `tfsdk:"json_array_field" json:"jsonArrayField,omitempty"`
+	ParentFieldsToCopy   types.List   `tfsdk:"parent_fields_to_copy" json:"parentFieldsToCopy,omitempty"`
+	JSONExtractAll       types.Bool   `tfsdk:"json_extract_all" json:"jsonExtractAll,omitempty"`
 }
 
 type PackBreakersRulesAPIModel struct {
-	Name                 *string `json:"name,omitempty"`
-	Condition            *string `json:"condition,omitempty"`
-	Type                 *string `json:"type,omitempty"`
-	TimestampAnchorRegex *string `json:"timestampAnchorRegex,omitempty"`
-	Timestamp            any     `json:"timestamp,omitempty"`
-	TimestampTimezone    *string `json:"timestampTimezone,omitempty"`
-	TimestampEarliest    *string `json:"timestampEarliest,omitempty"`
-	TimestampLatest      *string `json:"timestampLatest,omitempty"`
-	MaxEventBytes        *int64  `json:"maxEventBytes,omitempty"`
-	Fields               any     `json:"fields,omitempty"`
-	Disabled             *bool   `json:"disabled,omitempty"`
-	ParserEnabled        *bool   `json:"parserEnabled,omitempty"`
-	ShouldUseDataRaw     *bool   `json:"shouldUseDataRaw,omitempty"`
-	Delimiter            *string `json:"delimiter,omitempty"`
-	DelimiterRegex       *string `json:"delimiterRegex,omitempty"`
-	EscapeChar           *string `json:"escapeChar,omitempty"`
-	EventBreakerRegex    *string `json:"eventBreakerRegex,omitempty"`
-	FieldsLineRegex      *string `json:"fieldsLineRegex,omitempty"`
-	HeaderLineRegex      *string `json:"headerLineRegex,omitempty"`
-	QuoteChar            *string `json:"quoteChar,omitempty"`
+	Name                 *string  `json:"name,omitempty"`
+	Condition            *string  `json:"condition,omitempty"`
+	Type                 *string  `json:"type,omitempty"`
+	TimestampAnchorRegex *string  `json:"timestampAnchorRegex,omitempty"`
+	Timestamp            any      `json:"timestamp,omitempty"`
+	TimestampTimezone    *string  `json:"timestampTimezone,omitempty"`
+	TimestampEarliest    *string  `json:"timestampEarliest,omitempty"`
+	TimestampLatest      *string  `json:"timestampLatest,omitempty"`
+	MaxEventBytes        *int64   `json:"maxEventBytes,omitempty"`
+	Fields               any      `json:"fields,omitempty"`
+	Disabled             *bool    `json:"disabled,omitempty"`
+	ParserEnabled        *bool    `json:"parserEnabled,omitempty"`
+	ShouldUseDataRaw     *bool    `json:"shouldUseDataRaw,omitempty"`
+	Delimiter            *string  `json:"delimiter,omitempty"`
+	DelimiterRegex       *string  `json:"delimiterRegex,omitempty"`
+	EscapeChar           *string  `json:"escapeChar,omitempty"`
+	EventBreakerRegex    *string  `json:"eventBreakerRegex,omitempty"`
+	FieldsLineRegex      *string  `json:"fieldsLineRegex,omitempty"`
+	HeaderLineRegex      *string  `json:"headerLineRegex,omitempty"`
+	QuoteChar            *string  `json:"quoteChar,omitempty"`
+	JSONArrayField       *string  `json:"jsonArrayField,omitempty"`
+	ParentFieldsToCopy   []string `json:"parentFieldsToCopy,omitempty"`
+	JSONExtractAll       *bool    `json:"jsonExtractAll,omitempty"`
 }
 
 func PackBreakersRulesAttrTypes() map[string]attr.Type {
@@ -128,6 +134,9 @@ func PackBreakersRulesAttrTypes() map[string]attr.Type {
 		"fields_line_regex":      types.StringType,
 		"header_line_regex":      types.StringType,
 		"quote_char":             types.StringType,
+		"json_array_field":       types.StringType,
+		"parent_fields_to_copy":  types.ListType{ElemType: types.StringType},
+		"json_extract_all":       types.BoolType,
 	}
 }
 

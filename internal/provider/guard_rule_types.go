@@ -8,8 +8,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -17,59 +17,58 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type GuardRuleModel struct {
-	ContextKeywords types.List `tfsdk:"context_keywords" json:"contextKeywords,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID types.String `tfsdk:"id" json:"id,omitempty"`
-	Lib types.String `tfsdk:"lib" json:"lib,omitempty"`
-	Regex types.String `tfsdk:"regex" json:"regex,omitempty"`
-	Rulesets types.List `tfsdk:"rulesets" json:"rulesets,omitempty"`
+	ContextKeywords types.List   `tfsdk:"context_keywords" json:"contextKeywords,omitempty"`
+	Description     types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID         types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID              types.String `tfsdk:"id" json:"id,omitempty"`
+	Lib             types.String `tfsdk:"lib" json:"lib,omitempty"`
+	Regex           types.String `tfsdk:"regex" json:"regex,omitempty"`
+	Rulesets        types.List   `tfsdk:"rulesets" json:"rulesets,omitempty"`
 }
 
 type GuardRuleResourceModel struct {
-	ContextKeywords types.List `tfsdk:"context_keywords" json:"contextKeywords,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID types.String `tfsdk:"id" json:"id,omitempty"`
-	Lib types.String `tfsdk:"lib" json:"lib,omitempty"`
-	Regex types.String `tfsdk:"regex" json:"regex,omitempty"`
-	Rulesets []types.String `tfsdk:"rulesets" json:"rulesets,omitempty"`
+	ContextKeywords types.List     `tfsdk:"context_keywords" json:"contextKeywords,omitempty"`
+	Description     types.String   `tfsdk:"description" json:"description,omitempty"`
+	GroupID         types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID              types.String   `tfsdk:"id" json:"id,omitempty"`
+	Lib             types.String   `tfsdk:"lib" json:"lib,omitempty"`
+	Regex           types.String   `tfsdk:"regex" json:"regex,omitempty"`
+	Rulesets        []types.String `tfsdk:"rulesets" json:"rulesets,omitempty"`
 }
 
 type GuardRuleDataSourceModel struct {
-	ContextKeywords types.List `tfsdk:"context_keywords" json:"contextKeywords,omitempty"`
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID types.String `tfsdk:"id" json:"id,omitempty"`
-	Lib types.String `tfsdk:"lib" json:"lib,omitempty"`
-	Regex types.String `tfsdk:"regex" json:"regex,omitempty"`
-	Rulesets []types.String `tfsdk:"rulesets" json:"rulesets,omitempty"`
+	ContextKeywords types.List     `tfsdk:"context_keywords" json:"contextKeywords,omitempty"`
+	Description     types.String   `tfsdk:"description" json:"description,omitempty"`
+	GroupID         types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID              types.String   `tfsdk:"id" json:"id,omitempty"`
+	Lib             types.String   `tfsdk:"lib" json:"lib,omitempty"`
+	Regex           types.String   `tfsdk:"regex" json:"regex,omitempty"`
+	Rulesets        []types.String `tfsdk:"rulesets" json:"rulesets,omitempty"`
 }
 
 type GuardRuleAPIModel struct {
-	ContextKeywords any `json:"contextKeywords,omitempty"`
-	Description *string `json:"description,omitempty"`
-	GroupID *string `json:"groupId,omitempty"`
-	ID *string `json:"id,omitempty"`
-	Lib *string `json:"lib,omitempty"`
-	Regex *string `json:"regex,omitempty"`
-	Rulesets []string `json:"rulesets,omitempty"`
+	ContextKeywords any      `json:"contextKeywords,omitempty"`
+	Description     *string  `json:"description,omitempty"`
+	GroupID         *string  `json:"groupId,omitempty"`
+	ID              *string  `json:"id,omitempty"`
+	Lib             *string  `json:"lib,omitempty"`
+	Regex           *string  `json:"regex,omitempty"`
+	Rulesets        []string `json:"rulesets,omitempty"`
 }
 
-
 type GuardRuleContextKeywordsModel struct {
-	Keyword types.String `tfsdk:"keyword" json:"keyword,omitempty"`
+	Keyword   types.String `tfsdk:"keyword" json:"keyword,omitempty"`
 	Placement types.String `tfsdk:"placement" json:"placement,omitempty"`
 }
 
 type GuardRuleContextKeywordsAPIModel struct {
-	Keyword *string `json:"keyword,omitempty"`
+	Keyword   *string `json:"keyword,omitempty"`
 	Placement *string `json:"placement,omitempty"`
 }
 
 func GuardRuleContextKeywordsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"keyword": types.StringType,
+		"keyword":   types.StringType,
 		"placement": types.StringType,
 	}
 }
@@ -285,7 +284,6 @@ func GuardRuleTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 }
 
-
 func (m GuardRuleModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.ContextKeywords.IsNull() && !m.ContextKeywords.IsUnknown() {
@@ -383,4 +381,3 @@ func (m *GuardRuleModel) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-

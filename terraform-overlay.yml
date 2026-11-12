@@ -949,6 +949,20 @@ actions:
             type: string
             title: Quote character
             x-terraform-optional-computed: true
+          jsonArrayField: {}
+          parentFieldsToCopy: {}
+          jsonExtractAll: {}
+  # The inline ruleset schema omits JSON options defined on EventBreakerRule.
+  # Copy the upstream definitions so group and pack rulesets retain these fields.
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules.items.properties.jsonArrayField"
+    copy_from: "$.components.schemas.EventBreakerRule.properties.jsonArrayField"
+    update: {}
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules.items.properties.parentFieldsToCopy"
+    copy_from: "$.components.schemas.EventBreakerRule.properties.parentFieldsToCopy"
+    update: {}
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules.items.properties.jsonExtractAll"
+    copy_from: "$.components.schemas.EventBreakerRule.properties.jsonExtractAll"
+    update: {}
 
   - target: "$.paths./m/{groupId}/lib/hmac-functions.post"
     update:
@@ -1157,6 +1171,73 @@ actions:
   - target: "$.paths./m/{groupId}/system/settings/conf.patch"
     update:
       x-terraform-update: GroupSystemSettings
+  # Allow selected limits in Terraform while a provider-owned wrapper reads and
+  # merges the complete configuration before the upstream replacement PATCH.
+  - target: "$.components.schemas"
+    update:
+      SystemLimitsUpdate: {}
+  - target: "$.components.schemas.SystemLimitsUpdate"
+    copy_from: "$.components.schemas.Limits"
+    update:
+      title: SystemLimitsUpdate
+      required: []
+  - target: "$.paths./m/{groupId}/system/limits.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SystemLimits
+      x-terraform-resource-factory-hook: newSystemLimitsManagedResource
+      x-terraform-update: SystemLimits
+      x-terraform-refresh-from-api: true
+      x-terraform-generate-data-source-docs: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SystemLimitsUpdate"
+  - target: "$.paths./m/{groupId}/system/limits.get"
+    update:
+      x-terraform-read: SystemLimits
+  # Use the writable-limit example instead of the full API payload.
+  - target: "$.paths./m/{groupId}/system/limits.patch.requestBody.content.application/json.examples"
+    replace: {}
+  - target: "$.components.schemas.Limits.properties.maxPQSize"
+    update:
+      x-terraform-name: max_pq_size
+  - target: "$.components.schemas.Limits.properties.metricsGCPeriod"
+    update:
+      x-terraform-name: metrics_gc_period
+  - target: "$.components.schemas.Limits.properties.kvStoreWALMaxBytes"
+    update:
+      x-terraform-name: kv_store_wal_max_bytes
+  - target: "$.components.schemas.SystemLimitsUpdate.properties"
+    update:
+      lookupAllowedPaths:
+        x-terraform-computed: true
+        description: Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      lookupMaxSize:
+        x-terraform-computed: true
+        description: Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      lookupMaxTotalSize:
+        x-terraform-computed: true
+        description: Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      enableWorkerInMemory:
+        x-terraform-computed: true
+        description: Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+      metricsDirectory:
+        x-terraform-computed: true
+        description: Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.
+      managedFields:
+        type: array
+        items:
+          type: string
+        x-terraform-computed: true
+        description: Provider-maintained list of configured limit field paths. Tracks ownership changes even when a managed value is absent from the API.
+      maxPQSize:
+        x-terraform-name: max_pq_size
+      metricsGCPeriod:
+        x-terraform-name: metrics_gc_period
+      kvStoreWALMaxBytes:
+        x-terraform-name: kv_store_wal_max_bytes
   - target: "$.components.schemas.SslTypeSystemSettingsConfApi.properties.passphrase"
     update:
       x-terraform-sensitive: true
@@ -2812,9 +2893,20 @@ actions:
         type:
           type: string
           description: Dataset provider type.
+  - target: "$.components.schemas.DatasetMetadata"
+    update:
+      required: [enableAcceleration, fieldList, scanMode]
+      if:
+        required: [enableAcceleration]
+        properties:
+          enableAcceleration:
+            const: true
+      then:
+        required: [earliest]
   - target: "$.components.schemas.DatasetMetadata.properties.earliest"
     update:
       x-terraform-optional-computed: true
+      description: Rolling time window that defines how far back acceleration scans. Required when enable_acceleration is true (for example, -30d).
   - target: "$.components.schemas.DatasetMetadata.properties.enableAcceleration"
     update:
       x-terraform-optional-computed: true

@@ -25,7 +25,7 @@ type GuardRulesDataSource struct {
 
 type GuardRulesListDataSourceModel struct {
 	GroupID types.String `tfsdk:"group_id"`
-	Items types.List `tfsdk:"items"`
+	Items   types.List   `tfsdk:"items"`
 }
 
 func NewGuardRulesDataSource() datasource.DataSource {
@@ -41,7 +41,7 @@ func (d *GuardRulesDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 		MarkdownDescription: "GuardRules Data Source",
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
 				Description: `Worker group ID.`,
 			},
 
@@ -49,44 +49,43 @@ func (d *GuardRulesDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-							"context_keywords": schema.ListNestedAttribute{
-								Computed: true,
-								Description: `Context keywords that help match sensitive data for this rule.`,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"keyword": schema.StringAttribute{
-											Computed: true,
-											Description: `Keyword that provides additional context to help match sensitive data for the rule.`,
-										},
-										"placement": schema.StringAttribute{
-											Computed: true,
-											Description: `Position of the keyword relative to the match: <code>before</code> or <code>after</code>.`,
-										},
+						"context_keywords": schema.ListNestedAttribute{
+							Computed:    true,
+							Description: `Context keywords that help match sensitive data for this rule.`,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"keyword": schema.StringAttribute{
+										Computed:    true,
+										Description: `Keyword that provides additional context to help match sensitive data for the rule.`,
+									},
+									"placement": schema.StringAttribute{
+										Computed:    true,
+										Description: `Position of the keyword relative to the match: <code>before</code> or <code>after</code>.`,
 									},
 								},
 							},
-							"description": schema.StringAttribute{
-								Computed: true,
-								Description: `Brief description of the SDS rule.`,
-							},
-							"id": schema.StringAttribute{
-								Computed: true,
-								Description: `Unique identifier for the SDS rule.`,
-							},
-							"lib": schema.StringAttribute{
-								Computed: true,
-								Description: `Name of the library that the rule belongs to.`,
-							},
-							"regex": schema.StringAttribute{
-								Computed: true,
-								Description: `Regular expression pattern used to match sensitive data.`,
-							},
-							"rulesets": schema.ListAttribute{
-								Computed: true,
-								Description: `Rulesets that the rule belongs to.`,
-								ElementType: types.StringType,
-							},
-
+						},
+						"description": schema.StringAttribute{
+							Computed:    true,
+							Description: `Brief description of the SDS rule.`,
+						},
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique identifier for the SDS rule.`,
+						},
+						"lib": schema.StringAttribute{
+							Computed:    true,
+							Description: `Name of the library that the rule belongs to.`,
+						},
+						"regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regular expression pattern used to match sensitive data.`,
+						},
+						"rulesets": schema.ListAttribute{
+							Computed:    true,
+							Description: `Rulesets that the rule belongs to.`,
+							ElementType: types.StringType,
+						},
 					},
 				},
 			},
@@ -124,7 +123,7 @@ func (d *GuardRulesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(GuardRulesItemAttrTypes(), map[string]attr.Value{"context_keywords": item.ContextKeywords, "description": item.Description, "id": item.ID, "lib": item.Lib, "regex": item.Regex, "rulesets": item.Rulesets, }))
+			values = append(values, types.ObjectValueMust(GuardRulesItemAttrTypes(), map[string]attr.Value{"context_keywords": item.ContextKeywords, "description": item.Description, "id": item.ID, "lib": item.Lib, "regex": item.Regex, "rulesets": item.Rulesets}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: GuardRulesItemAttrTypes()}, values)
@@ -134,10 +133,10 @@ func (d *GuardRulesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 func GuardRulesItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"context_keywords": types.ListType{ElemType: types.ObjectType{AttrTypes: GuardRuleContextKeywordsAttrTypes()}},
-		"description": types.StringType,
-		"id": types.StringType,
-		"lib": types.StringType,
-		"regex": types.StringType,
-		"rulesets": types.ListType{ElemType: types.StringType},
+		"description":      types.StringType,
+		"id":               types.StringType,
+		"lib":              types.StringType,
+		"regex":            types.StringType,
+		"rulesets":         types.ListType{ElemType: types.StringType},
 	}
 }
