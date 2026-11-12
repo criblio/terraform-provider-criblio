@@ -34,6 +34,7 @@ commit history, and tag-to-tag diffs.
 - Syncing 4.20.3 upstream spec.
 - MON-1453: typed monitor resource + notifications (base layer).
 - Reverting codegen changes and adding example.
+- PLAT-17563: `criblio_guard_rule` resource with single and list data sources, for managing custom Guard Rules in a Worker Group.
 
 ### Fixed
 - Fixed saved-query exports containing empty schedule notification objects so Terraform accepts them and import produces a clean plan, while preserving explicit notification enablement values.

@@ -71,6 +71,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_grok":                         {SDKService: "Grokfiles", ListMethod: "ListGrokFile", GetMethod: "GetGrokFileByID", ImportIDFormat: ""},
 	"criblio_group":                        {SDKService: "Groups", ListMethod: "ListGroups", GetMethod: "GetGroupsByID", ImportIDFormat: ""},
 	"criblio_group_system_settings":        {SDKService: "System", ListMethod: "", GetMethod: "GetSystemSettingsConf", ImportIDFormat: ""},
+	"criblio_guard_rule":                   {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/sds-rules", RESTGetPath: "/m/{group_id}/lib/sds-rules/{id}"},
 	"criblio_hmac_function":                {SDKService: "HmacFunctions", ListMethod: "ListHmacFunction", GetMethod: "GetHmacFunctionByID", ImportIDFormat: ""},
 	"criblio_key":                          {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_lakehouse_dataset_connection": {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
