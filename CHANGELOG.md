@@ -36,6 +36,7 @@ commit history, and tag-to-tag diffs.
 - MON-1453: typed monitor resource + notifications (base layer).
 - Reverting codegen changes and adding example.
 - PLAT-17563: `criblio_guard_rule` resource with single and list data sources, for managing custom Guard Rules in a Worker Group.
+- PLAT-18021: Made `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` configurable in `criblio_system_limits`. On the Cribl.Cloud Leader and Cribl-managed Worker Groups, the API returns 403 for these attributes unless the caller is a Cribl Operator. After upgrading from v1.25.111–v1.25.113, the first plan shows these four attributes changing to null once; the apply changes nothing on the server.
 
 ### Fixed
 - Fixed saved-query exports containing empty schedule notification objects so Terraform accepts them and import produces a clean plan, while preserving explicit notification enablement values.

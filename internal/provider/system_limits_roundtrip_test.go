@@ -132,10 +132,10 @@ func TestSystemLimitsManagedLimits(t *testing.T) {
 			{Config: config(`["cribl.cpu"]`, ""), Check: resource.ComposeAggregateTestCheckFunc(
 				resource.TestCheckResourceAttr(name, "metrics_drop_list.0", "cribl.cpu"),
 				resource.TestCheckNoResourceAttr(name, "min_free_space"),
-				resource.TestCheckResourceAttr(name, "lookup_allowed_paths.0", "/readonly"),
-				resource.TestCheckResourceAttr(name, "lookup_max_size", "50 MB"),
-				resource.TestCheckResourceAttr(name, "lookup_max_total_size", "5 GB"),
-				resource.TestCheckResourceAttr(name, "enable_worker_in_memory", "false"),
+				resource.TestCheckNoResourceAttr(name, "lookup_allowed_paths.#"),
+				resource.TestCheckNoResourceAttr(name, "lookup_max_size"),
+				resource.TestCheckNoResourceAttr(name, "lookup_max_total_size"),
+				resource.TestCheckNoResourceAttr(name, "enable_worker_in_memory"),
 				resource.TestCheckResourceAttr(name, "metrics_directory", "/var/cribl/metrics"),
 				resource.TestCheckResourceAttr(name, "managed_fields.#", "1"),
 				resource.TestCheckResourceAttr(name, "managed_fields.0", "metricsDropList"),
@@ -150,11 +150,12 @@ func TestSystemLimitsManagedLimits(t *testing.T) {
 				stored["enableWorkerInMemory"] = json.RawMessage(`true`)
 				stored["metricsDirectory"] = json.RawMessage(`"/var/updated/metrics"`)
 			}, Config: config(`["cribl.cpu"]`, ""), PlanOnly: true},
+			// Unconfigured lookup fields stay null; read-only metrics_directory refreshes.
 			{Config: config(`["cribl.cpu"]`, ""), Check: resource.ComposeAggregateTestCheckFunc(
-				resource.TestCheckResourceAttr(name, "lookup_allowed_paths.0", "/updated"),
-				resource.TestCheckResourceAttr(name, "lookup_max_size", "100 MB"),
-				resource.TestCheckResourceAttr(name, "lookup_max_total_size", "10 GB"),
-				resource.TestCheckResourceAttr(name, "enable_worker_in_memory", "true"),
+				resource.TestCheckNoResourceAttr(name, "lookup_allowed_paths.#"),
+				resource.TestCheckNoResourceAttr(name, "lookup_max_size"),
+				resource.TestCheckNoResourceAttr(name, "lookup_max_total_size"),
+				resource.TestCheckNoResourceAttr(name, "enable_worker_in_memory"),
 				resource.TestCheckResourceAttr(name, "metrics_directory", "/var/updated/metrics"),
 			)},
 			{PreConfig: func() {
@@ -193,7 +194,7 @@ data "criblio_system_limits" "test" {
 				mu.Lock()
 				defer mu.Unlock()
 				stored["lookupAllowedPaths"] = json.RawMessage(`[]`)
-			}, Config: config(`["cribl.cpu"]`, ""), Check: resource.TestCheckResourceAttr(name, "lookup_allowed_paths.#", "0")},
+			}, Config: config(`["cribl.cpu"]`, ""), Check: resource.TestCheckNoResourceAttr(name, "lookup_allowed_paths.#")},
 			{PreConfig: func() {
 				mu.Lock()
 				defer mu.Unlock()
@@ -222,6 +223,7 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 		{"zero limit", "maxEPs", `max_eps = 0`, `0`, `10`, ""},
 		{"nested object", "samples", `samples = { max_size = "1 MB" }`, `{"maxSize":"1 MB"}`, `{"maxSize":"2 MB"}`, ""},
 		{"unknown metric", "metricsDropList", `metrics_drop_list = [terraform_data.metric.output]`, `["cribl.cpu"]`, `["external.metric"]`, `resource "terraform_data" "metric" { input = "cribl.cpu" }`},
+		{"lookup paths", "lookupAllowedPaths", `lookup_allowed_paths = ["/tmp"]`, `["/tmp"]`, `["/external"]`, ""},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var mu sync.Mutex
@@ -257,6 +259,11 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 					if string(body[tc.field]) != tc.initial {
 						t.Errorf("configured field = %s, want %s", body[tc.field], tc.initial)
 					}
+					for key, value := range stored {
+						if key != tc.field && !reflect.DeepEqual(body[key], value) {
+							t.Errorf("PATCH changed unconfigured %s: %s", key, body[key])
+						}
+					}
 					stored = body
 				case http.MethodGet:
 				default:
@@ -289,7 +296,7 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 				// Applying removal must persist ownership even when both values are null.
 				{Config: groupOnly, Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("criblio_system_limits.test", "managed_fields.#", "0"),
-					resource.TestCheckResourceAttr("criblio_system_limits.test", "lookup_allowed_paths.0", "/readonly"),
+					resource.TestCheckNoResourceAttr("criblio_system_limits.test", "lookup_allowed_paths.#"),
 				)},
 				{PreConfig: func() { mu.Lock(); defer mu.Unlock(); stored[tc.field] = json.RawMessage(tc.external) }, Config: groupOnly, PlanOnly: true},
 				{Config: groupOnly, PlanOnly: true},
@@ -311,12 +318,114 @@ func TestSystemLimitsOwnershipAfterRemoteRemoval(t *testing.T) {
 	}
 }
 
+func TestSystemLimitsConfiguresLookupFields(t *testing.T) {
+	initial := map[string]string{
+		"lookupAllowedPaths": `["/opt/x"]`, "lookupMaxSize": `"50 MB"`,
+		"lookupMaxTotalSize": `"5 GB"`, "enableWorkerInMemory": `false`,
+		"minFreeSpace": `"2 GB"`, "metricsDirectory": `"/metrics"`,
+	}
+	for _, tc := range []struct{ attr, field, value, stateKey, stateValue string }{
+		{"lookup_allowed_paths", "lookupAllowedPaths", `["/tmp"]`, "lookup_allowed_paths.0", "/tmp"},
+		{"lookup_allowed_paths", "lookupAllowedPaths", `[]`, "lookup_allowed_paths.#", "0"}, // an empty list clears the server list
+		{"lookup_max_size", "lookupMaxSize", `"100 MB"`, "lookup_max_size", "100 MB"},
+		{"lookup_max_total_size", "lookupMaxTotalSize", `"10 GB"`, "lookup_max_total_size", "10 GB"},
+		{"enable_worker_in_memory", "enableWorkerInMemory", `true`, "enable_worker_in_memory", "true"},
+	} {
+		t.Run(tc.attr, func(t *testing.T) {
+			var mu sync.Mutex
+			stored := map[string]json.RawMessage{}
+			for key, value := range initial {
+				stored[key] = json.RawMessage(value)
+			}
+			patches := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				mu.Lock()
+				defer mu.Unlock()
+				if r.Method == http.MethodPatch {
+					patches++
+					var body map[string]json.RawMessage
+					if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+						t.Errorf("decode PATCH: %v", err)
+						w.WriteHeader(http.StatusBadRequest)
+						return
+					}
+					for key, value := range initial {
+						want := value
+						if key == tc.field {
+							want = tc.value
+						}
+						if string(body[key]) != want {
+							t.Errorf("PATCH %s = %s, want %s", key, body[key], want)
+						}
+					}
+					stored = body
+				}
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(map[string]any{"items": []any{stored}}); err != nil {
+					t.Errorf("encode limits: %v", err)
+				}
+			}))
+			defer server.Close()
+			config := fmt.Sprintf(`resource "criblio_system_limits" "test" {
+  group_id = "test-fleet"
+  %s = %s
+}`, tc.attr, tc.value)
+			checks := []resource.TestCheckFunc{
+				resource.TestCheckResourceAttr("criblio_system_limits.test", tc.stateKey, tc.stateValue),
+				resource.TestCheckResourceAttr("criblio_system_limits.test", "managed_fields.#", "1"),
+				resource.TestCheckResourceAttr("criblio_system_limits.test", "managed_fields.0", tc.field),
+			}
+			for _, other := range []string{"lookup_max_size", "lookup_max_total_size", "enable_worker_in_memory", "lookup_allowed_paths.#"} {
+				if other != tc.stateKey && other != tc.attr+".#" {
+					checks = append(checks, resource.TestCheckNoResourceAttr("criblio_system_limits.test", other))
+				}
+			}
+			resource.UnitTest(t, resource.TestCase{
+				ProtoV6ProviderFactories: map[string]func() (tfprotov6.ProviderServer, error){"criblio": providerserver.NewProtocol6WithError(&systemLimitsTestProvider{baseURL: server.URL})},
+				Steps: []resource.TestStep{
+					{Config: config, Check: resource.ComposeAggregateTestCheckFunc(checks...)},
+					{Config: config, PlanOnly: true},
+				},
+			})
+			mu.Lock()
+			defer mu.Unlock()
+			if patches != 1 {
+				t.Fatalf("got %d PATCHes, want 1", patches)
+			}
+		})
+	}
+}
+
+func TestSystemLimitsLookupFieldsForbidden(t *testing.T) {
+	const message = `Forbidden. Contact Cribl Operator to update "lookupAllowedPaths"`
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method == http.MethodPatch {
+			w.WriteHeader(http.StatusForbidden)
+			if err := json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": message}); err != nil {
+				t.Errorf("encode error: %v", err)
+			}
+			return
+		}
+		if _, err := w.Write([]byte(`{"items":[{"lookupAllowedPaths":["/opt/x"],"minFreeSpace":"2 GB"}]}`)); err != nil {
+			t.Errorf("write limits: %v", err)
+		}
+	}))
+	defer server.Close()
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: map[string]func() (tfprotov6.ProviderServer, error){"criblio": providerserver.NewProtocol6WithError(&systemLimitsTestProvider{baseURL: server.URL})},
+		Steps: []resource.TestStep{{
+			Config: `resource "criblio_system_limits" "test" {
+  group_id = "default"
+  lookup_allowed_paths = ["/tmp"]
+}`,
+			ExpectError: regexp.MustCompile(`(?s)Unable to update system limits.*HTTP 403.*Contact\s+Cribl\s+Operator\s+to\s+update`),
+		}},
+	})
+}
+
 func TestSystemLimitsRejectReadOnlyConfiguration(t *testing.T) {
 	for _, tc := range []struct{ field, value string }{
-		{"lookup_allowed_paths", `["/tmp"]`},
-		{"lookup_max_size", `"500 MB"`},
-		{"lookup_max_total_size", `"2 GB"`},
-		{"enable_worker_in_memory", `false`},
 		{"metrics_directory", `"/metrics"`},
 	} {
 		t.Run(tc.field, func(t *testing.T) {
