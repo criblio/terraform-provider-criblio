@@ -121,9 +121,9 @@ func (r *SystemLimitsResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"enable_worker_in_memory": schema.BoolAttribute{
 				Required:    false,
-				Optional:    false,
-				Computed:    true,
-				Description: `Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Optional:    true,
+				Computed:    false,
+				Description: `Whether worker connection data is retained only in memory. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 			},
 			"events_metadata_sources": schema.ListAttribute{
 				Required:    false,
@@ -206,25 +206,25 @@ func (r *SystemLimitsResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 			"lookup_allowed_paths": schema.ListAttribute{
 				Required:    false,
-				Optional:    false,
-				Computed:    true,
-				Description: `Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Optional:    true,
+				Computed:    false,
+				Description: `Additional permitted lookup directories. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 				ElementType: types.StringType,
 			},
 			"lookup_max_size": schema.StringAttribute{
 				Required:    false,
-				Optional:    false,
-				Computed:    true,
-				Description: `Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Optional:    true,
+				Computed:    false,
+				Description: `Maximum disk space for a single lookup file. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
 				},
 			},
 			"lookup_max_total_size": schema.StringAttribute{
 				Required:    false,
-				Optional:    false,
-				Computed:    true,
-				Description: `Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Optional:    true,
+				Computed:    false,
+				Description: `Maximum disk space for lookup data and metadata. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
 				},
@@ -554,6 +554,9 @@ func isSystemLimitsImportState(state *SystemLimitsModel) bool {
 	if !state.EnableProcessInfoUsingWindowsTools.IsNull() && !state.EnableProcessInfoUsingWindowsTools.IsUnknown() {
 		return false
 	}
+	if !state.EnableWorkerInMemory.IsNull() && !state.EnableWorkerInMemory.IsUnknown() {
+		return false
+	}
 	if !state.EventsMetadataSources.IsNull() && !state.EventsMetadataSources.IsUnknown() {
 		return false
 	}
@@ -579,6 +582,15 @@ func isSystemLimitsImportState(state *SystemLimitsModel) bool {
 		return false
 	}
 	if !state.LargeEventsThreshold.IsNull() && !state.LargeEventsThreshold.IsUnknown() {
+		return false
+	}
+	if !state.LookupAllowedPaths.IsNull() && !state.LookupAllowedPaths.IsUnknown() {
+		return false
+	}
+	if !state.LookupMaxSize.IsNull() && !state.LookupMaxSize.IsUnknown() {
+		return false
+	}
+	if !state.LookupMaxTotalSize.IsNull() && !state.LookupMaxTotalSize.IsUnknown() {
 		return false
 	}
 	if !state.MaxDimensionValueSize.IsNull() && !state.MaxDimensionValueSize.IsUnknown() {
@@ -701,10 +713,10 @@ func applySystemLimitsAPIToState(api *SystemLimitsModel, state *SystemLimitsMode
 			state.EnableProcessInfoUsingWindowsTools = api.EnableProcessInfoUsingWindowsTools
 		}
 	}
-	if !api.EnableWorkerInMemory.IsNull() && !api.EnableWorkerInMemory.IsUnknown() {
-		state.EnableWorkerInMemory = api.EnableWorkerInMemory
-	} else if state.EnableWorkerInMemory.IsNull() || state.EnableWorkerInMemory.IsUnknown() {
-		state.EnableWorkerInMemory = types.BoolValue(false)
+	if !preserveInputs || (fillMissingInputs && (state.EnableWorkerInMemory.IsNull() || state.EnableWorkerInMemory.IsUnknown())) {
+		if !api.EnableWorkerInMemory.IsNull() && !api.EnableWorkerInMemory.IsUnknown() {
+			state.EnableWorkerInMemory = api.EnableWorkerInMemory
+		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.EventsMetadataSources.IsNull() || state.EventsMetadataSources.IsUnknown())) {
 		if !api.EventsMetadataSources.IsNull() && !api.EventsMetadataSources.IsUnknown() {
@@ -759,23 +771,23 @@ func applySystemLimitsAPIToState(api *SystemLimitsModel, state *SystemLimitsMode
 			state.LargeEventsThreshold = api.LargeEventsThreshold
 		}
 	}
-	if !api.LookupAllowedPaths.IsNull() && !api.LookupAllowedPaths.IsUnknown() {
-		state.LookupAllowedPaths = api.LookupAllowedPaths
-	} else if state.LookupAllowedPaths.IsNull() || state.LookupAllowedPaths.IsUnknown() {
-		state.LookupAllowedPaths = types.ListValueMust(types.StringType, nil)
+	if !preserveInputs || (fillMissingInputs && (state.LookupAllowedPaths.IsNull() || state.LookupAllowedPaths.IsUnknown())) {
+		if !api.LookupAllowedPaths.IsNull() && !api.LookupAllowedPaths.IsUnknown() {
+			state.LookupAllowedPaths = api.LookupAllowedPaths
+		}
 	}
 	if elementType := state.LookupAllowedPaths.ElementType(context.Background()); elementType == nil {
 		state.LookupAllowedPaths = types.ListNull(types.StringType)
 	}
-	if !api.LookupMaxSize.IsNull() && !api.LookupMaxSize.IsUnknown() {
-		state.LookupMaxSize = api.LookupMaxSize
-	} else if state.LookupMaxSize.IsNull() || state.LookupMaxSize.IsUnknown() {
-		state.LookupMaxSize = types.StringValue("")
+	if !preserveInputs || (fillMissingInputs && (state.LookupMaxSize.IsNull() || state.LookupMaxSize.IsUnknown())) {
+		if !api.LookupMaxSize.IsNull() && !api.LookupMaxSize.IsUnknown() {
+			state.LookupMaxSize = api.LookupMaxSize
+		}
 	}
-	if !api.LookupMaxTotalSize.IsNull() && !api.LookupMaxTotalSize.IsUnknown() {
-		state.LookupMaxTotalSize = api.LookupMaxTotalSize
-	} else if state.LookupMaxTotalSize.IsNull() || state.LookupMaxTotalSize.IsUnknown() {
-		state.LookupMaxTotalSize = types.StringValue("")
+	if !preserveInputs || (fillMissingInputs && (state.LookupMaxTotalSize.IsNull() || state.LookupMaxTotalSize.IsUnknown())) {
+		if !api.LookupMaxTotalSize.IsNull() && !api.LookupMaxTotalSize.IsUnknown() {
+			state.LookupMaxTotalSize = api.LookupMaxTotalSize
+		}
 	}
 	if !api.ManagedFields.IsNull() && !api.ManagedFields.IsUnknown() {
 		state.ManagedFields = api.ManagedFields
