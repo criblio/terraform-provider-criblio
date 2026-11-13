@@ -1212,17 +1212,13 @@ actions:
   - target: "$.components.schemas.SystemLimitsUpdate.properties"
     update:
       lookupAllowedPaths:
-        x-terraform-computed: true
-        description: Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+        description: Additional permitted lookup directories. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
       lookupMaxSize:
-        x-terraform-computed: true
-        description: Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+        description: Maximum disk space for a single lookup file. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
       lookupMaxTotalSize:
-        x-terraform-computed: true
-        description: Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+        description: Maximum disk space for lookup data and metadata. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
       enableWorkerInMemory:
-        x-terraform-computed: true
-        description: Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
+        description: Whether worker connection data is retained only in memory. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
       metricsDirectory:
         x-terraform-computed: true
         description: Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.

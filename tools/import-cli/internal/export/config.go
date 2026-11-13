@@ -6,7 +6,7 @@ package export
 var readOnlyAttrsByType = map[string][]string{
 	"criblio_workspace_system_settings": {"managed_fields"},
 
-	"criblio_system_limits":           {"managed_fields", "lookup_allowed_paths", "lookup_max_size", "lookup_max_total_size", "enable_worker_in_memory", "metrics_directory"},
+	"criblio_system_limits":           {"managed_fields", "metrics_directory"},
 	"criblio_collector":               {"saved_state"}, // API runtime checkpoints should not become configuration.
 	"criblio_pack_collector":          {"saved_state"},
 	"criblio_certificate":             {"cert_expiry_date", "in_use", "passphrase"}, // cert_expiry_date/in_use are Computed; passphrase is write-only/sensitive
