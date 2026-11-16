@@ -27,12 +27,9 @@ func newSystemLimitsManagedResource() resource.Resource { return &systemLimitsMa
 
 const systemLimitsManagedFieldsKey = "system_limits_managed_fields"
 
-// These fields are operator-controlled or feature-gated by the backend. They
-// remain in replacement PATCHes unchanged and are always refreshed into state.
-var systemLimitsReadOnlyFields = []string{
-	"lookupAllowedPaths", "lookupMaxSize", "lookupMaxTotalSize",
-	"enableWorkerInMemory", "metricsDirectory",
-}
+// This field is feature-gated by the backend. It remains in replacement
+// PATCHes unchanged and is always refreshed into state.
+var systemLimitsReadOnlyFields = []string{"metricsDirectory"}
 
 func (r *systemLimitsManagedResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
 	if req.Plan.Raw.IsNull() {
@@ -262,10 +259,6 @@ func systemLimitsReadOnlyModel(current map[string]json.RawMessage) (SystemLimits
 }
 
 func copySystemLimitsReadOnly(source SystemLimitsModel, target *SystemLimitsModel) {
-	target.LookupAllowedPaths = source.LookupAllowedPaths
-	target.LookupMaxSize = source.LookupMaxSize
-	target.LookupMaxTotalSize = source.LookupMaxTotalSize
-	target.EnableWorkerInMemory = source.EnableWorkerInMemory
 	target.MetricsDirectory = source.MetricsDirectory
 }
 

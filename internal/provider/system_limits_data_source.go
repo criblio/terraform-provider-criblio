@@ -77,7 +77,7 @@ func (d *SystemLimitsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 			},
 			"enable_worker_in_memory": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Description: `Whether worker connection data is retained only in memory. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 			},
 			"events_metadata_sources": schema.ListAttribute{
 				Computed:    true,
@@ -122,16 +122,16 @@ func (d *SystemLimitsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 			},
 			"lookup_allowed_paths": schema.ListAttribute{
 				Computed:    true,
-				Description: `Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Description: `Additional permitted lookup directories. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 				ElementType: types.StringType,
 			},
 			"lookup_max_size": schema.StringAttribute{
 				Computed:    true,
-				Description: `Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Description: `Maximum disk space for a single lookup file. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 			},
 			"lookup_max_total_size": schema.StringAttribute{
 				Computed:    true,
-				Description: `Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.`,
+				Description: `Maximum disk space for lookup data and metadata. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.`,
 			},
 			"managed_fields": schema.ListAttribute{
 				Computed:    true,

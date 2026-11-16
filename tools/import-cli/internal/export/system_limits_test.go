@@ -44,7 +44,7 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 		"metricsWorkerIdBlacklist":[], "minFreeSpace":"2 GB",
 		"samples":{"maxSize":"2 MB"}, "maxPQSize":"1 TB", "maxEPs":0,
         "lookupMaxSize":"500 MB", "lookupMaxTotalSize":"2 GB", "enableWorkerInMemory":false,
-		"eventsMetadataSources":[], "lookupAllowedPaths":[], "metricsDropList":[],
+		"eventsMetadataSources":[], "lookupAllowedPaths":["/tmp"], "metricsDropList":[],
 		"managedFields":["lookupAllowedPaths"]
 	}`)
 	model, err := converter.ConvertRawItemWithIdentifiers(entry, fixture, toRequestParams(ids))
@@ -79,9 +79,17 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 	if _, ok := item.Attrs["limits"]; ok {
 		t.Fatal("limits must be flat resource attributes")
 	}
-	for _, field := range []string{"managed_fields", "lookup_allowed_paths", "lookup_max_size", "lookup_max_total_size", "enable_worker_in_memory", "metrics_directory"} {
+	for _, field := range []string{"managed_fields", "metrics_directory"} {
 		if _, ok := item.Attrs[field]; ok {
 			t.Fatalf("read-only attribute %s must not become configuration", field)
+		}
+	}
+	if got := item.Attrs["lookup_allowed_paths"]; got.Kind != hcl.KindList || len(got.List) != 1 || got.List[0].String != "/tmp" {
+		t.Fatalf("export lost lookup_allowed_paths: %#v", got)
+	}
+	for _, field := range []string{"lookup_max_size", "lookup_max_total_size", "enable_worker_in_memory"} {
+		if _, ok := item.Attrs[field]; !ok {
+			t.Fatalf("configurable attribute %s was not exported", field)
 		}
 	}
 	file, err := hcl.FileWithResources([]hcl.ResourceInput{{TypeName: item.TypeName, Name: item.Name, Attrs: item.Attrs}}, hcl.DefaultResourceBlockOptions())
@@ -89,6 +97,9 @@ func TestSystemLimitsExportAndValidation(t *testing.T) {
 		t.Fatal(err)
 	}
 	config := string(file.Bytes())
+	if !strings.Contains(config, "lookup_allowed_paths") || strings.Contains(config, "managed_fields") || strings.Contains(config, "metrics_directory") {
+		t.Fatalf("unexpected exported HCL:\n%s", config)
+	}
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: map[string]func() (tfprotov6.ProviderServer, error){
 			"criblio": providerserver.NewProtocol6WithError(&systemLimitsExportTestProvider{}),

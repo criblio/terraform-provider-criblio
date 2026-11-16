@@ -14,7 +14,7 @@ Manages selected system limits for the Worker Group or Edge Fleet identified by 
 
 Configure only the limits you want Terraform to manage. Before each create or update, the provider reads the current limits, merges configured attributes, and sends a complete configuration as required by the upstream PATCH endpoint. Unconfigured limits, including fields unknown to this provider version, are retained. Writable lists replace the existing list; configure an empty list to clear one. Removing an attribute from configuration stops managing it and retains its current server value.
 
-The provider exposes `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, `enable_worker_in_memory`, and `metrics_directory` as read-only attributes and preserves their server values during updates. The four lookup and worker fields require Cribl Operator permissions in Cribl-managed deployments. Updating `metrics_directory` requires the backend `settings-limits-metrics-directory` feature flag.
+`lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` are configurable. In Cribl.Cloud, changing them on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept them. The provider exposes `metrics_directory` as a read-only attribute and preserves its server value during updates. Updating `metrics_directory` requires the backend `settings-limits-metrics-directory` feature flag.
 
 Refresh reports remote changes to managed attributes. Import uses the group ID and reads all supported limits; retain only the attributes you intend to manage in your configuration. Destroy removes the resource from Terraform state and leaves the server configuration in place because the API has no delete operation. Avoid simultaneous writers: the API does not provide a conditional update for the read and PATCH sequence.
 
@@ -47,6 +47,7 @@ resource "criblio_system_limits" "default" {
 - `edge_nodes_count` (Integer) Used to pre-allocate connection handlers. Changing this value could restart currently running connection handlers, causing all Edge Nodes to reconnect.
 - `enable_metrics_persistence` (Boolean) Disable to stop writing metrics to disk.
 - `enable_process_info_using_windows_tools` (Boolean) Enable PowerShell to collect process information instead of using the native API.
+- `enable_worker_in_memory` (Boolean) Whether worker connection data is retained only in memory. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
 - `events_metadata_sources` (List of String) List of event metadata sources to enable.
 - `hb_connection_mode` (String) Persistent: connection stays open. Ephemeral: connection can disconnect after a configured duration. Auto: treated as persistent in this version.
 - `hb_metric_spool_max_file_size` (String) Maximum file size per slice in the heartbeat metric spool. Active only in ephemeral mode.
@@ -56,6 +57,9 @@ resource "criblio_system_limits" "default" {
 - `kv_store_service_period` (Integer) How often the KVStore syncs itself to disk. When WAL mode is enabled, deltas to the KVStore are synced to disk immediately as they happen; however, the WAL is merged back into the overall KVStore on this interval.
 - `kv_store_wal_max_bytes` (Integer) The amount of bytes to allow a WAL file to get to before committing the WAL back into the KVStore.
 - `large_events_threshold` (String) Deprecated. Large events are now tracked using a histogram with fixed buckets.
+- `lookup_allowed_paths` (List of String) Additional permitted lookup directories. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
+- `lookup_max_size` (String) Maximum disk space for a single lookup file. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
+- `lookup_max_total_size` (String) Maximum disk space for lookup data and metadata. In Cribl.Cloud, changing this on the Leader or a Cribl-managed Worker Group requires Cribl Operator permissions, and the API returns 403; Fleets and hybrid Worker Groups accept it.
 - `max_dimension_value_size` (Integer) Maximum allowed length, in characters, for a metric dimension value. Metric series with a dimension value exceeding this limit are dropped.
 - `max_eps` (Integer) Maximum number of event processors (EPs) that all sources can create collectively within a worker process. When this limit is reached, new connections or requests are rejected to limit worker resources. Set to 0 to disable the limit.
 - `max_event_bytes_mode` (String) Consult Cribl Support before adjusting this advanced setting. How the event breaker handles a segment that exceeds maxEventBytes with no break boundary: 'drop' emits the bounded head and discards the remainder through the next boundary; 'split' preserves every byte as bounded fragments.
@@ -80,10 +84,6 @@ resource "criblio_system_limits" "default" {
 
 ### Read-Only
 
-- `enable_worker_in_memory` (Boolean) Whether worker connection data is retained only in memory. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
-- `lookup_allowed_paths` (List of String) Additional permitted lookup directories. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
-- `lookup_max_size` (String) Maximum disk space for a single lookup file. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
-- `lookup_max_total_size` (String) Maximum disk space for lookup data and metadata. Cloud changes require Cribl Operator permissions; exposed read-only by this provider.
 - `managed_fields` (List of String) Provider-maintained list of configured limit field paths. Tracks ownership changes even when a managed value is absent from the API.
 - `metrics_directory` (String) Directory for persisted metrics. Changes require the backend settings-limits-metrics-directory feature flag; exposed read-only by this provider.
 
