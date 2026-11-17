@@ -903,7 +903,7 @@ func (d *SearchDatasetProvidersDataSource) Read(ctx context.Context, req datasou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]SearchDatasetProviderModel](ctx, d.client, fmt.Sprintf("/m/%s/search/dataset-providers", "default_search"))
+	items, err := restclient.List[SearchDatasetProviderModel](ctx, d.client, fmt.Sprintf("/m/%s/search/dataset-providers", "default_search"), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

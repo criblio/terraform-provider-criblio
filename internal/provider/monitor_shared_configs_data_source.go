@@ -89,7 +89,7 @@ func (d *MonitorSharedConfigsDataSource) Read(ctx context.Context, req datasourc
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]MonitorSharedConfigModel](ctx, d.client, "/products/lakehouse_engine_metrics/shared-configs")
+	items, err := restclient.List[MonitorSharedConfigModel](ctx, d.client, "/products/lakehouse_engine_metrics/shared-configs", true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

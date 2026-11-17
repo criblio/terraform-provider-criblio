@@ -121,7 +121,7 @@ func (d *KeysDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]KeyModel](ctx, d.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))
+	items, err := restclient.List[KeyModel](ctx, d.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

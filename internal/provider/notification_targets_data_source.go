@@ -316,7 +316,7 @@ func (d *NotificationTargetsDataSource) Read(ctx context.Context, req datasource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]NotificationTargetModel](ctx, d.client, "/notification-targets")
+	items, err := restclient.List[NotificationTargetModel](ctx, d.client, "/notification-targets", true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

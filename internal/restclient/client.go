@@ -52,6 +52,7 @@ type Config struct {
 
 // Client sends authenticated requests to Cribl APIs.
 type Client struct {
+	packIDs              packIDCache
 	baseURL              string
 	providerCloudDomain  string
 	credentials          *auth.CriblConfig

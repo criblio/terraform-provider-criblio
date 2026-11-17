@@ -170,7 +170,7 @@ func (d *ProjectPipelinesDataSource) Read(ctx context.Context, req datasource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]ProjectPipelineModel](ctx, d.client, fmt.Sprintf("/m/%s/system/projects/%s/pipelines", model.GroupID.ValueString(), model.ProjectID.ValueString()))
+	items, err := restclient.List[ProjectPipelineModel](ctx, d.client, fmt.Sprintf("/m/%s/system/projects/%s/pipelines", model.GroupID.ValueString(), model.ProjectID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

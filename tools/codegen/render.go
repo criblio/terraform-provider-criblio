@@ -13,6 +13,7 @@ import (
 	"text/template"
 
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
+	"github.com/hashicorp/hcl/v2/hclwrite"
 )
 
 type renderer struct {
@@ -149,12 +150,13 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	if shouldGenerateDataSourceAcceptanceTest(resource) {
 		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_data_source_test.go", Kind: "data_source_test"})
 	}
+	if hasGeneratedListDataSource(resource) && resource.StructName != "GroupSystemSettings" {
+		files = append(files, parser.OutputFile{Path: "docs/data-sources/" + resource.ListFileStem + ".md", Kind: "list_data_source_doc"})
+		files = append(files, parser.OutputFile{Path: "examples/data-sources/" + resource.ListTypeName + "/data-source.tf", Kind: "list_data_source_example"})
+	}
 	if resource.GenerateDataSourceDocs {
 		if hasGeneratedReadDataSource(resource) {
 			files = append(files, parser.OutputFile{Path: "docs/data-sources/" + resource.FileStem + ".md", Kind: "data_source_doc"})
-		}
-		if hasGeneratedListDataSource(resource) {
-			files = append(files, parser.OutputFile{Path: "docs/data-sources/" + resource.ListFileStem + ".md", Kind: "list_data_source_doc"})
 		}
 	}
 	return files
@@ -165,7 +167,7 @@ func shouldGenerateAcceptanceTest(resource parser.ResourceDef) bool {
 }
 
 func shouldGenerateDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
-	if resource.Action || strings.HasPrefix(resource.Read.Path, "/v1/organizations/") || strings.HasPrefix(resource.List.Path, "/v1/organizations/") {
+	if resource.Action {
 		return false
 	}
 	return canGenerateStandaloneListDataSourceAcceptanceTest(resource)
@@ -175,7 +177,7 @@ func canGenerateStandaloneListDataSourceAcceptanceTest(resource parser.ResourceD
 	if !hasGeneratedListDataSource(resource) {
 		return false
 	}
-	if resource.Create.Path != "" {
+	if resource.StructName == "GroupSystemSettings" {
 		return false
 	}
 	for _, field := range listConfigFields(resource) {
@@ -200,6 +202,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"zeroValue":                        zeroValue,
 		"nullValue":                        nullValue,
 		"pathExpr":                         pathExpr,
+		"listPathExpr":                     listPathExpr,
 		"jsonName":                         jsonName,
 		"apiType":                          apiType,
 		"legacyGoType":                     legacyGoType,
@@ -267,6 +270,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"listItemObjectValue":              listItemObjectValue,
 		"acceptanceDataSources":            acceptanceDataSources,
 		"acceptanceDataSourceChecks":       acceptanceDataSourceChecks,
+		"acceptanceStandaloneListCheck":    acceptanceStandaloneListCheck,
 		"acceptanceDataSourceTestConfig":   acceptanceDataSourceTestConfig,
 		"acceptancePrimaryResourceAddress": acceptancePrimaryResourceAddress,
 		"acceptanceDataSourceSkipsCloud":   acceptanceDataSourceSkipsCloud,
@@ -393,12 +397,21 @@ func computedDocFields(fields []parser.FieldDef) []parser.FieldDef {
 
 func dataSourceDocSchema(resource parser.ResourceDef, list bool) string {
 	fields := computedDocFields(resource.Fields)
+	if list {
+		fields = computedDocFields(listItemFields(resource))
+	}
 	for _, variant := range resource.OneOfVariants {
 		fields = append(fields, parser.FieldDef{TerraformName: variant.TerraformName, Type: "object", ElementType: variant.MapElementType,
 			Computed: true, Fields: computedDocFields(variant.Fields)})
 	}
 	if list {
-		fields = append(listConfigFields(resource), parser.FieldDef{TerraformName: "items", Type: "array", ElementType: "object", Computed: true, Fields: fields})
+		itemField := parser.FieldDef{TerraformName: "items", Type: "array", ElementType: "object", Computed: true, Fields: fields}
+		if hasDynamic(resource) {
+			itemField.Type = "dynamic"
+			itemField.CustomType = "types.DynamicType{}"
+			itemField.Fields = nil
+		}
+		fields = append(listConfigFields(resource), itemField)
 	} else {
 		for i := range fields {
 			if i < len(resource.Fields) && resource.Fields[i].PathParam {
@@ -417,17 +430,17 @@ func dataSourceDocExample(resource parser.ResourceDef, list bool) string {
 	}
 	content, err := os.ReadFile(filepath.Join("examples", "data-sources", typeName, "data-source.tf"))
 	if err == nil {
-		return strings.TrimSpace(string(content))
+		return strings.TrimSpace(string(hclwrite.Format(content)))
 	}
 	var output strings.Builder
 	fmt.Fprintf(&output, "data %q %q {\n", typeName, "example")
 	for _, field := range fields {
 		if field.Required {
-			fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, "example")
+			fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, exampleValue(resource, field))
 		}
 	}
 	output.WriteString("}")
-	return output.String()
+	return strings.TrimSpace(string(hclwrite.Format([]byte(output.String()))))
 }
 
 func renderDocSchema(resource parser.ResourceDef, descriptions map[string]struct{}) string {
@@ -1155,6 +1168,9 @@ func needsClientFmt(resource parser.ResourceDef) bool {
 		return true
 	}
 	for _, op := range []parser.OperationDef{resource.Create, resource.Read, resource.Update, resource.Delete} {
+		if op.CreateHook != "" {
+			continue
+		}
 		if len(op.PathParams) > 0 || len(op.QueryParams) > 0 {
 			return true
 		}
@@ -1441,6 +1457,13 @@ func acceptanceDataSources(resource parser.ResourceDef, resourceAddress, label s
 	return output.String()
 }
 
+func acceptanceStandaloneListCheck(resource parser.ResourceDef) string {
+	if resource.StructName == "SystemInfo" || resource.StructName == "InstanceSettings" {
+		return fmt.Sprintf("testCheckListDataSourceHasItems(%q)", "data."+resource.ListTypeName+".all")
+	}
+	return fmt.Sprintf("resource.TestCheckResourceAttrSet(%q, %q)", "data."+resource.ListTypeName+".all", "items.#")
+}
+
 func acceptanceDataSourceTestConfig(resource parser.ResourceDef) string {
 	return strings.TrimSpace(acceptanceDataSources(resource, "", "by_id", true))
 }
@@ -1463,7 +1486,11 @@ func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
 		resource.StructName == "Subscription" ||
 		resource.StructName == "SystemInfo" ||
 		resource.StructName == "MonitorActiveAlert" ||
-		resource.StructName == "InstanceSettings"
+		resource.StructName == "InstanceSettings" ||
+		strings.HasPrefix(resource.List.Path, "/products/lake/") ||
+		strings.HasPrefix(resource.List.Path, "/v1/organizations/") ||
+		strings.Contains(resource.List.Path, "lakehouse_engine_metrics") ||
+		strings.HasPrefix(resource.List.Path, "/apps")
 }
 
 func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {
@@ -2011,6 +2038,13 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func curatedExampleUsage(resource parser.ResourceDef) (string, bool) {
+	if resource.StructName == "WorkerGroupUpgrade" {
+		content, err := readRepoFile(filepath.Join("examples", "resources", resourceType(resource), "resource.tf"))
+		if err != nil {
+			return "", false
+		}
+		return strings.TrimSpace(string(content)), true
+	}
 	if resource.TypeName == "criblio_search_dashboard" {
 		content, err := readRepoFile(filepath.Join("examples", "resources", resource.TypeName, "metric.tf"))
 		if err != nil {
@@ -2540,6 +2574,10 @@ func goValueLiteral(value any) string {
 	default:
 		return fmt.Sprintf("%#v", typed)
 	}
+}
+
+func listPathExpr(resource parser.ResourceDef) string {
+	return strings.ReplaceAll(pathExpr(resource, resource.List), "a.client", "d.client")
 }
 
 func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {

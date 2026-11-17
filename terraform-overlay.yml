@@ -3702,8 +3702,10 @@ actions:
   - target: "$.components.schemas.LocalSearchSource.properties.disabled"
     update:
       x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
   - target: "$.components.schemas.LocalSearchSource.properties.authTokens"
     update:
+      description: Authentication tokens. An empty list clears all tokens. After writing configured tokens, removing this attribute or setting it to null clears them. Unconfigured tokens from legacy or imported resources are preserved.
       x-terraform-optional-computed: true
   - target: "$.components.schemas.LocalSearchSource.properties.authTokens.items"
     replace:
@@ -3715,14 +3717,13 @@ actions:
         enabled:
           type: boolean
           description: When false, the token is rejected.
-        tokenSecret:
+        token:
           type: string
-          description: Secret token clients must present.
-          x-terraform-name: token
+          description: Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.
           x-terraform-sensitive: true
           x-terraform-prefer-state: true
       required:
-        - tokenSecret
+        - token
   - target: "$.components.schemas.TLSConfig.properties.certPath"
     update:
       x-terraform-optional-computed: true
@@ -4244,6 +4245,69 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: Deploy
       x-terraform-action: true
+
+  - target: "$.paths./system/distributed/upgrade/{group}.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: WorkerGroupUpgrade
+      x-terraform-action: true
+      x-terraform-create-hook: createWorkerGroupUpgrade
+      parameters:
+        - name: group
+          in: path
+          required: true
+          x-terraform-name: group_id
+          schema:
+            type: string
+          description: ID of the existing self-managed Worker Group to upgrade.
+
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties"
+    update:
+      group:
+        type: string
+        minLength: 1
+        x-terraform-name: group_id
+        x-terraform-local-only: true
+        x-terraform-force-new-always: true
+        description: ID of the existing self-managed Worker Group to upgrade.
+      trigger:
+        type: string
+        x-terraform-local-only: true
+        x-terraform-force-new-always: true
+        description: Stable value to change when another upgrade should be submitted. Changing any upgrade input also resubmits the action.
+      jobIds:
+        type: array
+        x-terraform-name: job_ids
+        x-terraform-computed: true
+        x-terraform-local-only: true
+        description: Job IDs returned when the upgrade is submitted. These do not indicate completion.
+        items:
+          type: string
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties.versionTo"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties.upgradeMode"
+    update:
+      x-terraform-force-new-always: true
+      x-terraform-default-value: rolling
+      x-terraform-optional-computed: true
+      x-terraform-enum-validator: true
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties.upgradePercentage"
+    update:
+      x-terraform-force-new-always: true
+      description: Fraction of workers to upgrade, from 0.00001 through 1. Defaults to 1 in the API when omitted.
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties.workerRetryDelay"
+    update:
+      x-terraform-force-new-always: true
+      description: Delay between worker connection retries, in milliseconds. At least 100.
+
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties.packageUrls"
+    update:
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.DistributedUpgradeRequest.properties.workerRetries"
+    update:
+      x-terraform-force-new-always: true
+      description: Number of worker connection retries before marking the upgrade as failed. At least 1.
 
   - target: "$.paths./apps.post"
     update:
@@ -5543,3 +5607,201 @@ actions:
   - target: "$.components.schemas.NotificationPolicy.properties.waitToGroup"
     update:
       x-terraform-optional-computed: true
+
+  # discovery for every managed collection. Existing singular names stay intact.
+  - target: "$.paths./apps.get"
+    update:
+      x-terraform-list: App
+      x-terraform-list-name: Apps
+  - target: "$.paths./m/{groupId}/lib/appscope-configs.get"
+    update:
+      x-terraform-list: AppscopeConfig
+      x-terraform-list-name: AppscopeConfigs
+  - target: "$.paths./products/lake/lakes/{lakeId}/datasets.get"
+    update:
+      x-terraform-list: CriblLakeDataset
+      x-terraform-list-name: CriblLakeDatasets
+  - target: "$.paths./products/lake/lakes/default/lakehouses.get"
+    update:
+      x-terraform-list: CriblLakeHouse
+      x-terraform-list-name: CriblLakeHouses
+  - target: "$.paths./m/{groupId}/lib/database-connections.get"
+    update:
+      x-terraform-list: DatabaseConnection
+      x-terraform-list-name: DatabaseConnections
+  - target: "$.paths./m/{groupId}/lib/breakers.get"
+    update:
+      x-terraform-list: EventBreakerRuleset
+      x-terraform-list-name: EventBreakerRulesets
+  - target: "$.paths./m/{groupId}/lib/vars.get"
+    update:
+      x-terraform-list: GlobalVar
+      x-terraform-list-name: GlobalVars
+  - target: "$.paths./m/{groupId}/lib/hmac-functions.get"
+    update:
+      x-terraform-list: HmacFunction
+      x-terraform-list-name: HmacFunctions
+  - target: "$.paths./m/{groupId}/system/lookups.get"
+    update:
+      x-terraform-list: LookupFile
+      x-terraform-list-name: LookupFiles
+  - target: "$.paths./m/{groupId}/notifications.get"
+    update:
+      x-terraform-list: Notification
+      x-terraform-list-name: Notifications
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Worker Group ID.
+          schema:
+            type: string
+        - name: includePacks
+          in: query
+          required: false
+          description: Include Pack Notifications. Cannot be combined with a Pack context.
+          schema:
+            type: boolean
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers.get"
+    update:
+      x-terraform-list: PackBreakers
+      x-terraform-list-name: PackBreakerRulesets
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/jobs.get"
+    update:
+      x-terraform-list: PackCollector
+      x-terraform-list-name: PackCollectors
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs.get"
+    update:
+      x-terraform-list: PackDestination
+      x-terraform-list-name: PackDestinations
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups.get"
+    update:
+      x-terraform-list: PackLookups
+      x-terraform-list-name: PackLookupFiles
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines.get"
+    update:
+      x-terraform-list: PackPipeline
+      x-terraform-list-name: PackPipelines
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs.get"
+    update:
+      x-terraform-list: PackSource
+      x-terraform-list-name: PackSources
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars.get"
+    update:
+      x-terraform-list: PackVars
+      x-terraform-list-name: PackGlobalVars
+  - target: "$.paths./m/{groupId}/lib/parquet-schemas.get"
+    update:
+      x-terraform-list: ParquetSchema
+      x-terraform-list-name: ParquetSchemas
+  - target: "$.paths./m/{groupId}/lib/parsers.get"
+    update:
+      x-terraform-list: ParserLibEntry
+      x-terraform-list-name: ParserLibEntries
+  - target: "$.paths./m/{groupId}/system/projects.get"
+    update:
+      x-terraform-list: Project
+      x-terraform-list-name: Projects
+  - target: "$.paths./m/{groupId}/routes.get"
+    update:
+      x-terraform-list: Routes
+      x-terraform-list-name: RoutingTables
+  - target: "$.paths./m/{groupId}/search/dashboard-categories.get"
+    update:
+      x-terraform-list: SearchDashboardCategory
+      x-terraform-list-name: SearchDashboardCategories
+  - target: "$.paths./m/{groupId}/search/datasets.get"
+    update:
+      x-terraform-list: SearchDataset
+      x-terraform-list-name: SearchDatasets
+  - target: "$.paths./m/{groupId}/search/local_search/dataset-rulesets.get"
+    update:
+      x-terraform-list: SearchDatasetRuleset
+      x-terraform-list-name: SearchDatasetRulesets
+  - target: "$.paths./m/{groupId}/search/datatypes.get"
+    update:
+      x-terraform-list: SearchDatatype
+      x-terraform-list-name: SearchDatatypes
+  - target: "$.paths./m/{groupId}/search/macros.get"
+    update:
+      x-terraform-list: SearchMacro
+      x-terraform-list-name: SearchMacros
+  - target: "$.paths./m/{groupId}/search/saved.get"
+    update:
+      x-terraform-list: SearchSavedQuery
+      x-terraform-list-name: SearchSavedQueries
+  - target: "$.paths./m/{groupId}/system/secrets.get"
+    update:
+      x-terraform-list: Secret
+      x-terraform-list-name: Secrets
+  - target: "$.paths./m/{groupId}/system/subscriptions.get"
+    update:
+      x-terraform-list: Subscription
+      x-terraform-list-name: Subscriptions
+  - target: "$.paths./m/{groupId}/lib/grok.get"
+    update:
+      x-terraform-list: grok
+      x-terraform-list-name: Groks
+  - target: "$.paths./m/{groupId}/lib/regex.get"
+    update:
+      x-terraform-list: regex
+      x-terraform-list-name: Regexes
+  - target: "$.paths./m/{groupId}/lib/schemas.get"
+    update:
+      x-terraform-list: schema
+      x-terraform-list-name: Schemas
+  - target: "$.paths./m/{groupId}/p/{pack}/routes.get"
+    update:
+      x-terraform-list: PackRoutes
+      x-terraform-list-name: PackRoutingTables
+  - target: "$.paths./master/groups.get"
+    update:
+      x-terraform-list: GroupDiscovery
+      x-terraform-list-name: Groups
+  - target: "$.paths./m/{groupId}/system/banners.get"
+    update:
+      x-terraform-list: CustomBannerDiscovery
+      x-terraform-list-name: CustomBanners
+  # Group-scoped Packs use the established provider route. Upstream describes /packs.
+  - target: "$.paths"
+    update:
+      /m/{groupId}/packs:
+        get:
+          operationId: getPacksByGroup
+          summary: List all Packs in a Worker Group
+          x-terraform-list: PackDiscovery
+          x-terraform-list-name: Packs
+          parameters:
+            - name: groupId
+              in: path
+              required: true
+              description: Worker group ID.
+              schema:
+                type: string
+            - name: offset
+              in: query
+              schema:
+                type: integer
+                minimum: 0
+            - name: limit
+              in: query
+              schema:
+                type: integer
+                minimum: 0
+          responses:
+            "200":
+              description: List of Packs.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/PaginatedPackInfo"

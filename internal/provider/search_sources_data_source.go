@@ -46,7 +46,7 @@ func (d *SearchSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					Attributes: map[string]schema.Attribute{
 						"auth_tokens": schema.ListNestedAttribute{
 							Computed:    true,
-							Description: `Optional bearer or shared tokens accepted by this source.`,
+							Description: `Authentication tokens. An empty list clears all tokens. After writing configured tokens, removing this attribute or setting it to null clears them. Unconfigured tokens from legacy or imported resources are preserved.`,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"description": schema.StringAttribute{
@@ -60,7 +60,7 @@ func (d *SearchSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaR
 									"token": schema.StringAttribute{
 										Computed:    true,
 										Sensitive:   true,
-										Description: `Secret token clients must present.`,
+										Description: `Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.`,
 									},
 								},
 							},
@@ -241,7 +241,7 @@ func (d *SearchSourcesDataSource) Read(ctx context.Context, req datasource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]SearchSourceModel](ctx, d.client, fmt.Sprintf("/m/%s/search/local_search/sources", "default_search"))
+	items, err := restclient.List[SearchSourceModel](ctx, d.client, fmt.Sprintf("/m/%s/search/local_search/sources", "default_search"), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

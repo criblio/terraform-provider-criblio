@@ -8,6 +8,8 @@ description: |-
 
 # criblio_monitor_shared_configs (Data Source)
 
+Returns all matching objects in `items`, following API pagination automatically. Scope the request using the required attributes below. An empty collection returns an empty list.
+
 ## Example Usage
 
 ```terraform

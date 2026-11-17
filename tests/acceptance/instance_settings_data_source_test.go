@@ -22,8 +22,8 @@ func TestInstanceSettingsDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `data "criblio_instance_settings" "all" {
-}`,
+				Config: listDataSourceAcceptanceConfig(t, `data "criblio_instance_settings" "all" {
+}`),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testCheckListDataSourceHasItems("data.criblio_instance_settings.all"),
 				),

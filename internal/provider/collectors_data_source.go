@@ -71,7 +71,7 @@ func (d *CollectorsDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]CollectorModel](ctx, d.client, fmt.Sprintf("/m/%s/lib/jobs", model.GroupID.ValueString()))
+	items, err := restclient.List[CollectorModel](ctx, d.client, fmt.Sprintf("/m/%s/lib/jobs", model.GroupID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

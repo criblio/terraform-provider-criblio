@@ -97,6 +97,7 @@ After gathering facts, restate the development plan in a short checklist before 
 
 ## Tests, Docs, Examples
 
+- Describe all user-visible changes in the Unreleased changelog without Jira issue keys or numbers. Include uncommitted resource/data-source additions and accompanying behavior fixes; the automatic updater only reads commit history. Preserve GitHub issue/PR references, technical identifiers, and existing release history.
 - Generated acceptance tests must be real tests, not permanent scaffolds.
 - Resource tests should cover create, read, update, plan-no-diff, import, and delete when the API supports them.
 - Singleton/read-only data source tests should cover successful read and stable state.

@@ -497,7 +497,7 @@ func (d *GroupSystemSettingsDataSource) Read(ctx context.Context, req datasource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]GroupSystemSettingsModel](ctx, d.client, fmt.Sprintf("/m/%s/system/settings/conf", model.GroupID.ValueString()))
+	items, err := restclient.List[GroupSystemSettingsModel](ctx, d.client, fmt.Sprintf("/m/%s/system/settings/conf", model.GroupID.ValueString()), false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

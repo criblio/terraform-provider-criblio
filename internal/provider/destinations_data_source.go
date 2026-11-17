@@ -21510,7 +21510,7 @@ func (d *DestinationsDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]DestinationModel](ctx, d.client, fmt.Sprintf("/m/%s/system/outputs", model.GroupID.ValueString()))
+	items, err := restclient.List[DestinationModel](ctx, d.client, fmt.Sprintf("/m/%s/system/outputs", model.GroupID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -19,8 +19,8 @@ func TestSystemInfoDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `data "criblio_system_info" "all" {
-}`,
+				Config: listDataSourceAcceptanceConfig(t, `data "criblio_system_info" "all" {
+}`),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testCheckListDataSourceHasItems("data.criblio_system_info.all"),
 				),

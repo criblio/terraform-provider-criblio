@@ -106,7 +106,7 @@ func (d *WorkspacesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]WorkspaceModel](ctx, d.client, fmt.Sprintf("/v1/organizations/%s/workspaces", model.OrganizationID.ValueString()))
+	items, err := restclient.List[WorkspaceModel](ctx, d.client, fmt.Sprintf("/v1/organizations/%s/workspaces", model.OrganizationID.ValueString()), false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

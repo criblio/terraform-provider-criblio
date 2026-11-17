@@ -6,6 +6,7 @@ package exclusions
 // Merged with --exclude so these types are skipped in discovery and export.
 var NoExportTypes = []string{
 	"criblio_commit",                       // No list/get API in SDK; apply-only resource.
+	"criblio_worker_group_upgrade",         // Apply-only asynchronous upgrade; no import/list/get.
 	"criblio_deploy",                       // No list/get API in SDK; apply-only resource.
 	"criblio_group_system_settings",        // Cloud rejects api host/port updates on default group; config/state drift causes apply failures.
 	"criblio_key",                          // Skipped from import; keys are sensitive.

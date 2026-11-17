@@ -745,6 +745,11 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 	output["type"] = "collection"
 {{- end }}
+{{- if eq .StructName "SearchSource" }}
+	if err := searchSourceAuthTokensToAPI(output); err != nil {
+		return nil, err
+	}
+{{- end }}
 	return json.Marshal(output)
 }
 
@@ -920,6 +925,19 @@ func normalizeRouteEntries(output map[string]any) {
 {{- end }}
 
 func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
+{{- if eq .StructName "SearchSource" }}
+	var raw map[string]any
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	if err := searchSourceAuthTokensFromAPI(raw); err != nil {
+		return err
+	}
+	data, err := json.Marshal(raw)
+	if err != nil {
+		return err
+	}
+{{- end }}
 {{- if .OneOfVariants }}
 	var raw map[string]any
 	if err := json.Unmarshal(data, &raw); err != nil {
@@ -1449,6 +1467,8 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 	// This resource is implemented by a companion handler; the generated
 	// client does not match the backend contract and must not be called.
 	return nil, fmt.Errorf("{{ .StructName }} is managed by a companion implementation; the generated client is disabled")
+{{- else if .Create.CreateHook }}
+	return {{ .Create.CreateHook }}(ctx, a.client, model)
 {{- else if .Action }}
 	{{- if .ActionResponse }}
 	return restclient.{{ restWriteCall .Create }}FullResponse[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
@@ -2077,7 +2097,7 @@ var _ resource.ResourceWithImportState = &{{ .StructName }}Resource{}
 {{- if .ValidateRequiredUnions }}
 var _ resource.ResourceWithConfigValidators = &{{ .StructName }}Resource{}
 {{- end }}
-{{- if or (eq .StructName "SearchDataset") (eq .StructName "Collector") (eq .StructName "PackCollector") }}
+{{- if or (eq .StructName "SearchSource") (eq .StructName "SearchDataset") (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 var _ resource.ResourceWithModifyPlan = &{{ .StructName }}Resource{}
 {{- end }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
@@ -2294,6 +2314,9 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 	restoreCollectorConfiguredSavedState(&model, plannedSavedState, configuredSavedState)
 	if resp.Private != nil { resp.Diagnostics.Append(writeCollectorSavedStateConfig(ctx, resp.Private, configuredSavedState)...) }
 {{- end }}
+{{- if eq .StructName "SearchSource" }}
+	if resp.Private != nil { resp.Diagnostics.Append(resp.Private.SetKey(ctx, searchSourceAuthManagedKey, []byte("true"))...) }
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 	{{- end }}
 }
@@ -2400,6 +2423,11 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 	plannedSavedState := collectorSavedStates(model)
 	requestModel = collectorRequestSavedState(requestModel, configuredSavedState)
 {{- end }}
+	apiModel, err := r.api.Update(ctx, requestModel)
+{{- else if eq .StructName "SearchSource" }}
+	requestModel, authDiags := searchSourceAuthRequestModel(ctx, model, req)
+	resp.Diagnostics.Append(authDiags...)
+	if resp.Diagnostics.HasError() { return }
 	apiModel, err := r.api.Update(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Update(ctx, model)
@@ -2641,6 +2669,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	syncSourceLikeActiveInput(api, state)
 {{- end }}
 {{- range .Fields }}
+{{- if and (eq $.StructName "SearchSource") (eq .TerraformName "auth_tokens") }}
+	state.AuthTokens = mergeSearchSourceAuthTokenState(api.AuthTokens, state.AuthTokens, api.Type.ValueString())
+{{- else }}
 {{- if and (or (eq $.StructName "LookupFile") (eq $.StructName "PackLookups")) (eq .TerraformName "content") }}
 	if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 		state.{{ .GoName }} = api.{{ .GoName }}
@@ -2734,6 +2765,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 		}
 	}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- if or (eq .StructName "Pipeline") (eq .StructName "PackPipeline") (eq .StructName "ProjectPipeline") }}
@@ -3356,7 +3388,7 @@ func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, d.client, {{ pathExpr . .List }})
+	items, err := restclient.List[{{ .StructName }}Model](ctx, d.client, {{ listPathExpr . }}, {{ .List.Paginated }})
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
@@ -3417,6 +3449,31 @@ description: |-
 # {{ resourceType . }} (Resource)
 
 {{ if .CreateDisabledMessage }}{{ .CreateDisabledMessage }}{{ else if eq .StructName "PackCollector" }}Manages a Collector within a Pack using the same input_collector_* configuration as criblio_collector.{{ else }}{{ .StructName }} Resource{{ end }}
+{{- if eq .StructName "WorkerGroupUpgrade" }}
+
+Submits an asynchronous software upgrade for an existing self-managed Worker Group, including hybrid groups connected to a Cribl.Cloud leader. Cribl-managed cloud groups and Outpost Groups are unsupported. The group must have running workers.
+
+Creation submits one upgrade request. Changing ` + "`" + `trigger` + "`" + ` or any upgrade input replaces the resource and submits another request; unchanged applies and refreshes preserve state without submitting requests. Use a stable trigger value and change it deliberately when another upgrade is needed. Destroy only removes Terraform state; it does not cancel an upgrade or roll back workers. Import is unsupported.
+
+` + "`" + `upgrade_mode` + "`" + ` defaults to ` + "`" + `rolling` + "`" + `. ` + "`" + `upgrade_percentage` + "`" + ` is a fraction from 0.00001 through 1, with 1 selecting all workers; omitting it uses the API default of 1. Retry settings use the API defaults when omitted, and ` + "`" + `worker_retry_delay` + "`" + ` is measured in milliseconds.
+
+Without ` + "`" + `package_urls` + "`" + `, workers upgrade to the leader version using packages from the Cribl CDN. Custom package URLs or local paths must reference compatible Cribl packages accessible to the leader; optional hash URLs provide package verification. The public endpoint does not permit selecting an operator-only ` + "`" + `versionTo` + "`" + ` or downgrading workers.
+
+` + "`" + `job_ids` + "`" + ` contains the job IDs returned by the API for tracking outside Terraform. A successful apply confirms submission, not completion of the upgrades.
+
+## Live acceptance test
+
+Use normal provider credentials and explicitly select a disposable self-managed Worker Group, including a hybrid group. It must have running workers eligible for a job-based upgrade and access to the leader-version packages. The test requires at least one returned job ID; a group without eligible workers is not a valid fixture.
+
+` + "```shell" + `
+TF_ACC=1 \
+CRIBL_TEST_WORKER_GROUP_UPGRADE=1 \
+CRIBL_TEST_WORKER_GROUP_UPGRADE_GROUP_ID="disposable-upgrade-group" \
+go test -v -count=1 -run '^TestWorkerGroupUpgrade$' ./tests/acceptance
+` + "```" + `
+
+The test submits one real rolling upgrade, checks that job IDs remain stable through unchanged applies and refresh, verifies trigger and settings changes plan replacements, and checks that destroying the action preserves the existing group. Replacement plans are not applied, avoiding overlapping upgrade submissions. The test does not wait for upgrade completion; cleanup does not cancel or roll back the submitted upgrade. Without both acceptance flags it skips before accessing credentials or contacting Cribl.
+{{- end }}
 {{- if or (eq .StructName "Collector") (eq .StructName "PackCollector") }}
 
 The ` + "`saved_state`" + ` attribute accepts both legacy string maps and nested objects. When omitted, it exposes runtime checkpoints returned by Cribl. Configured values are preserved during refresh; computed checkpoints are omitted from create and update requests. Existing string-map state is upgraded automatically. For resources created with older providers, legacy saved values are retained until an apply records whether ` + "`saved_state`" + ` is configured.
@@ -3510,6 +3567,13 @@ Optional ` + "`tags`" + ` uses a JSON map of label names to lists of allowed str
 Requires V2 Notifications. Configure ` + "`conditions`" + ` using ` + "`jsonencode(...)`" + ` to represent nested arrays of condition objects. Outer groups are combined with OR; conditions inside each group with AND. Values may be strings, numbers, booleans, or null.
 
 Each template/target pair must reference existing entities with matching target types. Lower ` + "`order`" + ` values are evaluated first.
+{{- end }}
+
+{{- if eq .StructName "SearchSource" }}
+
+Authentication tokens use the existing list of objects with ` + "`token`" + `, ` + "`description`" + `, and ` + "`enabled`" + ` attributes. For Raw HTTP, ` + "`token`" + ` is an inline value; the provider sends objects through ` + "`authTokensExt`" + ` and clears the legacy token list when configuring tokens. Raw HTTP accepts ` + "`enabled`" + ` omitted or true; remove an entry instead of setting it false. Raw HTTP stored-secret references are not supported by this attribute. An explicit empty list clears all tokens. For resources created with this provider, removing ` + "`auth_tokens`" + ` or setting it to null also clears tokens. Existing tokens on legacy or imported resources remain API-computed until a configured token list is written by a resource update; a no-change apply does not record ownership. Use an explicit empty list to clear protected credentials. Unrelated updates omit unconfigured credentials from requests.
+
+For Cribl HTTP, ` + "`token`" + ` is a stored text-secret ID sent as ` + "`tokenSecret`" + `. For Splunk HEC it is an inline token sent as ` + "`token`" + `. Masked or encrypted API responses preserve known token values in state. Imported secrets cannot recover plaintext values; configure the desired tokens before applying.
 {{- end }}
 
 ## Example Usage
@@ -4655,8 +4719,9 @@ data "criblio_monitor_active_alerts" "all" {
 					resource.TestCheckResourceAttrPair("data.criblio_monitor_active_alerts.all", "dataset_id", "data.criblio_search_engine.metrics", "metrics_dataset_id"),
 					// A healthy dataset may have no active alerts.
 					resource.TestCheckResourceAttrSet("data.criblio_monitor_active_alerts.all", "items.#"),
-				),{{ else }}{{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
-				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . "" "by_id" true }}
+				),{{ else }}listDataSourceAcceptanceConfig(t, {{ goStringLiteral (acceptanceDataSourceTestConfig .) }}),
+				Check: resource.ComposeAggregateTestCheckFunc(
+ {{ acceptanceStandaloneListCheck . }},
 				),
 {{ end }}
 			},
@@ -4686,6 +4751,9 @@ description: |-
 {{ dataSourceDocSchema . false }}
 `
 
+const listDataSourceExampleTemplate = `{{ dataSourceDocExample . true }}
+`
+
 const listDataSourceDocTemplate = `---
 # generated by tools/codegen
 page_title: "{{ .ListTypeName }} Data Source - terraform-provider-criblio"
@@ -4695,6 +4763,8 @@ description: |-
 ---
 
 # {{ .ListTypeName }} (Data Source)
+
+Returns all matching objects in ` + "`items`" + `, following API pagination automatically. Scope the request using the required attributes below. An empty collection returns an empty list.
 
 ## Example Usage
 
@@ -4708,14 +4778,15 @@ description: |-
 `
 
 var templateBodies = map[string]string{
-	"types":                typesTemplate,
-	"client":               clientTemplate,
-	"resource":             resourceTemplate,
-	"data_source":          dataSourceTemplate,
-	"list_data_source":     listDataSourceTemplate,
-	"doc":                  docTemplate,
-	"data_source_doc":      dataSourceDocTemplate,
-	"list_data_source_doc": listDataSourceDocTemplate,
-	"test":                 testTemplate,
-	"data_source_test":     dataSourceTestTemplate,
+	"types":                    typesTemplate,
+	"client":                   clientTemplate,
+	"resource":                 resourceTemplate,
+	"data_source":              dataSourceTemplate,
+	"list_data_source":         listDataSourceTemplate,
+	"doc":                      docTemplate,
+	"data_source_doc":          dataSourceDocTemplate,
+	"list_data_source_doc":     listDataSourceDocTemplate,
+	"list_data_source_example": listDataSourceExampleTemplate,
+	"test":                     testTemplate,
+	"data_source_test":         dataSourceTestTemplate,
 }

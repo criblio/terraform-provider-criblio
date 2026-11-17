@@ -101,7 +101,7 @@ func (d *NotificationTemplatesDataSource) Read(ctx context.Context, req datasour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]NotificationTemplateModel](ctx, d.client, fmt.Sprintf("/notification-templates?engine=%s", url.QueryEscape("handlebars")))
+	items, err := restclient.List[NotificationTemplateModel](ctx, d.client, fmt.Sprintf("/notification-templates?engine=%s", url.QueryEscape("handlebars")), false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -114,7 +114,7 @@ func (d *GuardRulesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]GuardRuleModel](ctx, d.client, fmt.Sprintf("/m/%s/lib/sds-rules", model.GroupID.ValueString()))
+	items, err := restclient.List[GuardRuleModel](ctx, d.client, fmt.Sprintf("/m/%s/lib/sds-rules", model.GroupID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -34,6 +34,7 @@ type ResourceDef struct {
 
 // OperationDef describes one annotated OpenAPI operation.
 type OperationDef struct {
+	Paginated                bool
 	Method                   string
 	Path                     string
 	OperationID              string
@@ -46,6 +47,7 @@ type OperationDef struct {
 	ReadAfterWrite           bool
 	PreserveInputsAfterWrite bool
 	ResetBody                any
+	CreateHook               string
 	DeleteHook               string
 }
 

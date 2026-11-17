@@ -74,6 +74,7 @@ func ResourceModelTypes() map[string]reflect.Type {
 		"CriblLakeDatasetResourceModel":           reflect.TypeOf((*provider.CriblLakeDatasetResourceModel)(nil)).Elem(),
 		"CriblLakeHouseResourceModel":             reflect.TypeOf((*provider.CriblLakeHouseResourceModel)(nil)).Elem(),
 		"DatabaseConnectionResourceModel":         reflect.TypeOf((*provider.DatabaseConnectionResourceModel)(nil)).Elem(),
+		"WorkerGroupUpgradeResourceModel":         reflect.TypeOf((*provider.WorkerGroupUpgradeModel)(nil)).Elem(),
 		"DeployResourceModel":                     reflect.TypeOf((*provider.DeployResourceModel)(nil)).Elem(),
 		"DestinationResourceModel":                reflect.TypeOf((*provider.DestinationResourceModel)(nil)).Elem(),
 		"EventBreakerRulesetResourceModel":        reflect.TypeOf((*provider.EventBreakerRulesetResourceModel)(nil)).Elem(),

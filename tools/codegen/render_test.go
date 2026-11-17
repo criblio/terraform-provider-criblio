@@ -340,7 +340,7 @@ func TestRendererGeneratesListOnlyDataSourceAcceptanceTests(t *testing.T) {
 		t.Fatalf("read standalone data source acceptance test: %v", err)
 	}
 	assertContains(t, string(content), `data "criblio_things" "all"`)
-	assertContains(t, string(content), `testCheckListDataSourceHasItems("data.criblio_things.all")`)
+	assertContains(t, string(content), `resource.TestCheckResourceAttrSet("data.criblio_things.all", "items.#")`)
 	assertNotContains(t, string(content), `resource "`)
 	assertNotContains(t, string(content), `"by_id"`)
 }
@@ -485,6 +485,19 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationListDataSource, `"id": schema.StringAttribute{`)
 	assertContains(t, destinationListDataSource, `"output_azure_blob": schema.SingleNestedAttribute{`)
 	assertContains(t, destinationListDataSource, `"id": item.ID,`)
+
+	searchSource := parser.ResourceDef{
+		StructName: "SearchSource",
+		Fields: []parser.FieldDef{{
+			APIName: "authTokens", TerraformName: "auth_tokens", GoName: "AuthTokens",
+			Type: "array", ElementType: "object", RequestField: true, Optional: true, Computed: true, UseStateForUnknown: true,
+		}},
+	}
+	searchSourceTypes := renderTemplate(t, "types", searchSource)
+	assertContains(t, searchSourceTypes, "searchSourceAuthTokensToAPI(output)")
+	assertContains(t, searchSourceTypes, "searchSourceAuthTokensFromAPI(raw)")
+	assertContains(t, renderTemplate(t, "resource", searchSource), "mergeSearchSourceAuthTokenState(api.AuthTokens, state.AuthTokens, api.Type.ValueString())")
+	assertContains(t, renderTemplate(t, "resource", searchSource), "listplanmodifier.UseStateForUnknown()")
 
 	source := parser.ResourceDef{
 		StructName: "Source",
@@ -1738,8 +1751,8 @@ func TestMonitoringJSONAndDataSourceDocs(t *testing.T) {
 	}
 	definition.GenerateDataSourceDocs = false
 	for _, file := range outputFiles(definition) {
-		if strings.HasSuffix(file.Kind, "source_doc") {
-			t.Fatal("existing data source docs must remain untouched without opting in")
+		if file.Kind == "data_source_doc" {
+			t.Fatal("single-object data source docs must remain untouched without opting in")
 		}
 	}
 }

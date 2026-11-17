@@ -606,6 +606,10 @@ func prefixGroupScopedPaths(spec *yaml.Node) error {
 }
 
 func shouldPrefixPath(apiPath string) bool {
+	// Upgrade submission is a leader action; the group is already in its path.
+	if apiPath == "/system/distributed/upgrade/{group}" {
+		return false
+	}
 	if apiPath == "" || apiPath == "/" || strings.HasPrefix(apiPath, groupPrefix+"/") {
 		return false
 	}

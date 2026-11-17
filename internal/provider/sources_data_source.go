@@ -26412,7 +26412,7 @@ func (d *SourcesDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]SourceModel](ctx, d.client, fmt.Sprintf("/m/%s/system/inputs", model.GroupID.ValueString()))
+	items, err := restclient.List[SourceModel](ctx, d.client, fmt.Sprintf("/m/%s/system/inputs", model.GroupID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

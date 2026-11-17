@@ -36,6 +36,13 @@ Orient contributors and keep changes aligned with the provider's generated-code 
 
 ## Contributor Workflow
 
+Write changelog entries and release notes as descriptions of user-visible changes
+without Jira issue keys or numbers. Preserve GitHub issue/PR references and
+technical identifiers such as provider versions, API names, and HTTP status codes.
+Check `CHANGELOG.md` against the full working diff, including untracked files:
+`tools/update-changelog` reads committed subjects and cannot describe uncommitted
+work automatically. Keep existing release history intact.
+
 Use this workflow when someone wants to contribute a code change:
 
 1. Confirm access and intent:

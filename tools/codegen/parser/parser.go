@@ -88,9 +88,25 @@ func Parse(content []byte) ([]ResourceDef, error) {
 		if err := populateFields(resource, schemas); err != nil {
 			return nil, err
 		}
+		for _, operation := range []OperationDef{resource.Create, resource.Read, resource.Update, resource.Delete, resource.List} {
+			if err := validatePathParams(operation); err != nil {
+				return nil, err
+			}
+		}
 		defs = append(defs, *resource)
 	}
 	return defs, nil
+}
+
+func validatePathParams(operation OperationDef) error {
+	path := operation.Path
+	for _, parameter := range operation.PathParams {
+		path = strings.ReplaceAll(path, "{"+parameter.APIName+"}", "")
+	}
+	if strings.ContainsAny(path, "{}") {
+		return fmt.Errorf("%s %s has an unresolved path placeholder; declare every placeholder as a path parameter", operation.Method, operation.Path)
+	}
+	return nil
 }
 
 func collectOperations(resources map[string]*ResourceDef, schemas, examples *yaml.Node, path string, pathItem *yaml.Node) error {
@@ -173,7 +189,16 @@ func ensureResource(resources map[string]*ResourceDef, name string) *ResourceDef
 }
 
 func operationDef(method, path string, operation, examples *yaml.Node) OperationDef {
+	paginated := false
+	if parameters, ok := mappingValue(operation, "parameters"); ok {
+		for _, parameter := range parameters.Content {
+			if scalarValue(parameter, "in") == "query" && scalarValue(parameter, "name") == "offset" {
+				paginated = true
+			}
+		}
+	}
 	return OperationDef{
+		Paginated:      paginated,
 		Method:         strings.ToUpper(method),
 		Path:           path,
 		OperationID:    scalarValue(operation, "operationId"),
@@ -189,11 +214,18 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 			"x-terraform-preserve-inputs-after-write",
 		),
 		ResetBody:  resetBody(operation),
+		CreateHook: scalarValue(operation, "x-terraform-create-hook"),
 		DeleteHook: scalarValue(operation, "x-terraform-delete-hook"),
 	}
 }
 
 func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
+	if response, ok := mappingValue(schemas, resource.List.ResponseSchema); ok {
+		properties, _ := mappingValue(response, "properties")
+		if _, ok := mappingValue(properties, "totalCount"); ok {
+			resource.List.Paginated = true
+		}
+	}
 	schemaName := resource.SchemaName
 	if schemaName == "" && resource.List.ResponseSchema != "" {
 		schemaName = listItemSchemaName(schemas, resource.List.ResponseSchema)
@@ -344,7 +376,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 	if resource.Action {
 		for index := range resource.Fields {
 			field := &resource.Fields[index]
-			if !field.Computed {
+			if !field.Computed || field.Optional {
 				field.ForceNew = true
 			}
 		}

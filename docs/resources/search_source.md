@@ -10,6 +10,10 @@ description: |-
 
 SearchSource Resource
 
+Authentication tokens use the existing list of objects with `token`, `description`, and `enabled` attributes. For Raw HTTP, `token` is an inline value; the provider sends objects through `authTokensExt` and clears the legacy token list when configuring tokens. Raw HTTP accepts `enabled` omitted or true; remove an entry instead of setting it false. Raw HTTP stored-secret references are not supported by this attribute. An explicit empty list clears all tokens. For resources created with this provider, removing `auth_tokens` or setting it to null also clears tokens. Existing tokens on legacy or imported resources remain API-computed until a configured token list is written by a resource update; a no-change apply does not record ownership. Use an explicit empty list to clear protected credentials. Unrelated updates omit unconfigured credentials from requests.
+
+For Cribl HTTP, `token` is a stored text-secret ID sent as `tokenSecret`. For Splunk HEC it is an inline token sent as `token`. Masked or encrypted API responses preserve known token values in state. Imported secrets cannot recover plaintext values; configure the desired tokens before applying.
+
 ## Example Usage
 
 ```terraform
@@ -37,7 +41,7 @@ resource "criblio_search_source" "my_search_source" {
 
 ### Optional
 
-- `auth_tokens` (Attributes List) Optional bearer or shared tokens accepted by this source. (see [below for nested schema](#nestedatt--auth_tokens))
+- `auth_tokens` (Attributes List) Authentication tokens. An empty list clears all tokens. After writing configured tokens, removing this attribute or setting it to null clears them. Unconfigured tokens from legacy or imported resources are preserved. (see [below for nested schema](#nestedatt--auth_tokens))
 - `cribl_api` (String) Absolute path for Cribl HTTP API requests. Used when type is cribl_http.
 - `description` (String) Optional description shown in configuration UIs.
 - `disabled` (Boolean) When true, the source does not accept new connections.
@@ -57,7 +61,7 @@ resource "criblio_search_source" "my_search_source" {
 
 Required:
 
-- `token` (String, Sensitive) Secret token clients must present.
+- `token` (String, Sensitive) Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.
 
 Optional:
 

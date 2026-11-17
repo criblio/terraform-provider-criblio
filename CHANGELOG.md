@@ -13,6 +13,10 @@ commit history, and tag-to-tag diffs.
 - Made import CLI exports honor provider schema sensitivity and emit sensitive variable references instead of credential literals, while preserving stored secret names.
 
 ### Added
+- Added 36 collection data sources, bringing list coverage to 58 supported managed resource types across Stream, Edge, Search, Lake, Packs, Projects, and Organizations. Included generated schemas, documentation, examples, and a list-data-source guide while preserving existing data source names and dynamic collector items.
+- Added `criblio_worker_group_upgrade` to submit asynchronous upgrades for existing self-managed Worker Groups, including hybrid groups, through the leader upgrade endpoint. Supports rolling upgrades by default, upgrade fractions, retry settings, custom package URLs, and returned `job_ids`; changing `trigger` or another input resubmits the action. Cribl-managed cloud groups and Outpost Groups are unsupported; destroy only removes Terraform state, and import/export are unsupported.
+- Added read-only acceptance tests for collection data sources, gated live acceptance tests for Raw HTTP Search source authentication and Worker Group upgrades, and local Terraform lifecycle regressions for token rotation/removal, legacy token protection, upgrade replacement, refresh, and cleanup.
+- Added a Search source authentication upgrade guide covering protocol-specific token values, preservation of legacy/imported credentials, explicit clearing, and ownership after resource updates.
 - Added `criblio_search_dataset_acl` resource and data source to reconcile explicit user, API-credential, and team dataset shares, with drift detection and import/export support.
 - Added `criblio_workspace_system_settings` resource and data source for workspace-level configuration, with import/export support, preservation of unmanaged settings, and drift detection for configured fields.
 - Added `criblio_system_limits` resource and data source using the upstream `/system/limits` endpoint, with import/export support, safe read/merge/PATCH updates for selected writable limits, and read-only access to operator-controlled or feature-gated limits.
@@ -31,14 +35,21 @@ commit history, and tag-to-tag diffs.
 - Added workspace settings search dataset acl resources.
 
 ### Changed
+- Updated generated collection reads to follow offset/limit pagination automatically, respect server page-size caps, and return known empty collections. Reads reject incomplete or inconsistent pagination and stop with an error after 1,000 pages instead of returning partial results.
+- Shared successful Pack ID listings per REST client and Worker Group for one minute, deduplicating concurrent lookups while preserving legacy mixed-case IDs. Failed lookups are not cached.
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
 - Syncing 4.20.3 upstream spec.
-- MON-1453: typed monitor resource + notifications (base layer).
+- Typed monitor resource + notifications (base layer).
 - Reverting codegen changes and adding example.
-- PLAT-17563: `criblio_guard_rule` resource with single and list data sources, for managing custom Guard Rules in a Worker Group.
-- PLAT-18021: Made `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` configurable in `criblio_system_limits`. On the Cribl.Cloud Leader and Cribl-managed Worker Groups, the API returns 403 for these attributes unless the caller is a Cribl Operator. After upgrading from v1.25.111–v1.25.113, the first refresh removes these four attributes from state unless they are configured; server values do not change.
+- `criblio_guard_rule` resource with single and list data sources, for managing custom Guard Rules in a Worker Group.
+- Made `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` configurable in `criblio_system_limits`. On the Cribl.Cloud Leader and Cribl-managed Worker Groups, the API returns 403 for these attributes unless the caller is a Cribl Operator. After upgrading from v1.25.111–v1.25.113, the first refresh removes these four attributes from state unless they are configured; server values do not change.
 
 ### Fixed
+- Corrected Search source authentication payloads: Raw HTTP sends inline token objects through `authTokensExt` and clears the legacy list, Cribl HTTP sends stored-secret IDs as `tokenSecret`, and Splunk HEC retains inline tokens. This prevents Raw HTTP failures such as `s.startsWith is not a function` while preserving the existing Terraform token shape.
+- Made Raw HTTP `authTokensExt` authoritative when reading mirrored token responses, including empty lists, preventing duplicate credentials and inconsistent sensitive-list state. Preserved configured plaintext values across masked/encrypted responses and optional token fields across API defaults.
+- Preserved unconfigured Search source tokens when upgrading or importing by retaining the original optional/computed schema and tracking ownership in provider-private state. Unrelated updates omit protected credentials; removing a token list written by Terraform or setting it to null clears both token representations. An explicit `auth_tokens = []` clears protected tokens; a no-change apply does not record ownership.
+- Corrected `criblio_notifications` to require `group_id` and substitute it into the collection route. Code generation now rejects unresolved path placeholders, and route tests check concrete notification URLs independently of spec-derived expectations.
+- Replaced the Worker Group upgrade example's managed `default` target with an explicit Worker Group ID input and added actionable diagnostics for managed-group API rejections, preserving the original HTTP error.
 - Fixed saved-query exports containing empty schedule notification objects so Terraform accepts them and import produces a clean plan, while preserving explicit notification enablement values.
 - Added nested-object support to collector `saved_state`, with automatic migration of legacy string maps, configuration preservation, and runtime checkpoint filtering on updates. Applies to all collector types and pack collectors. (#251)
 - Kept bulk export working when AI is disabled or consent is missing, while retaining dataset permission errors, and skipped the new intelligence/template acceptance tests on the on-prem fixture that lacks their prerequisites.
@@ -51,7 +62,7 @@ commit history, and tag-to-tag diffs.
 - Fixed worker group id replacement issue.
 - Fixed saved_state field within collectors.
 - Fixed removal of configured collector `saved_state` so omitting it or setting it to null restores runtime checkpoint tracking without changing another field.
-- Fixed restore template_params opaque-JSON protection (INFRA-12649).
+- Fixed restore template_params opaque-JSON protection.
 - Fixed fmt issues.
 - Fixed test.
 - Fixed tests.
