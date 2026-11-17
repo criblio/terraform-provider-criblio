@@ -62,6 +62,10 @@ func (d *SearchSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaR
 										Sensitive:   true,
 										Description: `Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.`,
 									},
+									"token_secret": schema.StringAttribute{
+										Computed:    true,
+										Description: `Stored text-secret ID for Raw HTTP or Splunk HEC. Configure exactly one of token or token_secret. The provider sends authType secret for this reference.`,
+									},
 								},
 							},
 						},

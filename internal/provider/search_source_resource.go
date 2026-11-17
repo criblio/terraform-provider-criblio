@@ -69,11 +69,17 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 							Description: `When false, the token is rejected.`,
 						},
 						"token": schema.StringAttribute{
-							Required:    true,
-							Optional:    false,
+							Required:    false,
+							Optional:    true,
 							Computed:    false,
 							Sensitive:   true,
 							Description: `Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.`,
+						},
+						"token_secret": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Stored text-secret ID for Raw HTTP or Splunk HEC. Configure exactly one of token or token_secret. The provider sends authType secret for this reference.`,
 						},
 					},
 				},
@@ -421,7 +427,7 @@ func (r *SearchSourceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Update(ctx, requestModel)
+	apiModel, err := r.api.updateWithPreservedAuth(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -3731,8 +3731,9 @@ actions:
           description: Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.
           x-terraform-sensitive: true
           x-terraform-prefer-state: true
-      required:
-        - token
+        tokenSecret:
+          type: string
+          description: Stored text-secret ID for Raw HTTP or Splunk HEC. Configure exactly one of token or token_secret. The provider sends authType secret for this reference.
   - target: "$.components.schemas.TLSConfig.properties.certPath"
     update:
       x-terraform-optional-computed: true

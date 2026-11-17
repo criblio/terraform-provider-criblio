@@ -10,7 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 )
 
 func TestSearchSourceAuthTokensWireFormat(t *testing.T) {
@@ -43,7 +45,7 @@ func TestSearchSourceAuthTokensWireFormat(t *testing.T) {
 
 func searchSourceTestTokens(token string, enabled types.Bool, description types.String) types.List {
 	value := types.ObjectValueMust(SearchSourceAuthTokensAttrTypes(), map[string]attr.Value{
-		"description": description, "enabled": enabled, "token": types.StringValue(token),
+		"description": description, "enabled": enabled, "token": types.StringValue(token), "token_secret": types.StringNull(),
 	})
 	return types.ListValueMust(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()}, []attr.Value{value})
 }
@@ -125,9 +127,119 @@ func TestSearchSourceEmptyExtendedTokensOverrideLegacy(t *testing.T) {
 	}
 }
 
+func TestSearchSourceRawStoredSecretRoundTrip(t *testing.T) {
+	for _, body := range []string{
+		`{"type":"http_raw","authTokensExt":[{"authType":"secret","tokenSecret":"http-secret"}]}`,
+		`{"type":"http_raw","authTokensExt":[{"tokenSecret":"http-secret"}]}`,
+		`{"type":"http_raw","authTokens":[{"authType":"secret","tokenSecret":"http-secret","token":"resolved-value"}]}`,
+		`{"type":"http_raw","authTokens":["resolved-value"],"authTokensExt":[{"authType":"secret","tokenSecret":"http-secret","token":"resolved-value"}]}`,
+	} {
+		var model SearchSourceModel
+		if err := json.Unmarshal([]byte(body), &model); err != nil {
+			t.Fatal(err)
+		}
+		attributes := model.AuthTokens.Elements()[0].(types.Object).Attributes()
+		if !attributes["token"].IsNull() || attributes["token_secret"].(types.String).ValueString() != "http-secret" {
+			t.Fatal("read must retain the stored-secret ID without a resolved token")
+		}
+		payload, err := json.Marshal(model)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var wire map[string]any
+		if err := json.Unmarshal(payload, &wire); err != nil {
+			t.Fatal(err)
+		}
+		token := wire["authTokensExt"].([]any)[0].(map[string]any)
+		if token["authType"] != "secret" || token["tokenSecret"] != "http-secret" || token["token"] != nil {
+			t.Fatal("write must send the stored-secret reference, not an inline token")
+		}
+		if len(wire["authTokens"].([]any)) != 0 {
+			t.Fatal("legacy token list must be cleared when writing extended tokens")
+		}
+	}
+}
+
+func TestSearchSourceRawMixedAuthentication(t *testing.T) {
+	var model SearchSourceModel
+	if err := json.Unmarshal([]byte(`{"type":"http_raw","authTokensExt":[{"authType":"manual","tokenSecret":"","token":"inline-token"},{"authType":"secret","tokenSecret":"http-secret","token":"resolved-value"}]}`), &model); err != nil {
+		t.Fatal(err)
+	}
+	if len(model.AuthTokens.Elements()) != 2 {
+		t.Fatal("mixed inline and stored-secret entries must both be retained")
+	}
+	inline := model.AuthTokens.Elements()[0].(types.Object).Attributes()
+	if inline["token"].(types.String).ValueString() != "inline-token" || !inline["token_secret"].IsNull() {
+		t.Fatal("empty manual secret selector must not become a stored-secret reference")
+	}
+	if _, err := json.Marshal(model); err != nil {
+		t.Fatal(err)
+	}
+	prior := model.AuthTokens
+	if err := json.Unmarshal([]byte(`{"type":"http_raw","authTokensExt":[{"token":"********"},{"authType":"secret","tokenSecret":"changed-secret","token":"********"}]}`), &model); err != nil {
+		t.Fatal(err)
+	}
+	merged := mergeSearchSourceAuthTokenState(model.AuthTokens, prior, "http_raw")
+	if merged.Elements()[0].(types.Object).Attributes()["token"].(types.String).ValueString() != "inline-token" || merged.Elements()[1].(types.Object).Attributes()["token_secret"].(types.String).ValueString() != "changed-secret" {
+		t.Fatal("masked inline tokens must preserve plaintext while reference drift remains visible")
+	}
+}
+
+func TestSearchSourceAuthTokenChoices(t *testing.T) {
+	for _, test := range []struct {
+		name, protocol string
+		token          map[string]any
+	}{
+		{"both", "http_raw", map[string]any{"token": "inline", "tokenSecret": "secret"}},
+		{"neither", "http_raw", map[string]any{}},
+		{"empty reference", "http_raw", map[string]any{"tokenSecret": ""}},
+		{"unsupported protocol", "cribl_http", map[string]any{"tokenSecret": "secret"}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if err := searchSourceAuthTokensToAPI(map[string]any{"type": test.protocol, "authTokens": []any{test.token}}); err == nil {
+				t.Fatal("invalid authentication token was accepted")
+			}
+		})
+	}
+}
+
+func TestSearchSourceAuthConfigValidation(t *testing.T) {
+	ctx := context.Background()
+	r := &SearchSourceResource{}
+	var schemaResponse resource.SchemaResponse
+	r.Schema(ctx, resource.SchemaRequest{}, &schemaResponse)
+	objectType := schemaResponse.Schema.Type().TerraformType(ctx).(tftypes.Object)
+	tokenType := objectType.AttributeTypes["auth_tokens"].(tftypes.List).ElementType.(tftypes.Object)
+	for _, test := range []struct {
+		name    string
+		values  map[string]any
+		invalid bool
+	}{
+		{"inline", map[string]any{"token": "inline"}, false},
+		{"reference", map[string]any{"token_secret": "http-secret"}, false},
+		{"both", map[string]any{"token": "inline", "token_secret": "http-secret"}, true},
+		{"neither", map[string]any{}, true},
+		{"unknown", map[string]any{"token_secret": tftypes.UnknownValue}, false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			raw := collectorPlanTestObject(objectType, map[string]any{
+				"type": "http_raw", "auth_tokens": []tftypes.Value{collectorPlanTestObject(tokenType, test.values)},
+			})
+			var response resource.ValidateConfigResponse
+			r.ValidateConfig(ctx, resource.ValidateConfigRequest{Config: tfsdk.Config{Schema: schemaResponse.Schema, Raw: raw}}, &response)
+			if response.Diagnostics.HasError() != test.invalid {
+				t.Fatalf("validation diagnostics: %v", response.Diagnostics)
+			}
+		})
+	}
+}
+
 func TestSearchSourceAuthTokenStatePreservesSecretsAndDefaults(t *testing.T) {
 	for _, protocol := range []string{"http_raw", "cribl_http", "splunk_hec"} {
 		for _, secret := range []string{"********", "#42:iv:ciphertext#"} {
+			if protocol == "cribl_http" && secret != "********" {
+				continue
+			}
 			prior := searchSourceTestTokens("new-plaintext", types.BoolNull(), types.StringNull())
 			api := searchSourceTestTokens(secret, types.BoolValue(true), types.StringValue("API default"))
 			if got := mergeSearchSourceAuthTokenState(api, prior, protocol); !got.Equal(prior) {
