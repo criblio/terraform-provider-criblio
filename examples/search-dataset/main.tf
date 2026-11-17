@@ -24,7 +24,7 @@ resource "criblio_search_dataset" "v2" {
 
     paths = [
       {
-        auto_detect_region  = true
+        auto_detect_region  = false
         bucket              = "lake-main-beautiful-nguyen-y8y4azd"
         partitioning_scheme = "none"
         region              = "us-west-2"
