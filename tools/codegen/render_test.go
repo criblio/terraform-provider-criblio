@@ -105,6 +105,33 @@ func TestNotificationTemplateFixedEngineRouting(t *testing.T) {
 	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
 }
 
+func TestNotificationDataSourceAcceptanceOnPremSkips(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		reason string
+	}{
+		{"Notification", "The on-prem acceptance fixture license prohibits notifications"},
+		{"NotificationTarget", "The on-prem acceptance fixture license prohibits notifications"},
+		{"NotificationPolicy", "The on-prem acceptance fixture does not enable V2 Notifications"},
+		{"NotificationTemplate", "The on-prem acceptance fixture does not enable V2 Notifications"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			content := renderTemplate(t, "data_source_test", parser.ResourceDef{StructName: test.name})
+			assertContains(t, content, `"os"`)
+			assertContains(t, content, `if os.Getenv("DEPLOYMENT") == "onprem"`)
+			skip := `t.Skip("` + test.reason + `")`
+			assertContains(t, content, skip)
+			if strings.Index(content, skip) > strings.Index(content, "resource.ParallelTest(") {
+				t.Fatal("on-prem skip must precede Terraform and API operations")
+			}
+		})
+	}
+	content := renderTemplate(t, "data_source_test", parser.ResourceDef{StructName: "Key"})
+	assertNotContains(t, content, `os.Getenv("DEPLOYMENT")`)
+	assertNotContains(t, content, "t.Skip(")
+	assertContains(t, content, "resource.ParallelTest(t, resource.TestCase{")
+}
+
 func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
 	resource := parser.ResourceDef{Fields: []parser.FieldDef{{
 		APIName:       "collector",

@@ -1002,6 +1002,9 @@ actions:
     update:
       x-terraform-list: Key
       x-terraform-list-name: Keys
+      # Cribl's generic pagination sorts by id, but encryption keys only have keyId.
+      # The unpaginated v1 request returns the complete collection.
+      x-terraform-disable-pagination: true
   - target: "$.paths./m/{groupId}/system/keys/{id}.get"
     update:
       x-terraform-read: Key
@@ -1922,6 +1925,9 @@ actions:
     update:
       x-terraform-list: ProjectPipeline
       x-terraform-list-name: ProjectPipelines
+      # Project middleware matches the request URL only without a query string.
+      # Pagination parameters bypass its rewrite and produce a 404.
+      x-terraform-disable-pagination: true
   - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines/{id}.get"
     update:
       x-terraform-read: ProjectPipeline
@@ -3567,6 +3573,9 @@ actions:
     update:
       x-terraform-list: SearchSource
       x-terraform-list-name: SearchSources
+      # Older Search source handlers return the full collection and ignore paging.
+      # Volatile source status prevents repeated-page detection from terminating.
+      x-terraform-disable-pagination: true
   - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.get"
     update:
       x-terraform-read: SearchSource

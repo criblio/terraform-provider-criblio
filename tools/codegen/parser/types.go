@@ -35,6 +35,7 @@ type ResourceDef struct {
 // OperationDef describes one annotated OpenAPI operation.
 type OperationDef struct {
 	Paginated                bool
+	DisablePagination        bool
 	Method                   string
 	Path                     string
 	OperationID              string

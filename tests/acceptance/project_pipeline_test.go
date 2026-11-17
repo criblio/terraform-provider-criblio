@@ -41,13 +41,13 @@ func TestProjectPipeline(t *testing.T) {
 				),
 			},
 			{
-				Config: projectPipelineConfig(projectID, pipelineID, "updated"),
+				Config: withoutCollectionDataSources(t, projectPipelineConfig(projectID, pipelineID, "updated")),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "conf.description", "updated"),
 				),
 			},
 			{
-				Config: projectPipelineConfig(projectID, pipelineID, "updated"),
+				Config: withoutCollectionDataSources(t, projectPipelineConfig(projectID, pipelineID, "updated")),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectEmptyPlan(),

@@ -42,6 +42,7 @@ func main() {
 	mgmtInput := flag.String("mgmt-input", defaultMgmtInput, "management OpenAPI YAML file")
 	mgmtOverlay := flag.String("mgmt-overlay", defaultMgmtOverlay, "management Terraform overlay YAML file")
 	output := flag.String("output", defaultOutput, "merged OpenAPI YAML file")
+	cloudOnlyPathsOutput := flag.String("cloud-only-paths-output", defaultCloudOnlyPathsOutput, "generated availability Go file")
 	flag.Parse()
 
 	if err := runWithConfig(mergeConfig{
@@ -50,7 +51,7 @@ func main() {
 		MgmtInputPath:            *mgmtInput,
 		MgmtOverlayPath:          *mgmtOverlay,
 		OutputPath:               *output,
-		CloudOnlyPathsOutputPath: defaultCloudOnlyPathsOutput,
+		CloudOnlyPathsOutputPath: *cloudOnlyPathsOutput,
 	}); err != nil {
 		fmt.Fprintf(os.Stderr, "merge spec: %v\n", err)
 		os.Exit(1)

@@ -3803,12 +3803,12 @@ func TestNotificationTemplate(t *testing.T) {
 					resource.TestCheckResourceAttr("data.criblio_notification_template.by_id", "id", id),
 				),
 			},
-			{Config: notificationTemplateConfig(id, "Alert notification"), PlanOnly: true},
+			{Config: withoutCollectionDataSources(t, notificationTemplateConfig(id, "Alert notification")), PlanOnly: true},
 			{
-				Config: notificationTemplateConfig(id, "Updated notification"),
+				Config: withoutCollectionDataSources(t, notificationTemplateConfig(id, "Updated notification")),
 				Check: resource.TestCheckResourceAttr(name, "content", "Updated notification"),
 			},
-			{Config: notificationTemplateConfig(id, "Updated notification"), PlanOnly: true},
+			{Config: withoutCollectionDataSources(t, notificationTemplateConfig(id, "Updated notification")), PlanOnly: true},
 			{ResourceName: name, ImportState: true, ImportStateId: id, ImportStateVerify: true},
 		},
 	})
@@ -3873,7 +3873,7 @@ func TestGlobalVar(t *testing.T) {
 					),
 				},
 				{
-					Config:   globalVarUpdatedConfig,
+					Config:   withoutCollectionDataSources(t, globalVarUpdatedConfig),
 					PlanOnly:        true,
 				},
 				{
@@ -3935,13 +3935,13 @@ func TestGrok(t *testing.T) {
 					),
 				},
 				{
-					Config: grokUpdatedConfig,
+					Config: withoutCollectionDataSources(t, grokUpdatedConfig),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "content", "UPDATEDWORD [a-zA-Z]+\n"),
 					),
 				},
 				{
-					Config:   grokUpdatedConfig,
+					Config:   withoutCollectionDataSources(t, grokUpdatedConfig),
 					PlanOnly:        true,
 				},
 				{
@@ -4016,7 +4016,7 @@ func TestRegex(t *testing.T) {
 					),
 				},
 				{
-					Config:   regexUpdatedConfig,
+					Config:   withoutCollectionDataSources(t, regexUpdatedConfig),
 					PlanOnly:        true,
 				},
 				{
@@ -4078,7 +4078,7 @@ func TestSchema(t *testing.T) {
 					),
 				},
 				{
-					Config:   schemaUpdatedConfig,
+					Config:   withoutCollectionDataSources(t, schemaUpdatedConfig),
 					PlanOnly:        true,
 				},
 				{
@@ -4231,13 +4231,13 @@ func TestPipeline(t *testing.T) {
 					),
 				},
 				{
-					Config: pipelineConfig(pipelineID, "updated"),
+					Config: withoutCollectionDataSources(t, pipelineConfig(pipelineID, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "conf.description", "updated"),
 					),
 				},
 				{
-					Config:   pipelineConfig(pipelineID, "updated"),
+					Config:   withoutCollectionDataSources(t, pipelineConfig(pipelineID, "updated")),
 					PlanOnly: true,
 				},
 				{
@@ -4318,14 +4318,14 @@ func TestSearchDashboard(t *testing.T) {
 					),
 				},
 				{
-					Config: searchDashboardConfig(t, dashboardID, "updated"),
+					Config: withoutCollectionDataSources(t, searchDashboardConfig(t, dashboardID, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "name", "Test Search Dashboard updated"),
 						resource.TestCheckResourceAttr(resourceName, "description", "Test Search Dashboard updated"),
 					),
 				},
 				{
-					Config:   searchDashboardConfig(t, dashboardID, "updated"),
+					Config:   withoutCollectionDataSources(t, searchDashboardConfig(t, dashboardID, "updated")),
 					PlanOnly: true,
 				},
 				{
@@ -4410,13 +4410,13 @@ func TestNotificationTarget(t *testing.T) {
 					),
 				},
 				{
-					Config: notificationTargetConfig(id, "updated"),
+					Config: withoutCollectionDataSources(t, notificationTargetConfig(id, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "sns_target.message_group_id", "cribl-notifications-updated"),
 					),
 				},
 				{
-					Config:   notificationTargetConfig(id, "updated"),
+					Config:   withoutCollectionDataSources(t, notificationTargetConfig(id, "updated")),
 					PlanOnly: true,
 				},
 				{
@@ -4505,7 +4505,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					),
 				},
 				{
-					Config: searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated"),
+					Config: withoutCollectionDataSources(t, searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "apihttp.description", "Example API HTTP search dataset provider updated"),
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "api_elasticsearch.description", "Example Elasticsearch provider updated"),
@@ -4513,7 +4513,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					),
 				},
 				{
-					Config:   searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated"),
+					Config:   withoutCollectionDataSources(t, searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated")),
 					PlanOnly: true,
 				},
 				{
@@ -4696,11 +4696,11 @@ func Test{{ .StructName }}DataSources(t *testing.T) {
 {{- end }}
 {{- if acceptanceDataSourceSkipsOnPrem . }}
 	if os.Getenv("DEPLOYMENT") == "onprem" {
-		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
+		t.Skip({{ printf "%q" (acceptanceOnPremSkipReason .) }})
 	}
 {{- end }}
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{

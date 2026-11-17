@@ -33,8 +33,10 @@ commit history, and tag-to-tag diffs.
 - Added model outlier detection config fields.
 - Added restore codegen overlay for criblio_monitor.
 - Added workspace settings search dataset acl resources.
+- Added data resources for all supported list endpoints.
 
 ### Changed
+- Split acceptance runs into serial resource tests followed by read-only data source tests with configurable concurrency (default four). Removed repeated lifecycle collection reads while retaining initial collection checks and by-ID, update, drift, and import coverage.
 - Updated generated collection reads to follow offset/limit pagination automatically, respect server page-size caps, and return known empty collections. Reads reject incomplete or inconsistent pagination and stop with an error after 1,000 pages instead of returning partial results.
 - Shared successful Pack ID listings per REST client and Worker Group for one minute, deduplicating concurrent lookups while preserving legacy mixed-case IDs. Failed lookups are not cached.
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
@@ -45,6 +47,8 @@ commit history, and tag-to-tag diffs.
 - Made `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` configurable in `criblio_system_limits`. On the Cribl.Cloud Leader and Cribl-managed Worker Groups, the API returns 403 for these attributes unless the caller is a Cribl Operator. After upgrading from v1.25.111–v1.25.113, the first refresh removes these four attributes from state unless they are configured; server values do not change.
 
 ### Fixed
+- Made `criblio_search_sources` read the full collection once without pagination parameters, avoiding repeated reads and the 1,000-page error on Search versions that ignore offset/limit and return changing source status.
+- Avoided pagination parameters on `criblio_project_pipelines` to preserve Cribl's project-route rewrite and prevent collection reads from returning 404 during project pipeline acceptance tests.
 - Corrected Search source authentication payloads: Raw HTTP sends inline token objects through `authTokensExt` and clears the legacy list, Cribl HTTP sends stored-secret IDs as `tokenSecret`, and Splunk HEC retains inline tokens. This prevents Raw HTTP failures such as `s.startsWith is not a function` while preserving the existing Terraform token shape.
 - Made Raw HTTP `authTokensExt` authoritative when reading mirrored token responses, including empty lists, preventing duplicate credentials and inconsistent sensitive-list state. Preserved configured plaintext values across masked/encrypted responses and optional token fields across API defaults.
 - Preserved unconfigured Search source tokens when upgrading or importing by retaining the original optional/computed schema and tracking ownership in provider-private state. Unrelated updates omit protected credentials; removing a token list written by Terraform or setting it to null clears both token representations. An explicit `auth_tokens = []` clears protected tokens; a no-change apply does not record ownership.

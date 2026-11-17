@@ -198,17 +198,18 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		}
 	}
 	return OperationDef{
-		Paginated:      paginated,
-		Method:         strings.ToUpper(method),
-		Path:           path,
-		OperationID:    scalarValue(operation, "operationId"),
-		RequestSchema:  schemaRefName(requestSchema(operation)),
-		ResponseSchema: schemaRefName(responseSchema(operation)),
-		ResponseItem:   boolAnnotation(operation, "x-terraform-response-item"),
-		PathParams:     pathParams(operation),
-		QueryParams:    queryParams(operation),
-		Examples:       requestExamples(operation, examples),
-		ReadAfterWrite: boolAnnotation(operation, "x-terraform-read-after-write"),
+		Paginated:         paginated && !boolAnnotation(operation, "x-terraform-disable-pagination"),
+		DisablePagination: boolAnnotation(operation, "x-terraform-disable-pagination"),
+		Method:            strings.ToUpper(method),
+		Path:              path,
+		OperationID:       scalarValue(operation, "operationId"),
+		RequestSchema:     schemaRefName(requestSchema(operation)),
+		ResponseSchema:    schemaRefName(responseSchema(operation)),
+		ResponseItem:      boolAnnotation(operation, "x-terraform-response-item"),
+		PathParams:        pathParams(operation),
+		QueryParams:       queryParams(operation),
+		Examples:          requestExamples(operation, examples),
+		ReadAfterWrite:    boolAnnotation(operation, "x-terraform-read-after-write"),
 		PreserveInputsAfterWrite: boolAnnotation(
 			operation,
 			"x-terraform-preserve-inputs-after-write",
@@ -220,7 +221,7 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 }
 
 func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
-	if response, ok := mappingValue(schemas, resource.List.ResponseSchema); ok {
+	if response, ok := mappingValue(schemas, resource.List.ResponseSchema); ok && !resource.List.DisablePagination {
 		properties, _ := mappingValue(response, "properties")
 		if _, ok := mappingValue(properties, "totalCount"); ok {
 			resource.List.Paginated = true

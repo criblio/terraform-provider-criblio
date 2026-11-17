@@ -9,6 +9,12 @@ description: |-
 
 List data sources discover resources created through the UI, API, or another Terraform configuration. Each exposes `items`, a collection of objects with the same attribute names used by the corresponding resource. Required attributes select the Worker Group, Pack, Project, Lake, or Organization. API offset/limit pagination is handled automatically; users receive the entire collection. Collection data sources return an empty collection when there are no objects.
 
+`criblio_keys` requests the full collection without pagination parameters. Cribl's generic pagination sorts by `id`, while encryption keys use `keyId`, causing paginated requests to fail on affected versions.
+
+`criblio_project_pipelines` also requests the full collection without pagination parameters. On affected versions, Cribl's project route middleware fails to rewrite URLs containing query strings, causing paginated requests to return 404.
+
+`criblio_search_sources` requests the full collection without pagination parameters for compatibility with Search versions that ignore offset/limit. Changing source status in those responses can otherwise prevent repeated-page detection and cause excessive requests.
+
 Existing data source names remain supported. `criblio_routes`, `criblio_pack_routes`, `criblio_pack_breakers`, `criblio_pack_lookups`, and `criblio_pack_vars` read individual objects, so their collection counterparts use distinct names below. Collectors retain their existing dynamic `items` representation to accommodate heterogeneous saved state.
 
 ```terraform
@@ -114,3 +120,9 @@ client and Worker Group for one minute, including concurrent requests. Failed
 listings are not cached; long-lived provider processes refresh expired entries.
 
 Every collection has a read-only acceptance test. Run with `TF_ACC=1` and the provider's normal credentials. `CRIBL_TEST_GROUP_ID` optionally selects an existing group (defaults to `default`, or `default_search` for Search). Pack-scoped tests require `CRIBL_TEST_PACK_ID`; Project-scoped tests require `CRIBL_TEST_PROJECT_ID`; workspace discovery requires `CRIBL_ORGANIZATION_ID`. Tests skip when a required scope is not configured, and cloud-only APIs skip on-prem deployments. Empty collections are valid. Provider unit tests exercise collection decoding and pagination against local HTTP servers, including server-imposed page sizes and pagination errors.
+
+Notification collection tests also skip the on-prem acceptance fixture: its license prohibits notifications and targets, and it does not enable V2 Notifications for policies and templates. Licensed on-prem deployments with the required features can still use these data sources.
+
+`make acceptance-test` runs resource tests serially, then runs the read-only data source tests with up to four tests in parallel. Run only discovery with `make acceptance-test-data-sources`, or adjust its concurrency with `DATA_SOURCE_TEST_PARALLELISM=2 make acceptance-test-data-sources`. Run only resource lifecycles with `make acceptance-test-resources`. These phases run separately to avoid discovery racing resource creation or cleanup in the same suite.
+
+Lifecycle tests retain their first collection assertion and by-ID checks. Later update and unchanged-plan steps omit redundant collection blocks; tests that assert updated collection contents retain those reads.

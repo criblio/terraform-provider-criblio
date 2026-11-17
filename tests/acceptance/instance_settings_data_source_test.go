@@ -17,7 +17,7 @@ func TestInstanceSettingsDataSources(t *testing.T) {
 		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
 	}
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{

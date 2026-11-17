@@ -241,7 +241,7 @@ func (d *SearchSourcesDataSource) Read(ctx context.Context, req datasource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.List[SearchSourceModel](ctx, d.client, fmt.Sprintf("/m/%s/search/local_search/sources", "default_search"), true)
+	items, err := restclient.List[SearchSourceModel](ctx, d.client, fmt.Sprintf("/m/%s/search/local_search/sources", "default_search"), false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

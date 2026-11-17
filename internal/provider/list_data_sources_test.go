@@ -3,13 +3,16 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -36,12 +39,38 @@ var listDataSourceExclusions = map[string]string{
 	"criblio_search_dataset_intelligence":  "per-dataset settings have no collection API",
 }
 
+var listDataSourceSpec struct {
+	sync.Once
+	definitions []parser.ResourceDef
+	err         error
+}
+
+// Build from checked-in inputs rather than requiring a prior make generate.
+// Both merge outputs stay in a temporary directory so tests never rewrite source files.
+func listDataSourceDefinitions(t *testing.T) []parser.ResourceDef {
+	t.Helper()
+	listDataSourceSpec.Do(func() {
+		dir := t.TempDir()
+		specPath := filepath.Join(dir, "merged-spec.yml")
+		command := exec.CommandContext(t.Context(), "go", "run", "./tools/merge-spec",
+			"--output", specPath,
+			"--cloud-only-paths-output", filepath.Join(dir, "cloud_only_paths.go"))
+		command.Dir = filepath.Join("..", "..")
+		if output, err := command.CombinedOutput(); err != nil {
+			listDataSourceSpec.err = fmt.Errorf("merge test spec: %w\n%s", err, output)
+			return
+		}
+		listDataSourceSpec.definitions, listDataSourceSpec.err = parser.ParseFile(specPath)
+	})
+	if listDataSourceSpec.err != nil {
+		t.Fatal(listDataSourceSpec.err)
+	}
+	return listDataSourceSpec.definitions
+}
+
 func TestListDataSourceCoverage(t *testing.T) {
 	ctx := context.Background()
-	definitions, err := parser.ParseFile(filepath.Join("..", "..", "merged-spec.yml"))
-	if err != nil {
-		t.Fatal(err)
-	}
+	definitions := listDataSourceDefinitions(t)
 	lists := map[string]parser.ResourceDef{}
 	for _, definition := range definitions {
 		if definition.List.Path != "" {
@@ -84,10 +113,7 @@ func TestListDataSourceCoverage(t *testing.T) {
 
 func TestAllListDataSourcesRead(t *testing.T) {
 	ctx := context.Background()
-	definitions, err := parser.ParseFile(filepath.Join("..", "..", "merged-spec.yml"))
-	if err != nil {
-		t.Fatal(err)
-	}
+	definitions := listDataSourceDefinitions(t)
 	lists := map[string]parser.ResourceDef{}
 	for _, definition := range definitions {
 		if definition.List.Path != "" && definition.StructName != "GroupSystemSettings" {
@@ -269,5 +295,172 @@ func TestNotificationsListUsesConcreteGroupRoute(t *testing.T) {
 	d.Read(ctx, datasource.ReadRequest{Config: tfsdk.Config{Schema: schema.Schema, Raw: raw}}, &response)
 	if response.Diagnostics.HasError() || requests != 1 {
 		t.Fatalf("diagnostics=%v requests=%d", response.Diagnostics, requests)
+	}
+}
+
+func TestKeysListAvoidsBrokenPagination(t *testing.T) {
+	ctx := context.Background()
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != http.MethodGet || r.URL.Path != "/api/v1/m/key-group/system/keys" {
+			t.Errorf("incorrect keys request: %s %s", r.Method, r.URL)
+		}
+		if r.URL.Query().Has("offset") || r.URL.Query().Has("limit") {
+			// Cribl's pagination comparator calls id.localeCompare for keyId-only items.
+			http.Error(w, `{"status":"error","message":"Cannot read properties of undefined (reading 'localeCompare')"}`, http.StatusInternalServerError)
+			return
+		}
+		if _, err := w.Write([]byte(`{"items":[{"keyId":"first","algorithm":"aes-256-gcm"},{"keyId":"second","algorithm":"aes-256-cbc"}],"count":2}`)); err != nil {
+			t.Error(err)
+		}
+	}))
+	defer server.Close()
+	d := NewKeysDataSource()
+	var schema datasource.SchemaResponse
+	d.Schema(ctx, datasource.SchemaRequest{}, &schema)
+	var configured datasource.ConfigureResponse
+	d.(datasource.DataSourceWithConfigure).Configure(ctx, datasource.ConfigureRequest{ProviderData: &ProviderClients{RC: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}}, &configured)
+	raw := collectorPlanTestObject(schema.Schema.Type().TerraformType(ctx).(tftypes.Object), map[string]any{"group_id": "key-group"})
+	response := datasource.ReadResponse{State: tfsdk.State{Schema: schema.Schema}}
+	d.Read(ctx, datasource.ReadRequest{Config: tfsdk.Config{Schema: schema.Schema, Raw: raw}}, &response)
+	if response.Diagnostics.HasError() {
+		t.Fatal(response.Diagnostics)
+	}
+	var model KeysListDataSourceModel
+	if diagnostics := response.State.Get(ctx, &model); diagnostics.HasError() {
+		t.Fatal(diagnostics)
+	}
+	if requests != 1 || len(model.Items.Elements()) != 2 {
+		t.Fatalf("requests=%d items=%v; want one request and two keys", requests, model.Items)
+	}
+	for i, expected := range []string{"first", "second"} {
+		item := model.Items.Elements()[i].(types.Object)
+		if got := item.Attributes()["key_id"].(types.String).ValueString(); got != expected {
+			t.Errorf("key %d ID = %q, want %q", i, got, expected)
+		}
+	}
+}
+
+func TestProjectPipelinesListAvoidsBrokenRouteRewrite(t *testing.T) {
+	for _, empty := range []bool{false, true} {
+		t.Run(fmt.Sprintf("empty=%t", empty), func(t *testing.T) {
+			ctx := context.Background()
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requests++
+				if r.Method != http.MethodGet || r.URL.Path != "/api/v1/m/project-group/system/projects/project-id/pipelines" {
+					t.Errorf("incorrect project pipeline request: %s %s", r.Method, r.URL)
+				}
+				// Cribl matches project middleware against req.url, including its query.
+				if r.URL.RawQuery != "" {
+					http.Error(w, "Cannot GET /api/v1/system/projects/project-id/pipelines", http.StatusNotFound)
+					return
+				}
+				items := []map[string]any{}
+				if !empty {
+					for _, id := range []string{"first", "second"} {
+						items = append(items, map[string]any{"id": id, "conf": map[string]any{"description": id, "functions": []any{}}})
+					}
+				}
+				if err := json.NewEncoder(w).Encode(map[string]any{"items": items, "count": len(items)}); err != nil {
+					t.Error(err)
+				}
+			}))
+			defer server.Close()
+			d := NewProjectPipelinesDataSource()
+			var schema datasource.SchemaResponse
+			d.Schema(ctx, datasource.SchemaRequest{}, &schema)
+			var configured datasource.ConfigureResponse
+			d.(datasource.DataSourceWithConfigure).Configure(ctx, datasource.ConfigureRequest{ProviderData: &ProviderClients{RC: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}}, &configured)
+			raw := collectorPlanTestObject(schema.Schema.Type().TerraformType(ctx).(tftypes.Object), map[string]any{"group_id": "project-group", "project_id": "project-id"})
+			response := datasource.ReadResponse{State: tfsdk.State{Schema: schema.Schema}}
+			d.Read(ctx, datasource.ReadRequest{Config: tfsdk.Config{Schema: schema.Schema, Raw: raw}}, &response)
+			if response.Diagnostics.HasError() {
+				t.Fatal(response.Diagnostics)
+			}
+			var model ProjectPipelinesListDataSourceModel
+			if diagnostics := response.State.Get(ctx, &model); diagnostics.HasError() {
+				t.Fatal(diagnostics)
+			}
+			want := 2
+			if empty {
+				want = 0
+			}
+			if requests != 1 || model.Items.IsNull() || model.Items.IsUnknown() || len(model.Items.Elements()) != want {
+				t.Fatalf("requests=%d items=%v; want one request and %d pipelines", requests, model.Items, want)
+			}
+			if !empty {
+				for i, expected := range []string{"first", "second"} {
+					attributes := model.Items.Elements()[i].(types.Object).Attributes()
+					if got := attributes["id"].(types.String).ValueString(); got != expected {
+						t.Errorf("pipeline %d ID = %q, want %q", i, got, expected)
+					}
+					if got := attributes["conf"].(types.Object).Attributes()["description"].(types.String).ValueString(); got != expected {
+						t.Errorf("pipeline %d description = %q, want %q", i, got, expected)
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestSearchSourcesListReadsFullCollectionOnce(t *testing.T) {
+	for _, count := range []int{0, 105} {
+		t.Run(fmt.Sprintf("count=%d", count), func(t *testing.T) {
+			ctx := context.Background()
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requests++
+				if r.Method != http.MethodGet || r.URL.Path != "/api/v1/m/default_search/search/local_search/sources" {
+					t.Errorf("incorrect Search sources request: %s %s", r.Method, r.URL)
+				}
+				if r.URL.Query().Has("offset") || r.URL.Query().Has("limit") {
+					t.Errorf("Search source discovery must omit pagination: %s", r.URL)
+				}
+				// Bound the regression itself if pagination is accidentally reenabled.
+				if requests > 2 {
+					http.Error(w, "Search source list did not stop after the full collection", http.StatusInternalServerError)
+					return
+				}
+				// Older handlers ignore pagination and return the same sources with changing status.
+				items := make([]map[string]any, 0, count)
+				for i := 0; i < count; i++ {
+					items = append(items, map[string]any{
+						"id": fmt.Sprintf("source-%d", i), "type": "http_raw",
+						"description": fmt.Sprintf("source %d", i),
+						"status":      map[string]any{"receivedEvents": requests},
+					})
+				}
+				if err := json.NewEncoder(w).Encode(map[string]any{"items": items, "count": len(items)}); err != nil {
+					t.Error(err)
+				}
+			}))
+			defer server.Close()
+			d := NewSearchSourcesDataSource()
+			var schema datasource.SchemaResponse
+			d.Schema(ctx, datasource.SchemaRequest{}, &schema)
+			var configured datasource.ConfigureResponse
+			d.(datasource.DataSourceWithConfigure).Configure(ctx, datasource.ConfigureRequest{ProviderData: &ProviderClients{RC: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}}, &configured)
+			raw := collectorPlanTestObject(schema.Schema.Type().TerraformType(ctx).(tftypes.Object), map[string]any{})
+			response := datasource.ReadResponse{State: tfsdk.State{Schema: schema.Schema}}
+			d.Read(ctx, datasource.ReadRequest{Config: tfsdk.Config{Schema: schema.Schema, Raw: raw}}, &response)
+			if response.Diagnostics.HasError() {
+				t.Fatal(response.Diagnostics)
+			}
+			var model SearchSourcesListDataSourceModel
+			if diagnostics := response.State.Get(ctx, &model); diagnostics.HasError() {
+				t.Fatal(diagnostics)
+			}
+			if requests != 1 || model.Items.IsNull() || model.Items.IsUnknown() || len(model.Items.Elements()) != count {
+				t.Fatalf("requests=%d items=%v; want one request and %d sources", requests, model.Items, count)
+			}
+			for i, value := range model.Items.Elements() {
+				attributes := value.(types.Object).Attributes()
+				if got, want := attributes["id"].(types.String).ValueString(), fmt.Sprintf("source-%d", i); got != want {
+					t.Errorf("source %d ID = %q, want %q", i, got, want)
+				}
+			}
+		})
 	}
 }

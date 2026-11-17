@@ -42,14 +42,14 @@ func TestSearchDashboard(t *testing.T) {
 					),
 				},
 				{
-					Config: searchDashboardConfig(t, dashboardID, "updated"),
+					Config: withoutCollectionDataSources(t, searchDashboardConfig(t, dashboardID, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "name", "Test Search Dashboard updated"),
 						resource.TestCheckResourceAttr(resourceName, "description", "Test Search Dashboard updated"),
 					),
 				},
 				{
-					Config:   searchDashboardConfig(t, dashboardID, "updated"),
+					Config:   withoutCollectionDataSources(t, searchDashboardConfig(t, dashboardID, "updated")),
 					PlanOnly: true,
 				},
 				{

@@ -275,6 +275,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"acceptancePrimaryResourceAddress": acceptancePrimaryResourceAddress,
 		"acceptanceDataSourceSkipsCloud":   acceptanceDataSourceSkipsCloud,
 		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
+		"acceptanceOnPremSkipReason":       acceptanceOnPremSkipReason,
 		"noDiscriminatorVariants":          noDiscriminatorVariants,
 		"rootOneOfVariants":                rootOneOfVariants,
 		"hasRootOneOf":                     hasRootOneOf,
@@ -1482,7 +1483,17 @@ func acceptancePrimaryResourceAddress(resource parser.ResourceDef) string {
 }
 
 func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
-	return strings.HasPrefix(resource.TypeName, "criblio_search_") ||
+	return acceptanceOnPremSkipReason(resource) != ""
+}
+
+func acceptanceOnPremSkipReason(resource parser.ResourceDef) string {
+	switch resource.StructName {
+	case "Notification", "NotificationTarget":
+		return "The on-prem acceptance fixture license prohibits notifications"
+	case "NotificationPolicy", "NotificationTemplate":
+		return "The on-prem acceptance fixture does not enable V2 Notifications"
+	}
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") ||
 		resource.StructName == "Subscription" ||
 		resource.StructName == "SystemInfo" ||
 		resource.StructName == "MonitorActiveAlert" ||
@@ -1490,7 +1501,10 @@ func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
 		strings.HasPrefix(resource.List.Path, "/products/lake/") ||
 		strings.HasPrefix(resource.List.Path, "/v1/organizations/") ||
 		strings.Contains(resource.List.Path, "lakehouse_engine_metrics") ||
-		strings.HasPrefix(resource.List.Path, "/apps")
+		strings.HasPrefix(resource.List.Path, "/apps") {
+		return "Skipping data source acceptance test for On-Prem deployments as it is not supported"
+	}
+	return ""
 }
 
 func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {

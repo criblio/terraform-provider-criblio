@@ -31,7 +31,7 @@ func createWorkerGroupUpgrade(ctx context.Context, client *restclient.Client, mo
 			if json.Unmarshal([]byte(httpErr.Body), &response) == nil {
 				message := strings.ToLower(response.Message)
 				if strings.Contains(message, "managed group") || strings.Contains(message, "managed worker group") {
-					return nil, fmt.Errorf("Worker Group %q is managed by Cribl and cannot be upgraded with criblio_worker_group_upgrade. Set group_id to an existing self-managed Worker Group, including a hybrid group. Cribl manages upgrades for cloud-managed groups: %w", model.GroupID.ValueString(), err)
+					return nil, fmt.Errorf("worker group %q is managed by Cribl and cannot be upgraded with criblio_worker_group_upgrade. Set group_id to an existing self-managed Worker Group, including a hybrid group. Cribl manages upgrades for cloud-managed groups: %w", model.GroupID.ValueString(), err)
 				}
 			}
 		}
