@@ -537,6 +537,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, searchSourceTypes, "searchSourceAuthTokensFromAPI(raw)")
 	assertContains(t, renderTemplate(t, "resource", searchSource), "mergeSearchSourceAuthTokenState(api.AuthTokens, state.AuthTokens, api.Type.ValueString())")
 	assertContains(t, renderTemplate(t, "resource", searchSource), "listplanmodifier.UseStateForUnknown()")
+	assertContains(t, renderTemplate(t, "resource", searchSource), "r.api.updateWithPreservedAuth(ctx, requestModel)")
 
 	source := parser.ResourceDef{
 		StructName: "Source",

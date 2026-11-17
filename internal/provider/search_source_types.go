@@ -100,19 +100,22 @@ type SearchSourceAuthTokensModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 	Enabled     types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
 	Token       types.String `tfsdk:"token" json:"token,omitempty"`
+	TokenSecret types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
 }
 
 type SearchSourceAuthTokensAPIModel struct {
 	Description *string `json:"description,omitempty"`
 	Enabled     *bool   `json:"enabled,omitempty"`
 	Token       *string `json:"token,omitempty"`
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 }
 
 func SearchSourceAuthTokensAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"description": types.StringType,
-		"enabled":     types.BoolType,
-		"token":       types.StringType,
+		"description":  types.StringType,
+		"enabled":      types.BoolType,
+		"token":        types.StringType,
+		"token_secret": types.StringType,
 	}
 }
 

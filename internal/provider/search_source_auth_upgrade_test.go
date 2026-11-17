@@ -46,11 +46,21 @@ func (p *legacySearchSourceAuthProvider) Resources(context.Context) []func() fra
 
 func TestSearchSourceLegacyAuthUpgradePreservesTokens(t *testing.T) {
 	for _, token := range []string{"legacy-token", "new-token"} {
-		t.Run(token, func(t *testing.T) { testSearchSourceLegacyAuthUpgradePreservesTokens(t, token) })
+		t.Run(token, func(t *testing.T) { testSearchSourceLegacyAuthUpgradePreservesTokens(t, token, false) })
 	}
 }
 
-func testSearchSourceLegacyAuthUpgradePreservesTokens(t *testing.T, adoptedToken string) {
+func TestSearchSourceStoredSecretPreservation(t *testing.T) {
+	for _, secret := range []string{"legacy-token", "new-token"} {
+		t.Run(secret, func(t *testing.T) { testSearchSourceLegacyAuthUpgradePreservesTokens(t, secret, true) })
+	}
+}
+
+func testSearchSourceLegacyAuthUpgradePreservesTokens(t *testing.T, adoptedToken string, storedSecret bool) {
+	tokenField := "token"
+	if storedSecret {
+		tokenField = "token_secret"
+	}
 	var mu sync.Mutex
 	var source map[string]any
 	updates := 0
@@ -66,6 +76,9 @@ func testSearchSourceLegacyAuthUpgradePreservesTokens(t *testing.T, adoptedToken
 			}
 			source["authTokens"] = []any{"legacy-token"}
 			source["authTokensExt"] = []any{map[string]any{"token": "legacy-token"}}
+			if storedSecret {
+				source["authTokensExt"] = []any{map[string]any{"authType": "secret", "tokenSecret": "legacy-token", "token": "resolved-value"}}
+			}
 			source["disabled"] = false
 		case http.MethodPatch:
 			var body map[string]any
@@ -75,16 +88,26 @@ func testSearchSourceLegacyAuthUpgradePreservesTokens(t *testing.T, adoptedToken
 			}
 			updates++
 			if updates == 1 {
-				if _, ok := body["authTokens"]; ok {
-					t.Error("unrelated update sent legacy credentials")
-				}
-				if _, ok := body["authTokensExt"]; ok {
-					t.Error("unrelated update sent extended credentials")
+				if entries, ok := body["authTokensExt"].([]any); !ok || len(entries) != 1 {
+					t.Error("full-replacement update did not preserve legacy credentials")
 				}
 			}
-			for key, value := range body {
-				source[key] = value
+			if storedSecret {
+				expectedSecret := adoptedToken
+				if updates == 1 {
+					expectedSecret = "legacy-token"
+				}
+				if entries, ok := body["authTokensExt"].([]any); ok {
+					for _, item := range entries {
+						entry := item.(map[string]any)
+						if entry["authType"] != "secret" || entry["tokenSecret"] != expectedSecret || entry["token"] != nil {
+							t.Error("update converted a stored-secret reference into an inline token")
+						}
+					}
+				}
 			}
+			// The v1 backend replaces the complete stored source.
+			source = body
 		case http.MethodDelete:
 			w.WriteHeader(http.StatusNoContent)
 			return
@@ -111,17 +134,23 @@ func testSearchSourceLegacyAuthUpgradePreservesTokens(t *testing.T, adoptedToken
 	}
 	const name = "criblio_search_source.test"
 	steps := []resource.TestStep{
-		{ProtoV6ProviderFactories: legacy, Config: config("old", ""), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0.token", "legacy-token")},
+		{ProtoV6ProviderFactories: legacy, Config: config("old", ""), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0."+tokenField, "legacy-token")},
 		{ProtoV6ProviderFactories: current, Config: config("old", ""), PlanOnly: true},
-		{ProtoV6ProviderFactories: current, Config: config("changed", ""), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0.token", "legacy-token")},
+		{ProtoV6ProviderFactories: current, Config: config("changed", ""), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0."+tokenField, "legacy-token")},
 		{ProtoV6ProviderFactories: current, Config: config("changed", ""), PlanOnly: true},
-		{ProtoV6ProviderFactories: current, Config: config("changed", fmt.Sprintf(`auth_tokens = [{token = %q}]`, adoptedToken)), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0.token", adoptedToken)},
+		{ProtoV6ProviderFactories: current, Config: config("changed", fmt.Sprintf(`auth_tokens = [{%s = %q}]`, tokenField, adoptedToken)), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0."+tokenField, adoptedToken)},
+	}
+	if storedSecret {
+		steps = append([]resource.TestStep{
+			steps[0],
+			{ProtoV6ProviderFactories: current, ResourceName: name, ImportState: true, ImportStateId: "upgrade-auth", ImportStateVerify: true},
+		}, steps[1:]...)
 	}
 	if adoptedToken == "legacy-token" {
 		// Terraform does not persist private ownership metadata on a no-op.
 		// Preserve legacy credentials until a write or explicit clear occurs.
 		steps = append(steps,
-			resource.TestStep{ProtoV6ProviderFactories: current, Config: config("changed", ""), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0.token", "legacy-token")},
+			resource.TestStep{ProtoV6ProviderFactories: current, Config: config("changed", ""), Check: resource.TestCheckResourceAttr(name, "auth_tokens.0."+tokenField, "legacy-token")},
 			resource.TestStep{ProtoV6ProviderFactories: current, Config: config("changed", ""), PlanOnly: true},
 			resource.TestStep{ProtoV6ProviderFactories: current, Config: config("changed", `auth_tokens = []`), Check: resource.TestCheckResourceAttr(name, "auth_tokens.#", "0")},
 			resource.TestStep{ProtoV6ProviderFactories: current, Config: config("changed", `auth_tokens = []`), PlanOnly: true},

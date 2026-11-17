@@ -489,6 +489,9 @@ func TestSearchSourcesListReadsFullCollectionOnce(t *testing.T) {
 						"id": fmt.Sprintf("source-%d", i), "type": "http_raw",
 						"description": fmt.Sprintf("source %d", i),
 						"status":      map[string]any{"receivedEvents": requests},
+						"authTokensExt": []any{map[string]any{
+							"authType": "secret", "tokenSecret": "http-secret", "token": "resolved-value",
+						}},
 					})
 				}
 				if err := json.NewEncoder(w).Encode(map[string]any{"items": items, "count": len(items)}); err != nil {
@@ -516,6 +519,14 @@ func TestSearchSourcesListReadsFullCollectionOnce(t *testing.T) {
 			}
 			for i, value := range model.Items.Elements() {
 				attributes := value.(types.Object).Attributes()
+				tokens := attributes["auth_tokens"].(types.List).Elements()
+				if len(tokens) != 1 {
+					t.Fatal("collection read lost stored-secret token")
+				}
+				auth := tokens[0].(types.Object).Attributes()
+				if !auth["token"].IsNull() || auth["token_secret"].(types.String).ValueString() != "http-secret" {
+					t.Fatal("collection read must expose the reference without its resolved token")
+				}
 				if got, want := attributes["id"].(types.String).ValueString(), fmt.Sprintf("source-%d", i); got != want {
 					t.Errorf("source %d ID = %q, want %q", i, got, want)
 				}

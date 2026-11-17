@@ -10,7 +10,7 @@ description: |-
 
 SearchSource Resource
 
-Authentication tokens use the existing list of objects with `token`, `description`, and `enabled` attributes. For Raw HTTP, `token` is an inline value; the provider sends objects through `authTokensExt` and clears the legacy token list when configuring tokens. Raw HTTP accepts `enabled` omitted or true; remove an entry instead of setting it false. Raw HTTP stored-secret references are not supported by this attribute. An explicit empty list clears all tokens. For resources created with this provider, removing `auth_tokens` or setting it to null also clears tokens. Existing tokens on legacy or imported resources remain API-computed until a configured token list is written by a resource update; a no-change apply does not record ownership. Use an explicit empty list to clear protected credentials. Unrelated updates omit unconfigured credentials from requests.
+Authentication tokens use the existing list of objects with `token`, `description`, and `enabled` attributes. For Raw HTTP, `token` is an inline value; the provider sends objects through `authTokensExt` and clears the legacy token list when configuring tokens. Raw HTTP accepts `enabled` omitted or true; remove an entry instead of setting it false. For Raw HTTP or Splunk HEC stored text secrets, configure `token_secret` instead of `token`; the provider sends `authType: secret` and preserves the reference on refresh and import. An explicit empty list clears all tokens. For resources created with this provider, removing `auth_tokens` or setting it to null also clears tokens. Existing tokens on legacy or imported resources remain API-computed until a configured token list is written by a resource update; a no-change apply does not record ownership. Use an explicit empty list to clear protected credentials. Unrelated updates preserve unconfigured credentials from the current API representation because v1 updates replace the source. Masked credentials that cannot be safely preserved block the update before writing.
 
 For Cribl HTTP, `token` is a stored text-secret ID sent as `tokenSecret`. For Splunk HEC it is an inline token sent as `token`. Masked or encrypted API responses preserve known token values in state. Imported secrets cannot recover plaintext values; configure the desired tokens before applying.
 
@@ -59,14 +59,12 @@ resource "criblio_search_source" "my_search_source" {
 <a id="nestedatt--auth_tokens"></a>
 ### Nested Schema for `auth_tokens`
 
-Required:
-
-- `token` (String, Sensitive) Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.
-
 Optional:
 
 - `description` (String) Optional label for this token.
 - `enabled` (Boolean) When false, the token is rejected.
+- `token` (String, Sensitive) Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.
+- `token_secret` (String) Stored text-secret ID for Raw HTTP or Splunk HEC. Configure exactly one of token or token_secret. The provider sends authType secret for this reference.
 
 <a id="nestedatt--metadata"></a>
 ### Nested Schema for `metadata`

@@ -2,9 +2,12 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"regexp"
 
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -26,8 +29,9 @@ func searchSourceAuthTokensToAPI(body map[string]any) error {
 		if !ok {
 			return fmt.Errorf("auth_tokens[%d]: expected a non-null token object", i)
 		}
-		if _, ok := token["token"].(string); !ok {
-			return fmt.Errorf("auth_tokens[%d].token: expected a known token string", i)
+		protocol, _ := body["type"].(string)
+		if err := validateSearchSourceAuthToken(token, protocol); err != nil {
+			return fmt.Errorf("auth_tokens[%d]: %w", i, err)
 		}
 	}
 	switch body["type"] {
@@ -38,17 +42,45 @@ func searchSourceAuthTokensToAPI(body map[string]any) error {
 			delete(token, "token")
 		}
 	case "http_raw":
-		for i, item := range tokens {
+		for _, item := range tokens {
 			token := item.(map[string]any)
-			if enabled, ok := token["enabled"].(bool); ok && !enabled {
-				return fmt.Errorf("auth_tokens[%d].enabled: Raw HTTP does not support disabling individual tokens; remove the token entry instead", i)
-			}
 			delete(token, "enabled")
+			if token["tokenSecret"] != nil {
+				token["authType"] = "secret"
+			}
 		}
 		// Clear both representations when removing tokens. The input runtime
 		// may backport extended tokens into authTokens during initialization.
 		body["authTokens"] = []any{}
 		body["authTokensExt"] = tokens
+	case "splunk_hec":
+		for _, item := range tokens {
+			token := item.(map[string]any)
+			if token["tokenSecret"] != nil {
+				token["authType"] = "secret"
+			}
+		}
+	}
+	return nil
+}
+
+func validateSearchSourceAuthToken(token map[string]any, protocol string) error {
+	value, hasToken := token["token"].(string)
+	secret, hasSecret := token["tokenSecret"].(string)
+	if hasToken == hasSecret {
+		return errors.New("configure exactly one of token or token_secret")
+	}
+	if (hasToken && value == "") || (hasSecret && secret == "") {
+		return errors.New("token or token_secret must not be empty")
+	}
+	if hasSecret && protocol != "http_raw" && protocol != "splunk_hec" {
+		return errors.New("token_secret is supported only for Raw HTTP and Splunk HEC; use token for this protocol")
+	}
+	if secret == "****/******" || (protocol == "cribl_http" && value == "****/******") {
+		return errors.New("configure an accessible secret ID instead of the masked global-secret placeholder")
+	}
+	if enabled, ok := token["enabled"].(bool); protocol == "http_raw" && ok && !enabled {
+		return errors.New("raw HTTP does not support disabling individual tokens; remove the token entry instead")
 	}
 	return nil
 }
@@ -73,6 +105,9 @@ func searchSourceAuthTokensFromAPI(body map[string]any) error {
 					tokens = append(tokens, map[string]any{"token": token})
 				case map[string]any:
 					// Accept object responses from older Search API implementations.
+					if err := normalizeSearchSourceRawAuthToken(token); err != nil {
+						return fmt.Errorf("authTokens[%d]: %w", i, err)
+					}
 					tokens = append(tokens, token)
 				default:
 					return fmt.Errorf("authTokens[%d]: expected token string or object", i)
@@ -84,8 +119,12 @@ func searchSourceAuthTokensFromAPI(body map[string]any) error {
 			if !ok {
 				return fmt.Errorf("authTokensExt[%d]: expected token object", i)
 			}
-			if token["authType"] == "secret" || token["tokenSecret"] != nil {
-				return fmt.Errorf("authTokensExt[%d]: stored-secret references on Raw HTTP are not supported by auth_tokens", i)
+			if err := normalizeSearchSourceRawAuthToken(token); err != nil {
+				return fmt.Errorf("authTokensExt[%d]: %w", i, err)
+			}
+			if token["tokenSecret"] != nil {
+				tokens = append(tokens, token)
+				continue
 			}
 			if value, ok := token["token"].(string); ok && value != "" {
 				tokens = append(tokens, token)
@@ -96,13 +135,40 @@ func searchSourceAuthTokensFromAPI(body map[string]any) error {
 	if tokens, ok := body["authTokens"].([]any); ok {
 		for _, item := range tokens {
 			if token, ok := item.(map[string]any); ok {
+				if body["type"] == "splunk_hec" {
+					if err := normalizeSearchSourceRawAuthToken(token); err != nil {
+						return err
+					}
+					continue
+				}
 				if body["type"] == "cribl_http" && token["tokenSecret"] != nil {
 					token["token"] = token["tokenSecret"]
-				} else if token["token"] == nil {
+				} else if body["type"] != "http_raw" && token["token"] == nil {
 					token["token"] = token["tokenSecret"]
+				}
+				if body["type"] != "http_raw" {
+					// Keep the established Cribl HTTP token attribute; token_secret
+					// is the additional Raw HTTP representation only.
+					delete(token, "tokenSecret")
 				}
 			}
 		}
+	}
+	return nil
+}
+
+func normalizeSearchSourceRawAuthToken(token map[string]any) error {
+	secret, _ := token["tokenSecret"].(string)
+	if token["authType"] == "secret" || (token["authType"] != "manual" && secret != "") {
+		if secret == "" {
+			return errors.New("stored-secret reference is missing tokenSecret")
+		}
+		// A resolved runtime token is not the configured credential. Keep only
+		// the reference so refresh/import never converts it to an inline value.
+		delete(token, "token")
+	} else {
+		// Manual rows may include an empty secret selector from the UI.
+		delete(token, "tokenSecret")
 	}
 	return nil
 }
@@ -139,9 +205,14 @@ func mergeSearchSourceAuthTokenState(api, prior types.List, sourceType string) t
 		// Retain the matching plan/state value, including newly rotated tokens.
 		if !priorToken.IsNull() && !priorToken.IsUnknown() && !apiToken.IsNull() && !apiToken.IsUnknown() {
 			secret := apiToken.ValueString()
-			if isLikelyMaskedSecret(secret) || searchSourceEncryptedToken.MatchString(secret) {
+			if isLikelyMaskedSecret(secret) || (sourceType == "cribl_http" && secret == "****/******") || (sourceType != "cribl_http" && searchSourceEncryptedToken.MatchString(secret)) {
 				attributes["token"] = priorToken
 			}
+		}
+		apiReference := attributes["token_secret"].(types.String)
+		priorReference := previous["token_secret"].(types.String)
+		if apiReference.ValueString() == "****/******" && !priorReference.IsNull() && !priorReference.IsUnknown() {
+			attributes["token_secret"] = priorReference
 		}
 		for _, name := range []string{"description", "enabled"} {
 			// These optional fields are not computed: API defaults must not turn
@@ -156,6 +227,43 @@ func mergeSearchSourceAuthTokenState(api, prior types.List, sourceType string) t
 }
 
 const searchSourceAuthManagedKey = "search_source_auth_tokens_managed"
+
+var _ resource.ResourceWithValidateConfig = &SearchSourceResource{}
+
+// ValidateConfig checks protocol-specific token choices before making API requests.
+func (r *SearchSourceResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var sourceType types.String
+	var tokens types.List
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, path.Root("type"), &sourceType)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, path.Root("auth_tokens"), &tokens)...)
+	if resp.Diagnostics.HasError() || sourceType.IsUnknown() || tokens.IsNull() || tokens.IsUnknown() {
+		return
+	}
+	for i, item := range tokens.Elements() {
+		object := item.(types.Object)
+		if object.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("auth_tokens").AtListIndex(i), "Invalid authentication token", "Authentication token entries must not be null.")
+			continue
+		}
+		if object.IsUnknown() {
+			continue
+		}
+		unknown := false
+		for _, attribute := range object.Attributes() {
+			unknown = unknown || attribute.IsUnknown()
+		}
+		if unknown {
+			continue
+		}
+		value, err := SearchSourceTerraformValueToJSON(object)
+		if err == nil {
+			err = validateSearchSourceAuthToken(value.(map[string]any), sourceType.ValueString())
+		}
+		if err != nil {
+			resp.Diagnostics.AddAttributeError(path.Root("auth_tokens").AtListIndex(i), "Invalid authentication token", err.Error())
+		}
+	}
+}
 
 // ModifyPlan preserves unconfigured legacy/imported credentials. Private state
 // records ownership only once configuration or a new resource takes control.
@@ -192,8 +300,8 @@ func (r *SearchSourceResource) ModifyPlan(ctx context.Context, req resource.Modi
 	}
 }
 
-// searchSourceAuthRequestModel omits API-computed credentials on unrelated
-// updates. Resending encrypted or masked legacy values could corrupt tokens.
+// searchSourceAuthRequestModel marks unowned credentials for preservation from
+// the raw API representation rather than re-encoding their Terraform values.
 func searchSourceAuthRequestModel(ctx context.Context, model SearchSourceModel, req resource.UpdateRequest) (SearchSourceModel, diag.Diagnostics) {
 	var configured types.List
 	diags := req.Config.GetAttribute(ctx, path.Root("auth_tokens"), &configured)
@@ -210,4 +318,76 @@ func searchSourceAuthRequestModel(ctx context.Context, model SearchSourceModel, 
 		model.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()})
 	}
 	return model, diags
+}
+
+// updateWithPreservedAuth respects the v1 API's full-replacement semantics.
+// Keep unowned credentials and protocol-specific properties from the backend,
+// removing inactive runtime values to respect its exclusive token-row schema.
+func (a SearchSourceAPI) updateWithPreservedAuth(ctx context.Context, model SearchSourceModel) (*SearchSourceModel, error) {
+	if !model.AuthTokens.IsNull() {
+		return a.Update(ctx, model)
+	}
+	path := fmt.Sprintf("/m/default_search/search/local_search/sources/%s", model.ID.ValueString())
+	existing, err := restclient.Get[map[string]any](ctx, a.client, path)
+	if err != nil {
+		return nil, err
+	}
+	if existing == nil {
+		return nil, errors.New("source response is empty; cannot preserve authentication")
+	}
+	encoded, err := json.Marshal(model)
+	if err != nil {
+		return nil, err
+	}
+	var body map[string]any
+	if err := json.Unmarshal(encoded, &body); err != nil {
+		return nil, err
+	}
+	for _, field := range []string{"authTokens", "authTokensExt"} {
+		if tokens, ok := (*existing)[field]; ok {
+			if field == "authTokens" && model.Type.ValueString() == "http_raw" && (*existing)["authTokensExt"] != nil {
+				body[field] = []any{}
+				continue
+			}
+			if entries, ok := tokens.([]any); ok {
+				for _, item := range entries {
+					if token, ok := item.(map[string]any); ok && (model.Type.ValueString() == "http_raw" || model.Type.ValueString() == "splunk_hec") {
+						if err := normalizeSearchSourceRawAuthToken(token); err != nil {
+							return nil, err
+						}
+						if token["tokenSecret"] != nil {
+							token["authType"] = "secret"
+						}
+					}
+				}
+			}
+			if err := validatePreservedSearchSourceAuth(tokens); err != nil {
+				return nil, err
+			}
+			body[field] = tokens
+		}
+	}
+	return restclient.Patch[map[string]any, SearchSourceModel](ctx, a.client, path, body)
+}
+
+func validatePreservedSearchSourceAuth(value any) error {
+	switch value := value.(type) {
+	case string:
+		if isLikelyMaskedSecret(value) || value == "****/******" {
+			return errors.New("cannot safely preserve masked authentication during a source update; grant access to the secret folder or configure auth_tokens with known credentials")
+		}
+	case []any:
+		for _, item := range value {
+			if err := validatePreservedSearchSourceAuth(item); err != nil {
+				return err
+			}
+		}
+	case map[string]any:
+		for _, field := range []string{"token", "tokenSecret"} {
+			if err := validatePreservedSearchSourceAuth(value[field]); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
