@@ -8,6 +8,8 @@ description: |-
 
 # criblio_guard_rules (Data Source)
 
+Returns all matching objects in `items`, following API pagination automatically. Scope the request using the required attributes below. An empty collection returns an empty list.
+
 ## Example Usage
 
 ```terraform
@@ -33,7 +35,6 @@ Read-Only:
 
 - `context_keywords` (Attributes List) Context keywords that help match sensitive data for this rule. (see [below for nested schema](#nestedatt--items--context_keywords))
 - `description` (String) Brief description of the SDS rule.
-- `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the SDS rule.
 - `lib` (String) Name of the library that the rule belongs to.
 - `regex` (String) Regular expression pattern used to match sensitive data.

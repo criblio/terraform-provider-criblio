@@ -128,7 +128,7 @@ func (d *CertificatesDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]CertificateModel](ctx, d.client, fmt.Sprintf("/m/%s/system/certificates", model.GroupID.ValueString()))
+	items, err := restclient.List[CertificateModel](ctx, d.client, fmt.Sprintf("/m/%s/system/certificates", model.GroupID.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

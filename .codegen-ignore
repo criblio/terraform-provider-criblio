@@ -38,3 +38,10 @@ internal/provider/workspace_system_settings_managed.go
 internal/provider/search_dataset_acl_managed.go
 tests/acceptance/search_dataset_acl_test.go
 tests/acceptance/workspace_system_settings_test.go
+
+# Live upgrade acceptance requires an explicit target and one submission per run.
+tests/acceptance/worker_group_upgrade_test.go
+
+# Search source authentication adapts the underlying protocol's wire format.
+internal/provider/search_source_auth.go
+tests/acceptance/search_source_http_raw_auth_tokens_test.go

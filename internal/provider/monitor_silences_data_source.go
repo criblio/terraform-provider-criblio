@@ -125,7 +125,7 @@ func (d *MonitorSilencesDataSource) Read(ctx context.Context, req datasource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]MonitorSilenceModel](ctx, d.client, "/a/__cribl_metrics/products/lakehouse_engine_metrics/silences")
+	items, err := restclient.List[MonitorSilenceModel](ctx, d.client, "/a/__cribl_metrics/products/lakehouse_engine_metrics/silences", false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

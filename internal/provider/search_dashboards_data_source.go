@@ -979,7 +979,7 @@ func (d *SearchDashboardsDataSource) Read(ctx context.Context, req datasource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]SearchDashboardModel](ctx, d.client, fmt.Sprintf("/m/%s/search/dashboards", "default_search"))
+	items, err := restclient.List[SearchDashboardModel](ctx, d.client, fmt.Sprintf("/m/%s/search/dashboards", "default_search"), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

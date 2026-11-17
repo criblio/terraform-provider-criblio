@@ -45,7 +45,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					),
 				},
 				{
-					Config: searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated"),
+					Config: withoutCollectionDataSources(t, searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "apihttp.description", "Example API HTTP search dataset provider updated"),
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "api_elasticsearch.description", "Example Elasticsearch provider updated"),
@@ -53,7 +53,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					),
 				},
 				{
-					Config:   searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated"),
+					Config:   withoutCollectionDataSources(t, searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated")),
 					PlanOnly: true,
 				},
 				{

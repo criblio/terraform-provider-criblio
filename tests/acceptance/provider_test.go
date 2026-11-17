@@ -12,7 +12,9 @@ import (
 
 var (
 	providerFactory = map[string]func() (tfprotov6.ProviderServer, error){
-		"criblio": providerserver.NewProtocol6WithError(provider.New("999.99.9")()),
+		"criblio": func() (tfprotov6.ProviderServer, error) {
+			return providerserver.NewProtocol6WithError(provider.New("999.99.9")())()
+		},
 	}
 )
 

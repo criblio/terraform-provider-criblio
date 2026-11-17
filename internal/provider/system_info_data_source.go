@@ -404,7 +404,7 @@ func (d *SystemInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]SystemInfoModel](ctx, d.client, fmt.Sprintf("/m/%s/system/info", "default"))
+	items, err := restclient.List[SystemInfoModel](ctx, d.client, fmt.Sprintf("/m/%s/system/info", "default"), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

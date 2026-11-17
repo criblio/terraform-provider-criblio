@@ -64,6 +64,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_cribl_lake_dataset":           {SDKService: "Lake", ListMethod: "GetCriblLakeDatasetByLakeID", GetMethod: "GetCriblLakeDatasetByLakeIDAndID", ImportIDFormat: ""},
 	"criblio_cribl_lake_house":             {SDKService: "LakeHouse", ListMethod: "ListDefaultLakeLakehouse", GetMethod: "GetDefaultLakeLakehouseByID", ImportIDFormat: ""},
 	"criblio_database_connection":          {SDKService: "DatabaseConnections", ListMethod: "GetDatabaseConnectionConfig", GetMethod: "GetDatabaseConnectionConfigByID", ImportIDFormat: ""},
+	"criblio_worker_group_upgrade":         {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_deploy":                       {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_destination":                  {SDKService: "Outputs", ListMethod: "ListOutput", GetMethod: "GetOutputByID", ImportIDFormat: "", OneOf: oneOfOutput},
 	"criblio_event_breaker_ruleset":        {SDKService: "EventBreakerRules", ListMethod: "ListEventBreakerRuleset", GetMethod: "GetEventBreakerRulesetByID", ImportIDFormat: ""},

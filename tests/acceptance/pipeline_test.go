@@ -42,13 +42,13 @@ func TestPipeline(t *testing.T) {
 					),
 				},
 				{
-					Config: pipelineConfig(pipelineID, "updated"),
+					Config: withoutCollectionDataSources(t, pipelineConfig(pipelineID, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "conf.description", "updated"),
 					),
 				},
 				{
-					Config:   pipelineConfig(pipelineID, "updated"),
+					Config:   withoutCollectionDataSources(t, pipelineConfig(pipelineID, "updated")),
 					PlanOnly: true,
 				},
 				{

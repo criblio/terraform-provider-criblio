@@ -19,6 +19,11 @@ func monitoringLifecycle(t *testing.T, tfType, id, initial, updated, changedFiel
 	t.Helper()
 	name := tfType + ".test"
 	listType := map[string]string{"criblio_monitor_shared_config": "criblio_monitor_shared_configs", "criblio_monitor_profile": "criblio_monitor_profiles", "criblio_monitor_silence": "criblio_monitor_silences", "criblio_notification_policy": "criblio_notification_policies"}[tfType]
+	updatedWithoutLists := withoutCollectionDataSources(t, updated)
+	// Silence tests also assert membership in the updated collection.
+	if tfType != "criblio_monitor_silence" {
+		updated = updatedWithoutLists
+	}
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: providerFactory,
 		Steps: []resource.TestStep{
@@ -29,13 +34,13 @@ func monitoringLifecycle(t *testing.T, tfType, id, initial, updated, changedFiel
 					testCheckListDataSourceHasItems("data." + listType + ".all"),
 				}, checks...)...,
 			)},
-			{Config: initial, PlanOnly: true},
+			{Config: withoutCollectionDataSources(t, initial), PlanOnly: true},
 			{Config: updated, Check: resource.ComposeAggregateTestCheckFunc(append([]resource.TestCheckFunc{
 				resource.TestCheckResourceAttr(name, changedField, want),
 			}, checks...)...)},
-			{Config: updated, PlanOnly: true},
+			{Config: updatedWithoutLists, PlanOnly: true},
 			{ResourceName: name, ImportState: true, ImportStateId: id, ImportStateVerify: true, ImportStateVerifyIgnore: ignore},
-			{Config: updated, PlanOnly: true},
+			{Config: updatedWithoutLists, PlanOnly: true},
 		},
 	})
 }

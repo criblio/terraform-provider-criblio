@@ -105,6 +105,45 @@ func TestNotificationTemplateFixedEngineRouting(t *testing.T) {
 	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
 }
 
+func TestLicensedDataSourceAcceptanceOnPremSkips(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		reason string
+	}{
+		{"MappingRuleset", "The on-prem acceptance fixture license does not enable Worker Group mappings"},
+		{"Project", "The on-prem acceptance fixture license does not enable enterprise Projects"},
+		{"ProjectPipeline", "The on-prem acceptance fixture license does not enable enterprise Projects"},
+		{"Notification", "The on-prem acceptance fixture license prohibits notifications"},
+		{"NotificationTarget", "The on-prem acceptance fixture license prohibits notifications"},
+		{"NotificationPolicy", "The on-prem acceptance fixture does not enable V2 Notifications"},
+		{"NotificationTemplate", "The on-prem acceptance fixture does not enable V2 Notifications"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			content := renderTemplate(t, "data_source_test", parser.ResourceDef{StructName: test.name})
+			assertContains(t, content, `"os"`)
+			assertContains(t, content, `if os.Getenv("DEPLOYMENT") == "onprem"`)
+			skip := `t.Skip("` + test.reason + `")`
+			assertContains(t, content, skip)
+			if strings.Index(content, skip) > strings.Index(content, "resource.ParallelTest(") {
+				t.Fatal("on-prem skip must precede Terraform and API operations")
+			}
+		})
+	}
+	// These list APIs can read existing Stream scopes even when their resource
+	// tests use Search scopes, install Cloud packs, or need a custom rule library.
+	for _, name := range []string{
+		"Key", "Grok", "GuardRule", "ParserLibEntry", "LookupFile", "CustomBannerDiscovery", "GroupDiscovery",
+		"PackBreakers", "PackCollector", "PackDestination", "PackLookups", "PackPipeline", "PackRoutes", "PackSource", "PackVars",
+	} {
+		t.Run(name, func(t *testing.T) {
+			content := renderTemplate(t, "data_source_test", parser.ResourceDef{StructName: name})
+			assertNotContains(t, content, `os.Getenv("DEPLOYMENT")`)
+			assertNotContains(t, content, "t.Skip(")
+			assertContains(t, content, "resource.ParallelTest(t, resource.TestCase{")
+		})
+	}
+}
+
 func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
 	resource := parser.ResourceDef{Fields: []parser.FieldDef{{
 		APIName:       "collector",
@@ -340,7 +379,7 @@ func TestRendererGeneratesListOnlyDataSourceAcceptanceTests(t *testing.T) {
 		t.Fatalf("read standalone data source acceptance test: %v", err)
 	}
 	assertContains(t, string(content), `data "criblio_things" "all"`)
-	assertContains(t, string(content), `testCheckListDataSourceHasItems("data.criblio_things.all")`)
+	assertContains(t, string(content), `resource.TestCheckResourceAttrSet("data.criblio_things.all", "items.#")`)
 	assertNotContains(t, string(content), `resource "`)
 	assertNotContains(t, string(content), `"by_id"`)
 }
@@ -485,6 +524,19 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationListDataSource, `"id": schema.StringAttribute{`)
 	assertContains(t, destinationListDataSource, `"output_azure_blob": schema.SingleNestedAttribute{`)
 	assertContains(t, destinationListDataSource, `"id": item.ID,`)
+
+	searchSource := parser.ResourceDef{
+		StructName: "SearchSource",
+		Fields: []parser.FieldDef{{
+			APIName: "authTokens", TerraformName: "auth_tokens", GoName: "AuthTokens",
+			Type: "array", ElementType: "object", RequestField: true, Optional: true, Computed: true, UseStateForUnknown: true,
+		}},
+	}
+	searchSourceTypes := renderTemplate(t, "types", searchSource)
+	assertContains(t, searchSourceTypes, "searchSourceAuthTokensToAPI(output)")
+	assertContains(t, searchSourceTypes, "searchSourceAuthTokensFromAPI(raw)")
+	assertContains(t, renderTemplate(t, "resource", searchSource), "mergeSearchSourceAuthTokenState(api.AuthTokens, state.AuthTokens, api.Type.ValueString())")
+	assertContains(t, renderTemplate(t, "resource", searchSource), "listplanmodifier.UseStateForUnknown()")
 
 	source := parser.ResourceDef{
 		StructName: "Source",
@@ -1738,8 +1790,8 @@ func TestMonitoringJSONAndDataSourceDocs(t *testing.T) {
 	}
 	definition.GenerateDataSourceDocs = false
 	for _, file := range outputFiles(definition) {
-		if strings.HasSuffix(file.Kind, "source_doc") {
-			t.Fatal("existing data source docs must remain untouched without opting in")
+		if file.Kind == "data_source_doc" {
+			t.Fatal("single-object data source docs must remain untouched without opting in")
 		}
 	}
 }

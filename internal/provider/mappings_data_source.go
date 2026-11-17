@@ -145,7 +145,7 @@ func (d *MappingsDataSource) Read(ctx context.Context, req datasource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]MappingRulesetModel](ctx, d.client, fmt.Sprintf("/admin/products/%s/mappings", model.Product.ValueString()))
+	items, err := restclient.List[MappingRulesetModel](ctx, d.client, fmt.Sprintf("/admin/products/%s/mappings", model.Product.ValueString()), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

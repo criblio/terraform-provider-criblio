@@ -37,13 +37,13 @@ func TestNotificationTarget(t *testing.T) {
 					),
 				},
 				{
-					Config: notificationTargetConfig(id, "updated"),
+					Config: withoutCollectionDataSources(t, notificationTargetConfig(id, "updated")),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "sns_target.message_group_id", "cribl-notifications-updated"),
 					),
 				},
 				{
-					Config:   notificationTargetConfig(id, "updated"),
+					Config:   withoutCollectionDataSources(t, notificationTargetConfig(id, "updated")),
 					PlanOnly: true,
 				},
 				{

@@ -9,6 +9,7 @@ import (
 func TestNoExportTypes_ContainsExpectedTypes(t *testing.T) {
 	expected := map[string]bool{
 		"criblio_commit":                       true,
+		"criblio_worker_group_upgrade":         true,
 		"criblio_deploy":                       true,
 		"criblio_group_system_settings":        true,
 		"criblio_key":                          true,

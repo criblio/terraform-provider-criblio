@@ -18,6 +18,16 @@ func TestChangelogEntryClassifiesCommitSubjects(t *testing.T) {
 		{subject: "feat(import): support new resources", category: "Added", entry: "Added support new resources."},
 		{subject: "remove legacy SDK", category: "Removed", entry: "Removed legacy SDK."},
 		{subject: "update generated docs", category: "Changed", entry: "Update generated docs."},
+		{subject: "PLAT-17816: feat: collection data sources", category: "Added", entry: "Added collection data sources."},
+		{subject: "[INFRA-12649] fixing token state", category: "Fixed", entry: "Fixed token state."},
+		{subject: "fix(MON-1453): preserve notification defaults", category: "Fixed", entry: "Fixed preserve notification defaults."},
+		{subject: "fix: PLAT-18063: upgrade errors", category: "Fixed", entry: "Fixed upgrade errors."},
+		{subject: "fix token state (PLAT-17816) (#251)", category: "Fixed", entry: "Fixed token state (#251)."},
+		{subject: "add data sources PLAT-17816 / INFRA-12649", category: "Added", entry: "Added data sources."},
+		{subject: "fix token state `PLAT-17816`", category: "Fixed", entry: "Fixed token state."},
+		{subject: "fix UTF-8 decoding and HTTP-500 responses (RFC-8259)", category: "Fixed", entry: "Fixed UTF-8 decoding and HTTP-500 responses (RFC-8259)."},
+		{subject: "fix CVE-2026-12345 in v1.25.55", category: "Fixed", entry: "Fixed CVE-2026-12345 in v1.25.55."},
+		{subject: "PLAT-17816", category: "", entry: ""},
 	}
 
 	for _, test := range tests {
@@ -45,7 +55,7 @@ func TestUpdateChangelogAddsAndDeduplicatesUnreleasedEntries(t *testing.T) {
 		t.Fatalf("write changelog fixture: %v", err)
 	}
 
-	subjects := []string{"fixing imports", "add retry support", "fixing imports"}
+	subjects := []string{"PLAT-17816: fixing imports", "add retry support (INFRA-12649)", "fixing imports"}
 	if err := updateChangelog(path, subjects); err != nil {
 		t.Fatalf("updateChangelog returned error: %v", err)
 	}

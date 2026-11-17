@@ -33,14 +33,14 @@ func TestMonitor(t *testing.T) {
 					),
 				},
 				{
-					Config: monitorThreshold(90),
+					Config: withoutCollectionDataSources(t, monitorThreshold(90)),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "firing_rule.threshold.0.limit", "90"),
 						resource.TestCheckResourceAttr("data.criblio_monitor.example_threshold", "firing_rule.threshold.0.limit", "90"),
 					),
 				},
 				{
-					Config:   monitorThreshold(90),
+					Config:   withoutCollectionDataSources(t, monitorThreshold(90)),
 					PlanOnly: true,
 				},
 				{
@@ -70,11 +70,11 @@ func TestMonitor(t *testing.T) {
 					),
 				},
 				{
-					Config: monitorForecast(3),
+					Config: withoutCollectionDataSources(t, monitorForecast(3)),
 					Check:  resource.TestCheckResourceAttr(resourceName, "forecast_config.deviations", "3"),
 				},
 				{
-					Config:   monitorForecast(3),
+					Config:   withoutCollectionDataSources(t, monitorForecast(3)),
 					PlanOnly: true,
 				},
 				{
@@ -105,7 +105,7 @@ func TestMonitor(t *testing.T) {
 					),
 				},
 				{
-					Config:   monitorOutlier(),
+					Config:   withoutCollectionDataSources(t, monitorOutlier()),
 					PlanOnly: true,
 				},
 			},

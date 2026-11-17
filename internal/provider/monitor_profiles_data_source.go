@@ -93,7 +93,7 @@ func (d *MonitorProfilesDataSource) Read(ctx context.Context, req datasource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]MonitorProfileModel](ctx, d.client, "/products/lakehouse_engine_metrics/config-profiles")
+	items, err := restclient.List[MonitorProfileModel](ctx, d.client, "/products/lakehouse_engine_metrics/config-profiles", true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

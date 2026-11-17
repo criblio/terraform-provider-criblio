@@ -32,7 +32,7 @@ func TestGuardRule(t *testing.T) {
 
 	resourceName := "criblio_guard_rule.test"
 	created := guardRuleCreatedConfig(ruleID, ruleset)
-	updated := guardRuleUpdatedConfig(ruleID, ruleset)
+	updated := withoutCollectionDataSources(t, guardRuleUpdatedConfig(ruleID, ruleset))
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
@@ -59,7 +59,7 @@ func TestGuardRule(t *testing.T) {
 				),
 			},
 			{
-				Config:   created,
+				Config:   withoutCollectionDataSources(t, created),
 				PlanOnly: true,
 			},
 			{

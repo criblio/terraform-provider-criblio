@@ -115,7 +115,7 @@ func (d *NotificationPoliciesDataSource) Read(ctx context.Context, req datasourc
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]NotificationPolicyModel](ctx, d.client, "/notification-policies")
+	items, err := restclient.List[NotificationPolicyModel](ctx, d.client, "/notification-policies", false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

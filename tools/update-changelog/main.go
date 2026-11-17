@@ -12,6 +12,25 @@ const changelogPath = "CHANGELOG.md"
 
 var subjectPrefixRE = regexp.MustCompile(`(?i)^(add|added|adding|feat|fix|fixed|fixing|remove|removed|removing|security)(?:\([^)]*\))?:?\s+`)
 var providerTagRE = regexp.MustCompile(`^v[0-9]+\.[0-9]+\.[0-9]+$`)
+var jiraIssueKeyRE = regexp.MustCompile(`\b[A-Z][A-Z0-9_]+-[0-9]+\b`)
+var emptyIssueWrapperRE = regexp.MustCompile("\\(\\s*\\)|\\[\\s*\\]|`\\s*`")
+
+// stripJiraIssueKeys keeps release notes descriptive without internal ticket IDs.
+func stripJiraIssueKeys(subject string) string {
+	subject = jiraIssueKeyRE.ReplaceAllStringFunc(subject, func(key string) string {
+		// These are technical identifiers, not Jira project keys.
+		prefix := strings.SplitN(key, "-", 2)[0]
+		switch prefix {
+		case "HTTP", "UTF", "TLS", "RFC", "ISO", "CVE", "SHA", "AES", "FIPS":
+			return key
+		default:
+			return ""
+		}
+	})
+	subject = emptyIssueWrapperRE.ReplaceAllString(subject, "")
+	subject = strings.Join(strings.Fields(subject), " ")
+	return strings.Trim(subject, " \t:-–—/,;")
+}
 
 func main() {
 	subjects, err := unreleasedCommitSubjects(".")
@@ -95,7 +114,7 @@ func updateChangelog(path string, subjects []string) error {
 }
 
 func changelogEntry(subject string) (string, string) {
-	subject = strings.TrimSpace(subject)
+	subject = stripJiraIssueKeys(subject)
 	if subject == "" {
 		return "", ""
 	}
@@ -115,7 +134,7 @@ func changelogEntry(subject string) (string, string) {
 	if prefix != "" {
 		subject = subjectPrefixRE.ReplaceAllString(subject, "")
 	}
-	subject = strings.TrimSpace(strings.TrimSuffix(subject, "."))
+	subject = strings.TrimLeft(strings.TrimSpace(strings.TrimSuffix(subject, ".")), ":-–— ")
 	if subject == "" {
 		return "", ""
 	}

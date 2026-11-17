@@ -480,7 +480,7 @@ func (d *InstanceSettingsDataSource) Read(ctx context.Context, req datasource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]InstanceSettingsModel](ctx, d.client, fmt.Sprintf("/m/%s/system/instance", "default"))
+	items, err := restclient.List[InstanceSettingsModel](ctx, d.client, fmt.Sprintf("/m/%s/system/instance", "default"), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -30,12 +30,12 @@ func TestNotificationTemplate(t *testing.T) {
 					resource.TestCheckResourceAttr("data.criblio_notification_template.by_id", "id", id),
 				),
 			},
-			{Config: notificationTemplateConfig(id, "Alert notification"), PlanOnly: true},
+			{Config: withoutCollectionDataSources(t, notificationTemplateConfig(id, "Alert notification")), PlanOnly: true},
 			{
-				Config: notificationTemplateConfig(id, "Updated notification"),
+				Config: withoutCollectionDataSources(t, notificationTemplateConfig(id, "Updated notification")),
 				Check:  resource.TestCheckResourceAttr(name, "content", "Updated notification"),
 			},
-			{Config: notificationTemplateConfig(id, "Updated notification"), PlanOnly: true},
+			{Config: withoutCollectionDataSources(t, notificationTemplateConfig(id, "Updated notification")), PlanOnly: true},
 			{ResourceName: name, ImportState: true, ImportStateId: id, ImportStateVerify: true},
 		},
 	})

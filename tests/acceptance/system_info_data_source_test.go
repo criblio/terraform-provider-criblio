@@ -14,13 +14,13 @@ func TestSystemInfoDataSources(t *testing.T) {
 		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
 	}
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `data "criblio_system_info" "all" {
-}`,
+				Config: listDataSourceAcceptanceConfig(t, `data "criblio_system_info" "all" {
+}`),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testCheckListDataSourceHasItems("data.criblio_system_info.all"),
 				),

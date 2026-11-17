@@ -108,7 +108,7 @@ func (d *SearchDatatypeRulesetsDataSource) Read(ctx context.Context, req datasou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]SearchDatatypeRulesetModel](ctx, d.client, fmt.Sprintf("/m/%s/search/local_search/datatype-rulesets", "default_search"))
+	items, err := restclient.List[SearchDatatypeRulesetModel](ctx, d.client, fmt.Sprintf("/m/%s/search/local_search/datatype-rulesets", "default_search"), true)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -98,7 +98,7 @@ func (d *MonitorActiveAlertsDataSource) Read(ctx context.Context, req datasource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]MonitorActiveAlertModel](ctx, d.client, fmt.Sprintf("/products/lakehouse_engine_metrics/engines/%s/datasets/%s/alert_activity/current", model.EngineID.ValueString(), model.DatasetID.ValueString()))
+	items, err := restclient.List[MonitorActiveAlertModel](ctx, d.client, fmt.Sprintf("/products/lakehouse_engine_metrics/engines/%s/datasets/%s/alert_activity/current", model.EngineID.ValueString(), model.DatasetID.ValueString()), false)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -29,6 +30,7 @@ var _ = types.String{}
 var _ resource.Resource = &SearchSourceResource{}
 var _ resource.ResourceWithConfigure = &SearchSourceResource{}
 var _ resource.ResourceWithImportState = &SearchSourceResource{}
+var _ resource.ResourceWithModifyPlan = &SearchSourceResource{}
 
 type SearchSourceResource struct {
 	client *restclient.Client
@@ -51,7 +53,7 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Description: `Optional bearer or shared tokens accepted by this source.`,
+				Description: `Authentication tokens. An empty list clears all tokens. After writing configured tokens, removing this attribute or setting it to null clears them. Unconfigured tokens from legacy or imported resources are preserved.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"description": schema.StringAttribute{
@@ -71,7 +73,7 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 							Optional:    false,
 							Computed:    false,
 							Sensitive:   true,
-							Description: `Secret token clients must present.`,
+							Description: `Inline token for Raw HTTP and Splunk HEC; stored text-secret ID for Cribl HTTP. Raw HTTP accepts enabled omitted or true; remove an entry to disable it.`,
 						},
 					},
 				},
@@ -96,6 +98,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    true,
 				Description: `When true, the source does not accept new connections.`,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"elastic_api": schema.StringAttribute{
 				Required:    false,
@@ -372,6 +377,9 @@ func (r *SearchSourceResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 	applySearchSourceAPIToState(apiModel, &model, true, false)
+	if resp.Private != nil {
+		resp.Diagnostics.Append(resp.Private.SetKey(ctx, searchSourceAuthManagedKey, []byte("true"))...)
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -408,7 +416,12 @@ func (r *SearchSourceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Update(ctx, model)
+	requestModel, authDiags := searchSourceAuthRequestModel(ctx, model, req)
+	resp.Diagnostics.Append(authDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Update(ctx, requestModel)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
@@ -449,17 +462,7 @@ func applySearchSourceAPIToState(api *SearchSourceModel, state *SearchSourceMode
 	if api == nil || state == nil {
 		return
 	}
-	if !api.AuthTokens.IsNull() && !api.AuthTokens.IsUnknown() {
-		state.AuthTokens = api.AuthTokens
-	}
-	if state.AuthTokens.IsUnknown() {
-		state.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()})
-	}
-	if state.AuthTokens.IsNull() || state.AuthTokens.IsUnknown() {
-		state.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()})
-	} else if len(state.AuthTokens.Elements()) == 0 {
-		state.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()}, nil)
-	}
+	state.AuthTokens = mergeSearchSourceAuthTokenState(api.AuthTokens, state.AuthTokens, api.Type.ValueString())
 	if !preserveInputs || (fillMissingInputs && (state.CriblAPI.IsNull() || state.CriblAPI.IsUnknown())) {
 		if !api.CriblAPI.IsNull() && !api.CriblAPI.IsUnknown() {
 			state.CriblAPI = api.CriblAPI
