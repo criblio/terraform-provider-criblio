@@ -11,9 +11,7 @@ e2e-test:
 	@#run our wrapper script targeting our new plugin
 	./tests/e2e/scripts/e2e.sh 
 
-acceptance-test:
-	$(MAKE) acceptance-test-resources
-	$(MAKE) acceptance-test-data-sources
+acceptance-test: acceptance-test-resources acceptance-test-data-sources
 
 acceptance-test-resources:
 	go test -v -count=1 -timeout 60m ./tests/acceptance -skip 'DataSources$$' -parallel 1
