@@ -36,7 +36,7 @@ commit history, and tag-to-tag diffs.
 - Added data resources for all supported list endpoints.
 
 ### Changed
-- Split acceptance runs into serial resource tests and read-only data source tests with configurable concurrency (default four). Use `make -j2 acceptance-test` to run both phases simultaneously. Removed repeated lifecycle collection reads while retaining initial collection checks and by-ID, update, drift, and import coverage.
+- Split acceptance runs into serial resource tests and read-only data source tests with configurable concurrency (default four). `make acceptance-test` runs both phases simultaneously by default. Removed repeated lifecycle collection reads while retaining initial collection checks and by-ID, update, drift, and import coverage.
 - Updated generated collection reads to follow offset/limit pagination automatically, respect server page-size caps, and return known empty collections. Reads reject incomplete or inconsistent pagination and stop with an error after 1,000 pages instead of returning partial results.
 - Shared successful Pack ID listings per REST client and Worker Group for one minute, deduplicating concurrent lookups while preserving legacy mixed-case IDs. Failed lookups are not cached.
 - Reworked import CLI discovery to retry Config Helper admission within one shared bounded timeout, bootstrap helpers one group at a time, list resource types concurrently within the active group, reuse discovered identifiers during export, and report exhausted admission once per group.
