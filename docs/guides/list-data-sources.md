@@ -123,6 +123,10 @@ Every collection has a read-only acceptance test. Run with `TF_ACC=1` and the pr
 
 Notification collection tests also skip the on-prem acceptance fixture: its license prohibits notifications and targets, and it does not enable V2 Notifications for policies and templates. Licensed on-prem deployments with the required features can still use these data sources.
 
+Projects and project pipeline collection tests skip the on-prem fixture because its license does not enable enterprise Projects, matching their resource tests.
+
+Mapping ruleset collection tests also skip this fixture because the mappings API requires a Worker Group entitlement absent from its license. These fixture skips do not restrict licensed on-prem users. Grok, Guard Rules, parser libraries, lookup files, banners, groups, and pack collections still run against existing Stream scopes; resource tests using Search or Cloud pack installation fixtures have different prerequisites. Permission and license failures remain visible as provider errors.
+
 `make acceptance-test` runs both phases simultaneously by default, with at most one resource test and four read-only data source tests active. Both phases share the configured Cribl environment, so concurrent resource creation and cleanup can affect discovery results. Run only discovery with `make acceptance-test-data-sources`, or adjust its concurrency with `DATA_SOURCE_TEST_PARALLELISM=2 make acceptance-test`. Run only resource lifecycles with `make acceptance-test-resources`. To run the phases sequentially, run the resource target first and then the data source target.
 
 Lifecycle tests retain their first collection assertion and by-ID checks. Later update and unchanged-plan steps omit redundant collection blocks; tests that assert updated collection contents retain those reads.

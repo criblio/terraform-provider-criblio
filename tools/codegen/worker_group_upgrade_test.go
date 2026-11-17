@@ -1,13 +1,26 @@
 package main
 
 import (
+	"os/exec"
+	"path/filepath"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
 
 func TestWorkerGroupUpgradeGeneration(t *testing.T) {
-	definitions, err := parser.ParseFile("../../merged-spec.yml")
+	// Build both merge outputs in a temporary directory so a fresh checkout
+	// needs no generated spec and the test never rewrites provider source files.
+	dir := t.TempDir()
+	specPath := filepath.Join(dir, "merged-spec.yml")
+	command := exec.CommandContext(t.Context(), "go", "run", "./tools/merge-spec",
+		"--output", specPath,
+		"--cloud-only-paths-output", filepath.Join(dir, "cloud_only_paths.go"))
+	command.Dir = filepath.Join("..", "..")
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("merge test spec: %v\n%s", err, output)
+	}
+	definitions, err := parser.ParseFile(specPath)
 	if err != nil {
 		t.Fatal(err)
 	}

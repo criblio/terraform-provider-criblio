@@ -45,8 +45,12 @@ commit history, and tag-to-tag diffs.
 - Reverting codegen changes and adding example.
 - `criblio_guard_rule` resource with single and list data sources, for managing custom Guard Rules in a Worker Group.
 - Made `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` configurable in `criblio_system_limits`. On the Cribl.Cloud Leader and Cribl-managed Worker Groups, the API returns 403 for these attributes unless the caller is a Cribl Operator. After upgrading from v1.25.111–v1.25.113, the first refresh removes these four attributes from state unless they are configured; server values do not change.
+- Running both type of acceptance tests in parallel.
+- Making two runs within acceptance tests.
 
 ### Fixed
+- Aligned Projects and project pipeline collection acceptance tests with the on-prem fixture's missing enterprise license, matching existing resource test skips.
+- Aligned mapping collection acceptance tests with the on-prem fixture's missing Worker Group entitlement. Audited collection test prerequisites and added empty/populated collection regressions for both Cloud and on-prem routing, including rejection of Cloud-only APIs before HTTP requests.
 - Made `criblio_search_sources` read the full collection once without pagination parameters, avoiding repeated reads and the 1,000-page error on Search versions that ignore offset/limit and return changing source status.
 - Avoided pagination parameters on `criblio_project_pipelines` to preserve Cribl's project-route rewrite and prevent collection reads from returning 404 during project pipeline acceptance tests.
 - Corrected Search source authentication payloads: Raw HTTP sends inline token objects through `authTokensExt` and clears the legacy list, Cribl HTTP sends stored-secret IDs as `tokenSecret`, and Splunk HEC retains inline tokens. This prevents Raw HTTP failures such as `s.startsWith is not a function` while preserving the existing Terraform token shape.
@@ -70,6 +74,7 @@ commit history, and tag-to-tag diffs.
 - Fixed fmt issues.
 - Fixed test.
 - Fixed tests.
+- Fixed tests and adding concurrency for data resources.
 
 ## [1.25.55] - 2026-08-19
 

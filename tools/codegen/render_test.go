@@ -105,11 +105,14 @@ func TestNotificationTemplateFixedEngineRouting(t *testing.T) {
 	assertContains(t, test, `if os.Getenv("DEPLOYMENT") == "onprem"`)
 }
 
-func TestNotificationDataSourceAcceptanceOnPremSkips(t *testing.T) {
+func TestLicensedDataSourceAcceptanceOnPremSkips(t *testing.T) {
 	for _, test := range []struct {
 		name   string
 		reason string
 	}{
+		{"MappingRuleset", "The on-prem acceptance fixture license does not enable Worker Group mappings"},
+		{"Project", "The on-prem acceptance fixture license does not enable enterprise Projects"},
+		{"ProjectPipeline", "The on-prem acceptance fixture license does not enable enterprise Projects"},
 		{"Notification", "The on-prem acceptance fixture license prohibits notifications"},
 		{"NotificationTarget", "The on-prem acceptance fixture license prohibits notifications"},
 		{"NotificationPolicy", "The on-prem acceptance fixture does not enable V2 Notifications"},
@@ -126,10 +129,19 @@ func TestNotificationDataSourceAcceptanceOnPremSkips(t *testing.T) {
 			}
 		})
 	}
-	content := renderTemplate(t, "data_source_test", parser.ResourceDef{StructName: "Key"})
-	assertNotContains(t, content, `os.Getenv("DEPLOYMENT")`)
-	assertNotContains(t, content, "t.Skip(")
-	assertContains(t, content, "resource.ParallelTest(t, resource.TestCase{")
+	// These list APIs can read existing Stream scopes even when their resource
+	// tests use Search scopes, install Cloud packs, or need a custom rule library.
+	for _, name := range []string{
+		"Key", "Grok", "GuardRule", "ParserLibEntry", "LookupFile", "CustomBannerDiscovery", "GroupDiscovery",
+		"PackBreakers", "PackCollector", "PackDestination", "PackLookups", "PackPipeline", "PackRoutes", "PackSource", "PackVars",
+	} {
+		t.Run(name, func(t *testing.T) {
+			content := renderTemplate(t, "data_source_test", parser.ResourceDef{StructName: name})
+			assertNotContains(t, content, `os.Getenv("DEPLOYMENT")`)
+			assertNotContains(t, content, "t.Skip(")
+			assertContains(t, content, "resource.ParallelTest(t, resource.TestCase{")
+		})
+	}
 }
 
 func TestAPINameOverridesPreservesAcronyms(t *testing.T) {

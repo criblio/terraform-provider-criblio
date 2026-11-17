@@ -15,6 +15,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -112,6 +113,15 @@ func TestListDataSourceCoverage(t *testing.T) {
 }
 
 func TestAllListDataSourcesRead(t *testing.T) {
+	for _, deployment := range []string{"cloud", "onprem"} {
+		t.Run(deployment, func(t *testing.T) {
+			testAllListDataSourcesRead(t, deployment == "onprem")
+		})
+	}
+}
+
+func testAllListDataSourcesRead(t *testing.T, onPrem bool) {
+	t.Helper()
 	ctx := context.Background()
 	definitions := listDataSourceDefinitions(t)
 	lists := map[string]parser.ResourceDef{}
@@ -164,7 +174,11 @@ func TestAllListDataSourcesRead(t *testing.T) {
 						return
 					}
 					requests++
-					if r.Method != http.MethodGet || !strings.HasSuffix(r.URL.Path, expectedPath) {
+					pathMatches := strings.HasSuffix(r.URL.Path, expectedPath)
+					if onPrem {
+						pathMatches = r.URL.Path == "/api/v1"+expectedPath
+					}
+					if r.Method != http.MethodGet || !pathMatches {
 						t.Errorf("unexpected request: %s %s, want %s", r.Method, r.URL.Path, expectedPath)
 					}
 					if definition.StructName == "NotificationTemplate" && r.URL.Query().Get("engine") != "handlebars" {
@@ -216,11 +230,24 @@ func TestAllListDataSourcesRead(t *testing.T) {
 					cloned.URL.Host = targetURL.Host
 					return http.DefaultTransport.RoundTrip(cloned)
 				})}
+				clientConfig := restclient.Config{BaseURL: server.URL, BearerToken: "test", HTTPClient: client}
+				if onPrem {
+					clientConfig.Credentials = &auth.CriblConfig{OnpremServerURL: server.URL}
+				}
 				var configured datasource.ConfigureResponse
-				d.(datasource.DataSourceWithConfigure).Configure(ctx, datasource.ConfigureRequest{ProviderData: &ProviderClients{RC: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test", HTTPClient: client})}}, &configured)
+				d.(datasource.DataSourceWithConfigure).Configure(ctx, datasource.ConfigureRequest{ProviderData: &ProviderClients{RC: restclient.New(clientConfig)}}, &configured)
 				raw := collectorPlanTestObject(schema.Schema.Type().TerraformType(ctx).(tftypes.Object), config)
 				response := datasource.ReadResponse{State: tfsdk.State{Schema: schema.Schema}}
 				d.Read(ctx, datasource.ReadRequest{Config: tfsdk.Config{Schema: schema.Schema, Raw: raw}}, &response)
+				if onPrem && auth.IsRestrictedOnPremEndpoint(expectedPath) {
+					if !response.Diagnostics.HasError() || !strings.Contains(response.Diagnostics.Errors()[0].Detail(), "not supported for on-prem deployments") {
+						t.Fatalf("cloud-only list must report on-prem restriction: %v", response.Diagnostics)
+					}
+					if requests != 0 {
+						t.Fatalf("cloud-only list sent %d requests on-prem", requests)
+					}
+					return
+				}
 				if response.Diagnostics.HasError() {
 					t.Fatal(response.Diagnostics)
 				}
@@ -269,6 +296,38 @@ func TestAllListDataSourcesRead(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestOnPremMappingsListReportsLicenseFailure(t *testing.T) {
+	ctx := context.Background()
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != http.MethodGet || r.URL.Path != "/api/v1/admin/products/stream/mappings" {
+			t.Errorf("incorrect mappings request: %s %s", r.Method, r.URL)
+		}
+		w.WriteHeader(http.StatusForbidden)
+		if _, err := w.Write([]byte(`{"status":"error","message":"Forbidden"}`)); err != nil {
+			t.Error(err)
+		}
+	}))
+	defer server.Close()
+	d := NewMappingsDataSource()
+	var schema datasource.SchemaResponse
+	d.Schema(ctx, datasource.SchemaRequest{}, &schema)
+	var configured datasource.ConfigureResponse
+	d.(datasource.DataSourceWithConfigure).Configure(ctx, datasource.ConfigureRequest{ProviderData: &ProviderClients{RC: restclient.New(restclient.Config{
+		Credentials: &auth.CriblConfig{OnpremServerURL: server.URL}, BearerToken: "test",
+	})}}, &configured)
+	raw := collectorPlanTestObject(schema.Schema.Type().TerraformType(ctx).(tftypes.Object), map[string]any{"product": "stream"})
+	response := datasource.ReadResponse{State: tfsdk.State{Schema: schema.Schema}}
+	d.Read(ctx, datasource.ReadRequest{Config: tfsdk.Config{Schema: schema.Schema, Raw: raw}}, &response)
+	if !response.Diagnostics.HasError() || !strings.Contains(response.Diagnostics.Errors()[0].Detail(), "HTTP 403") {
+		t.Fatalf("license failure must remain visible: %v", response.Diagnostics)
+	}
+	if requests != 1 {
+		t.Fatalf("got %d requests, want 1", requests)
 	}
 }
 

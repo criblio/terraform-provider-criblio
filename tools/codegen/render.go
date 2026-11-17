@@ -1488,6 +1488,10 @@ func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
 
 func acceptanceOnPremSkipReason(resource parser.ResourceDef) string {
 	switch resource.StructName {
+	case "MappingRuleset":
+		return "The on-prem acceptance fixture license does not enable Worker Group mappings"
+	case "Project", "ProjectPipeline":
+		return "The on-prem acceptance fixture license does not enable enterprise Projects"
 	case "Notification", "NotificationTarget":
 		return "The on-prem acceptance fixture license prohibits notifications"
 	case "NotificationPolicy", "NotificationTemplate":
