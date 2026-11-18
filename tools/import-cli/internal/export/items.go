@@ -100,6 +100,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if isLookupFileType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		return nil, fmt.Sprintf("%s %v: built-in default lookup (skip export)", r.TypeName, idMap)
 	}
+	if isSearchUsageGroupType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
+		return nil, fmt.Sprintf("%s %v: built-in Usage Group (skip export)", r.TypeName, idMap)
+	}
 	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
 		return nil, fmt.Sprintf("%s %v: built-in default (--exclude-defaults)", r.TypeName, idMap)
@@ -334,6 +337,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	filterAttrsBySchema(attrs, e.ModelTypeName)
 	if skipResourceWhenLibCribl(attrs) {
 		return ErrSkipResourceLibCribl
+	}
+	if isSearchUsageGroupType(typeName) && DefaultResource(typeName, idMap, attrs, includeOverride) {
+		return nil
 	}
 	if excludeDefaults && DefaultResource(typeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++

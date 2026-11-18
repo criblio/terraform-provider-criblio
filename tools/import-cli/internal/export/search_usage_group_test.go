@@ -62,9 +62,21 @@ func TestSearchUsageGroupExportKeepsRulesAndUsers(t *testing.T) {
 	require.Equal(t, "search.admin@example.com", users["user-1"].Map["email"].String)
 }
 
+// Built-in Usage Groups are skipped whether or not --exclude-defaults is set.
+// A full export without the flag previously emitted the built-in `default`
+// group, whose empty `rules` prunes away in generated HCL, leaving a config that
+// failed `terraform plan` with `The argument "rules" is required`.
+func TestSearchUsageGroupExportSkipsBuiltInsWithoutExcludeDefaults(t *testing.T) {
+	require.True(t, isSearchUsageGroupType("criblio_search_usage_group"))
+	require.False(t, isSearchUsageGroupType("criblio_search_dataset"))
+	for _, id := range []string{"default", "default_api_credentials", "system"} {
+		require.True(t, DefaultResource("criblio_search_usage_group", map[string]string{"id": id}, nil, IncludeOverride{}), id)
+	}
+}
+
 // The built-in Usage Groups cannot be created or deleted through the API, so
 // they must never be exported as managed resources. A live export of a
-// live export of a Cribl.Cloud workspace reports exactly these three.
+// Cribl.Cloud workspace reports exactly these three.
 func TestSearchUsageGroupExportSkipsDefaultGroup(t *testing.T) {
 	for _, tc := range []struct {
 		id   string

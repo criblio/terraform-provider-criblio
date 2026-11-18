@@ -280,7 +280,7 @@ func (r *SearchUsageGroupResource) Schema(_ context.Context, _ resource.SchemaRe
 			"users": schema.MapNestedAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Membership record for a user assigned to a Usage Group.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -452,10 +452,11 @@ func applySearchUsageGroupAPIToState(api *SearchUsageGroupModel, state *SearchUs
 	if len(state.Rules.AttributeTypes(context.Background())) == 0 {
 		state.Rules = types.ObjectNull(SearchUsageGroupRulesAttrTypes())
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Users.IsNull() || state.Users.IsUnknown())) {
-		if !api.Users.IsNull() && !api.Users.IsUnknown() {
-			state.Users = api.Users
-		}
+	if !api.Users.IsNull() && !api.Users.IsUnknown() {
+		state.Users = api.Users
+	}
+	if state.Users.IsUnknown() {
+		state.Users = types.MapNull(types.ObjectType{AttrTypes: SearchUsageGroupUsersAttrTypes()})
 	}
 	if state.Users.IsNull() || state.Users.IsUnknown() {
 		state.Users = types.MapNull(types.ObjectType{AttrTypes: SearchUsageGroupUsersAttrTypes()})

@@ -2945,6 +2945,13 @@ actions:
   - target: "$.components.schemas.UsageGroup.properties.usersCount"
     update:
       x-terraform-computed: true
+  # Membership is configurable, but the API reports `users: {}` for a group with
+  # no members, which the provider normalizes to an empty map. Without
+  # `computed`, importing a memberless group plans `users = {} -> null` against a
+  # configuration that omits `users`, so the plan after import is not clean.
+  - target: "$.components.schemas.UsageGroup.properties.users"
+    update:
+      x-terraform-optional-computed: true
   # `enabled` defaults server-side, and the deployment can store
   # `coordinatorHeapMemoryLimit` at the group level itself, so both accept a
   # value or let the API fill one in.
