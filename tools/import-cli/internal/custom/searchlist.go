@@ -90,6 +90,14 @@ var DefaultSearchDatatypeRulesetIDs = map[string]bool{
 	"default": true,
 }
 
+// DefaultSearchUsageGroupIDs are built-in search Usage Group IDs. The API refuses
+// to delete these, so they must not round-trip into HCL.
+var DefaultSearchUsageGroupIDs = map[string]bool{
+	"default":                 true, // catch-all group for adhoc searches
+	"default_api_credentials": true, // applies to every API credential
+	"system":                  true, // workspace-wide search limits
+}
+
 // DefaultSearchSavedQueryIDs are built-in search saved query IDs (prefixed with cribl_).
 var DefaultSearchSavedQueryIDs = map[string]bool{
 	"cribl_search_finished_1h": true,

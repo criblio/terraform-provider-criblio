@@ -2070,7 +2070,10 @@ func curatedExampleUsage(resource parser.ResourceDef) (string, bool) {
 		}
 		return strings.TrimSpace(string(content)), true
 	}
-	if resource.TypeName == "criblio_search_dataset_ruleset" || resource.TypeName == "criblio_search_datatype" {
+	// The upstream examples for these resources cover only part of the
+	// configuration, so document the repo's own example instead.
+	if resource.TypeName == "criblio_search_dataset_ruleset" || resource.TypeName == "criblio_search_datatype" ||
+		resource.TypeName == "criblio_search_usage_group" {
 		content, err := readRepoFile(filepath.Join("examples", "resources", resource.TypeName, "resource.tf"))
 		if err != nil {
 			return "", false

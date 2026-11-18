@@ -185,6 +185,8 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 		return custom.DefaultSearchDatasetIDs[id]
 	case "criblio_search_dataset_provider":
 		return custom.DefaultSearchDatasetProviderIDs[id]
+	case "criblio_search_usage_group":
+		return custom.DefaultSearchUsageGroupIDs[id]
 	case "criblio_cribl_lake_dataset":
 		return custom.DefaultCriblLakeDatasetIDs[id]
 	case "criblio_group":
