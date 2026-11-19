@@ -58,7 +58,9 @@ Read-Only:
 
 Read-Only:
 
+- `description` (String) Brief description of the rule.
 - `limit` (Dynamic) Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.
+- `metric` (String) Optional metric identifier aggregated for enforcement.
 - `type` (String) Limit type.
 
 <a id="nestedatt--rules--max_concurrent_adhoc_searches_per_user"></a>
@@ -68,7 +70,9 @@ Read-Only:
 
 Read-Only:
 
+- `description` (String) Brief description of the rule.
 - `limit` (Dynamic) Non-negative integer concurrent-search limit, or a percentage string.
+- `metric` (String) Optional metric identifier aggregated for enforcement.
 - `type` (String) Identifier for a scheduling-stage limit.
 
 <a id="nestedatt--users"></a>

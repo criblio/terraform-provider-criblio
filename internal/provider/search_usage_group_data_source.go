@@ -59,9 +59,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum Coordinator heap memory, in bytes, available to a single search.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -73,9 +81,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum number of bytes that a single search can read.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -87,9 +103,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum number of ad hoc searches that a single user can run concurrently.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Non-negative integer concurrent-search limit, or a percentage string.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -101,9 +125,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum number of scheduled searches that a single user can run concurrently.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Non-negative integer concurrent-search limit, or a percentage string.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -115,9 +147,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum number of concurrent searches across the entire organization.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Non-negative integer concurrent-search limit, or a percentage string.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -129,9 +169,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum number of executors that can be allocated to a single search.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -143,9 +191,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Limit on how far back from the present a search can read, in seconds.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -157,9 +213,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum number of events that a single search can return.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -171,9 +235,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum time, in seconds, that a single search can run.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,
@@ -185,9 +257,17 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Maximum width of a search time range, in seconds.`,
 						Attributes: map[string]schema.Attribute{
+							"description": schema.StringAttribute{
+								Computed:    true,
+								Description: `Brief description of the rule.`,
+							},
 							"limit": schema.DynamicAttribute{
 								Computed:    true,
 								Description: `Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.`,
+							},
+							"metric": schema.StringAttribute{
+								Computed:    true,
+								Description: `Optional metric identifier aggregated for enforcement.`,
 							},
 							"type": schema.StringAttribute{
 								Computed:    true,

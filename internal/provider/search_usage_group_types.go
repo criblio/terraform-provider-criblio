@@ -98,172 +98,232 @@ func SearchUsageGroupRulesAttrTypes() map[string]attr.Type {
 }
 
 type SearchUsageGroupRulesCoordinatorHeapMemoryLimitModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesCoordinatorHeapMemoryLimitAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesCoordinatorHeapMemoryLimitAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxBytesReadPerSearchModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxBytesReadPerSearchAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxBytesReadPerSearchAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxConcurrentAdhocSearchesPerUserModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxConcurrentAdhocSearchesPerUserAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxConcurrentAdhocSearchesPerUserAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxConcurrentScheduledSearchesPerUserModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxConcurrentScheduledSearchesPerUserAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxConcurrentScheduledSearchesPerUserAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxConcurrentSearchesModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxConcurrentSearchesAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxConcurrentSearchesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxExecutorsPerSearchModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxExecutorsPerSearchAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxExecutorsPerSearchAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxRelativeEarliestTimerangeModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxRelativeEarliestTimerangeAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxRelativeEarliestTimerangeAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxResultsPerSearchModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxResultsPerSearchAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxResultsPerSearchAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxRunningTimePerSearchModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxRunningTimePerSearchAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxRunningTimePerSearchAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 
 type SearchUsageGroupRulesMaxTimerangeWidthModel struct {
-	Limit types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
-	Type  types.String  `tfsdk:"type" json:"type,omitempty"`
+	Description types.String  `tfsdk:"description" json:"description,omitempty"`
+	Limit       types.Dynamic `tfsdk:"limit" json:"limit,omitempty"`
+	Metric      types.String  `tfsdk:"metric" json:"metric,omitempty"`
+	Type        types.String  `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SearchUsageGroupRulesMaxTimerangeWidthAPIModel struct {
-	Limit any     `json:"limit,omitempty"`
-	Type  *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Limit       any     `json:"limit,omitempty"`
+	Metric      *string `json:"metric,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 func SearchUsageGroupRulesMaxTimerangeWidthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"limit": types.DynamicType,
-		"type":  types.StringType,
+		"description": types.StringType,
+		"limit":       types.DynamicType,
+		"metric":      types.StringType,
+		"type":        types.StringType,
 	}
 }
 

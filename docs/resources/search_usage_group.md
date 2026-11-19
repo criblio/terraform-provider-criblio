@@ -102,6 +102,11 @@ Required:
 - `limit` (Dynamic) Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.
 - `type` (String) Limit type.
 
+Read-Only:
+
+- `description` (String) Brief description of the rule.
+- `metric` (String) Optional metric identifier aggregated for enforcement.
+
 <a id="nestedatt--rules--max_concurrent_adhoc_searches_per_user"></a>
 <a id="nestedatt--rules--max_concurrent_scheduled_searches_per_user"></a>
 <a id="nestedatt--rules--max_concurrent_searches"></a>
@@ -111,6 +116,11 @@ Required:
 
 - `limit` (Dynamic) Non-negative integer concurrent-search limit, or a percentage string.
 - `type` (String) Identifier for a scheduling-stage limit.
+
+Read-Only:
+
+- `description` (String) Brief description of the rule.
+- `metric` (String) Optional metric identifier aggregated for enforcement.
 
 <a id="nestedatt--users"></a>
 ### Nested Schema for `users`

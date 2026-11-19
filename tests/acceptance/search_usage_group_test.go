@@ -24,6 +24,11 @@ type searchUsageGroupMember struct {
 	Email string
 }
 
+// Usage Groups are a Cribl.Cloud-only Search feature.
+// CRIBL_TEST_USAGE_GROUP_USER_ID and CRIBL_TEST_USAGE_GROUP_USER_EMAIL name the
+// designated test member used for assignment coverage; without them the
+// lifecycle still runs, membership aside. The member's original Usage Group is
+// restored on cleanup.
 func searchUsageGroupPreCheck(t *testing.T) {
 	t.Helper()
 	if os.Getenv("DEPLOYMENT") == "onprem" {
@@ -50,13 +55,7 @@ func TestSearchUsageGroup(t *testing.T) {
 	suffix := strings.ToLower(acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum))
 	groupID := "tf_usage_group_" + suffix
 
-	// The API stores only IDs of users that already exist in the organization and
-	// silently drops anything else, so membership can be exercised only with a
-	// real member. A user belongs to one Usage Group at a time, so this moves them
-	// into the test group for the duration of the test; destroying the group
-	// returns them to the catch-all `default` group. Set
-	// CRIBL_ACC_SKIP_USAGE_GROUP_MEMBERS=1 to leave membership untested.
-	member := searchUsageGroupExistingMember(t)
+	member := searchUsageGroupTestMember(t)
 
 	resourceName := "criblio_search_usage_group.test"
 	created := searchUsageGroupCreatedConfig(groupID, member)
@@ -258,17 +257,26 @@ func searchUsageGroupCheckMember(resourceName string, member *searchUsageGroupMe
 	)
 }
 
-// searchUsageGroupExistingMember returns a user that the organization already
-// knows, discovered from whichever Usage Group currently holds one. It returns
-// nil when membership testing is switched off or the organization reports no
-// members, so the rest of the lifecycle still runs.
-func searchUsageGroupExistingMember(t *testing.T) *searchUsageGroupMember {
+// searchUsageGroupTestMember returns the designated test member for assignment
+// coverage, following the pattern in TestSearchDatasetACL.
+// CRIBL_TEST_USAGE_GROUP_USER_ID and CRIBL_TEST_USAGE_GROUP_USER_EMAIL name the
+// member; both must be set, and the ID must be an existing organization member
+// because the API silently drops IDs it does not know. Membership coverage is
+// skipped when they are unset, so the rest of the lifecycle still runs.
+//
+// A user belongs to one Usage Group at a time, so assigning them here moves them
+// out of whichever group holds them. The original group is captured up front and
+// restored on cleanup, so the member's assignment is the same after the test as
+// before it.
+func searchUsageGroupTestMember(t *testing.T) *searchUsageGroupMember {
 	t.Helper()
-	if os.Getenv("CRIBL_ACC_SKIP_USAGE_GROUP_MEMBERS") != "" {
-		t.Log("CRIBL_ACC_SKIP_USAGE_GROUP_MEMBERS is set; skipping user assignment coverage")
+	if os.Getenv("TF_ACC") == "" {
 		return nil
 	}
-	if os.Getenv("TF_ACC") == "" {
+	id := os.Getenv("CRIBL_TEST_USAGE_GROUP_USER_ID")
+	email := os.Getenv("CRIBL_TEST_USAGE_GROUP_USER_EMAIL")
+	if id == "" || email == "" {
+		t.Log("set CRIBL_TEST_USAGE_GROUP_USER_ID and CRIBL_TEST_USAGE_GROUP_USER_EMAIL to cover user assignment; skipping that coverage")
 		return nil
 	}
 
@@ -277,30 +285,62 @@ func searchUsageGroupExistingMember(t *testing.T) *searchUsageGroupMember {
 		t.Logf("skipping user assignment coverage, no API client: %v", err)
 		return nil
 	}
-	type usageGroup struct {
-		ID    string `json:"id"`
-		Users map[string]struct {
-			ID    string `json:"id"`
-			Email string `json:"email"`
-		} `json:"users"`
+
+	origin, body := searchUsageGroupMembershipOf(t, client, id)
+	if origin == "" {
+		t.Logf("member %q is in no Usage Group; it will fall back to the catch-all group after the test", email)
+	} else {
+		t.Logf("member %q is currently in Usage Group %q; it will be restored there on cleanup", email, origin)
 	}
-	groups, err := restclient.Get[[]usageGroup](context.Background(), client, searchUsageGroupPath)
-	if err != nil {
-		t.Fatalf("list Usage Groups: %v", err)
+	t.Cleanup(func() { searchUsageGroupRestoreMembership(t, client, id, origin, body) })
+
+	return &searchUsageGroupMember{ID: id, Email: email}
+}
+
+// searchUsageGroupMembershipOf reports which Usage Group holds the user, with
+// that group's full representation so it can be restored verbatim. The update
+// endpoint replaces the whole object, so a partial body would drop its rules.
+func searchUsageGroupMembershipOf(t *testing.T, client *restclient.Client, userID string) (string, map[string]any) {
+	t.Helper()
+	groups, err := restclient.Get[[]map[string]any](context.Background(), client, searchUsageGroupPath)
+	if err != nil || groups == nil {
+		t.Logf("could not read current Usage Group membership: %v", err)
+		return "", nil
 	}
-	if groups != nil {
-		for _, group := range *groups {
-			for _, user := range group.Users {
-				if user.ID == "" || user.Email == "" {
-					continue
-				}
-				t.Logf("using existing member %q (currently in Usage Group %q) for assignment coverage", user.Email, group.ID)
-				return &searchUsageGroupMember{ID: user.ID, Email: user.Email}
-			}
+	for _, group := range *groups {
+		users, ok := group["users"].(map[string]any)
+		if !ok {
+			continue
 		}
+		if _, member := users[userID]; !member {
+			continue
+		}
+		id, _ := group["id"].(string)
+		return id, group
 	}
-	t.Log("no existing Usage Group member found; skipping user assignment coverage")
-	return nil
+	return "", nil
+}
+
+// searchUsageGroupRestoreMembership puts the member back in the group that held
+// them. Members of the catch-all `default` group need no action: deleting the
+// test group returns them there. Any other group is restored from the captured
+// representation, because membership does not move back on its own.
+func searchUsageGroupRestoreMembership(t *testing.T, client *restclient.Client, userID, origin string, body map[string]any) {
+	t.Helper()
+	if origin == "" || origin == "default" || body == nil {
+		return
+	}
+	current, _ := searchUsageGroupMembershipOf(t, client, userID)
+	if current == origin {
+		return
+	}
+	path := fmt.Sprintf("%s/%s", searchUsageGroupPath, origin)
+	delete(body, "usersCount")
+	if _, err := restclient.Patch[map[string]any, map[string]any](context.Background(), client, path, body); err != nil {
+		t.Errorf("restore member %q to Usage Group %q: %v; the member is now in %q", userID, origin, err, current)
+		return
+	}
+	t.Logf("restored member %q to Usage Group %q", userID, origin)
 }
 
 // testCheckSearchUsageGroupDestroyed confirms the API no longer serves the group

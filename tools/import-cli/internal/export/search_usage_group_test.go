@@ -32,6 +32,9 @@ func TestSearchUsageGroupExportKeepsRulesAndUsers(t *testing.T) {
 
 	attrs, err := hcl.ModelToValue(&model, hclOptionsForType("criblio_search_usage_group", registry.Entry{}))
 	require.NoError(t, err)
+	// The export path strips the API-owned rule fields, which are computed and
+	// cannot appear in a configuration.
+	pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
 
 	require.Equal(t, "power_users", attrs["id"].String)
 	require.Equal(t, "Members with elevated search limits.", attrs["description"].String)
@@ -45,7 +48,8 @@ func TestSearchUsageGroupExportKeepsRulesAndUsers(t *testing.T) {
 	require.Equal(t, float64(100000), rules["max_results_per_search"].Map["limit"].Number)
 	require.Equal(t, float64(300), rules["max_running_time_per_search"].Map["limit"].Number)
 	// The API owns each limit type's description and metric and overwrites
-	// whatever is sent, so neither is part of the exported configuration.
+	// whatever is sent. They are computed attributes, so a configuration cannot
+	// set them and the export path strips them.
 	require.NotContains(t, rules["max_running_time_per_search"].Map, "description")
 	require.NotContains(t, rules["max_results_per_search"].Map, "metric")
 	// Scheduling limits keep whichever NumberOrPercent form the API reports.

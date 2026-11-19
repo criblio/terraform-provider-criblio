@@ -2985,16 +2985,16 @@ actions:
   # of the Terraform schema. `type` stays, since the API echoes what is sent.
   - target: "$.components.schemas.LimitRule.properties.description"
     update:
-      x-terraform-ignore: true
+      x-terraform-computed: true
   - target: "$.components.schemas.LimitRule.properties.metric"
     update:
-      x-terraform-ignore: true
+      x-terraform-computed: true
   - target: "$.components.schemas.SchedulingLimitRule.properties.description"
     update:
-      x-terraform-ignore: true
+      x-terraform-computed: true
   - target: "$.components.schemas.SchedulingLimitRule.properties.metric"
     update:
-      x-terraform-ignore: true
+      x-terraform-computed: true
 
   - target: "$.paths./m/{groupId}/search/datasets.post"
     update:

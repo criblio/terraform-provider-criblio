@@ -2911,6 +2911,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- if eq .StructName "SearchSavedQuery" }}
 	normalizeSearchSavedQueryScheduleNotifications(api, state)
 {{- end }}
+{{- if eq .StructName "SearchUsageGroup" }}
+	state.Rules = searchUsageGroupRulesWithKnownAPIValues(api.Rules, state.Rules)
+{{- end }}
 {{- end }}
 }
 
