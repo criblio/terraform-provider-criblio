@@ -172,6 +172,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_search_dataset_provider":      {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/dataset-providers", RESTGetPath: "/m/default_search/search/dataset-providers/{id}"},
 	"criblio_search_datatype":              {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/datatypes", RESTGetPath: "/m/default_search/search/datatypes/{id}"},
 	"criblio_search_engine":                {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/local_search/engines", RESTGetPath: "/m/default_search/search/local_search/engines/{id}"},
+	"criblio_search_usage_group":           {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/usage-groups", RESTGetPath: "/m/default_search/search/usage-groups/{id}"},
 	"criblio_search_source":                {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/local_search/sources", RESTGetPath: "/m/default_search/search/local_search/sources/{id}"},
 	"criblio_search_dataset_ruleset":       {GetMethod: "GetDatasetRuleByID", ImportIDFormat: "id", RESTGetPath: "/m/default_search/search/local_search/dataset-rulesets/{id}", RefreshFromMethod: "RefreshFromSharedCountedDatasetRuleset"},
 	"criblio_search_datatype_ruleset":      {GetMethod: "GetDatatypeRuleByID", ImportIDFormat: "id", RESTGetPath: "/m/default_search/search/local_search/datatype-rulesets/{id}", RefreshFromMethod: "RefreshFromSharedCountedDatatypeRuleset"},

@@ -148,3 +148,23 @@ func hclOptionsForType(typeName string, e registry.Entry) *hcl.Options {
 	}
 	return opts
 }
+
+// pruneSearchUsageGroupAPIOwnedRuleFields removes `description` and `metric`
+// from every limit rule. The API assigns both per limit type and the provider
+// models them as computed, so Terraform rejects a configuration that sets them.
+// They must not reach generated HCL even though reads report them.
+func pruneSearchUsageGroupAPIOwnedRuleFields(attrs map[string]hcl.Value) {
+	rules, ok := attrs["rules"]
+	if !ok || rules.Kind != hcl.KindMap {
+		return
+	}
+	for name, rule := range rules.Map {
+		if rule.Kind != hcl.KindMap {
+			continue
+		}
+		delete(rule.Map, "description")
+		delete(rule.Map, "metric")
+		rules.Map[name] = rule
+	}
+	attrs["rules"] = rules
+}

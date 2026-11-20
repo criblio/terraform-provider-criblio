@@ -139,6 +139,15 @@ func isLookupFileType(typeName string) bool {
 	return typeName == "criblio_lookup_file" || typeName == "criblio_pack_lookups"
 }
 
+// isSearchUsageGroupType reports the Search Usage Group resource. Its built-in
+// groups are skipped whether or not --exclude-defaults is set: the API refuses
+// to create or delete them, and the built-in `default` group carries an empty
+// `rules`, which prunes to nothing and renders as HCL missing a required
+// argument.
+func isSearchUsageGroupType(typeName string) bool {
+	return typeName == "criblio_search_usage_group"
+}
+
 func defaultLookupFileByID(typeName string, idMap map[string]string, includeOverride IncludeOverride) bool {
 	if typeName != "criblio_lookup_file" {
 		return false
@@ -148,6 +157,21 @@ func defaultLookupFileByID(typeName string, idMap map[string]string, includeOver
 		return false
 	}
 	return custom.DefaultLookupFileIDs[id]
+}
+
+// skipGuardRuleWithoutRulesets reports a Guard Rule that belongs to no ruleset.
+// `rulesets` is required by the provider schema, and the API additionally
+// enforces at least one entry ("At least one ruleset is required"), so such a
+// rule cannot be written back: omitting the attribute fails `terraform plan`,
+// and sending an empty list fails apply with HTTP 400. The API nonetheless
+// serves rules in that state, so they are unmanageable and must not be exported
+// as managed resources, like Cribl-library rules above.
+func skipGuardRuleWithoutRulesets(typeName string, attrs map[string]hcl.Value) bool {
+	if typeName != "criblio_guard_rule" {
+		return false
+	}
+	v, ok := attrs["rulesets"]
+	return !ok || v.IsNull() || (v.Kind == hcl.KindList && len(v.List) == 0)
 }
 
 func skipResourceWhenLibCribl(attrs map[string]hcl.Value) bool {
@@ -185,6 +209,8 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 		return custom.DefaultSearchDatasetIDs[id]
 	case "criblio_search_dataset_provider":
 		return custom.DefaultSearchDatasetProviderIDs[id]
+	case "criblio_search_usage_group":
+		return custom.DefaultSearchUsageGroupIDs[id]
 	case "criblio_cribl_lake_dataset":
 		return custom.DefaultCriblLakeDatasetIDs[id]
 	case "criblio_group":
