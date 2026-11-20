@@ -4920,7 +4920,7 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_sentinelone--pq))
 - `management_host` (String) Your SentinelOne management console hostname, without the domain suffix (example: usea1-yourorg)
 - `management_domain_suffix` (String) Host suffix for your SentinelOne management console. Defaults to sentinelone.net (global). Choose sentinelone.mil for US military environments, or enter a custom domain.
-- `api_token` (String) SentinelOne API token
+- `api_token` (String, Sensitive) SentinelOne API token
 - `text_secret` (String)
 - `content_config` (Attributes List) (see [below for nested schema](#nestedatt--items--input_sentinelone--content_config))
 - `request_timeout` (Number)
@@ -5364,7 +5364,7 @@ Read-Only:
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--items--input_netskope--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_netskope--pq))
 - `tenant_url` (String) Full base URL of your Netskope tenant (example: https://mycompany.goskope.com). Do not include trailing slashes or API paths.
-- `api_token` (String) API token
+- `api_token` (String, Sensitive) API token
 - `text_secret` (String) Select or create a stored Netskope V2 API token
 - `content_config` (Attributes List) (see [below for nested schema](#nestedatt--items--input_netskope--content_config))
 - `request_timeout` (Number)

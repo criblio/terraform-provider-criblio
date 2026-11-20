@@ -455,21 +455,21 @@ func SearchSavedQueryChartConfigSeriesAreaStyleAttrTypes() map[string]attr.Type 
 }
 
 type SearchSavedQueryChartConfigVisualizationModel struct {
-	Family        types.String `tfsdk:"family" json:"family,omitempty"`
-	Version       types.String `tfsdk:"version" json:"version,omitempty"`
-	FieldsConfig  types.Object `tfsdk:"fields_config" json:"fieldsConfig,omitempty"`
-	DisplayConfig types.Map    `tfsdk:"display_config" json:"displayConfig,omitempty"`
-	LegendConfig  types.Object `tfsdk:"legend_config" json:"legendConfig,omitempty"`
-	TooltipConfig types.Object `tfsdk:"tooltip_config" json:"tooltipConfig,omitempty"`
+	Family        types.String         `tfsdk:"family" json:"family,omitempty"`
+	Version       types.String         `tfsdk:"version" json:"version,omitempty"`
+	FieldsConfig  types.Object         `tfsdk:"fields_config" json:"fieldsConfig,omitempty"`
+	DisplayConfig jsontypes.Normalized `tfsdk:"display_config" json:"displayConfig,omitempty"`
+	LegendConfig  types.Object         `tfsdk:"legend_config" json:"legendConfig,omitempty"`
+	TooltipConfig types.Object         `tfsdk:"tooltip_config" json:"tooltipConfig,omitempty"`
 }
 
 type SearchSavedQueryChartConfigVisualizationAPIModel struct {
-	Family        *string           `json:"family,omitempty"`
-	Version       *string           `json:"version,omitempty"`
-	FieldsConfig  any               `json:"fieldsConfig,omitempty"`
-	DisplayConfig map[string]string `json:"displayConfig,omitempty"`
-	LegendConfig  any               `json:"legendConfig,omitempty"`
-	TooltipConfig any               `json:"tooltipConfig,omitempty"`
+	Family        *string `json:"family,omitempty"`
+	Version       *string `json:"version,omitempty"`
+	FieldsConfig  any     `json:"fieldsConfig,omitempty"`
+	DisplayConfig any     `json:"displayConfig,omitempty"`
+	LegendConfig  any     `json:"legendConfig,omitempty"`
+	TooltipConfig any     `json:"tooltipConfig,omitempty"`
 }
 
 func SearchSavedQueryChartConfigVisualizationAttrTypes() map[string]attr.Type {
@@ -477,7 +477,7 @@ func SearchSavedQueryChartConfigVisualizationAttrTypes() map[string]attr.Type {
 		"family":         types.StringType,
 		"version":        types.StringType,
 		"fields_config":  types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationFieldsConfigAttrTypes()},
-		"display_config": types.MapType{ElemType: types.StringType},
+		"display_config": jsontypes.NormalizedType{},
 		"legend_config":  types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationLegendConfigAttrTypes()},
 		"tooltip_config": types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationTooltipConfigAttrTypes()},
 	}
@@ -718,6 +718,16 @@ func SearchSavedQueryTerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
+	case jsontypes.Normalized:
+		raw := typed.ValueString()
+		if raw == "" {
+			return map[string]any{}, nil
+		}
+		var output any
+		if err := json.Unmarshal([]byte(raw), &output); err != nil {
+			return nil, err
+		}
+		return output, nil
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:
@@ -745,9 +755,16 @@ func SearchSavedQueryTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
+		attributeTypes := typed.AttributeTypes(context.Background())
 		attributes := typed.Attributes()
 		for key, attribute := range attributes {
-			value, err := SearchSavedQueryTerraformValueToJSON(attribute)
+			var value any
+			var err error
+			if attributeType, ok := attributeTypes[key]; ok && attributeType.Equal(jsontypes.NormalizedType{}) {
+				value, err = SearchSavedQueryObjectJSONFromTerraformValue(attribute)
+			} else {
+				value, err = SearchSavedQueryTerraformValueToJSON(attribute)
+			}
 			if err != nil {
 				return nil, err
 			}
@@ -763,6 +780,24 @@ func SearchSavedQueryTerraformValueToJSON(value attr.Value) (any, error) {
 	default:
 		return nil, fmt.Errorf("unsupported Terraform value %T", value)
 	}
+}
+func SearchSavedQueryObjectJSONFromTerraformValue(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	typed, ok := value.(interface{ ValueString() string })
+	if !ok {
+		return nil, fmt.Errorf("expected normalized JSON string, got %T", value)
+	}
+	raw := typed.ValueString()
+	if raw == "" {
+		return map[string]any{}, nil
+	}
+	var output any
+	if err := json.Unmarshal([]byte(raw), &output); err != nil {
+		return nil, err
+	}
+	return output, nil
 }
 
 func SearchSavedQueryTerraformNameToAPIName(name string) string {
@@ -823,6 +858,16 @@ func SearchSavedQueryAPIValueToTerraformValue(value any, typ attr.Type) (attr.Va
 			return nil, fmt.Errorf("expected string, got %T", value)
 		}
 		return types.StringValue(typed), nil
+	}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		if typed, ok := value.(string); ok {
+			return jsontypes.NewNormalizedValue(typed), nil
+		}
+		raw, err := json.Marshal(value)
+		if err != nil {
+			return nil, err
+		}
+		return jsontypes.NewNormalizedValue(string(raw)), nil
 	}
 	switch typed := typ.(type) {
 	case types.ListType:
@@ -909,6 +954,9 @@ func SearchSavedQueryTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
+	}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		return jsontypes.NewNormalizedNull(), nil
 	}
 	switch typed := typ.(type) {
 	case types.ListType:

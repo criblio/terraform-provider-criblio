@@ -3565,6 +3565,12 @@ actions:
   - target: "$.components.schemas.SavedQuery.properties.user"
     update:
       x-terraform-optional-computed: true
+  # Visualization display options include nested objects and non-string values.
+  - target: "$.components.schemas.ChartConfig.properties.visualization.properties.displayConfig"
+    update:
+      description: "Display options the visualization draws with, such as its colors. Configure with jsonencode(...) to preserve nested objects and non-string values."
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
   # Saved queries define notifications inline, rather than referencing
   # SavedQueryScheduleNotifications. Empty API objects must remain importable.
   - target: "$.components.schemas.SavedQuerySchedule.properties.notifications.properties.disabled"
@@ -4625,6 +4631,12 @@ actions:
     update:
       authTokens:
         x-terraform-sensitive: true
+  - target: "$.components.schemas.InputSentinelone.properties.apiToken"
+    update:
+      x-terraform-sensitive: true
+  - target: "$.components.schemas.InputNetskope.properties.apiToken"
+    update:
+      x-terraform-sensitive: true
   # 4.21 extracts the HTTP token object into a shared schema. Keep these
   # provider-specific annotations on a private copy of the referenced object.
   - target: "$.components.schemas.InputHttp.properties.authTokensExt.items"

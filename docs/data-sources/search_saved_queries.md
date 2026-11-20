@@ -198,7 +198,7 @@ Read-Only:
 - `family` (String) Family of the registered visualization that persisted this configuration.
 - `version` (String) Version of the visualization configuration contract this object was written against.
 - `fields_config` (Attributes) Ordered field metadata the visualization binds and formats. (see [below for nested schema](#nestedatt--items--chart_config--visualization--fields_config))
-- `display_config` (Map of String) Display options the visualization draws with, such as its colors.
+- `display_config` (String) Display options the visualization draws with, such as its colors. Configure with jsonencode(...) to preserve nested objects and non-string values.
 - `legend_config` (Attributes) Legend configuration (see [below for nested schema](#nestedatt--items--chart_config--visualization--legend_config))
 - `tooltip_config` (Attributes) Tooltip configuration (see [below for nested schema](#nestedatt--items--chart_config--visualization--tooltip_config))
 

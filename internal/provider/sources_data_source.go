@@ -26944,6 +26944,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `SentinelOne API token`,
 								},
 								"text_secret": schema.StringAttribute{
@@ -30484,6 +30485,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"api_token": schema.StringAttribute{
 									Computed:    true,
+									Sensitive:   true,
 									Description: `API token`,
 								},
 								"text_secret": schema.StringAttribute{

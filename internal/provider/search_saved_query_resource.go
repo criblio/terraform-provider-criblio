@@ -575,12 +575,12 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 									},
 								},
 							},
-							"display_config": schema.MapAttribute{
+							"display_config": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Display options the visualization draws with, such as its colors.`,
-								ElementType: types.StringType,
+								Description: `Display options the visualization draws with, such as its colors. Configure with jsonencode(...) to preserve nested objects and non-string values.`,
+								CustomType:  jsontypes.NormalizedType{},
 							},
 							"legend_config": schema.SingleNestedAttribute{
 								Required:    false,

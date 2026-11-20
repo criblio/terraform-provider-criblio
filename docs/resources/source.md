@@ -4163,7 +4163,7 @@ Optional:
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_sentinelone--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sentinelone--pq))
 - `management_domain_suffix` (String) Host suffix for your SentinelOne management console. Defaults to sentinelone.net (global). Choose sentinelone.mil for US military environments, or enter a custom domain.
-- `api_token` (String) SentinelOne API token
+- `api_token` (String, Sensitive) SentinelOne API token
 - `request_timeout` (Number)
 - `keep_alive_time` (Number)
 - `max_missed_keep_alives` (Number)
@@ -4644,7 +4644,7 @@ Optional:
 - `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_netskope--cribl_source_provenance))
 - `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_netskope--connections))
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_netskope--pq))
-- `api_token` (String) API token
+- `api_token` (String, Sensitive) API token
 - `request_timeout` (Number)
 - `keep_alive_time` (Number)
 - `max_missed_keep_alives` (Number)
