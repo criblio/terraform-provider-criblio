@@ -73,6 +73,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if r.TypeName == "criblio_search_usage_group" {
 		pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
 	}
+	if r.TypeName == "criblio_guard_rule" {
+		ensureGuardRuleRulesets(attrs)
+	}
 	if r.TypeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
 	}
@@ -321,6 +324,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	if typeName == "criblio_search_usage_group" {
 		pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
+	}
+	if typeName == "criblio_guard_rule" {
+		ensureGuardRuleRulesets(attrs)
 	}
 	if typeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
