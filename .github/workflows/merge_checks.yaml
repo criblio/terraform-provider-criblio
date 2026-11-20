@@ -7,6 +7,12 @@ concurrency:
   group: tfprovider
   cancel-in-progress: false
 
+# Bound compiler/package concurrency for the large generated provider package.
+env:
+  GOFLAGS: -p=1
+  GOMAXPROCS: 2
+  GOGC: 50
+
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -264,6 +270,9 @@ jobs:
         timeout-minutes: 11
 
       - uses: dominikh/staticcheck-action@v1.3.1
+        env:
+          # Staticcheck sizes its analysis worker pool from GOMAXPROCS.
+          GOMAXPROCS: 1
         with:
           # v0.7.0 supports Go 1.25; newer releases require Go 1.26.
           version: v0.7.0

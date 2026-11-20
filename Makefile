@@ -1,4 +1,4 @@
-.PHONY: * acceptance-test acceptance-test-resources acceptance-test-data-sources
+.PHONY: * acceptance-test acceptance-test-compile acceptance-test-resources acceptance-test-data-sources
 
 DATA_SOURCE_TEST_PARALLELISM ?= 4
 
@@ -11,8 +11,12 @@ e2e-test:
 	@#run our wrapper script targeting our new plugin
 	./tests/e2e/scripts/e2e.sh 
 
-acceptance-test:
+# Warm the shared package cache before the two suites start parallel Go builds.
+acceptance-test: acceptance-test-compile
 	$(MAKE) -j2 acceptance-test-resources acceptance-test-data-sources
+
+acceptance-test-compile:
+	go test -run '^$$' ./tests/acceptance
 
 acceptance-test-resources:
 	go test -v -count=1 -timeout 60m ./tests/acceptance -skip 'DataSources$$' -parallel 1
