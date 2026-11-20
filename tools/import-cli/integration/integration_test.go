@@ -40,10 +40,18 @@ func testCommand(t *testing.T, name string, args ...string) *exec.Cmd {
 	if remaining < margin {
 		margin = remaining / 2
 	}
-	ctx, cancel := context.WithDeadline(context.Background(), deadline.Add(-margin))
+	commandDeadline := deadline.Add(-margin)
+	ctx, cancel := context.WithDeadline(context.Background(), commandDeadline)
 	t.Cleanup(cancel)
 	cmd := exec.CommandContext(ctx, name, args...)
 	configureTestCommand(cmd)
+	cancelCommand := cmd.Cancel
+	cmd.Cancel = func() error {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			t.Logf("%s command canceled because the Go test command deadline (%s) expired", filepath.Base(name), commandDeadline.UTC().Format(time.RFC3339))
+		}
+		return cancelCommand()
+	}
 	return cmd
 }
 

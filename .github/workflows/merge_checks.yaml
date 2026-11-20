@@ -224,7 +224,8 @@ jobs:
 
   integration_test_import_cli:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Leave room for setup/builds around the Makefile's 40-minute test timeout.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -252,9 +253,8 @@ jobs:
           CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
-        run: |
-          make build-import-cli
-          go test -v -tags=integration ./tools/import-cli/integration/...
+        # Use the shared target so CI does not inherit Go's default 10-minute timeout.
+        run: make integration-test-import-cli
 
   staticcheck_test:
     runs-on: ubuntu-latest
