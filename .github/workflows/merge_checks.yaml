@@ -265,6 +265,8 @@ jobs:
 
       - uses: dominikh/staticcheck-action@v1.3.1
         with:
+          # v0.7.0 supports Go 1.25; newer releases require Go 1.26.
+          version: v0.7.0
           # SA1019: deprecated identifiers (e.g. reflect.PtrTo in generated SDK utils)
           checks: inherit,-ST1000,-SA1019,-SA5008
           install-go: false
