@@ -51,7 +51,7 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).`,
+				Description: `Snowflake account identifier, either in org-account format (<code>ORGNAME-ACCTNAME</code>) or as a legacy account locator (<code>LOCATOR.REGION.CLOUD</code>).`,
 			},
 			"auth_type": schema.StringAttribute{
 				Required:    true,
@@ -152,7 +152,7 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Required:    false,
 							Optional:    true,
 							Computed:    false,
-							Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).`,
+							Description: `Snowflake account identifier, either in org-account format (<code>ORGNAME-ACCTNAME</code>) or as a legacy account locator (<code>LOCATOR.REGION.CLOUD</code>).`,
 						},
 						"auth_type": schema.StringAttribute{
 							Required:    true,
@@ -249,13 +249,13 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Required:    false,
 							Optional:    true,
 							Computed:    false,
-							Description: `RSA private key configuration for Snowflake key-pair authentication.`,
+							Description: `Reference to the stored RSA private key used for Snowflake authentication. Required for both <code>oauth</code> and <code>keypair</code> authentication.`,
 							Attributes: map[string]schema.Attribute{
 								"key_name": schema.StringAttribute{
 									Required:    true,
 									Optional:    false,
 									Computed:    false,
-									Description: `RSA private key (PEM format) for Snowflake key-pair authentication.`,
+									Description: `Name of the stored private key, as listed by <code>/lib/private-keys</code>, to authenticate with.`,
 								},
 							},
 						},
@@ -392,13 +392,13 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `RSA private key configuration for Snowflake key-pair authentication.`,
+				Description: `Reference to the stored RSA private key used for Snowflake authentication. Required for both <code>oauth</code> and <code>keypair</code> authentication.`,
 				Attributes: map[string]schema.Attribute{
 					"key_name": schema.StringAttribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
-						Description: `RSA private key (PEM format) for Snowflake key-pair authentication.`,
+						Description: `Name of the stored private key, as listed by <code>/lib/private-keys</code>, to authenticate with.`,
 					},
 				},
 			},

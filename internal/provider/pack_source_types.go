@@ -71,6 +71,17 @@ type PackSourceModel struct {
 	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
 	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
 	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputCheckPointSaseSyslog         *InputCheckPointSaseSyslogModel         `tfsdk:"input_check_point_sase_syslog" json:"InputCheckPointSaseSyslog,omitempty"`
+	InputCiscoAsaSyslog               *InputCiscoAsaSyslogModel               `tfsdk:"input_cisco_asa_syslog" json:"InputCiscoAsaSyslog,omitempty"`
+	InputCiscoMerakiSyslog            *InputCiscoMerakiSyslogModel            `tfsdk:"input_cisco_meraki_syslog" json:"InputCiscoMerakiSyslog,omitempty"`
+	InputFortigateSyslog              *InputFortigateSyslogModel              `tfsdk:"input_fortigate_syslog" json:"InputFortigateSyslog,omitempty"`
+	InputVmwareEsxiVcenterSyslog      *InputVmwareEsxiVcenterSyslogModel      `tfsdk:"input_vmware_esxi_vcenter_syslog" json:"InputVmwareEsxiVcenterSyslog,omitempty"`
+	InputNetgatePfsenseSyslog         *InputNetgatePfsenseSyslogModel         `tfsdk:"input_netgate_pfsense_syslog" json:"InputNetgatePfsenseSyslog,omitempty"`
+	InputWatchguardFireboxSyslog      *InputWatchguardFireboxSyslogModel      `tfsdk:"input_watchguard_firebox_syslog" json:"InputWatchguardFireboxSyslog,omitempty"`
+	InputInfobloxSyslog               *InputInfobloxSyslogModel               `tfsdk:"input_infoblox_syslog" json:"InputInfobloxSyslog,omitempty"`
+	InputUbiquitiUnifiSyslog          *InputUbiquitiUnifiSyslogModel          `tfsdk:"input_ubiquiti_unifi_syslog" json:"InputUbiquitiUnifiSyslog,omitempty"`
+	InputSonicwallSyslog              *InputSonicwallSyslogModel              `tfsdk:"input_sonicwall_syslog" json:"InputSonicwallSyslog,omitempty"`
+	InputSophosXgXgsFirewallSyslog    *InputSophosXgXgsFirewallSyslogModel    `tfsdk:"input_sophos_xg_xgs_firewall_syslog" json:"InputSophosXgXgsFirewallSyslog,omitempty"`
 	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
 	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
 	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
@@ -92,6 +103,7 @@ type PackSourceModel struct {
 	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
 	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSalesforce                   *InputSalesforceModel                   `tfsdk:"input_salesforce" json:"InputSalesforce,omitempty"`
 	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
 	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
 	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
@@ -100,6 +112,7 @@ type PackSourceModel struct {
 	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
 	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
 	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputSentinelone                  *InputSentineloneModel                  `tfsdk:"input_sentinelone" json:"InputSentinelone,omitempty"`
 	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
 	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
 	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
@@ -109,6 +122,12 @@ type PackSourceModel struct {
 	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
 	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
 	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
+	InputZoomWebhook                  *InputZoomWebhookModel                  `tfsdk:"input_zoom_webhook" json:"InputZoomWebhook,omitempty"`
+	InputNetskope                     *InputNetskopeModel                     `tfsdk:"input_netskope" json:"InputNetskope,omitempty"`
+	InputLitellm                      *InputLitellmModel                      `tfsdk:"input_litellm" json:"InputLitellm,omitempty"`
+	InputCiscoSecureFirewallSyslog    *InputCiscoSecureFirewallSyslogModel    `tfsdk:"input_cisco_secure_firewall_syslog" json:"InputCiscoSecureFirewallSyslog,omitempty"`
+	InputJuniperJunosSyslog           *InputJuniperJunosSyslogModel           `tfsdk:"input_juniper_junos_syslog" json:"InputJuniperJunosSyslog,omitempty"`
+	InputCiscoIosSyslog               *InputCiscoIosSyslogModel               `tfsdk:"input_cisco_ios_syslog" json:"InputCiscoIosSyslog,omitempty"`
 }
 
 type PackSourceResourceModel struct {
@@ -166,6 +185,17 @@ type PackSourceResourceModel struct {
 	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
 	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
 	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputCheckPointSaseSyslog         *InputCheckPointSaseSyslogModel         `tfsdk:"input_check_point_sase_syslog" json:"InputCheckPointSaseSyslog,omitempty"`
+	InputCiscoAsaSyslog               *InputCiscoAsaSyslogModel               `tfsdk:"input_cisco_asa_syslog" json:"InputCiscoAsaSyslog,omitempty"`
+	InputCiscoMerakiSyslog            *InputCiscoMerakiSyslogModel            `tfsdk:"input_cisco_meraki_syslog" json:"InputCiscoMerakiSyslog,omitempty"`
+	InputFortigateSyslog              *InputFortigateSyslogModel              `tfsdk:"input_fortigate_syslog" json:"InputFortigateSyslog,omitempty"`
+	InputVmwareEsxiVcenterSyslog      *InputVmwareEsxiVcenterSyslogModel      `tfsdk:"input_vmware_esxi_vcenter_syslog" json:"InputVmwareEsxiVcenterSyslog,omitempty"`
+	InputNetgatePfsenseSyslog         *InputNetgatePfsenseSyslogModel         `tfsdk:"input_netgate_pfsense_syslog" json:"InputNetgatePfsenseSyslog,omitempty"`
+	InputWatchguardFireboxSyslog      *InputWatchguardFireboxSyslogModel      `tfsdk:"input_watchguard_firebox_syslog" json:"InputWatchguardFireboxSyslog,omitempty"`
+	InputInfobloxSyslog               *InputInfobloxSyslogModel               `tfsdk:"input_infoblox_syslog" json:"InputInfobloxSyslog,omitempty"`
+	InputUbiquitiUnifiSyslog          *InputUbiquitiUnifiSyslogModel          `tfsdk:"input_ubiquiti_unifi_syslog" json:"InputUbiquitiUnifiSyslog,omitempty"`
+	InputSonicwallSyslog              *InputSonicwallSyslogModel              `tfsdk:"input_sonicwall_syslog" json:"InputSonicwallSyslog,omitempty"`
+	InputSophosXgXgsFirewallSyslog    *InputSophosXgXgsFirewallSyslogModel    `tfsdk:"input_sophos_xg_xgs_firewall_syslog" json:"InputSophosXgXgsFirewallSyslog,omitempty"`
 	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
 	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
 	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
@@ -187,6 +217,7 @@ type PackSourceResourceModel struct {
 	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
 	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSalesforce                   *InputSalesforceModel                   `tfsdk:"input_salesforce" json:"InputSalesforce,omitempty"`
 	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
 	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
 	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
@@ -195,6 +226,7 @@ type PackSourceResourceModel struct {
 	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
 	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
 	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputSentinelone                  *InputSentineloneModel                  `tfsdk:"input_sentinelone" json:"InputSentinelone,omitempty"`
 	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
 	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
 	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
@@ -204,6 +236,12 @@ type PackSourceResourceModel struct {
 	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
 	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
 	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
+	InputZoomWebhook                  *InputZoomWebhookModel                  `tfsdk:"input_zoom_webhook" json:"InputZoomWebhook,omitempty"`
+	InputNetskope                     *InputNetskopeModel                     `tfsdk:"input_netskope" json:"InputNetskope,omitempty"`
+	InputLitellm                      *InputLitellmModel                      `tfsdk:"input_litellm" json:"InputLitellm,omitempty"`
+	InputCiscoSecureFirewallSyslog    *InputCiscoSecureFirewallSyslogModel    `tfsdk:"input_cisco_secure_firewall_syslog" json:"InputCiscoSecureFirewallSyslog,omitempty"`
+	InputJuniperJunosSyslog           *InputJuniperJunosSyslogModel           `tfsdk:"input_juniper_junos_syslog" json:"InputJuniperJunosSyslog,omitempty"`
+	InputCiscoIosSyslog               *InputCiscoIosSyslogModel               `tfsdk:"input_cisco_ios_syslog" json:"InputCiscoIosSyslog,omitempty"`
 }
 
 type PackSourceDataSourceModel struct {
@@ -261,6 +299,17 @@ type PackSourceDataSourceModel struct {
 	InputModelDrivenTelemetry         *InputModelDrivenTelemetryModel         `tfsdk:"input_model_driven_telemetry" json:"InputModelDrivenTelemetry,omitempty"`
 	InputSqs                          *InputSqsModel                          `tfsdk:"input_sqs" json:"InputSqs,omitempty"`
 	InputSyslog                       *InputSyslogModel                       `tfsdk:"input_syslog" json:"InputSyslog,omitempty"`
+	InputCheckPointSaseSyslog         *InputCheckPointSaseSyslogModel         `tfsdk:"input_check_point_sase_syslog" json:"InputCheckPointSaseSyslog,omitempty"`
+	InputCiscoAsaSyslog               *InputCiscoAsaSyslogModel               `tfsdk:"input_cisco_asa_syslog" json:"InputCiscoAsaSyslog,omitempty"`
+	InputCiscoMerakiSyslog            *InputCiscoMerakiSyslogModel            `tfsdk:"input_cisco_meraki_syslog" json:"InputCiscoMerakiSyslog,omitempty"`
+	InputFortigateSyslog              *InputFortigateSyslogModel              `tfsdk:"input_fortigate_syslog" json:"InputFortigateSyslog,omitempty"`
+	InputVmwareEsxiVcenterSyslog      *InputVmwareEsxiVcenterSyslogModel      `tfsdk:"input_vmware_esxi_vcenter_syslog" json:"InputVmwareEsxiVcenterSyslog,omitempty"`
+	InputNetgatePfsenseSyslog         *InputNetgatePfsenseSyslogModel         `tfsdk:"input_netgate_pfsense_syslog" json:"InputNetgatePfsenseSyslog,omitempty"`
+	InputWatchguardFireboxSyslog      *InputWatchguardFireboxSyslogModel      `tfsdk:"input_watchguard_firebox_syslog" json:"InputWatchguardFireboxSyslog,omitempty"`
+	InputInfobloxSyslog               *InputInfobloxSyslogModel               `tfsdk:"input_infoblox_syslog" json:"InputInfobloxSyslog,omitempty"`
+	InputUbiquitiUnifiSyslog          *InputUbiquitiUnifiSyslogModel          `tfsdk:"input_ubiquiti_unifi_syslog" json:"InputUbiquitiUnifiSyslog,omitempty"`
+	InputSonicwallSyslog              *InputSonicwallSyslogModel              `tfsdk:"input_sonicwall_syslog" json:"InputSonicwallSyslog,omitempty"`
+	InputSophosXgXgsFirewallSyslog    *InputSophosXgXgsFirewallSyslogModel    `tfsdk:"input_sophos_xg_xgs_firewall_syslog" json:"InputSophosXgXgsFirewallSyslog,omitempty"`
 	InputFile                         *InputFileModel                         `tfsdk:"input_file" json:"InputFile,omitempty"`
 	InputTcp                          *InputTcpModel                          `tfsdk:"input_tcp" json:"InputTcp,omitempty"`
 	InputAppscope                     *InputAppscopeModel                     `tfsdk:"input_appscope" json:"InputAppscope,omitempty"`
@@ -282,6 +331,7 @@ type PackSourceDataSourceModel struct {
 	InputSysdigHec                    *InputSysdigHecModel                    `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
 	InputUpwindHec                    *InputUpwindHecModel                    `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputTrellixHec                   *InputTrellixHecModel                   `tfsdk:"input_trellix_hec" json:"InputTrellixHec,omitempty"`
+	InputSalesforce                   *InputSalesforceModel                   `tfsdk:"input_salesforce" json:"InputSalesforce,omitempty"`
 	InputSailpointHec                 *InputSailpointHecModel                 `tfsdk:"input_sailpoint_hec" json:"InputSailpointHec,omitempty"`
 	InputExtrahopRevealx360           *InputExtrahopRevealx360Model           `tfsdk:"input_extrahop_revealx360" json:"InputExtrahopRevealx360,omitempty"`
 	InputAquaSecurityHec              *InputAquaSecurityHecModel              `tfsdk:"input_aqua_security_hec" json:"InputAquaSecurityHec,omitempty"`
@@ -290,6 +340,7 @@ type PackSourceDataSourceModel struct {
 	InputAnthropicEnterpriseAnalytics *InputAnthropicEnterpriseAnalyticsModel `tfsdk:"input_anthropic_enterprise_analytics" json:"InputAnthropicEnterpriseAnalytics,omitempty"`
 	InputMicrosoftCopilot             *InputMicrosoftCopilotModel             `tfsdk:"input_microsoft_copilot" json:"InputMicrosoftCopilot,omitempty"`
 	InputOkta                         *InputOktaModel                         `tfsdk:"input_okta" json:"InputOkta,omitempty"`
+	InputSentinelone                  *InputSentineloneModel                  `tfsdk:"input_sentinelone" json:"InputSentinelone,omitempty"`
 	InputAkamaiHec                    *InputAkamaiHecModel                    `tfsdk:"input_akamai_hec" json:"InputAkamaiHec,omitempty"`
 	InputPingIDentityPingone          *InputPingIDentityPingoneModel          `tfsdk:"input_ping_identity_pingone" json:"InputPingIdentityPingone,omitempty"`
 	InputGigamonHec                   *InputGigamonHecModel                   `tfsdk:"input_gigamon_hec" json:"InputGigamonHec,omitempty"`
@@ -299,6 +350,12 @@ type PackSourceDataSourceModel struct {
 	InputHashicorpHcpVaultDedicated   *InputHashicorpHcpVaultDedicatedModel   `tfsdk:"input_hashicorp_hcp_vault_dedicated" json:"InputHashicorpHcpVaultDedicated,omitempty"`
 	InputMimecastHec                  *InputMimecastHecModel                  `tfsdk:"input_mimecast_hec" json:"InputMimecastHec,omitempty"`
 	InputTrendMicroVisionOne          *InputTrendMicroVisionOneModel          `tfsdk:"input_trend_micro_vision_one" json:"InputTrendMicroVisionOne,omitempty"`
+	InputZoomWebhook                  *InputZoomWebhookModel                  `tfsdk:"input_zoom_webhook" json:"InputZoomWebhook,omitempty"`
+	InputNetskope                     *InputNetskopeModel                     `tfsdk:"input_netskope" json:"InputNetskope,omitempty"`
+	InputLitellm                      *InputLitellmModel                      `tfsdk:"input_litellm" json:"InputLitellm,omitempty"`
+	InputCiscoSecureFirewallSyslog    *InputCiscoSecureFirewallSyslogModel    `tfsdk:"input_cisco_secure_firewall_syslog" json:"InputCiscoSecureFirewallSyslog,omitempty"`
+	InputJuniperJunosSyslog           *InputJuniperJunosSyslogModel           `tfsdk:"input_juniper_junos_syslog" json:"InputJuniperJunosSyslog,omitempty"`
+	InputCiscoIosSyslog               *InputCiscoIosSyslogModel               `tfsdk:"input_cisco_ios_syslog" json:"InputCiscoIosSyslog,omitempty"`
 }
 
 type PackSourceAPIModel struct {
@@ -359,6 +416,17 @@ func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_model_driven_telemetry":         types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
 		"input_sqs":                            types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
 		"input_syslog":                         types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
+		"input_check_point_sase_syslog":        types.ObjectType{AttrTypes: InputCheckPointSaseSyslogModelAttrTypes()},
+		"input_cisco_asa_syslog":               types.ObjectType{AttrTypes: InputCiscoAsaSyslogModelAttrTypes()},
+		"input_cisco_meraki_syslog":            types.ObjectType{AttrTypes: InputCiscoMerakiSyslogModelAttrTypes()},
+		"input_fortigate_syslog":               types.ObjectType{AttrTypes: InputFortigateSyslogModelAttrTypes()},
+		"input_vmware_esxi_vcenter_syslog":     types.ObjectType{AttrTypes: InputVmwareEsxiVcenterSyslogModelAttrTypes()},
+		"input_netgate_pfsense_syslog":         types.ObjectType{AttrTypes: InputNetgatePfsenseSyslogModelAttrTypes()},
+		"input_watchguard_firebox_syslog":      types.ObjectType{AttrTypes: InputWatchguardFireboxSyslogModelAttrTypes()},
+		"input_infoblox_syslog":                types.ObjectType{AttrTypes: InputInfobloxSyslogModelAttrTypes()},
+		"input_ubiquiti_unifi_syslog":          types.ObjectType{AttrTypes: InputUbiquitiUnifiSyslogModelAttrTypes()},
+		"input_sonicwall_syslog":               types.ObjectType{AttrTypes: InputSonicwallSyslogModelAttrTypes()},
+		"input_sophos_xg_xgs_firewall_syslog":  types.ObjectType{AttrTypes: InputSophosXgXgsFirewallSyslogModelAttrTypes()},
 		"input_file":                           types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
 		"input_tcp":                            types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
 		"input_appscope":                       types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
@@ -380,6 +448,7 @@ func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_sysdig_hec":                     types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
 		"input_upwind_hec":                     types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
 		"input_trellix_hec":                    types.ObjectType{AttrTypes: InputTrellixHecModelAttrTypes()},
+		"input_salesforce":                     types.ObjectType{AttrTypes: InputSalesforceModelAttrTypes()},
 		"input_sailpoint_hec":                  types.ObjectType{AttrTypes: InputSailpointHecModelAttrTypes()},
 		"input_extrahop_revealx360":            types.ObjectType{AttrTypes: InputExtrahopRevealx360ModelAttrTypes()},
 		"input_aqua_security_hec":              types.ObjectType{AttrTypes: InputAquaSecurityHecModelAttrTypes()},
@@ -388,6 +457,7 @@ func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_anthropic_enterprise_analytics": types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsModelAttrTypes()},
 		"input_microsoft_copilot":              types.ObjectType{AttrTypes: InputMicrosoftCopilotModelAttrTypes()},
 		"input_okta":                           types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+		"input_sentinelone":                    types.ObjectType{AttrTypes: InputSentineloneModelAttrTypes()},
 		"input_akamai_hec":                     types.ObjectType{AttrTypes: InputAkamaiHecModelAttrTypes()},
 		"input_ping_identity_pingone":          types.ObjectType{AttrTypes: InputPingIDentityPingoneModelAttrTypes()},
 		"input_gigamon_hec":                    types.ObjectType{AttrTypes: InputGigamonHecModelAttrTypes()},
@@ -397,6 +467,12 @@ func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_hashicorp_hcp_vault_dedicated":  types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedModelAttrTypes()},
 		"input_mimecast_hec":                   types.ObjectType{AttrTypes: InputMimecastHecModelAttrTypes()},
 		"input_trend_micro_vision_one":         types.ObjectType{AttrTypes: InputTrendMicroVisionOneModelAttrTypes()},
+		"input_zoom_webhook":                   types.ObjectType{AttrTypes: InputZoomWebhookModelAttrTypes()},
+		"input_netskope":                       types.ObjectType{AttrTypes: InputNetskopeModelAttrTypes()},
+		"input_litellm":                        types.ObjectType{AttrTypes: InputLitellmModelAttrTypes()},
+		"input_cisco_secure_firewall_syslog":   types.ObjectType{AttrTypes: InputCiscoSecureFirewallSyslogModelAttrTypes()},
+		"input_juniper_junos_syslog":           types.ObjectType{AttrTypes: InputJuniperJunosSyslogModelAttrTypes()},
+		"input_cisco_ios_syslog":               types.ObjectType{AttrTypes: InputCiscoIosSyslogModelAttrTypes()},
 	}
 }
 
@@ -1138,6 +1214,105 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputCheckPointSaseSyslog != nil {
+		value, err := m.InputCheckPointSaseSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputCiscoAsaSyslog != nil {
+		value, err := m.InputCiscoAsaSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputCiscoMerakiSyslog != nil {
+		value, err := m.InputCiscoMerakiSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputFortigateSyslog != nil {
+		value, err := m.InputFortigateSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputVmwareEsxiVcenterSyslog != nil {
+		value, err := m.InputVmwareEsxiVcenterSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputNetgatePfsenseSyslog != nil {
+		value, err := m.InputNetgatePfsenseSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputWatchguardFireboxSyslog != nil {
+		value, err := m.InputWatchguardFireboxSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputInfobloxSyslog != nil {
+		value, err := m.InputInfobloxSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputUbiquitiUnifiSyslog != nil {
+		value, err := m.InputUbiquitiUnifiSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSonicwallSyslog != nil {
+		value, err := m.InputSonicwallSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSophosXgXgsFirewallSyslog != nil {
+		value, err := m.InputSophosXgXgsFirewallSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputFile != nil {
 		value, err := m.InputFile.terraformPayload()
 		if err != nil {
@@ -1327,6 +1502,15 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputSalesforce != nil {
+		value, err := m.InputSalesforce.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputSailpointHec != nil {
 		value, err := m.InputSailpointHec.terraformPayload()
 		if err != nil {
@@ -1392,6 +1576,15 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputOkta != nil {
 		value, err := m.InputOkta.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSentinelone != nil {
+		value, err := m.InputSentinelone.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1473,6 +1666,60 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputTrendMicroVisionOne != nil {
 		value, err := m.InputTrendMicroVisionOne.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputZoomWebhook != nil {
+		value, err := m.InputZoomWebhook.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputNetskope != nil {
+		value, err := m.InputNetskope.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputLitellm != nil {
+		value, err := m.InputLitellm.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputCiscoSecureFirewallSyslog != nil {
+		value, err := m.InputCiscoSecureFirewallSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputJuniperJunosSyslog != nil {
+		value, err := m.InputJuniperJunosSyslog.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputCiscoIosSyslog != nil {
+		value, err := m.InputCiscoIosSyslog.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1760,6 +2007,61 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputSyslog.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "check_point_sase_syslog":
+		m.InputCheckPointSaseSyslog = &InputCheckPointSaseSyslogModel{}
+		if err := m.InputCheckPointSaseSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "cisco_asa_syslog":
+		m.InputCiscoAsaSyslog = &InputCiscoAsaSyslogModel{}
+		if err := m.InputCiscoAsaSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "cisco_meraki_syslog":
+		m.InputCiscoMerakiSyslog = &InputCiscoMerakiSyslogModel{}
+		if err := m.InputCiscoMerakiSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "fortigate_syslog":
+		m.InputFortigateSyslog = &InputFortigateSyslogModel{}
+		if err := m.InputFortigateSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "vmware_esxi_vcenter_syslog":
+		m.InputVmwareEsxiVcenterSyslog = &InputVmwareEsxiVcenterSyslogModel{}
+		if err := m.InputVmwareEsxiVcenterSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "netgate_pfsense_syslog":
+		m.InputNetgatePfsenseSyslog = &InputNetgatePfsenseSyslogModel{}
+		if err := m.InputNetgatePfsenseSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "watchguard_firebox_syslog":
+		m.InputWatchguardFireboxSyslog = &InputWatchguardFireboxSyslogModel{}
+		if err := m.InputWatchguardFireboxSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "infoblox_syslog":
+		m.InputInfobloxSyslog = &InputInfobloxSyslogModel{}
+		if err := m.InputInfobloxSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "ubiquiti_unifi_syslog":
+		m.InputUbiquitiUnifiSyslog = &InputUbiquitiUnifiSyslogModel{}
+		if err := m.InputUbiquitiUnifiSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sonicwall_syslog":
+		m.InputSonicwallSyslog = &InputSonicwallSyslogModel{}
+		if err := m.InputSonicwallSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sophos_xg_xgs_firewall_syslog":
+		m.InputSophosXgXgsFirewallSyslog = &InputSophosXgXgsFirewallSyslogModel{}
+		if err := m.InputSophosXgXgsFirewallSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "file":
 		m.InputFile = &InputFileModel{}
 		if err := m.InputFile.unmarshalPayload(raw); err != nil {
@@ -1865,6 +2167,11 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputTrellixHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "salesforce":
+		m.InputSalesforce = &InputSalesforceModel{}
+		if err := m.InputSalesforce.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "sailpoint_hec":
 		m.InputSailpointHec = &InputSailpointHecModel{}
 		if err := m.InputSailpointHec.unmarshalPayload(raw); err != nil {
@@ -1903,6 +2210,11 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "okta":
 		m.InputOkta = &InputOktaModel{}
 		if err := m.InputOkta.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sentinelone":
+		m.InputSentinelone = &InputSentineloneModel{}
+		if err := m.InputSentinelone.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "akamai_hec":
@@ -1948,6 +2260,36 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "trend_micro_vision_one":
 		m.InputTrendMicroVisionOne = &InputTrendMicroVisionOneModel{}
 		if err := m.InputTrendMicroVisionOne.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "zoom_webhook":
+		m.InputZoomWebhook = &InputZoomWebhookModel{}
+		if err := m.InputZoomWebhook.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "netskope":
+		m.InputNetskope = &InputNetskopeModel{}
+		if err := m.InputNetskope.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "litellm":
+		m.InputLitellm = &InputLitellmModel{}
+		if err := m.InputLitellm.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "cisco_secure_firewall_syslog":
+		m.InputCiscoSecureFirewallSyslog = &InputCiscoSecureFirewallSyslogModel{}
+		if err := m.InputCiscoSecureFirewallSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "juniper_junos_syslog":
+		m.InputJuniperJunosSyslog = &InputJuniperJunosSyslogModel{}
+		if err := m.InputJuniperJunosSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "cisco_ios_syslog":
+		m.InputCiscoIosSyslog = &InputCiscoIosSyslogModel{}
+		if err := m.InputCiscoIosSyslog.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}

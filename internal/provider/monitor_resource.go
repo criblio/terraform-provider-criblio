@@ -73,6 +73,12 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Computed:    false,
 				Description: `Whether the monitor is active and evaluated.`,
 			},
+			"evaluation_interval_sec": schema.Int64Attribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Evaluation cadence in seconds. Integer multiple of 60 between 60 and 3600. Defaults to 60 when omitted.`,
+			},
 			"expr": schema.ListNestedAttribute{
 				Required:    true,
 				Optional:    false,
@@ -147,6 +153,13 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Computed:    false,
 				Description: `Identifies the external provisioner (e.g. 'terraform') that owns this monitor. When set, the monitor is read-only from the UI and non-SDK REST mutations are rejected with 403.`,
 			},
+			"mute_schedule_ids": schema.ListAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `IDs of the recurring mute schedules that suppress this monitor's notifications while any of them is active.`,
+				ElementType: types.StringType,
+			},
 			"name": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
@@ -190,7 +203,7 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 									Required:    true,
 									Optional:    false,
 									Computed:    false,
-									Description: `Aggregation operator applied to the metric series.`,
+									Description: `Aggregation function chosen in the query builder, for example sum, avg, rate or quantile. Used by the UI only.`,
 								},
 								"evaluation_window": schema.SingleNestedAttribute{
 									Required:    true,
@@ -512,10 +525,47 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Optional:    true,
 						Computed:    true,
 						Default:     stringdefault.StaticString("mad"),
-						Description: `Discriminator value.`,
+						Description: `Detector family (the outlier fit). Currently MAD — median absolute deviation from peers.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("mad"),
 						},
+					},
+					"cohort_labels": schema.ListAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Labels that group series into peer cohorts; empty means one global cohort across all series.`,
+						ElementType: types.StringType,
+					},
+					"evaluation_window_ms": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Window in milliseconds the pooled cohort median/MAD is computed over.`,
+					},
+					"min_coverage": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Percentage (1–100) of expected window points a series needs before it is graded.`,
+					},
+					"mode": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `How the peer cohort is pooled: per-instant cross-section, or pooled over the window.`,
+					},
+					"pct": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Percentage (1–100) of a series' window points that must breach before it is flagged.`,
+					},
+					"threshold_direction": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Which side flags an outlier: above the cohort spread, below it, or either.`,
 					},
 				},
 			},
@@ -562,11 +612,29 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Computed:    false,
 						Description: `Time (in seconds) a recovery must persist before the monitor clears.`,
 					},
+					"exec_error_state": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `What the monitor does when the evaluation itself fails to run: <code>error</code> (default) records the failure against each instance while holding its prior status, <code>alerting</code> treats it as breaching at the highest configured severity, <code>ok</code> treats it as recovered, and <code>keep_last</code> holds the prior status without notifying.`,
+					},
 					"fire_delay": schema.Int64Attribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
 						Description: `Time (in seconds) a breach must persist before the monitor fires.`,
+					},
+					"missing_series_evals_to_resolve": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Consecutive missed evaluations a single vanished series must be absent before it resolves to no-data (1 to 100; default 1). Does not apply when the whole rule returns no data.`,
+					},
+					"no_data_state": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `What the monitor does when its whole rule returns no data: <code>no_data</code> (default) ages the instance into no-data, <code>ok</code> treats it as recovered, <code>alerting</code> treats it as breaching at the highest configured severity, and <code>keep_last</code> holds the prior status.`,
 					},
 				},
 			},
@@ -677,6 +745,26 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 												Computed:    false,
 												Description: `Comparison operator applied to the threshold limit.`,
 											},
+											"recovery": schema.SingleNestedAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    false,
+												Description: `Optional recovery (hysteresis) bound the series must cross before this severity is released.`,
+												Attributes: map[string]schema.Attribute{
+													"limit": schema.Float64Attribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `Value the metric must cross, using <code>operator</code>, before the severity is released.`,
+													},
+													"operator": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `Comparison operator applied to the recovery limit; must oppose the firing operator.`,
+													},
+												},
+											},
 											"severity": schema.StringAttribute{
 												Required:    true,
 												Optional:    false,
@@ -739,6 +827,26 @@ func (r *MonitorResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 									Optional:    true,
 									Computed:    false,
 									Description: `Comparison operator applied to the threshold limit.`,
+								},
+								"recovery": schema.SingleNestedAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Optional recovery (hysteresis) bound the series must cross before this severity is released.`,
+									Attributes: map[string]schema.Attribute{
+										"limit": schema.Float64Attribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Value the metric must cross, using <code>operator</code>, before the severity is released.`,
+										},
+										"operator": schema.StringAttribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Comparison operator applied to the recovery limit; must oppose the firing operator.`,
+										},
+									},
 								},
 								"severity": schema.StringAttribute{
 									Required:    true,
@@ -1208,6 +1316,11 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 			state.Enabled = api.Enabled
 		}
 	}
+	if !preserveInputs || (fillMissingInputs && (state.EvaluationIntervalSec.IsNull() || state.EvaluationIntervalSec.IsUnknown())) {
+		if !api.EvaluationIntervalSec.IsNull() && !api.EvaluationIntervalSec.IsUnknown() {
+			state.EvaluationIntervalSec = api.EvaluationIntervalSec
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Expr.IsNull() || state.Expr.IsUnknown())) || (!api.Expr.IsNull() && !api.Expr.IsUnknown() && !state.Expr.IsNull() && !state.Expr.IsUnknown() && len(state.Expr.Elements()) == 0) {
 		if !api.Expr.IsNull() && !api.Expr.IsUnknown() {
 			state.Expr = api.Expr
@@ -1227,6 +1340,14 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		if !api.ManagedBy.IsNull() && !api.ManagedBy.IsUnknown() {
 			state.ManagedBy = api.ManagedBy
 		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.MuteScheduleIDs.IsNull() || state.MuteScheduleIDs.IsUnknown())) {
+		if !api.MuteScheduleIDs.IsNull() && !api.MuteScheduleIDs.IsUnknown() {
+			state.MuteScheduleIDs = api.MuteScheduleIDs
+		}
+	}
+	if elementType := state.MuteScheduleIDs.ElementType(context.Background()); elementType == nil {
+		state.MuteScheduleIDs = types.ListNull(types.StringType)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Name.IsNull() || state.Name.IsUnknown())) {
 		if !api.Name.IsNull() && !api.Name.IsUnknown() {
@@ -1368,6 +1489,39 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		} else if state.OutlierConfig.Algorithm.IsNull() || state.OutlierConfig.Algorithm.IsUnknown() {
 			state.OutlierConfig.Algorithm = types.StringNull()
 		}
+		if !api.OutlierConfig.CohortLabels.IsNull() && !api.OutlierConfig.CohortLabels.IsUnknown() {
+			state.OutlierConfig.CohortLabels = api.OutlierConfig.CohortLabels
+		} else if state.OutlierConfig.CohortLabels.IsNull() || state.OutlierConfig.CohortLabels.IsUnknown() {
+			state.OutlierConfig.CohortLabels = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutlierConfig.CohortLabels.ElementType(context.Background()); elementType == nil {
+			state.OutlierConfig.CohortLabels = types.ListNull(types.StringType)
+		}
+		if !api.OutlierConfig.EvaluationWindowMs.IsNull() && !api.OutlierConfig.EvaluationWindowMs.IsUnknown() {
+			state.OutlierConfig.EvaluationWindowMs = api.OutlierConfig.EvaluationWindowMs
+		} else if state.OutlierConfig.EvaluationWindowMs.IsNull() || state.OutlierConfig.EvaluationWindowMs.IsUnknown() {
+			state.OutlierConfig.EvaluationWindowMs = types.Float64Null()
+		}
+		if !api.OutlierConfig.MinCoverage.IsNull() && !api.OutlierConfig.MinCoverage.IsUnknown() {
+			state.OutlierConfig.MinCoverage = api.OutlierConfig.MinCoverage
+		} else if state.OutlierConfig.MinCoverage.IsNull() || state.OutlierConfig.MinCoverage.IsUnknown() {
+			state.OutlierConfig.MinCoverage = types.Float64Null()
+		}
+		if !api.OutlierConfig.Mode.IsNull() && !api.OutlierConfig.Mode.IsUnknown() {
+			state.OutlierConfig.Mode = api.OutlierConfig.Mode
+		} else if state.OutlierConfig.Mode.IsNull() || state.OutlierConfig.Mode.IsUnknown() {
+			state.OutlierConfig.Mode = types.StringNull()
+		}
+		if !api.OutlierConfig.Pct.IsNull() && !api.OutlierConfig.Pct.IsUnknown() {
+			state.OutlierConfig.Pct = api.OutlierConfig.Pct
+		} else if state.OutlierConfig.Pct.IsNull() || state.OutlierConfig.Pct.IsUnknown() {
+			state.OutlierConfig.Pct = types.Float64Null()
+		}
+		if !api.OutlierConfig.ThresholdDirection.IsNull() && !api.OutlierConfig.ThresholdDirection.IsUnknown() {
+			state.OutlierConfig.ThresholdDirection = api.OutlierConfig.ThresholdDirection
+		} else if state.OutlierConfig.ThresholdDirection.IsNull() || state.OutlierConfig.ThresholdDirection.IsUnknown() {
+			state.OutlierConfig.ThresholdDirection = types.StringNull()
+		}
 	}
 	if api.ForecastConfig != nil {
 		if state.ForecastConfig == nil {
@@ -1408,10 +1562,25 @@ func applyMonitorAPIToState(api *MonitorModel, state *MonitorModel, preserveInpu
 		} else if state.FiringCondition.ClearDelay.IsNull() || state.FiringCondition.ClearDelay.IsUnknown() {
 			state.FiringCondition.ClearDelay = types.Int64Null()
 		}
+		if !api.FiringCondition.ExecErrorState.IsNull() && !api.FiringCondition.ExecErrorState.IsUnknown() {
+			state.FiringCondition.ExecErrorState = api.FiringCondition.ExecErrorState
+		} else if state.FiringCondition.ExecErrorState.IsNull() || state.FiringCondition.ExecErrorState.IsUnknown() {
+			state.FiringCondition.ExecErrorState = types.StringNull()
+		}
 		if !api.FiringCondition.FireDelay.IsNull() && !api.FiringCondition.FireDelay.IsUnknown() {
 			state.FiringCondition.FireDelay = api.FiringCondition.FireDelay
 		} else if state.FiringCondition.FireDelay.IsNull() || state.FiringCondition.FireDelay.IsUnknown() {
 			state.FiringCondition.FireDelay = types.Int64Null()
+		}
+		if !api.FiringCondition.MissingSeriesEvalsToResolve.IsNull() && !api.FiringCondition.MissingSeriesEvalsToResolve.IsUnknown() {
+			state.FiringCondition.MissingSeriesEvalsToResolve = api.FiringCondition.MissingSeriesEvalsToResolve
+		} else if state.FiringCondition.MissingSeriesEvalsToResolve.IsNull() || state.FiringCondition.MissingSeriesEvalsToResolve.IsUnknown() {
+			state.FiringCondition.MissingSeriesEvalsToResolve = types.Int64Null()
+		}
+		if !api.FiringCondition.NoDataState.IsNull() && !api.FiringCondition.NoDataState.IsUnknown() {
+			state.FiringCondition.NoDataState = api.FiringCondition.NoDataState
+		} else if state.FiringCondition.NoDataState.IsNull() || state.FiringCondition.NoDataState.IsUnknown() {
+			state.FiringCondition.NoDataState = types.StringNull()
 		}
 	}
 	if api.FiringConditionInheritable != nil {

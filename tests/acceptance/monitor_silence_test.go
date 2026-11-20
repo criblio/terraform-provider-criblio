@@ -40,6 +40,5 @@ resource "criblio_monitor_silence" "test" {
  duration_type = "relative"
  duration_value = 1
  duration_unit = "hours"
- tags = jsonencode({ host = ["worker-01", "worker-02"] })
 }`, id, name, begins, begins+int64(time.Hour/time.Millisecond)) + monitoringDataSources("criblio_monitor_silence", "criblio_monitor_silences")
 }

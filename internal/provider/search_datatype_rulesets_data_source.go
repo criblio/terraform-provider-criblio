@@ -46,7 +46,7 @@ func (d *SearchDatatypeRulesetsDataSource) Schema(_ context.Context, _ datasourc
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `Ruleset identifier.`,
+							Description: `Identifier of the fixed slot this ruleset occupies.`,
 						},
 						"rules": schema.ListNestedAttribute{
 							Computed:    true,

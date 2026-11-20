@@ -18,6 +18,7 @@ var _ = jsontypes.NormalizedType{}
 
 type SearchSavedQueryModel struct {
 	AppID              types.String  `tfsdk:"app_id" json:"appId,omitempty"`
+	AppOwner           types.Object  `tfsdk:"app_owner" json:"appOwner,omitempty"`
 	ChartConfig        types.Object  `tfsdk:"chart_config" json:"chartConfig,omitempty"`
 	Description        types.String  `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String  `tfsdk:"display_username" json:"displayUsername,omitempty"`
@@ -40,6 +41,7 @@ type SearchSavedQueryModel struct {
 
 type SearchSavedQueryResourceModel struct {
 	AppID              types.String   `tfsdk:"app_id" json:"appId,omitempty"`
+	AppOwner           types.Object   `tfsdk:"app_owner" json:"appOwner,omitempty"`
 	ChartConfig        types.Object   `tfsdk:"chart_config" json:"chartConfig,omitempty"`
 	Description        types.String   `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String   `tfsdk:"display_username" json:"displayUsername,omitempty"`
@@ -62,6 +64,7 @@ type SearchSavedQueryResourceModel struct {
 
 type SearchSavedQueryDataSourceModel struct {
 	AppID              types.String   `tfsdk:"app_id" json:"appId,omitempty"`
+	AppOwner           types.Object   `tfsdk:"app_owner" json:"appOwner,omitempty"`
 	ChartConfig        types.Object   `tfsdk:"chart_config" json:"chartConfig,omitempty"`
 	Description        types.String   `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String   `tfsdk:"display_username" json:"displayUsername,omitempty"`
@@ -84,6 +87,7 @@ type SearchSavedQueryDataSourceModel struct {
 
 type SearchSavedQueryAPIModel struct {
 	AppID              *string           `json:"appId,omitempty"`
+	AppOwner           any               `json:"appOwner,omitempty"`
 	ChartConfig        any               `json:"chartConfig,omitempty"`
 	Description        *string           `json:"description,omitempty"`
 	DisplayUsername    *string           `json:"displayUsername,omitempty"`
@@ -102,6 +106,23 @@ type SearchSavedQueryAPIModel struct {
 	TableConfig        map[string]string `json:"tableConfig,omitempty"`
 	Timezone           *string           `json:"timezone,omitempty"`
 	User               *string           `json:"user,omitempty"`
+}
+
+type SearchSavedQueryAppOwnerModel struct {
+	AppID          types.String `tfsdk:"app_id" json:"appId,omitempty"`
+	InstallationID types.String `tfsdk:"installation_id" json:"installationId,omitempty"`
+}
+
+type SearchSavedQueryAppOwnerAPIModel struct {
+	AppID          *string `json:"appId,omitempty"`
+	InstallationID *string `json:"installationId,omitempty"`
+}
+
+func SearchSavedQueryAppOwnerAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"app_id":          types.StringType,
+		"installation_id": types.StringType,
+	}
 }
 
 type SearchSavedQueryChartConfigModel struct {
@@ -125,6 +146,7 @@ type SearchSavedQueryChartConfigModel struct {
 	Style                        types.Bool   `tfsdk:"style" json:"style,omitempty"`
 	Suffix                       types.String `tfsdk:"suffix" json:"suffix,omitempty"`
 	Type                         types.String `tfsdk:"type" json:"type,omitempty"`
+	Visualization                types.Object `tfsdk:"visualization" json:"visualization,omitempty"`
 	XAxis                        types.Object `tfsdk:"x_axis" json:"xAxis,omitempty"`
 	YAxis                        types.Object `tfsdk:"y_axis" json:"yAxis,omitempty"`
 }
@@ -150,6 +172,7 @@ type SearchSavedQueryChartConfigAPIModel struct {
 	Style                        *bool             `json:"style,omitempty"`
 	Suffix                       *string           `json:"suffix,omitempty"`
 	Type                         *string           `json:"type,omitempty"`
+	Visualization                any               `json:"visualization,omitempty"`
 	XAxis                        any               `json:"xAxis,omitempty"`
 	YAxis                        any               `json:"yAxis,omitempty"`
 }
@@ -176,6 +199,7 @@ func SearchSavedQueryChartConfigAttrTypes() map[string]attr.Type {
 		"style":                            types.BoolType,
 		"suffix":                           types.StringType,
 		"type":                             types.StringType,
+		"visualization":                    types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationAttrTypes()},
 		"x_axis":                           types.ObjectType{AttrTypes: SearchSavedQueryChartConfigXAxisAttrTypes()},
 		"y_axis":                           types.ObjectType{AttrTypes: SearchSavedQueryChartConfigYAxisAttrTypes()},
 	}
@@ -427,6 +451,100 @@ func SearchSavedQueryChartConfigSeriesAreaStyleAttrTypes() map[string]attr.Type 
 		"shadow_color":    types.StringType,
 		"shadow_offset_x": types.Int64Type,
 		"shadow_offset_y": types.Int64Type,
+	}
+}
+
+type SearchSavedQueryChartConfigVisualizationModel struct {
+	Family        types.String `tfsdk:"family" json:"family,omitempty"`
+	Version       types.String `tfsdk:"version" json:"version,omitempty"`
+	FieldsConfig  types.Object `tfsdk:"fields_config" json:"fieldsConfig,omitempty"`
+	DisplayConfig types.Map    `tfsdk:"display_config" json:"displayConfig,omitempty"`
+	LegendConfig  types.Object `tfsdk:"legend_config" json:"legendConfig,omitempty"`
+	TooltipConfig types.Object `tfsdk:"tooltip_config" json:"tooltipConfig,omitempty"`
+}
+
+type SearchSavedQueryChartConfigVisualizationAPIModel struct {
+	Family        *string           `json:"family,omitempty"`
+	Version       *string           `json:"version,omitempty"`
+	FieldsConfig  any               `json:"fieldsConfig,omitempty"`
+	DisplayConfig map[string]string `json:"displayConfig,omitempty"`
+	LegendConfig  any               `json:"legendConfig,omitempty"`
+	TooltipConfig any               `json:"tooltipConfig,omitempty"`
+}
+
+func SearchSavedQueryChartConfigVisualizationAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"family":         types.StringType,
+		"version":        types.StringType,
+		"fields_config":  types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationFieldsConfigAttrTypes()},
+		"display_config": types.MapType{ElemType: types.StringType},
+		"legend_config":  types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationLegendConfigAttrTypes()},
+		"tooltip_config": types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationTooltipConfigAttrTypes()},
+	}
+}
+
+type SearchSavedQueryChartConfigVisualizationFieldsConfigModel struct {
+	Fields types.List `tfsdk:"fields" json:"fields,omitempty"`
+}
+
+type SearchSavedQueryChartConfigVisualizationFieldsConfigAPIModel struct {
+	Fields any `json:"fields,omitempty"`
+}
+
+func SearchSavedQueryChartConfigVisualizationFieldsConfigAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"fields": types.ListType{ElemType: types.ObjectType{AttrTypes: SearchSavedQueryChartConfigVisualizationFieldsConfigFieldsAttrTypes()}},
+	}
+}
+
+type SearchSavedQueryChartConfigVisualizationFieldsConfigFieldsModel struct {
+	Name types.String `tfsdk:"name" json:"name,omitempty"`
+	Type types.String `tfsdk:"type" json:"type,omitempty"`
+}
+
+type SearchSavedQueryChartConfigVisualizationFieldsConfigFieldsAPIModel struct {
+	Name *string `json:"name,omitempty"`
+	Type *string `json:"type,omitempty"`
+}
+
+func SearchSavedQueryChartConfigVisualizationFieldsConfigFieldsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name": types.StringType,
+		"type": types.StringType,
+	}
+}
+
+type SearchSavedQueryChartConfigVisualizationLegendConfigModel struct {
+	Hidden   types.Bool   `tfsdk:"hidden" json:"hidden,omitempty"`
+	Position types.String `tfsdk:"position" json:"position,omitempty"`
+}
+
+type SearchSavedQueryChartConfigVisualizationLegendConfigAPIModel struct {
+	Hidden   *bool   `json:"hidden,omitempty"`
+	Position *string `json:"position,omitempty"`
+}
+
+func SearchSavedQueryChartConfigVisualizationLegendConfigAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"hidden":   types.BoolType,
+		"position": types.StringType,
+	}
+}
+
+type SearchSavedQueryChartConfigVisualizationTooltipConfigModel struct {
+	Hidden           types.Bool `tfsdk:"hidden" json:"hidden,omitempty"`
+	AdditionalFields types.List `tfsdk:"additional_fields" json:"additionalFields,omitempty"`
+}
+
+type SearchSavedQueryChartConfigVisualizationTooltipConfigAPIModel struct {
+	Hidden           *bool    `json:"hidden,omitempty"`
+	AdditionalFields []string `json:"additionalFields,omitempty"`
+}
+
+func SearchSavedQueryChartConfigVisualizationTooltipConfigAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"hidden":            types.BoolType,
+		"additional_fields": types.ListType{ElemType: types.StringType},
 	}
 }
 
@@ -813,6 +931,13 @@ func (m SearchSavedQueryModel) MarshalJSON() ([]byte, error) {
 		}
 		output["appId"] = value
 	}
+	if !m.AppOwner.IsNull() && !m.AppOwner.IsUnknown() {
+		value, err := SearchSavedQueryTerraformValueToJSON(m.AppOwner)
+		if err != nil {
+			return nil, fmt.Errorf("convert app_owner to API value: %v", err)
+		}
+		output["appOwner"] = value
+	}
 	if !m.ChartConfig.IsNull() && !m.ChartConfig.IsUnknown() {
 		value, err := SearchSavedQueryTerraformValueToJSON(m.ChartConfig)
 		if err != nil {
@@ -909,6 +1034,15 @@ func (m *SearchSavedQueryModel) UnmarshalJSON(data []byte) error {
 		m.AppID = types.StringValue(*input.AppID)
 	} else {
 		m.AppID = types.StringNull()
+	}
+	if input.AppOwner != nil {
+		value, err := SearchSavedQueryAPIValueToTerraformValue(input.AppOwner, types.ObjectType{AttrTypes: SearchSavedQueryAppOwnerAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert appOwner from API value: %v", err)
+		}
+		m.AppOwner = value.(types.Object)
+	} else {
+		m.AppOwner = types.ObjectNull(SearchSavedQueryAppOwnerAttrTypes())
 	}
 	if input.ChartConfig != nil {
 		value, err := SearchSavedQueryAPIValueToTerraformValue(input.ChartConfig, types.ObjectType{AttrTypes: SearchSavedQueryChartConfigAttrTypes()})

@@ -42,7 +42,7 @@ func TestMonitoringResourceExport(t *testing.T) {
 	}{
 		{"criblio_monitor_shared_config", `{"id":"shared","config":{"priority":{"value":"P3"}},"fingerprint":"hash"}`, &provider.MonitorSharedConfigModel{}, []string{"fingerprint"}},
 		{"criblio_monitor_profile", `{"id":"profile","name":"Platform","configIds":["shared"]}`, &provider.MonitorProfileModel{}, nil},
-		{"criblio_monitor_silence", `{"id":"silence","monitor_id":"cpu","begins_at":1893456000000,"expires_at":1893542400000,"tags":{"host":["a","b"]},"created_at":123456,"created_by":"api-user"}`, &provider.MonitorSilenceModel{}, []string{"created_at", "created_by"}},
+		{"criblio_monitor_silence", `{"id":"silence","monitor_id":"cpu","begins_at":1893456000000,"expires_at":1893542400000,"created_at":123456,"created_by":"api-user"}`, &provider.MonitorSilenceModel{}, []string{"created_at", "created_by"}},
 		{"criblio_notification_policy", `{"id":"policy","order":10,"conditions":[[{"key":"count","operator":"=","value":3}]],"templateTargetPairs":[{"targetId":"target","templateId":"template"}]}`, &provider.NotificationPolicyModel{}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -59,7 +59,9 @@ func TestMonitoringResourceExport(t *testing.T) {
 			case "criblio_monitor_profile":
 				require.Equal(t, "shared", attrs["config_ids"].List[0].String)
 			case "criblio_monitor_silence":
-				require.Contains(t, attrs["tags"].String, `"b"`)
+				require.NotContains(t, attrs, "tags")
+				require.NotContains(t, attrs, "alert_instance_id")
+				require.Equal(t, "cpu", attrs["monitor_id"].String)
 			case "criblio_notification_policy":
 				require.Contains(t, attrs["conditions"].String, `"value":3`)
 			}

@@ -17,67 +17,59 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type MonitorSilenceModel struct {
-	AlertInstanceID types.String         `tfsdk:"alert_instance_id" json:"alert_instance_id,omitempty"`
-	BeginsAt        types.Int64          `tfsdk:"begins_at" json:"begins_at,omitempty"`
-	CreatedAt       types.Int64          `tfsdk:"created_at" json:"created_at,omitempty"`
-	CreatedBy       types.String         `tfsdk:"created_by" json:"created_by,omitempty"`
-	Description     types.String         `tfsdk:"description" json:"description,omitempty"`
-	DurationType    types.String         `tfsdk:"duration_type" json:"duration_type,omitempty"`
-	DurationUnit    types.String         `tfsdk:"duration_unit" json:"duration_unit,omitempty"`
-	DurationValue   types.Int64          `tfsdk:"duration_value" json:"duration_value,omitempty"`
-	ExpiresAt       types.Int64          `tfsdk:"expires_at" json:"expires_at,omitempty"`
-	ID              types.String         `tfsdk:"id" json:"id,omitempty"`
-	MonitorID       types.String         `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
-	Name            types.String         `tfsdk:"name" json:"name,omitempty"`
-	Tags            jsontypes.Normalized `tfsdk:"tags" json:"tags,omitempty"`
+	BeginsAt      types.Int64  `tfsdk:"begins_at" json:"begins_at,omitempty"`
+	CreatedAt     types.Int64  `tfsdk:"created_at" json:"created_at,omitempty"`
+	CreatedBy     types.String `tfsdk:"created_by" json:"created_by,omitempty"`
+	Description   types.String `tfsdk:"description" json:"description,omitempty"`
+	DurationType  types.String `tfsdk:"duration_type" json:"duration_type,omitempty"`
+	DurationUnit  types.String `tfsdk:"duration_unit" json:"duration_unit,omitempty"`
+	DurationValue types.Int64  `tfsdk:"duration_value" json:"duration_value,omitempty"`
+	ExpiresAt     types.Int64  `tfsdk:"expires_at" json:"expires_at,omitempty"`
+	ID            types.String `tfsdk:"id" json:"id,omitempty"`
+	MonitorID     types.String `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
+	Name          types.String `tfsdk:"name" json:"name,omitempty"`
 }
 
 type MonitorSilenceResourceModel struct {
-	AlertInstanceID types.String         `tfsdk:"alert_instance_id" json:"alert_instance_id,omitempty"`
-	BeginsAt        types.Int64          `tfsdk:"begins_at" json:"begins_at,omitempty"`
-	CreatedAt       types.Int64          `tfsdk:"created_at" json:"created_at,omitempty"`
-	CreatedBy       types.String         `tfsdk:"created_by" json:"created_by,omitempty"`
-	Description     types.String         `tfsdk:"description" json:"description,omitempty"`
-	DurationType    types.String         `tfsdk:"duration_type" json:"duration_type,omitempty"`
-	DurationUnit    types.String         `tfsdk:"duration_unit" json:"duration_unit,omitempty"`
-	DurationValue   types.Int64          `tfsdk:"duration_value" json:"duration_value,omitempty"`
-	ExpiresAt       types.Int64          `tfsdk:"expires_at" json:"expires_at,omitempty"`
-	ID              types.String         `tfsdk:"id" json:"id,omitempty"`
-	MonitorID       types.String         `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
-	Name            types.String         `tfsdk:"name" json:"name,omitempty"`
-	Tags            jsontypes.Normalized `tfsdk:"tags" json:"tags,omitempty"`
+	BeginsAt      types.Int64  `tfsdk:"begins_at" json:"begins_at,omitempty"`
+	CreatedAt     types.Int64  `tfsdk:"created_at" json:"created_at,omitempty"`
+	CreatedBy     types.String `tfsdk:"created_by" json:"created_by,omitempty"`
+	Description   types.String `tfsdk:"description" json:"description,omitempty"`
+	DurationType  types.String `tfsdk:"duration_type" json:"duration_type,omitempty"`
+	DurationUnit  types.String `tfsdk:"duration_unit" json:"duration_unit,omitempty"`
+	DurationValue types.Int64  `tfsdk:"duration_value" json:"duration_value,omitempty"`
+	ExpiresAt     types.Int64  `tfsdk:"expires_at" json:"expires_at,omitempty"`
+	ID            types.String `tfsdk:"id" json:"id,omitempty"`
+	MonitorID     types.String `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
+	Name          types.String `tfsdk:"name" json:"name,omitempty"`
 }
 
 type MonitorSilenceDataSourceModel struct {
-	AlertInstanceID types.String         `tfsdk:"alert_instance_id" json:"alert_instance_id,omitempty"`
-	BeginsAt        types.Int64          `tfsdk:"begins_at" json:"begins_at,omitempty"`
-	CreatedAt       types.Int64          `tfsdk:"created_at" json:"created_at,omitempty"`
-	CreatedBy       types.String         `tfsdk:"created_by" json:"created_by,omitempty"`
-	Description     types.String         `tfsdk:"description" json:"description,omitempty"`
-	DurationType    types.String         `tfsdk:"duration_type" json:"duration_type,omitempty"`
-	DurationUnit    types.String         `tfsdk:"duration_unit" json:"duration_unit,omitempty"`
-	DurationValue   types.Int64          `tfsdk:"duration_value" json:"duration_value,omitempty"`
-	ExpiresAt       types.Int64          `tfsdk:"expires_at" json:"expires_at,omitempty"`
-	ID              types.String         `tfsdk:"id" json:"id,omitempty"`
-	MonitorID       types.String         `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
-	Name            types.String         `tfsdk:"name" json:"name,omitempty"`
-	Tags            jsontypes.Normalized `tfsdk:"tags" json:"tags,omitempty"`
+	BeginsAt      types.Int64  `tfsdk:"begins_at" json:"begins_at,omitempty"`
+	CreatedAt     types.Int64  `tfsdk:"created_at" json:"created_at,omitempty"`
+	CreatedBy     types.String `tfsdk:"created_by" json:"created_by,omitempty"`
+	Description   types.String `tfsdk:"description" json:"description,omitempty"`
+	DurationType  types.String `tfsdk:"duration_type" json:"duration_type,omitempty"`
+	DurationUnit  types.String `tfsdk:"duration_unit" json:"duration_unit,omitempty"`
+	DurationValue types.Int64  `tfsdk:"duration_value" json:"duration_value,omitempty"`
+	ExpiresAt     types.Int64  `tfsdk:"expires_at" json:"expires_at,omitempty"`
+	ID            types.String `tfsdk:"id" json:"id,omitempty"`
+	MonitorID     types.String `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
+	Name          types.String `tfsdk:"name" json:"name,omitempty"`
 }
 
 type MonitorSilenceAPIModel struct {
-	AlertInstanceID *string `json:"alert_instance_id,omitempty"`
-	BeginsAt        *int64  `json:"begins_at,omitempty"`
-	CreatedAt       *int64  `json:"created_at,omitempty"`
-	CreatedBy       *string `json:"created_by,omitempty"`
-	Description     *string `json:"description,omitempty"`
-	DurationType    *string `json:"duration_type,omitempty"`
-	DurationUnit    *string `json:"duration_unit,omitempty"`
-	DurationValue   *int64  `json:"duration_value,omitempty"`
-	ExpiresAt       *int64  `json:"expires_at,omitempty"`
-	ID              *string `json:"id,omitempty"`
-	MonitorID       *string `json:"monitor_id,omitempty"`
-	Name            *string `json:"name,omitempty"`
-	Tags            any     `json:"tags,omitempty"`
+	BeginsAt      *int64  `json:"begins_at,omitempty"`
+	CreatedAt     *int64  `json:"created_at,omitempty"`
+	CreatedBy     *string `json:"created_by,omitempty"`
+	Description   *string `json:"description,omitempty"`
+	DurationType  *string `json:"duration_type,omitempty"`
+	DurationUnit  *string `json:"duration_unit,omitempty"`
+	DurationValue *int64  `json:"duration_value,omitempty"`
+	ExpiresAt     *int64  `json:"expires_at,omitempty"`
+	ID            *string `json:"id,omitempty"`
+	MonitorID     *string `json:"monitor_id,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
 func MonitorSilenceTerraformValueToJSON(value attr.Value) (any, error) {
@@ -91,16 +83,6 @@ func MonitorSilenceTerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
-	case jsontypes.Normalized:
-		raw := typed.ValueString()
-		if raw == "" {
-			return map[string]any{}, nil
-		}
-		var output any
-		if err := json.Unmarshal([]byte(raw), &output); err != nil {
-			return nil, err
-		}
-		return output, nil
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:
@@ -128,16 +110,9 @@ func MonitorSilenceTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		attributeTypes := typed.AttributeTypes(context.Background())
 		attributes := typed.Attributes()
 		for key, attribute := range attributes {
-			var value any
-			var err error
-			if attributeType, ok := attributeTypes[key]; ok && attributeType.Equal(jsontypes.NormalizedType{}) {
-				value, err = MonitorSilenceObjectJSONFromTerraformValue(attribute)
-			} else {
-				value, err = MonitorSilenceTerraformValueToJSON(attribute)
-			}
+			value, err := MonitorSilenceTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
 			}
@@ -154,24 +129,6 @@ func MonitorSilenceTerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, fmt.Errorf("unsupported Terraform value %T", value)
 	}
 }
-func MonitorSilenceObjectJSONFromTerraformValue(value attr.Value) (any, error) {
-	if value.IsNull() || value.IsUnknown() {
-		return nil, nil
-	}
-	typed, ok := value.(interface{ ValueString() string })
-	if !ok {
-		return nil, fmt.Errorf("expected normalized JSON string, got %T", value)
-	}
-	raw := typed.ValueString()
-	if raw == "" {
-		return map[string]any{}, nil
-	}
-	var output any
-	if err := json.Unmarshal([]byte(raw), &output); err != nil {
-		return nil, err
-	}
-	return output, nil
-}
 
 func MonitorSilenceTerraformNameToAPIName(name string) string {
 	prefix := ""
@@ -180,8 +137,6 @@ func MonitorSilenceTerraformNameToAPIName(name string) string {
 		name = strings.TrimPrefix(name, prefix)
 	}
 	switch name {
-	case "alert_instance_id":
-		return prefix + "alert_instance_id"
 	case "begins_at":
 		return prefix + "begins_at"
 	case "created_at":
@@ -247,16 +202,6 @@ func MonitorSilenceAPIValueToTerraformValue(value any, typ attr.Type) (attr.Valu
 			return nil, fmt.Errorf("expected string, got %T", value)
 		}
 		return types.StringValue(typed), nil
-	}
-	if typ.Equal(jsontypes.NormalizedType{}) {
-		if typed, ok := value.(string); ok {
-			return jsontypes.NewNormalizedValue(typed), nil
-		}
-		raw, err := json.Marshal(value)
-		if err != nil {
-			return nil, err
-		}
-		return jsontypes.NewNormalizedValue(string(raw)), nil
 	}
 	switch typed := typ.(type) {
 	case types.ListType:
@@ -344,9 +289,6 @@ func MonitorSilenceTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
 	}
-	if typ.Equal(jsontypes.NormalizedType{}) {
-		return jsontypes.NewNormalizedNull(), nil
-	}
 	switch typed := typ.(type) {
 	case types.ListType:
 		return types.ListNull(typed.ElemType), nil
@@ -361,13 +303,6 @@ func MonitorSilenceTerraformNullValue(typ attr.Type) (attr.Value, error) {
 
 func (m MonitorSilenceModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
-	if !m.AlertInstanceID.IsNull() && !m.AlertInstanceID.IsUnknown() {
-		value, err := MonitorSilenceTerraformValueToJSON(m.AlertInstanceID)
-		if err != nil {
-			return nil, fmt.Errorf("convert alert_instance_id to API value: %v", err)
-		}
-		output["alert_instance_id"] = value
-	}
 	if !m.BeginsAt.IsNull() && !m.BeginsAt.IsUnknown() {
 		value, err := MonitorSilenceTerraformValueToJSON(m.BeginsAt)
 		if err != nil {
@@ -445,13 +380,6 @@ func (m MonitorSilenceModel) MarshalJSON() ([]byte, error) {
 		}
 		output["name"] = value
 	}
-	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
-		value, err := MonitorSilenceObjectJSONFromTerraformValue(m.Tags)
-		if err != nil {
-			return nil, fmt.Errorf("convert tags to API value: %v", err)
-		}
-		output["tags"] = value
-	}
 	return json.Marshal(output)
 }
 
@@ -459,11 +387,6 @@ func (m *MonitorSilenceModel) UnmarshalJSON(data []byte) error {
 	var input MonitorSilenceAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
-	}
-	if input.AlertInstanceID != nil {
-		m.AlertInstanceID = types.StringValue(*input.AlertInstanceID)
-	} else {
-		m.AlertInstanceID = types.StringNull()
 	}
 	if input.BeginsAt != nil {
 		m.BeginsAt = types.Int64Value(*input.BeginsAt)
@@ -519,15 +442,6 @@ func (m *MonitorSilenceModel) UnmarshalJSON(data []byte) error {
 		m.Name = types.StringValue(*input.Name)
 	} else {
 		m.Name = types.StringNull()
-	}
-	if input.Tags != nil {
-		raw, err := json.Marshal(input.Tags)
-		if err != nil {
-			return fmt.Errorf("convert tags from API value: %v", err)
-		}
-		m.Tags = jsontypes.NewNormalizedValue(string(raw))
-	} else {
-		m.Tags = jsontypes.NewNormalizedNull()
 	}
 	return nil
 }

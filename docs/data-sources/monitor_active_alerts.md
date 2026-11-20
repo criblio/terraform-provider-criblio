@@ -23,7 +23,7 @@ data "criblio_monitor_active_alerts" "example" {
 
 ### Required
 
-- `engine_id` (String) The Local Search engine id.
+- `engine_id` (String) The <code>id</code> of the lakehouse engine that contains the metrics dataset.
 - `dataset_id` (String) The metrics dataset id within the engine.
 
 ### Read-Only
@@ -36,6 +36,7 @@ data "criblio_monitor_active_alerts" "example" {
 Read-Only:
 
 - `fingerprint` (String) Stable identity of a single monitor instance — one distinct label-set of the monitor's query.
+- `health` (String) Health of the evaluation, independent of breach severity: <code>ok</code> when the instance evaluated normally, <code>no_data</code> when the whole Monitor matched no series, <code>missing_series</code> when this instance's series disappeared while others remained, or <code>error</code> when the evaluation failed to run.
 - `monitor_id` (String) The monitor this instance belongs to.
 - `pending_status` (String) In-flight target status not yet confirmed by the fire/clear delay; equals <code>status</code> once the transition is confirmed.
 - `status` (String) Confirmed evaluation status with fire/clear delays already applied. One of <code>critical</code>, <code>warning</code>, <code>info</code>, <code>ok</code>, <code>no_data</code>.

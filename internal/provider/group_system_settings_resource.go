@@ -619,6 +619,12 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						Computed:    false,
 						Description: `If <code>true</code>, automatically restart Worker Processes that become unresponsive. Otherwise, <code>false</code>.`,
 					},
+					"scheduling_policy": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Consult Cribl Support before adjusting this advanced setting. How the API process distributes inbound data-plane connections to Worker Processes: <code>auto</code> lets Cribl choose the policy for the platform, <code>rr</code> round-robins accepted sockets from the API process, and <code>none</code> lets Worker Processes accept directly from the shared listen socket. Applies to Stream Worker Nodes and single-instance deployments only; all other node types always use <code>auto</code>. Takes effect after a restart.`,
+					},
 					"startup_max_conns": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,

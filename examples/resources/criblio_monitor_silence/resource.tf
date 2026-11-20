@@ -50,7 +50,7 @@ resource "criblio_monitor_silence" "example" {
   id          = "maintenance-window"
   monitor_id  = criblio_monitor.cpu_high.id
   name        = "Maintenance window"
-  description = "Mute host alerts during maintenance"
+  description = "Mute all alerts for this monitor during maintenance"
   # Set a fixed current window before applying; values are Unix milliseconds.
   # Future windows can be excluded by the backend list endpoint.
   begins_at      = 1793325780159 # 2026-10-30 02:03:00.159 UTC.
@@ -58,7 +58,4 @@ resource "criblio_monitor_silence" "example" {
   duration_type  = "relative"
   duration_value = 1
   duration_unit  = "hours"
-  tags = jsonencode({
-    host = ["worker-01", "worker-02"]
-  })
 }

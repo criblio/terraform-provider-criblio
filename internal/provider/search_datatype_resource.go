@@ -79,6 +79,12 @@ func (r *SearchDatatypeResource) Schema(_ context.Context, _ resource.SchemaRequ
 							Computed:    true,
 							Description: `Name of the additional extraction.`,
 						},
+						"prefix": schema.StringAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `Optional prefix prepended to all extracted field names. If the value does not end with an underscore, one is appended when the Datatype is saved.`,
+						},
 						"source_field": schema.StringAttribute{
 							Required:    false,
 							Optional:    true,

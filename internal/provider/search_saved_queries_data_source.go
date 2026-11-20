@@ -48,6 +48,19 @@ func (d *SearchSavedQueriesDataSource) Schema(_ context.Context, _ datasource.Sc
 							Computed:    true,
 							Description: `App identifier used to attribute search/platform usage to a driving app.`,
 						},
+						"app_owner": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"app_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Identifier of the app that owns the Search resource.`,
+								},
+								"installation_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Identifier of the app installation that established ownership.`,
+								},
+							},
+						},
 						"chart_config": schema.SingleNestedAttribute{
 							Computed:    true,
 							Description: `Chart configuration for scheduled or Dashboard-backed runs.`,
@@ -361,6 +374,76 @@ func (d *SearchSavedQueriesDataSource) Schema(_ context.Context, _ datasource.Sc
 									Computed:    true,
 									Description: `Default chart type for all series.`,
 								},
+								"visualization": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Registry-native visualization configuration.`,
+									Attributes: map[string]schema.Attribute{
+										"family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Family of the registered visualization that persisted this configuration.`,
+										},
+										"version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Version of the visualization configuration contract this object was written against.`,
+										},
+										"fields_config": schema.SingleNestedAttribute{
+											Computed:    true,
+											Description: `Ordered field metadata the visualization binds and formats.`,
+											Attributes: map[string]schema.Attribute{
+												"fields": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Fields`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed:    true,
+																Description: `Name of the result field this entry configures.`,
+															},
+															"type": schema.StringAttribute{
+																Computed:    true,
+																Description: `Value type the field formatter reads.`,
+															},
+														},
+													},
+												},
+											},
+										},
+										"display_config": schema.MapAttribute{
+											Computed:    true,
+											Description: `Display options the visualization draws with, such as its colors.`,
+											ElementType: types.StringType,
+										},
+										"legend_config": schema.SingleNestedAttribute{
+											Computed:    true,
+											Description: `Legend configuration`,
+											Attributes: map[string]schema.Attribute{
+												"hidden": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Hide legend`,
+												},
+												"position": schema.StringAttribute{
+													Computed:    true,
+													Description: `Legend position`,
+												},
+											},
+										},
+										"tooltip_config": schema.SingleNestedAttribute{
+											Computed:    true,
+											Description: `Tooltip configuration`,
+											Attributes: map[string]schema.Attribute{
+												"hidden": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Hide tooltip`,
+												},
+												"additional_fields": schema.ListAttribute{
+													Computed:    true,
+													Description: `Result fields shown in the tooltip beyond the ones the visualization binds.`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+									},
+								},
 								"x_axis": schema.SingleNestedAttribute{
 									Computed:    true,
 									Description: `X-axis configuration.`,
@@ -576,7 +659,7 @@ func (d *SearchSavedQueriesDataSource) Schema(_ context.Context, _ datasource.Sc
 						},
 						"user": schema.StringAttribute{
 							Computed:    true,
-							Description: `Identifier for the user who created the saved search. Scheduled runs execute as the specified user.`,
+							Description: `Creator identifier. Member-owned scheduled runs execute as this user; app-owned runs use .`,
 						},
 					},
 				},
@@ -615,7 +698,7 @@ func (d *SearchSavedQueriesDataSource) Read(ctx context.Context, req datasource.
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(SearchSavedQueriesItemAttrTypes(), map[string]attr.Value{"app_id": item.AppID, "chart_config": item.ChartConfig, "description": item.Description, "display_username": item.DisplayUsername, "earliest": item.Earliest, "id": item.ID, "is_private": item.IsPrivate, "is_system": item.IsSystem, "latest": item.Latest, "lib": item.Lib, "name": item.Name, "query": item.Query, "resolved_dataset_ids": item.ResolvedDatasetIDs, "sample_rate": item.SampleRate, "schedule": item.Schedule, "search_job_source": item.SearchJobSource, "table_config": item.TableConfig, "timezone": item.Timezone, "user": item.User}))
+			values = append(values, types.ObjectValueMust(SearchSavedQueriesItemAttrTypes(), map[string]attr.Value{"app_id": item.AppID, "app_owner": item.AppOwner, "chart_config": item.ChartConfig, "description": item.Description, "display_username": item.DisplayUsername, "earliest": item.Earliest, "id": item.ID, "is_private": item.IsPrivate, "is_system": item.IsSystem, "latest": item.Latest, "lib": item.Lib, "name": item.Name, "query": item.Query, "resolved_dataset_ids": item.ResolvedDatasetIDs, "sample_rate": item.SampleRate, "schedule": item.Schedule, "search_job_source": item.SearchJobSource, "table_config": item.TableConfig, "timezone": item.Timezone, "user": item.User}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: SearchSavedQueriesItemAttrTypes()}, values)
@@ -625,6 +708,7 @@ func (d *SearchSavedQueriesDataSource) Read(ctx context.Context, req datasource.
 func SearchSavedQueriesItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"app_id":               types.StringType,
+		"app_owner":            types.ObjectType{AttrTypes: SearchSavedQueryAppOwnerAttrTypes()},
 		"chart_config":         types.ObjectType{AttrTypes: SearchSavedQueryChartConfigAttrTypes()},
 		"description":          types.StringType,
 		"display_username":     types.StringType,

@@ -28,16 +28,14 @@ data "criblio_monitor_silences" "example" {
 
 Read-Only:
 
-- `alert_instance_id` (String) Optional fingerprint of a specific alert instance to mute. If omitted, all instances for the monitor are muted.
-- `begins_at` (Integer) Unix timestamp in milliseconds when the alert silence begins.
-- `created_at` (Integer) Unix timestamp in milliseconds when the alert silence was created.
-- `created_by` (String) Username or identifier of who created this alert silence.
-- `description` (String) Optional user-friendly description of the alert silence.
-- `duration_type` (String) UI state that records which duration picker mode was used. UI-only field for edit mode round-tripping. API consumers should ignore.
-- `duration_unit` (String) UI state that records the unit for a relative duration. UI-only field for edit mode round-tripping. API consumers should ignore.
-- `duration_value` (Integer) UI state that records the numeric value for a relative duration, such as <code>2</code> for two hours.
-- `expires_at` (Integer) Unix timestamp in milliseconds when the alert silence expires.
-- `id` (String) Unique identifier for the alert silence.
-- `monitor_id` (String) The <code>id</code> of the alert Monitor that this silence applies to.
-- `name` (String) Optional display name for the alert silence.
-- `tags` (String) Optional tag matchers for selective instance muting. Keys are label names, values are arrays of allowed values. Logic: AND across keys, OR within each key's values. Only instances whose labels satisfy all keys are muted.
+- `begins_at` (Integer) Unix timestamp in milliseconds when the Silence starts muting notifications.
+- `created_at` (Integer) Unix timestamp in milliseconds when the Silence was created. Set by the server; a value sent in a request is ignored.
+- `created_by` (String) Username of who created the Silence. Set by the server; a value sent in a request is ignored.
+- `description` (String) Optional description of the Silence.
+- `duration_type` (String) Records which duration picker mode the Metrics UI used to set the window. Does not change what the Silence mutes; <code>begins_at</code> and <code>expires_at</code> decide that.
+- `duration_unit` (String) Records the unit for a relative duration in the Metrics UI. Does not change what the Silence mutes.
+- `duration_value` (Integer) Records the number for a relative duration in the Metrics UI, such as <code>2</code> for two hours. Does not change what the Silence mutes.
+- `expires_at` (Integer) Unix timestamp in milliseconds when the Silence stops muting notifications.
+- `id` (String) Unique identifier for the Silence.
+- `monitor_id` (String) The <code>id</code> of the Monitor Configuration whose notifications this Silence mutes. All of the Monitor's notifications are muted, for every series.
+- `name` (String) Optional display name for the Silence.

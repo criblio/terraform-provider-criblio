@@ -64,7 +64,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -272,6 +272,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 								Computed:    true,
 								Description: `Destination to send results to`,
 							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+							},
 						},
 					},
 					"description": schema.StringAttribute{
@@ -466,7 +470,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -674,6 +678,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},
@@ -1234,7 +1242,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -1441,6 +1449,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},
@@ -1589,7 +1601,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -1796,6 +1808,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},
@@ -1945,7 +1961,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -2153,6 +2169,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 								Computed:    true,
 								Description: `Destination to send results to`,
 							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+							},
 						},
 					},
 					"description": schema.StringAttribute{
@@ -2198,7 +2218,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -2411,6 +2431,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 								Computed:    true,
 								Description: `Destination to send results to`,
 							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+							},
 						},
 					},
 					"description": schema.StringAttribute{
@@ -2460,7 +2484,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -2667,6 +2691,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},
@@ -2774,7 +2802,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -2981,6 +3009,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},
@@ -3283,7 +3315,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -3490,6 +3522,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},
@@ -3556,7 +3592,7 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
-						Description: `Unique ID for this Job`,
+						Description: `Unique name for this Job`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -3763,6 +3799,10 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 							"output": schema.StringAttribute{
 								Computed:    true,
 								Description: `Destination to send results to`,
+							},
+							"throttle_burst_disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 							},
 						},
 					},

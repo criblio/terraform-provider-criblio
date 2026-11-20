@@ -182,9 +182,17 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 											Computed:    true,
 											Description: `Maximum number of externally backed secret stores.`,
 										},
+										"heavy_duty": schema.Int64Attribute{
+											Computed:    true,
+											Description: `When disabled, resource optimizations, like not spawning certain services or limiting RAM, are applied.`,
+										},
 										"kms": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Maximum number of Key Management Service (KMS) providers.`,
+										},
+										"lakehouse": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Lakehouse limit.`,
 										},
 										"lake_access_groups": schema.Int64Attribute{
 											Computed:    true,
@@ -201,10 +209,6 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 										"lake_storage_locations": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Maximum number of Cribl Lake Storage Locations.`,
-										},
-										"lakehouse": schema.Int64Attribute{
-											Computed:    true,
-											Description: `Lakehouse limit.`,
 										},
 										"leader_resiliency": schema.Int64Attribute{
 											Computed:    true,
@@ -270,13 +274,13 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 											Computed:    true,
 											Description: `System email limit.`,
 										},
-										"worker_group_boot_throttle": schema.Int64Attribute{
-											Computed:    true,
-											Description: `Whether the Leader may throttle Worker Group and Fleet APIs that boot a group process when resources are insufficient.`,
-										},
 										"worker_groups": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Maximum number of Worker Groups.`,
+										},
+										"worker_group_boot_throttle": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Whether the Leader may throttle Worker Group and Fleet APIs that boot a group process when resources are insufficient.`,
 										},
 										"worker_procs": schema.Int64Attribute{
 											Computed:    true,

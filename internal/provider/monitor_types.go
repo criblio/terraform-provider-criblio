@@ -20,9 +20,11 @@ type MonitorModel struct {
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
+	EvaluationIntervalSec           types.Int64                           `tfsdk:"evaluation_interval_sec" json:"evaluationIntervalSec,omitempty"`
 	Expr                            types.List                            `tfsdk:"expr" json:"expr,omitempty"`
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
+	MuteScheduleIDs                 types.List                            `tfsdk:"mute_schedule_ids" json:"muteScheduleIds,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
 	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
@@ -54,9 +56,11 @@ type MonitorResourceModel struct {
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
+	EvaluationIntervalSec           types.Int64                           `tfsdk:"evaluation_interval_sec" json:"evaluationIntervalSec,omitempty"`
 	Expr                            types.List                            `tfsdk:"expr" json:"expr,omitempty"`
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
+	MuteScheduleIDs                 []types.String                        `tfsdk:"mute_schedule_ids" json:"muteScheduleIds,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
 	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
@@ -88,9 +92,11 @@ type MonitorDataSourceModel struct {
 	DatasetID                       types.String                          `tfsdk:"dataset_id" json:"datasetId,omitempty"`
 	Description                     types.String                          `tfsdk:"description" json:"description,omitempty"`
 	Enabled                         types.Bool                            `tfsdk:"enabled" json:"enabled,omitempty"`
+	EvaluationIntervalSec           types.Int64                           `tfsdk:"evaluation_interval_sec" json:"evaluationIntervalSec,omitempty"`
 	Expr                            types.List                            `tfsdk:"expr" json:"expr,omitempty"`
 	ID                              types.String                          `tfsdk:"id" json:"id,omitempty"`
 	ManagedBy                       types.String                          `tfsdk:"managed_by" json:"managedBy,omitempty"`
+	MuteScheduleIDs                 []types.String                        `tfsdk:"mute_schedule_ids" json:"muteScheduleIds,omitempty"`
 	Name                            types.String                          `tfsdk:"name" json:"name,omitempty"`
 	ProfileRef                      types.Object                          `tfsdk:"profile_ref" json:"$profileRef,omitempty"`
 	Query                           types.Map                             `tfsdk:"query" json:"query,omitempty"`
@@ -119,20 +125,22 @@ type MonitorDataSourceModel struct {
 }
 
 type MonitorAPIModel struct {
-	DatasetID      *string  `json:"datasetId,omitempty"`
-	Description    *string  `json:"description,omitempty"`
-	Enabled        *bool    `json:"enabled,omitempty"`
-	Expr           any      `json:"expr,omitempty"`
-	ID             *string  `json:"id,omitempty"`
-	ManagedBy      *string  `json:"managedBy,omitempty"`
-	Name           *string  `json:"name,omitempty"`
-	ProfileRef     any      `json:"$profileRef,omitempty"`
-	Query          any      `json:"query,omitempty"`
-	SearchMode     *string  `json:"searchMode,omitempty"`
-	Silence        []string `json:"silence,omitempty"`
-	TemplateParams any      `json:"templateParams,omitempty"`
-	Type           *string  `json:"type,omitempty"`
-	Unit           *string  `json:"unit,omitempty"`
+	DatasetID             *string  `json:"datasetId,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	EvaluationIntervalSec *int64   `json:"evaluationIntervalSec,omitempty"`
+	Expr                  any      `json:"expr,omitempty"`
+	ID                    *string  `json:"id,omitempty"`
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	MuteScheduleIDs       []string `json:"muteScheduleIds,omitempty"`
+	Name                  *string  `json:"name,omitempty"`
+	ProfileRef            any      `json:"$profileRef,omitempty"`
+	Query                 any      `json:"query,omitempty"`
+	SearchMode            *string  `json:"searchMode,omitempty"`
+	Silence               []string `json:"silence,omitempty"`
+	TemplateParams        any      `json:"templateParams,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	Unit                  *string  `json:"unit,omitempty"`
 }
 
 type MonitorExprModel struct {
@@ -405,6 +413,7 @@ type FiringRuleOverridesThresholdModel struct {
 	IncludedTags   types.List    `tfsdk:"included_tags" json:"includedTags,omitempty"`
 	Limit          types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
 	Operator       types.String  `tfsdk:"operator" json:"operator,omitempty"`
+	Recovery       types.Object  `tfsdk:"recovery" json:"recovery,omitempty"`
 	Severity       types.String  `tfsdk:"severity" json:"severity,omitempty"`
 	StdDeviations  types.Float64 `tfsdk:"std_deviations" json:"stdDeviations,omitempty"`
 	TimesTriggered types.Int64   `tfsdk:"times_triggered" json:"timesTriggered,omitempty"`
@@ -415,6 +424,7 @@ type FiringRuleOverridesThresholdAPIModel struct {
 	IncludedTags   []string `json:"includedTags,omitempty"`
 	Limit          *float64 `json:"limit,omitempty"`
 	Operator       *string  `json:"operator,omitempty"`
+	Recovery       any      `json:"recovery,omitempty"`
 	Severity       *string  `json:"severity,omitempty"`
 	StdDeviations  *float64 `json:"stdDeviations,omitempty"`
 	TimesTriggered *int64   `json:"timesTriggered,omitempty"`
@@ -426,9 +436,27 @@ func FiringRuleOverridesThresholdAttrTypes() map[string]attr.Type {
 		"included_tags":   types.ListType{ElemType: types.StringType},
 		"limit":           types.Float64Type,
 		"operator":        types.StringType,
+		"recovery":        types.ObjectType{AttrTypes: FiringRuleOverridesThresholdRecoveryAttrTypes()},
 		"severity":        types.StringType,
 		"std_deviations":  types.Float64Type,
 		"times_triggered": types.Int64Type,
+	}
+}
+
+type FiringRuleOverridesThresholdRecoveryModel struct {
+	Limit    types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
+	Operator types.String  `tfsdk:"operator" json:"operator,omitempty"`
+}
+
+type FiringRuleOverridesThresholdRecoveryAPIModel struct {
+	Limit    *float64 `json:"limit,omitempty"`
+	Operator *string  `json:"operator,omitempty"`
+}
+
+func FiringRuleOverridesThresholdRecoveryAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"limit":    types.Float64Type,
+		"operator": types.StringType,
 	}
 }
 
@@ -437,6 +465,7 @@ type FiringRuleThresholdModel struct {
 	IncludedTags   types.List    `tfsdk:"included_tags" json:"includedTags,omitempty"`
 	Limit          types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
 	Operator       types.String  `tfsdk:"operator" json:"operator,omitempty"`
+	Recovery       types.Object  `tfsdk:"recovery" json:"recovery,omitempty"`
 	Severity       types.String  `tfsdk:"severity" json:"severity,omitempty"`
 	StdDeviations  types.Float64 `tfsdk:"std_deviations" json:"stdDeviations,omitempty"`
 	TimesTriggered types.Int64   `tfsdk:"times_triggered" json:"timesTriggered,omitempty"`
@@ -447,6 +476,7 @@ type FiringRuleThresholdAPIModel struct {
 	IncludedTags   []string `json:"includedTags,omitempty"`
 	Limit          *float64 `json:"limit,omitempty"`
 	Operator       *string  `json:"operator,omitempty"`
+	Recovery       any      `json:"recovery,omitempty"`
 	Severity       *string  `json:"severity,omitempty"`
 	StdDeviations  *float64 `json:"stdDeviations,omitempty"`
 	TimesTriggered *int64   `json:"timesTriggered,omitempty"`
@@ -458,9 +488,27 @@ func FiringRuleThresholdAttrTypes() map[string]attr.Type {
 		"included_tags":   types.ListType{ElemType: types.StringType},
 		"limit":           types.Float64Type,
 		"operator":        types.StringType,
+		"recovery":        types.ObjectType{AttrTypes: FiringRuleThresholdRecoveryAttrTypes()},
 		"severity":        types.StringType,
 		"std_deviations":  types.Float64Type,
 		"times_triggered": types.Int64Type,
+	}
+}
+
+type FiringRuleThresholdRecoveryModel struct {
+	Limit    types.Float64 `tfsdk:"limit" json:"limit,omitempty"`
+	Operator types.String  `tfsdk:"operator" json:"operator,omitempty"`
+}
+
+type FiringRuleThresholdRecoveryAPIModel struct {
+	Limit    *float64 `json:"limit,omitempty"`
+	Operator *string  `json:"operator,omitempty"`
+}
+
+func FiringRuleThresholdRecoveryAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"limit":    types.Float64Type,
+		"operator": types.StringType,
 	}
 }
 
@@ -722,8 +770,14 @@ func MonitorTerraformNameToAPIName(name string) string {
 		return prefix + "clear_delay"
 	case "config_refs":
 		return prefix + "$configRefs"
+	case "exec_error_state":
+		return prefix + "exec_error_state"
 	case "fire_delay":
 		return prefix + "fire_delay"
+	case "missing_series_evals_to_resolve":
+		return prefix + "missing_series_evals_to_resolve"
+	case "no_data_state":
+		return prefix + "no_data_state"
 	case "profile_ref":
 		return prefix + "$profileRef"
 	}
@@ -910,6 +964,13 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 		}
 		output["enabled"] = value
 	}
+	if !m.EvaluationIntervalSec.IsNull() && !m.EvaluationIntervalSec.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.EvaluationIntervalSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert evaluation_interval_sec to API value: %v", err)
+		}
+		output["evaluationIntervalSec"] = value
+	}
 	if !m.Expr.IsNull() && !m.Expr.IsUnknown() {
 		value, err := MonitorTerraformValueToJSON(m.Expr)
 		if err != nil {
@@ -930,6 +991,13 @@ func (m MonitorModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
 		}
 		output["managedBy"] = value
+	}
+	if !m.MuteScheduleIDs.IsNull() && !m.MuteScheduleIDs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.MuteScheduleIDs)
+		if err != nil {
+			return nil, fmt.Errorf("convert mute_schedule_ids to API value: %v", err)
+		}
+		output["muteScheduleIds"] = value
 	}
 	if !m.Name.IsNull() && !m.Name.IsUnknown() {
 		value, err := MonitorTerraformValueToJSON(m.Name)
@@ -1202,6 +1270,11 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Enabled = types.BoolNull()
 	}
+	if input.EvaluationIntervalSec != nil {
+		m.EvaluationIntervalSec = types.Int64Value(*input.EvaluationIntervalSec)
+	} else {
+		m.EvaluationIntervalSec = types.Int64Null()
+	}
 	if input.Expr != nil {
 		value, err := MonitorAPIValueToTerraformValue(input.Expr, types.ListType{ElemType: types.ObjectType{AttrTypes: MonitorExprAttrTypes()}})
 		if err != nil {
@@ -1220,6 +1293,15 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 		m.ManagedBy = types.StringValue(*input.ManagedBy)
 	} else {
 		m.ManagedBy = types.StringNull()
+	}
+	if input.MuteScheduleIDs != nil {
+		value, diags := types.ListValueFrom(context.Background(), types.StringType, input.MuteScheduleIDs)
+		if diags.HasError() {
+			return fmt.Errorf("convert muteScheduleIds from API value: %v", diags)
+		}
+		m.MuteScheduleIDs = value
+	} else {
+		m.MuteScheduleIDs = types.ListNull(types.StringType)
 	}
 	if input.Name != nil {
 		m.Name = types.StringValue(*input.Name)
@@ -1313,7 +1395,7 @@ func (m *MonitorModel) UnmarshalJSON(data []byte) error {
 		nested, ok := raw["firingCondition"].(map[string]any)
 		if ok {
 			matched := false
-			if !matched && MonitorOneOfShapeMatches(nested, []string{"clear_delay", "fire_delay"}, []string{"clear_delay", "fire_delay"}) {
+			if !matched && MonitorOneOfShapeMatches(nested, []string{"clear_delay", "fire_delay"}, []string{"clear_delay", "exec_error_state", "fire_delay", "missing_series_evals_to_resolve", "no_data_state"}) {
 				m.FiringCondition = &FiringConditionModel{}
 				if err := m.FiringCondition.unmarshalPayload(nested); err != nil {
 					return err
@@ -1727,12 +1809,24 @@ func (m *ChangeConfigModel) unmarshalPayload(input map[string]any) error {
 }
 
 type OutlierConfigModel struct {
-	Algorithm types.String `tfsdk:"algorithm" json:"algorithm,omitempty"`
+	Algorithm          types.String  `tfsdk:"algorithm" json:"algorithm,omitempty"`
+	CohortLabels       types.List    `tfsdk:"cohort_labels" json:"cohortLabels,omitempty"`
+	EvaluationWindowMs types.Float64 `tfsdk:"evaluation_window_ms" json:"evaluationWindowMs,omitempty"`
+	MinCoverage        types.Float64 `tfsdk:"min_coverage" json:"minCoverage,omitempty"`
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	Pct                types.Float64 `tfsdk:"pct" json:"pct,omitempty"`
+	ThresholdDirection types.String  `tfsdk:"threshold_direction" json:"thresholdDirection,omitempty"`
 }
 
 func OutlierConfigModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"algorithm": types.StringType,
+		"algorithm":            types.StringType,
+		"cohort_labels":        types.ListType{ElemType: types.StringType},
+		"evaluation_window_ms": types.Float64Type,
+		"min_coverage":         types.Float64Type,
+		"mode":                 types.StringType,
+		"pct":                  types.Float64Type,
+		"threshold_direction":  types.StringType,
 	}
 }
 
@@ -1744,6 +1838,48 @@ func (m OutlierConfigModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert algorithm to API value: %v", err)
 		}
 		output["algorithm"] = value
+	}
+	if !m.CohortLabels.IsNull() && !m.CohortLabels.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.CohortLabels)
+		if err != nil {
+			return nil, fmt.Errorf("convert cohort_labels to API value: %v", err)
+		}
+		output["cohortLabels"] = value
+	}
+	if !m.EvaluationWindowMs.IsNull() && !m.EvaluationWindowMs.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.EvaluationWindowMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert evaluation_window_ms to API value: %v", err)
+		}
+		output["evaluationWindowMs"] = value
+	}
+	if !m.MinCoverage.IsNull() && !m.MinCoverage.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.MinCoverage)
+		if err != nil {
+			return nil, fmt.Errorf("convert min_coverage to API value: %v", err)
+		}
+		output["minCoverage"] = value
+	}
+	if !m.Mode.IsNull() && !m.Mode.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.Mode)
+		if err != nil {
+			return nil, fmt.Errorf("convert mode to API value: %v", err)
+		}
+		output["mode"] = value
+	}
+	if !m.Pct.IsNull() && !m.Pct.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.Pct)
+		if err != nil {
+			return nil, fmt.Errorf("convert pct to API value: %v", err)
+		}
+		output["pct"] = value
+	}
+	if !m.ThresholdDirection.IsNull() && !m.ThresholdDirection.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ThresholdDirection)
+		if err != nil {
+			return nil, fmt.Errorf("convert threshold_direction to API value: %v", err)
+		}
+		output["thresholdDirection"] = value
 	}
 	return output, nil
 }
@@ -1757,6 +1893,60 @@ func (m *OutlierConfigModel) unmarshalPayload(input map[string]any) error {
 		m.Algorithm = value.(types.String)
 	} else {
 		m.Algorithm = types.StringNull()
+	}
+	if item, ok := input["cohortLabels"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert cohortLabels from API value: %v", err)
+		}
+		m.CohortLabels = value.(types.List)
+	} else {
+		m.CohortLabels = types.ListNull(types.StringType)
+	}
+	if item, ok := input["evaluationWindowMs"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert evaluationWindowMs from API value: %v", err)
+		}
+		m.EvaluationWindowMs = value.(types.Float64)
+	} else {
+		m.EvaluationWindowMs = types.Float64Null()
+	}
+	if item, ok := input["minCoverage"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert minCoverage from API value: %v", err)
+		}
+		m.MinCoverage = value.(types.Float64)
+	} else {
+		m.MinCoverage = types.Float64Null()
+	}
+	if item, ok := input["mode"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert mode from API value: %v", err)
+		}
+		m.Mode = value.(types.String)
+	} else {
+		m.Mode = types.StringNull()
+	}
+	if item, ok := input["pct"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pct from API value: %v", err)
+		}
+		m.Pct = value.(types.Float64)
+	} else {
+		m.Pct = types.Float64Null()
+	}
+	if item, ok := input["thresholdDirection"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert thresholdDirection from API value: %v", err)
+		}
+		m.ThresholdDirection = value.(types.String)
+	} else {
+		m.ThresholdDirection = types.StringNull()
 	}
 	return nil
 }
@@ -1869,14 +2059,20 @@ func (m *ForecastConfigModel) unmarshalPayload(input map[string]any) error {
 }
 
 type FiringConditionModel struct {
-	ClearDelay types.Int64 `tfsdk:"clear_delay" json:"clear_delay,omitempty"`
-	FireDelay  types.Int64 `tfsdk:"fire_delay" json:"fire_delay,omitempty"`
+	ClearDelay                  types.Int64  `tfsdk:"clear_delay" json:"clear_delay,omitempty"`
+	ExecErrorState              types.String `tfsdk:"exec_error_state" json:"exec_error_state,omitempty"`
+	FireDelay                   types.Int64  `tfsdk:"fire_delay" json:"fire_delay,omitempty"`
+	MissingSeriesEvalsToResolve types.Int64  `tfsdk:"missing_series_evals_to_resolve" json:"missing_series_evals_to_resolve,omitempty"`
+	NoDataState                 types.String `tfsdk:"no_data_state" json:"no_data_state,omitempty"`
 }
 
 func FiringConditionModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"clear_delay": types.Int64Type,
-		"fire_delay":  types.Int64Type,
+		"clear_delay":                     types.Int64Type,
+		"exec_error_state":                types.StringType,
+		"fire_delay":                      types.Int64Type,
+		"missing_series_evals_to_resolve": types.Int64Type,
+		"no_data_state":                   types.StringType,
 	}
 }
 
@@ -1889,12 +2085,33 @@ func (m FiringConditionModel) terraformPayload() (map[string]any, error) {
 		}
 		output["clear_delay"] = value
 	}
+	if !m.ExecErrorState.IsNull() && !m.ExecErrorState.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.ExecErrorState)
+		if err != nil {
+			return nil, fmt.Errorf("convert exec_error_state to API value: %v", err)
+		}
+		output["exec_error_state"] = value
+	}
 	if !m.FireDelay.IsNull() && !m.FireDelay.IsUnknown() {
 		value, err := MonitorTerraformValueToJSON(m.FireDelay)
 		if err != nil {
 			return nil, fmt.Errorf("convert fire_delay to API value: %v", err)
 		}
 		output["fire_delay"] = value
+	}
+	if !m.MissingSeriesEvalsToResolve.IsNull() && !m.MissingSeriesEvalsToResolve.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.MissingSeriesEvalsToResolve)
+		if err != nil {
+			return nil, fmt.Errorf("convert missing_series_evals_to_resolve to API value: %v", err)
+		}
+		output["missing_series_evals_to_resolve"] = value
+	}
+	if !m.NoDataState.IsNull() && !m.NoDataState.IsUnknown() {
+		value, err := MonitorTerraformValueToJSON(m.NoDataState)
+		if err != nil {
+			return nil, fmt.Errorf("convert no_data_state to API value: %v", err)
+		}
+		output["no_data_state"] = value
 	}
 	return output, nil
 }
@@ -1909,6 +2126,15 @@ func (m *FiringConditionModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ClearDelay = types.Int64Null()
 	}
+	if item, ok := input["exec_error_state"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert exec_error_state from API value: %v", err)
+		}
+		m.ExecErrorState = value.(types.String)
+	} else {
+		m.ExecErrorState = types.StringNull()
+	}
 	if item, ok := input["fire_delay"]; ok {
 		value, err := MonitorAPIValueToTerraformValue(item, types.Int64Type)
 		if err != nil {
@@ -1917,6 +2143,24 @@ func (m *FiringConditionModel) unmarshalPayload(input map[string]any) error {
 		m.FireDelay = value.(types.Int64)
 	} else {
 		m.FireDelay = types.Int64Null()
+	}
+	if item, ok := input["missing_series_evals_to_resolve"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert missing_series_evals_to_resolve from API value: %v", err)
+		}
+		m.MissingSeriesEvalsToResolve = value.(types.Int64)
+	} else {
+		m.MissingSeriesEvalsToResolve = types.Int64Null()
+	}
+	if item, ok := input["no_data_state"]; ok {
+		value, err := MonitorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert no_data_state from API value: %v", err)
+		}
+		m.NoDataState = value.(types.String)
+	} else {
+		m.NoDataState = types.StringNull()
 	}
 	return nil
 }

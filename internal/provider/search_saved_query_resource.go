@@ -50,6 +50,25 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 				Computed:    false,
 				Description: `App identifier used to attribute search/platform usage to a driving app.`,
 			},
+			"app_owner": schema.SingleNestedAttribute{
+				Required: false,
+				Optional: true,
+				Computed: false,
+				Attributes: map[string]schema.Attribute{
+					"app_id": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Identifier of the app that owns the Search resource.`,
+					},
+					"installation_id": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Identifier of the app installation that established ownership.`,
+					},
+				},
+			},
 			"chart_config": schema.SingleNestedAttribute{
 				Required:    false,
 				Optional:    true,
@@ -508,6 +527,104 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Computed:    false,
 						Description: `Default chart type for all series.`,
 					},
+					"visualization": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Registry-native visualization configuration.`,
+						Attributes: map[string]schema.Attribute{
+							"family": schema.StringAttribute{
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Family of the registered visualization that persisted this configuration.`,
+							},
+							"version": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Version of the visualization configuration contract this object was written against.`,
+							},
+							"fields_config": schema.SingleNestedAttribute{
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Ordered field metadata the visualization binds and formats.`,
+								Attributes: map[string]schema.Attribute{
+									"fields": schema.ListNestedAttribute{
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Fields`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Name of the result field this entry configures.`,
+												},
+												"type": schema.StringAttribute{
+													Required:    false,
+													Optional:    true,
+													Computed:    false,
+													Description: `Value type the field formatter reads.`,
+												},
+											},
+										},
+									},
+								},
+							},
+							"display_config": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Display options the visualization draws with, such as its colors.`,
+								ElementType: types.StringType,
+							},
+							"legend_config": schema.SingleNestedAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Legend configuration`,
+								Attributes: map[string]schema.Attribute{
+									"hidden": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Hide legend`,
+									},
+									"position": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Legend position`,
+									},
+								},
+							},
+							"tooltip_config": schema.SingleNestedAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Tooltip configuration`,
+								Attributes: map[string]schema.Attribute{
+									"hidden": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Hide tooltip`,
+									},
+									"additional_fields": schema.ListAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Result fields shown in the tooltip beyond the ones the visualization binds.`,
+										ElementType: types.StringType,
+									},
+								},
+							},
+						},
+					},
 					"x_axis": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -833,7 +950,7 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Description: `Identifier for the user who created the saved search. Scheduled runs execute as the specified user.`,
+				Description: `Creator identifier. Member-owned scheduled runs execute as this user; app-owned runs use .`,
 			},
 		},
 	}
@@ -956,6 +1073,14 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 		if !api.AppID.IsNull() && !api.AppID.IsUnknown() {
 			state.AppID = api.AppID
 		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.AppOwner.IsNull() || state.AppOwner.IsUnknown())) {
+		if !api.AppOwner.IsNull() && !api.AppOwner.IsUnknown() {
+			state.AppOwner = api.AppOwner
+		}
+	}
+	if len(state.AppOwner.AttributeTypes(context.Background())) == 0 {
+		state.AppOwner = types.ObjectNull(SearchSavedQueryAppOwnerAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.ChartConfig.IsNull() || state.ChartConfig.IsUnknown())) {
 		if !api.ChartConfig.IsNull() && !api.ChartConfig.IsUnknown() {

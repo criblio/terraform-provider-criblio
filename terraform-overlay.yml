@@ -820,6 +820,14 @@ actions:
   - target: "$.paths./m/{groupId}/system/certificates/{id}.delete"
     update:
       x-terraform-delete: certificate
+  # Preserve the existing PEM attributes at the resource root. The new 4.21
+  # upload union would otherwise move them into certificate_pem_upload.
+  - target: "$.paths./m/{groupId}/system/certificates.post.requestBody.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/Certificate"
+  - target: "$.paths./m/{groupId}/system/certificates/{id}.patch.requestBody.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/Certificate"
   - target: "$.components.schemas.Certificate.properties.privKey"
     update:
       x-terraform-sensitive: true
@@ -1126,6 +1134,13 @@ actions:
     update:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true
+  # Resolved by the server from keyName, ignored on input, and omitted on read.
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.pem.properties.passphrase"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.pem.properties.privKeyPath"
+    update:
+      x-terraform-ignore: true
   - target: "$.components.schemas.DatabaseConnectionResponseEnvelope.properties.count"
     update:
       # Response-envelope metadata is not part of an individual connection,
@@ -4610,6 +4625,11 @@ actions:
     update:
       authTokens:
         x-terraform-sensitive: true
+  # 4.21 extracts the HTTP token object into a shared schema. Keep these
+  # provider-specific annotations on a private copy of the referenced object.
+  - target: "$.components.schemas.InputHttp.properties.authTokensExt.items"
+    copy_from: "$.components.schemas.AuthTokensExtConfInputHttp"
+    update: {}
   - target: "$.components.schemas.InputHttp.properties.authTokensExt.items.properties"
     update:
       token:
@@ -5288,8 +5308,22 @@ actions:
   # seasonality="hourly" copied verbatim from the forecast fields, caught only by Terraform's own
   # post-apply consistency check). Add the real discriminator -- the sibling `type` field on
   # AetosMonitorConf itself -- so read-path dispatch is unambiguous.
-  - target: "$.components.schemas.DetectionConfigTypeAetosMonitorConf"
+  # 4.21 shares the detection union with resolved profiles. Retain the monitor's
+  # schema name and parent discriminator without changing other consumers.
+  - target: "$.components.schemas"
     update:
+      DetectionConfigTypeAetosMonitorConf: {}
+  - target: "$.components.schemas.AetosMonitorConf.properties.detectionConfig"
+    update:
+      $ref: "#/components/schemas/DetectionConfigTypeAetosMonitorConf"
+  - target: "$.components.schemas.DetectionConfigTypeAetosMonitorConf"
+    copy_from: "$.components.schemas.DetectionConfigTypeResolvedConfigProfileConfig"
+    update:
+      oneOf:
+        - $ref: "#/components/schemas/AnomalyConfig"
+        - $ref: "#/components/schemas/ChangeConfig"
+        - $ref: "#/components/schemas/OutlierConfig"
+        - $ref: "#/components/schemas/ForecastConfig"
       x-terraform-discriminator-at-parent: true
       discriminator:
         propertyName: type
@@ -5351,17 +5385,16 @@ actions:
     update:
       x-terraform-object-as-json: true
       x-terraform-custom-type: jsontypes.NormalizedType{}
-  - target: "$.components.schemas.MonitorSilenceConf.properties.created_at"
+  - target: "$.components.schemas.CriblMetricsMonitorSilenceConf.properties.created_at"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.MonitorSilenceConf.properties.created_by"
+  - target: "$.components.schemas.CriblMetricsMonitorSilenceConf.properties.created_by"
     update:
       x-terraform-computed: true
-  - target: "$.components.schemas.MonitorSilenceConf.properties.tags"
-    update:
-      x-terraform-object-as-json: true
-      x-terraform-custom-type: jsontypes.NormalizedType{}
-  # These CRUD routes exist in Cribl but are not published in upstream-openapi.yml.
+  # Use the Metrics silence schema, not the System Insights MonitorSilenceConf.
+  # Metrics silences mute every series; tags and alert_instance_id are rejected.
+  # Preserve the metrics app routing context for silences. Notification policy
+  # CRUD routes exist in Cribl but are not published in upstream-openapi.yml.
   # Sources: rest/customer-metrics/Silences.ts + customerMetrics/SilenceMgr.ts;
   # rest/endpoints/NotificationPolicies.ts + share/apitypes/notification.ts.
   # Use the metrics app route observed in the UI network trace. Cribl retains
@@ -5396,14 +5429,14 @@ actions:
             content:
               application/json:
                 schema:
-                  $ref: "#/components/schemas/MonitorSilenceConf"
+                  $ref: "#/components/schemas/CriblMetricsMonitorSilenceConf"
           responses:
             "200":
               description: MonitorSilence response in a counted list.
               content:
                 application/json:
                   schema:
-                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+                    $ref: "#/components/schemas/CountedCriblMetricsMonitorSilenceConf"
         get:
           operationId: listMonitorSilence
           x-cribl-api-context: [leader]
@@ -5417,7 +5450,7 @@ actions:
               content:
                 application/json:
                   schema:
-                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+                    $ref: "#/components/schemas/CountedCriblMetricsMonitorSilenceConf"
       /a/__cribl_metrics/products/lakehouse_engine_metrics/silences/{id}:
         get:
           operationId: getMonitorSilence
@@ -5436,7 +5469,7 @@ actions:
               content:
                 application/json:
                   schema:
-                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+                    $ref: "#/components/schemas/CountedCriblMetricsMonitorSilenceConf"
         patch:
           operationId: updateMonitorSilence
           x-cribl-api-context: [leader]
@@ -5453,14 +5486,14 @@ actions:
             content:
               application/json:
                 schema:
-                  $ref: "#/components/schemas/MonitorSilenceConf"
+                  $ref: "#/components/schemas/CriblMetricsMonitorSilenceConf"
           responses:
             "200":
               description: MonitorSilence response in a counted list.
               content:
                 application/json:
                   schema:
-                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+                    $ref: "#/components/schemas/CountedCriblMetricsMonitorSilenceConf"
         delete:
           operationId: deleteMonitorSilence
           x-cribl-api-context: [leader]
@@ -5478,7 +5511,7 @@ actions:
               content:
                 application/json:
                   schema:
-                    $ref: "#/components/schemas/CountedMonitorSilenceConf"
+                    $ref: "#/components/schemas/CountedCriblMetricsMonitorSilenceConf"
       /notification-policies:
         post:
           operationId: createNotificationPolicy
@@ -5598,11 +5631,11 @@ actions:
         x-terraform-force-new-always: true
   # ConfCrudMgr replaces silences on PATCH. Preserve server-created audit values
   # in update payloads; omit the unknown values on initial create.
-  - target: "$.components.schemas.MonitorSilenceConf.properties.created_at"
+  - target: "$.components.schemas.CriblMetricsMonitorSilenceConf.properties.created_at"
     update:
       x-terraform-use-state-for-unknown: true
       x-terraform-request-computed: true
-  - target: "$.components.schemas.MonitorSilenceConf.properties.created_by"
+  - target: "$.components.schemas.CriblMetricsMonitorSilenceConf.properties.created_by"
     update:
       x-terraform-use-state-for-unknown: true
       x-terraform-request-computed: true

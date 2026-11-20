@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -28,6 +29,7 @@ const (
 )
 
 var slackWebhookURL = regexp.MustCompile(`https://hooks\.slack\.com/services/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+`)
+var versionsMapAssignment = regexp.MustCompile(`\b(?:v1Versions|versions)\s*=\s*\{`)
 
 type config struct {
 	source  string
@@ -78,6 +80,7 @@ func syncOpenAPI(ctx context.Context, cfg config) (string, int, error) {
 		return "", 0, err
 	}
 	spec = sanitizeSensitiveExamples(spec)
+	spec = trimTrailingWhitespace(spec)
 	if err := validateOpenAPI(spec); err != nil {
 		return "", 0, err
 	}
@@ -89,6 +92,14 @@ func syncOpenAPI(ctx context.Context, cfg config) (string, int, error) {
 
 func sanitizeSensitiveExamples(spec []byte) []byte {
 	return slackWebhookURL.ReplaceAllLiteral(spec, []byte("https://example.invalid/slack-webhook"))
+}
+
+func trimTrailingWhitespace(spec []byte) []byte {
+	lines := bytes.Split(spec, []byte("\n"))
+	for i, line := range lines {
+		lines[i] = bytes.TrimRight(line, " \t")
+	}
+	return bytes.Join(lines, []byte("\n"))
 }
 
 func loadSpec(ctx context.Context, cfg config) ([]byte, string, error) {
@@ -151,15 +162,11 @@ func resolveDocsSpecURL(ctx context.Context, client *http.Client, docsURL, versi
 }
 
 func parseVersionsMap(html string) (map[string]string, error) {
-	idx := strings.Index(html, "versions=")
-	if idx < 0 {
+	assignment := versionsMapAssignment.FindStringIndex(html)
+	if assignment == nil {
 		return nil, fmt.Errorf("versions map not found")
 	}
-	brace := strings.IndexByte(html[idx:], '{')
-	if brace < 0 {
-		return nil, fmt.Errorf("versions map opening brace not found")
-	}
-	start := idx + brace
+	start := assignment[1] - 1
 	end, err := matchingBraceEnd(html, start)
 	if err != nil {
 		return nil, err

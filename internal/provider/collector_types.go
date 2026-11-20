@@ -193,40 +193,43 @@ func InputCollectorSplunkScheduleRunStateTrackingAttrTypes() map[string]attr.Typ
 }
 
 type InputCollectorSplunkInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorSplunkInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorSplunkInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorSplunkInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorSplunkInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorSplunkInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorSplunkInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -548,40 +551,43 @@ func InputCollectorRestScheduleRunStateTrackingAttrTypes() map[string]attr.Type 
 }
 
 type InputCollectorRestInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorRestInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorRestInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorRestInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorRestInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorRestInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -1251,40 +1257,43 @@ func InputCollectorS3ScheduleRunStateTrackingAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorS3InputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorS3InputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorS3InputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorS3InputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorS3InputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorS3InputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorS3InputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -1554,40 +1563,43 @@ func InputCollectorAzureBlobScheduleRunStateTrackingAttrTypes() map[string]attr.
 }
 
 type InputCollectorAzureBlobInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorAzureBlobInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorAzureBlobInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorAzureBlobInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorAzureBlobInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorAzureBlobInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorAzureBlobInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -1868,40 +1880,43 @@ func InputCollectorCriblLakeScheduleRunStateTrackingAttrTypes() map[string]attr.
 }
 
 type InputCollectorCriblLakeInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorCriblLakeInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorCriblLakeInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorCriblLakeInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorCriblLakeInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorCriblLakeInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorCriblLakeInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -2091,40 +2106,43 @@ func InputCollectorDatabaseScheduleRunStateTrackingAttrTypes() map[string]attr.T
 }
 
 type InputCollectorDatabaseInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorDatabaseInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorDatabaseInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorDatabaseInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorDatabaseInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorDatabaseInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorDatabaseInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -2314,40 +2332,43 @@ func InputCollectorGCSScheduleRunStateTrackingAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorGCSInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorGCSInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorGCSInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorGCSInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorGCSInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorGCSInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorGCSInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -2587,40 +2608,43 @@ func InputCollectorHealthCheckScheduleRunStateTrackingAttrTypes() map[string]att
 }
 
 type InputCollectorHealthCheckInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorHealthCheckInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorHealthCheckInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorHealthCheckInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorHealthCheckInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorHealthCheckInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -3071,40 +3095,43 @@ func InputCollectorScriptScheduleRunStateTrackingAttrTypes() map[string]attr.Typ
 }
 
 type InputCollectorScriptInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorScriptInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorScriptInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorScriptInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorScriptInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorScriptInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorScriptInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 
@@ -3314,40 +3341,43 @@ func InputCollectorFilesystemScheduleRunStateTrackingAttrTypes() map[string]attr
 }
 
 type InputCollectorFilesystemInputModel struct {
-	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
-	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess            types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec    types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
+	ThrottleBurstDisabled types.Bool    `tfsdk:"throttle_burst_disabled" json:"throttleBurstDisabled,omitempty"`
 }
 
 type InputCollectorFilesystemInputAPIModel struct {
-	Type                *string  `json:"type,omitempty"`
-	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
-	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
-	Preprocess          any      `json:"preprocess,omitempty"`
-	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
-	Metadata            any      `json:"metadata,omitempty"`
-	Pipeline            *string  `json:"pipeline,omitempty"`
-	Output              *string  `json:"output,omitempty"`
+	Type                  *string  `json:"type,omitempty"`
+	BreakerRulesets       []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes          *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess            any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec    *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+	Pipeline              *string  `json:"pipeline,omitempty"`
+	Output                *string  `json:"output,omitempty"`
+	ThrottleBurstDisabled *bool    `json:"throttleBurstDisabled,omitempty"`
 }
 
 func InputCollectorFilesystemInputAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                   types.StringType,
-		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms": types.Float64Type,
-		"send_to_routes":         types.BoolType,
-		"preprocess":             types.ObjectType{AttrTypes: InputCollectorFilesystemInputPreprocessAttrTypes()},
-		"throttle_rate_per_sec":  types.StringType,
-		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorFilesystemInputMetadataAttrTypes()}},
-		"pipeline":               types.StringType,
-		"output":                 types.StringType,
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"send_to_routes":          types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectorFilesystemInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorFilesystemInputMetadataAttrTypes()}},
+		"pipeline":                types.StringType,
+		"output":                  types.StringType,
+		"throttle_burst_disabled": types.BoolType,
 	}
 }
 

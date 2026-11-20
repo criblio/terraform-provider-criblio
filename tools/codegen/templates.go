@@ -3560,7 +3560,7 @@ Manages reusable monitor settings. Supply the partial upstream monitor configura
 
 Manages a muting rule for an existing customer-metrics monitor. Configure begin and expiration timestamps in Unix milliseconds. Cribl sets creation time and creator; updates preserve those audit values. Expired rules may be removed by Cribl.
 
-Optional ` + "`tags`" + ` uses a JSON map of label names to lists of allowed strings: keys are combined with AND and allowed values within a key with OR.
+A silence mutes all notifications for its monitor, across every series. Selective muting with ` + "`tags`" + ` or ` + "`alert_instance_id`" + ` is unsupported by the Metrics API.
 {{- end }}
 {{- if eq .StructName "NotificationPolicy" }}
 
