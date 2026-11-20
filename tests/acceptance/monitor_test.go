@@ -247,7 +247,13 @@ func monitorOutlier() string {
   }
 
   outlier_config = {
-    algorithm = "mad"
+    algorithm            = "mad"
+    mode                 = "instant"
+    cohort_labels        = []
+    threshold_direction  = "either"
+    evaluation_window_ms = 1800000
+    pct                  = 20
+    min_coverage         = 80
   }
 
   priority_scalar_value = { value = "P3" }

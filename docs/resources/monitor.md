@@ -90,7 +90,13 @@ resource "criblio_monitor" "example_outlier" {
   # Outlier creation is currently rejected by the backend.
   # These are the fields defined by the published upstream schema.
   outlier_config = {
-    algorithm = "mad"
+    algorithm            = "mad"
+    mode                 = "instant"
+    cohort_labels        = []
+    threshold_direction  = "either"
+    evaluation_window_ms = 1800000
+    pct                  = 20
+    min_coverage         = 80
   }
 
   firing_condition = {
