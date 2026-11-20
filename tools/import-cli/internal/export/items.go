@@ -73,9 +73,6 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if r.TypeName == "criblio_search_usage_group" {
 		pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
 	}
-	if r.TypeName == "criblio_guard_rule" {
-		ensureGuardRuleRulesets(attrs)
-	}
 	if r.TypeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
 	}
@@ -108,6 +105,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	}
 	if isSearchUsageGroupType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		return nil, fmt.Sprintf("%s %v: built-in Usage Group (skip export)", r.TypeName, idMap)
+	}
+	if skipGuardRuleWithoutRulesets(r.TypeName, attrs) {
+		return nil, fmt.Sprintf("%s %v: Guard Rule belongs to no ruleset (unmanageable, skip export)", r.TypeName, idMap)
 	}
 	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
@@ -325,9 +325,6 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if typeName == "criblio_search_usage_group" {
 		pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
 	}
-	if typeName == "criblio_guard_rule" {
-		ensureGuardRuleRulesets(attrs)
-	}
 	if typeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
 	}
@@ -351,6 +348,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		return ErrSkipResourceLibCribl
 	}
 	if isSearchUsageGroupType(typeName) && DefaultResource(typeName, idMap, attrs, includeOverride) {
+		return nil
+	}
+	if skipGuardRuleWithoutRulesets(typeName, attrs) {
 		return nil
 	}
 	if excludeDefaults && DefaultResource(typeName, idMap, attrs, includeOverride) {

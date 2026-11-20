@@ -324,8 +324,38 @@ func copyMatchingFields(dst, src reflect.Value) {
 		}
 		if srcField.Type().ConvertibleTo(dstField.Type()) {
 			dstField.Set(srcField.Convert(dstField.Type()))
+			continue
+		}
+		if converted, ok := listValueAsTypedSlice(srcField, dstField.Type()); ok {
+			dstField.Set(converted)
 		}
 	}
+}
+
+// listValueAsTypedSlice bridges the two shapes the generator emits for the same
+// array field: the generated model holds types.List while the resource model
+// holds a slice of framework values, such as []types.String. Neither is
+// assignable or convertible to the other, so without this the field is silently
+// left null and the exported configuration loses every element the API
+// returned. criblio_guard_rule's required `rulesets` was dropped this way.
+func listValueAsTypedSlice(src reflect.Value, dstType reflect.Type) (reflect.Value, bool) {
+	if dstType.Kind() != reflect.Slice {
+		return reflect.Value{}, false
+	}
+	list, ok := src.Interface().(types.List)
+	if !ok || list.IsNull() || list.IsUnknown() {
+		return reflect.Value{}, false
+	}
+	elements := list.Elements()
+	out := reflect.MakeSlice(dstType, 0, len(elements))
+	for _, element := range elements {
+		value := reflect.ValueOf(element)
+		if !value.IsValid() || !value.Type().AssignableTo(dstType.Elem()) {
+			return reflect.Value{}, false
+		}
+		out = reflect.Append(out, value)
+	}
+	return out, true
 }
 
 func firstResponseItem(responseBody interface{}) (reflect.Value, error) {

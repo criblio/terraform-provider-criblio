@@ -60,8 +60,6 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_search_dataset_ruleset":  {"rules"},
 			"criblio_search_datatype_ruleset": {"rules"},
 			"criblio_search_dashboard":        {"elements"},
-			// rulesets is Required; a rule in no ruleset must still render it.
-			"criblio_guard_rule": {"rulesets"},
 		},
 		AlwaysEmitEmptyMapsFor: map[string][]string{
 			"criblio_search_dataset_acl":        {"users", "teams"},

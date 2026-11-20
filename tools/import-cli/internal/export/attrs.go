@@ -149,18 +149,6 @@ func hclOptionsForType(typeName string, e registry.Entry) *hcl.Options {
 	return opts
 }
 
-// ensureGuardRuleRulesets emits an explicit empty list when a Guard Rule belongs
-// to no ruleset. `rulesets` is a required attribute, but the API omits it, or
-// reports it empty, for a rule that is in no ruleset; the generator drops null
-// and empty-list attributes, which renders HCL that fails `terraform plan` with
-// `The argument "rulesets" is required`. Mirrors the streamtags handling for
-// criblio_group.
-func ensureGuardRuleRulesets(attrs map[string]hcl.Value) {
-	if v, has := attrs["rulesets"]; !has || v.IsNull() {
-		attrs["rulesets"] = hcl.Value{Kind: hcl.KindList, List: []hcl.Value{}}
-	}
-}
-
 // pruneSearchUsageGroupAPIOwnedRuleFields removes `description` and `metric`
 // from every limit rule. The API assigns both per limit type and the provider
 // models them as computed, so Terraform rejects a configuration that sets them.

@@ -159,6 +159,21 @@ func defaultLookupFileByID(typeName string, idMap map[string]string, includeOver
 	return custom.DefaultLookupFileIDs[id]
 }
 
+// skipGuardRuleWithoutRulesets reports a Guard Rule that belongs to no ruleset.
+// `rulesets` is required by the provider schema, and the API additionally
+// enforces at least one entry ("At least one ruleset is required"), so such a
+// rule cannot be written back: omitting the attribute fails `terraform plan`,
+// and sending an empty list fails apply with HTTP 400. The API nonetheless
+// serves rules in that state, so they are unmanageable and must not be exported
+// as managed resources, like Cribl-library rules above.
+func skipGuardRuleWithoutRulesets(typeName string, attrs map[string]hcl.Value) bool {
+	if typeName != "criblio_guard_rule" {
+		return false
+	}
+	v, ok := attrs["rulesets"]
+	return !ok || v.IsNull() || (v.Kind == hcl.KindList && len(v.List) == 0)
+}
+
 func skipResourceWhenLibCribl(attrs map[string]hcl.Value) bool {
 	v, ok := attrs["lib"]
 	if !ok || v.Kind != hcl.KindString {

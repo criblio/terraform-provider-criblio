@@ -26,49 +26,55 @@ const guardRuleWireEmptyRulesets = `{
 	"rulesets": []
 }`
 
-// `rulesets` is a required attribute, so generated HCL must always carry it.
-// A full export previously emitted a rule with no `rulesets` at all, and
-// `terraform plan` failed with `The argument "rulesets" is required, but no
-// definition was found`, because the generator drops null and empty-list
-// attributes.
-func TestGuardRuleExportAlwaysEmitsRulesets(t *testing.T) {
+const guardRuleWireWithRulesets = `{
+	"id": "credit_card",
+	"groupId": "default",
+	"regex": "/\\b(?:\\d[ -]*?){13,16}\\b/",
+	"rulesets": ["pci-compliance"]
+}`
+
+func guardRuleAttrs(t *testing.T, wire string) map[string]hcl.Value {
+	t.Helper()
+	var model provider.GuardRuleModel
+	require.NoError(t, json.Unmarshal([]byte(wire), &model))
+	attrs, err := hcl.ModelToValue(&model, hclOptionsForType("criblio_guard_rule", registry.Entry{}))
+	require.NoError(t, err)
+	return attrs
+}
+
+// A Guard Rule in no ruleset cannot round-trip and must not be exported.
+// `rulesets` is required by the provider schema and the API enforces at least
+// one entry, so such a rule has no valid representation: omitting the attribute
+// failed `terraform plan` with `The argument "rulesets" is required`, and
+// emitting `rulesets = []` failed apply with `HTTP 400: At least one ruleset is
+// required`. Both broke TestIntegration_FullExport_Cloud.
+func TestGuardRuleExportSkipsRuleWithoutRulesets(t *testing.T) {
 	for name, wire := range map[string]string{
 		"absent": guardRuleWireWithoutRulesets,
 		"empty":  guardRuleWireEmptyRulesets,
 	} {
 		t.Run(name, func(t *testing.T) {
-			var model provider.GuardRuleModel
-			require.NoError(t, json.Unmarshal([]byte(wire), &model))
-
-			attrs, err := hcl.ModelToValue(&model, hclOptionsForType("criblio_guard_rule", registry.Entry{}))
-			require.NoError(t, err)
-			ensureGuardRuleRulesets(attrs)
-
-			require.Equal(t, hcl.KindList, attrs["rulesets"].Kind)
-			require.Empty(t, attrs["rulesets"].List)
-
-			// Rendering is where the attribute was lost, so assert on the HCL.
-			out, err := hcl.ResourceBlockBytes("criblio_guard_rule", "guard_rule_default_employee_badge_id", attrs, hcl.DefaultResourceBlockOptions())
-			require.NoError(t, err)
-			require.Regexp(t, `rulesets\s*= \[\]`, string(out))
+			require.True(t, skipGuardRuleWithoutRulesets("criblio_guard_rule", guardRuleAttrs(t, wire)))
 		})
 	}
 }
 
-// A rule that does belong to rulesets keeps them verbatim.
+// A rule that does belong to rulesets exports normally, keeping them verbatim.
 func TestGuardRuleExportKeepsRulesets(t *testing.T) {
-	var model provider.GuardRuleModel
-	require.NoError(t, json.Unmarshal([]byte(`{
-		"id": "credit_card",
-		"groupId": "default",
-		"regex": "/\\b(?:\\d[ -]*?){13,16}\\b/",
-		"rulesets": ["pci-compliance"]
-	}`), &model))
+	attrs := guardRuleAttrs(t, guardRuleWireWithRulesets)
 
-	attrs, err := hcl.ModelToValue(&model, hclOptionsForType("criblio_guard_rule", registry.Entry{}))
-	require.NoError(t, err)
-	ensureGuardRuleRulesets(attrs)
-
+	require.False(t, skipGuardRuleWithoutRulesets("criblio_guard_rule", attrs))
 	require.Len(t, attrs["rulesets"].List, 1)
 	require.Equal(t, "pci-compliance", attrs["rulesets"].List[0].String)
+
+	out, err := hcl.ResourceBlockBytes("criblio_guard_rule", "guard_rule_default_credit_card", attrs, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	require.Regexp(t, `rulesets\s*= \["pci-compliance"\]`, string(out))
+}
+
+// The skip is specific to Guard Rules; other types with an empty list attribute
+// are untouched.
+func TestGuardRuleSkipDoesNotApplyToOtherTypes(t *testing.T) {
+	attrs := map[string]hcl.Value{"rulesets": {Kind: hcl.KindList, List: []hcl.Value{}}}
+	require.False(t, skipGuardRuleWithoutRulesets("criblio_event_breaker_ruleset", attrs))
 }
