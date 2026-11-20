@@ -1,0 +1,24 @@
+name: Download Go modules
+description: Download dependencies before tests with bounded retries on Ubuntu runners.
+runs:
+  using: composite
+  steps:
+    - name: Download dependencies with retries
+      shell: bash
+      run: |
+        for attempt in 1 2 3; do
+          echo "::group::Go module download attempt ${attempt}/3"
+          if timeout --signal=TERM --kill-after=10s 180s go mod download -x; then
+            echo "::endgroup::"
+            exit 0
+          else
+            download_status=$?
+          fi
+          echo "::endgroup::"
+          echo "::warning::Go module download attempt ${attempt} failed (exit ${download_status})."
+          if [[ "$attempt" -eq 3 ]]; then
+            echo "::error::Go module download failed after three attempts; tests were not started."
+            exit "$download_status"
+          fi
+          sleep "$((attempt * 10))"
+        done

@@ -57,10 +57,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
 
       - name: Run Go Fmt Checks
         run: | 
@@ -84,10 +85,15 @@ jobs:
         with:
           terraform_version: "1.1.7"
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run Acceptance Tests [Cloud]
         env:
@@ -113,10 +119,15 @@ jobs:
         with:
           terraform_version: "1.1.7"
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Start Docker Compose services
         run: docker compose -f tests/docker/docker-compose.yml up -d
@@ -152,10 +163,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run Unit Tests
         run: | 
@@ -166,10 +182,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run Remaining Go Tests
         run: |
@@ -182,10 +203,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run import-cli Unit Tests
         run: make unit-test-import-cli
@@ -203,10 +229,15 @@ jobs:
           # Preserve Terraform exit codes (0=no changes, 1=error, 2=changes). Default wrapper converts non-zero to 1.
           terraform_wrapper: false
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run import-cli Integration Tests
         env:
@@ -223,10 +254,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: actions/setup-go@v4.3.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
+
       - uses: dominikh/staticcheck-action@v1.3.1
         with:
           # SA1019: deprecated identifiers (e.g. reflect.PtrTo in generated SDK utils)
