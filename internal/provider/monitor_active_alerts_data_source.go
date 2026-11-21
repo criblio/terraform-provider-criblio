@@ -43,7 +43,7 @@ func (d *MonitorActiveAlertsDataSource) Schema(_ context.Context, _ datasource.S
 		Attributes: map[string]schema.Attribute{
 			"engine_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The Local Search engine id.`,
+				Description: `The <code>id</code> of the lakehouse engine that contains the metrics dataset.`,
 			},
 			"dataset_id": schema.StringAttribute{
 				Required:    true,
@@ -57,6 +57,10 @@ func (d *MonitorActiveAlertsDataSource) Schema(_ context.Context, _ datasource.S
 						"fingerprint": schema.StringAttribute{
 							Computed:    true,
 							Description: `Stable identity of a single monitor instance — one distinct label-set of the monitor's query.`,
+						},
+						"health": schema.StringAttribute{
+							Computed:    true,
+							Description: `Health of the evaluation, independent of breach severity: <code>ok</code> when the instance evaluated normally, <code>no_data</code> when the whole Monitor matched no series, <code>missing_series</code> when this instance's series disappeared while others remained, or <code>error</code> when the evaluation failed to run.`,
 						},
 						"monitor_id": schema.StringAttribute{
 							Computed:    true,
@@ -107,7 +111,7 @@ func (d *MonitorActiveAlertsDataSource) Read(ctx context.Context, req datasource
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(MonitorActiveAlertsItemAttrTypes(), map[string]attr.Value{"fingerprint": item.Fingerprint, "monitor_id": item.MonitorID, "pending_status": item.PendingStatus, "status": item.Status}))
+			values = append(values, types.ObjectValueMust(MonitorActiveAlertsItemAttrTypes(), map[string]attr.Value{"fingerprint": item.Fingerprint, "health": item.Health, "monitor_id": item.MonitorID, "pending_status": item.PendingStatus, "status": item.Status}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: MonitorActiveAlertsItemAttrTypes()}, values)
@@ -117,6 +121,7 @@ func (d *MonitorActiveAlertsDataSource) Read(ctx context.Context, req datasource
 func MonitorActiveAlertsItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"fingerprint":    types.StringType,
+		"health":         types.StringType,
 		"monitor_id":     types.StringType,
 		"pending_status": types.StringType,
 		"status":         types.StringType,

@@ -18,6 +18,7 @@ var _ = jsontypes.NormalizedType{}
 
 type PackLookupsModel struct {
 	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Deploy      types.Object  `tfsdk:"deploy" json:"deploy,omitempty"`
 	Description types.String  `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
@@ -31,6 +32,7 @@ type PackLookupsModel struct {
 
 type PackLookupsResourceModel struct {
 	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Deploy      types.Object  `tfsdk:"deploy" json:"deploy,omitempty"`
 	Description types.String  `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
@@ -44,6 +46,7 @@ type PackLookupsResourceModel struct {
 
 type PackLookupsDataSourceModel struct {
 	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Deploy      types.Object  `tfsdk:"deploy" json:"deploy,omitempty"`
 	Description types.String  `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
@@ -57,6 +60,7 @@ type PackLookupsDataSourceModel struct {
 
 type PackLookupsAPIModel struct {
 	Content     *string  `json:"content,omitempty"`
+	Deploy      any      `json:"deploy,omitempty"`
 	Description *string  `json:"description,omitempty"`
 	GroupID     *string  `json:"groupId,omitempty"`
 	ID          *string  `json:"id,omitempty"`
@@ -66,6 +70,20 @@ type PackLookupsAPIModel struct {
 	PendingTask any      `json:"pendingTask,omitempty"`
 	Tags        *string  `json:"tags,omitempty"`
 	Version     *string  `json:"version,omitempty"`
+}
+
+type PackLookupsDeployModel struct {
+	Mode types.String `tfsdk:"mode" json:"mode,omitempty"`
+}
+
+type PackLookupsDeployAPIModel struct {
+	Mode *string `json:"mode,omitempty"`
+}
+
+func PackLookupsDeployAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode": types.StringType,
+	}
 }
 
 type PackLookupsPendingTaskModel struct {
@@ -308,6 +326,13 @@ func (m PackLookupsModel) MarshalJSON() ([]byte, error) {
 		}
 		output["content"] = value
 	}
+	if !m.Deploy.IsNull() && !m.Deploy.IsUnknown() {
+		value, err := PackLookupsTerraformValueToJSON(m.Deploy)
+		if err != nil {
+			return nil, fmt.Errorf("convert deploy to API value: %v", err)
+		}
+		output["deploy"] = value
+	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := PackLookupsTerraformValueToJSON(m.Description)
 		if err != nil {
@@ -348,6 +373,15 @@ func (m *PackLookupsModel) UnmarshalJSON(data []byte) error {
 		m.Content = types.StringValue(*input.Content)
 	} else {
 		m.Content = types.StringNull()
+	}
+	if input.Deploy != nil {
+		value, err := PackLookupsAPIValueToTerraformValue(input.Deploy, types.ObjectType{AttrTypes: PackLookupsDeployAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert deploy from API value: %v", err)
+		}
+		m.Deploy = value.(types.Object)
+	} else {
+		m.Deploy = types.ObjectNull(PackLookupsDeployAttrTypes())
 	}
 	if input.Description != nil {
 		m.Description = types.StringValue(*input.Description)

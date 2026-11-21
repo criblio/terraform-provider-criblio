@@ -41,23 +41,17 @@ func (r *MonitorSilenceResource) Schema(_ context.Context, _ resource.SchemaRequ
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "MonitorSilence Resource",
 		Attributes: map[string]schema.Attribute{
-			"alert_instance_id": schema.StringAttribute{
-				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Optional fingerprint of a specific alert instance to mute. If omitted, all instances for the monitor are muted.`,
-			},
 			"begins_at": schema.Int64Attribute{
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `Unix timestamp in milliseconds when the alert silence begins.`,
+				Description: `Unix timestamp in milliseconds when the Silence starts muting notifications.`,
 			},
 			"created_at": schema.Int64Attribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Unix timestamp in milliseconds when the alert silence was created.`,
+				Description: `Unix timestamp in milliseconds when the Silence was created. Set by the server; a value sent in a request is ignored.`,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
 				},
@@ -66,7 +60,7 @@ func (r *MonitorSilenceResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Username or identifier of who created this alert silence.`,
+				Description: `Username of who created the Silence. Set by the server; a value sent in a request is ignored.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -75,37 +69,37 @@ func (r *MonitorSilenceResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Optional user-friendly description of the alert silence.`,
+				Description: `Optional description of the Silence.`,
 			},
 			"duration_type": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `UI state that records which duration picker mode was used. UI-only field for edit mode round-tripping. API consumers should ignore.`,
+				Description: `Records which duration picker mode the Metrics UI used to set the window. Does not change what the Silence mutes; <code>begins_at</code> and <code>expires_at</code> decide that.`,
 			},
 			"duration_unit": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `UI state that records the unit for a relative duration. UI-only field for edit mode round-tripping. API consumers should ignore.`,
+				Description: `Records the unit for a relative duration in the Metrics UI. Does not change what the Silence mutes.`,
 			},
 			"duration_value": schema.Int64Attribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `UI state that records the numeric value for a relative duration, such as <code>2</code> for two hours.`,
+				Description: `Records the number for a relative duration in the Metrics UI, such as <code>2</code> for two hours. Does not change what the Silence mutes.`,
 			},
 			"expires_at": schema.Int64Attribute{
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `Unix timestamp in milliseconds when the alert silence expires.`,
+				Description: `Unix timestamp in milliseconds when the Silence stops muting notifications.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `Unique identifier for the alert silence.`,
+				Description: `Unique identifier for the Silence.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -114,20 +108,13 @@ func (r *MonitorSilenceResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `The <code>id</code> of the alert Monitor that this silence applies to.`,
+				Description: `The <code>id</code> of the Monitor Configuration whose notifications this Silence mutes. All of the Monitor's notifications are muted, for every series.`,
 			},
 			"name": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Optional display name for the alert silence.`,
-			},
-			"tags": schema.StringAttribute{
-				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				Description: `Optional tag matchers for selective instance muting. Keys are label names, values are arrays of allowed values. Logic: AND across keys, OR within each key's values. Only instances whose labels satisfy all keys are muted.`,
-				CustomType:  jsontypes.NormalizedType{},
+				Description: `Optional display name for the Silence.`,
 			},
 		},
 	}
@@ -254,11 +241,6 @@ func applyMonitorSilenceAPIToState(api *MonitorSilenceModel, state *MonitorSilen
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || (fillMissingInputs && (state.AlertInstanceID.IsNull() || state.AlertInstanceID.IsUnknown())) {
-		if !api.AlertInstanceID.IsNull() && !api.AlertInstanceID.IsUnknown() {
-			state.AlertInstanceID = api.AlertInstanceID
-		}
-	}
 	if !preserveInputs || (fillMissingInputs && (state.BeginsAt.IsNull() || state.BeginsAt.IsUnknown())) {
 		if !api.BeginsAt.IsNull() && !api.BeginsAt.IsUnknown() {
 			state.BeginsAt = api.BeginsAt
@@ -312,11 +294,6 @@ func applyMonitorSilenceAPIToState(api *MonitorSilenceModel, state *MonitorSilen
 	if !preserveInputs || (fillMissingInputs && (state.Name.IsNull() || state.Name.IsUnknown())) {
 		if !api.Name.IsNull() && !api.Name.IsUnknown() {
 			state.Name = api.Name
-		}
-	}
-	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
-		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
-			state.Tags = api.Tags
 		}
 	}
 }

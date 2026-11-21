@@ -111,6 +111,7 @@ func SearchDatatypeAddFieldsAttrTypes() map[string]attr.Type {
 
 type SearchDatatypeAdditionalExtractionsModel struct {
 	Name              types.String `tfsdk:"name" json:"name,omitempty"`
+	Prefix            types.String `tfsdk:"prefix" json:"prefix,omitempty"`
 	SourceField       types.String `tfsdk:"source_field" json:"sourceField,omitempty"`
 	ContainsHeaderRow types.Bool   `tfsdk:"contains_header_row" json:"containsHeaderRow,omitempty"`
 	Delimiter         types.String `tfsdk:"delimiter" json:"delimiter,omitempty"`
@@ -123,6 +124,7 @@ type SearchDatatypeAdditionalExtractionsModel struct {
 
 type SearchDatatypeAdditionalExtractionsAPIModel struct {
 	Name              *string  `json:"name,omitempty"`
+	Prefix            *string  `json:"prefix,omitempty"`
 	SourceField       *string  `json:"sourceField,omitempty"`
 	ContainsHeaderRow *bool    `json:"containsHeaderRow,omitempty"`
 	Delimiter         *string  `json:"delimiter,omitempty"`
@@ -136,6 +138,7 @@ type SearchDatatypeAdditionalExtractionsAPIModel struct {
 func SearchDatatypeAdditionalExtractionsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"name":                types.StringType,
+		"prefix":              types.StringType,
 		"source_field":        types.StringType,
 		"contains_header_row": types.BoolType,
 		"delimiter":           types.StringType,

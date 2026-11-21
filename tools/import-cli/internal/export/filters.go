@@ -125,14 +125,12 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	if !ok || len(ids) == 0 {
 		return false
 	}
-	// Match ImportIDFormat "id" and group-only maps (e.g. criblio_group uses group_id without "id").
-	if v := idMap["id"]; v != "" && ids[v] {
-		return true
+	// Use the resource ID when present. Only group-only identifiers use group_id;
+	// a worker group named "default" must not exclude every pack destination.
+	if id := idMap["id"]; id != "" {
+		return ids[id]
 	}
-	if v := idMap["group_id"]; v != "" && ids[v] {
-		return true
-	}
-	return false
+	return ids[idMap["group_id"]]
 }
 
 func isLookupFileType(typeName string) bool {

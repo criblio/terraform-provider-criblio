@@ -83,7 +83,7 @@ resource "criblio_pack" "source_pack" {
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -102,7 +102,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -121,7 +121,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -140,7 +140,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -159,7 +159,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -178,7 +178,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -197,7 +197,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -216,7 +216,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -235,7 +235,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -254,7 +254,7 @@ Optional:
 
 Optional:
 
-- `id` (String) Unique ID for this Job
+- `id` (String) Unique name for this Job
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `remove_fields` (List of String) List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
@@ -356,6 +356,7 @@ Optional:
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_splunk--input--metadata))
 - `pipeline` (String) Pipeline to process results
 - `output` (String) Destination to send results to
+- `throttle_burst_disabled` (Boolean) When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.
 
 <a id="nestedatt--input_collector_splunk--input--preprocess"></a>
 <a id="nestedatt--input_collector_rest--input--preprocess"></a>

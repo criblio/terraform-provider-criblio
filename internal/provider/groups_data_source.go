@@ -74,6 +74,10 @@ func (d *GroupsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 							Computed:    true,
 							Description: `Brief description of the Worker Group, Outpost Group, or Edge Fleet.`,
 						},
+						"ephemeral_count": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Number of Workers or Nodes in the Worker Group, Outpost Group, or Edge Fleet that are connected, plus those that are away: disconnected, but still within the reconnect window their ephemeral connection mode allows. Excludes Nodes disconnected beyond that window. Equals <code>workerCount</code> wherever no Node uses an ephemeral connection mode.<br/><br/> **Warning**: Do not change the value of <code>ephemeralCount</code> in the body of PATCH requests. The PATCH request body must include the value as it appears in the <code>GET /products/{product}/groups/{id}</code> response.`,
+						},
 						"estimated_ingest_rate": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Estimated ingest rate for a Cribl.Cloud Worker Group, in GB/sec.`,
@@ -262,7 +266,7 @@ func (d *GroupsDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(GroupsItemAttrTypes(), map[string]attr.Value{"cloud": item.Cloud, "collectors_ha_enabled": item.CollectorsHaEnabled, "config_version": item.ConfigVersion, "deploying_worker_count": item.DeployingWorkerCount, "description": item.Description, "estimated_ingest_rate": item.EstimatedIngestRate, "git": item.Git, "id": item.ID, "incompatible_worker_count": item.IncompatibleWorkerCount, "inherits": item.Inherits, "is_fleet": item.IsFleet, "is_search": item.IsSearch, "lookup_deployments": item.LookupDeployments, "max_worker_age": item.MaxWorkerAge, "name": item.Name, "on_prem": item.OnPrem, "provisioned": item.Provisioned, "streamtags": item.Streamtags, "tags": item.Tags, "type": item.Type, "upgrade_version": item.UpgradeVersion, "worker_count": item.WorkerCount, "worker_remote_access": item.WorkerRemoteAccess}))
+			values = append(values, types.ObjectValueMust(GroupsItemAttrTypes(), map[string]attr.Value{"cloud": item.Cloud, "collectors_ha_enabled": item.CollectorsHaEnabled, "config_version": item.ConfigVersion, "deploying_worker_count": item.DeployingWorkerCount, "description": item.Description, "ephemeral_count": item.EphemeralCount, "estimated_ingest_rate": item.EstimatedIngestRate, "git": item.Git, "id": item.ID, "incompatible_worker_count": item.IncompatibleWorkerCount, "inherits": item.Inherits, "is_fleet": item.IsFleet, "is_search": item.IsSearch, "lookup_deployments": item.LookupDeployments, "max_worker_age": item.MaxWorkerAge, "name": item.Name, "on_prem": item.OnPrem, "provisioned": item.Provisioned, "streamtags": item.Streamtags, "tags": item.Tags, "type": item.Type, "upgrade_version": item.UpgradeVersion, "worker_count": item.WorkerCount, "worker_remote_access": item.WorkerRemoteAccess}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: GroupsItemAttrTypes()}, values)
@@ -276,6 +280,7 @@ func GroupsItemAttrTypes() map[string]attr.Type {
 		"config_version":            types.StringType,
 		"deploying_worker_count":    types.Int64Type,
 		"description":               types.StringType,
+		"ephemeral_count":           types.Int64Type,
 		"estimated_ingest_rate":     types.Int64Type,
 		"git":                       types.ObjectType{AttrTypes: GroupDiscoveryGitAttrTypes()},
 		"id":                        types.StringType,

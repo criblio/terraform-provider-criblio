@@ -56,7 +56,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `Unique ID for this input`,
+							Description: `Unique name for this input`,
 						},
 						"pack": schema.StringAttribute{
 							Computed:    true,
@@ -68,7 +68,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -224,6 +224,10 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
 									Description: `Fields to add to events from this input`,
@@ -251,7 +255,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -382,7 +386,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 								"topics": schema.ListAttribute{
 									Computed:    true,
-									Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+									Description: `Topic to subscribe to. Warning: Multiple entries are supported, but will degrade throughput. To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
 									ElementType: types.StringType,
 								},
 								"group_id": schema.StringAttribute{
@@ -485,7 +489,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
-													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 												},
 												"servername": schema.StringAttribute{
@@ -662,7 +667,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -700,11 +706,15 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 										},
 									},
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
 								"session_timeout": schema.Float64Attribute{
 									Computed: true,
 									Description: `
       Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires, 
+      If the client sends no heartbeats to the broker before the timeout expires,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
@@ -774,7 +784,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -905,7 +915,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 								"topics": schema.ListAttribute{
 									Computed:    true,
-									Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+									Description: `Topic to subscribe to. Warning: Multiple entries are supported, but will degrade throughput. To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
 									ElementType: types.StringType,
 								},
 								"group_id": schema.StringAttribute{
@@ -920,7 +930,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Computed: true,
 									Description: `
       Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires, 
+      If the client sends no heartbeats to the broker before the timeout expires,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
@@ -1047,7 +1057,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
-													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 												},
 												"servername": schema.StringAttribute{
@@ -1119,6 +1130,10 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Computed:    true,
 									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
 									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
@@ -1170,7 +1185,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -1252,7 +1268,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1396,7 +1412,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -1545,7 +1561,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1683,7 +1699,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -1837,7 +1853,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2162,7 +2178,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2350,7 +2366,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -2518,7 +2534,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2768,7 +2784,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2998,7 +3014,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3136,7 +3152,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -3351,7 +3367,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3490,7 +3506,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -3530,7 +3547,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 								"topics": schema.ListAttribute{
 									Computed:    true,
-									Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+									Description: `Topic to subscribe to. Warning: Multiple entries are supported, but will degrade throughput. To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
 									ElementType: types.StringType,
 								},
 								"group_id": schema.StringAttribute{
@@ -3633,7 +3650,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
-													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 												},
 												"servername": schema.StringAttribute{
@@ -3800,11 +3818,15 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 										},
 									},
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
 								"session_timeout": schema.Float64Attribute{
 									Computed: true,
 									Description: `
       Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires, 
+      If the client sends no heartbeats to the broker before the timeout expires,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
@@ -3874,7 +3896,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4012,7 +4034,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -4204,7 +4226,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4342,7 +4364,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -4492,7 +4514,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4630,7 +4652,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -4780,7 +4802,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5126,7 +5148,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5521,7 +5543,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5800,7 +5822,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6071,7 +6093,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6382,7 +6404,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6693,7 +6715,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6824,7 +6846,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 								"topics": schema.ListAttribute{
 									Computed:    true,
-									Description: `The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.`,
+									Description: `The name of the Event Hub (Kafka topic) to subscribe to. Warning: Multiple entries are supported, but will degrade throughput. To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.`,
 									ElementType: types.StringType,
 								},
 								"group_id": schema.StringAttribute{
@@ -7035,7 +7057,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -7361,7 +7383,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -7549,7 +7571,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -7693,7 +7715,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -7813,7 +7835,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8022,7 +8044,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8177,7 +8199,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8315,7 +8337,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -8431,7 +8453,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8589,7 +8611,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -8709,7 +8731,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8853,7 +8875,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -9002,7 +9024,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9140,7 +9162,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -9253,7 +9275,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9655,7 +9677,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9964,7 +9986,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10173,7 +10195,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10391,7 +10413,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10558,7 +10580,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10907,7 +10929,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11251,7 +11273,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11389,7 +11411,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -11551,7 +11573,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11718,7 +11740,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11862,7 +11884,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12074,7 +12096,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12319,7 +12341,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12478,7 +12500,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12632,7 +12654,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12708,7 +12730,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13056,7 +13078,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13408,7 +13430,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13647,7 +13669,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13785,7 +13807,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -14062,7 +14084,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14200,7 +14222,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -14288,7 +14310,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14525,7 +14547,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14724,7 +14746,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -14807,12 +14829,3012 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 							},
 						},
+						"input_check_point_sase_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Not supported for this Source — it listens on TCP only.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_cisco_asa_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_cisco_meraki_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_fortigate_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_vmware_esxi_vcenter_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_netgate_pfsense_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_watchguard_firebox_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP. WatchGuard Firebox sends syslog to port 514 by default.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_infoblox_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_ubiquiti_unifi_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_sonicwall_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_sophos_xg_xgs_firewall_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
 						"input_file": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15054,6 +18076,18 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Computed:    true,
 									Description: `Target CPU utilization percentage during file discovery. Discovery alternates between work and yield periods within a 200ms cycle. For example, 25% processes entries for 50ms then yields for 150ms. Lower values reduce CPU usage at the cost of longer discovery times.`,
 								},
+								"recursive_watch": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Watch the search path recursively, so new and updated files are detected as the filesystem reports them. When disabled, file discovery relies on repeated directory scans only. Intended for large search paths, where it removes the cost of scanning the whole tree on every interval.It offers little benefit for search paths containing few files or a single file.`,
+								},
+								"rescan_interval": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Time, in seconds, between restarting the recursive watch and rescanning the directory tree. The rescan recovers discovered changes when the operating system fails to send filesystem notifications. A shorter interval reduces the time window during which changes can go unnoticed, but at the expense of performing a full directory walk each time. An interval is always in force: clearing the field falls back to one hour rather than turning rescans off.`,
+								},
+								"max_watches": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of directories this Source watches at one time. Applies on Linux, where the operating system needs one watch per directory; macOS and Windows use a single recursive watch and ignore this. Reaching the limit stops the watch from descending further and reports the Source as unhealthy, rather than quietly missing files below that point. Raise the limit for a tree with many directories, or lower it to leave room for other Sources sharing the host's fs.inotify.max_user_watches budget.`,
+								},
 								"include_unidentifiable_binary": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Stream binary files as Base64-encoded chunks`,
@@ -15065,7 +18099,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15203,7 +18237,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -15348,7 +18382,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15607,7 +18641,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -15676,7 +18710,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16047,7 +19081,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16247,7 +19281,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16406,7 +19440,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16589,7 +19623,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16785,7 +19819,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17098,7 +20132,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17447,7 +20481,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17591,7 +20625,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -17771,7 +20805,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17962,7 +20996,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -18306,7 +21340,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -18650,7 +21684,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19002,7 +22036,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19148,7 +22182,8 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -19221,7 +22256,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19409,7 +22444,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -19552,7 +22587,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19888,7 +22923,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20076,7 +23111,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -20215,7 +23250,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20403,7 +23438,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -20542,7 +23577,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20730,7 +23765,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -20864,12 +23899,325 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 							},
 						},
+						"input_salesforce": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"salesforce_subdomain": schema.StringAttribute{
+									Computed:    true,
+									Description: `Your Salesforce My Domain prefix. For production: mycompany. For sandbox: mycompany.sandbox. For developer: mycompany.develop.`,
+								},
+								"salesforce_cloud": schema.StringAttribute{
+									Computed:    true,
+									Description: `Salesforce cloud deployment — determines the domain suffix.`,
+								},
+								"salesforce_oauth_client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Client ID from your Salesforce connected app`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"salesforce_api_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Salesforce REST API version (example: v64.0)`,
+								},
+								"content_config": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Salesforce data sources to collect. Each entry specifies a Salesforce object, fields, and a cursor for time filtering — or an EventLogFile download.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"content_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Content type`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Enabled`,
+											},
+											"state_tracking": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Track collection progress between consecutive scheduled executions.`,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression that defines how to update the state from an event. Use the event's data and the current state to compute the new state. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields) for more information.`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: "JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates `prevState` and `newState` variables, resolving to the state to keep.",
+											},
+											"manage_state": schema.MapAttribute{
+												Computed:    true,
+												Description: `Controls for viewing and managing the collector state.`,
+												ElementType: types.StringType,
+											},
+											"content_description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Brief description of what this content type collects.`,
+											},
+											"object_name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Salesforce object API name to query (examples: LoginHistory, SetupAuditTrail, Account)`,
+											},
+											"fields": schema.ListAttribute{
+												Computed:    true,
+												Description: `Field API names to include in the query.`,
+												ElementType: types.StringType,
+											},
+											"cursor": schema.StringAttribute{
+												Computed:    true,
+												Description: `Timestamp field used for time filtering and breaker rule routing (examples: LoginTime, CreatedDate)`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Description: "Optional SOQL WHERE conditions, entered as a Cribl expression that evaluates to a SOQL string. Wrap the value in backticks (example: `CountryIso = 'US'`). The expression is evaluated once when the Source initializes — not per collection run. Combined with cursor-based time filtering using AND. SOQL syntax is not validated locally; invalid conditions will fail at collection time.",
+											},
+											"cron_schedule": schema.StringAttribute{
+												Computed:    true,
+												Description: `Schedule on which to run this collection job`,
+											},
+											"earliest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Earliest time for data collection, relative to now`,
+											},
+											"latest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Latest time for data collection, relative to now`,
+											},
+											"job_timeout": schema.StringAttribute{
+												Computed:    true,
+												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+											},
+										},
+									},
+								},
+								"max_pages": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of pages to fetch per content type per scheduled run. Use 0 for unlimited.`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+								},
+								"breaker_rulesets": schema.ListAttribute{
+									Computed:    true,
+									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+									ElementType: types.StringType,
+								},
+								"stale_channel_flush_ms": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+								},
+								"max_missed_keep_alives": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+								},
+								"ttl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"retry_rules": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
+										},
+										"interval": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+										},
+										"limit": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of times to retry a failed HTTP request`,
+										},
+										"multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+										},
+										"codes": schema.ListAttribute{
+											Computed:    true,
+											Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+											ElementType: types.Float64Type,
+										},
+										"enable_header": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+										},
+										"retry_connect_timeout": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
+										},
+										"retry_connect_reset": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
+										},
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
 						"input_sailpoint_hec": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -21057,7 +24405,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -21177,7 +24525,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -21365,7 +24713,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -21504,7 +24852,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -21692,7 +25040,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -21831,7 +25179,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -22122,7 +25470,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -22637,7 +25985,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -22918,7 +26266,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -23223,7 +26571,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -23466,12 +26814,341 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 							},
 						},
+						"input_sentinelone": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"management_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Your SentinelOne management console hostname, without the domain suffix (example: usea1-yourorg)`,
+								},
+								"management_domain_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `Host suffix for your SentinelOne management console. Defaults to sentinelone.net (global). Choose sentinelone.mil for US military environments, or enter a custom domain.`,
+								},
+								"api_token": schema.StringAttribute{
+									Computed:    true,
+									Sensitive:   true,
+									Description: `SentinelOne API token`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"content_config": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Content Types`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"content_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Content type`,
+											},
+											"content_description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"collect_path": schema.StringAttribute{
+												Computed:    true,
+												Description: `SentinelOne API path`,
+											},
+											"collect_method": schema.StringAttribute{
+												Computed:    true,
+												Description: `HTTP method`,
+											},
+											"collect_body": schema.StringAttribute{
+												Computed:    true,
+												Description: `Request body`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Enabled`,
+											},
+											"state_tracking": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Track collection progress between consecutive scheduled executions`,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression that defines how to update the state from an event. Use the event's data and the current state to compute the new state. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields) for more information.`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: "JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates `prevState` and `newState` variables, resolving to the state to keep.",
+											},
+											"manage_state": schema.MapAttribute{
+												Computed:    true,
+												Description: `Controls for viewing and managing the collector state.`,
+												ElementType: types.StringType,
+											},
+											"request_params": schema.ListNestedAttribute{
+												Computed:    true,
+												Description: `Query-string parameters to send with this endpoint`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Name`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `Value`,
+														},
+													},
+												},
+											},
+											"pagination_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pagination type`,
+											},
+											"pagination_attribute": schema.ListAttribute{
+												Computed:    true,
+												Description: `Pagination attributes`,
+												ElementType: types.StringType,
+											},
+											"pagination_last_page_expr": schema.StringAttribute{
+												Computed:    true,
+												Description: `Last page expression`,
+											},
+											"max_pages": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Maximum number of pages to retrieve per collection task. Set to 0 for unlimited.`,
+											},
+											"cron_schedule": schema.StringAttribute{
+												Computed:    true,
+												Description: `A cron schedule on which to run this job`,
+											},
+											"earliest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Relative to the current time`,
+											},
+											"latest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Relative to the current time`,
+											},
+											"job_timeout": schema.StringAttribute{
+												Computed:    true,
+												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+											},
+											"log_level": schema.StringAttribute{
+												Computed:    true,
+												Description: `Collector runtime log level`,
+											},
+										},
+									},
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+								},
+								"max_missed_keep_alives": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+								},
+								"ttl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"retry_rules": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
+										},
+										"interval": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+										},
+										"limit": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of times to retry a failed HTTP request`,
+										},
+										"multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+										},
+										"codes": schema.ListAttribute{
+											Computed:    true,
+											Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+											ElementType: types.Float64Type,
+										},
+										"enable_header": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+										},
+										"retry_connect_timeout": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
+										},
+										"retry_connect_reset": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
+										},
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
 						"input_akamai_hec": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -23659,7 +27336,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -23783,7 +27460,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -23971,7 +27648,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -24110,7 +27787,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -24298,7 +27975,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -24437,7 +28114,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -24625,7 +28302,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -24764,7 +28441,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -24952,7 +28629,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -25095,7 +28772,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -25283,7 +28960,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -25417,7 +29094,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -25605,7 +29282,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -25744,7 +29421,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -25932,7 +29609,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -26071,7 +29748,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this input`,
+									Description: `Unique name for this input`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -26259,7 +29936,7 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `If true, TLS is disabled on this connection.`,
+											Description: `Disabled`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -26393,6 +30070,1682 @@ func (d *PackSourcesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								},
 							},
 						},
+						"input_zoom_webhook": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Source type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Port to listen on`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"max_active_req": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+								},
+								"max_requests_per_socket": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								},
+								"enable_proxy_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
+								},
+								"capture_headers": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
+								},
+								"activity_log_sample_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+								},
+								"socket_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+								},
+								"keep_alive_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+								},
+								"enable_health_check": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
+								},
+								"ip_allowlist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist`,
+								},
+								"ip_denylist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.`,
+								},
+								"breaker_rulesets": schema.ListAttribute{
+									Computed:    true,
+									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+									ElementType: types.StringType,
+								},
+								"stale_channel_flush_ms": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"allowed_paths": schema.ListAttribute{
+									Computed:    true,
+									Description: `List of URI paths accepted by this input. Wildcards are supported (such as /api/v*/hook). Defaults to allow all.`,
+									ElementType: types.StringType,
+								},
+								"allowed_methods": schema.ListAttribute{
+									Computed:    true,
+									Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.`,
+									ElementType: types.StringType,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Not supported for this Source — the stored text secret is the only credential path.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Not supported for this Source — authentication always uses the stored secret token.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret token from your Zoom webhook configuration, used to verify that incoming requests originate from Zoom`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_netskope": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"tenant_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Full base URL of your Netskope tenant (example: https://mycompany.goskope.com). Do not include trailing slashes or API paths.`,
+								},
+								"api_token": schema.StringAttribute{
+									Computed:    true,
+									Sensitive:   true,
+									Description: `API token`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored Netskope V2 API token`,
+								},
+								"content_config": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Content types`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"content_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Content type`,
+											},
+											"content_description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Enabled`,
+											},
+											"cursor_index": schema.StringAttribute{
+												Computed:    true,
+												Description: `Server-side index name Netskope uses for tracking data export state. Change only if you need a separate export cursor.`,
+											},
+											"cron_schedule": schema.StringAttribute{
+												Computed:    true,
+												Description: `Schedule on which to collect this content type`,
+											},
+											"job_timeout": schema.StringAttribute{
+												Computed:    true,
+												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+											},
+											"log_level": schema.StringAttribute{
+												Computed:    true,
+												Description: `Collector runtime log level`,
+											},
+										},
+									},
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+								},
+								"max_missed_keep_alives": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+								},
+								"ttl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"retry_rules": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `HTTP retry behavior for failed collection requests.`,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
+										},
+										"interval": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+										},
+										"limit": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of times to retry a failed HTTP request`,
+										},
+										"multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+										},
+										"codes": schema.ListAttribute{
+											Computed:    true,
+											Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+											ElementType: types.Float64Type,
+										},
+										"enable_header": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+										},
+										"retry_connect_timeout": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
+										},
+										"retry_connect_reset": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
+										},
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_litellm": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Source type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Port to listen on`,
+								},
+								"auth_tokens": schema.ListAttribute{
+									Computed:    true,
+									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									ElementType: types.StringType,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"max_active_req": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+								},
+								"max_requests_per_socket": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								},
+								"capture_headers": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed:    true,
+									Description: `Warning displayed when request-header capture is enabled.`,
+								},
+								"activity_log_sample_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+								},
+								"socket_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+								},
+								"keep_alive_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+								},
+								"enable_health_check": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
+								},
+								"ip_allowlist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist`,
+								},
+								"ip_denylist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.`,
+								},
+								"cribl_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Absolute path on which to listen for LiteLLM generic API logger requests. Only _bulk (default /cribl/_bulk) is available. Each log record becomes one event, whether LiteLLM sends a JSON array or NDJSON.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"auth_tokens_ext": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"auth_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+											"token": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"metadata": schema.ListNestedAttribute{
+												Computed:    true,
+												Description: `Fields to add to events referencing this token`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Name of the metadata field.`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_cisco_secure_firewall_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_juniper_junos_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_cisco_ios_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"source_service": schema.StringAttribute{
+											Computed:    true,
+											Description: `Resolved DSD source-service offering, when known.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+										},
+										"template_family": schema.StringAttribute{
+											Computed:    true,
+											Description: `Infrastructure-as-code family that provisioned the AWS resources (absent means cloudformation).`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Persistent queue settings for this Source.`,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them. Lower values increase cursor-write IOPS and can add disk pressure, including on shared storage.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+									ElementType: types.StringType,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (server side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to accept from clients.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to accept from clients.`,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"auto_parse": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Detect the datatype of each event and extract its top-level fields before the data reaches any of the processing pipelines (pre-processing, main processing, post-processing).`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
 					},
 				},
 			},
@@ -26430,7 +31783,7 @@ func (d *PackSourcesDataSource) Read(ctx context.Context, req datasource.ReadReq
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(PackSourcesItemAttrTypes(), map[string]attr.Value{"id": item.ID, "pack": item.Pack, "input_collection": PackSourcesInputCollectionObjectValue(item.InputCollection), "input_kafka": PackSourcesInputKafkaObjectValue(item.InputKafka), "input_msk": PackSourcesInputMskObjectValue(item.InputMsk), "input_http": PackSourcesInputHttpObjectValue(item.InputHttp), "input_splunk": PackSourcesInputSplunkObjectValue(item.InputSplunk), "input_splunk_search": PackSourcesInputSplunkSearchObjectValue(item.InputSplunkSearch), "input_splunk_hec": PackSourcesInputSplunkHecObjectValue(item.InputSplunkHec), "input_azure_blob": PackSourcesInputAzureBlobObjectValue(item.InputAzureBlob), "input_azure_vnet_flow_log": PackSourcesInputAzureVnetFlowLogObjectValue(item.InputAzureVnetFlowLog), "input_elastic": PackSourcesInputElasticObjectValue(item.InputElastic), "input_confluent_cloud": PackSourcesInputConfluentCloudObjectValue(item.InputConfluentCloud), "input_grafana": PackSourcesInputGrafanaObjectValue(item.InputGrafana), "input_loki": PackSourcesInputLokiObjectValue(item.InputLoki), "input_prometheus_rw": PackSourcesInputPrometheusRwObjectValue(item.InputPrometheusRw), "input_prometheus": PackSourcesInputPrometheusObjectValue(item.InputPrometheus), "input_edge_prometheus": PackSourcesInputEdgePrometheusObjectValue(item.InputEdgePrometheus), "input_office365_mgmt": PackSourcesInputOffice365MgmtObjectValue(item.InputOffice365Mgmt), "input_office365_service": PackSourcesInputOffice365ServiceObjectValue(item.InputOffice365Service), "input_office365_msg_trace": PackSourcesInputOffice365MsgTraceObjectValue(item.InputOffice365MsgTrace), "input_microsoft_graph": PackSourcesInputMicrosoftGraphObjectValue(item.InputMicrosoftGraph), "input_eventhub": PackSourcesInputEventhubObjectValue(item.InputEventhub), "input_eventhub_amqp": PackSourcesInputEventhubAmqpObjectValue(item.InputEventhubAmqp), "input_exec": PackSourcesInputExecObjectValue(item.InputExec), "input_firehose": PackSourcesInputFirehoseObjectValue(item.InputFirehose), "input_google_pubsub": PackSourcesInputGooglePubsubObjectValue(item.InputGooglePubsub), "input_cribl": PackSourcesInputCriblObjectValue(item.InputCribl), "input_cribl_tcp": PackSourcesInputCriblTcpObjectValue(item.InputCriblTcp), "input_cribl_http": PackSourcesInputCriblHttpObjectValue(item.InputCriblHttp), "input_cribl_lake_http": PackSourcesInputCriblLakeHttpObjectValue(item.InputCriblLakeHttp), "input_tcpjson": PackSourcesInputTcpjsonObjectValue(item.InputTcpjson), "input_system_metrics": PackSourcesInputSystemMetricsObjectValue(item.InputSystemMetrics), "input_system_state": PackSourcesInputSystemStateObjectValue(item.InputSystemState), "input_kube_metrics": PackSourcesInputKubeMetricsObjectValue(item.InputKubeMetrics), "input_kube_logs": PackSourcesInputKubeLogsObjectValue(item.InputKubeLogs), "input_kube_events": PackSourcesInputKubeEventsObjectValue(item.InputKubeEvents), "input_windows_metrics": PackSourcesInputWindowsMetricsObjectValue(item.InputWindowsMetrics), "input_crowdstrike": PackSourcesInputCrowdstrikeObjectValue(item.InputCrowdstrike), "input_datadog_agent": PackSourcesInputDatadogAgentObjectValue(item.InputDatadogAgent), "input_datagen": PackSourcesInputDatagenObjectValue(item.InputDatagen), "input_http_raw": PackSourcesInputHttpRawObjectValue(item.InputHttpRaw), "input_kinesis": PackSourcesInputKinesisObjectValue(item.InputKinesis), "input_criblmetrics": PackSourcesInputCriblmetricsObjectValue(item.InputCriblmetrics), "input_metrics": PackSourcesInputMetricsObjectValue(item.InputMetrics), "input_s3": PackSourcesInputS3ObjectValue(item.InputS3), "input_s3_inventory": PackSourcesInputS3InventoryObjectValue(item.InputS3Inventory), "input_snmp": PackSourcesInputSnmpObjectValue(item.InputSnmp), "input_open_telemetry": PackSourcesInputOpenTelemetryObjectValue(item.InputOpenTelemetry), "input_model_driven_telemetry": PackSourcesInputModelDrivenTelemetryObjectValue(item.InputModelDrivenTelemetry), "input_sqs": PackSourcesInputSqsObjectValue(item.InputSqs), "input_syslog": PackSourcesInputSyslogObjectValue(item.InputSyslog), "input_file": PackSourcesInputFileObjectValue(item.InputFile), "input_tcp": PackSourcesInputTcpObjectValue(item.InputTcp), "input_appscope": PackSourcesInputAppscopeObjectValue(item.InputAppscope), "input_wef": PackSourcesInputWefObjectValue(item.InputWef), "input_win_event_logs": PackSourcesInputWinEventLogsObjectValue(item.InputWinEventLogs), "input_apple_unified_logs": PackSourcesInputAppleUnifiedLogsObjectValue(item.InputAppleUnifiedLogs), "input_raw_udp": PackSourcesInputRawUdpObjectValue(item.InputRawUdp), "input_journal_files": PackSourcesInputJournalFilesObjectValue(item.InputJournalFiles), "input_wiz": PackSourcesInputWizObjectValue(item.InputWiz), "input_openai": PackSourcesInputOpenaiObjectValue(item.InputOpenai), "input_wiz_webhook": PackSourcesInputWizWebhookObjectValue(item.InputWizWebhook), "input_netflow": PackSourcesInputNetflowObjectValue(item.InputNetflow), "input_security_lake": PackSourcesInputSecurityLakeObjectValue(item.InputSecurityLake), "input_bedrock_s3": PackSourcesInputBedrockS3ObjectValue(item.InputBedrockS3), "input_servicenow_table": PackSourcesInputServicenowTableObjectValue(item.InputServicenowTable), "input_proofpoint_pod": PackSourcesInputProofpointPodObjectValue(item.InputProofpointPod), "input_zscaler_hec": PackSourcesInputZscalerHecObjectValue(item.InputZscalerHec), "input_cloudflare_hec": PackSourcesInputCloudflareHecObjectValue(item.InputCloudflareHec), "input_sysdig_hec": PackSourcesInputSysdigHecObjectValue(item.InputSysdigHec), "input_upwind_hec": PackSourcesInputUpwindHecObjectValue(item.InputUpwindHec), "input_trellix_hec": PackSourcesInputTrellixHecObjectValue(item.InputTrellixHec), "input_sailpoint_hec": PackSourcesInputSailpointHecObjectValue(item.InputSailpointHec), "input_extrahop_revealx360": PackSourcesInputExtrahopRevealx360ObjectValue(item.InputExtrahopRevealx360), "input_aqua_security_hec": PackSourcesInputAquaSecurityHecObjectValue(item.InputAquaSecurityHec), "input_openai_compliance_logs": PackSourcesInputOpenaiComplianceLogsObjectValue(item.InputOpenaiComplianceLogs), "input_anthropic_compliance": PackSourcesInputAnthropicComplianceObjectValue(item.InputAnthropicCompliance), "input_anthropic_enterprise_analytics": PackSourcesInputAnthropicEnterpriseAnalyticsObjectValue(item.InputAnthropicEnterpriseAnalytics), "input_microsoft_copilot": PackSourcesInputMicrosoftCopilotObjectValue(item.InputMicrosoftCopilot), "input_okta": PackSourcesInputOktaObjectValue(item.InputOkta), "input_akamai_hec": PackSourcesInputAkamaiHecObjectValue(item.InputAkamaiHec), "input_ping_identity_pingone": PackSourcesInputPingIDentityPingoneObjectValue(item.InputPingIDentityPingone), "input_gigamon_hec": PackSourcesInputGigamonHecObjectValue(item.InputGigamonHec), "input_vectra_ai_hec": PackSourcesInputVectraAiHecObjectValue(item.InputVectraAiHec), "input_f5_big_ip": PackSourcesInputF5BigIpObjectValue(item.InputF5BigIp), "input_beyondtrust_hec": PackSourcesInputBeyondtrustHecObjectValue(item.InputBeyondtrustHec), "input_hashicorp_hcp_vault_dedicated": PackSourcesInputHashicorpHcpVaultDedicatedObjectValue(item.InputHashicorpHcpVaultDedicated), "input_mimecast_hec": PackSourcesInputMimecastHecObjectValue(item.InputMimecastHec), "input_trend_micro_vision_one": PackSourcesInputTrendMicroVisionOneObjectValue(item.InputTrendMicroVisionOne)}))
+			values = append(values, types.ObjectValueMust(PackSourcesItemAttrTypes(), map[string]attr.Value{"id": item.ID, "pack": item.Pack, "input_collection": PackSourcesInputCollectionObjectValue(item.InputCollection), "input_kafka": PackSourcesInputKafkaObjectValue(item.InputKafka), "input_msk": PackSourcesInputMskObjectValue(item.InputMsk), "input_http": PackSourcesInputHttpObjectValue(item.InputHttp), "input_splunk": PackSourcesInputSplunkObjectValue(item.InputSplunk), "input_splunk_search": PackSourcesInputSplunkSearchObjectValue(item.InputSplunkSearch), "input_splunk_hec": PackSourcesInputSplunkHecObjectValue(item.InputSplunkHec), "input_azure_blob": PackSourcesInputAzureBlobObjectValue(item.InputAzureBlob), "input_azure_vnet_flow_log": PackSourcesInputAzureVnetFlowLogObjectValue(item.InputAzureVnetFlowLog), "input_elastic": PackSourcesInputElasticObjectValue(item.InputElastic), "input_confluent_cloud": PackSourcesInputConfluentCloudObjectValue(item.InputConfluentCloud), "input_grafana": PackSourcesInputGrafanaObjectValue(item.InputGrafana), "input_loki": PackSourcesInputLokiObjectValue(item.InputLoki), "input_prometheus_rw": PackSourcesInputPrometheusRwObjectValue(item.InputPrometheusRw), "input_prometheus": PackSourcesInputPrometheusObjectValue(item.InputPrometheus), "input_edge_prometheus": PackSourcesInputEdgePrometheusObjectValue(item.InputEdgePrometheus), "input_office365_mgmt": PackSourcesInputOffice365MgmtObjectValue(item.InputOffice365Mgmt), "input_office365_service": PackSourcesInputOffice365ServiceObjectValue(item.InputOffice365Service), "input_office365_msg_trace": PackSourcesInputOffice365MsgTraceObjectValue(item.InputOffice365MsgTrace), "input_microsoft_graph": PackSourcesInputMicrosoftGraphObjectValue(item.InputMicrosoftGraph), "input_eventhub": PackSourcesInputEventhubObjectValue(item.InputEventhub), "input_eventhub_amqp": PackSourcesInputEventhubAmqpObjectValue(item.InputEventhubAmqp), "input_exec": PackSourcesInputExecObjectValue(item.InputExec), "input_firehose": PackSourcesInputFirehoseObjectValue(item.InputFirehose), "input_google_pubsub": PackSourcesInputGooglePubsubObjectValue(item.InputGooglePubsub), "input_cribl": PackSourcesInputCriblObjectValue(item.InputCribl), "input_cribl_tcp": PackSourcesInputCriblTcpObjectValue(item.InputCriblTcp), "input_cribl_http": PackSourcesInputCriblHttpObjectValue(item.InputCriblHttp), "input_cribl_lake_http": PackSourcesInputCriblLakeHttpObjectValue(item.InputCriblLakeHttp), "input_tcpjson": PackSourcesInputTcpjsonObjectValue(item.InputTcpjson), "input_system_metrics": PackSourcesInputSystemMetricsObjectValue(item.InputSystemMetrics), "input_system_state": PackSourcesInputSystemStateObjectValue(item.InputSystemState), "input_kube_metrics": PackSourcesInputKubeMetricsObjectValue(item.InputKubeMetrics), "input_kube_logs": PackSourcesInputKubeLogsObjectValue(item.InputKubeLogs), "input_kube_events": PackSourcesInputKubeEventsObjectValue(item.InputKubeEvents), "input_windows_metrics": PackSourcesInputWindowsMetricsObjectValue(item.InputWindowsMetrics), "input_crowdstrike": PackSourcesInputCrowdstrikeObjectValue(item.InputCrowdstrike), "input_datadog_agent": PackSourcesInputDatadogAgentObjectValue(item.InputDatadogAgent), "input_datagen": PackSourcesInputDatagenObjectValue(item.InputDatagen), "input_http_raw": PackSourcesInputHttpRawObjectValue(item.InputHttpRaw), "input_kinesis": PackSourcesInputKinesisObjectValue(item.InputKinesis), "input_criblmetrics": PackSourcesInputCriblmetricsObjectValue(item.InputCriblmetrics), "input_metrics": PackSourcesInputMetricsObjectValue(item.InputMetrics), "input_s3": PackSourcesInputS3ObjectValue(item.InputS3), "input_s3_inventory": PackSourcesInputS3InventoryObjectValue(item.InputS3Inventory), "input_snmp": PackSourcesInputSnmpObjectValue(item.InputSnmp), "input_open_telemetry": PackSourcesInputOpenTelemetryObjectValue(item.InputOpenTelemetry), "input_model_driven_telemetry": PackSourcesInputModelDrivenTelemetryObjectValue(item.InputModelDrivenTelemetry), "input_sqs": PackSourcesInputSqsObjectValue(item.InputSqs), "input_syslog": PackSourcesInputSyslogObjectValue(item.InputSyslog), "input_check_point_sase_syslog": PackSourcesInputCheckPointSaseSyslogObjectValue(item.InputCheckPointSaseSyslog), "input_cisco_asa_syslog": PackSourcesInputCiscoAsaSyslogObjectValue(item.InputCiscoAsaSyslog), "input_cisco_meraki_syslog": PackSourcesInputCiscoMerakiSyslogObjectValue(item.InputCiscoMerakiSyslog), "input_fortigate_syslog": PackSourcesInputFortigateSyslogObjectValue(item.InputFortigateSyslog), "input_vmware_esxi_vcenter_syslog": PackSourcesInputVmwareEsxiVcenterSyslogObjectValue(item.InputVmwareEsxiVcenterSyslog), "input_netgate_pfsense_syslog": PackSourcesInputNetgatePfsenseSyslogObjectValue(item.InputNetgatePfsenseSyslog), "input_watchguard_firebox_syslog": PackSourcesInputWatchguardFireboxSyslogObjectValue(item.InputWatchguardFireboxSyslog), "input_infoblox_syslog": PackSourcesInputInfobloxSyslogObjectValue(item.InputInfobloxSyslog), "input_ubiquiti_unifi_syslog": PackSourcesInputUbiquitiUnifiSyslogObjectValue(item.InputUbiquitiUnifiSyslog), "input_sonicwall_syslog": PackSourcesInputSonicwallSyslogObjectValue(item.InputSonicwallSyslog), "input_sophos_xg_xgs_firewall_syslog": PackSourcesInputSophosXgXgsFirewallSyslogObjectValue(item.InputSophosXgXgsFirewallSyslog), "input_file": PackSourcesInputFileObjectValue(item.InputFile), "input_tcp": PackSourcesInputTcpObjectValue(item.InputTcp), "input_appscope": PackSourcesInputAppscopeObjectValue(item.InputAppscope), "input_wef": PackSourcesInputWefObjectValue(item.InputWef), "input_win_event_logs": PackSourcesInputWinEventLogsObjectValue(item.InputWinEventLogs), "input_apple_unified_logs": PackSourcesInputAppleUnifiedLogsObjectValue(item.InputAppleUnifiedLogs), "input_raw_udp": PackSourcesInputRawUdpObjectValue(item.InputRawUdp), "input_journal_files": PackSourcesInputJournalFilesObjectValue(item.InputJournalFiles), "input_wiz": PackSourcesInputWizObjectValue(item.InputWiz), "input_openai": PackSourcesInputOpenaiObjectValue(item.InputOpenai), "input_wiz_webhook": PackSourcesInputWizWebhookObjectValue(item.InputWizWebhook), "input_netflow": PackSourcesInputNetflowObjectValue(item.InputNetflow), "input_security_lake": PackSourcesInputSecurityLakeObjectValue(item.InputSecurityLake), "input_bedrock_s3": PackSourcesInputBedrockS3ObjectValue(item.InputBedrockS3), "input_servicenow_table": PackSourcesInputServicenowTableObjectValue(item.InputServicenowTable), "input_proofpoint_pod": PackSourcesInputProofpointPodObjectValue(item.InputProofpointPod), "input_zscaler_hec": PackSourcesInputZscalerHecObjectValue(item.InputZscalerHec), "input_cloudflare_hec": PackSourcesInputCloudflareHecObjectValue(item.InputCloudflareHec), "input_sysdig_hec": PackSourcesInputSysdigHecObjectValue(item.InputSysdigHec), "input_upwind_hec": PackSourcesInputUpwindHecObjectValue(item.InputUpwindHec), "input_trellix_hec": PackSourcesInputTrellixHecObjectValue(item.InputTrellixHec), "input_salesforce": PackSourcesInputSalesforceObjectValue(item.InputSalesforce), "input_sailpoint_hec": PackSourcesInputSailpointHecObjectValue(item.InputSailpointHec), "input_extrahop_revealx360": PackSourcesInputExtrahopRevealx360ObjectValue(item.InputExtrahopRevealx360), "input_aqua_security_hec": PackSourcesInputAquaSecurityHecObjectValue(item.InputAquaSecurityHec), "input_openai_compliance_logs": PackSourcesInputOpenaiComplianceLogsObjectValue(item.InputOpenaiComplianceLogs), "input_anthropic_compliance": PackSourcesInputAnthropicComplianceObjectValue(item.InputAnthropicCompliance), "input_anthropic_enterprise_analytics": PackSourcesInputAnthropicEnterpriseAnalyticsObjectValue(item.InputAnthropicEnterpriseAnalytics), "input_microsoft_copilot": PackSourcesInputMicrosoftCopilotObjectValue(item.InputMicrosoftCopilot), "input_okta": PackSourcesInputOktaObjectValue(item.InputOkta), "input_sentinelone": PackSourcesInputSentineloneObjectValue(item.InputSentinelone), "input_akamai_hec": PackSourcesInputAkamaiHecObjectValue(item.InputAkamaiHec), "input_ping_identity_pingone": PackSourcesInputPingIDentityPingoneObjectValue(item.InputPingIDentityPingone), "input_gigamon_hec": PackSourcesInputGigamonHecObjectValue(item.InputGigamonHec), "input_vectra_ai_hec": PackSourcesInputVectraAiHecObjectValue(item.InputVectraAiHec), "input_f5_big_ip": PackSourcesInputF5BigIpObjectValue(item.InputF5BigIp), "input_beyondtrust_hec": PackSourcesInputBeyondtrustHecObjectValue(item.InputBeyondtrustHec), "input_hashicorp_hcp_vault_dedicated": PackSourcesInputHashicorpHcpVaultDedicatedObjectValue(item.InputHashicorpHcpVaultDedicated), "input_mimecast_hec": PackSourcesInputMimecastHecObjectValue(item.InputMimecastHec), "input_trend_micro_vision_one": PackSourcesInputTrendMicroVisionOneObjectValue(item.InputTrendMicroVisionOne), "input_zoom_webhook": PackSourcesInputZoomWebhookObjectValue(item.InputZoomWebhook), "input_netskope": PackSourcesInputNetskopeObjectValue(item.InputNetskope), "input_litellm": PackSourcesInputLitellmObjectValue(item.InputLitellm), "input_cisco_secure_firewall_syslog": PackSourcesInputCiscoSecureFirewallSyslogObjectValue(item.InputCiscoSecureFirewallSyslog), "input_juniper_junos_syslog": PackSourcesInputJuniperJunosSyslogObjectValue(item.InputJuniperJunosSyslog), "input_cisco_ios_syslog": PackSourcesInputCiscoIosSyslogObjectValue(item.InputCiscoIosSyslog)}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: PackSourcesItemAttrTypes()}, values)
@@ -26491,6 +31844,17 @@ func PackSourcesItemAttrTypes() map[string]attr.Type {
 		"input_model_driven_telemetry":         types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
 		"input_sqs":                            types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
 		"input_syslog":                         types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
+		"input_check_point_sase_syslog":        types.ObjectType{AttrTypes: InputCheckPointSaseSyslogModelAttrTypes()},
+		"input_cisco_asa_syslog":               types.ObjectType{AttrTypes: InputCiscoAsaSyslogModelAttrTypes()},
+		"input_cisco_meraki_syslog":            types.ObjectType{AttrTypes: InputCiscoMerakiSyslogModelAttrTypes()},
+		"input_fortigate_syslog":               types.ObjectType{AttrTypes: InputFortigateSyslogModelAttrTypes()},
+		"input_vmware_esxi_vcenter_syslog":     types.ObjectType{AttrTypes: InputVmwareEsxiVcenterSyslogModelAttrTypes()},
+		"input_netgate_pfsense_syslog":         types.ObjectType{AttrTypes: InputNetgatePfsenseSyslogModelAttrTypes()},
+		"input_watchguard_firebox_syslog":      types.ObjectType{AttrTypes: InputWatchguardFireboxSyslogModelAttrTypes()},
+		"input_infoblox_syslog":                types.ObjectType{AttrTypes: InputInfobloxSyslogModelAttrTypes()},
+		"input_ubiquiti_unifi_syslog":          types.ObjectType{AttrTypes: InputUbiquitiUnifiSyslogModelAttrTypes()},
+		"input_sonicwall_syslog":               types.ObjectType{AttrTypes: InputSonicwallSyslogModelAttrTypes()},
+		"input_sophos_xg_xgs_firewall_syslog":  types.ObjectType{AttrTypes: InputSophosXgXgsFirewallSyslogModelAttrTypes()},
 		"input_file":                           types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
 		"input_tcp":                            types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
 		"input_appscope":                       types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
@@ -26512,6 +31876,7 @@ func PackSourcesItemAttrTypes() map[string]attr.Type {
 		"input_sysdig_hec":                     types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
 		"input_upwind_hec":                     types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
 		"input_trellix_hec":                    types.ObjectType{AttrTypes: InputTrellixHecModelAttrTypes()},
+		"input_salesforce":                     types.ObjectType{AttrTypes: InputSalesforceModelAttrTypes()},
 		"input_sailpoint_hec":                  types.ObjectType{AttrTypes: InputSailpointHecModelAttrTypes()},
 		"input_extrahop_revealx360":            types.ObjectType{AttrTypes: InputExtrahopRevealx360ModelAttrTypes()},
 		"input_aqua_security_hec":              types.ObjectType{AttrTypes: InputAquaSecurityHecModelAttrTypes()},
@@ -26520,6 +31885,7 @@ func PackSourcesItemAttrTypes() map[string]attr.Type {
 		"input_anthropic_enterprise_analytics": types.ObjectType{AttrTypes: InputAnthropicEnterpriseAnalyticsModelAttrTypes()},
 		"input_microsoft_copilot":              types.ObjectType{AttrTypes: InputMicrosoftCopilotModelAttrTypes()},
 		"input_okta":                           types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+		"input_sentinelone":                    types.ObjectType{AttrTypes: InputSentineloneModelAttrTypes()},
 		"input_akamai_hec":                     types.ObjectType{AttrTypes: InputAkamaiHecModelAttrTypes()},
 		"input_ping_identity_pingone":          types.ObjectType{AttrTypes: InputPingIDentityPingoneModelAttrTypes()},
 		"input_gigamon_hec":                    types.ObjectType{AttrTypes: InputGigamonHecModelAttrTypes()},
@@ -26529,6 +31895,12 @@ func PackSourcesItemAttrTypes() map[string]attr.Type {
 		"input_hashicorp_hcp_vault_dedicated":  types.ObjectType{AttrTypes: InputHashicorpHcpVaultDedicatedModelAttrTypes()},
 		"input_mimecast_hec":                   types.ObjectType{AttrTypes: InputMimecastHecModelAttrTypes()},
 		"input_trend_micro_vision_one":         types.ObjectType{AttrTypes: InputTrendMicroVisionOneModelAttrTypes()},
+		"input_zoom_webhook":                   types.ObjectType{AttrTypes: InputZoomWebhookModelAttrTypes()},
+		"input_netskope":                       types.ObjectType{AttrTypes: InputNetskopeModelAttrTypes()},
+		"input_litellm":                        types.ObjectType{AttrTypes: InputLitellmModelAttrTypes()},
+		"input_cisco_secure_firewall_syslog":   types.ObjectType{AttrTypes: InputCiscoSecureFirewallSyslogModelAttrTypes()},
+		"input_juniper_junos_syslog":           types.ObjectType{AttrTypes: InputJuniperJunosSyslogModelAttrTypes()},
+		"input_cisco_ios_syslog":               types.ObjectType{AttrTypes: InputCiscoIosSyslogModelAttrTypes()},
 	}
 }
 
@@ -26552,6 +31924,7 @@ func PackSourcesInputCollectionObjectValue(item *InputCollectionModel) attr.Valu
 		"stale_channel_flush_ms":  item.StaleChannelFlushMs,
 		"preprocess":              item.Preprocess,
 		"throttle_rate_per_sec":   item.ThrottleRatePerSec,
+		"throttle_burst_disabled": item.ThrottleBurstDisabled,
 		"metadata":                item.Metadata,
 		"output":                  item.Output,
 	})
@@ -26588,6 +31961,7 @@ func PackSourcesInputKafkaObjectValue(item *InputKafkaModel) attr.Value {
 		"reauthentication_threshold": item.ReauthenticationThreshold,
 		"sasl":                       item.Sasl,
 		"tls":                        item.TLS,
+		"dynamic_headers_field":      item.DynamicHeadersField,
 		"session_timeout":            item.SessionTimeout,
 		"rebalance_timeout":          item.RebalanceTimeout,
 		"heartbeat_interval":         item.HeartbeatInterval,
@@ -26635,6 +32009,7 @@ func PackSourcesInputMskObjectValue(item *InputMskModel) attr.Value {
 		"backoff_rate":               item.BackoffRate,
 		"authentication_timeout":     item.AuthenticationTimeout,
 		"reauthentication_threshold": item.ReauthenticationThreshold,
+		"dynamic_headers_field":      item.DynamicHeadersField,
 		"aws_authentication_method":  item.AwsAuthenticationMethod,
 		"aws_secret_key":             item.AwsSecretKey,
 		"region":                     item.Region,
@@ -26996,6 +32371,7 @@ func PackSourcesInputConfluentCloudObjectValue(item *InputConfluentCloudModel) a
 		"authentication_timeout":     item.AuthenticationTimeout,
 		"reauthentication_threshold": item.ReauthenticationThreshold,
 		"sasl":                       item.Sasl,
+		"dynamic_headers_field":      item.DynamicHeadersField,
 		"session_timeout":            item.SessionTimeout,
 		"rebalance_timeout":          item.RebalanceTimeout,
 		"heartbeat_interval":         item.HeartbeatInterval,
@@ -28527,6 +33903,440 @@ func PackSourcesInputSyslogObjectValue(item *InputSyslogModel) attr.Value {
 	})
 }
 
+func PackSourcesInputCheckPointSaseSyslogObjectValue(item *InputCheckPointSaseSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCheckPointSaseSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCheckPointSaseSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"disabled":                item.Disabled,
+		"pipeline":                item.Pipeline,
+		"send_to_routes":          item.SendToRoutes,
+		"environment":             item.Environment,
+		"pq_enabled":              item.PqEnabled,
+		"streamtags":              item.Streamtags,
+		"cribl_source_provenance": item.CriblSourceProvenance,
+		"connections":             item.Connections,
+		"pq":                      item.Pq,
+		"host":                    item.Host,
+		"udp_port":                item.UdpPort,
+		"tcp_port":                item.TcpPort,
+		"ip_whitelist_regex":      item.IpWhitelistRegex,
+		"timestamp_timezone":      item.TimestampTimezone,
+		"keep_fields_list":        item.KeepFieldsList,
+		"infer_framing":           item.InferFraming,
+		"max_active_cxn":          item.MaxActiveCxn,
+		"socket_idle_timeout":     item.SocketIDleTimeout,
+		"socket_ending_max_wait":  item.SocketEndingMaxWait,
+		"socket_max_lifespan":     item.SocketMaxLifespan,
+		"tls":                     item.TLS,
+		"metadata":                item.Metadata,
+		"auto_parse":              item.AutoParse,
+		"description":             item.Description,
+	})
+}
+
+func PackSourcesInputCiscoAsaSyslogObjectValue(item *InputCiscoAsaSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCiscoAsaSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCiscoAsaSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputCiscoMerakiSyslogObjectValue(item *InputCiscoMerakiSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCiscoMerakiSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCiscoMerakiSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputFortigateSyslogObjectValue(item *InputFortigateSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputFortigateSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputFortigateSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputVmwareEsxiVcenterSyslogObjectValue(item *InputVmwareEsxiVcenterSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputVmwareEsxiVcenterSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputVmwareEsxiVcenterSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputNetgatePfsenseSyslogObjectValue(item *InputNetgatePfsenseSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputNetgatePfsenseSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputNetgatePfsenseSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputWatchguardFireboxSyslogObjectValue(item *InputWatchguardFireboxSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputWatchguardFireboxSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputWatchguardFireboxSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputInfobloxSyslogObjectValue(item *InputInfobloxSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputInfobloxSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputInfobloxSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputUbiquitiUnifiSyslogObjectValue(item *InputUbiquitiUnifiSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputUbiquitiUnifiSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputUbiquitiUnifiSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputSonicwallSyslogObjectValue(item *InputSonicwallSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputSonicwallSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputSonicwallSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputSophosXgXgsFirewallSyslogObjectValue(item *InputSophosXgXgsFirewallSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputSophosXgXgsFirewallSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputSophosXgXgsFirewallSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
 func PackSourcesInputFileObjectValue(item *InputFileModel) attr.Value {
 	if item == nil {
 		return types.ObjectNull(InputFileModelAttrTypes())
@@ -28569,6 +34379,9 @@ func PackSourcesInputFileObjectValue(item *InputFileModel) attr.Value {
 		"optimize_leaf_directories":      item.OptimizeLeafDirectories,
 		"enable_discovery_throttle":      item.EnableDiscoveryThrottle,
 		"discovery_throttle_cpu_percent": item.DiscoveryThrottleCpuPercent,
+		"recursive_watch":                item.RecursiveWatch,
+		"rescan_interval":                item.RescanInterval,
+		"max_watches":                    item.MaxWatches,
 		"include_unidentifiable_binary":  item.IncludeUnidentifiableBinary,
 	})
 }
@@ -29366,6 +35179,42 @@ func PackSourcesInputTrellixHecObjectValue(item *InputTrellixHecModel) attr.Valu
 	})
 }
 
+func PackSourcesInputSalesforceObjectValue(item *InputSalesforceModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputSalesforceModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputSalesforceModelAttrTypes(), map[string]attr.Value{
+		"id":                         item.ID,
+		"type":                       item.Type,
+		"disabled":                   item.Disabled,
+		"pipeline":                   item.Pipeline,
+		"send_to_routes":             item.SendToRoutes,
+		"environment":                item.Environment,
+		"pq_enabled":                 item.PqEnabled,
+		"streamtags":                 item.Streamtags,
+		"cribl_source_provenance":    item.CriblSourceProvenance,
+		"connections":                item.Connections,
+		"pq":                         item.Pq,
+		"salesforce_subdomain":       item.SalesforceSubdomain,
+		"salesforce_cloud":           item.SalesforceCloud,
+		"salesforce_oauth_client_id": item.SalesforceOauthClientID,
+		"text_secret":                item.TextSecret,
+		"salesforce_api_version":     item.SalesforceAPIVersion,
+		"content_config":             item.ContentConfig,
+		"max_pages":                  item.MaxPages,
+		"request_timeout":            item.RequestTimeout,
+		"breaker_rulesets":           item.BreakerRulesets,
+		"stale_channel_flush_ms":     item.StaleChannelFlushMs,
+		"keep_alive_time":            item.KeepAliveTime,
+		"max_missed_keep_alives":     item.MaxMissedKeepAlives,
+		"ttl":                        item.Ttl,
+		"ignore_group_jobs_limit":    item.IgnoreGroupJobsLimit,
+		"metadata":                   item.Metadata,
+		"retry_rules":                item.RetryRules,
+		"description":                item.Description,
+	})
+}
+
 func PackSourcesInputSailpointHecObjectValue(item *InputSailpointHecModel) attr.Value {
 	if item == nil {
 		return types.ObjectNull(InputSailpointHecModelAttrTypes())
@@ -29681,6 +35530,38 @@ func PackSourcesInputOktaObjectValue(item *InputOktaModel) attr.Value {
 		"metadata":                item.Metadata,
 		"retry_rules":             item.RetryRules,
 		"description":             item.Description,
+	})
+}
+
+func PackSourcesInputSentineloneObjectValue(item *InputSentineloneModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputSentineloneModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputSentineloneModelAttrTypes(), map[string]attr.Value{
+		"id":                       item.ID,
+		"type":                     item.Type,
+		"disabled":                 item.Disabled,
+		"pipeline":                 item.Pipeline,
+		"send_to_routes":           item.SendToRoutes,
+		"environment":              item.Environment,
+		"pq_enabled":               item.PqEnabled,
+		"streamtags":               item.Streamtags,
+		"cribl_source_provenance":  item.CriblSourceProvenance,
+		"connections":              item.Connections,
+		"pq":                       item.Pq,
+		"management_host":          item.ManagementHost,
+		"management_domain_suffix": item.ManagementDomainSuffix,
+		"api_token":                item.APIToken,
+		"text_secret":              item.TextSecret,
+		"content_config":           item.ContentConfig,
+		"request_timeout":          item.RequestTimeout,
+		"keep_alive_time":          item.KeepAliveTime,
+		"max_missed_keep_alives":   item.MaxMissedKeepAlives,
+		"ttl":                      item.Ttl,
+		"ignore_group_jobs_limit":  item.IgnoreGroupJobsLimit,
+		"metadata":                 item.Metadata,
+		"retry_rules":              item.RetryRules,
+		"description":              item.Description,
 	})
 }
 
@@ -30047,5 +35928,237 @@ func PackSourcesInputTrendMicroVisionOneObjectValue(item *InputTrendMicroVisionO
 		"access_control_allow_headers": item.AccessControlAllowHeaders,
 		"emit_token_metrics":           item.EmitTokenMetrics,
 		"description":                  item.Description,
+	})
+}
+
+func PackSourcesInputZoomWebhookObjectValue(item *InputZoomWebhookModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputZoomWebhookModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputZoomWebhookModelAttrTypes(), map[string]attr.Value{
+		"id":                       item.ID,
+		"type":                     item.Type,
+		"disabled":                 item.Disabled,
+		"pipeline":                 item.Pipeline,
+		"send_to_routes":           item.SendToRoutes,
+		"environment":              item.Environment,
+		"pq_enabled":               item.PqEnabled,
+		"streamtags":               item.Streamtags,
+		"cribl_source_provenance":  item.CriblSourceProvenance,
+		"connections":              item.Connections,
+		"pq":                       item.Pq,
+		"host":                     item.Host,
+		"port":                     item.Port,
+		"tls":                      item.TLS,
+		"max_active_req":           item.MaxActiveReq,
+		"max_requests_per_socket":  item.MaxRequestsPerSocket,
+		"enable_proxy_header":      item.EnableProxyHeader,
+		"capture_headers":          item.CaptureHeaders,
+		"capture_headers_warning":  item.CaptureHeadersWarning,
+		"activity_log_sample_rate": item.ActivityLogSampleRate,
+		"request_timeout":          item.RequestTimeout,
+		"socket_timeout":           item.SocketTimeout,
+		"keep_alive_timeout":       item.KeepAliveTimeout,
+		"enable_health_check":      item.EnableHealthCheck,
+		"ip_allowlist_regex":       item.IpAllowlistRegex,
+		"ip_denylist_regex":        item.IpDenylistRegex,
+		"breaker_rulesets":         item.BreakerRulesets,
+		"stale_channel_flush_ms":   item.StaleChannelFlushMs,
+		"metadata":                 item.Metadata,
+		"allowed_paths":            item.AllowedPaths,
+		"allowed_methods":          item.AllowedMethods,
+		"token":                    item.Token,
+		"auth_type":                item.AuthType,
+		"text_secret":              item.TextSecret,
+		"description":              item.Description,
+	})
+}
+
+func PackSourcesInputNetskopeObjectValue(item *InputNetskopeModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputNetskopeModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputNetskopeModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"disabled":                item.Disabled,
+		"pipeline":                item.Pipeline,
+		"send_to_routes":          item.SendToRoutes,
+		"environment":             item.Environment,
+		"pq_enabled":              item.PqEnabled,
+		"streamtags":              item.Streamtags,
+		"cribl_source_provenance": item.CriblSourceProvenance,
+		"connections":             item.Connections,
+		"pq":                      item.Pq,
+		"tenant_url":              item.TenantURL,
+		"api_token":               item.APIToken,
+		"text_secret":             item.TextSecret,
+		"content_config":          item.ContentConfig,
+		"request_timeout":         item.RequestTimeout,
+		"keep_alive_time":         item.KeepAliveTime,
+		"max_missed_keep_alives":  item.MaxMissedKeepAlives,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"metadata":                item.Metadata,
+		"retry_rules":             item.RetryRules,
+		"description":             item.Description,
+	})
+}
+
+func PackSourcesInputLitellmObjectValue(item *InputLitellmModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputLitellmModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputLitellmModelAttrTypes(), map[string]attr.Value{
+		"id":                       item.ID,
+		"type":                     item.Type,
+		"disabled":                 item.Disabled,
+		"pipeline":                 item.Pipeline,
+		"send_to_routes":           item.SendToRoutes,
+		"environment":              item.Environment,
+		"pq_enabled":               item.PqEnabled,
+		"streamtags":               item.Streamtags,
+		"cribl_source_provenance":  item.CriblSourceProvenance,
+		"connections":              item.Connections,
+		"pq":                       item.Pq,
+		"host":                     item.Host,
+		"port":                     item.Port,
+		"auth_tokens":              item.AuthTokens,
+		"tls":                      item.TLS,
+		"max_active_req":           item.MaxActiveReq,
+		"max_requests_per_socket":  item.MaxRequestsPerSocket,
+		"capture_headers":          item.CaptureHeaders,
+		"capture_headers_warning":  item.CaptureHeadersWarning,
+		"activity_log_sample_rate": item.ActivityLogSampleRate,
+		"request_timeout":          item.RequestTimeout,
+		"socket_timeout":           item.SocketTimeout,
+		"keep_alive_timeout":       item.KeepAliveTimeout,
+		"enable_health_check":      item.EnableHealthCheck,
+		"ip_allowlist_regex":       item.IpAllowlistRegex,
+		"ip_denylist_regex":        item.IpDenylistRegex,
+		"cribl_api":                item.CriblAPI,
+		"metadata":                 item.Metadata,
+		"auth_tokens_ext":          item.AuthTokensExt,
+		"description":              item.Description,
+	})
+}
+
+func PackSourcesInputCiscoSecureFirewallSyslogObjectValue(item *InputCiscoSecureFirewallSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCiscoSecureFirewallSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCiscoSecureFirewallSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputJuniperJunosSyslogObjectValue(item *InputJuniperJunosSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputJuniperJunosSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputJuniperJunosSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
+	})
+}
+
+func PackSourcesInputCiscoIosSyslogObjectValue(item *InputCiscoIosSyslogModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCiscoIosSyslogModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCiscoIosSyslogModelAttrTypes(), map[string]attr.Value{
+		"id":                            item.ID,
+		"type":                          item.Type,
+		"disabled":                      item.Disabled,
+		"pipeline":                      item.Pipeline,
+		"send_to_routes":                item.SendToRoutes,
+		"environment":                   item.Environment,
+		"pq_enabled":                    item.PqEnabled,
+		"streamtags":                    item.Streamtags,
+		"cribl_source_provenance":       item.CriblSourceProvenance,
+		"connections":                   item.Connections,
+		"pq":                            item.Pq,
+		"host":                          item.Host,
+		"udp_port":                      item.UdpPort,
+		"tcp_port":                      item.TcpPort,
+		"max_buffer_size":               item.MaxBufferSize,
+		"ip_whitelist_regex":            item.IpWhitelistRegex,
+		"timestamp_timezone":            item.TimestampTimezone,
+		"single_msg_udp_packets":        item.SingleMsgUdpPackets,
+		"keep_fields_list":              item.KeepFieldsList,
+		"octet_counting":                item.OctetCounting,
+		"infer_framing":                 item.InferFraming,
+		"strictly_infer_octet_counting": item.StrictlyInferOctetCounting,
+		"max_active_cxn":                item.MaxActiveCxn,
+		"socket_idle_timeout":           item.SocketIDleTimeout,
+		"socket_ending_max_wait":        item.SocketEndingMaxWait,
+		"socket_max_lifespan":           item.SocketMaxLifespan,
+		"tls":                           item.TLS,
+		"metadata":                      item.Metadata,
+		"udp_socket_rx_buf_size":        item.UdpSocketRxBufSize,
+		"enable_load_balancing":         item.EnableLoadBalancing,
+		"auto_parse":                    item.AutoParse,
+		"description":                   item.Description,
 	})
 }

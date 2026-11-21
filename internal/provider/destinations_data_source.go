@@ -55,7 +55,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						},
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `Unique ID for this output`,
+							Description: `Unique name for this output`,
 						},
 						"pipeline": schema.StringAttribute{
 							Computed:    true,
@@ -71,7 +71,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -94,6 +94,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"default_id": schema.StringAttribute{
 									Computed:    true,
@@ -106,7 +132,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -129,6 +155,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"method": schema.StringAttribute{
 									Computed:    true,
@@ -160,8 +212,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -314,6 +367,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional description for this configuration.`,
@@ -380,7 +437,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -545,7 +602,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -569,6 +626,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"keep_alive": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Disable to close the connection immediately after sending the outgoing request`,
@@ -591,8 +674,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -747,6 +831,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Enter the data collection endpoint URL or the individual ID`,
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Event field to use for dynamic headers and batching`,
+								},
 								"total_memory_limit_kb": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
@@ -820,7 +908,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -866,7 +954,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -889,6 +977,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -897,7 +1011,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -920,6 +1034,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -948,6 +1088,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"octet_count_framing": schema.BoolAttribute{
 									Computed:    true,
@@ -1035,7 +1179,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -1119,7 +1264,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -1145,7 +1290,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1169,6 +1314,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"host": schema.StringAttribute{
 									Computed:    true,
 									Description: `The hostname of the receiver`,
@@ -1184,6 +1355,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"connection_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -1203,7 +1378,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -1307,7 +1483,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -1342,7 +1518,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1366,6 +1542,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"dns_resolve_period_sec": schema.Float64Attribute{
 									Computed:    true,
 									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
@@ -1386,6 +1588,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+								},
 								"connection_timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
@@ -1404,7 +1610,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -1604,7 +1811,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -1639,7 +1846,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1662,6 +1869,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
@@ -1728,8 +1961,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -1827,6 +2061,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
 								"next_queue": schema.StringAttribute{
 									Computed:    true,
 									Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
@@ -1918,7 +2156,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -1944,7 +2182,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1967,6 +2205,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed:    true,
@@ -2029,8 +2293,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -2124,6 +2389,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
 								"wiz_connector_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration.`,
@@ -2195,7 +2464,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -2221,7 +2490,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2245,6 +2514,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Use load-balanced destinations`,
@@ -2261,6 +2556,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed:    true,
 									Description: `TLS settings (client side)`,
@@ -2271,7 +2570,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -2419,7 +2719,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -2454,7 +2754,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2477,6 +2777,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -2504,8 +2830,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -2646,7 +2973,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -2672,7 +2999,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2695,6 +3022,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -2722,8 +3075,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -2864,7 +3218,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -2890,7 +3244,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2913,6 +3267,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"dest_path": schema.StringAttribute{
 									Computed:    true,
@@ -3117,7 +3497,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3140,6 +3520,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -3308,7 +3714,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+									Description: "Secret key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"object_acl": schema.StringAttribute{
 									Computed:    true,
@@ -3326,6 +3732,22 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 								},
+								"object_tags": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Key-value tags set on each uploaded object`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Tag Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Tag Value`,
+											},
+										},
+									},
+								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional description for this configuration.`,
@@ -3333,7 +3755,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
+									Description: "This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -3426,7 +3848,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3449,6 +3871,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"container_name": schema.StringAttribute{
 									Computed:    true,
@@ -3581,6 +4029,22 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"storage_class": schema.StringAttribute{
 									Computed:    true,
 									Description: `Blob access tier`,
+								},
+								"blob_index_tags": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Key-value tags set on each uploaded blob`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Tag Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Tag Value`,
+											},
+										},
+									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -3715,7 +4179,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3738,6 +4202,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"cluster_url": schema.StringAttribute{
 									Computed:    true,
@@ -4020,7 +4510,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"ingest_if_not_exists": schema.ListNestedAttribute{
 									Computed:    true,
-									Description: `Prevents duplicate ingestion by verifying whether an extent with the specified ingest-by tag already exists`,
+									Description: `Prevents duplicate ingestion by verifying whether an extent with the specified ingest-by tag already exists. Typically a value corresponding to an "ingest-by" tag. Example: "Part0001".`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"value": schema.StringAttribute{
@@ -4040,7 +4530,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"additional_properties": schema.ListNestedAttribute{
 									Computed:    true,
-									Description: `Optionally, enter additional configuration properties to send to the ingestion service`,
+									Description: `Optionally, enter additional configuration properties to send to the ingestion service. The key is the ingestion property field name. Example: "creationTime".`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"key": schema.StringAttribute{
@@ -4126,8 +4616,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"use_round_robin_dns": schema.BoolAttribute{
@@ -4168,7 +4659,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -4194,7 +4685,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4217,6 +4708,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"log_type": schema.StringAttribute{
 									Computed:    true,
@@ -4244,8 +4761,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -4385,7 +4903,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -4424,7 +4942,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4447,6 +4965,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"stream_name": schema.StringAttribute{
 									Computed:    true,
@@ -4568,7 +5112,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -4594,7 +5138,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4618,6 +5162,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"dataset": schema.StringAttribute{
 									Computed:    true,
 									Description: `Name of the dataset to send events to – e.g., observability`,
@@ -4640,8 +5210,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -4684,6 +5255,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `List of headers that are safe to log in plain text`,
 									ElementType: types.StringType,
+								},
+								"max_top_failure_reasons": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of distinct, most-frequent per-event failure reasons to surface in health status and warning logs when a request partially fails. Set to 0 to omit failure reasons from health status and warning logs.`,
 								},
 								"response_retry_settings": schema.ListNestedAttribute{
 									Computed:    true,
@@ -4777,7 +5352,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -4811,7 +5386,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4834,6 +5409,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"brokers": schema.ListAttribute{
 									Computed:    true,
@@ -5025,7 +5626,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -5051,7 +5652,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5074,6 +5675,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"project_id": schema.StringAttribute{
 									Computed:    true,
@@ -5158,7 +5785,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -5184,7 +5811,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5207,6 +5834,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"api_version": schema.StringAttribute{
 									Computed:    true,
@@ -5292,8 +5945,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -5449,7 +6103,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -5475,7 +6129,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5498,6 +6152,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"bucket": schema.StringAttribute{
 									Computed:    true,
@@ -5734,12 +6414,12 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.",
+									Description: "HMAC access key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`.",
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "HMAC secret. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.",
+									Description: "HMAC secret. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`.",
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -5752,7 +6432,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -5775,6 +6455,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"log_location_type": schema.StringAttribute{
 									Computed:    true,
@@ -6040,7 +6746,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -6066,7 +6772,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6089,6 +6795,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -6176,7 +6908,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"certificate_name": schema.StringAttribute{
@@ -6257,7 +6990,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -6283,7 +7016,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6306,6 +7039,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"topic_name": schema.StringAttribute{
 									Computed:    true,
@@ -6399,7 +7158,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -6425,7 +7184,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6448,6 +7207,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"bucket": schema.StringAttribute{
 									Computed:    true,
@@ -6601,12 +7386,12 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.",
+									Description: "HMAC access key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`.",
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.",
+									Description: "HMAC secret. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`.",
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -6639,7 +7424,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -6662,6 +7447,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"brokers": schema.ListAttribute{
 									Computed:    true,
@@ -6788,7 +7599,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
-													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 												},
 												"servername": schema.StringAttribute{
@@ -6973,7 +7785,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -7010,6 +7823,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 											Description: `Maximum TLS version to use for the connection.`,
 										},
 									},
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
 								},
 								"on_backpressure": schema.StringAttribute{
 									Computed:    true,
@@ -7057,7 +7874,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -7083,7 +7900,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -7107,6 +7924,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"brokers": schema.ListAttribute{
 									Computed:    true,
 									Description: `List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092.`,
@@ -7122,7 +7965,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -7280,7 +8124,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
-													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 												},
 												"servername": schema.StringAttribute{
@@ -7455,6 +8300,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 									},
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
 								"on_backpressure": schema.StringAttribute{
 									Computed:    true,
 									Description: `How to handle events when all receivers are exerting backpressure`,
@@ -7501,7 +8350,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -7527,7 +8376,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -7550,6 +8399,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"brokers": schema.ListAttribute{
 									Computed:    true,
@@ -7676,7 +8551,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
-													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+													Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 												},
 												"servername": schema.StringAttribute{
@@ -7755,6 +8631,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"reauthentication_threshold": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -7807,7 +8687,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -7900,7 +8781,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -7926,7 +8807,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -7949,6 +8830,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
@@ -7980,8 +8887,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -8020,6 +8928,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `List of headers that are safe to log in plain text`,
 									ElementType: types.StringType,
+								},
+								"max_top_failure_reasons": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of distinct, most-frequent per-event failure reasons to surface in health status and warning logs when a request partially fails. Set to 0 to omit failure reasons from health status and warning logs.`,
 								},
 								"response_retry_settings": schema.ListNestedAttribute{
 									Computed:    true,
@@ -8217,7 +9129,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -8243,7 +9155,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8266,6 +9178,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -8293,8 +9231,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -8333,6 +9272,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `List of headers that are safe to log in plain text`,
 									ElementType: types.StringType,
+								},
+								"max_top_failure_reasons": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of distinct, most-frequent per-event failure reasons to surface in health status and warning logs when a request partially fails. Set to 0 to omit failure reasons from health status and warning logs.`,
 								},
 								"extra_params": schema.ListNestedAttribute{
 									Computed:    true,
@@ -8482,7 +9425,295 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_max_buffer_size_bytes": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								},
+								"pq_controls": schema.MapAttribute{
+									Computed:    true,
+									Description: `Persistent queue controls.`,
+									ElementType: types.StringType,
+								},
+							},
+						},
+						"output_elastic_serverless": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"connection_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connection mode`,
+								},
+								"index": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
+        that value will take precedence.`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"max_connection_reuse_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Headers to add to all events`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Value`,
+											},
+										},
+									},
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `List of headers that are safe to log in plain text`,
+									ElementType: types.StringType,
+								},
+								"max_top_failure_reasons": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of distinct, most-frequent per-event failure reasons to surface in health status and warning logs when a request partially fails. Set to 0 to omit failure reasons from health status and warning logs.`,
+								},
+								"extra_params": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Extra parameters to use in HTTP requests`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Value`,
+											},
+										},
+									},
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"elastic_pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional Elastic Serverless destination pipeline`,
+								},
+								"include_doc_id": schema.BoolAttribute{
+									Computed:    true,
+									Description: "Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)",
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for HTTP requests that exceed the request timeout.`,
+									Attributes: map[string]schema.Attribute{
+										"timeout_retry": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Whether to retry HTTP requests that exceed the request timeout.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+									},
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"retry_partial_errors": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Retry failed events when a bulk request to Elastic is successful, but the response body returns an error for one or more events in the batch`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"cloud_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Elastic Cloud ID for the Serverless project. Found in the Elastic Cloud console under your project settings.`,
+								},
+								"project_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Elastic Serverless project name (alias). Combined with the project ID to form the endpoint subdomain.`,
+								},
+								"project_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Elastic Serverless project ID. Found in the Elastic Cloud console under your project settings.`,
+								},
+								"cloud_provider": schema.StringAttribute{
+									Computed:    true,
+									Description: `Cloud provider where the Elastic Serverless project is hosted`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the Elastic Serverless project is deployed`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -8508,7 +9739,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8531,6 +9762,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -8578,8 +9835,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -8723,7 +9981,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -8758,7 +10016,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -8781,6 +10039,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -8812,8 +10096,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -8953,7 +10238,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -8988,7 +10273,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9011,6 +10296,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -9050,8 +10361,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -9199,7 +10511,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -9247,7 +10559,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9270,6 +10582,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"log_group_name": schema.StringAttribute{
 									Computed:    true,
@@ -9379,7 +10717,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -9405,7 +10743,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9428,6 +10766,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -9576,7 +10940,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+									Description: "Secret key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -9601,7 +10965,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
+									Description: "This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -9694,7 +11058,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9717,6 +11081,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -9749,6 +11139,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"connection_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -9792,7 +11186,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -9818,7 +11212,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9841,6 +11235,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -9873,6 +11293,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"connection_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -9916,7 +11340,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -9942,7 +11366,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -9965,6 +11389,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -9997,6 +11447,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"connection_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -10040,7 +11494,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -10066,7 +11520,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10089,6 +11543,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"report_branch_metrics": schema.BoolAttribute{
 									Computed:    true,
@@ -10129,7 +11609,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10152,6 +11632,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"topic_arn": schema.StringAttribute{
 									Computed:    true,
@@ -10253,7 +11759,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -10279,7 +11785,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10302,6 +11808,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"queue_name": schema.StringAttribute{
 									Computed:    true,
@@ -10427,7 +11959,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -10453,7 +11985,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10476,6 +12008,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"hosts": schema.ListNestedAttribute{
 									Computed:    true,
@@ -10516,7 +12074,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10539,6 +12097,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -10574,8 +12158,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -10711,7 +12296,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -10737,7 +12322,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -10760,6 +12345,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"content_type": schema.StringAttribute{
 									Computed:    true,
@@ -10824,8 +12435,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -10969,7 +12581,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -11004,7 +12616,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11027,6 +12639,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"loki_url": schema.StringAttribute{
 									Computed:    true,
@@ -11142,8 +12780,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -11279,7 +12918,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -11305,7 +12944,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11328,6 +12967,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -11375,8 +13040,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -11472,7 +13138,11 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"enable_dynamic_headers": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Add per-event HTTP headers from the __headers field to outgoing requests. Events with different headers are batched and sent separately.`,
+									Description: `Add per-event HTTP headers from the dynamic headers field to outgoing requests. Events with different headers are batched and sent separately.`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When present, this field, which contains per-event HTTP headers, will be added to outgoing requests and used to batch events.`,
 								},
 								"on_backpressure": schema.StringAttribute{
 									Computed:    true,
@@ -11542,7 +13212,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -11568,7 +13238,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11592,9 +13262,35 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"url": schema.StringAttribute{
 									Computed:    true,
-									Description: `The Amazon Managed Service for Prometheus remote_write endpoint`,
+									Description: `The Amazon Managed Service for Prometheus remote_write endpoint. For example: https://aps-workspaces.us-east-1.amazonaws.com/workspaces/ws-example/api/v1/remote_write.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -11611,8 +13307,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"enable_assume_role": schema.BoolAttribute{
@@ -11792,7 +13489,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -11818,7 +13515,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -11842,9 +13539,35 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"url": schema.StringAttribute{
 									Computed:    true,
-									Description: `The endpoint to send metrics to`,
+									Description: `The endpoint to send metrics to. Example: http://localhost:9200/write`,
 								},
 								"metric_rename_expr": schema.StringAttribute{
 									Computed:    true,
@@ -11857,6 +13580,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"use_prometheus_histogram_bucket_suffix": schema.BoolAttribute{
 									Computed:    true,
 									Description: "Serialize histogram bucket series as `<metric>_bucket` to match Prometheus histogram naming convention",
+								},
+								"nan_as_staleness_marker": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Write every NaN value as a Prometheus staleness marker, so the remote store ends the series instead of storing NaN. Real NaN values are written as markers too.`,
 								},
 								"concurrency": schema.Float64Attribute{
 									Computed:    true,
@@ -11872,8 +13599,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -12013,7 +13741,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -12093,7 +13821,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12116,6 +13844,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"format": schema.StringAttribute{
 									Computed:    true,
@@ -12156,7 +13910,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12179,6 +13933,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -12368,8 +14148,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"use_round_robin_dns": schema.BoolAttribute{
@@ -12457,7 +14238,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"certificate_name": schema.StringAttribute{
@@ -12521,7 +14303,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -12547,7 +14329,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12570,6 +14352,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -12685,8 +14493,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"use_round_robin_dns": schema.BoolAttribute{
@@ -12774,7 +14583,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"certificate_name": schema.StringAttribute{
@@ -12838,7 +14648,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -12864,7 +14674,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -12887,6 +14697,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"message_field": schema.StringAttribute{
 									Computed:    true,
@@ -12981,8 +14817,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -13076,7 +14913,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -13111,7 +14948,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13135,6 +14972,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Use load-balanced destinations`,
@@ -13151,6 +15014,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed:    true,
 									Description: `TLS settings (client side)`,
@@ -13161,7 +15028,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -13252,9 +15120,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `The port to connect to on the provided host`,
 								},
-								"exclude_self": schema.BoolAttribute{
+								"endpoint_source": schema.StringAttribute{
 									Computed:    true,
-									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+									Description: `Whether to use statically configured endpoints or an Endpoint List`,
 								},
 								"hosts": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13283,6 +15151,28 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 											},
 										},
 									},
+								},
+								"endpoint_list": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Endpoint List`,
+									Attributes: map[string]schema.Attribute{
+										"id": schema.StringAttribute{
+											Computed:    true,
+											Description: `The Endpoint List that supplies this destination's endpoints`,
+										},
+										"port": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The port to connect to on each endpoint in the list`,
+										},
+										"tls": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to connect to endpoints using TLS`,
+										},
+									},
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 								},
 								"dns_resolve_period_sec": schema.Float64Attribute{
 									Computed:    true,
@@ -13326,7 +15216,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -13352,7 +15242,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13376,6 +15266,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
 									Description: `For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.`,
@@ -13390,7 +15306,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -13455,8 +15372,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -13499,6 +15417,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"response_retry_settings": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13586,9 +15508,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 								},
-								"exclude_self": schema.BoolAttribute{
+								"endpoint_source": schema.StringAttribute{
 									Computed:    true,
-									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+									Description: `Whether to use statically configured endpoints or an Endpoint List`,
 								},
 								"urls": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13605,6 +15527,28 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 											},
 										},
 									},
+								},
+								"endpoint_list": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Endpoint List`,
+									Attributes: map[string]schema.Attribute{
+										"id": schema.StringAttribute{
+											Computed:    true,
+											Description: `The Endpoint List that supplies this destination's endpoints`,
+										},
+										"port": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The port to connect to on each endpoint in the list`,
+										},
+										"tls": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to connect to endpoints using TLS`,
+										},
+									},
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 								},
 								"dns_resolve_period_sec": schema.Float64Attribute{
 									Computed:    true,
@@ -13644,7 +15588,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -13670,7 +15614,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -13694,6 +15638,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
 									Description: `For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.`,
@@ -13708,7 +15678,8 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -13773,8 +15744,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -13817,6 +15789,10 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								"throttle_rate_per_sec": schema.StringAttribute{
 									Computed:    true,
 									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.`,
 								},
 								"response_retry_settings": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13908,9 +15884,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Computed:    true,
 									Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
 								},
-								"exclude_self": schema.BoolAttribute{
+								"endpoint_source": schema.StringAttribute{
 									Computed:    true,
-									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+									Description: `Whether to use statically configured endpoints or an Endpoint List`,
 								},
 								"urls": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13927,6 +15903,28 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 											},
 										},
 									},
+								},
+								"endpoint_list": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Endpoint List`,
+									Attributes: map[string]schema.Attribute{
+										"id": schema.StringAttribute{
+											Computed:    true,
+											Description: `The Endpoint List that supplies this destination's endpoints`,
+										},
+										"port": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The port to connect to on each endpoint in the list`,
+										},
+										"tls": schema.StringAttribute{
+											Computed:    true,
+											Description: `Whether to connect to endpoints using TLS`,
+										},
+									},
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 								},
 								"dns_resolve_period_sec": schema.Float64Attribute{
 									Computed:    true,
@@ -13966,7 +15964,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -13992,7 +15990,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14016,6 +16014,32 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"url": schema.StringAttribute{
 									Computed:    true,
 									Description: `URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw`,
@@ -14038,8 +16062,9 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -14188,7 +16213,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -14214,7 +16239,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14238,9 +16263,35 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"url": schema.StringAttribute{
 									Computed: true,
-									Description: `URL provided from a CrowdStrike data connector. 
+									Description: `URL provided from a CrowdStrike data connector.
 Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector`,
 								},
 								"concurrency": schema.Float64Attribute{
@@ -14261,8 +16312,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -14411,7 +16463,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -14437,7 +16489,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14460,6 +16512,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -14624,7 +16702,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+									Description: "Secret key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"object_acl": schema.StringAttribute{
 									Computed:    true,
@@ -14654,7 +16732,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
+									Description: "This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -14747,7 +16825,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -14770,6 +16848,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -15007,7 +17111,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)",
+									Description: "This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -15040,7 +17144,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15063,6 +17167,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"stage_path": schema.StringAttribute{
 									Computed:    true,
@@ -15283,7 +17413,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15306,6 +17436,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"time_window": schema.StringAttribute{
 									Computed:    true,
@@ -15338,7 +17494,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15361,6 +17517,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -15451,8 +17633,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -15642,7 +17825,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -15668,7 +17851,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -15691,6 +17874,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -15781,8 +17990,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -15972,7 +18182,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -15998,7 +18208,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16021,6 +18231,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"url": schema.StringAttribute{
 									Computed:    true,
@@ -16111,8 +18347,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -16393,7 +18630,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -16419,7 +18656,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16443,6 +18680,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"load_balanced": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
@@ -16465,8 +18728,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -16564,6 +18828,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Maximum number of requests to limit to per second`,
 								},
+								"throttle_burst_disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttle request rate limit is set.`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `The metadata in this field will be included with the Destination metadata and used to batch events`,
+								},
 								"on_backpressure": schema.StringAttribute{
 									Computed:    true,
 									Description: `How to handle events when all receivers are exerting backpressure`,
@@ -16647,7 +18919,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -16673,7 +18945,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16696,6 +18968,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"hosts": schema.ListNestedAttribute{
 									Computed:    true,
@@ -16736,7 +19034,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -16759,6 +19057,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"method": schema.StringAttribute{
 									Computed:    true,
@@ -16786,8 +19110,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -16901,6 +19226,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Telemetry type`,
 								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Event field to use for dynamic headers and batching`,
+								},
 								"total_memory_limit_kb": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
@@ -16939,7 +19268,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -16986,7 +19315,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17009,6 +19338,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"protocol": schema.StringAttribute{
 									Computed:    true,
@@ -17128,8 +19483,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"use_round_robin_dns": schema.BoolAttribute{
@@ -17237,7 +19593,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -17263,7 +19619,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17286,6 +19642,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -17449,8 +19831,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"use_round_robin_dns": schema.BoolAttribute{
@@ -17538,7 +19921,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"certificate_name": schema.StringAttribute{
@@ -17602,7 +19986,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -17628,7 +20012,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17652,6 +20036,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
 								"concurrency": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Maximum number of ongoing requests before blocking`,
@@ -17670,8 +20080,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -17764,6 +20175,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								"response_honor_retry_after_header": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -17880,7 +20295,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -17906,7 +20321,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -17929,6 +20344,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"api_version": schema.StringAttribute{
 									Computed:    true,
@@ -18010,8 +20451,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -18154,7 +20596,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -18180,7 +20622,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -18203,6 +20645,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"dest_path": schema.StringAttribute{
 									Computed:    true,
@@ -18443,7 +20911,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -18466,6 +20934,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"account_identifier": schema.StringAttribute{
 									Computed:    true,
@@ -18503,7 +20997,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"role": schema.StringAttribute{
 									Computed:    true,
-									Description: `Snowflake role to assume for this connection`,
+									Description: `Snowflake role to assume for this connection. Example: ACCOUNTADMIN`,
 								},
 								"keep_alive": schema.BoolAttribute{
 									Computed:    true,
@@ -18527,8 +21021,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed: true,
-									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
         that value will take precedence.`,
 								},
 								"timeout_sec": schema.Float64Attribute{
@@ -18660,7 +21155,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -18686,7 +21181,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -18709,6 +21204,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"topic": schema.StringAttribute{
 									Computed:    true,
@@ -18885,7 +21406,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -18911,7 +21432,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -18934,6 +21455,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -19078,7 +21625,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Sensitive:   true,
-									Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+									Description: "Secret key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.",
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -19187,7 +21734,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19210,6 +21757,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -19449,12 +22022,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 							},
 						},
-						"output_storj_s3": schema.SingleNestedAttribute{
+						"output_backblaze_b2": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19477,6 +22050,321 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Backblaze B2 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Backblaze B2 S3-compatible endpoint URL (example: https://s3.us-west-004.backblazeb2.com). Copy the endpoint and matching region from your bucket details.`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_storj_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -19717,7 +22605,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -19740,6 +22628,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -19980,7 +22894,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20003,6 +22917,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -20246,12 +23186,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 							},
 						},
-						"output_cloudian_s3": schema.SingleNestedAttribute{
+						"output_wasabi": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20274,6 +23214,610 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Wasabi bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Wasabi S3-compatible service URL for the region where the bucket is located (example: https://s3.us-east-1.wasabisys.com)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_seagate_lyve_cloud_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Seagate Lyve Cloud bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Seagate Lyve Cloud S3-compatible endpoint URL for the region where the bucket is located (example: https://s3.us-east-1.lyvecloud.seagate.com)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_cloudian_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -20534,7 +24078,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20557,6 +24101,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -20796,12 +24366,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 							},
 						},
-						"output_alibaba_cloud_s3": schema.SingleNestedAttribute{
+						"output_akamai_object_storage_s3": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -20824,6 +24394,321 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Akamai Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Akamai Object Storage S3-compatible endpoint URL for the region where the bucket is located (example: https://us-east-1.linodeobjects.com)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_alibaba_cloud_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
@@ -21079,12 +24964,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 							},
 						},
-						"output_ibm_cloud_s3": schema.SingleNestedAttribute{
+						"output_exoscale_sos_s3": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -21107,6 +24992,2954 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Exoscale SOS bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Exoscale SOS S3-compatible zone endpoint URL for the zone where the bucket is located (example: https://sos-ch-gva-2.exo.io)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_ionos_s3_object_storage": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination IONOS S3 Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `IONOS S3 Object Storage S3-compatible regional endpoint URL for the region where the bucket is located (example: https://s3.eu-central-2.ionoscloud.com)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_fastly_object_storage_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Fastly Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Fastly Object Storage S3-compatible regional endpoint URL for the region where the bucket is located (example: https://us-east-1.object.fastlystorage.app)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_impossible_cloud_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Impossible Cloud bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Impossible Cloud S3-compatible regional storage endpoint URL for the region where the bucket is located (example: https://eu-central-2.storage.impossibleapi.net)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_dreamobjects_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination DreamObjects bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `DreamObjects S3-compatible cluster endpoint URL (example: https://s3.us-east-005.dream.io)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_filebase_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Filebase bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filebase S3-compatible endpoint URL (example: https://s3.filebase.io)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_tencent_cloud_cos_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Tencent Cloud COS bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Tencent Cloud COS S3-compatible endpoint URL for the region where the bucket is located (example: https://cos.ap-guangzhou.myqcloud.com)`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed:    true,
+									Description: `Server-side encryption to use for uploaded objects`,
+								},
+								"kms_key_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_ovhcloud_object_storage_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination OVHcloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `OVHcloud Object Storage S3-compatible endpoint URL for the region where the bucket is located (example: https://s3.gra.io.cloud.ovh.net)`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed:    true,
+									Description: `Server-side encryption to use for uploaded objects`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_scaleway_object_storage_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Scaleway Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Scaleway Object Storage S3-compatible endpoint URL for the region where the bucket is located (example: https://s3.fr-par.scw.cloud)`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_digitalocean_spaces_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination DigitalOcean Spaces bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `DigitalOcean Spaces S3-compatible endpoint URL for the region where the Space is located (example: https://nyc3.digitaloceanspaces.com)`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_ibm_cloud_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
@@ -21342,12 +28175,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 							},
 						},
-						"output_databricks_zerobus": schema.SingleNestedAttribute{
+						"output_oracle_cloud_s3": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Unique ID for this output`,
+									Description: `Unique name for this output`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -21370,6 +28203,321 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Oracle Cloud Object Storage S3-compatible endpoint URL (example: https://<namespace>.compat.objectstorage.<region>.oraclecloud.com)`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: "Name of the destination Oracle Cloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for failed file uploads.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+										},
+										"initial_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"backoff_multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"max_backoff_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+										},
+										"jitter_percent": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+										},
+									},
+								},
+								"orphans": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Orphan file recovery`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+										},
+										"period_min": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Minimum interval between reconciliation runs`,
+										},
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed:    true,
+												Description: `Key`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Value`,
+											},
+										},
+									},
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+							},
+						},
+						"output_databricks_zerobus": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"workspace_url": schema.StringAttribute{
 									Computed:    true,
@@ -21461,7 +28609,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
 								},
 								"pq_compress": schema.StringAttribute{
 									Computed:    true,
@@ -21479,6 +28627,612 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Persistent queue controls.`,
 									ElementType: types.StringType,
+								},
+							},
+						},
+						"output_securonix": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
+        that value will take precedence.`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"max_connection_reuse_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Value`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `List of headers that are safe to log in plain text`,
+									ElementType: types.StringType,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for HTTP requests that exceed the request timeout.`,
+									Attributes: map[string]schema.Attribute{
+										"timeout_retry": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Whether to retry HTTP requests that exceed the request timeout.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+									},
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method to use for the HTTP request`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (client side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Whether TLS is disabled for this connection.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to use for the connection.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to use for the connection.`,
+										},
+									},
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Event field to use for dynamic headers and batching`,
+								},
+								"http_receiver_endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL of the Securonix HTTP Event Receiver endpoint`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_max_buffer_size_bytes": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								},
+								"pq_controls": schema.MapAttribute{
+									Computed:    true,
+									Description: `Persistent queue controls.`,
+									ElementType: types.StringType,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+							},
+						},
+						"output_fortisiem": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique name for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"schema_monitor_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for Schema Monitor on this Destination.`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.`,
+										},
+										"target_schemas": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"id": schema.StringAttribute{
+														Computed:    true,
+														Description: `ID of the Schema Knowledge Object.`,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Library that contains the schema: json for Schemas, parquet for Parquet Schemas.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+
+        Enabled by default. When this setting is also present in TLS Settings (Client Side),
+        that value will take precedence.`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"max_connection_reuse_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Field Value`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `List of headers that are safe to log in plain text`,
+									ElementType: types.StringType,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Retry settings for HTTP requests that exceed the request timeout.`,
+									Attributes: map[string]schema.Attribute{
+										"timeout_retry": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Whether to retry HTTP requests that exceed the request timeout.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+									},
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method to use for the HTTP request`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `TLS settings (client side)`,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Whether TLS is disabled for this connection.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Minimum TLS version to use for the connection.`,
+										},
+										"max_version": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum TLS version to use for the connection.`,
+										},
+									},
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Event field to use for dynamic headers and batching`,
+								},
+								"fortisiem_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Base URL or host of the FortiSIEM node that receives events, such as https://fortisiem.example. The /rawupload path is added automatically.`,
+								},
+								"vendor": schema.StringAttribute{
+									Computed:    true,
+									Description: `Vendor of the product that generated the logs.`,
+								},
+								"model": schema.StringAttribute{
+									Computed:    true,
+									Description: `Model of the product that generated the logs.`,
+								},
+								"rept_ip": schema.StringAttribute{
+									Computed:    true,
+									Description: `Reporting device IP address, the source of the logs.`,
+								},
+								"rept_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Reporting device hostname.`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_max_buffer_size_bytes": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								},
+								"pq_controls": schema.MapAttribute{
+									Computed:    true,
+									Description: `Persistent queue controls.`,
+									ElementType: types.StringType,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
 								},
 							},
 						},
@@ -21519,7 +29273,7 @@ func (d *DestinationsDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(DestinationsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "id": item.ID, "pipeline": item.Pipeline, "type": item.Type, "output_default": DestinationsOutputDefaultObjectValue(item.OutputDefault), "output_webhook": DestinationsOutputWebhookObjectValue(item.OutputWebhook), "output_sentinel": DestinationsOutputSentinelObjectValue(item.OutputSentinel), "output_devnull": DestinationsOutputDevnullObjectValue(item.OutputDevnull), "output_syslog": DestinationsOutputSyslogObjectValue(item.OutputSyslog), "output_splunk": DestinationsOutputSplunkObjectValue(item.OutputSplunk), "output_splunk_lb": DestinationsOutputSplunkLbObjectValue(item.OutputSplunkLb), "output_splunk_hec": DestinationsOutputSplunkHecObjectValue(item.OutputSplunkHec), "output_wiz_hec": DestinationsOutputWizHecObjectValue(item.OutputWizHec), "output_tcpjson": DestinationsOutputTcpjsonObjectValue(item.OutputTcpjson), "output_wavefront": DestinationsOutputWavefrontObjectValue(item.OutputWavefront), "output_signalfx": DestinationsOutputSignalfxObjectValue(item.OutputSignalfx), "output_filesystem": DestinationsOutputFilesystemObjectValue(item.OutputFilesystem), "output_s3": DestinationsOutputS3ObjectValue(item.OutputS3), "output_azure_blob": DestinationsOutputAzureBlobObjectValue(item.OutputAzureBlob), "output_azure_data_explorer": DestinationsOutputAzureDataExplorerObjectValue(item.OutputAzureDataExplorer), "output_azure_logs": DestinationsOutputAzureLogsObjectValue(item.OutputAzureLogs), "output_kinesis": DestinationsOutputKinesisObjectValue(item.OutputKinesis), "output_honeycomb": DestinationsOutputHoneycombObjectValue(item.OutputHoneycomb), "output_azure_eventhub": DestinationsOutputAzureEventhubObjectValue(item.OutputAzureEventhub), "output_google_bigquery": DestinationsOutputGoogleBigqueryObjectValue(item.OutputGoogleBigquery), "output_google_chronicle": DestinationsOutputGoogleChronicleObjectValue(item.OutputGoogleChronicle), "output_google_cloud_storage": DestinationsOutputGoogleCloudStorageObjectValue(item.OutputGoogleCloudStorage), "output_google_cloud_logging": DestinationsOutputGoogleCloudLoggingObjectValue(item.OutputGoogleCloudLogging), "output_google_cloud_observability": DestinationsOutputGoogleCloudObservabilityObjectValue(item.OutputGoogleCloudObservability), "output_google_pubsub": DestinationsOutputGooglePubsubObjectValue(item.OutputGooglePubsub), "output_exabeam": DestinationsOutputExabeamObjectValue(item.OutputExabeam), "output_kafka": DestinationsOutputKafkaObjectValue(item.OutputKafka), "output_confluent_cloud": DestinationsOutputConfluentCloudObjectValue(item.OutputConfluentCloud), "output_msk": DestinationsOutputMskObjectValue(item.OutputMsk), "output_elastic": DestinationsOutputElasticObjectValue(item.OutputElastic), "output_elastic_cloud": DestinationsOutputElasticCloudObjectValue(item.OutputElasticCloud), "output_newrelic": DestinationsOutputNewrelicObjectValue(item.OutputNewrelic), "output_newrelic_events": DestinationsOutputNewrelicEventsObjectValue(item.OutputNewrelicEvents), "output_influxdb": DestinationsOutputInfluxdbObjectValue(item.OutputInfluxdb), "output_cloudwatch": DestinationsOutputCloudwatchObjectValue(item.OutputCloudwatch), "output_minio": DestinationsOutputMinioObjectValue(item.OutputMinio), "output_statsd": DestinationsOutputStatsdObjectValue(item.OutputStatsd), "output_statsd_ext": DestinationsOutputStatsdExtObjectValue(item.OutputStatsdExt), "output_graphite": DestinationsOutputGraphiteObjectValue(item.OutputGraphite), "output_router": DestinationsOutputRouterObjectValue(item.OutputRouter), "output_sns": DestinationsOutputSnsObjectValue(item.OutputSns), "output_sqs": DestinationsOutputSqsObjectValue(item.OutputSqs), "output_snmp": DestinationsOutputSnmpObjectValue(item.OutputSnmp), "output_sumo_logic": DestinationsOutputSumoLogicObjectValue(item.OutputSumoLogic), "output_datadog": DestinationsOutputDatadogObjectValue(item.OutputDatadog), "output_grafana_cloud": DestinationsOutputGrafanaCloudObjectValue(item.OutputGrafanaCloud), "output_loki": DestinationsOutputLokiObjectValue(item.OutputLoki), "output_amazon_managed_prometheus": DestinationsOutputAmazonManagedPrometheusObjectValue(item.OutputAmazonManagedPrometheus), "output_prometheus": DestinationsOutputPrometheusObjectValue(item.OutputPrometheus), "output_ring": DestinationsOutputRingObjectValue(item.OutputRing), "output_open_telemetry": DestinationsOutputOpenTelemetryObjectValue(item.OutputOpenTelemetry), "output_service_now": DestinationsOutputServiceNowObjectValue(item.OutputServiceNow), "output_dataset": DestinationsOutputDatasetObjectValue(item.OutputDataset), "output_cribl_tcp": DestinationsOutputCriblTcpObjectValue(item.OutputCriblTcp), "output_cribl_http": DestinationsOutputCriblHttpObjectValue(item.OutputCriblHttp), "output_cribl_search_engine": DestinationsOutputCriblSearchEngineObjectValue(item.OutputCriblSearchEngine), "output_humio_hec": DestinationsOutputHumioHecObjectValue(item.OutputHumioHec), "output_crowdstrike_next_gen_siem": DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item.OutputCrowdstrikeNextGenSiem), "output_dl_s3": DestinationsOutputDlS3ObjectValue(item.OutputDlS3), "output_security_lake": DestinationsOutputSecurityLakeObjectValue(item.OutputSecurityLake), "output_cribl_lake": DestinationsOutputCriblLakeObjectValue(item.OutputCriblLake), "output_disk_spool": DestinationsOutputDiskSpoolObjectValue(item.OutputDiskSpool), "output_click_house": DestinationsOutputClickHouseObjectValue(item.OutputClickHouse), "output_customer_metrics_storage": DestinationsOutputCustomerMetricsStorageObjectValue(item.OutputCustomerMetricsStorage), "output_local_search_storage": DestinationsOutputLocalSearchStorageObjectValue(item.OutputLocalSearchStorage), "output_xsiam": DestinationsOutputXsiamObjectValue(item.OutputXsiam), "output_netflow": DestinationsOutputNetflowObjectValue(item.OutputNetflow), "output_dynatrace_http": DestinationsOutputDynatraceHttpObjectValue(item.OutputDynatraceHttp), "output_dynatrace_otlp": DestinationsOutputDynatraceOtlpObjectValue(item.OutputDynatraceOtlp), "output_traversal_otlp": DestinationsOutputTraversalOtlpObjectValue(item.OutputTraversalOtlp), "output_sentinel_one_ai_siem": DestinationsOutputSentinelOneAiSiemObjectValue(item.OutputSentinelOneAiSiem), "output_chronicle": DestinationsOutputChronicleObjectValue(item.OutputChronicle), "output_databricks": DestinationsOutputDatabricksObjectValue(item.OutputDatabricks), "output_snowflake_streaming": DestinationsOutputSnowflakeStreamingObjectValue(item.OutputSnowflakeStreaming), "output_microsoft_fabric": DestinationsOutputMicrosoftFabricObjectValue(item.OutputMicrosoftFabric), "output_cloudflare_r2": DestinationsOutputCloudflareR2ObjectValue(item.OutputCloudflareR2), "output_nutanix_objects": DestinationsOutputNutanixObjectsObjectValue(item.OutputNutanixObjects), "output_storj_s3": DestinationsOutputStorjS3ObjectValue(item.OutputStorjS3), "output_alphasoc_s3": DestinationsOutputAlphasocS3ObjectValue(item.OutputAlphasocS3), "output_dell_s3": DestinationsOutputDellS3ObjectValue(item.OutputDellS3), "output_cloudian_s3": DestinationsOutputCloudianS3ObjectValue(item.OutputCloudianS3), "output_scality_s3": DestinationsOutputScalityS3ObjectValue(item.OutputScalityS3), "output_alibaba_cloud_s3": DestinationsOutputAlibabaCloudS3ObjectValue(item.OutputAlibabaCloudS3), "output_ibm_cloud_s3": DestinationsOutputIbmCloudS3ObjectValue(item.OutputIbmCloudS3), "output_databricks_zerobus": DestinationsOutputDatabricksZerobusObjectValue(item.OutputDatabricksZerobus)}))
+			values = append(values, types.ObjectValueMust(DestinationsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "id": item.ID, "pipeline": item.Pipeline, "type": item.Type, "output_default": DestinationsOutputDefaultObjectValue(item.OutputDefault), "output_webhook": DestinationsOutputWebhookObjectValue(item.OutputWebhook), "output_sentinel": DestinationsOutputSentinelObjectValue(item.OutputSentinel), "output_devnull": DestinationsOutputDevnullObjectValue(item.OutputDevnull), "output_syslog": DestinationsOutputSyslogObjectValue(item.OutputSyslog), "output_splunk": DestinationsOutputSplunkObjectValue(item.OutputSplunk), "output_splunk_lb": DestinationsOutputSplunkLbObjectValue(item.OutputSplunkLb), "output_splunk_hec": DestinationsOutputSplunkHecObjectValue(item.OutputSplunkHec), "output_wiz_hec": DestinationsOutputWizHecObjectValue(item.OutputWizHec), "output_tcpjson": DestinationsOutputTcpjsonObjectValue(item.OutputTcpjson), "output_wavefront": DestinationsOutputWavefrontObjectValue(item.OutputWavefront), "output_signalfx": DestinationsOutputSignalfxObjectValue(item.OutputSignalfx), "output_filesystem": DestinationsOutputFilesystemObjectValue(item.OutputFilesystem), "output_s3": DestinationsOutputS3ObjectValue(item.OutputS3), "output_azure_blob": DestinationsOutputAzureBlobObjectValue(item.OutputAzureBlob), "output_azure_data_explorer": DestinationsOutputAzureDataExplorerObjectValue(item.OutputAzureDataExplorer), "output_azure_logs": DestinationsOutputAzureLogsObjectValue(item.OutputAzureLogs), "output_kinesis": DestinationsOutputKinesisObjectValue(item.OutputKinesis), "output_honeycomb": DestinationsOutputHoneycombObjectValue(item.OutputHoneycomb), "output_azure_eventhub": DestinationsOutputAzureEventhubObjectValue(item.OutputAzureEventhub), "output_google_bigquery": DestinationsOutputGoogleBigqueryObjectValue(item.OutputGoogleBigquery), "output_google_chronicle": DestinationsOutputGoogleChronicleObjectValue(item.OutputGoogleChronicle), "output_google_cloud_storage": DestinationsOutputGoogleCloudStorageObjectValue(item.OutputGoogleCloudStorage), "output_google_cloud_logging": DestinationsOutputGoogleCloudLoggingObjectValue(item.OutputGoogleCloudLogging), "output_google_cloud_observability": DestinationsOutputGoogleCloudObservabilityObjectValue(item.OutputGoogleCloudObservability), "output_google_pubsub": DestinationsOutputGooglePubsubObjectValue(item.OutputGooglePubsub), "output_exabeam": DestinationsOutputExabeamObjectValue(item.OutputExabeam), "output_kafka": DestinationsOutputKafkaObjectValue(item.OutputKafka), "output_confluent_cloud": DestinationsOutputConfluentCloudObjectValue(item.OutputConfluentCloud), "output_msk": DestinationsOutputMskObjectValue(item.OutputMsk), "output_elastic": DestinationsOutputElasticObjectValue(item.OutputElastic), "output_elastic_cloud": DestinationsOutputElasticCloudObjectValue(item.OutputElasticCloud), "output_elastic_serverless": DestinationsOutputElasticServerlessObjectValue(item.OutputElasticServerless), "output_newrelic": DestinationsOutputNewrelicObjectValue(item.OutputNewrelic), "output_newrelic_events": DestinationsOutputNewrelicEventsObjectValue(item.OutputNewrelicEvents), "output_influxdb": DestinationsOutputInfluxdbObjectValue(item.OutputInfluxdb), "output_cloudwatch": DestinationsOutputCloudwatchObjectValue(item.OutputCloudwatch), "output_minio": DestinationsOutputMinioObjectValue(item.OutputMinio), "output_statsd": DestinationsOutputStatsdObjectValue(item.OutputStatsd), "output_statsd_ext": DestinationsOutputStatsdExtObjectValue(item.OutputStatsdExt), "output_graphite": DestinationsOutputGraphiteObjectValue(item.OutputGraphite), "output_router": DestinationsOutputRouterObjectValue(item.OutputRouter), "output_sns": DestinationsOutputSnsObjectValue(item.OutputSns), "output_sqs": DestinationsOutputSqsObjectValue(item.OutputSqs), "output_snmp": DestinationsOutputSnmpObjectValue(item.OutputSnmp), "output_sumo_logic": DestinationsOutputSumoLogicObjectValue(item.OutputSumoLogic), "output_datadog": DestinationsOutputDatadogObjectValue(item.OutputDatadog), "output_grafana_cloud": DestinationsOutputGrafanaCloudObjectValue(item.OutputGrafanaCloud), "output_loki": DestinationsOutputLokiObjectValue(item.OutputLoki), "output_amazon_managed_prometheus": DestinationsOutputAmazonManagedPrometheusObjectValue(item.OutputAmazonManagedPrometheus), "output_prometheus": DestinationsOutputPrometheusObjectValue(item.OutputPrometheus), "output_ring": DestinationsOutputRingObjectValue(item.OutputRing), "output_open_telemetry": DestinationsOutputOpenTelemetryObjectValue(item.OutputOpenTelemetry), "output_service_now": DestinationsOutputServiceNowObjectValue(item.OutputServiceNow), "output_dataset": DestinationsOutputDatasetObjectValue(item.OutputDataset), "output_cribl_tcp": DestinationsOutputCriblTcpObjectValue(item.OutputCriblTcp), "output_cribl_http": DestinationsOutputCriblHttpObjectValue(item.OutputCriblHttp), "output_cribl_search_engine": DestinationsOutputCriblSearchEngineObjectValue(item.OutputCriblSearchEngine), "output_humio_hec": DestinationsOutputHumioHecObjectValue(item.OutputHumioHec), "output_crowdstrike_next_gen_siem": DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item.OutputCrowdstrikeNextGenSiem), "output_dl_s3": DestinationsOutputDlS3ObjectValue(item.OutputDlS3), "output_security_lake": DestinationsOutputSecurityLakeObjectValue(item.OutputSecurityLake), "output_cribl_lake": DestinationsOutputCriblLakeObjectValue(item.OutputCriblLake), "output_disk_spool": DestinationsOutputDiskSpoolObjectValue(item.OutputDiskSpool), "output_click_house": DestinationsOutputClickHouseObjectValue(item.OutputClickHouse), "output_customer_metrics_storage": DestinationsOutputCustomerMetricsStorageObjectValue(item.OutputCustomerMetricsStorage), "output_local_search_storage": DestinationsOutputLocalSearchStorageObjectValue(item.OutputLocalSearchStorage), "output_xsiam": DestinationsOutputXsiamObjectValue(item.OutputXsiam), "output_netflow": DestinationsOutputNetflowObjectValue(item.OutputNetflow), "output_dynatrace_http": DestinationsOutputDynatraceHttpObjectValue(item.OutputDynatraceHttp), "output_dynatrace_otlp": DestinationsOutputDynatraceOtlpObjectValue(item.OutputDynatraceOtlp), "output_traversal_otlp": DestinationsOutputTraversalOtlpObjectValue(item.OutputTraversalOtlp), "output_sentinel_one_ai_siem": DestinationsOutputSentinelOneAiSiemObjectValue(item.OutputSentinelOneAiSiem), "output_chronicle": DestinationsOutputChronicleObjectValue(item.OutputChronicle), "output_databricks": DestinationsOutputDatabricksObjectValue(item.OutputDatabricks), "output_snowflake_streaming": DestinationsOutputSnowflakeStreamingObjectValue(item.OutputSnowflakeStreaming), "output_microsoft_fabric": DestinationsOutputMicrosoftFabricObjectValue(item.OutputMicrosoftFabric), "output_cloudflare_r2": DestinationsOutputCloudflareR2ObjectValue(item.OutputCloudflareR2), "output_nutanix_objects": DestinationsOutputNutanixObjectsObjectValue(item.OutputNutanixObjects), "output_backblaze_b2": DestinationsOutputBackblazeB2ObjectValue(item.OutputBackblazeB2), "output_storj_s3": DestinationsOutputStorjS3ObjectValue(item.OutputStorjS3), "output_alphasoc_s3": DestinationsOutputAlphasocS3ObjectValue(item.OutputAlphasocS3), "output_dell_s3": DestinationsOutputDellS3ObjectValue(item.OutputDellS3), "output_wasabi": DestinationsOutputWasabiObjectValue(item.OutputWasabi), "output_seagate_lyve_cloud_s3": DestinationsOutputSeagateLyveCloudS3ObjectValue(item.OutputSeagateLyveCloudS3), "output_cloudian_s3": DestinationsOutputCloudianS3ObjectValue(item.OutputCloudianS3), "output_scality_s3": DestinationsOutputScalityS3ObjectValue(item.OutputScalityS3), "output_akamai_object_storage_s3": DestinationsOutputAkamaiObjectStorageS3ObjectValue(item.OutputAkamaiObjectStorageS3), "output_alibaba_cloud_s3": DestinationsOutputAlibabaCloudS3ObjectValue(item.OutputAlibabaCloudS3), "output_exoscale_sos_s3": DestinationsOutputExoscaleSosS3ObjectValue(item.OutputExoscaleSosS3), "output_ionos_s3_object_storage": DestinationsOutputIonosS3ObjectStorageObjectValue(item.OutputIonosS3ObjectStorage), "output_fastly_object_storage_s3": DestinationsOutputFastlyObjectStorageS3ObjectValue(item.OutputFastlyObjectStorageS3), "output_impossible_cloud_s3": DestinationsOutputImpossibleCloudS3ObjectValue(item.OutputImpossibleCloudS3), "output_dreamobjects_s3": DestinationsOutputDreamobjectsS3ObjectValue(item.OutputDreamobjectsS3), "output_filebase_s3": DestinationsOutputFilebaseS3ObjectValue(item.OutputFilebaseS3), "output_tencent_cloud_cos_s3": DestinationsOutputTencentCloudCosS3ObjectValue(item.OutputTencentCloudCosS3), "output_ovhcloud_object_storage_s3": DestinationsOutputOvhcloudObjectStorageS3ObjectValue(item.OutputOvhcloudObjectStorageS3), "output_scaleway_object_storage_s3": DestinationsOutputScalewayObjectStorageS3ObjectValue(item.OutputScalewayObjectStorageS3), "output_digitalocean_spaces_s3": DestinationsOutputDigitaloceanSpacesS3ObjectValue(item.OutputDigitaloceanSpacesS3), "output_ibm_cloud_s3": DestinationsOutputIbmCloudS3ObjectValue(item.OutputIbmCloudS3), "output_oracle_cloud_s3": DestinationsOutputOracleCloudS3ObjectValue(item.OutputOracleCloudS3), "output_databricks_zerobus": DestinationsOutputDatabricksZerobusObjectValue(item.OutputDatabricksZerobus), "output_securonix": DestinationsOutputSecuronixObjectValue(item.OutputSecuronix), "output_fortisiem": DestinationsOutputFortisiemObjectValue(item.OutputFortisiem)}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: DestinationsItemAttrTypes()}, values)
@@ -21564,6 +29318,7 @@ func DestinationsItemAttrTypes() map[string]attr.Type {
 		"output_msk":                        types.ObjectType{AttrTypes: OutputMskModelAttrTypes()},
 		"output_elastic":                    types.ObjectType{AttrTypes: OutputElasticModelAttrTypes()},
 		"output_elastic_cloud":              types.ObjectType{AttrTypes: OutputElasticCloudModelAttrTypes()},
+		"output_elastic_serverless":         types.ObjectType{AttrTypes: OutputElasticServerlessModelAttrTypes()},
 		"output_newrelic":                   types.ObjectType{AttrTypes: OutputNewrelicModelAttrTypes()},
 		"output_newrelic_events":            types.ObjectType{AttrTypes: OutputNewrelicEventsModelAttrTypes()},
 		"output_influxdb":                   types.ObjectType{AttrTypes: OutputInfluxdbModelAttrTypes()},
@@ -21610,14 +29365,31 @@ func DestinationsItemAttrTypes() map[string]attr.Type {
 		"output_microsoft_fabric":           types.ObjectType{AttrTypes: OutputMicrosoftFabricModelAttrTypes()},
 		"output_cloudflare_r2":              types.ObjectType{AttrTypes: OutputCloudflareR2ModelAttrTypes()},
 		"output_nutanix_objects":            types.ObjectType{AttrTypes: OutputNutanixObjectsModelAttrTypes()},
+		"output_backblaze_b2":               types.ObjectType{AttrTypes: OutputBackblazeB2ModelAttrTypes()},
 		"output_storj_s3":                   types.ObjectType{AttrTypes: OutputStorjS3ModelAttrTypes()},
 		"output_alphasoc_s3":                types.ObjectType{AttrTypes: OutputAlphasocS3ModelAttrTypes()},
 		"output_dell_s3":                    types.ObjectType{AttrTypes: OutputDellS3ModelAttrTypes()},
+		"output_wasabi":                     types.ObjectType{AttrTypes: OutputWasabiModelAttrTypes()},
+		"output_seagate_lyve_cloud_s3":      types.ObjectType{AttrTypes: OutputSeagateLyveCloudS3ModelAttrTypes()},
 		"output_cloudian_s3":                types.ObjectType{AttrTypes: OutputCloudianS3ModelAttrTypes()},
 		"output_scality_s3":                 types.ObjectType{AttrTypes: OutputScalityS3ModelAttrTypes()},
+		"output_akamai_object_storage_s3":   types.ObjectType{AttrTypes: OutputAkamaiObjectStorageS3ModelAttrTypes()},
 		"output_alibaba_cloud_s3":           types.ObjectType{AttrTypes: OutputAlibabaCloudS3ModelAttrTypes()},
+		"output_exoscale_sos_s3":            types.ObjectType{AttrTypes: OutputExoscaleSosS3ModelAttrTypes()},
+		"output_ionos_s3_object_storage":    types.ObjectType{AttrTypes: OutputIonosS3ObjectStorageModelAttrTypes()},
+		"output_fastly_object_storage_s3":   types.ObjectType{AttrTypes: OutputFastlyObjectStorageS3ModelAttrTypes()},
+		"output_impossible_cloud_s3":        types.ObjectType{AttrTypes: OutputImpossibleCloudS3ModelAttrTypes()},
+		"output_dreamobjects_s3":            types.ObjectType{AttrTypes: OutputDreamobjectsS3ModelAttrTypes()},
+		"output_filebase_s3":                types.ObjectType{AttrTypes: OutputFilebaseS3ModelAttrTypes()},
+		"output_tencent_cloud_cos_s3":       types.ObjectType{AttrTypes: OutputTencentCloudCosS3ModelAttrTypes()},
+		"output_ovhcloud_object_storage_s3": types.ObjectType{AttrTypes: OutputOvhcloudObjectStorageS3ModelAttrTypes()},
+		"output_scaleway_object_storage_s3": types.ObjectType{AttrTypes: OutputScalewayObjectStorageS3ModelAttrTypes()},
+		"output_digitalocean_spaces_s3":     types.ObjectType{AttrTypes: OutputDigitaloceanSpacesS3ModelAttrTypes()},
 		"output_ibm_cloud_s3":               types.ObjectType{AttrTypes: OutputIbmCloudS3ModelAttrTypes()},
+		"output_oracle_cloud_s3":            types.ObjectType{AttrTypes: OutputOracleCloudS3ModelAttrTypes()},
 		"output_databricks_zerobus":         types.ObjectType{AttrTypes: OutputDatabricksZerobusModelAttrTypes()},
+		"output_securonix":                  types.ObjectType{AttrTypes: OutputSecuronixModelAttrTypes()},
+		"output_fortisiem":                  types.ObjectType{AttrTypes: OutputFortisiemModelAttrTypes()},
 	}
 }
 
@@ -21626,13 +29398,14 @@ func DestinationsOutputDefaultObjectValue(item *OutputDefaultModel) attr.Value {
 		return types.ObjectNull(OutputDefaultModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputDefaultModelAttrTypes(), map[string]attr.Value{
-		"id":            item.ID,
-		"type":          item.Type,
-		"pipeline":      item.Pipeline,
-		"system_fields": item.SystemFields,
-		"environment":   item.Environment,
-		"streamtags":    item.Streamtags,
-		"default_id":    item.DefaultID,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
+		"default_id":              item.DefaultID,
 	})
 }
 
@@ -21647,6 +29420,7 @@ func DestinationsOutputWebhookObjectValue(item *OutputWebhookModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"method":                            item.Method,
 		"format":                            item.Format,
 		"keep_alive":                        item.KeepAlive,
@@ -21670,6 +29444,7 @@ func DestinationsOutputWebhookObjectValue(item *OutputWebhookModel) attr.Value {
 		"tls":                               item.TLS,
 		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
 		"load_balanced":                     item.LoadBalanced,
+		"dynamic_headers_field":             item.DynamicHeadersField,
 		"description":                       item.Description,
 		"custom_source_expression":          item.CustomSourceExpression,
 		"custom_drop_when_null":             item.CustomDropWhenNull,
@@ -21727,6 +29502,7 @@ func DestinationsOutputSentinelObjectValue(item *OutputSentinelModel) attr.Value
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"keep_alive":                        item.KeepAlive,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
@@ -21755,6 +29531,7 @@ func DestinationsOutputSentinelObjectValue(item *OutputSentinelModel) attr.Value
 		"client_id":                         item.ClientID,
 		"scope":                             item.Scope,
 		"endpoint_urlconfiguration":         item.EndpointURLConfiguration,
+		"dynamic_headers_field":             item.DynamicHeadersField,
 		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
 		"description":                       item.Description,
 		"format":                            item.Format,
@@ -21791,12 +29568,13 @@ func DestinationsOutputDevnullObjectValue(item *OutputDevnullModel) attr.Value {
 		return types.ObjectNull(OutputDevnullModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputDevnullModelAttrTypes(), map[string]attr.Value{
-		"id":            item.ID,
-		"type":          item.Type,
-		"pipeline":      item.Pipeline,
-		"system_fields": item.SystemFields,
-		"environment":   item.Environment,
-		"streamtags":    item.Streamtags,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
 	})
 }
 
@@ -21811,6 +29589,7 @@ func DestinationsOutputSyslogObjectValue(item *OutputSyslogModel) attr.Value {
 		"system_fields":                 item.SystemFields,
 		"environment":                   item.Environment,
 		"streamtags":                    item.Streamtags,
+		"schema_monitor_settings":       item.SchemaMonitorSettings,
 		"protocol":                      item.Protocol,
 		"facility":                      item.Facility,
 		"severity":                      item.Severity,
@@ -21818,6 +29597,7 @@ func DestinationsOutputSyslogObjectValue(item *OutputSyslogModel) attr.Value {
 		"message_format":                item.MessageFormat,
 		"timestamp_format":              item.TimestampFormat,
 		"throttle_rate_per_sec":         item.ThrottleRatePerSec,
+		"throttle_burst_disabled":       item.ThrottleBurstDisabled,
 		"octet_count_framing":           item.OctetCountFraming,
 		"log_failed_requests":           item.LogFailedRequests,
 		"description":                   item.Description,
@@ -21862,10 +29642,12 @@ func DestinationsOutputSplunkObjectValue(item *OutputSplunkModel) attr.Value {
 		"system_fields":            item.SystemFields,
 		"environment":              item.Environment,
 		"streamtags":               item.Streamtags,
+		"schema_monitor_settings":  item.SchemaMonitorSettings,
 		"host":                     item.Host,
 		"port":                     item.Port,
 		"nested_fields":            item.NestedFields,
 		"throttle_rate_per_sec":    item.ThrottleRatePerSec,
+		"throttle_burst_disabled":  item.ThrottleBurstDisabled,
 		"connection_timeout":       item.ConnectionTimeout,
 		"write_timeout":            item.WriteTimeout,
 		"tls":                      item.TLS,
@@ -21906,11 +29688,13 @@ func DestinationsOutputSplunkLbObjectValue(item *OutputSplunkLbModel) attr.Value
 		"system_fields":                   item.SystemFields,
 		"environment":                     item.Environment,
 		"streamtags":                      item.Streamtags,
+		"schema_monitor_settings":         item.SchemaMonitorSettings,
 		"dns_resolve_period_sec":          item.DnsResolvePeriodSec,
 		"load_balance_stats_period_sec":   item.LoadBalanceStatsPeriodSec,
 		"max_concurrent_senders":          item.MaxConcurrentSenders,
 		"nested_fields":                   item.NestedFields,
 		"throttle_rate_per_sec":           item.ThrottleRatePerSec,
+		"throttle_burst_disabled":         item.ThrottleBurstDisabled,
 		"connection_timeout":              item.ConnectionTimeout,
 		"write_timeout":                   item.WriteTimeout,
 		"tls":                             item.TLS,
@@ -21956,6 +29740,7 @@ func DestinationsOutputSplunkHecObjectValue(item *OutputSplunkHecModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"load_balanced":                     item.LoadBalanced,
 		"tls":                               item.TLS,
 		"concurrency":                       item.Concurrency,
@@ -21974,6 +29759,7 @@ func DestinationsOutputSplunkHecObjectValue(item *OutputSplunkHecModel) attr.Val
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"throttle_rate_per_sec":             item.ThrottleRatePerSec,
 		"next_queue":                        item.NextQueue,
 		"tcp_routing":                       item.TcpRouting,
 		"on_backpressure":                   item.OnBackpressure,
@@ -22012,6 +29798,7 @@ func DestinationsOutputWizHecObjectValue(item *OutputWizHecModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"tls":                               item.TLS,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
@@ -22028,6 +29815,7 @@ func DestinationsOutputWizHecObjectValue(item *OutputWizHecModel) attr.Value {
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"throttle_rate_per_sec":             item.ThrottleRatePerSec,
 		"wiz_connector_id":                  item.WizConnectorID,
 		"wiz_environment":                   item.WizEnvironment,
 		"data_center":                       item.DataCenter,
@@ -22064,10 +29852,12 @@ func DestinationsOutputTcpjsonObjectValue(item *OutputTcpjsonModel) attr.Value {
 		"system_fields":                 item.SystemFields,
 		"environment":                   item.Environment,
 		"streamtags":                    item.Streamtags,
+		"schema_monitor_settings":       item.SchemaMonitorSettings,
 		"load_balanced":                 item.LoadBalanced,
 		"compression":                   item.Compression,
 		"log_failed_requests":           item.LogFailedRequests,
 		"throttle_rate_per_sec":         item.ThrottleRatePerSec,
+		"throttle_burst_disabled":       item.ThrottleBurstDisabled,
 		"tls":                           item.TLS,
 		"connection_timeout":            item.ConnectionTimeout,
 		"write_timeout":                 item.WriteTimeout,
@@ -22111,6 +29901,7 @@ func DestinationsOutputWavefrontObjectValue(item *OutputWavefrontModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"auth_type":                         item.AuthType,
 		"domain":                            item.Domain,
 		"concurrency":                       item.Concurrency,
@@ -22158,6 +29949,7 @@ func DestinationsOutputSignalfxObjectValue(item *OutputSignalfxModel) attr.Value
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"auth_type":                         item.AuthType,
 		"realm":                             item.Realm,
 		"concurrency":                       item.Concurrency,
@@ -22205,6 +29997,7 @@ func DestinationsOutputFilesystemObjectValue(item *OutputFilesystemModel) attr.V
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"dest_path":                 item.DestPath,
 		"stage_path":                item.StagePath,
 		"add_id_to_stage_path":      item.AddIDToStagePath,
@@ -22257,6 +30050,7 @@ func DestinationsOutputS3ObjectValue(item *OutputS3Model) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"endpoint":                          item.Endpoint,
 		"enable_assume_role":                item.EnableAssumeRole,
 		"assume_role_arn":                   item.AssumeRoleArn,
@@ -22295,6 +30089,7 @@ func DestinationsOutputS3ObjectValue(item *OutputS3Model) attr.Value {
 		"storage_class":                     item.StorageClass,
 		"server_side_encryption":            item.ServerSideEncryption,
 		"kms_key_id":                        item.KmsKeyID,
+		"object_tags":                       item.ObjectTags,
 		"description":                       item.Description,
 		"aws_api_key":                       item.AwsAPIKey,
 		"aws_secret":                        item.AwsSecret,
@@ -22329,6 +30124,7 @@ func DestinationsOutputAzureBlobObjectValue(item *OutputAzureBlobModel) attr.Val
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"container_name":            item.ContainerName,
 		"create_container":          item.CreateContainer,
 		"dest_path":                 item.DestPath,
@@ -22354,6 +30150,7 @@ func DestinationsOutputAzureBlobObjectValue(item *OutputAzureBlobModel) attr.Val
 		"orphans":                   item.Orphans,
 		"auth_type":                 item.AuthType,
 		"storage_class":             item.StorageClass,
+		"blob_index_tags":           item.BlobIndexTags,
 		"description":               item.Description,
 		"compress":                  item.Compress,
 		"compression_level":         item.CompressionLevel,
@@ -22395,6 +30192,7 @@ func DestinationsOutputAzureDataExplorerObjectValue(item *OutputAzureDataExplore
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"cluster_url":                       item.ClusterURL,
 		"database":                          item.Database,
 		"table":                             item.Table,
@@ -22490,6 +30288,7 @@ func DestinationsOutputAzureLogsObjectValue(item *OutputAzureLogsModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"log_type":                          item.LogType,
 		"resource_id":                       item.ResourceID,
 		"concurrency":                       item.Concurrency,
@@ -22540,6 +30339,7 @@ func DestinationsOutputKinesisObjectValue(item *OutputKinesisModel) attr.Value {
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"stream_name":               item.StreamName,
 		"aws_authentication_method": item.AwsAuthenticationMethod,
 		"aws_secret_key":            item.AwsSecretKey,
@@ -22588,6 +30388,7 @@ func DestinationsOutputHoneycombObjectValue(item *OutputHoneycombModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"dataset":                           item.Dataset,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
@@ -22601,6 +30402,7 @@ func DestinationsOutputHoneycombObjectValue(item *OutputHoneycombModel) attr.Val
 		"use_round_robin_dns":               item.UseRoundRobinDns,
 		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
 		"safe_headers":                      item.SafeHeaders,
+		"max_top_failure_reasons":           item.MaxTopFailureReasons,
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
@@ -22635,6 +30437,7 @@ func DestinationsOutputAzureEventhubObjectValue(item *OutputAzureEventhubModel) 
 		"system_fields":              item.SystemFields,
 		"environment":                item.Environment,
 		"streamtags":                 item.Streamtags,
+		"schema_monitor_settings":    item.SchemaMonitorSettings,
 		"brokers":                    item.Brokers,
 		"topic":                      item.Topic,
 		"ack":                        item.Ack,
@@ -22680,6 +30483,7 @@ func DestinationsOutputGoogleBigqueryObjectValue(item *OutputGoogleBigqueryModel
 		"system_fields":            item.SystemFields,
 		"environment":              item.Environment,
 		"streamtags":               item.Streamtags,
+		"schema_monitor_settings":  item.SchemaMonitorSettings,
 		"project_id":               item.ProjectID,
 		"dataset_id":               item.DatasetID,
 		"table_id":                 item.TableID,
@@ -22719,6 +30523,7 @@ func DestinationsOutputGoogleChronicleObjectValue(item *OutputGoogleChronicleMod
 		"system_fields":                      item.SystemFields,
 		"environment":                        item.Environment,
 		"streamtags":                         item.Streamtags,
+		"schema_monitor_settings":            item.SchemaMonitorSettings,
 		"api_version":                        item.APIVersion,
 		"authentication_method":              item.AuthenticationMethod,
 		"response_retry_settings":            item.ResponseRetrySettings,
@@ -22778,6 +30583,7 @@ func DestinationsOutputGoogleCloudStorageObjectValue(item *OutputGoogleCloudStor
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"bucket":                    item.Bucket,
 		"region":                    item.Region,
 		"endpoint":                  item.Endpoint,
@@ -22842,6 +30648,7 @@ func DestinationsOutputGoogleCloudLoggingObjectValue(item *OutputGoogleCloudLogg
 		"system_fields":               item.SystemFields,
 		"environment":                 item.Environment,
 		"streamtags":                  item.Streamtags,
+		"schema_monitor_settings":     item.SchemaMonitorSettings,
 		"log_location_type":           item.LogLocationType,
 		"log_name_expression":         item.LogNameExpression,
 		"sanitize_log_names":          item.SanitizeLogNames,
@@ -22920,6 +30727,7 @@ func DestinationsOutputGoogleCloudObservabilityObjectValue(item *OutputGoogleClo
 		"system_fields":               item.SystemFields,
 		"environment":                 item.Environment,
 		"streamtags":                  item.Streamtags,
+		"schema_monitor_settings":     item.SchemaMonitorSettings,
 		"protocol":                    item.Protocol,
 		"otlp_version":                item.OtlpVersion,
 		"endpoint":                    item.Endpoint,
@@ -22967,6 +30775,7 @@ func DestinationsOutputGooglePubsubObjectValue(item *OutputGooglePubsubModel) at
 		"system_fields":               item.SystemFields,
 		"environment":                 item.Environment,
 		"streamtags":                  item.Streamtags,
+		"schema_monitor_settings":     item.SchemaMonitorSettings,
 		"topic_name":                  item.TopicName,
 		"create_topic":                item.CreateTopic,
 		"ordered_delivery":            item.OrderedDelivery,
@@ -23008,6 +30817,7 @@ func DestinationsOutputExabeamObjectValue(item *OutputExabeamModel) attr.Value {
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"bucket":                    item.Bucket,
 		"region":                    item.Region,
 		"stage_path":                item.StagePath,
@@ -23059,6 +30869,7 @@ func DestinationsOutputKafkaObjectValue(item *OutputKafkaModel) attr.Value {
 		"system_fields":              item.SystemFields,
 		"environment":                item.Environment,
 		"streamtags":                 item.Streamtags,
+		"schema_monitor_settings":    item.SchemaMonitorSettings,
 		"brokers":                    item.Brokers,
 		"topic":                      item.Topic,
 		"ack":                        item.Ack,
@@ -23078,6 +30889,7 @@ func DestinationsOutputKafkaObjectValue(item *OutputKafkaModel) attr.Value {
 		"reauthentication_threshold": item.ReauthenticationThreshold,
 		"sasl":                       item.Sasl,
 		"tls":                        item.TLS,
+		"dynamic_headers_field":      item.DynamicHeadersField,
 		"on_backpressure":            item.OnBackpressure,
 		"description":                item.Description,
 		"protobuf_library_id":        item.ProtobufLibraryID,
@@ -23108,6 +30920,7 @@ func DestinationsOutputConfluentCloudObjectValue(item *OutputConfluentCloudModel
 		"system_fields":              item.SystemFields,
 		"environment":                item.Environment,
 		"streamtags":                 item.Streamtags,
+		"schema_monitor_settings":    item.SchemaMonitorSettings,
 		"brokers":                    item.Brokers,
 		"tls":                        item.TLS,
 		"topic":                      item.Topic,
@@ -23127,6 +30940,7 @@ func DestinationsOutputConfluentCloudObjectValue(item *OutputConfluentCloudModel
 		"authentication_timeout":     item.AuthenticationTimeout,
 		"reauthentication_threshold": item.ReauthenticationThreshold,
 		"sasl":                       item.Sasl,
+		"dynamic_headers_field":      item.DynamicHeadersField,
 		"on_backpressure":            item.OnBackpressure,
 		"description":                item.Description,
 		"protobuf_library_id":        item.ProtobufLibraryID,
@@ -23157,6 +30971,7 @@ func DestinationsOutputMskObjectValue(item *OutputMskModel) attr.Value {
 		"system_fields":              item.SystemFields,
 		"environment":                item.Environment,
 		"streamtags":                 item.Streamtags,
+		"schema_monitor_settings":    item.SchemaMonitorSettings,
 		"brokers":                    item.Brokers,
 		"topic":                      item.Topic,
 		"ack":                        item.Ack,
@@ -23174,6 +30989,7 @@ func DestinationsOutputMskObjectValue(item *OutputMskModel) attr.Value {
 		"backoff_rate":               item.BackoffRate,
 		"authentication_timeout":     item.AuthenticationTimeout,
 		"reauthentication_threshold": item.ReauthenticationThreshold,
+		"dynamic_headers_field":      item.DynamicHeadersField,
 		"aws_authentication_method":  item.AwsAuthenticationMethod,
 		"aws_secret_key":             item.AwsSecretKey,
 		"region":                     item.Region,
@@ -23217,6 +31033,7 @@ func DestinationsOutputElasticObjectValue(item *OutputElasticModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"load_balanced":                     item.LoadBalanced,
 		"index":                             item.Index,
 		"doc_type":                          item.DocType,
@@ -23231,6 +31048,7 @@ func DestinationsOutputElasticObjectValue(item *OutputElasticModel) attr.Value {
 		"extra_http_headers":                item.ExtraHttpHeaders,
 		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
 		"safe_headers":                      item.SafeHeaders,
+		"max_top_failure_reasons":           item.MaxTopFailureReasons,
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
@@ -23275,6 +31093,7 @@ func DestinationsOutputElasticCloudObjectValue(item *OutputElasticCloudModel) at
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"index":                             item.Index,
 		"concurrency":                       item.Concurrency,
@@ -23288,6 +31107,7 @@ func DestinationsOutputElasticCloudObjectValue(item *OutputElasticCloudModel) at
 		"extra_http_headers":                item.ExtraHttpHeaders,
 		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
 		"safe_headers":                      item.SafeHeaders,
+		"max_top_failure_reasons":           item.MaxTopFailureReasons,
 		"extra_params":                      item.ExtraParams,
 		"auth":                              item.Auth,
 		"elastic_pipeline":                  item.ElasticPipeline,
@@ -23297,6 +31117,62 @@ func DestinationsOutputElasticCloudObjectValue(item *OutputElasticCloudModel) at
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
 		"on_backpressure":                   item.OnBackpressure,
 		"description":                       item.Description,
+		"pq_strict_ordering":                item.PqStrictOrdering,
+		"pq_rate_per_sec":                   item.PqRatePerSec,
+		"pq_mode":                           item.PqMode,
+		"pq_max_buffer_size":                item.PqMaxBufferSize,
+		"pq_max_backpressure_sec":           item.PqMaxBackpressureSec,
+		"pq_max_file_size":                  item.PqMaxFileSize,
+		"pq_max_size":                       item.PqMaxSize,
+		"pq_path":                           item.PqPath,
+		"pq_compress":                       item.PqCompress,
+		"pq_on_backpressure":                item.PqOnBackpressure,
+		"pq_max_buffer_size_bytes":          item.PqMaxBufferSizeBytes,
+		"pq_controls":                       item.PqControls,
+	})
+}
+
+func DestinationsOutputElasticServerlessObjectValue(item *OutputElasticServerlessModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputElasticServerlessModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputElasticServerlessModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"connection_mode":                   item.ConnectionMode,
+		"index":                             item.Index,
+		"concurrency":                       item.Concurrency,
+		"max_payload_size_kb":               item.MaxPayloadSizeKB,
+		"max_payload_events":                item.MaxPayloadEvents,
+		"compress":                          item.Compress,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"timeout_sec":                       item.TimeoutSec,
+		"max_connection_reuse_sec":          item.MaxConnectionReuseSec,
+		"flush_period_sec":                  item.FlushPeriodSec,
+		"extra_http_headers":                item.ExtraHttpHeaders,
+		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
+		"safe_headers":                      item.SafeHeaders,
+		"max_top_failure_reasons":           item.MaxTopFailureReasons,
+		"extra_params":                      item.ExtraParams,
+		"text_secret":                       item.TextSecret,
+		"elastic_pipeline":                  item.ElasticPipeline,
+		"include_doc_id":                    item.IncludeDocID,
+		"response_retry_settings":           item.ResponseRetrySettings,
+		"timeout_retry_settings":            item.TimeoutRetrySettings,
+		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"retry_partial_errors":              item.RetryPartialErrors,
+		"on_backpressure":                   item.OnBackpressure,
+		"description":                       item.Description,
+		"cloud_id":                          item.CloudID,
+		"project_name":                      item.ProjectName,
+		"project_id":                        item.ProjectID,
+		"cloud_provider":                    item.CloudProvider,
+		"region":                            item.Region,
 		"pq_strict_ordering":                item.PqStrictOrdering,
 		"pq_rate_per_sec":                   item.PqRatePerSec,
 		"pq_mode":                           item.PqMode,
@@ -23323,6 +31199,7 @@ func DestinationsOutputNewrelicObjectValue(item *OutputNewrelicModel) attr.Value
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"region":                            item.Region,
 		"log_type":                          item.LogType,
 		"message_field":                     item.MessageField,
@@ -23375,6 +31252,7 @@ func DestinationsOutputNewrelicEventsObjectValue(item *OutputNewrelicEventsModel
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"region":                            item.Region,
 		"account_id":                        item.AccountID,
 		"event_type":                        item.EventType,
@@ -23425,6 +31303,7 @@ func DestinationsOutputInfluxdbObjectValue(item *OutputInfluxdbModel) attr.Value
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"use_v2_api":                        item.UseV2API,
 		"timestamp_precision":               item.TimestampPrecision,
@@ -23482,6 +31361,7 @@ func DestinationsOutputCloudwatchObjectValue(item *OutputCloudwatchModel) attr.V
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"log_group_name":            item.LogGroupName,
 		"log_stream_name":           item.LogStreamName,
 		"aws_authentication_method": item.AwsAuthenticationMethod,
@@ -23527,6 +31407,7 @@ func DestinationsOutputMinioObjectValue(item *OutputMinioModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
@@ -23594,6 +31475,7 @@ func DestinationsOutputStatsdObjectValue(item *OutputStatsdModel) attr.Value {
 		"system_fields":            item.SystemFields,
 		"environment":              item.Environment,
 		"streamtags":               item.Streamtags,
+		"schema_monitor_settings":  item.SchemaMonitorSettings,
 		"protocol":                 item.Protocol,
 		"host":                     item.Host,
 		"port":                     item.Port,
@@ -23602,6 +31484,7 @@ func DestinationsOutputStatsdObjectValue(item *OutputStatsdModel) attr.Value {
 		"dns_resolve_period_sec":   item.DnsResolvePeriodSec,
 		"description":              item.Description,
 		"throttle_rate_per_sec":    item.ThrottleRatePerSec,
+		"throttle_burst_disabled":  item.ThrottleBurstDisabled,
 		"connection_timeout":       item.ConnectionTimeout,
 		"write_timeout":            item.WriteTimeout,
 		"on_backpressure":          item.OnBackpressure,
@@ -23631,6 +31514,7 @@ func DestinationsOutputStatsdExtObjectValue(item *OutputStatsdExtModel) attr.Val
 		"system_fields":            item.SystemFields,
 		"environment":              item.Environment,
 		"streamtags":               item.Streamtags,
+		"schema_monitor_settings":  item.SchemaMonitorSettings,
 		"protocol":                 item.Protocol,
 		"host":                     item.Host,
 		"port":                     item.Port,
@@ -23639,6 +31523,7 @@ func DestinationsOutputStatsdExtObjectValue(item *OutputStatsdExtModel) attr.Val
 		"dns_resolve_period_sec":   item.DnsResolvePeriodSec,
 		"description":              item.Description,
 		"throttle_rate_per_sec":    item.ThrottleRatePerSec,
+		"throttle_burst_disabled":  item.ThrottleBurstDisabled,
 		"connection_timeout":       item.ConnectionTimeout,
 		"write_timeout":            item.WriteTimeout,
 		"on_backpressure":          item.OnBackpressure,
@@ -23668,6 +31553,7 @@ func DestinationsOutputGraphiteObjectValue(item *OutputGraphiteModel) attr.Value
 		"system_fields":            item.SystemFields,
 		"environment":              item.Environment,
 		"streamtags":               item.Streamtags,
+		"schema_monitor_settings":  item.SchemaMonitorSettings,
 		"protocol":                 item.Protocol,
 		"host":                     item.Host,
 		"port":                     item.Port,
@@ -23676,6 +31562,7 @@ func DestinationsOutputGraphiteObjectValue(item *OutputGraphiteModel) attr.Value
 		"dns_resolve_period_sec":   item.DnsResolvePeriodSec,
 		"description":              item.Description,
 		"throttle_rate_per_sec":    item.ThrottleRatePerSec,
+		"throttle_burst_disabled":  item.ThrottleBurstDisabled,
 		"connection_timeout":       item.ConnectionTimeout,
 		"write_timeout":            item.WriteTimeout,
 		"on_backpressure":          item.OnBackpressure,
@@ -23699,15 +31586,16 @@ func DestinationsOutputRouterObjectValue(item *OutputRouterModel) attr.Value {
 		return types.ObjectNull(OutputRouterModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputRouterModelAttrTypes(), map[string]attr.Value{
-		"id":                    item.ID,
-		"type":                  item.Type,
-		"pipeline":              item.Pipeline,
-		"system_fields":         item.SystemFields,
-		"environment":           item.Environment,
-		"streamtags":            item.Streamtags,
-		"report_branch_metrics": item.ReportBranchMetrics,
-		"rules":                 item.Rules,
-		"description":           item.Description,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
+		"report_branch_metrics":   item.ReportBranchMetrics,
+		"rules":                   item.Rules,
+		"description":             item.Description,
 	})
 }
 
@@ -23722,6 +31610,7 @@ func DestinationsOutputSnsObjectValue(item *OutputSnsModel) attr.Value {
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"topic_arn":                 item.TopicArn,
 		"message_group_id":          item.MessageGroupID,
 		"max_retries":               item.MaxRetries,
@@ -23765,6 +31654,7 @@ func DestinationsOutputSqsObjectValue(item *OutputSqsModel) attr.Value {
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"queue_name":                item.QueueName,
 		"queue_type":                item.QueueType,
 		"aws_account_id":            item.AwsAccountID,
@@ -23808,17 +31698,18 @@ func DestinationsOutputSnmpObjectValue(item *OutputSnmpModel) attr.Value {
 		return types.ObjectNull(OutputSnmpModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputSnmpModelAttrTypes(), map[string]attr.Value{
-		"id":                     item.ID,
-		"type":                   item.Type,
-		"pipeline":               item.Pipeline,
-		"system_fields":          item.SystemFields,
-		"environment":            item.Environment,
-		"streamtags":             item.Streamtags,
-		"hosts":                  item.Hosts,
-		"dns_resolve_period_sec": item.DnsResolvePeriodSec,
-		"enable_ip_spoofing":     item.EnableIpSpoofing,
-		"description":            item.Description,
-		"max_record_size":        item.MaxRecordSize,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
+		"hosts":                   item.Hosts,
+		"dns_resolve_period_sec":  item.DnsResolvePeriodSec,
+		"enable_ip_spoofing":      item.EnableIpSpoofing,
+		"description":             item.Description,
+		"max_record_size":         item.MaxRecordSize,
 	})
 }
 
@@ -23833,6 +31724,7 @@ func DestinationsOutputSumoLogicObjectValue(item *OutputSumoLogicModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"custom_source":                     item.CustomSource,
 		"custom_category":                   item.CustomCategory,
@@ -23881,6 +31773,7 @@ func DestinationsOutputDatadogObjectValue(item *OutputDatadogModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"content_type":                      item.ContentType,
 		"message":                           item.Message,
 		"source":                            item.Source,
@@ -23940,6 +31833,7 @@ func DestinationsOutputGrafanaCloudObjectValue(item *OutputGrafanaCloudModel) at
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"loki_url":                          item.LokiURL,
 		"prometheus_url":                    item.PrometheusURL,
 		"message":                           item.Message,
@@ -23991,6 +31885,7 @@ func DestinationsOutputLokiObjectValue(item *OutputLokiModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"message":                           item.Message,
 		"message_format":                    item.MessageFormat,
@@ -24011,6 +31906,7 @@ func DestinationsOutputLokiObjectValue(item *OutputLokiModel) attr.Value {
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
 		"enable_dynamic_headers":            item.EnableDynamicHeaders,
+		"dynamic_headers_field":             item.DynamicHeadersField,
 		"on_backpressure":                   item.OnBackpressure,
 		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
 		"description":                       item.Description,
@@ -24046,6 +31942,7 @@ func DestinationsOutputAmazonManagedPrometheusObjectValue(item *OutputAmazonMana
 		"system_fields":                          item.SystemFields,
 		"environment":                            item.Environment,
 		"streamtags":                             item.Streamtags,
+		"schema_monitor_settings":                item.SchemaMonitorSettings,
 		"url":                                    item.URL,
 		"aws_authentication_method":              item.AwsAuthenticationMethod,
 		"aws_secret_key":                         item.AwsSecretKey,
@@ -24101,10 +31998,12 @@ func DestinationsOutputPrometheusObjectValue(item *OutputPrometheusModel) attr.V
 		"system_fields":                          item.SystemFields,
 		"environment":                            item.Environment,
 		"streamtags":                             item.Streamtags,
+		"schema_monitor_settings":                item.SchemaMonitorSettings,
 		"url":                                    item.URL,
 		"metric_rename_expr":                     item.MetricRenameExpr,
 		"send_metadata":                          item.SendMetadata,
 		"use_prometheus_histogram_bucket_suffix": item.UsePrometheusHistogramBucketSuffix,
+		"nan_as_staleness_marker":                item.NanAsStalenessMarker,
 		"concurrency":                            item.Concurrency,
 		"max_payload_size_kb":                    item.MaxPayloadSizeKB,
 		"max_payload_events":                     item.MaxPayloadEvents,
@@ -24156,20 +32055,21 @@ func DestinationsOutputRingObjectValue(item *OutputRingModel) attr.Value {
 		return types.ObjectNull(OutputRingModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputRingModelAttrTypes(), map[string]attr.Value{
-		"id":              item.ID,
-		"type":            item.Type,
-		"pipeline":        item.Pipeline,
-		"system_fields":   item.SystemFields,
-		"environment":     item.Environment,
-		"streamtags":      item.Streamtags,
-		"format":          item.Format,
-		"partition_expr":  item.PartitionExpr,
-		"max_data_size":   item.MaxDataSize,
-		"max_data_time":   item.MaxDataTime,
-		"compress":        item.Compress,
-		"dest_path":       item.DestPath,
-		"on_backpressure": item.OnBackpressure,
-		"description":     item.Description,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
+		"format":                  item.Format,
+		"partition_expr":          item.PartitionExpr,
+		"max_data_size":           item.MaxDataSize,
+		"max_data_time":           item.MaxDataTime,
+		"compress":                item.Compress,
+		"dest_path":               item.DestPath,
+		"on_backpressure":         item.OnBackpressure,
+		"description":             item.Description,
 	})
 }
 
@@ -24184,6 +32084,7 @@ func DestinationsOutputOpenTelemetryObjectValue(item *OutputOpenTelemetryModel) 
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"protocol":                          item.Protocol,
 		"endpoint":                          item.Endpoint,
 		"otlp_version":                      item.OtlpVersion,
@@ -24255,6 +32156,7 @@ func DestinationsOutputServiceNowObjectValue(item *OutputServiceNowModel) attr.V
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"endpoint":                          item.Endpoint,
 		"token_secret":                      item.TokenSecret,
 		"auth_token_name":                   item.AuthTokenName,
@@ -24314,6 +32216,7 @@ func DestinationsOutputDatasetObjectValue(item *OutputDatasetModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"message_field":                     item.MessageField,
 		"exclude_fields":                    item.ExcludeFields,
 		"server_host_field":                 item.ServerHostField,
@@ -24368,10 +32271,12 @@ func DestinationsOutputCriblTcpObjectValue(item *OutputCriblTcpModel) attr.Value
 		"system_fields":                 item.SystemFields,
 		"environment":                   item.Environment,
 		"streamtags":                    item.Streamtags,
+		"schema_monitor_settings":       item.SchemaMonitorSettings,
 		"load_balanced":                 item.LoadBalanced,
 		"compression":                   item.Compression,
 		"log_failed_requests":           item.LogFailedRequests,
 		"throttle_rate_per_sec":         item.ThrottleRatePerSec,
+		"throttle_burst_disabled":       item.ThrottleBurstDisabled,
 		"tls":                           item.TLS,
 		"connection_timeout":            item.ConnectionTimeout,
 		"write_timeout":                 item.WriteTimeout,
@@ -24382,8 +32287,10 @@ func DestinationsOutputCriblTcpObjectValue(item *OutputCriblTcpModel) attr.Value
 		"description":                   item.Description,
 		"host":                          item.Host,
 		"port":                          item.Port,
-		"exclude_self":                  item.ExcludeSelf,
+		"endpoint_source":               item.EndpointSource,
 		"hosts":                         item.Hosts,
+		"endpoint_list":                 item.EndpointList,
+		"exclude_self":                  item.ExcludeSelf,
 		"dns_resolve_period_sec":        item.DnsResolvePeriodSec,
 		"load_balance_stats_period_sec": item.LoadBalanceStatsPeriodSec,
 		"max_concurrent_senders":        item.MaxConcurrentSenders,
@@ -24413,6 +32320,7 @@ func DestinationsOutputCriblHttpObjectValue(item *OutputCriblHttpModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"load_balanced":                     item.LoadBalanced,
 		"tls":                               item.TLS,
 		"token_ttlminutes":                  item.TokenTTLMinutes,
@@ -24429,6 +32337,7 @@ func DestinationsOutputCriblHttpObjectValue(item *OutputCriblHttpModel) attr.Val
 		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
 		"safe_headers":                      item.SafeHeaders,
 		"throttle_rate_per_sec":             item.ThrottleRatePerSec,
+		"throttle_burst_disabled":           item.ThrottleBurstDisabled,
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
@@ -24437,8 +32346,10 @@ func DestinationsOutputCriblHttpObjectValue(item *OutputCriblHttpModel) attr.Val
 		"description":                       item.Description,
 		"url":                               item.URL,
 		"use_round_robin_dns":               item.UseRoundRobinDns,
-		"exclude_self":                      item.ExcludeSelf,
+		"endpoint_source":                   item.EndpointSource,
 		"urls":                              item.URLs,
+		"endpoint_list":                     item.EndpointList,
+		"exclude_self":                      item.ExcludeSelf,
 		"dns_resolve_period_sec":            item.DnsResolvePeriodSec,
 		"load_balance_stats_period_sec":     item.LoadBalanceStatsPeriodSec,
 		"pq_strict_ordering":                item.PqStrictOrdering,
@@ -24467,6 +32378,7 @@ func DestinationsOutputCriblSearchEngineObjectValue(item *OutputCriblSearchEngin
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"load_balanced":                     item.LoadBalanced,
 		"tls":                               item.TLS,
 		"token_ttlminutes":                  item.TokenTTLMinutes,
@@ -24483,6 +32395,7 @@ func DestinationsOutputCriblSearchEngineObjectValue(item *OutputCriblSearchEngin
 		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
 		"safe_headers":                      item.SafeHeaders,
 		"throttle_rate_per_sec":             item.ThrottleRatePerSec,
+		"throttle_burst_disabled":           item.ThrottleBurstDisabled,
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
@@ -24492,8 +32405,10 @@ func DestinationsOutputCriblSearchEngineObjectValue(item *OutputCriblSearchEngin
 		"use_round_robin_dns":               item.UseRoundRobinDns,
 		"description":                       item.Description,
 		"url":                               item.URL,
-		"exclude_self":                      item.ExcludeSelf,
+		"endpoint_source":                   item.EndpointSource,
 		"urls":                              item.URLs,
+		"endpoint_list":                     item.EndpointList,
+		"exclude_self":                      item.ExcludeSelf,
 		"dns_resolve_period_sec":            item.DnsResolvePeriodSec,
 		"load_balance_stats_period_sec":     item.LoadBalanceStatsPeriodSec,
 		"pq_strict_ordering":                item.PqStrictOrdering,
@@ -24522,6 +32437,7 @@ func DestinationsOutputHumioHecObjectValue(item *OutputHumioHecModel) attr.Value
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
@@ -24570,6 +32486,7 @@ func DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item *OutputCrowdstrike
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
@@ -24618,6 +32535,7 @@ func DestinationsOutputDlS3ObjectValue(item *OutputDlS3Model) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"endpoint":                          item.Endpoint,
 		"enable_assume_role":                item.EnableAssumeRole,
 		"assume_role_arn":                   item.AssumeRoleArn,
@@ -24690,6 +32608,7 @@ func DestinationsOutputSecurityLakeObjectValue(item *OutputSecurityLakeModel) at
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"endpoint":                          item.Endpoint,
 		"enable_assume_role":                item.EnableAssumeRole,
 		"assume_role_arn":                   item.AssumeRoleArn,
@@ -24758,6 +32677,7 @@ func DestinationsOutputCriblLakeObjectValue(item *OutputCriblLakeModel) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"stage_path":                        item.StagePath,
 		"add_id_to_stage_path":              item.AddIDToStagePath,
 		"remove_empty_dirs":                 item.RemoveEmptyDirs,
@@ -24808,18 +32728,19 @@ func DestinationsOutputDiskSpoolObjectValue(item *OutputDiskSpoolModel) attr.Val
 		return types.ObjectNull(OutputDiskSpoolModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputDiskSpoolModelAttrTypes(), map[string]attr.Value{
-		"id":             item.ID,
-		"type":           item.Type,
-		"pipeline":       item.Pipeline,
-		"system_fields":  item.SystemFields,
-		"environment":    item.Environment,
-		"streamtags":     item.Streamtags,
-		"time_window":    item.TimeWindow,
-		"max_data_size":  item.MaxDataSize,
-		"max_data_time":  item.MaxDataTime,
-		"compress":       item.Compress,
-		"partition_expr": item.PartitionExpr,
-		"description":    item.Description,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
+		"time_window":             item.TimeWindow,
+		"max_data_size":           item.MaxDataSize,
+		"max_data_time":           item.MaxDataTime,
+		"compress":                item.Compress,
+		"partition_expr":          item.PartitionExpr,
+		"description":             item.Description,
 	})
 }
 
@@ -24834,6 +32755,7 @@ func DestinationsOutputClickHouseObjectValue(item *OutputClickHouseModel) attr.V
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"auth_type":                         item.AuthType,
 		"database":                          item.Database,
@@ -24895,6 +32817,7 @@ func DestinationsOutputCustomerMetricsStorageObjectValue(item *OutputCustomerMet
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"auth_type":                         item.AuthType,
 		"database":                          item.Database,
@@ -24956,6 +32879,7 @@ func DestinationsOutputLocalSearchStorageObjectValue(item *OutputLocalSearchStor
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"url":                               item.URL,
 		"auth_type":                         item.AuthType,
 		"database":                          item.Database,
@@ -25019,6 +32943,7 @@ func DestinationsOutputXsiamObjectValue(item *OutputXsiamModel) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"load_balanced":                     item.LoadBalanced,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
@@ -25036,6 +32961,8 @@ func DestinationsOutputXsiamObjectValue(item *OutputXsiamModel) attr.Value {
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
 		"throttle_rate_req_per_sec":         item.ThrottleRateReqPerSec,
+		"throttle_burst_disabled":           item.ThrottleBurstDisabled,
+		"dynamic_headers_field":             item.DynamicHeadersField,
 		"on_backpressure":                   item.OnBackpressure,
 		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
 		"description":                       item.Description,
@@ -25067,17 +32994,18 @@ func DestinationsOutputNetflowObjectValue(item *OutputNetflowModel) attr.Value {
 		return types.ObjectNull(OutputNetflowModelAttrTypes())
 	}
 	return types.ObjectValueMust(OutputNetflowModelAttrTypes(), map[string]attr.Value{
-		"id":                     item.ID,
-		"type":                   item.Type,
-		"pipeline":               item.Pipeline,
-		"system_fields":          item.SystemFields,
-		"environment":            item.Environment,
-		"streamtags":             item.Streamtags,
-		"hosts":                  item.Hosts,
-		"dns_resolve_period_sec": item.DnsResolvePeriodSec,
-		"enable_ip_spoofing":     item.EnableIpSpoofing,
-		"description":            item.Description,
-		"max_record_size":        item.MaxRecordSize,
+		"id":                      item.ID,
+		"type":                    item.Type,
+		"pipeline":                item.Pipeline,
+		"system_fields":           item.SystemFields,
+		"environment":             item.Environment,
+		"streamtags":              item.Streamtags,
+		"schema_monitor_settings": item.SchemaMonitorSettings,
+		"hosts":                   item.Hosts,
+		"dns_resolve_period_sec":  item.DnsResolvePeriodSec,
+		"enable_ip_spoofing":      item.EnableIpSpoofing,
+		"description":             item.Description,
+		"max_record_size":         item.MaxRecordSize,
 	})
 }
 
@@ -25092,6 +33020,7 @@ func DestinationsOutputDynatraceHttpObjectValue(item *OutputDynatraceHttpModel) 
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"method":                            item.Method,
 		"keep_alive":                        item.KeepAlive,
 		"concurrency":                       item.Concurrency,
@@ -25114,6 +33043,7 @@ func DestinationsOutputDynatraceHttpObjectValue(item *OutputDynatraceHttpModel) 
 		"format":                            item.Format,
 		"endpoint":                          item.Endpoint,
 		"telemetry_type":                    item.TelemetryType,
+		"dynamic_headers_field":             item.DynamicHeadersField,
 		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
 		"description":                       item.Description,
 		"pq_strict_ordering":                item.PqStrictOrdering,
@@ -25147,6 +33077,7 @@ func DestinationsOutputDynatraceOtlpObjectValue(item *OutputDynatraceOtlpModel) 
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"protocol":                          item.Protocol,
 		"endpoint":                          item.Endpoint,
 		"otlp_version":                      item.OtlpVersion,
@@ -25206,6 +33137,7 @@ func DestinationsOutputTraversalOtlpObjectValue(item *OutputTraversalOtlpModel) 
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"auth_type":                         item.AuthType,
 		"endpoint":                          item.Endpoint,
 		"protocol":                          item.Protocol,
@@ -25271,6 +33203,7 @@ func DestinationsOutputSentinelOneAiSiemObjectValue(item *OutputSentinelOneAiSie
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"concurrency":                       item.Concurrency,
 		"max_payload_size_kb":               item.MaxPayloadSizeKB,
 		"max_payload_events":                item.MaxPayloadEvents,
@@ -25286,6 +33219,7 @@ func DestinationsOutputSentinelOneAiSiemObjectValue(item *OutputSentinelOneAiSie
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"throttle_rate_per_sec":             item.ThrottleRatePerSec,
 		"region":                            item.Region,
 		"endpoint":                          item.Endpoint,
 		"on_backpressure":                   item.OnBackpressure,
@@ -25333,6 +33267,7 @@ func DestinationsOutputChronicleObjectValue(item *OutputChronicleModel) attr.Val
 		"system_fields":                      item.SystemFields,
 		"environment":                        item.Environment,
 		"streamtags":                         item.Streamtags,
+		"schema_monitor_settings":            item.SchemaMonitorSettings,
 		"api_version":                        item.APIVersion,
 		"authentication_method":              item.AuthenticationMethod,
 		"response_retry_settings":            item.ResponseRetrySettings,
@@ -25390,6 +33325,7 @@ func DestinationsOutputDatabricksObjectValue(item *OutputDatabricksModel) attr.V
 		"system_fields":             item.SystemFields,
 		"environment":               item.Environment,
 		"streamtags":                item.Streamtags,
+		"schema_monitor_settings":   item.SchemaMonitorSettings,
 		"dest_path":                 item.DestPath,
 		"stage_path":                item.StagePath,
 		"add_id_to_stage_path":      item.AddIDToStagePath,
@@ -25451,6 +33387,7 @@ func DestinationsOutputSnowflakeStreamingObjectValue(item *OutputSnowflakeStream
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"account_identifier":                item.AccountIDentifier,
 		"user":                              item.User,
 		"pem":                               item.Pem,
@@ -25503,6 +33440,7 @@ func DestinationsOutputMicrosoftFabricObjectValue(item *OutputMicrosoftFabricMod
 		"system_fields":              item.SystemFields,
 		"environment":                item.Environment,
 		"streamtags":                 item.Streamtags,
+		"schema_monitor_settings":    item.SchemaMonitorSettings,
 		"topic":                      item.Topic,
 		"ack":                        item.Ack,
 		"format":                     item.Format,
@@ -25548,6 +33486,7 @@ func DestinationsOutputCloudflareR2ObjectValue(item *OutputCloudflareR2Model) at
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
@@ -25612,11 +33551,74 @@ func DestinationsOutputNutanixObjectsObjectValue(item *OutputNutanixObjectsModel
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
 		"bucket":                            item.Bucket,
 		"region":                            item.Region,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputBackblazeB2ObjectValue(item *OutputBackblazeB2Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputBackblazeB2ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputBackblazeB2ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
 		"dest_path":                         item.DestPath,
 		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
 		"verify_permissions":                item.VerifyPermissions,
@@ -25674,6 +33676,7 @@ func DestinationsOutputStorjS3ObjectValue(item *OutputStorjS3Model) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
@@ -25735,6 +33738,7 @@ func DestinationsOutputAlphasocS3ObjectValue(item *OutputAlphasocS3Model) attr.V
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
@@ -25796,6 +33800,7 @@ func DestinationsOutputDellS3ObjectValue(item *OutputDellS3Model) attr.Value {
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
@@ -25848,6 +33853,130 @@ func DestinationsOutputDellS3ObjectValue(item *OutputDellS3Model) attr.Value {
 	})
 }
 
+func DestinationsOutputWasabiObjectValue(item *OutputWasabiModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputWasabiModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputWasabiModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputSeagateLyveCloudS3ObjectValue(item *OutputSeagateLyveCloudS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputSeagateLyveCloudS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputSeagateLyveCloudS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
 func DestinationsOutputCloudianS3ObjectValue(item *OutputCloudianS3Model) attr.Value {
 	if item == nil {
 		return types.ObjectNull(OutputCloudianS3ModelAttrTypes())
@@ -25859,6 +33988,7 @@ func DestinationsOutputCloudianS3ObjectValue(item *OutputCloudianS3Model) attr.V
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"endpoint":                          item.Endpoint,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
@@ -25925,11 +34055,74 @@ func DestinationsOutputScalityS3ObjectValue(item *OutputScalityS3Model) attr.Val
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
 		"bucket":                            item.Bucket,
 		"region":                            item.Region,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputAkamaiObjectStorageS3ObjectValue(item *OutputAkamaiObjectStorageS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputAkamaiObjectStorageS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputAkamaiObjectStorageS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
 		"dest_path":                         item.DestPath,
 		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
 		"verify_permissions":                item.VerifyPermissions,
@@ -25987,6 +34180,7 @@ func DestinationsOutputAlibabaCloudS3ObjectValue(item *OutputAlibabaCloudS3Model
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
 		"reject_unauthorized":               item.RejectUnauthorized,
@@ -26042,6 +34236,634 @@ func DestinationsOutputAlibabaCloudS3ObjectValue(item *OutputAlibabaCloudS3Model
 	})
 }
 
+func DestinationsOutputExoscaleSosS3ObjectValue(item *OutputExoscaleSosS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputExoscaleSosS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputExoscaleSosS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"object_acl":                        item.ObjectACL,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputIonosS3ObjectStorageObjectValue(item *OutputIonosS3ObjectStorageModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputIonosS3ObjectStorageModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputIonosS3ObjectStorageModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"object_acl":                        item.ObjectACL,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputFastlyObjectStorageS3ObjectValue(item *OutputFastlyObjectStorageS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputFastlyObjectStorageS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputFastlyObjectStorageS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputImpossibleCloudS3ObjectValue(item *OutputImpossibleCloudS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputImpossibleCloudS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputImpossibleCloudS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputDreamobjectsS3ObjectValue(item *OutputDreamobjectsS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputDreamobjectsS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputDreamobjectsS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputFilebaseS3ObjectValue(item *OutputFilebaseS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputFilebaseS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputFilebaseS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputTencentCloudCosS3ObjectValue(item *OutputTencentCloudCosS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputTencentCloudCosS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputTencentCloudCosS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"server_side_encryption":            item.ServerSideEncryption,
+		"kms_key_id":                        item.KmsKeyID,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputOvhcloudObjectStorageS3ObjectValue(item *OutputOvhcloudObjectStorageS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputOvhcloudObjectStorageS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputOvhcloudObjectStorageS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"object_acl":                        item.ObjectACL,
+		"endpoint":                          item.Endpoint,
+		"server_side_encryption":            item.ServerSideEncryption,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputScalewayObjectStorageS3ObjectValue(item *OutputScalewayObjectStorageS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputScalewayObjectStorageS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputScalewayObjectStorageS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"object_acl":                        item.ObjectACL,
+		"endpoint":                          item.Endpoint,
+		"storage_class":                     item.StorageClass,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputDigitaloceanSpacesS3ObjectValue(item *OutputDigitaloceanSpacesS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputDigitaloceanSpacesS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputDigitaloceanSpacesS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"endpoint":                          item.Endpoint,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
 func DestinationsOutputIbmCloudS3ObjectValue(item *OutputIbmCloudS3Model) attr.Value {
 	if item == nil {
 		return types.ObjectNull(OutputIbmCloudS3ModelAttrTypes())
@@ -26053,6 +34875,69 @@ func DestinationsOutputIbmCloudS3ObjectValue(item *OutputIbmCloudS3Model) attr.V
 		"system_fields":                     item.SystemFields,
 		"environment":                       item.Environment,
 		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"endpoint":                          item.Endpoint,
+		"aws_authentication_method":         item.AwsAuthenticationMethod,
+		"reuse_connections":                 item.ReuseConnections,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"bucket":                            item.Bucket,
+		"dest_path":                         item.DestPath,
+		"max_concurrent_file_parts":         item.MaxConcurrentFileParts,
+		"verify_permissions":                item.VerifyPermissions,
+		"max_closing_files_to_backpressure": item.MaxClosingFilesToBackpressure,
+		"stage_path":                        item.StagePath,
+		"add_id_to_stage_path":              item.AddIDToStagePath,
+		"remove_empty_dirs":                 item.RemoveEmptyDirs,
+		"partition_expr":                    item.PartitionExpr,
+		"format":                            item.Format,
+		"base_file_name":                    item.BaseFileName,
+		"file_name_suffix":                  item.FileNameSuffix,
+		"max_file_size_mb":                  item.MaxFileSizeMB,
+		"max_file_open_time_sec":            item.MaxFileOpenTimeSec,
+		"max_file_idle_time_sec":            item.MaxFileIDleTimeSec,
+		"max_open_files":                    item.MaxOpenFiles,
+		"header_line":                       item.HeaderLine,
+		"write_high_water_mark":             item.WriteHighWaterMark,
+		"on_backpressure":                   item.OnBackpressure,
+		"deadletter_enabled":                item.DeadletterEnabled,
+		"on_disk_full_backpressure":         item.OnDiskFullBackpressure,
+		"force_close_on_shutdown":           item.ForceCloseOnShutdown,
+		"retry_settings":                    item.RetrySettings,
+		"orphans":                           item.Orphans,
+		"description":                       item.Description,
+		"aws_secret":                        item.AwsSecret,
+		"compress":                          item.Compress,
+		"compression_level":                 item.CompressionLevel,
+		"automatic_schema":                  item.AutomaticSchema,
+		"parquet_schema":                    item.ParquetSchema,
+		"parquet_version":                   item.ParquetVersion,
+		"parquet_data_page_version":         item.ParquetDataPageVersion,
+		"parquet_row_group_length":          item.ParquetRowGroupLength,
+		"parquet_page_size":                 item.ParquetPageSize,
+		"should_log_invalid_rows":           item.ShouldLogInvalidRows,
+		"key_value_metadata":                item.KeyValueMetadata,
+		"enable_statistics":                 item.EnableStatistics,
+		"enable_write_page_index":           item.EnableWritePageIndex,
+		"enable_page_checksum":              item.EnablePageChecksum,
+		"empty_dir_cleanup_sec":             item.EmptyDirCleanupSec,
+		"directory_batch_size":              item.DirectoryBatchSize,
+		"deadletter_path":                   item.DeadletterPath,
+		"max_retry_num":                     item.MaxRetryNum,
+	})
+}
+
+func DestinationsOutputOracleCloudS3ObjectValue(item *OutputOracleCloudS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputOracleCloudS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputOracleCloudS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
 		"endpoint":                          item.Endpoint,
 		"aws_authentication_method":         item.AwsAuthenticationMethod,
 		"reuse_connections":                 item.ReuseConnections,
@@ -26114,6 +34999,7 @@ func DestinationsOutputDatabricksZerobusObjectValue(item *OutputDatabricksZerobu
 		"system_fields":            item.SystemFields,
 		"environment":              item.Environment,
 		"streamtags":               item.Streamtags,
+		"schema_monitor_settings":  item.SchemaMonitorSettings,
 		"workspace_url":            item.WorkspaceURL,
 		"workspace_id":             item.WorkspaceID,
 		"zerobus_endpoint":         item.ZerobusEndpoint,
@@ -26141,5 +35027,111 @@ func DestinationsOutputDatabricksZerobusObjectValue(item *OutputDatabricksZerobu
 		"pq_on_backpressure":       item.PqOnBackpressure,
 		"pq_max_buffer_size_bytes": item.PqMaxBufferSizeBytes,
 		"pq_controls":              item.PqControls,
+	})
+}
+
+func DestinationsOutputSecuronixObjectValue(item *OutputSecuronixModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputSecuronixModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputSecuronixModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"keep_alive":                        item.KeepAlive,
+		"concurrency":                       item.Concurrency,
+		"max_payload_size_kb":               item.MaxPayloadSizeKB,
+		"max_payload_events":                item.MaxPayloadEvents,
+		"compress":                          item.Compress,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"timeout_sec":                       item.TimeoutSec,
+		"max_connection_reuse_sec":          item.MaxConnectionReuseSec,
+		"flush_period_sec":                  item.FlushPeriodSec,
+		"extra_http_headers":                item.ExtraHttpHeaders,
+		"use_round_robin_dns":               item.UseRoundRobinDns,
+		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
+		"safe_headers":                      item.SafeHeaders,
+		"response_retry_settings":           item.ResponseRetrySettings,
+		"timeout_retry_settings":            item.TimeoutRetrySettings,
+		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"on_backpressure":                   item.OnBackpressure,
+		"auth_type":                         item.AuthType,
+		"tls":                               item.TLS,
+		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
+		"dynamic_headers_field":             item.DynamicHeadersField,
+		"http_receiver_endpoint":            item.HttpReceiverEndpoint,
+		"description":                       item.Description,
+		"pq_strict_ordering":                item.PqStrictOrdering,
+		"pq_rate_per_sec":                   item.PqRatePerSec,
+		"pq_mode":                           item.PqMode,
+		"pq_max_buffer_size":                item.PqMaxBufferSize,
+		"pq_max_backpressure_sec":           item.PqMaxBackpressureSec,
+		"pq_max_file_size":                  item.PqMaxFileSize,
+		"pq_max_size":                       item.PqMaxSize,
+		"pq_path":                           item.PqPath,
+		"pq_compress":                       item.PqCompress,
+		"pq_on_backpressure":                item.PqOnBackpressure,
+		"pq_max_buffer_size_bytes":          item.PqMaxBufferSizeBytes,
+		"pq_controls":                       item.PqControls,
+		"credentials_secret":                item.CredentialsSecret,
+		"text_secret":                       item.TextSecret,
+	})
+}
+
+func DestinationsOutputFortisiemObjectValue(item *OutputFortisiemModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputFortisiemModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputFortisiemModelAttrTypes(), map[string]attr.Value{
+		"id":                                item.ID,
+		"type":                              item.Type,
+		"pipeline":                          item.Pipeline,
+		"system_fields":                     item.SystemFields,
+		"environment":                       item.Environment,
+		"streamtags":                        item.Streamtags,
+		"schema_monitor_settings":           item.SchemaMonitorSettings,
+		"keep_alive":                        item.KeepAlive,
+		"concurrency":                       item.Concurrency,
+		"max_payload_size_kb":               item.MaxPayloadSizeKB,
+		"max_payload_events":                item.MaxPayloadEvents,
+		"reject_unauthorized":               item.RejectUnauthorized,
+		"timeout_sec":                       item.TimeoutSec,
+		"max_connection_reuse_sec":          item.MaxConnectionReuseSec,
+		"flush_period_sec":                  item.FlushPeriodSec,
+		"extra_http_headers":                item.ExtraHttpHeaders,
+		"use_round_robin_dns":               item.UseRoundRobinDns,
+		"failed_request_logging_mode":       item.FailedRequestLoggingMode,
+		"safe_headers":                      item.SafeHeaders,
+		"response_retry_settings":           item.ResponseRetrySettings,
+		"timeout_retry_settings":            item.TimeoutRetrySettings,
+		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"on_backpressure":                   item.OnBackpressure,
+		"auth_type":                         item.AuthType,
+		"tls":                               item.TLS,
+		"total_memory_limit_kb":             item.TotalMemoryLimitKB,
+		"dynamic_headers_field":             item.DynamicHeadersField,
+		"fortisiem_url":                     item.FortisiemURL,
+		"vendor":                            item.Vendor,
+		"model":                             item.Model,
+		"rept_ip":                           item.ReptIp,
+		"rept_name":                         item.ReptName,
+		"description":                       item.Description,
+		"pq_strict_ordering":                item.PqStrictOrdering,
+		"pq_rate_per_sec":                   item.PqRatePerSec,
+		"pq_mode":                           item.PqMode,
+		"pq_max_buffer_size":                item.PqMaxBufferSize,
+		"pq_max_backpressure_sec":           item.PqMaxBackpressureSec,
+		"pq_max_file_size":                  item.PqMaxFileSize,
+		"pq_max_size":                       item.PqMaxSize,
+		"pq_path":                           item.PqPath,
+		"pq_compress":                       item.PqCompress,
+		"pq_on_backpressure":                item.PqOnBackpressure,
+		"pq_max_buffer_size_bytes":          item.PqMaxBufferSizeBytes,
+		"pq_controls":                       item.PqControls,
+		"credentials_secret":                item.CredentialsSecret,
 	})
 }

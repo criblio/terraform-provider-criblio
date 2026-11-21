@@ -25,7 +25,7 @@ func TestMonitoringResourceLifecycle(t *testing.T) {
 	}{
 		{"shared", "/products/lakehouse_engine_metrics/shared-configs", `{"id":"test","name":"Initial","config":{"priority":{"value":"P3"},"metadata":{"owner":"platform"}}}`, "name", "name", NewMonitorSharedConfigResource, func() any { return &MonitorSharedConfigModel{} }},
 		{"profile", "/products/lakehouse_engine_metrics/config-profiles", `{"id":"test","name":"Initial","configIds":[]}`, "name", "name", NewMonitorProfileResource, func() any { return &MonitorProfileModel{} }},
-		{"silence", "/a/__cribl_metrics/products/lakehouse_engine_metrics/silences", `{"id":"test","name":"Initial","monitor_id":"cpu","begins_at":1893456000000,"expires_at":1893542400000,"tags":{"host":["a","b"]}}`, "name", "name", NewMonitorSilenceResource, func() any { return &MonitorSilenceModel{} }},
+		{"silence", "/a/__cribl_metrics/products/lakehouse_engine_metrics/silences", `{"id":"test","name":"Initial","monitor_id":"cpu","begins_at":1893456000000,"expires_at":1893542400000}`, "name", "name", NewMonitorSilenceResource, func() any { return &MonitorSilenceModel{} }},
 		{"policy", "/notification-policies", `{"id":"test","order":10,"conditions":[[{"key":"team","operator":"=","value":"platform"},{"key":"count","operator":"=","value":3},{"key":"enabled","operator":"=","value":false},{"key":"unset","operator":"=","value":null}]],"templateTargetPairs":[{"templateId":"template","targetId":"target"}]}`, "order", "order", NewNotificationPolicyResource, func() any { return &NotificationPolicyModel{} }},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -46,6 +46,15 @@ func TestMonitoringResourceLifecycle(t *testing.T) {
 						t.Error(err)
 						w.WriteHeader(400)
 						return
+					}
+					if tc.name == "silence" {
+						for _, field := range []string{"tags", "alert_instance_id", "matched_monitors_count"} {
+							if _, ok := body[field]; ok {
+								t.Errorf("silence sent unsupported field %s", field)
+								w.WriteHeader(http.StatusBadRequest)
+								return
+							}
+						}
 					}
 					lastPayload = body
 					if req.Method == http.MethodPost {
@@ -104,6 +113,13 @@ func TestMonitoringResourceLifecycle(t *testing.T) {
 			}
 			var schema resource.SchemaResponse
 			r.Schema(ctx, resource.SchemaRequest{}, &schema)
+			if tc.name == "silence" {
+				for _, field := range []string{"tags", "alert_instance_id", "matched_monitors_count"} {
+					if _, ok := schema.Schema.Attributes[field]; ok {
+						t.Errorf("schema permits unsupported silence field %s", field)
+					}
+				}
+			}
 			model := tc.newModel()
 			if err := json.Unmarshal([]byte(tc.body), model); err != nil {
 				t.Fatal(err)

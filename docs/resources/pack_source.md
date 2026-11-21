@@ -175,7 +175,7 @@ resource "criblio_pack" "source_pack" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String) Unique ID for this input
+- `id` (String) Unique name for this input
 - `pack` (String) The <code>id</code> of the Pack.
 
 ### Optional
@@ -230,6 +230,17 @@ resource "criblio_pack" "source_pack" {
 - `input_model_driven_telemetry` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry))
 - `input_sqs` (Attributes) (see [below for nested schema](#nestedatt--input_sqs))
 - `input_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_syslog))
+- `input_check_point_sase_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_check_point_sase_syslog))
+- `input_cisco_asa_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_asa_syslog))
+- `input_cisco_meraki_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_meraki_syslog))
+- `input_fortigate_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_fortigate_syslog))
+- `input_vmware_esxi_vcenter_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_vmware_esxi_vcenter_syslog))
+- `input_netgate_pfsense_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_netgate_pfsense_syslog))
+- `input_watchguard_firebox_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_watchguard_firebox_syslog))
+- `input_infoblox_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_infoblox_syslog))
+- `input_ubiquiti_unifi_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_ubiquiti_unifi_syslog))
+- `input_sonicwall_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_sonicwall_syslog))
+- `input_sophos_xg_xgs_firewall_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_sophos_xg_xgs_firewall_syslog))
 - `input_file` (Attributes) (see [below for nested schema](#nestedatt--input_file))
 - `input_tcp` (Attributes) (see [below for nested schema](#nestedatt--input_tcp))
 - `input_appscope` (Attributes) (see [below for nested schema](#nestedatt--input_appscope))
@@ -251,6 +262,7 @@ resource "criblio_pack" "source_pack" {
 - `input_sysdig_hec` (Attributes) (see [below for nested schema](#nestedatt--input_sysdig_hec))
 - `input_upwind_hec` (Attributes) (see [below for nested schema](#nestedatt--input_upwind_hec))
 - `input_trellix_hec` (Attributes) (see [below for nested schema](#nestedatt--input_trellix_hec))
+- `input_salesforce` (Attributes) (see [below for nested schema](#nestedatt--input_salesforce))
 - `input_sailpoint_hec` (Attributes) (see [below for nested schema](#nestedatt--input_sailpoint_hec))
 - `input_extrahop_revealx360` (Attributes) (see [below for nested schema](#nestedatt--input_extrahop_revealx360))
 - `input_aqua_security_hec` (Attributes) (see [below for nested schema](#nestedatt--input_aqua_security_hec))
@@ -259,6 +271,7 @@ resource "criblio_pack" "source_pack" {
 - `input_anthropic_enterprise_analytics` (Attributes) (see [below for nested schema](#nestedatt--input_anthropic_enterprise_analytics))
 - `input_microsoft_copilot` (Attributes) (see [below for nested schema](#nestedatt--input_microsoft_copilot))
 - `input_okta` (Attributes) (see [below for nested schema](#nestedatt--input_okta))
+- `input_sentinelone` (Attributes) (see [below for nested schema](#nestedatt--input_sentinelone))
 - `input_akamai_hec` (Attributes) (see [below for nested schema](#nestedatt--input_akamai_hec))
 - `input_ping_identity_pingone` (Attributes) (see [below for nested schema](#nestedatt--input_ping_identity_pingone))
 - `input_gigamon_hec` (Attributes) (see [below for nested schema](#nestedatt--input_gigamon_hec))
@@ -268,6 +281,12 @@ resource "criblio_pack" "source_pack" {
 - `input_hashicorp_hcp_vault_dedicated` (Attributes) (see [below for nested schema](#nestedatt--input_hashicorp_hcp_vault_dedicated))
 - `input_mimecast_hec` (Attributes) (see [below for nested schema](#nestedatt--input_mimecast_hec))
 - `input_trend_micro_vision_one` (Attributes) (see [below for nested schema](#nestedatt--input_trend_micro_vision_one))
+- `input_zoom_webhook` (Attributes) (see [below for nested schema](#nestedatt--input_zoom_webhook))
+- `input_netskope` (Attributes) (see [below for nested schema](#nestedatt--input_netskope))
+- `input_litellm` (Attributes) (see [below for nested schema](#nestedatt--input_litellm))
+- `input_cisco_secure_firewall_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_secure_firewall_syslog))
+- `input_juniper_junos_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_juniper_junos_syslog))
+- `input_cisco_ios_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_ios_syslog))
 
 <a id="nestedatt--input_collection"></a>
 ### Nested Schema for `input_collection`
@@ -289,6 +308,7 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `preprocess` (Attributes) Optional preprocessing step that pipes collected data through an external command before ingestion. (see [below for nested schema](#nestedatt--input_collection--preprocess))
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `throttle_burst_disabled` (Boolean) When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collection--metadata))
 - `output` (String) Destination to send results to
 
@@ -298,7 +318,7 @@ Optional:
 Required:
 
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
+- `topics` (List of String) Topic to subscribe to. Warning: Multiple entries are supported, but will degrade throughput. To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 
 Optional:
 
@@ -326,6 +346,7 @@ Optional:
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_kafka--sasl))
 - `tls` (Attributes) TLS settings (client side) (see [below for nested schema](#nestedatt--input_kafka--tls))
+- `dynamic_headers_field` (String) When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities. If the client sends no heartbeats to the broker before the timeout expires, the broker will remove the client from the group and initiate a rebalance. Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms. See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins. If the timeout is exceeded, the coordinator broker will remove the worker from the group. See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities. Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value. See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
@@ -376,6 +397,7 @@ Optional:
 - `backoff_rate` (Number)
 - `authentication_timeout` (Number)
 - `reauthentication_threshold` (Number)
+- `dynamic_headers_field` (String)
 - `aws_secret_key` (String, Sensitive) Secret key
 - `endpoint` (String) MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -752,6 +774,7 @@ Optional:
 - `authentication_timeout` (Number)
 - `reauthentication_threshold` (Number)
 - `sasl` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--sasl))
+- `dynamic_headers_field` (String)
 - `session_timeout` (Number)
 - `rebalance_timeout` (Number)
 - `heartbeat_interval` (Number)
@@ -1204,7 +1227,7 @@ Optional:
 Required:
 
 - `brokers` (List of String) List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
-- `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
+- `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: Multiple entries are supported, but will degrade throughput. To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
 
 Optional:
 
@@ -2326,6 +2349,451 @@ Optional:
 - `description` (String)
 - `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
 
+<a id="nestedatt--input_check_point_sase_syslog"></a>
+### Nested Schema for `input_check_point_sase_syslog`
+
+Required:
+
+- `host` (String)
+- `tcp_port` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_check_point_sase_syslog--tls))
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_check_point_sase_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_check_point_sase_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_check_point_sase_syslog--pq))
+- `udp_port` (Number) Not supported for this Source — it listens on TCP only.
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `keep_fields_list` (List of String)
+- `infer_framing` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_check_point_sase_syslog--metadata))
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_cisco_asa_syslog"></a>
+### Nested Schema for `input_cisco_asa_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_asa_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_asa_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_asa_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_asa_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_asa_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_cisco_meraki_syslog"></a>
+### Nested Schema for `input_cisco_meraki_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_meraki_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_meraki_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_meraki_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_meraki_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_meraki_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_fortigate_syslog"></a>
+### Nested Schema for `input_fortigate_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_fortigate_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_fortigate_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_fortigate_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_fortigate_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_fortigate_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_vmware_esxi_vcenter_syslog"></a>
+### Nested Schema for `input_vmware_esxi_vcenter_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_vmware_esxi_vcenter_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_vmware_esxi_vcenter_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_vmware_esxi_vcenter_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_vmware_esxi_vcenter_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_vmware_esxi_vcenter_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_netgate_pfsense_syslog"></a>
+### Nested Schema for `input_netgate_pfsense_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_netgate_pfsense_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_netgate_pfsense_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_netgate_pfsense_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_netgate_pfsense_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_netgate_pfsense_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_watchguard_firebox_syslog"></a>
+### Nested Schema for `input_watchguard_firebox_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_watchguard_firebox_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_watchguard_firebox_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_watchguard_firebox_syslog--pq))
+- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP. WatchGuard Firebox sends syslog to port 514 by default.
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_watchguard_firebox_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_watchguard_firebox_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_infoblox_syslog"></a>
+### Nested Schema for `input_infoblox_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_infoblox_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_infoblox_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_infoblox_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_infoblox_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_infoblox_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_ubiquiti_unifi_syslog"></a>
+### Nested Schema for `input_ubiquiti_unifi_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_ubiquiti_unifi_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_ubiquiti_unifi_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_ubiquiti_unifi_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_ubiquiti_unifi_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_ubiquiti_unifi_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_sonicwall_syslog"></a>
+### Nested Schema for `input_sonicwall_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_sonicwall_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_sonicwall_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sonicwall_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_sonicwall_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_sonicwall_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_sophos_xg_xgs_firewall_syslog"></a>
+### Nested Schema for `input_sophos_xg_xgs_firewall_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_sophos_xg_xgs_firewall_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_sophos_xg_xgs_firewall_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sophos_xg_xgs_firewall_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_sophos_xg_xgs_firewall_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_sophos_xg_xgs_firewall_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
 <a id="nestedatt--input_file"></a>
 ### Nested Schema for `input_file`
 
@@ -2368,6 +2836,9 @@ Optional:
 - `optimize_leaf_directories` (Boolean) Skip rescans of unchanged directories based on directory modification time. Uses an exponential backoff strategy, reducing load on the filesystems, but possibly delaying detection of new data. This option is optimized for search paths where files exist in the leaf directories.
 - `enable_discovery_throttle` (Boolean) When enabled, discovery will throttle CPU usage to the configured target percentage.
 - `discovery_throttle_cpu_percent` (Number) Target CPU utilization percentage during file discovery. Discovery alternates between work and yield periods within a 200ms cycle. For example, 25% processes entries for 50ms then yields for 150ms. Lower values reduce CPU usage at the cost of longer discovery times.
+- `recursive_watch` (Boolean) Watch the search path recursively, so new and updated files are detected as the filesystem reports them. When disabled, file discovery relies on repeated directory scans only. Intended for large search paths, where it removes the cost of scanning the whole tree on every interval.It offers little benefit for search paths containing few files or a single file.
+- `rescan_interval` (Number) Time, in seconds, between restarting the recursive watch and rescanning the directory tree. The rescan recovers discovered changes when the operating system fails to send filesystem notifications. A shorter interval reduces the time window during which changes can go unnoticed, but at the expense of performing a full directory walk each time. An interval is always in force: clearing the field falls back to one hour rather than turning rescans off.
+- `max_watches` (Number) Maximum number of directories this Source watches at one time. Applies on Linux, where the operating system needs one watch per directory; macOS and Windows use a single recursive watch and ignore this. Reaching the limit stops the watch from descending further and reports the Source as unhealthy, rather than quietly missing files below that point. Raise the limit for a tree with many directories, or lower it to leave room for other Sources sharing the host's fs.inotify.max_user_watches budget.
 - `include_unidentifiable_binary` (Boolean) Stream binary files as Base64-encoded chunks
 
 <a id="nestedatt--input_tcp"></a>
@@ -3201,6 +3672,43 @@ Read-Only:
 
 - `capture_headers_warning` (String)
 
+<a id="nestedatt--input_salesforce"></a>
+### Nested Schema for `input_salesforce`
+
+Required:
+
+- `salesforce_subdomain` (String) Your Salesforce My Domain prefix. For production: mycompany. For sandbox: mycompany.sandbox. For developer: mycompany.develop.
+- `salesforce_cloud` (String) Salesforce cloud deployment — determines the domain suffix.
+- `salesforce_oauth_client_id` (String) Client ID from your Salesforce connected app
+- `text_secret` (String)
+- `salesforce_api_version` (String) Salesforce REST API version (example: v64.0)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_salesforce--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_salesforce--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_salesforce--pq))
+- `content_config` (Attributes List) Salesforce data sources to collect. Each entry specifies a Salesforce object, fields, and a cursor for time filtering — or an EventLogFile download. (see [below for nested schema](#nestedatt--input_salesforce--content_config))
+- `max_pages` (Number) Maximum number of pages to fetch per content type per scheduled run. Use 0 for unlimited.
+- `request_timeout` (Number)
+- `breaker_rulesets` (List of String)
+- `stale_channel_flush_ms` (Number)
+- `keep_alive_time` (Number)
+- `max_missed_keep_alives` (Number)
+- `ttl` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_salesforce--metadata))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_salesforce--retry_rules))
+- `description` (String)
+
 <a id="nestedatt--input_sailpoint_hec"></a>
 ### Nested Schema for `input_sailpoint_hec`
 
@@ -3534,6 +4042,39 @@ Optional:
 - `ignore_group_jobs_limit` (Boolean)
 - `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_okta--metadata))
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_okta--retry_rules))
+- `description` (String)
+
+<a id="nestedatt--input_sentinelone"></a>
+### Nested Schema for `input_sentinelone`
+
+Required:
+
+- `management_host` (String) Your SentinelOne management console hostname, without the domain suffix (example: usea1-yourorg)
+- `text_secret` (String)
+- `content_config` (Attributes List) (see [below for nested schema](#nestedatt--input_sentinelone--content_config))
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_sentinelone--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_sentinelone--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sentinelone--pq))
+- `management_domain_suffix` (String) Host suffix for your SentinelOne management console. Defaults to sentinelone.net (global). Choose sentinelone.mil for US military environments, or enter a custom domain.
+- `api_token` (String, Sensitive) SentinelOne API token
+- `request_timeout` (Number)
+- `keep_alive_time` (Number)
+- `max_missed_keep_alives` (Number)
+- `ttl` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_sentinelone--metadata))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_sentinelone--retry_rules))
 - `description` (String)
 
 <a id="nestedatt--input_akamai_hec"></a>
@@ -3938,6 +4479,250 @@ Read-Only:
 
 - `capture_headers_warning` (String)
 
+<a id="nestedatt--input_zoom_webhook"></a>
+### Nested Schema for `input_zoom_webhook`
+
+Required:
+
+- `host` (String)
+- `port` (Number)
+- `text_secret` (String) Secret token from your Zoom webhook configuration, used to verify that incoming requests originate from Zoom
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_zoom_webhook--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_zoom_webhook--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_zoom_webhook--pq))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_zoom_webhook--tls))
+- `max_active_req` (Number)
+- `max_requests_per_socket` (Integer)
+- `enable_proxy_header` (Boolean)
+- `capture_headers` (Boolean)
+- `activity_log_sample_rate` (Number)
+- `request_timeout` (Number)
+- `socket_timeout` (Number)
+- `keep_alive_timeout` (Number)
+- `enable_health_check` (Boolean)
+- `ip_allowlist_regex` (String)
+- `ip_denylist_regex` (String)
+- `breaker_rulesets` (List of String)
+- `stale_channel_flush_ms` (Number)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_zoom_webhook--metadata))
+- `allowed_paths` (List of String)
+- `allowed_methods` (List of String)
+- `token` (String) Not supported for this Source — the stored text secret is the only credential path.
+- `auth_type` (String) Not supported for this Source — authentication always uses the stored secret token.
+- `description` (String)
+
+Read-Only:
+
+- `capture_headers_warning` (String)
+
+<a id="nestedatt--input_netskope"></a>
+### Nested Schema for `input_netskope`
+
+Required:
+
+- `tenant_url` (String) Full base URL of your Netskope tenant (example: https://mycompany.goskope.com). Do not include trailing slashes or API paths.
+- `text_secret` (String) Select or create a stored Netskope V2 API token
+- `content_config` (Attributes List) (see [below for nested schema](#nestedatt--input_netskope--content_config))
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_netskope--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_netskope--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_netskope--pq))
+- `api_token` (String, Sensitive) API token
+- `request_timeout` (Number)
+- `keep_alive_time` (Number)
+- `max_missed_keep_alives` (Number)
+- `ttl` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_netskope--metadata))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_netskope--retry_rules))
+- `description` (String)
+
+<a id="nestedatt--input_litellm"></a>
+### Nested Schema for `input_litellm`
+
+Required:
+
+- `host` (String)
+- `port` (Number)
+- `cribl_api` (String) Absolute path on which to listen for LiteLLM generic API logger requests. Only _bulk (default /cribl/_bulk) is available. Each log record becomes one event, whether LiteLLM sends a JSON array or NDJSON.
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_litellm--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_litellm--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_litellm--pq))
+- `auth_tokens` (List of String)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_litellm--tls))
+- `max_active_req` (Number)
+- `max_requests_per_socket` (Integer)
+- `capture_headers` (Boolean)
+- `activity_log_sample_rate` (Number)
+- `request_timeout` (Number)
+- `socket_timeout` (Number)
+- `keep_alive_timeout` (Number)
+- `enable_health_check` (Boolean)
+- `ip_allowlist_regex` (String)
+- `ip_denylist_regex` (String)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_litellm--metadata))
+- `auth_tokens_ext` (Attributes List) (see [below for nested schema](#nestedatt--input_litellm--auth_tokens_ext))
+- `description` (String)
+
+Read-Only:
+
+- `capture_headers_warning` (String)
+
+<a id="nestedatt--input_cisco_secure_firewall_syslog"></a>
+### Nested Schema for `input_cisco_secure_firewall_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_secure_firewall_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_secure_firewall_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_secure_firewall_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_secure_firewall_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_secure_firewall_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_juniper_junos_syslog"></a>
+### Nested Schema for `input_juniper_junos_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_juniper_junos_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_juniper_junos_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_juniper_junos_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_juniper_junos_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_juniper_junos_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
+<a id="nestedatt--input_cisco_ios_syslog"></a>
+### Nested Schema for `input_cisco_ios_syslog`
+
+Required:
+
+- `host` (String)
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `disabled` (Boolean)
+- `pipeline` (String)
+- `send_to_routes` (Boolean)
+- `environment` (String)
+- `pq_enabled` (Boolean)
+- `streamtags` (List of String)
+- `cribl_source_provenance` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_ios_syslog--cribl_source_provenance))
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_ios_syslog--connections))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_ios_syslog--pq))
+- `udp_port` (Number)
+- `tcp_port` (Number)
+- `max_buffer_size` (Number)
+- `ip_whitelist_regex` (String)
+- `timestamp_timezone` (String)
+- `single_msg_udp_packets` (Boolean)
+- `keep_fields_list` (List of String)
+- `octet_counting` (Boolean)
+- `infer_framing` (Boolean)
+- `strictly_infer_octet_counting` (Boolean)
+- `max_active_cxn` (Number)
+- `socket_idle_timeout` (Number)
+- `socket_ending_max_wait` (Number)
+- `socket_max_lifespan` (Number)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cisco_ios_syslog--tls))
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_cisco_ios_syslog--metadata))
+- `udp_socket_rx_buf_size` (Number)
+- `enable_load_balancing` (Boolean)
+- `auto_parse` (Boolean)
+- `description` (String)
+
 <a id="nestedatt--input_collection--cribl_source_provenance"></a>
 <a id="nestedatt--input_kafka--cribl_source_provenance"></a>
 <a id="nestedatt--input_msk--cribl_source_provenance"></a>
@@ -3988,6 +4773,17 @@ Read-Only:
 <a id="nestedatt--input_model_driven_telemetry--cribl_source_provenance"></a>
 <a id="nestedatt--input_sqs--cribl_source_provenance"></a>
 <a id="nestedatt--input_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_check_point_sase_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_cisco_asa_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_cisco_meraki_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_fortigate_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_vmware_esxi_vcenter_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_netgate_pfsense_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_watchguard_firebox_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_infoblox_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_ubiquiti_unifi_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_sonicwall_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_sophos_xg_xgs_firewall_syslog--cribl_source_provenance"></a>
 <a id="nestedatt--input_file--cribl_source_provenance"></a>
 <a id="nestedatt--input_tcp--cribl_source_provenance"></a>
 <a id="nestedatt--input_appscope--cribl_source_provenance"></a>
@@ -4009,6 +4805,7 @@ Read-Only:
 <a id="nestedatt--input_sysdig_hec--cribl_source_provenance"></a>
 <a id="nestedatt--input_upwind_hec--cribl_source_provenance"></a>
 <a id="nestedatt--input_trellix_hec--cribl_source_provenance"></a>
+<a id="nestedatt--input_salesforce--cribl_source_provenance"></a>
 <a id="nestedatt--input_sailpoint_hec--cribl_source_provenance"></a>
 <a id="nestedatt--input_extrahop_revealx360--cribl_source_provenance"></a>
 <a id="nestedatt--input_aqua_security_hec--cribl_source_provenance"></a>
@@ -4017,6 +4814,7 @@ Read-Only:
 <a id="nestedatt--input_anthropic_enterprise_analytics--cribl_source_provenance"></a>
 <a id="nestedatt--input_microsoft_copilot--cribl_source_provenance"></a>
 <a id="nestedatt--input_okta--cribl_source_provenance"></a>
+<a id="nestedatt--input_sentinelone--cribl_source_provenance"></a>
 <a id="nestedatt--input_akamai_hec--cribl_source_provenance"></a>
 <a id="nestedatt--input_ping_identity_pingone--cribl_source_provenance"></a>
 <a id="nestedatt--input_gigamon_hec--cribl_source_provenance"></a>
@@ -4026,6 +4824,12 @@ Read-Only:
 <a id="nestedatt--input_hashicorp_hcp_vault_dedicated--cribl_source_provenance"></a>
 <a id="nestedatt--input_mimecast_hec--cribl_source_provenance"></a>
 <a id="nestedatt--input_trend_micro_vision_one--cribl_source_provenance"></a>
+<a id="nestedatt--input_zoom_webhook--cribl_source_provenance"></a>
+<a id="nestedatt--input_netskope--cribl_source_provenance"></a>
+<a id="nestedatt--input_litellm--cribl_source_provenance"></a>
+<a id="nestedatt--input_cisco_secure_firewall_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_juniper_junos_syslog--cribl_source_provenance"></a>
+<a id="nestedatt--input_cisco_ios_syslog--cribl_source_provenance"></a>
 ### Nested Schema for `input_collection.cribl_source_provenance`
 
 Optional:
@@ -4087,6 +4891,17 @@ Optional:
 <a id="nestedatt--input_model_driven_telemetry--connections"></a>
 <a id="nestedatt--input_sqs--connections"></a>
 <a id="nestedatt--input_syslog--connections"></a>
+<a id="nestedatt--input_check_point_sase_syslog--connections"></a>
+<a id="nestedatt--input_cisco_asa_syslog--connections"></a>
+<a id="nestedatt--input_cisco_meraki_syslog--connections"></a>
+<a id="nestedatt--input_fortigate_syslog--connections"></a>
+<a id="nestedatt--input_vmware_esxi_vcenter_syslog--connections"></a>
+<a id="nestedatt--input_netgate_pfsense_syslog--connections"></a>
+<a id="nestedatt--input_watchguard_firebox_syslog--connections"></a>
+<a id="nestedatt--input_infoblox_syslog--connections"></a>
+<a id="nestedatt--input_ubiquiti_unifi_syslog--connections"></a>
+<a id="nestedatt--input_sonicwall_syslog--connections"></a>
+<a id="nestedatt--input_sophos_xg_xgs_firewall_syslog--connections"></a>
 <a id="nestedatt--input_file--connections"></a>
 <a id="nestedatt--input_tcp--connections"></a>
 <a id="nestedatt--input_appscope--connections"></a>
@@ -4108,6 +4923,7 @@ Optional:
 <a id="nestedatt--input_sysdig_hec--connections"></a>
 <a id="nestedatt--input_upwind_hec--connections"></a>
 <a id="nestedatt--input_trellix_hec--connections"></a>
+<a id="nestedatt--input_salesforce--connections"></a>
 <a id="nestedatt--input_sailpoint_hec--connections"></a>
 <a id="nestedatt--input_extrahop_revealx360--connections"></a>
 <a id="nestedatt--input_aqua_security_hec--connections"></a>
@@ -4116,6 +4932,7 @@ Optional:
 <a id="nestedatt--input_anthropic_enterprise_analytics--connections"></a>
 <a id="nestedatt--input_microsoft_copilot--connections"></a>
 <a id="nestedatt--input_okta--connections"></a>
+<a id="nestedatt--input_sentinelone--connections"></a>
 <a id="nestedatt--input_akamai_hec--connections"></a>
 <a id="nestedatt--input_ping_identity_pingone--connections"></a>
 <a id="nestedatt--input_gigamon_hec--connections"></a>
@@ -4125,6 +4942,12 @@ Optional:
 <a id="nestedatt--input_hashicorp_hcp_vault_dedicated--connections"></a>
 <a id="nestedatt--input_mimecast_hec--connections"></a>
 <a id="nestedatt--input_trend_micro_vision_one--connections"></a>
+<a id="nestedatt--input_zoom_webhook--connections"></a>
+<a id="nestedatt--input_netskope--connections"></a>
+<a id="nestedatt--input_litellm--connections"></a>
+<a id="nestedatt--input_cisco_secure_firewall_syslog--connections"></a>
+<a id="nestedatt--input_juniper_junos_syslog--connections"></a>
+<a id="nestedatt--input_cisco_ios_syslog--connections"></a>
 ### Nested Schema for `input_collection.connections`
 
 Optional:
@@ -4182,6 +5005,17 @@ Optional:
 <a id="nestedatt--input_model_driven_telemetry--pq"></a>
 <a id="nestedatt--input_sqs--pq"></a>
 <a id="nestedatt--input_syslog--pq"></a>
+<a id="nestedatt--input_check_point_sase_syslog--pq"></a>
+<a id="nestedatt--input_cisco_asa_syslog--pq"></a>
+<a id="nestedatt--input_cisco_meraki_syslog--pq"></a>
+<a id="nestedatt--input_fortigate_syslog--pq"></a>
+<a id="nestedatt--input_vmware_esxi_vcenter_syslog--pq"></a>
+<a id="nestedatt--input_netgate_pfsense_syslog--pq"></a>
+<a id="nestedatt--input_watchguard_firebox_syslog--pq"></a>
+<a id="nestedatt--input_infoblox_syslog--pq"></a>
+<a id="nestedatt--input_ubiquiti_unifi_syslog--pq"></a>
+<a id="nestedatt--input_sonicwall_syslog--pq"></a>
+<a id="nestedatt--input_sophos_xg_xgs_firewall_syslog--pq"></a>
 <a id="nestedatt--input_file--pq"></a>
 <a id="nestedatt--input_tcp--pq"></a>
 <a id="nestedatt--input_appscope--pq"></a>
@@ -4203,6 +5037,7 @@ Optional:
 <a id="nestedatt--input_sysdig_hec--pq"></a>
 <a id="nestedatt--input_upwind_hec--pq"></a>
 <a id="nestedatt--input_trellix_hec--pq"></a>
+<a id="nestedatt--input_salesforce--pq"></a>
 <a id="nestedatt--input_sailpoint_hec--pq"></a>
 <a id="nestedatt--input_extrahop_revealx360--pq"></a>
 <a id="nestedatt--input_aqua_security_hec--pq"></a>
@@ -4211,6 +5046,7 @@ Optional:
 <a id="nestedatt--input_anthropic_enterprise_analytics--pq"></a>
 <a id="nestedatt--input_microsoft_copilot--pq"></a>
 <a id="nestedatt--input_okta--pq"></a>
+<a id="nestedatt--input_sentinelone--pq"></a>
 <a id="nestedatt--input_akamai_hec--pq"></a>
 <a id="nestedatt--input_ping_identity_pingone--pq"></a>
 <a id="nestedatt--input_gigamon_hec--pq"></a>
@@ -4220,6 +5056,12 @@ Optional:
 <a id="nestedatt--input_hashicorp_hcp_vault_dedicated--pq"></a>
 <a id="nestedatt--input_mimecast_hec--pq"></a>
 <a id="nestedatt--input_trend_micro_vision_one--pq"></a>
+<a id="nestedatt--input_zoom_webhook--pq"></a>
+<a id="nestedatt--input_netskope--pq"></a>
+<a id="nestedatt--input_litellm--pq"></a>
+<a id="nestedatt--input_cisco_secure_firewall_syslog--pq"></a>
+<a id="nestedatt--input_juniper_junos_syslog--pq"></a>
+<a id="nestedatt--input_cisco_ios_syslog--pq"></a>
 ### Nested Schema for `input_collection.pq`
 
 Optional:
@@ -4306,6 +5148,17 @@ Optional:
 <a id="nestedatt--input_model_driven_telemetry--metadata"></a>
 <a id="nestedatt--input_sqs--metadata"></a>
 <a id="nestedatt--input_syslog--metadata"></a>
+<a id="nestedatt--input_check_point_sase_syslog--metadata"></a>
+<a id="nestedatt--input_cisco_asa_syslog--metadata"></a>
+<a id="nestedatt--input_cisco_meraki_syslog--metadata"></a>
+<a id="nestedatt--input_fortigate_syslog--metadata"></a>
+<a id="nestedatt--input_vmware_esxi_vcenter_syslog--metadata"></a>
+<a id="nestedatt--input_netgate_pfsense_syslog--metadata"></a>
+<a id="nestedatt--input_watchguard_firebox_syslog--metadata"></a>
+<a id="nestedatt--input_infoblox_syslog--metadata"></a>
+<a id="nestedatt--input_ubiquiti_unifi_syslog--metadata"></a>
+<a id="nestedatt--input_sonicwall_syslog--metadata"></a>
+<a id="nestedatt--input_sophos_xg_xgs_firewall_syslog--metadata"></a>
 <a id="nestedatt--input_file--metadata"></a>
 <a id="nestedatt--input_tcp--metadata"></a>
 <a id="nestedatt--input_appscope--metadata"></a>
@@ -4334,6 +5187,7 @@ Optional:
 <a id="nestedatt--input_upwind_hec--metadata"></a>
 <a id="nestedatt--input_trellix_hec--auth_tokens--metadata"></a>
 <a id="nestedatt--input_trellix_hec--metadata"></a>
+<a id="nestedatt--input_salesforce--metadata"></a>
 <a id="nestedatt--input_sailpoint_hec--auth_tokens--metadata"></a>
 <a id="nestedatt--input_sailpoint_hec--metadata"></a>
 <a id="nestedatt--input_extrahop_revealx360--auth_tokens--metadata"></a>
@@ -4345,6 +5199,7 @@ Optional:
 <a id="nestedatt--input_anthropic_enterprise_analytics--metadata"></a>
 <a id="nestedatt--input_microsoft_copilot--metadata"></a>
 <a id="nestedatt--input_okta--metadata"></a>
+<a id="nestedatt--input_sentinelone--metadata"></a>
 <a id="nestedatt--input_akamai_hec--auth_tokens--metadata"></a>
 <a id="nestedatt--input_akamai_hec--metadata"></a>
 <a id="nestedatt--input_ping_identity_pingone--auth_tokens--metadata"></a>
@@ -4363,6 +5218,13 @@ Optional:
 <a id="nestedatt--input_mimecast_hec--metadata"></a>
 <a id="nestedatt--input_trend_micro_vision_one--auth_tokens--metadata"></a>
 <a id="nestedatt--input_trend_micro_vision_one--metadata"></a>
+<a id="nestedatt--input_zoom_webhook--metadata"></a>
+<a id="nestedatt--input_netskope--metadata"></a>
+<a id="nestedatt--input_litellm--metadata"></a>
+<a id="nestedatt--input_litellm--auth_tokens_ext--metadata"></a>
+<a id="nestedatt--input_cisco_secure_firewall_syslog--metadata"></a>
+<a id="nestedatt--input_juniper_junos_syslog--metadata"></a>
+<a id="nestedatt--input_cisco_ios_syslog--metadata"></a>
 ### Nested Schema for `input_collection.metadata`
 
 Required:
@@ -4496,6 +5358,16 @@ Required:
 <a id="nestedatt--input_open_telemetry--tls"></a>
 <a id="nestedatt--input_model_driven_telemetry--tls"></a>
 <a id="nestedatt--input_syslog--tls"></a>
+<a id="nestedatt--input_cisco_asa_syslog--tls"></a>
+<a id="nestedatt--input_cisco_meraki_syslog--tls"></a>
+<a id="nestedatt--input_fortigate_syslog--tls"></a>
+<a id="nestedatt--input_vmware_esxi_vcenter_syslog--tls"></a>
+<a id="nestedatt--input_netgate_pfsense_syslog--tls"></a>
+<a id="nestedatt--input_watchguard_firebox_syslog--tls"></a>
+<a id="nestedatt--input_infoblox_syslog--tls"></a>
+<a id="nestedatt--input_ubiquiti_unifi_syslog--tls"></a>
+<a id="nestedatt--input_sonicwall_syslog--tls"></a>
+<a id="nestedatt--input_sophos_xg_xgs_firewall_syslog--tls"></a>
 <a id="nestedatt--input_tcp--tls"></a>
 <a id="nestedatt--input_appscope--tls"></a>
 <a id="nestedatt--input_wiz_webhook--tls"></a>
@@ -4515,11 +5387,16 @@ Required:
 <a id="nestedatt--input_hashicorp_hcp_vault_dedicated--tls"></a>
 <a id="nestedatt--input_mimecast_hec--tls"></a>
 <a id="nestedatt--input_trend_micro_vision_one--tls"></a>
+<a id="nestedatt--input_zoom_webhook--tls"></a>
+<a id="nestedatt--input_litellm--tls"></a>
+<a id="nestedatt--input_cisco_secure_firewall_syslog--tls"></a>
+<a id="nestedatt--input_juniper_junos_syslog--tls"></a>
+<a id="nestedatt--input_cisco_ios_syslog--tls"></a>
 ### Nested Schema for `input_http.tls`
 
 Optional:
 
-- `disabled` (Boolean) If true, TLS is disabled on this connection.
+- `disabled` (Boolean)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
@@ -4569,10 +5446,13 @@ Required:
 <a id="nestedatt--input_wiz--retry_rules"></a>
 <a id="nestedatt--input_openai--retry_rules"></a>
 <a id="nestedatt--input_servicenow_table--retry_rules"></a>
+<a id="nestedatt--input_salesforce--retry_rules"></a>
 <a id="nestedatt--input_openai_compliance_logs--retry_rules"></a>
 <a id="nestedatt--input_anthropic_compliance--retry_rules"></a>
 <a id="nestedatt--input_anthropic_enterprise_analytics--retry_rules"></a>
 <a id="nestedatt--input_okta--retry_rules"></a>
+<a id="nestedatt--input_sentinelone--retry_rules"></a>
+<a id="nestedatt--input_netskope--retry_rules"></a>
 ### Nested Schema for `input_splunk_search.retry_rules`
 
 Required:
@@ -4679,6 +5559,7 @@ Required:
 <a id="nestedatt--input_prometheus--http_discovery_headers"></a>
 <a id="nestedatt--input_edge_prometheus--http_discovery_headers"></a>
 <a id="nestedatt--input_openai--content_config--request_params"></a>
+<a id="nestedatt--input_sentinelone--content_config--request_params"></a>
 ### Nested Schema for `input_prometheus.http_discovery_headers`
 
 Required:
@@ -5276,6 +6157,26 @@ Optional:
 - `audience` (String) Expected token audience (aud claim)
 - `scopes` (List of String) Scopes the token must grant (optional)
 
+<a id="nestedatt--input_check_point_sase_syslog--tls"></a>
+### Nested Schema for `input_check_point_sase_syslog.tls`
+
+Required:
+
+- `disabled` (Boolean)
+
+Optional:
+
+- `request_cert` (Boolean)
+- `ca_path` (String)
+- `reject_unauthorized` (Boolean)
+- `common_name_regex` (String)
+- `certificate_name` (String)
+- `priv_key_path` (String)
+- `passphrase` (String)
+- `cert_path` (String)
+- `min_version` (String)
+- `max_version` (String)
+
 <a id="nestedatt--input_appscope--filter"></a>
 ### Nested Schema for `input_appscope.filter`
 
@@ -5506,6 +6407,30 @@ Optional:
 - `min_version` (String)
 - `max_version` (String)
 
+<a id="nestedatt--input_salesforce--content_config"></a>
+### Nested Schema for `input_salesforce.content_config`
+
+Optional:
+
+- `disabled` (Boolean)
+- `state_tracking` (Boolean)
+- `state_update_expression` (String)
+- `state_merge_expression` (String)
+- `manage_state` (Map of String)
+- `object_name` (String) Salesforce object API name to query (examples: LoginHistory, SetupAuditTrail, Account)
+- `fields` (List of String) Field API names to include in the query.
+- `cursor` (String) Timestamp field used for time filtering and breaker rule routing (examples: LoginTime, CreatedDate)
+- `filter` (String) Optional SOQL WHERE conditions, entered as a Cribl expression that evaluates to a SOQL string. Wrap the value in backticks (example: `CountryIso = 'US'`). The expression is evaluated once when the Source initializes — not per collection run. Combined with cursor-based time filtering using AND. SOQL syntax is not validated locally; invalid conditions will fail at collection time.
+- `cron_schedule` (String)
+- `earliest` (String)
+- `latest` (String)
+- `job_timeout` (String)
+
+Read-Only:
+
+- `content_type` (String)
+- `content_description` (String) Brief description of what this content type collects.
+
 <a id="nestedatt--input_anthropic_compliance--activities"></a>
 <a id="nestedatt--input_anthropic_compliance--chats"></a>
 <a id="nestedatt--input_anthropic_compliance--projects"></a>
@@ -5586,6 +6511,68 @@ Optional:
 
 - `certificate_name` (String) The name of a predefined certificate
 - `passphrase` (String, Sensitive) Passphrase to decrypt the private key
+
+<a id="nestedatt--input_sentinelone--content_config"></a>
+### Nested Schema for `input_sentinelone.content_config`
+
+Required:
+
+- `pagination_type` (String)
+- `cron_schedule` (String)
+- `earliest` (String)
+- `latest` (String)
+
+Optional:
+
+- `collect_method` (String) HTTP method
+- `collect_body` (String) Request body
+- `disabled` (Boolean)
+- `state_tracking` (Boolean)
+- `state_update_expression` (String)
+- `state_merge_expression` (String)
+- `manage_state` (Map of String)
+- `request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_sentinelone--content_config--request_params))
+- `pagination_attribute` (List of String)
+- `pagination_last_page_expr` (String)
+- `max_pages` (Number) Maximum number of pages to retrieve per collection task. Set to 0 for unlimited.
+- `job_timeout` (String)
+- `log_level` (String)
+
+Read-Only:
+
+- `content_type` (String)
+- `content_description` (String)
+- `collect_path` (String) SentinelOne API path
+
+<a id="nestedatt--input_netskope--content_config"></a>
+### Nested Schema for `input_netskope.content_config`
+
+Required:
+
+- `cursor_index` (String) Server-side index name Netskope uses for tracking data export state. Change only if you need a separate export cursor.
+- `cron_schedule` (String) Schedule on which to collect this content type
+
+Optional:
+
+- `disabled` (Boolean)
+- `job_timeout` (String)
+- `log_level` (String)
+
+Read-Only:
+
+- `content_type` (String)
+- `content_description` (String)
+
+<a id="nestedatt--input_litellm--auth_tokens_ext"></a>
+### Nested Schema for `input_litellm.auth_tokens_ext`
+
+Optional:
+
+- `auth_type` (String)
+- `token_secret` (String)
+- `token` (String)
+- `description` (String)
+- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--input_litellm--auth_tokens_ext--metadata))
 
 ## Import
 

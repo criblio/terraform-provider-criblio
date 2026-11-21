@@ -30,9 +30,11 @@ Read-Only:
 - `dataset_id` (String) Default dataset used for query execution and alert history storage. Per-query overrides are set via the query's datasetId.
 - `description` (String) Optional human-readable description of the monitor.
 - `enabled` (Boolean) Whether the monitor is active and evaluated.
+- `evaluation_interval_sec` (Integer) Evaluation cadence in seconds. Integer multiple of 60 between 60 and 3600. Defaults to 60 when omitted.
 - `expr` (Attributes List) Query expressions evaluated to produce the monitor's series. (see [below for nested schema](#nestedatt--items--expr))
 - `id` (String) Unique identifier for the monitor.
 - `managed_by` (String) Identifies the external provisioner (e.g. 'terraform') that owns this monitor. When set, the monitor is read-only from the UI and non-SDK REST mutations are rejected with 403.
+- `mute_schedule_ids` (List of String) IDs of the recurring mute schedules that suppress this monitor's notifications while any of them is active.
 - `name` (String) Human-readable name for the monitor.
 - `profile_ref` (Attributes) Profile this monitor is linked to. Used by the UI to rehydrate inherited fields when an overridden field is toggled back to inherited. (see [below for nested schema](#nestedatt--items--profile_ref))
 - `query` (Attributes Map) Monitor queries keyed by query label. Each query is inheritable from a linked profile. (see [below for nested schema](#nestedatt--items--query))
@@ -100,7 +102,7 @@ Read-Only:
 
 Read-Only:
 
-- `aggregation` (String) Aggregation operator applied to the metric series.
+- `aggregation` (String) Aggregation function chosen in the query builder, for example sum, avg, rate or quantile. Used by the UI only.
 - `evaluation_window` (Attributes) Evaluation window over which the metric query is evaluated. (see [below for nested schema](#nestedatt--items--query--builder--evaluation_window))
 - `group_by` (List of String) Label keys to group the aggregated metric results by.
 - `label_filters` (Attributes List) Label filters applied to the metric query in builder mode. (see [below for nested schema](#nestedatt--items--query--builder--label_filters))
@@ -181,6 +183,15 @@ Read-Only:
 <a id="nestedatt--items--outlier_config"></a>
 ### Nested Schema for `items.outlier_config`
 
+Read-Only:
+
+- `cohort_labels` (List of String) Labels that group series into peer cohorts; empty means one global cohort across all series.
+- `evaluation_window_ms` (Number) Window in milliseconds the pooled cohort median/MAD is computed over.
+- `min_coverage` (Number) Percentage (1–100) of expected window points a series needs before it is graded.
+- `mode` (String) How the peer cohort is pooled: per-instant cross-section, or pooled over the window.
+- `pct` (Number) Percentage (1–100) of a series' window points that must breach before it is flagged.
+- `threshold_direction` (String) Which side flags an outlier: above the cohort spread, below it, or either.
+
 <a id="nestedatt--items--forecast_config"></a>
 ### Nested Schema for `items.forecast_config`
 
@@ -198,7 +209,10 @@ Read-Only:
 Read-Only:
 
 - `clear_delay` (Integer) Time (in seconds) a recovery must persist before the monitor clears.
+- `exec_error_state` (String) What the monitor does when the evaluation itself fails to run: <code>error</code> (default) records the failure against each instance while holding its prior status, <code>alerting</code> treats it as breaching at the highest configured severity, <code>ok</code> treats it as recovered, and <code>keep_last</code> holds the prior status without notifying.
 - `fire_delay` (Integer) Time (in seconds) a breach must persist before the monitor fires.
+- `missing_series_evals_to_resolve` (Integer) Consecutive missed evaluations a single vanished series must be absent before it resolves to no-data (1 to 100; default 1). Does not apply when the whole rule returns no data.
+- `no_data_state` (String) What the monitor does when its whole rule returns no data: <code>no_data</code> (default) ages the instance into no-data, <code>ok</code> treats it as recovered, <code>alerting</code> treats it as breaching at the highest configured severity, and <code>keep_last</code> holds the prior status.
 
 <a id="nestedatt--items--firing_condition_inheritable"></a>
 <a id="nestedatt--items--firing_rule_inheritable"></a>
@@ -244,9 +258,19 @@ Read-Only:
 - `included_tags` (List of String) Tag filters that scope the threshold to only the matching series.
 - `limit` (Number) Threshold value that the metric is compared against using <code>operator</code>.
 - `operator` (String) Comparison operator applied to the threshold limit.
+- `recovery` (Attributes) Optional recovery (hysteresis) bound the series must cross before this severity is released. (see [below for nested schema](#nestedatt--items--firing_rule--overrides--threshold--recovery))
 - `severity` (String) Severity assigned when the threshold's condition is met: <code>critical</code>, <code>warning</code>, or <code>info</code>.
 - `std_deviations` (Number) Per-severity anomaly sensitivity, expressed as a number of standard deviations from the baseline.
 - `times_triggered` (Integer) Number of consecutive evaluations the condition must hold before firing. Defaults to 1 when absent.
+
+<a id="nestedatt--items--firing_rule--overrides--threshold--recovery"></a>
+<a id="nestedatt--items--firing_rule--threshold--recovery"></a>
+### Nested Schema for `items.firing_rule.overrides.threshold.recovery`
+
+Read-Only:
+
+- `limit` (Number) Value the metric must cross, using <code>operator</code>, before the severity is released.
+- `operator` (String) Comparison operator applied to the recovery limit; must oppose the firing operator.
 
 <a id="nestedatt--items--monitor_policy_notification_config"></a>
 ### Nested Schema for `items.monitor_policy_notification_config`

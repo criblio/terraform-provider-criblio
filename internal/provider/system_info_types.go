@@ -198,12 +198,13 @@ type SystemInfoLicenseLimitsModel struct {
 	EdgeGroups              types.Int64 `tfsdk:"edge_groups" json:"edge_groups,omitempty"`
 	EdgeProcs               types.Int64 `tfsdk:"edge_procs" json:"edge_procs,omitempty"`
 	ExternalSecretStores    types.Int64 `tfsdk:"external_secret_stores" json:"external_secret_stores,omitempty"`
+	HeavyDuty               types.Int64 `tfsdk:"heavy_duty" json:"heavy_duty,omitempty"`
 	Kms                     types.Int64 `tfsdk:"kms" json:"kms,omitempty"`
+	Lakehouse               types.Int64 `tfsdk:"lakehouse" json:"lakehouse,omitempty"`
 	LakeAccessGroups        types.Int64 `tfsdk:"lake_access_groups" json:"lake_access_groups,omitempty"`
 	LakeDdss                types.Int64 `tfsdk:"lake_ddss" json:"lake_ddss,omitempty"`
 	LakeMetrics             types.Int64 `tfsdk:"lake_metrics" json:"lake_metrics,omitempty"`
 	LakeStorageLocations    types.Int64 `tfsdk:"lake_storage_locations" json:"lake_storage_locations,omitempty"`
-	Lakehouse               types.Int64 `tfsdk:"lakehouse" json:"lakehouse,omitempty"`
 	LeaderResiliency        types.Int64 `tfsdk:"leader_resiliency" json:"leader_resiliency,omitempty"`
 	MaxExecutorsPerSearch   types.Int64 `tfsdk:"max_executors_per_search" json:"max_executors_per_search,omitempty"`
 	Notifications           types.Int64 `tfsdk:"notifications" json:"notifications,omitempty"`
@@ -220,8 +221,8 @@ type SystemInfoLicenseLimitsModel struct {
 	SearchAcceleration      types.Int64 `tfsdk:"search_acceleration" json:"search_acceleration,omitempty"`
 	SearchGroups            types.Int64 `tfsdk:"search_groups" json:"search_groups,omitempty"`
 	SystemEmail             types.Int64 `tfsdk:"system_email" json:"system_email,omitempty"`
-	WorkerGroupBootThrottle types.Int64 `tfsdk:"worker_group_boot_throttle" json:"worker_group_boot_throttle,omitempty"`
 	WorkerGroups            types.Int64 `tfsdk:"worker_groups" json:"worker_groups,omitempty"`
+	WorkerGroupBootThrottle types.Int64 `tfsdk:"worker_group_boot_throttle" json:"worker_group_boot_throttle,omitempty"`
 	WorkerProcs             types.Int64 `tfsdk:"worker_procs" json:"worker_procs,omitempty"`
 }
 
@@ -230,12 +231,13 @@ type SystemInfoLicenseLimitsAPIModel struct {
 	EdgeGroups              *int64 `json:"edge_groups,omitempty"`
 	EdgeProcs               *int64 `json:"edge_procs,omitempty"`
 	ExternalSecretStores    *int64 `json:"external_secret_stores,omitempty"`
+	HeavyDuty               *int64 `json:"heavy_duty,omitempty"`
 	Kms                     *int64 `json:"kms,omitempty"`
+	Lakehouse               *int64 `json:"lakehouse,omitempty"`
 	LakeAccessGroups        *int64 `json:"lake_access_groups,omitempty"`
 	LakeDdss                *int64 `json:"lake_ddss,omitempty"`
 	LakeMetrics             *int64 `json:"lake_metrics,omitempty"`
 	LakeStorageLocations    *int64 `json:"lake_storage_locations,omitempty"`
-	Lakehouse               *int64 `json:"lakehouse,omitempty"`
 	LeaderResiliency        *int64 `json:"leader_resiliency,omitempty"`
 	MaxExecutorsPerSearch   *int64 `json:"max_executors_per_search,omitempty"`
 	Notifications           *int64 `json:"notifications,omitempty"`
@@ -252,8 +254,8 @@ type SystemInfoLicenseLimitsAPIModel struct {
 	SearchAcceleration      *int64 `json:"search_acceleration,omitempty"`
 	SearchGroups            *int64 `json:"search_groups,omitempty"`
 	SystemEmail             *int64 `json:"system_email,omitempty"`
-	WorkerGroupBootThrottle *int64 `json:"worker_group_boot_throttle,omitempty"`
 	WorkerGroups            *int64 `json:"worker_groups,omitempty"`
+	WorkerGroupBootThrottle *int64 `json:"worker_group_boot_throttle,omitempty"`
 	WorkerProcs             *int64 `json:"worker_procs,omitempty"`
 }
 
@@ -263,12 +265,13 @@ func SystemInfoLicenseLimitsAttrTypes() map[string]attr.Type {
 		"edge_groups":                types.Int64Type,
 		"edge_procs":                 types.Int64Type,
 		"external_secret_stores":     types.Int64Type,
+		"heavy_duty":                 types.Int64Type,
 		"kms":                        types.Int64Type,
+		"lakehouse":                  types.Int64Type,
 		"lake_access_groups":         types.Int64Type,
 		"lake_ddss":                  types.Int64Type,
 		"lake_metrics":               types.Int64Type,
 		"lake_storage_locations":     types.Int64Type,
-		"lakehouse":                  types.Int64Type,
 		"leader_resiliency":          types.Int64Type,
 		"max_executors_per_search":   types.Int64Type,
 		"notifications":              types.Int64Type,
@@ -285,8 +288,8 @@ func SystemInfoLicenseLimitsAttrTypes() map[string]attr.Type {
 		"search_acceleration":        types.Int64Type,
 		"search_groups":              types.Int64Type,
 		"system_email":               types.Int64Type,
-		"worker_group_boot_throttle": types.Int64Type,
 		"worker_groups":              types.Int64Type,
+		"worker_group_boot_throttle": types.Int64Type,
 		"worker_procs":               types.Int64Type,
 	}
 }
@@ -457,6 +460,8 @@ func SystemInfoTerraformNameToAPIName(name string) string {
 		return prefix + "edge_procs"
 	case "external_secret_stores":
 		return prefix + "external_secret_stores"
+	case "heavy_duty":
+		return prefix + "heavy_duty"
 	case "lake_access_groups":
 		return prefix + "lake_access_groups"
 	case "lake_ddss":

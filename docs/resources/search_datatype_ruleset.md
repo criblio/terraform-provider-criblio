@@ -42,7 +42,7 @@ resource "criblio_search_datatype_ruleset" "my_search_datatype_ruleset" {
 
 ### Optional
 
-- `id` (String) Ruleset identifier.
+- `id` (String) Identifier of the fixed slot this ruleset occupies.
 
 <a id="nestedatt--rules"></a>
 ### Nested Schema for `rules`

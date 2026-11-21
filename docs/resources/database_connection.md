@@ -14,21 +14,21 @@ DatabaseConnection Resource
 
 ```terraform
 resource "criblio_database_connection" "my_database_connection" {
-  auth_type = "connectionString"
-  connection_string = "tcps://oracle.example.com:2484/ORCL"
+  account_identifier = "MYORG-MYACCOUNT"
+  auth_type = "oauth"
   connection_timeout = 15000
-  database_type = "oracle"
-  description = "Oracle database reached over TCPS with mutual TLS"
+  database = "ANALYTICS"
+  database_type = "snowflake"
+  description = "Snowflake analytics warehouse"
   group_id = "default"
-  id = "oracle-mtls-db"
-  password = "Oracle_Pass456!"
-  tags = "erp,oracle,mtls,production"
-  tls = {
-    certificate_name = "oracle-client-cert"
-    disabled = false
-    reject_unauthorized = true
+  id = "snowflake-analytics"
+  pem = {
+    key_name = "snowflake-keypair"
   }
-  user = "erp_user"
+  role = "ANALYST"
+  tags = "analytics,snowflake"
+  user = "CRIBL_SVC"
+  warehouse = "COMPUTE_WH"
 }
 ```
 
@@ -45,7 +45,7 @@ resource "criblio_database_connection" "my_database_connection" {
 
 ### Optional
 
-- `account_identifier` (String) Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).
+- `account_identifier` (String) Snowflake account identifier, either in org-account format (<code>ORGNAME-ACCTNAME</code>) or as a legacy account locator (<code>LOCATOR.REGION.CLOUD</code>).
 - `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
 - `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
 - `connection_timeout` (Integer) Maximum time (in milliseconds) to wait when establishing the database connection.
@@ -55,7 +55,7 @@ resource "criblio_database_connection" "my_database_connection" {
 - `host` (String) Hostname of the server to connect to.
 - `log_on_mechanism` (String) Log On Mechanism for databases that support multiple, like Teradata.
 - `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
-- `pem` (Attributes) RSA private key configuration for Snowflake key-pair authentication. (see [below for nested schema](#nestedatt--pem))
+- `pem` (Attributes) Reference to the stored RSA private key used for Snowflake authentication. Required for both <code>oauth</code> and <code>keypair</code> authentication. (see [below for nested schema](#nestedatt--pem))
 - `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
 - `role` (String) Snowflake role to use for the session. When set, requests a role-scoped token.
 - `sslmode` (String) HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.
@@ -81,7 +81,7 @@ Required:
 
 Optional:
 
-- `account_identifier` (String) Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).
+- `account_identifier` (String) Snowflake account identifier, either in org-account format (<code>ORGNAME-ACCTNAME</code>) or as a legacy account locator (<code>LOCATOR.REGION.CLOUD</code>).
 - `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
 - `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
 - `connection_timeout` (Integer) Maximum time (in milliseconds) to wait when establishing the database connection.
@@ -91,7 +91,7 @@ Optional:
 - `host` (String) Hostname of the server to connect to.
 - `log_on_mechanism` (String) Log On Mechanism for databases that support multiple, like Teradata.
 - `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
-- `pem` (Attributes) RSA private key configuration for Snowflake key-pair authentication. (see [below for nested schema](#nestedatt--items--pem))
+- `pem` (Attributes) Reference to the stored RSA private key used for Snowflake authentication. Required for both <code>oauth</code> and <code>keypair</code> authentication. (see [below for nested schema](#nestedatt--items--pem))
 - `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
 - `role` (String) Snowflake role to use for the session. When set, requests a role-scoped token.
 - `sslmode` (String) HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.
@@ -107,7 +107,7 @@ Optional:
 
 Required:
 
-- `key_name` (String) RSA private key (PEM format) for Snowflake key-pair authentication.
+- `key_name` (String) Name of the stored private key, as listed by <code>/lib/private-keys</code>, to authenticate with.
 
 <a id="nestedatt--items--tls"></a>
 <a id="nestedatt--tls"></a>

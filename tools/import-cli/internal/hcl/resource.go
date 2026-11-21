@@ -57,6 +57,7 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			// Limits PATCH replaces the complete configuration; keep explicit empty lists.
 			"criblio_system_limits":           {"events_metadata_sources", "metrics_drop_list", "metrics_fields_blacklist", "metrics_never_drop_list", "metrics_worker_id_blacklist"},
 			"criblio_project":                 {"subscriptions", "destinations"},
+			"criblio_guard_rule":              {"rulesets"},
 			"criblio_search_dataset_ruleset":  {"rules"},
 			"criblio_search_datatype_ruleset": {"rules"},
 			"criblio_search_dashboard":        {"elements"},

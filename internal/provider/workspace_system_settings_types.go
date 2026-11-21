@@ -497,33 +497,35 @@ func WorkspaceSystemSettingsUpgradeSettingsPackageURLsAttrTypes() map[string]att
 }
 
 type WorkspaceSystemSettingsWorkersModel struct {
-	Count                                types.Int64 `tfsdk:"count" json:"count,omitempty"`
-	EnableHeapSnapshots                  types.Bool  `tfsdk:"enable_heap_snapshots" json:"enableHeapSnapshots,omitempty"`
-	LoadThrottlePerc                     types.Int64 `tfsdk:"load_throttle_perc" json:"loadThrottlePerc,omitempty"`
-	Memory                               types.Int64 `tfsdk:"memory" json:"memory,omitempty"`
-	Minimum                              types.Int64 `tfsdk:"minimum" json:"minimum,omitempty"`
-	RestartUnresponsiveProcesses         types.Bool  `tfsdk:"restart_unresponsive_processes" json:"restartUnresponsiveProcesses,omitempty"`
-	StartupMaxConns                      types.Int64 `tfsdk:"startup_max_conns" json:"startupMaxConns,omitempty"`
-	StartupThrottleTimeout               types.Int64 `tfsdk:"startup_throttle_timeout" json:"startupThrottleTimeout,omitempty"`
-	V8SingleThread                       types.Bool  `tfsdk:"v8_single_thread" json:"v8SingleThread,omitempty"`
-	WorkerProcessConfigUpdateConcurrency types.Int64 `tfsdk:"worker_process_config_update_concurrency" json:"workerProcessConfigUpdateConcurrency,omitempty"`
-	WorkerProcessReloadTimeout           types.Int64 `tfsdk:"worker_process_reload_timeout" json:"workerProcessReloadTimeout,omitempty"`
-	WorkerThreadPoolSize                 types.Int64 `tfsdk:"worker_thread_pool_size" json:"workerThreadPoolSize,omitempty"`
+	Count                                types.Int64  `tfsdk:"count" json:"count,omitempty"`
+	EnableHeapSnapshots                  types.Bool   `tfsdk:"enable_heap_snapshots" json:"enableHeapSnapshots,omitempty"`
+	LoadThrottlePerc                     types.Int64  `tfsdk:"load_throttle_perc" json:"loadThrottlePerc,omitempty"`
+	Memory                               types.Int64  `tfsdk:"memory" json:"memory,omitempty"`
+	Minimum                              types.Int64  `tfsdk:"minimum" json:"minimum,omitempty"`
+	RestartUnresponsiveProcesses         types.Bool   `tfsdk:"restart_unresponsive_processes" json:"restartUnresponsiveProcesses,omitempty"`
+	SchedulingPolicy                     types.String `tfsdk:"scheduling_policy" json:"schedulingPolicy,omitempty"`
+	StartupMaxConns                      types.Int64  `tfsdk:"startup_max_conns" json:"startupMaxConns,omitempty"`
+	StartupThrottleTimeout               types.Int64  `tfsdk:"startup_throttle_timeout" json:"startupThrottleTimeout,omitempty"`
+	V8SingleThread                       types.Bool   `tfsdk:"v8_single_thread" json:"v8SingleThread,omitempty"`
+	WorkerProcessConfigUpdateConcurrency types.Int64  `tfsdk:"worker_process_config_update_concurrency" json:"workerProcessConfigUpdateConcurrency,omitempty"`
+	WorkerProcessReloadTimeout           types.Int64  `tfsdk:"worker_process_reload_timeout" json:"workerProcessReloadTimeout,omitempty"`
+	WorkerThreadPoolSize                 types.Int64  `tfsdk:"worker_thread_pool_size" json:"workerThreadPoolSize,omitempty"`
 }
 
 type WorkspaceSystemSettingsWorkersAPIModel struct {
-	Count                                *int64 `json:"count,omitempty"`
-	EnableHeapSnapshots                  *bool  `json:"enableHeapSnapshots,omitempty"`
-	LoadThrottlePerc                     *int64 `json:"loadThrottlePerc,omitempty"`
-	Memory                               *int64 `json:"memory,omitempty"`
-	Minimum                              *int64 `json:"minimum,omitempty"`
-	RestartUnresponsiveProcesses         *bool  `json:"restartUnresponsiveProcesses,omitempty"`
-	StartupMaxConns                      *int64 `json:"startupMaxConns,omitempty"`
-	StartupThrottleTimeout               *int64 `json:"startupThrottleTimeout,omitempty"`
-	V8SingleThread                       *bool  `json:"v8SingleThread,omitempty"`
-	WorkerProcessConfigUpdateConcurrency *int64 `json:"workerProcessConfigUpdateConcurrency,omitempty"`
-	WorkerProcessReloadTimeout           *int64 `json:"workerProcessReloadTimeout,omitempty"`
-	WorkerThreadPoolSize                 *int64 `json:"workerThreadPoolSize,omitempty"`
+	Count                                *int64  `json:"count,omitempty"`
+	EnableHeapSnapshots                  *bool   `json:"enableHeapSnapshots,omitempty"`
+	LoadThrottlePerc                     *int64  `json:"loadThrottlePerc,omitempty"`
+	Memory                               *int64  `json:"memory,omitempty"`
+	Minimum                              *int64  `json:"minimum,omitempty"`
+	RestartUnresponsiveProcesses         *bool   `json:"restartUnresponsiveProcesses,omitempty"`
+	SchedulingPolicy                     *string `json:"schedulingPolicy,omitempty"`
+	StartupMaxConns                      *int64  `json:"startupMaxConns,omitempty"`
+	StartupThrottleTimeout               *int64  `json:"startupThrottleTimeout,omitempty"`
+	V8SingleThread                       *bool   `json:"v8SingleThread,omitempty"`
+	WorkerProcessConfigUpdateConcurrency *int64  `json:"workerProcessConfigUpdateConcurrency,omitempty"`
+	WorkerProcessReloadTimeout           *int64  `json:"workerProcessReloadTimeout,omitempty"`
+	WorkerThreadPoolSize                 *int64  `json:"workerThreadPoolSize,omitempty"`
 }
 
 func WorkspaceSystemSettingsWorkersAttrTypes() map[string]attr.Type {
@@ -534,6 +536,7 @@ func WorkspaceSystemSettingsWorkersAttrTypes() map[string]attr.Type {
 		"memory":                         types.Int64Type,
 		"minimum":                        types.Int64Type,
 		"restart_unresponsive_processes": types.BoolType,
+		"scheduling_policy":              types.StringType,
 		"startup_max_conns":              types.Int64Type,
 		"startup_throttle_timeout":       types.Int64Type,
 		"v8_single_thread":               types.BoolType,

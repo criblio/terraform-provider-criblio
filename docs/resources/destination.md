@@ -62,7 +62,7 @@ variable "aws_secret_key" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String) Unique ID for this output
+- `id` (String) Unique name for this output
 
 ### Read-Only
 
@@ -104,6 +104,7 @@ variable "aws_secret_key" {
 - `output_msk` (Attributes) (see [below for nested schema](#nestedatt--output_msk))
 - `output_elastic` (Attributes) (see [below for nested schema](#nestedatt--output_elastic))
 - `output_elastic_cloud` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud))
+- `output_elastic_serverless` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_serverless))
 - `output_newrelic` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic))
 - `output_newrelic_events` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events))
 - `output_influxdb` (Attributes) (see [below for nested schema](#nestedatt--output_influxdb))
@@ -150,14 +151,31 @@ variable "aws_secret_key" {
 - `output_microsoft_fabric` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric))
 - `output_cloudflare_r2` (Attributes) (see [below for nested schema](#nestedatt--output_cloudflare_r2))
 - `output_nutanix_objects` (Attributes) (see [below for nested schema](#nestedatt--output_nutanix_objects))
+- `output_backblaze_b2` (Attributes) (see [below for nested schema](#nestedatt--output_backblaze_b2))
 - `output_storj_s3` (Attributes) (see [below for nested schema](#nestedatt--output_storj_s3))
 - `output_alphasoc_s3` (Attributes) (see [below for nested schema](#nestedatt--output_alphasoc_s3))
 - `output_dell_s3` (Attributes) (see [below for nested schema](#nestedatt--output_dell_s3))
+- `output_wasabi` (Attributes) (see [below for nested schema](#nestedatt--output_wasabi))
+- `output_seagate_lyve_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_seagate_lyve_cloud_s3))
 - `output_cloudian_s3` (Attributes) (see [below for nested schema](#nestedatt--output_cloudian_s3))
 - `output_scality_s3` (Attributes) (see [below for nested schema](#nestedatt--output_scality_s3))
+- `output_akamai_object_storage_s3` (Attributes) (see [below for nested schema](#nestedatt--output_akamai_object_storage_s3))
 - `output_alibaba_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_alibaba_cloud_s3))
+- `output_exoscale_sos_s3` (Attributes) (see [below for nested schema](#nestedatt--output_exoscale_sos_s3))
+- `output_ionos_s3_object_storage` (Attributes) (see [below for nested schema](#nestedatt--output_ionos_s3_object_storage))
+- `output_fastly_object_storage_s3` (Attributes) (see [below for nested schema](#nestedatt--output_fastly_object_storage_s3))
+- `output_impossible_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_impossible_cloud_s3))
+- `output_dreamobjects_s3` (Attributes) (see [below for nested schema](#nestedatt--output_dreamobjects_s3))
+- `output_filebase_s3` (Attributes) (see [below for nested schema](#nestedatt--output_filebase_s3))
+- `output_tencent_cloud_cos_s3` (Attributes) (see [below for nested schema](#nestedatt--output_tencent_cloud_cos_s3))
+- `output_ovhcloud_object_storage_s3` (Attributes) (see [below for nested schema](#nestedatt--output_ovhcloud_object_storage_s3))
+- `output_scaleway_object_storage_s3` (Attributes) (see [below for nested schema](#nestedatt--output_scaleway_object_storage_s3))
+- `output_digitalocean_spaces_s3` (Attributes) (see [below for nested schema](#nestedatt--output_digitalocean_spaces_s3))
 - `output_ibm_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_ibm_cloud_s3))
+- `output_oracle_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_oracle_cloud_s3))
 - `output_databricks_zerobus` (Attributes) (see [below for nested schema](#nestedatt--output_databricks_zerobus))
+- `output_securonix` (Attributes) (see [below for nested schema](#nestedatt--output_securonix))
+- `output_fortisiem` (Attributes) (see [below for nested schema](#nestedatt--output_fortisiem))
 
 <a id="nestedatt--output_default"></a>
 ### Nested Schema for `output_default`
@@ -170,6 +188,7 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String)
 - `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `schema_monitor_settings` (Attributes) Configuration for Schema Monitor on this Destination. (see [below for nested schema](#nestedatt--output_default--schema_monitor_settings))
 - `default_id` (String) ID of the default output. This will be used whenever a nonexistent/deleted output is referenced.
 
 <a id="nestedatt--output_webhook"></a>
@@ -183,6 +202,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_webhook--schema_monitor_settings))
 - `method` (String) The method to use when sending events
 - `format` (String) How to format events before sending out
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
@@ -206,6 +226,7 @@ Optional:
 - `tls` (Attributes) TLS settings (client side) (see [below for nested schema](#nestedatt--output_webhook--tls))
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
+- `dynamic_headers_field` (String) When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.
 - `description` (String) Optional description for this configuration.
 - `custom_source_expression` (String) Expression to evaluate on events to generate output. Example: `raw=${_raw}`. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.
 - `custom_drop_when_null` (Boolean) Whether to drop events when the source expression evaluates to null
@@ -222,7 +243,7 @@ Optional:
 - `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
 - `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Defaults to $CRIBL_HOME/state/queues.
 - `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
@@ -261,6 +282,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--schema_monitor_settings))
 - `keep_alive` (Boolean)
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number) Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)
@@ -289,6 +311,7 @@ Optional:
 - `client_id` (String) JavaScript expression to compute the Client ID for the Azure application. Can be a constant.
 - `scope` (String) Scope to pass in the OAuth request
 - `endpoint_urlconfiguration` (String) Enter the data collection endpoint URL or the individual ID
+- `dynamic_headers_field` (String) Event field to use for dynamic headers and batching
 - `total_memory_limit_kb` (Number)
 - `description` (String)
 - `format` (String)
@@ -329,6 +352,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_devnull--schema_monitor_settings))
 
 <a id="nestedatt--output_syslog"></a>
 ### Nested Schema for `output_syslog`
@@ -341,6 +365,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_syslog--schema_monitor_settings))
 - `protocol` (String) The network protocol to use for sending out syslog messages
 - `facility` (Integer) Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user.
 - `severity` (Integer) Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice.
@@ -348,6 +373,7 @@ Optional:
 - `message_format` (String) The syslog message format depending on the receiver's support
 - `timestamp_format` (String) Timestamp format to use when serializing event's time field
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `throttle_burst_disabled` (Boolean) When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttling is set.
 - `octet_count_framing` (Boolean) Prefix messages with the byte count of the message. If disabled, no prefix will be set, and the message will be appended with a \n.
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
 - `description` (String)
@@ -390,10 +416,12 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--schema_monitor_settings))
 - `host` (String)
 - `port` (Number)
 - `nested_fields` (String) How to serialize nested fields into index-time fields
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--tls))
@@ -432,11 +460,13 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_lb--schema_monitor_settings))
 - `dns_resolve_period_sec` (Number)
 - `load_balance_stats_period_sec` (Number)
 - `max_concurrent_senders` (Number)
 - `nested_fields` (String)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_lb--tls))
@@ -480,6 +510,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--schema_monitor_settings))
 - `load_balanced` (Boolean)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--tls))
 - `concurrency` (Number)
@@ -498,6 +529,7 @@ Optional:
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_splunk_hec--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
+- `throttle_rate_per_sec` (String)
 - `next_queue` (String) In the Splunk app, define which Splunk processing queue to send the events after HEC processing.
 - `tcp_routing` (String) In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.
 - `on_backpressure` (String)
@@ -534,6 +566,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec--schema_monitor_settings))
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec--tls))
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
@@ -550,6 +583,7 @@ Optional:
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_wiz_hec--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
+- `throttle_rate_per_sec` (String)
 - `wiz_connector_id` (String) The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration.
 - `wiz_environment` (String) Your Wiz deployment environment
 - `data_center` (String) Your Wiz deployment data center (such as us1, us8, or eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.
@@ -584,10 +618,12 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_tcpjson--schema_monitor_settings))
 - `load_balanced` (Boolean) Use load-balanced destinations
 - `compression` (String) Codec to use to compress the data before sending
 - `log_failed_requests` (Boolean)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_tcpjson--tls))
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
@@ -629,6 +665,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wavefront--schema_monitor_settings))
 - `auth_type` (String)
 - `domain` (String) WaveFront domain name, e.g. "longboard"
 - `concurrency` (Number)
@@ -674,6 +711,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx--schema_monitor_settings))
 - `auth_type` (String)
 - `realm` (String) SignalFx realm name, e.g. "us0". For a complete list of available SignalFx realm names, please check [here](https://docs.splunk.com/observability/en/get-started/service-description.html#sd-regions).
 - `concurrency` (Number)
@@ -719,6 +757,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_filesystem--schema_monitor_settings))
 - `dest_path` (String) Final destination for the output files
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
@@ -769,6 +808,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_s3--schema_monitor_settings))
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -802,13 +842,14 @@ Optional:
 - `force_close_on_shutdown` (Boolean)
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_s3--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_s3--orphans))
-- `aws_secret_key` (String, Sensitive) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
+- `aws_secret_key` (String, Sensitive) Secret key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.
 - `object_acl` (String) Object ACL to assign to uploaded objects
 - `storage_class` (String) Storage class to select for uploaded objects
 - `server_side_encryption` (String) Server-side encryption to use for uploaded objects
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
+- `object_tags` (Attributes List) Key-value tags set on each uploaded object (see [below for nested schema](#nestedatt--output_s3--object_tags))
 - `description` (String)
-- `aws_api_key` (String, Sensitive) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
+- `aws_api_key` (String, Sensitive) This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`. If empty, IAM roles will be used.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -839,6 +880,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--schema_monitor_settings))
 - `container_name` (String) The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`.
 - `create_container` (Boolean) Create the configured container in Azure Blob Storage if it does not already exist
 - `dest_path` (String) Root directory prepended to path before uploading. Value can be a JavaScript expression enclosed in quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myBlobPrefix-${C.env["CRIBL_WORKER_ID"]}`.
@@ -864,6 +906,7 @@ Optional:
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--orphans))
 - `auth_type` (String) Authentication method
 - `storage_class` (String) Blob access tier
+- `blob_index_tags` (Attributes List) Key-value tags set on each uploaded blob (see [below for nested schema](#nestedatt--output_azure_blob--blob_index_tags))
 - `description` (String)
 - `compress` (String)
 - `compression_level` (String)
@@ -903,6 +946,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--schema_monitor_settings))
 - `cluster_url` (String) The base URI for your cluster. Typically, `https://<cluster>.<region>.kusto.windows.net`.
 - `database` (String) Name of the database containing the table where data will be ingested
 - `table` (String) Name of the table to ingest data into
@@ -957,10 +1001,10 @@ Optional:
 - `flush_immediately` (Boolean) Bypass the data management service's aggregation mechanism
 - `retain_blob_on_success` (Boolean) Prevent blob deletion after ingestion is complete
 - `extent_tags` (Attributes List) Strings or tags associated with the extent (ingested data shard) (see [below for nested schema](#nestedatt--output_azure_data_explorer--extent_tags))
-- `ingest_if_not_exists` (Attributes List) Prevents duplicate ingestion by verifying whether an extent with the specified ingest-by tag already exists (see [below for nested schema](#nestedatt--output_azure_data_explorer--ingest_if_not_exists))
+- `ingest_if_not_exists` (Attributes List) Prevents duplicate ingestion by verifying whether an extent with the specified ingest-by tag already exists. Typically a value corresponding to an "ingest-by" tag. Example: "Part0001". (see [below for nested schema](#nestedatt--output_azure_data_explorer--ingest_if_not_exists))
 - `report_level` (String) Level of ingestion status reporting. Defaults to FailuresOnly.
 - `report_method` (String) Target of the ingestion status reporting. Defaults to Queue.
-- `additional_properties` (Attributes List) Optionally, enter additional configuration properties to send to the ingestion service (see [below for nested schema](#nestedatt--output_azure_data_explorer--additional_properties))
+- `additional_properties` (Attributes List) Optionally, enter additional configuration properties to send to the ingestion service. The key is the ingestion property field name. Example: "creationTime". (see [below for nested schema](#nestedatt--output_azure_data_explorer--additional_properties))
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_azure_data_explorer--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
@@ -996,6 +1040,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs--schema_monitor_settings))
 - `log_type` (String) The Log Type of events sent to this LogAnalytics workspace. Defaults to `Cribl`. Use only letters, numbers, and `_` characters, and can't exceed 100 characters. Can be overwritten by event field __logType.
 - `resource_id` (String) Optional Resource ID of the Azure resource to associate the data with. Can be overridden by the __resourceId event field. This ID populates the _ResourceId property, allowing the data to be included in resource-centric queries. If the ID is neither specified nor overridden, resource-centric queries will omit the data.
 - `concurrency` (Number)
@@ -1044,6 +1089,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_kinesis--schema_monitor_settings))
 - `stream_name` (String) Kinesis stream name to send events to.
 - `aws_authentication_method` (String)
 - `aws_secret_key` (String, Sensitive) Secret key
@@ -1090,6 +1136,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--schema_monitor_settings))
 - `dataset` (String) Name of the dataset to send events to – e.g., observability
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
@@ -1103,6 +1150,7 @@ Optional:
 - `use_round_robin_dns` (Boolean)
 - `failed_request_logging_mode` (String)
 - `safe_headers` (List of String)
+- `max_top_failure_reasons` (Number) Maximum number of distinct, most-frequent per-event failure reasons to surface in health status and warning logs when a request partially fails. Set to 0 to omit failure reasons from health status and warning logs.
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_honeycomb--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
@@ -1135,6 +1183,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--schema_monitor_settings))
 - `brokers` (List of String) List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
 - `topic` (String) The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.
 - `ack` (Integer) Control the number of required acknowledgments
@@ -1178,6 +1227,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_bigquery--schema_monitor_settings))
 - `project_id` (String) Google Cloud project ID that contains the BigQuery dataset
 - `dataset_id` (String) BigQuery dataset ID
 - `table_id` (String) BigQuery table ID
@@ -1215,6 +1265,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--schema_monitor_settings))
 - `api_version` (String) API version
 - `authentication_method` (String) Authentication method
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_google_chronicle--response_retry_settings))
@@ -1272,6 +1323,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage--schema_monitor_settings))
 - `bucket` (String) Name of the destination bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a Global Variable: `myBucket-${C.vars.myVar}`.
 - `region` (String) Region where the bucket is located
 - `endpoint` (String) Google Cloud Storage service endpoint
@@ -1319,8 +1371,8 @@ Optional:
 - `directory_batch_size` (Number)
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
-- `aws_api_key` (String, Sensitive) HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
-- `aws_secret_key` (String, Sensitive) HMAC secret. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
+- `aws_api_key` (String, Sensitive) HMAC access key. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`.
+- `aws_secret_key` (String, Sensitive) HMAC secret. This value can be a constant or a JavaScript expression. Store credentials as secrets and retrieve them with `C.Secret('mySecret')`.
 - `aws_secret` (String)
 
 <a id="nestedatt--output_google_cloud_logging"></a>
@@ -1334,6 +1386,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_logging--schema_monitor_settings))
 - `log_location_type` (String) Log location type
 - `log_name_expression` (String) JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
 - `sanitize_log_names` (Boolean) Validate and correct log name
@@ -1410,6 +1463,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_observability--schema_monitor_settings))
 - `protocol` (String) Discriminator value.
 - `otlp_version` (String) Discriminator value.
 - `endpoint` (String) Fixed Google Cloud Observability gRPC endpoint. All three signals share this transport; the OTLP service path determines whether the call lands on traces, metrics, or logs.
@@ -1417,7 +1471,7 @@ Optional:
 - `preserve_native_any_value` (Boolean) Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_google_cloud_observability--metadata))
 - `dynamic_headers_enabled` (Boolean) Batch event data upon dynamic metadata (whether presented or not)
-- `dynamic_headers_field` (String) When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.
+- `dynamic_headers_field` (String)
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body sent to Google Cloud Observability
 - `timeout_sec` (Number)
@@ -1455,6 +1509,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_pubsub--schema_monitor_settings))
 - `topic_name` (String) ID of the topic to send events to.
 - `create_topic` (Boolean) If enabled, create topic if it does not exist.
 - `ordered_delivery` (Boolean) If enabled, send events in the order they were added to the queue. For this to work correctly, the process receiving events must have ordering enabled.
@@ -1494,6 +1549,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_exabeam--schema_monitor_settings))
 - `bucket` (String) Name of the destination bucket. A constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a JavaScript Global Variable: `myBucket-${C.vars.myVar}`.
 - `region` (String)
 - `stage_path` (String)
@@ -1523,8 +1579,8 @@ Optional:
 - `forwarder` (String) JavaScript expression for the host that forwarded the log, evaluated per event. Static values must be quoted or backticked (for example, 'fwd-1'); unquoted text is evaluated as JavaScript, not as a literal. To reference an event field use an expression, such as `${__forwarder}`. Emitted as the "forwarder" metadata field; omitted when empty or not a usable scalar.
 - `origin` (String) JavaScript expression that must resolve to an object describing the interim agent collector, such as {hostname: origin_host, '@timestamp': _time, path: source}. Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "origin" metadata field; omitted when the result is not a non-empty object.
 - `logtags` (String) JavaScript expression that must resolve to an object of custom metadata key/value pairs (searchable in Exabeam as m_c_logtags_<name>). Assemble the object upstream and reference it here (example: __exabeam_logtags), or build it inline (example: {department: dept, servertype: stype}). Evaluated per event. Unquoted text is evaluated as JavaScript, not as a literal. Emitted as the "logtags" metadata field; omitted when the result is not a non-empty object.
-- `aws_api_key` (String, Sensitive) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
-- `aws_secret_key` (String, Sensitive) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
+- `aws_api_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive)
 - `description` (String)
 - `empty_dir_cleanup_sec` (Number)
 - `directory_batch_size` (Number)
@@ -1543,6 +1599,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--schema_monitor_settings))
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.
 - `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
 - `ack` (Integer) Control the number of required acknowledgments.
@@ -1562,6 +1619,7 @@ Optional:
 - `reauthentication_threshold` (Number)
 - `sasl` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--sasl))
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--tls))
+- `dynamic_headers_field` (String)
 - `on_backpressure` (String)
 - `description` (String)
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
@@ -1590,6 +1648,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--schema_monitor_settings))
 - `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--tls))
 - `topic` (String)
@@ -1609,6 +1668,7 @@ Optional:
 - `authentication_timeout` (Number)
 - `reauthentication_threshold` (Number)
 - `sasl` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--sasl))
+- `dynamic_headers_field` (String)
 - `on_backpressure` (String)
 - `description` (String)
 - `protobuf_library_id` (String)
@@ -1637,6 +1697,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_msk--schema_monitor_settings))
 - `brokers` (List of String)
 - `topic` (String)
 - `ack` (Integer)
@@ -1654,6 +1715,7 @@ Optional:
 - `backoff_rate` (Number)
 - `authentication_timeout` (Number)
 - `reauthentication_threshold` (Number)
+- `dynamic_headers_field` (String)
 - `aws_authentication_method` (String)
 - `aws_secret_key` (String, Sensitive)
 - `region` (String) Region where the MSK cluster is located
@@ -1695,6 +1757,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--schema_monitor_settings))
 - `load_balanced` (Boolean)
 - `index` (String) Index or data stream to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
 - `doc_type` (String) Document type to use for events. Can be overwritten by an event's __type field.
@@ -1709,6 +1772,7 @@ Optional:
 - `extra_http_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--extra_http_headers))
 - `failed_request_logging_mode` (String)
 - `safe_headers` (List of String)
+- `max_top_failure_reasons` (Number)
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
@@ -1751,6 +1815,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--schema_monitor_settings))
 - `url` (String) Enter Cloud ID of the Elastic Cloud environment to send events to
 - `index` (String) Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
 - `concurrency` (Number)
@@ -1764,6 +1829,7 @@ Optional:
 - `extra_http_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic_cloud--extra_http_headers))
 - `failed_request_logging_mode` (String)
 - `safe_headers` (List of String)
+- `max_top_failure_reasons` (Number)
 - `extra_params` (Attributes List) Extra parameters to use in HTTP requests (see [below for nested schema](#nestedatt--output_elastic_cloud--extra_params))
 - `auth` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--auth))
 - `elastic_pipeline` (String) Optional Elastic Cloud Destination pipeline
@@ -1773,6 +1839,60 @@ Optional:
 - `response_honor_retry_after_header` (Boolean)
 - `on_backpressure` (String)
 - `description` (String)
+- `pq_strict_ordering` (Boolean)
+- `pq_rate_per_sec` (Number)
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number)
+- `pq_max_backpressure_sec` (Number)
+- `pq_max_file_size` (String)
+- `pq_max_size` (String)
+- `pq_path` (String)
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String)
+- `pq_controls` (Map of String)
+
+<a id="nestedatt--output_elastic_serverless"></a>
+### Nested Schema for `output_elastic_serverless`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_serverless--schema_monitor_settings))
+- `connection_mode` (String) Connection mode
+- `index` (String)
+- `concurrency` (Number)
+- `max_payload_size_kb` (Number)
+- `max_payload_events` (Number)
+- `compress` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `timeout_sec` (Number)
+- `max_connection_reuse_sec` (Number)
+- `flush_period_sec` (Number)
+- `extra_http_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic_serverless--extra_http_headers))
+- `failed_request_logging_mode` (String)
+- `safe_headers` (List of String)
+- `max_top_failure_reasons` (Number)
+- `extra_params` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic_serverless--extra_params))
+- `text_secret` (String)
+- `elastic_pipeline` (String) Optional Elastic Serverless destination pipeline
+- `include_doc_id` (Boolean)
+- `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic_serverless--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_serverless--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean)
+- `retry_partial_errors` (Boolean)
+- `on_backpressure` (String)
+- `description` (String)
+- `cloud_id` (String) Elastic Cloud ID for the Serverless project. Found in the Elastic Cloud console under your project settings.
+- `project_name` (String) Elastic Serverless project name (alias). Combined with the project ID to form the endpoint subdomain.
+- `project_id` (String) Elastic Serverless project ID. Found in the Elastic Cloud console under your project settings.
+- `cloud_provider` (String) Cloud provider where the Elastic Serverless project is hosted
+- `region` (String) Region where the Elastic Serverless project is deployed
 - `pq_strict_ordering` (Boolean)
 - `pq_rate_per_sec` (Number)
 - `pq_mode` (String)
@@ -1797,6 +1917,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic--schema_monitor_settings))
 - `region` (String) Which New Relic region endpoint to use.
 - `log_type` (String) Name of the logtype to send with events, e.g.: observability, access_log. The event's 'sourcetype' field (if set) will override this value.
 - `message_field` (String) Name of field to send as log message value. If not present, event will be serialized and sent as JSON.
@@ -1847,6 +1968,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events--schema_monitor_settings))
 - `region` (String)
 - `account_id` (String) New Relic account ID
 - `event_type` (String) Default New Relic eventType to use when event type is not present. For more information, see the [New Relic eventType documentation](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words).
@@ -1895,6 +2017,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_influxdb--schema_monitor_settings))
 - `url` (String) URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write
 - `use_v2_api` (Boolean) The v2 API can be enabled with InfluxDB versions 1.8 and later.
 - `timestamp_precision` (String) Sets the precision for the supplied Unix time values. Defaults to milliseconds.
@@ -1950,6 +2073,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cloudwatch--schema_monitor_settings))
 - `log_group_name` (String) CloudWatch log group to associate events with
 - `log_stream_name` (String) Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId
 - `aws_authentication_method` (String)
@@ -1993,6 +2117,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_minio--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -2058,6 +2183,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_statsd--schema_monitor_settings))
 - `protocol` (String) Protocol to use when communicating with the destination.
 - `host` (String) The hostname of the destination.
 - `port` (Number) Destination port.
@@ -2066,6 +2192,7 @@ Optional:
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
 - `description` (String)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
 - `on_backpressure` (String)
@@ -2093,6 +2220,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_statsd_ext--schema_monitor_settings))
 - `protocol` (String)
 - `host` (String)
 - `port` (Number)
@@ -2101,6 +2229,7 @@ Optional:
 - `dns_resolve_period_sec` (Number)
 - `description` (String)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
 - `on_backpressure` (String)
@@ -2128,6 +2257,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_graphite--schema_monitor_settings))
 - `protocol` (String)
 - `host` (String)
 - `port` (Number)
@@ -2136,6 +2266,7 @@ Optional:
 - `dns_resolve_period_sec` (Number)
 - `description` (String)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
 - `on_backpressure` (String)
@@ -2163,6 +2294,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_router--schema_monitor_settings))
 - `report_branch_metrics` (Boolean) Report per-rule event counts and percentages as internal metrics (router.out_events, router.out_events_pct, router.in_events, router.unmatched_events, router.unmatched_events_pct). Adds metric series per rule.
 - `rules` (Attributes List) Event routing rules (see [below for nested schema](#nestedatt--output_router--rules))
 - `description` (String)
@@ -2178,6 +2310,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sns--schema_monitor_settings))
 - `topic_arn` (String) The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`
 - `message_group_id` (String) Messages in the same group are processed in a FIFO manner. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `max_retries` (Number) Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.
@@ -2219,6 +2352,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sqs--schema_monitor_settings))
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `queue_type` (String) The queue type used (or created). Defaults to Standard.
 - `aws_account_id` (String) SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.
@@ -2266,6 +2400,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_snmp--schema_monitor_settings))
 - `hosts` (Attributes List) One or more SNMP destinations to forward traps to (see [below for nested schema](#nestedatt--output_snmp--hosts))
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.
 - `enable_ip_spoofing` (Boolean) Send SNMP Trap traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
@@ -2283,6 +2418,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sumo_logic--schema_monitor_settings))
 - `url` (String) Sumo Logic HTTP collector URL to which events should be sent
 - `custom_source` (String) Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.
 - `custom_category` (String) Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.
@@ -2329,6 +2465,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_datadog--schema_monitor_settings))
 - `content_type` (String) The content type to use when sending logs
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
 - `source` (String) Name of the source to send with logs. When you send logs as JSON objects, the event's 'source' field (if set) will override this value.
@@ -2386,6 +2523,7 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--schema_monitor_settings))
 - `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
 - `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
 - `message` (String)
@@ -2435,6 +2573,7 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs.
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_loki--schema_monitor_settings))
 - `url` (String) The endpoint to send logs to
 - `message` (String)
 - `message_format` (String)
@@ -2454,7 +2593,8 @@ Optional:
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_loki--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_loki--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
-- `enable_dynamic_headers` (Boolean) Add per-event HTTP headers from the __headers field to outgoing requests. Events with different headers are batched and sent separately.
+- `enable_dynamic_headers` (Boolean) Add per-event HTTP headers from the dynamic headers field to outgoing requests. Events with different headers are batched and sent separately.
+- `dynamic_headers_field` (String) When present, this field, which contains per-event HTTP headers, will be added to outgoing requests and used to batch events.
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number)
 - `description` (String)
@@ -2488,7 +2628,8 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
 - `environment` (String)
 - `streamtags` (List of String)
-- `url` (String) The Amazon Managed Service for Prometheus remote_write endpoint
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_amazon_managed_prometheus--schema_monitor_settings))
+- `url` (String) The Amazon Managed Service for Prometheus remote_write endpoint. For example: https://aps-workspaces.us-east-1.amazonaws.com/workspaces/ws-example/api/v1/remote_write.
 - `aws_authentication_method` (String)
 - `aws_secret_key` (String, Sensitive)
 - `region` (String) Region where the AMSP is located
@@ -2541,10 +2682,12 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
-- `url` (String) The endpoint to send metrics to
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--schema_monitor_settings))
+- `url` (String) The endpoint to send metrics to. Example: http://localhost:9200/write
 - `metric_rename_expr` (String)
 - `send_metadata` (Boolean)
 - `use_prometheus_histogram_bucket_suffix` (Boolean)
+- `nan_as_staleness_marker` (Boolean) Write every NaN value as a Prometheus staleness marker, so the remote store ends the series instead of storing NaN. Real NaN values are written as markers too.
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
 - `max_payload_events` (Number)
@@ -2600,6 +2743,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ring--schema_monitor_settings))
 - `format` (String) Format of the output data.
 - `partition_expr` (String) JS expression to define how files are partitioned and organized. If left blank, Cribl Stream will fallback on event.__partition.
 - `max_data_size` (String) Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.
@@ -2620,6 +2764,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry--schema_monitor_settings))
 - `protocol` (String) Select a transport option for OpenTelemetry
 - `endpoint` (String) The endpoint where OTel events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Unspecified ports will default to 4317, unless the endpoint is an HTTPS-based URL or TLS is enabled, in which case 443 will be used.
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send
@@ -2689,6 +2834,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--schema_monitor_settings))
 - `endpoint` (String) The endpoint where ServiceNow events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
 - `token_secret` (String) Select or create a stored text secret
 - `auth_token_name` (String) Auth token name
@@ -2746,6 +2892,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dataset--schema_monitor_settings))
 - `message_field` (String) Name of the event field that contains the message or attributes to send. If not specified, all of the event's non-internal fields will be sent as attributes.
 - `exclude_fields` (List of String) Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields.
 - `server_host_field` (String) Name of the event field that contains the `serverHost` identifier. If not specified, defaults to `cribl_<outputId>`.
@@ -2798,10 +2945,12 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp--schema_monitor_settings))
 - `load_balanced` (Boolean)
 - `compression` (String)
 - `log_failed_requests` (Boolean)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp--tls))
 - `connection_timeout` (Number)
 - `write_timeout` (Number)
@@ -2812,8 +2961,10 @@ Optional:
 - `description` (String)
 - `host` (String)
 - `port` (Number)
-- `exclude_self` (Boolean)
+- `endpoint_source` (String) Whether to use statically configured endpoints or an Endpoint List
 - `hosts` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_tcp--hosts))
+- `endpoint_list` (Attributes) Endpoint List (see [below for nested schema](#nestedatt--output_cribl_tcp--endpoint_list))
+- `exclude_self` (Boolean)
 - `dns_resolve_period_sec` (Number)
 - `load_balance_stats_period_sec` (Number)
 - `max_concurrent_senders` (Number)
@@ -2841,6 +2992,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--schema_monitor_settings))
 - `load_balanced` (Boolean)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--tls))
 - `token_ttlminutes` (Number) The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
@@ -2857,6 +3009,7 @@ Optional:
 - `failed_request_logging_mode` (String)
 - `safe_headers` (List of String)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_http--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
@@ -2865,8 +3018,10 @@ Optional:
 - `description` (String)
 - `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `use_round_robin_dns` (Boolean)
-- `exclude_self` (Boolean)
+- `endpoint_source` (String)
 - `urls` (Attributes List) Cribl Worker endpoints (see [below for nested schema](#nestedatt--output_cribl_http--urls))
+- `endpoint_list` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--endpoint_list))
+- `exclude_self` (Boolean)
 - `dns_resolve_period_sec` (Number)
 - `load_balance_stats_period_sec` (Number)
 - `pq_strict_ordering` (Boolean)
@@ -2893,6 +3048,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_search_engine--schema_monitor_settings))
 - `load_balanced` (Boolean)
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_search_engine--tls))
 - `token_ttlminutes` (Number)
@@ -2909,6 +3065,7 @@ Optional:
 - `failed_request_logging_mode` (String)
 - `safe_headers` (List of String)
 - `throttle_rate_per_sec` (String)
+- `throttle_burst_disabled` (Boolean)
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_search_engine--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_search_engine--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
@@ -2918,8 +3075,10 @@ Optional:
 - `use_round_robin_dns` (Boolean)
 - `description` (String)
 - `url` (String)
-- `exclude_self` (Boolean)
+- `endpoint_source` (String)
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_search_engine--urls))
+- `endpoint_list` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_search_engine--endpoint_list))
+- `exclude_self` (Boolean)
 - `dns_resolve_period_sec` (Number)
 - `load_balance_stats_period_sec` (Number)
 - `pq_strict_ordering` (Boolean)
@@ -2946,6 +3105,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_humio_hec--schema_monitor_settings))
 - `url` (String) URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
@@ -2992,6 +3152,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--schema_monitor_settings))
 - `url` (String) URL provided from a CrowdStrike data connector. Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
@@ -3038,6 +3199,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dl_s3--schema_monitor_settings))
 - `endpoint` (String)
 - `enable_assume_role` (Boolean)
 - `assume_role_arn` (String)
@@ -3108,6 +3270,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_security_lake--schema_monitor_settings))
 - `endpoint` (String) Amazon Security Lake service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Amazon Security Lake-compatible endpoint.
 - `enable_assume_role` (Boolean)
 - `assume_role_arn` (String)
@@ -3174,6 +3337,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake--schema_monitor_settings))
 - `stage_path` (String)
 - `add_id_to_stage_path` (Boolean)
 - `remove_empty_dirs` (Boolean)
@@ -3228,6 +3392,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_disk_spool--schema_monitor_settings))
 - `time_window` (String) Time period for grouping spooled events. Default is 10m.
 - `max_data_size` (String) Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.
 - `max_data_time` (String) Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.
@@ -3246,6 +3411,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--schema_monitor_settings))
 - `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/
 - `auth_type` (String)
 - `database` (String) ClickHouse database
@@ -3305,6 +3471,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_customer_metrics_storage--schema_monitor_settings))
 - `url` (String)
 - `auth_type` (String)
 - `database` (String)
@@ -3364,6 +3531,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--schema_monitor_settings))
 - `url` (String) URL of the database instance. Example: http://localhost:8123/
 - `auth_type` (String)
 - `database` (String) Database
@@ -3425,6 +3593,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam--schema_monitor_settings))
 - `load_balanced` (Boolean)
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
@@ -3442,6 +3611,8 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
 - `throttle_rate_req_per_sec` (Integer) Maximum number of requests to limit to per second
+- `throttle_burst_disabled` (Boolean) When bursts are disabled, the throttle rate is a hard limit and applies immediately. Otherwise, the throttle rate is an average over 1 hour and traffic may temporarily exceed the limit (bursts). Bursts are allowed by default. Applies only when Throttle request rate limit is set.
+- `dynamic_headers_field` (String) The metadata in this field will be included with the Destination metadata and used to batch events
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number)
 - `description` (String)
@@ -3477,6 +3648,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_netflow--schema_monitor_settings))
 - `hosts` (Attributes List) One or more NetFlow Destinations to forward events to (see [below for nested schema](#nestedatt--output_netflow--hosts))
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup.
 - `enable_ip_spoofing` (Boolean) Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
@@ -3494,6 +3666,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http--schema_monitor_settings))
 - `method` (String)
 - `keep_alive` (Boolean)
 - `concurrency` (Number)
@@ -3516,6 +3689,7 @@ Optional:
 - `format` (String) How to format events before sending. Defaults to JSON. Plaintext is not currently supported.
 - `endpoint` (String) Endpoint
 - `telemetry_type` (String) Telemetry type
+- `dynamic_headers_field` (String)
 - `total_memory_limit_kb` (Number)
 - `description` (String)
 - `pq_strict_ordering` (Boolean)
@@ -3547,6 +3721,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--schema_monitor_settings))
 - `protocol` (String) Select a transport option for Dynatrace
 - `endpoint` (String) The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
 - `otlp_version` (String)
@@ -3604,6 +3779,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_traversal_otlp--schema_monitor_settings))
 - `auth_type` (String)
 - `endpoint` (String) The endpoint where OTel log events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets).
 - `protocol` (String)
@@ -3667,6 +3843,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--schema_monitor_settings))
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number)
 - `max_payload_events` (Number)
@@ -3682,6 +3859,7 @@ Optional:
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean)
+- `throttle_rate_per_sec` (String)
 - `region` (String) The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.
 - `endpoint` (String) Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).
 - `on_backpressure` (String)
@@ -3727,6 +3905,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle--schema_monitor_settings))
 - `api_version` (String)
 - `authentication_method` (String)
 - `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_chronicle--response_retry_settings))
@@ -3782,6 +3961,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_databricks--schema_monitor_settings))
 - `dest_path` (String) Optional path to prepend to files before uploading.
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.
 - `add_id_to_stage_path` (Boolean)
@@ -3841,6 +4021,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_snowflake_streaming--schema_monitor_settings))
 - `account_identifier` (String) Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT)
 - `user` (String) Snowflake user with key-pair authentication configured
 - `pem` (Attributes) Private key (see [below for nested schema](#nestedatt--output_snowflake_streaming--pem))
@@ -3848,7 +4029,7 @@ Optional:
 - `schema` (String) Target schema
 - `table` (String) Target table
 - `url` (String) Override endpoint URL (for PrivateLink or custom deployments). Defaults to https://<accountIdentifier>.snowflakecomputing.com:443
-- `role` (String) Snowflake role to assume for this connection
+- `role` (String) Snowflake role to assume for this connection. Example: ACCOUNTADMIN
 - `keep_alive` (Boolean) Keep connections open between requests. Disable only if experiencing connection pooling issues.
 - `concurrency` (Number)
 - `max_payload_size_kb` (Number) Maximum uncompressed size of each batch. With compression enabled (default), batches are zstd-compressed before sending. Snowflake has observed a ~4 MB limit on the compressed wire size.
@@ -3891,6 +4072,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric--schema_monitor_settings))
 - `topic` (String) Topic name from Fabric Eventstream's endpoint
 - `ack` (Integer)
 - `format` (String)
@@ -3934,6 +4116,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cloudflare_r2--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -3996,6 +4179,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_nutanix_objects--schema_monitor_settings))
 - `aws_authentication_method` (String) Authentication method.
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -4045,6 +4229,66 @@ Optional:
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
 
+<a id="nestedatt--output_backblaze_b2"></a>
+### Nested Schema for `output_backblaze_b2`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_backblaze_b2--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Backblaze B2 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_backblaze_b2--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_backblaze_b2--orphans))
+- `endpoint` (String) Backblaze B2 S3-compatible endpoint URL (example: https://s3.us-west-004.backblazeb2.com). Copy the endpoint and matching region from your bucket details.
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_backblaze_b2--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
 <a id="nestedatt--output_storj_s3"></a>
 ### Nested Schema for `output_storj_s3`
 
@@ -4056,6 +4300,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_storj_s3--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -4115,6 +4360,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_alphasoc_s3--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -4174,6 +4420,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dell_s3--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -4224,6 +4471,126 @@ Optional:
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
 
+<a id="nestedatt--output_wasabi"></a>
+### Nested Schema for `output_wasabi`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wasabi--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Wasabi bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wasabi--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_wasabi--orphans))
+- `endpoint` (String) Wasabi S3-compatible service URL for the region where the bucket is located (example: https://s3.us-east-1.wasabisys.com)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_wasabi--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_seagate_lyve_cloud_s3"></a>
+### Nested Schema for `output_seagate_lyve_cloud_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_seagate_lyve_cloud_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Seagate Lyve Cloud bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_seagate_lyve_cloud_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_seagate_lyve_cloud_s3--orphans))
+- `endpoint` (String) Seagate Lyve Cloud S3-compatible endpoint URL for the region where the bucket is located (example: https://s3.us-east-1.lyvecloud.seagate.com)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_seagate_lyve_cloud_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
 <a id="nestedatt--output_cloudian_s3"></a>
 ### Nested Schema for `output_cloudian_s3`
 
@@ -4235,6 +4602,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cloudian_s3--schema_monitor_settings))
 - `endpoint` (String) Cloudian HyperStore S3-compatible endpoint URL (example: https://s3.hyperstore.example.com)
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
@@ -4299,6 +4667,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_scality_s3--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -4348,6 +4717,66 @@ Optional:
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
 
+<a id="nestedatt--output_akamai_object_storage_s3"></a>
+### Nested Schema for `output_akamai_object_storage_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_akamai_object_storage_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Akamai Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_akamai_object_storage_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_akamai_object_storage_s3--orphans))
+- `endpoint` (String) Akamai Object Storage S3-compatible endpoint URL for the region where the bucket is located (example: https://us-east-1.linodeobjects.com)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_akamai_object_storage_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
 <a id="nestedatt--output_alibaba_cloud_s3"></a>
 ### Nested Schema for `output_alibaba_cloud_s3`
 
@@ -4359,6 +4788,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_alibaba_cloud_s3--schema_monitor_settings))
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
 - `reject_unauthorized` (Boolean)
@@ -4412,6 +4842,614 @@ Optional:
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
 
+<a id="nestedatt--output_exoscale_sos_s3"></a>
+### Nested Schema for `output_exoscale_sos_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_exoscale_sos_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Exoscale SOS bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_exoscale_sos_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_exoscale_sos_s3--orphans))
+- `object_acl` (String)
+- `endpoint` (String) Exoscale SOS S3-compatible zone endpoint URL for the zone where the bucket is located (example: https://sos-ch-gva-2.exo.io)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_exoscale_sos_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_ionos_s3_object_storage"></a>
+### Nested Schema for `output_ionos_s3_object_storage`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ionos_s3_object_storage--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination IONOS S3 Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ionos_s3_object_storage--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_ionos_s3_object_storage--orphans))
+- `object_acl` (String)
+- `endpoint` (String) IONOS S3 Object Storage S3-compatible regional endpoint URL for the region where the bucket is located (example: https://s3.eu-central-2.ionoscloud.com)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_ionos_s3_object_storage--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_fastly_object_storage_s3"></a>
+### Nested Schema for `output_fastly_object_storage_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_fastly_object_storage_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Fastly Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_fastly_object_storage_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_fastly_object_storage_s3--orphans))
+- `endpoint` (String) Fastly Object Storage S3-compatible regional endpoint URL for the region where the bucket is located (example: https://us-east-1.object.fastlystorage.app)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_fastly_object_storage_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_impossible_cloud_s3"></a>
+### Nested Schema for `output_impossible_cloud_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_impossible_cloud_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Impossible Cloud bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_impossible_cloud_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_impossible_cloud_s3--orphans))
+- `endpoint` (String) Impossible Cloud S3-compatible regional storage endpoint URL for the region where the bucket is located (example: https://eu-central-2.storage.impossibleapi.net)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_impossible_cloud_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_dreamobjects_s3"></a>
+### Nested Schema for `output_dreamobjects_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dreamobjects_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination DreamObjects bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dreamobjects_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_dreamobjects_s3--orphans))
+- `endpoint` (String) DreamObjects S3-compatible cluster endpoint URL (example: https://s3.us-east-005.dream.io)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_dreamobjects_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_filebase_s3"></a>
+### Nested Schema for `output_filebase_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_filebase_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Filebase bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_filebase_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_filebase_s3--orphans))
+- `endpoint` (String) Filebase S3-compatible endpoint URL (example: https://s3.filebase.io)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_filebase_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_tencent_cloud_cos_s3"></a>
+### Nested Schema for `output_tencent_cloud_cos_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_tencent_cloud_cos_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Tencent Cloud COS bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_tencent_cloud_cos_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_tencent_cloud_cos_s3--orphans))
+- `endpoint` (String) Tencent Cloud COS S3-compatible endpoint URL for the region where the bucket is located (example: https://cos.ap-guangzhou.myqcloud.com)
+- `server_side_encryption` (String)
+- `kms_key_id` (String)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_tencent_cloud_cos_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_ovhcloud_object_storage_s3"></a>
+### Nested Schema for `output_ovhcloud_object_storage_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ovhcloud_object_storage_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination OVHcloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ovhcloud_object_storage_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_ovhcloud_object_storage_s3--orphans))
+- `object_acl` (String)
+- `endpoint` (String) OVHcloud Object Storage S3-compatible endpoint URL for the region where the bucket is located (example: https://s3.gra.io.cloud.ovh.net)
+- `server_side_encryption` (String)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_ovhcloud_object_storage_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_scaleway_object_storage_s3"></a>
+### Nested Schema for `output_scaleway_object_storage_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_scaleway_object_storage_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Scaleway Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_scaleway_object_storage_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_scaleway_object_storage_s3--orphans))
+- `object_acl` (String)
+- `endpoint` (String) Scaleway Object Storage S3-compatible endpoint URL for the region where the bucket is located (example: https://s3.fr-par.scw.cloud)
+- `storage_class` (String)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_scaleway_object_storage_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
+<a id="nestedatt--output_digitalocean_spaces_s3"></a>
+### Nested Schema for `output_digitalocean_spaces_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_digitalocean_spaces_s3--schema_monitor_settings))
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination DigitalOcean Spaces bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_digitalocean_spaces_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_digitalocean_spaces_s3--orphans))
+- `endpoint` (String) DigitalOcean Spaces S3-compatible endpoint URL for the region where the Space is located (example: https://nyc3.digitaloceanspaces.com)
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_digitalocean_spaces_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
 <a id="nestedatt--output_ibm_cloud_s3"></a>
 ### Nested Schema for `output_ibm_cloud_s3`
 
@@ -4423,6 +5461,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ibm_cloud_s3--schema_monitor_settings))
 - `endpoint` (String) IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean)
@@ -4471,6 +5510,66 @@ Optional:
 - `deadletter_path` (String)
 - `max_retry_num` (Number)
 
+<a id="nestedatt--output_oracle_cloud_s3"></a>
+### Nested Schema for `output_oracle_cloud_s3`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_oracle_cloud_s3--schema_monitor_settings))
+- `endpoint` (String) Oracle Cloud Object Storage S3-compatible endpoint URL (example: https://<namespace>.compat.objectstorage.<region>.oraclecloud.com)
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `bucket` (String) Name of the destination Oracle Cloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String)
+- `max_concurrent_file_parts` (Number)
+- `verify_permissions` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `stage_path` (String)
+- `add_id_to_stage_path` (Boolean)
+- `remove_empty_dirs` (Boolean)
+- `partition_expr` (String)
+- `format` (String)
+- `base_file_name` (String)
+- `file_name_suffix` (String)
+- `max_file_size_mb` (Number)
+- `max_file_open_time_sec` (Number)
+- `max_file_idle_time_sec` (Number)
+- `max_open_files` (Number)
+- `header_line` (String)
+- `write_high_water_mark` (Number)
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean)
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean)
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_oracle_cloud_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_oracle_cloud_s3--orphans))
+- `description` (String)
+- `aws_secret` (String)
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean)
+- `parquet_schema` (String)
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number)
+- `parquet_page_size` (String)
+- `should_log_invalid_rows` (Boolean)
+- `key_value_metadata` (Attributes List) (see [below for nested schema](#nestedatt--output_oracle_cloud_s3--key_value_metadata))
+- `enable_statistics` (Boolean)
+- `enable_write_page_index` (Boolean)
+- `enable_page_checksum` (Boolean)
+- `empty_dir_cleanup_sec` (Number)
+- `directory_batch_size` (Number)
+- `deadletter_path` (String)
+- `max_retry_num` (Number)
+
 <a id="nestedatt--output_databricks_zerobus"></a>
 ### Nested Schema for `output_databricks_zerobus`
 
@@ -4482,6 +5581,7 @@ Optional:
 - `system_fields` (List of String)
 - `environment` (String)
 - `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_databricks_zerobus--schema_monitor_settings))
 - `workspace_url` (String) HTTPS URL of the Databricks Workspace, used for OAuth token exchange (example: https://dbc-1234abcd-5e6f.cloud.databricks.com). Must start with https://
 - `workspace_id` (String) Unique identifier for the Databricks Workspace. Scopes the OAuth token to this Workspace.
 - `zerobus_endpoint` (String) Hostname of the Workspace Zerobus ingest endpoint. Omit the scheme, port, and path (example: 1234567890.zerobus.us-west-2.cloud.databricks.com).
@@ -4510,6 +5610,330 @@ Optional:
 - `pq_max_buffer_size_bytes` (String)
 - `pq_controls` (Map of String)
 
+<a id="nestedatt--output_securonix"></a>
+### Nested Schema for `output_securonix`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_securonix--schema_monitor_settings))
+- `keep_alive` (Boolean)
+- `concurrency` (Number)
+- `max_payload_size_kb` (Number)
+- `max_payload_events` (Number)
+- `compress` (Boolean)
+- `reject_unauthorized` (Boolean)
+- `timeout_sec` (Number)
+- `max_connection_reuse_sec` (Number)
+- `flush_period_sec` (Number)
+- `extra_http_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_securonix--extra_http_headers))
+- `use_round_robin_dns` (Boolean)
+- `failed_request_logging_mode` (String)
+- `safe_headers` (List of String)
+- `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_securonix--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_securonix--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean)
+- `on_backpressure` (String)
+- `auth_type` (String)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--output_securonix--tls))
+- `total_memory_limit_kb` (Number)
+- `dynamic_headers_field` (String)
+- `http_receiver_endpoint` (String) URL of the Securonix HTTP Event Receiver endpoint
+- `description` (String)
+- `pq_strict_ordering` (Boolean)
+- `pq_rate_per_sec` (Number)
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number)
+- `pq_max_backpressure_sec` (Number)
+- `pq_max_file_size` (String)
+- `pq_max_size` (String)
+- `pq_path` (String)
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String)
+- `pq_controls` (Map of String)
+- `credentials_secret` (String)
+- `text_secret` (String)
+
+<a id="nestedatt--output_fortisiem"></a>
+### Nested Schema for `output_fortisiem`
+
+Optional:
+
+- `id` (String)
+- `type` (String)
+- `pipeline` (String)
+- `system_fields` (List of String)
+- `environment` (String)
+- `streamtags` (List of String)
+- `schema_monitor_settings` (Attributes) (see [below for nested schema](#nestedatt--output_fortisiem--schema_monitor_settings))
+- `keep_alive` (Boolean)
+- `concurrency` (Number)
+- `max_payload_size_kb` (Number)
+- `max_payload_events` (Number)
+- `reject_unauthorized` (Boolean)
+- `timeout_sec` (Number)
+- `max_connection_reuse_sec` (Number)
+- `flush_period_sec` (Number)
+- `extra_http_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_fortisiem--extra_http_headers))
+- `use_round_robin_dns` (Boolean)
+- `failed_request_logging_mode` (String)
+- `safe_headers` (List of String)
+- `response_retry_settings` (Attributes List) (see [below for nested schema](#nestedatt--output_fortisiem--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_fortisiem--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean)
+- `on_backpressure` (String)
+- `auth_type` (String)
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--output_fortisiem--tls))
+- `total_memory_limit_kb` (Number)
+- `dynamic_headers_field` (String)
+- `fortisiem_url` (String) Base URL or host of the FortiSIEM node that receives events, such as https://fortisiem.example. The /rawupload path is added automatically.
+- `vendor` (String) Vendor of the product that generated the logs.
+- `model` (String) Model of the product that generated the logs.
+- `rept_ip` (String) Reporting device IP address, the source of the logs.
+- `rept_name` (String) Reporting device hostname.
+- `description` (String)
+- `pq_strict_ordering` (Boolean)
+- `pq_rate_per_sec` (Number)
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number)
+- `pq_max_backpressure_sec` (Number)
+- `pq_max_file_size` (String)
+- `pq_max_size` (String)
+- `pq_path` (String)
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String)
+- `pq_controls` (Map of String)
+- `credentials_secret` (String)
+
+<a id="nestedatt--output_default--schema_monitor_settings"></a>
+<a id="nestedatt--output_webhook--schema_monitor_settings"></a>
+<a id="nestedatt--output_sentinel--schema_monitor_settings"></a>
+<a id="nestedatt--output_devnull--schema_monitor_settings"></a>
+<a id="nestedatt--output_syslog--schema_monitor_settings"></a>
+<a id="nestedatt--output_splunk--schema_monitor_settings"></a>
+<a id="nestedatt--output_splunk_lb--schema_monitor_settings"></a>
+<a id="nestedatt--output_splunk_hec--schema_monitor_settings"></a>
+<a id="nestedatt--output_wiz_hec--schema_monitor_settings"></a>
+<a id="nestedatt--output_tcpjson--schema_monitor_settings"></a>
+<a id="nestedatt--output_wavefront--schema_monitor_settings"></a>
+<a id="nestedatt--output_signalfx--schema_monitor_settings"></a>
+<a id="nestedatt--output_filesystem--schema_monitor_settings"></a>
+<a id="nestedatt--output_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_azure_blob--schema_monitor_settings"></a>
+<a id="nestedatt--output_azure_data_explorer--schema_monitor_settings"></a>
+<a id="nestedatt--output_azure_logs--schema_monitor_settings"></a>
+<a id="nestedatt--output_kinesis--schema_monitor_settings"></a>
+<a id="nestedatt--output_honeycomb--schema_monitor_settings"></a>
+<a id="nestedatt--output_azure_eventhub--schema_monitor_settings"></a>
+<a id="nestedatt--output_google_bigquery--schema_monitor_settings"></a>
+<a id="nestedatt--output_google_chronicle--schema_monitor_settings"></a>
+<a id="nestedatt--output_google_cloud_storage--schema_monitor_settings"></a>
+<a id="nestedatt--output_google_cloud_logging--schema_monitor_settings"></a>
+<a id="nestedatt--output_google_cloud_observability--schema_monitor_settings"></a>
+<a id="nestedatt--output_google_pubsub--schema_monitor_settings"></a>
+<a id="nestedatt--output_exabeam--schema_monitor_settings"></a>
+<a id="nestedatt--output_kafka--schema_monitor_settings"></a>
+<a id="nestedatt--output_confluent_cloud--schema_monitor_settings"></a>
+<a id="nestedatt--output_msk--schema_monitor_settings"></a>
+<a id="nestedatt--output_elastic--schema_monitor_settings"></a>
+<a id="nestedatt--output_elastic_cloud--schema_monitor_settings"></a>
+<a id="nestedatt--output_elastic_serverless--schema_monitor_settings"></a>
+<a id="nestedatt--output_newrelic--schema_monitor_settings"></a>
+<a id="nestedatt--output_newrelic_events--schema_monitor_settings"></a>
+<a id="nestedatt--output_influxdb--schema_monitor_settings"></a>
+<a id="nestedatt--output_cloudwatch--schema_monitor_settings"></a>
+<a id="nestedatt--output_minio--schema_monitor_settings"></a>
+<a id="nestedatt--output_statsd--schema_monitor_settings"></a>
+<a id="nestedatt--output_statsd_ext--schema_monitor_settings"></a>
+<a id="nestedatt--output_graphite--schema_monitor_settings"></a>
+<a id="nestedatt--output_router--schema_monitor_settings"></a>
+<a id="nestedatt--output_sns--schema_monitor_settings"></a>
+<a id="nestedatt--output_sqs--schema_monitor_settings"></a>
+<a id="nestedatt--output_snmp--schema_monitor_settings"></a>
+<a id="nestedatt--output_sumo_logic--schema_monitor_settings"></a>
+<a id="nestedatt--output_datadog--schema_monitor_settings"></a>
+<a id="nestedatt--output_grafana_cloud--schema_monitor_settings"></a>
+<a id="nestedatt--output_loki--schema_monitor_settings"></a>
+<a id="nestedatt--output_amazon_managed_prometheus--schema_monitor_settings"></a>
+<a id="nestedatt--output_prometheus--schema_monitor_settings"></a>
+<a id="nestedatt--output_ring--schema_monitor_settings"></a>
+<a id="nestedatt--output_open_telemetry--schema_monitor_settings"></a>
+<a id="nestedatt--output_service_now--schema_monitor_settings"></a>
+<a id="nestedatt--output_dataset--schema_monitor_settings"></a>
+<a id="nestedatt--output_cribl_tcp--schema_monitor_settings"></a>
+<a id="nestedatt--output_cribl_http--schema_monitor_settings"></a>
+<a id="nestedatt--output_cribl_search_engine--schema_monitor_settings"></a>
+<a id="nestedatt--output_humio_hec--schema_monitor_settings"></a>
+<a id="nestedatt--output_crowdstrike_next_gen_siem--schema_monitor_settings"></a>
+<a id="nestedatt--output_dl_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_security_lake--schema_monitor_settings"></a>
+<a id="nestedatt--output_cribl_lake--schema_monitor_settings"></a>
+<a id="nestedatt--output_disk_spool--schema_monitor_settings"></a>
+<a id="nestedatt--output_click_house--schema_monitor_settings"></a>
+<a id="nestedatt--output_customer_metrics_storage--schema_monitor_settings"></a>
+<a id="nestedatt--output_local_search_storage--schema_monitor_settings"></a>
+<a id="nestedatt--output_xsiam--schema_monitor_settings"></a>
+<a id="nestedatt--output_netflow--schema_monitor_settings"></a>
+<a id="nestedatt--output_dynatrace_http--schema_monitor_settings"></a>
+<a id="nestedatt--output_dynatrace_otlp--schema_monitor_settings"></a>
+<a id="nestedatt--output_traversal_otlp--schema_monitor_settings"></a>
+<a id="nestedatt--output_sentinel_one_ai_siem--schema_monitor_settings"></a>
+<a id="nestedatt--output_chronicle--schema_monitor_settings"></a>
+<a id="nestedatt--output_databricks--schema_monitor_settings"></a>
+<a id="nestedatt--output_snowflake_streaming--schema_monitor_settings"></a>
+<a id="nestedatt--output_microsoft_fabric--schema_monitor_settings"></a>
+<a id="nestedatt--output_cloudflare_r2--schema_monitor_settings"></a>
+<a id="nestedatt--output_nutanix_objects--schema_monitor_settings"></a>
+<a id="nestedatt--output_backblaze_b2--schema_monitor_settings"></a>
+<a id="nestedatt--output_storj_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_alphasoc_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_dell_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_wasabi--schema_monitor_settings"></a>
+<a id="nestedatt--output_seagate_lyve_cloud_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_cloudian_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_scality_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_akamai_object_storage_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_alibaba_cloud_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_exoscale_sos_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_ionos_s3_object_storage--schema_monitor_settings"></a>
+<a id="nestedatt--output_fastly_object_storage_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_impossible_cloud_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_dreamobjects_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_filebase_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_tencent_cloud_cos_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_ovhcloud_object_storage_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_scaleway_object_storage_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_digitalocean_spaces_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_ibm_cloud_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_oracle_cloud_s3--schema_monitor_settings"></a>
+<a id="nestedatt--output_databricks_zerobus--schema_monitor_settings"></a>
+<a id="nestedatt--output_securonix--schema_monitor_settings"></a>
+<a id="nestedatt--output_fortisiem--schema_monitor_settings"></a>
+### Nested Schema for `output_default.schema_monitor_settings`
+
+Optional:
+
+- `enabled` (Boolean) Enable Schema Monitor to detect schema drift for this Destination. Events are sampled after this output's Pipeline runs, immediately before being sent.
+- `target_schemas` (Attributes List) Schema Knowledge Objects that sampled events are acceptable against. An event that matches any listed schema does not count as drift. (see [below for nested schema](#nestedatt--output_default--schema_monitor_settings--target_schemas))
+
+<a id="nestedatt--output_default--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_webhook--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_sentinel--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_devnull--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_syslog--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_splunk--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_splunk_lb--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_splunk_hec--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_wiz_hec--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_tcpjson--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_wavefront--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_signalfx--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_filesystem--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_azure_blob--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_azure_data_explorer--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_azure_logs--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_kinesis--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_honeycomb--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_azure_eventhub--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_google_bigquery--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_google_chronicle--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_google_cloud_storage--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_google_cloud_logging--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_google_cloud_observability--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_google_pubsub--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_exabeam--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_kafka--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_confluent_cloud--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_msk--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_elastic--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_elastic_cloud--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_elastic_serverless--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_newrelic--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_newrelic_events--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_influxdb--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cloudwatch--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_minio--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_statsd--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_statsd_ext--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_graphite--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_router--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_sns--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_sqs--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_snmp--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_sumo_logic--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_datadog--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_grafana_cloud--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_loki--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_amazon_managed_prometheus--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_prometheus--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_ring--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_open_telemetry--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_service_now--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_dataset--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cribl_tcp--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cribl_http--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cribl_search_engine--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_humio_hec--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_crowdstrike_next_gen_siem--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_dl_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_security_lake--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cribl_lake--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_disk_spool--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_click_house--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_customer_metrics_storage--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_local_search_storage--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_xsiam--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_netflow--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_dynatrace_http--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_dynatrace_otlp--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_traversal_otlp--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_sentinel_one_ai_siem--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_chronicle--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_databricks--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_snowflake_streaming--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_microsoft_fabric--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cloudflare_r2--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_nutanix_objects--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_backblaze_b2--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_storj_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_alphasoc_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_dell_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_wasabi--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_seagate_lyve_cloud_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_cloudian_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_scality_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_akamai_object_storage_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_alibaba_cloud_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_exoscale_sos_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_ionos_s3_object_storage--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_fastly_object_storage_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_impossible_cloud_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_dreamobjects_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_filebase_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_tencent_cloud_cos_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_ovhcloud_object_storage_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_scaleway_object_storage_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_digitalocean_spaces_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_ibm_cloud_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_oracle_cloud_s3--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_databricks_zerobus--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_securonix--schema_monitor_settings--target_schemas"></a>
+<a id="nestedatt--output_fortisiem--schema_monitor_settings--target_schemas"></a>
+### Nested Schema for `output_default.schema_monitor_settings.target_schemas`
+
+Optional:
+
+- `id` (String) ID of the Schema Knowledge Object.
+- `type` (String) Library that contains the schema: json for Schemas, parquet for Parquet Schemas.
+
 <a id="nestedatt--output_webhook--extra_http_headers"></a>
 <a id="nestedatt--output_sentinel--extra_http_headers"></a>
 <a id="nestedatt--output_splunk_hec--extra_http_headers"></a>
@@ -4525,6 +5949,8 @@ Optional:
 <a id="nestedatt--output_elastic--extra_params"></a>
 <a id="nestedatt--output_elastic_cloud--extra_http_headers"></a>
 <a id="nestedatt--output_elastic_cloud--extra_params"></a>
+<a id="nestedatt--output_elastic_serverless--extra_http_headers"></a>
+<a id="nestedatt--output_elastic_serverless--extra_params"></a>
 <a id="nestedatt--output_newrelic--extra_http_headers"></a>
 <a id="nestedatt--output_newrelic_events--extra_http_headers"></a>
 <a id="nestedatt--output_influxdb--extra_http_headers"></a>
@@ -4551,6 +5977,8 @@ Optional:
 <a id="nestedatt--output_sentinel_one_ai_siem--extra_http_headers"></a>
 <a id="nestedatt--output_chronicle--extra_http_headers"></a>
 <a id="nestedatt--output_snowflake_streaming--extra_http_headers"></a>
+<a id="nestedatt--output_securonix--extra_http_headers"></a>
+<a id="nestedatt--output_fortisiem--extra_http_headers"></a>
 ### Nested Schema for `output_webhook.extra_http_headers`
 
 Optional:
@@ -4570,6 +5998,7 @@ Optional:
 <a id="nestedatt--output_google_chronicle--response_retry_settings"></a>
 <a id="nestedatt--output_elastic--response_retry_settings"></a>
 <a id="nestedatt--output_elastic_cloud--response_retry_settings"></a>
+<a id="nestedatt--output_elastic_serverless--response_retry_settings"></a>
 <a id="nestedatt--output_newrelic--response_retry_settings"></a>
 <a id="nestedatt--output_newrelic_events--response_retry_settings"></a>
 <a id="nestedatt--output_influxdb--response_retry_settings"></a>
@@ -4596,6 +6025,8 @@ Optional:
 <a id="nestedatt--output_sentinel_one_ai_siem--response_retry_settings"></a>
 <a id="nestedatt--output_chronicle--response_retry_settings"></a>
 <a id="nestedatt--output_snowflake_streaming--response_retry_settings"></a>
+<a id="nestedatt--output_securonix--response_retry_settings"></a>
+<a id="nestedatt--output_fortisiem--response_retry_settings"></a>
 ### Nested Schema for `output_webhook.response_retry_settings`
 
 Optional:
@@ -4617,6 +6048,7 @@ Optional:
 <a id="nestedatt--output_google_chronicle--timeout_retry_settings"></a>
 <a id="nestedatt--output_elastic--timeout_retry_settings"></a>
 <a id="nestedatt--output_elastic_cloud--timeout_retry_settings"></a>
+<a id="nestedatt--output_elastic_serverless--timeout_retry_settings"></a>
 <a id="nestedatt--output_newrelic--timeout_retry_settings"></a>
 <a id="nestedatt--output_newrelic_events--timeout_retry_settings"></a>
 <a id="nestedatt--output_influxdb--timeout_retry_settings"></a>
@@ -4643,6 +6075,8 @@ Optional:
 <a id="nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings"></a>
 <a id="nestedatt--output_chronicle--timeout_retry_settings"></a>
 <a id="nestedatt--output_snowflake_streaming--timeout_retry_settings"></a>
+<a id="nestedatt--output_securonix--timeout_retry_settings"></a>
+<a id="nestedatt--output_fortisiem--timeout_retry_settings"></a>
 ### Nested Schema for `output_webhook.timeout_retry_settings`
 
 Optional:
@@ -4658,6 +6092,8 @@ Optional:
 <a id="nestedatt--output_click_house--tls"></a>
 <a id="nestedatt--output_customer_metrics_storage--tls"></a>
 <a id="nestedatt--output_local_search_storage--tls"></a>
+<a id="nestedatt--output_securonix--tls"></a>
+<a id="nestedatt--output_fortisiem--tls"></a>
 ### Nested Schema for `output_webhook.tls`
 
 Optional:
@@ -4797,13 +6233,28 @@ Optional:
 <a id="nestedatt--output_databricks--retry_settings"></a>
 <a id="nestedatt--output_cloudflare_r2--retry_settings"></a>
 <a id="nestedatt--output_nutanix_objects--retry_settings"></a>
+<a id="nestedatt--output_backblaze_b2--retry_settings"></a>
 <a id="nestedatt--output_storj_s3--retry_settings"></a>
 <a id="nestedatt--output_alphasoc_s3--retry_settings"></a>
 <a id="nestedatt--output_dell_s3--retry_settings"></a>
+<a id="nestedatt--output_wasabi--retry_settings"></a>
+<a id="nestedatt--output_seagate_lyve_cloud_s3--retry_settings"></a>
 <a id="nestedatt--output_cloudian_s3--retry_settings"></a>
 <a id="nestedatt--output_scality_s3--retry_settings"></a>
+<a id="nestedatt--output_akamai_object_storage_s3--retry_settings"></a>
 <a id="nestedatt--output_alibaba_cloud_s3--retry_settings"></a>
+<a id="nestedatt--output_exoscale_sos_s3--retry_settings"></a>
+<a id="nestedatt--output_ionos_s3_object_storage--retry_settings"></a>
+<a id="nestedatt--output_fastly_object_storage_s3--retry_settings"></a>
+<a id="nestedatt--output_impossible_cloud_s3--retry_settings"></a>
+<a id="nestedatt--output_dreamobjects_s3--retry_settings"></a>
+<a id="nestedatt--output_filebase_s3--retry_settings"></a>
+<a id="nestedatt--output_tencent_cloud_cos_s3--retry_settings"></a>
+<a id="nestedatt--output_ovhcloud_object_storage_s3--retry_settings"></a>
+<a id="nestedatt--output_scaleway_object_storage_s3--retry_settings"></a>
+<a id="nestedatt--output_digitalocean_spaces_s3--retry_settings"></a>
 <a id="nestedatt--output_ibm_cloud_s3--retry_settings"></a>
+<a id="nestedatt--output_oracle_cloud_s3--retry_settings"></a>
 ### Nested Schema for `output_filesystem.retry_settings`
 
 Optional:
@@ -4827,13 +6278,28 @@ Optional:
 <a id="nestedatt--output_databricks--orphans"></a>
 <a id="nestedatt--output_cloudflare_r2--orphans"></a>
 <a id="nestedatt--output_nutanix_objects--orphans"></a>
+<a id="nestedatt--output_backblaze_b2--orphans"></a>
 <a id="nestedatt--output_storj_s3--orphans"></a>
 <a id="nestedatt--output_alphasoc_s3--orphans"></a>
 <a id="nestedatt--output_dell_s3--orphans"></a>
+<a id="nestedatt--output_wasabi--orphans"></a>
+<a id="nestedatt--output_seagate_lyve_cloud_s3--orphans"></a>
 <a id="nestedatt--output_cloudian_s3--orphans"></a>
 <a id="nestedatt--output_scality_s3--orphans"></a>
+<a id="nestedatt--output_akamai_object_storage_s3--orphans"></a>
 <a id="nestedatt--output_alibaba_cloud_s3--orphans"></a>
+<a id="nestedatt--output_exoscale_sos_s3--orphans"></a>
+<a id="nestedatt--output_ionos_s3_object_storage--orphans"></a>
+<a id="nestedatt--output_fastly_object_storage_s3--orphans"></a>
+<a id="nestedatt--output_impossible_cloud_s3--orphans"></a>
+<a id="nestedatt--output_dreamobjects_s3--orphans"></a>
+<a id="nestedatt--output_filebase_s3--orphans"></a>
+<a id="nestedatt--output_tencent_cloud_cos_s3--orphans"></a>
+<a id="nestedatt--output_ovhcloud_object_storage_s3--orphans"></a>
+<a id="nestedatt--output_scaleway_object_storage_s3--orphans"></a>
+<a id="nestedatt--output_digitalocean_spaces_s3--orphans"></a>
 <a id="nestedatt--output_ibm_cloud_s3--orphans"></a>
+<a id="nestedatt--output_oracle_cloud_s3--orphans"></a>
 ### Nested Schema for `output_filesystem.orphans`
 
 Optional:
@@ -4860,19 +6326,43 @@ Optional:
 <a id="nestedatt--output_databricks--key_value_metadata"></a>
 <a id="nestedatt--output_cloudflare_r2--key_value_metadata"></a>
 <a id="nestedatt--output_nutanix_objects--key_value_metadata"></a>
+<a id="nestedatt--output_backblaze_b2--key_value_metadata"></a>
 <a id="nestedatt--output_storj_s3--key_value_metadata"></a>
 <a id="nestedatt--output_alphasoc_s3--key_value_metadata"></a>
 <a id="nestedatt--output_dell_s3--key_value_metadata"></a>
+<a id="nestedatt--output_wasabi--key_value_metadata"></a>
+<a id="nestedatt--output_seagate_lyve_cloud_s3--key_value_metadata"></a>
 <a id="nestedatt--output_cloudian_s3--key_value_metadata"></a>
 <a id="nestedatt--output_scality_s3--key_value_metadata"></a>
+<a id="nestedatt--output_akamai_object_storage_s3--key_value_metadata"></a>
 <a id="nestedatt--output_alibaba_cloud_s3--key_value_metadata"></a>
+<a id="nestedatt--output_exoscale_sos_s3--key_value_metadata"></a>
+<a id="nestedatt--output_ionos_s3_object_storage--key_value_metadata"></a>
+<a id="nestedatt--output_fastly_object_storage_s3--key_value_metadata"></a>
+<a id="nestedatt--output_impossible_cloud_s3--key_value_metadata"></a>
+<a id="nestedatt--output_dreamobjects_s3--key_value_metadata"></a>
+<a id="nestedatt--output_filebase_s3--key_value_metadata"></a>
+<a id="nestedatt--output_tencent_cloud_cos_s3--key_value_metadata"></a>
+<a id="nestedatt--output_ovhcloud_object_storage_s3--key_value_metadata"></a>
+<a id="nestedatt--output_scaleway_object_storage_s3--key_value_metadata"></a>
+<a id="nestedatt--output_digitalocean_spaces_s3--key_value_metadata"></a>
 <a id="nestedatt--output_ibm_cloud_s3--key_value_metadata"></a>
+<a id="nestedatt--output_oracle_cloud_s3--key_value_metadata"></a>
 ### Nested Schema for `output_filesystem.key_value_metadata`
 
 Optional:
 
 - `key` (String) Key
 - `value` (String)
+
+<a id="nestedatt--output_s3--object_tags"></a>
+<a id="nestedatt--output_azure_blob--blob_index_tags"></a>
+### Nested Schema for `output_s3.object_tags`
+
+Optional:
+
+- `key` (String) Tag Name
+- `value` (String) Tag Value
 
 <a id="nestedatt--output_azure_blob--certificate"></a>
 <a id="nestedatt--output_azure_data_explorer--certificate"></a>
@@ -5103,6 +6593,17 @@ Optional:
 - `token_secret` (String)
 - `enabled` (Boolean) Enable token
 - `description` (String) Optional token description
+
+<a id="nestedatt--output_cribl_tcp--endpoint_list"></a>
+<a id="nestedatt--output_cribl_http--endpoint_list"></a>
+<a id="nestedatt--output_cribl_search_engine--endpoint_list"></a>
+### Nested Schema for `output_cribl_tcp.endpoint_list`
+
+Optional:
+
+- `id` (String) The Endpoint List that supplies this destination's endpoints
+- `port` (Number) The port to connect to on each endpoint in the list
+- `tls` (String) Whether to connect to endpoints using TLS
 
 <a id="nestedatt--output_cribl_http--auth_tokens"></a>
 <a id="nestedatt--output_cribl_search_engine--auth_tokens"></a>

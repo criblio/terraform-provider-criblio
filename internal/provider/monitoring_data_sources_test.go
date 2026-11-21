@@ -23,7 +23,7 @@ func TestMonitoringListDataSources(t *testing.T) {
 	}{
 		{"shared", "/products/lakehouse_engine_metrics/shared-configs", `{"id":"shared","config":{"priority":{"value":"P3"}},"fingerprint":"hash"}`, NewMonitorSharedConfigsDataSource, nil},
 		{"profile", "/products/lakehouse_engine_metrics/config-profiles", `{"id":"profile","name":"Platform","configIds":["shared"]}`, NewMonitorProfilesDataSource, nil},
-		{"silence", "/a/__cribl_metrics/products/lakehouse_engine_metrics/silences", `{"id":"silence","monitor_id":"cpu","begins_at":1893456000000,"expires_at":1893542400000,"created_at":123,"tags":{"host":["a","b"]}}`, NewMonitorSilencesDataSource, nil},
+		{"silence", "/a/__cribl_metrics/products/lakehouse_engine_metrics/silences", `{"id":"silence","monitor_id":"cpu","begins_at":1893456000000,"expires_at":1893542400000,"created_at":123}`, NewMonitorSilencesDataSource, nil},
 		{"policy", "/notification-policies", `{"id":"policy","order":10,"conditions":[[{"key":"team","operator":"=","value":"platform"}]],"templateTargetPairs":[{"targetId":"target","templateId":"template"}]}`, NewNotificationPoliciesDataSource, nil},
 		{"current-state", "/products/lakehouse_engine_metrics/engines/engine/datasets/metrics/alert_activity/current", `{"monitor_id":"cpu","fingerprint":"instance","status":"warning","pending_status":"critical"}`, NewMonitorActiveAlertsDataSource, map[string]any{"engine_id": "engine", "dataset_id": "metrics"}},
 	} {

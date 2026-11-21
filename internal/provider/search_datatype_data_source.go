@@ -60,6 +60,10 @@ func (d *SearchDatatypeDataSource) Schema(_ context.Context, _ datasource.Schema
 							Computed:    true,
 							Description: `Name of the additional extraction.`,
 						},
+						"prefix": schema.StringAttribute{
+							Computed:    true,
+							Description: `Optional prefix prepended to all extracted field names. If the value does not end with an underscore, one is appended when the Datatype is saved.`,
+						},
 						"source_field": schema.StringAttribute{
 							Computed:    true,
 							Description: `Field to use as input for the extraction.`,

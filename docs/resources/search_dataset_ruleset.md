@@ -56,7 +56,7 @@ resource "criblio_search_dataset_ruleset" "metrics" {
 
 ### Required
 
-- `rules` (Attributes List) Ordered rules for routing events to Datasets. The first matching rule wins. Each rule can include an extend expression to transform matched events. (see [below for nested schema](#nestedatt--rules))
+- `rules` (Attributes List) Ordered rules for routing events to Datasets. The first matching rule wins. Each rule can include an extend expression to transform matched events.<br/><br/>In the <code>metrics</code> ruleset, the <code>metrics_catchall</code> rule is system-managed: Cribl creates and repairs it. Keep it in the list whenever you replace these rules. (see [below for nested schema](#nestedatt--rules))
 
 ### Optional
 

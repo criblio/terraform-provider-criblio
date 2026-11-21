@@ -33,7 +33,7 @@ data "criblio_database_connections" "example" {
 
 Read-Only:
 
-- `account_identifier` (String) Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).
+- `account_identifier` (String) Snowflake account identifier, either in org-account format (<code>ORGNAME-ACCTNAME</code>) or as a legacy account locator (<code>LOCATOR.REGION.CLOUD</code>).
 - `auth_type` (String) Authentication method for the Database Connection. Determines how credentials are provided.
 - `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
 - `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
@@ -48,7 +48,7 @@ Read-Only:
 - `items` (Attributes List) Database Connections returned in the response envelope. (see [below for nested schema](#nestedatt--items--items))
 - `log_on_mechanism` (String) Log On Mechanism for databases that support multiple, like Teradata.
 - `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
-- `pem` (Attributes) RSA private key configuration for Snowflake key-pair authentication. (see [below for nested schema](#nestedatt--items--pem))
+- `pem` (Attributes) Reference to the stored RSA private key used for Snowflake authentication. Required for both <code>oauth</code> and <code>keypair</code> authentication. (see [below for nested schema](#nestedatt--items--pem))
 - `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
 - `role` (String) Snowflake role to use for the session. When set, requests a role-scoped token.
 - `sslmode` (String) HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.
@@ -63,7 +63,7 @@ Read-Only:
 
 Read-Only:
 
-- `account_identifier` (String) Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT).
+- `account_identifier` (String) Snowflake account identifier, either in org-account format (<code>ORGNAME-ACCTNAME</code>) or as a legacy account locator (<code>LOCATOR.REGION.CLOUD</code>).
 - `auth_type` (String) Authentication method for the Database Connection. Determines how credentials are provided.
 - `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
 - `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
@@ -77,7 +77,7 @@ Read-Only:
 - `id` (String) Unique identifier for the Database Connection.
 - `log_on_mechanism` (String) Log On Mechanism for databases that support multiple, like Teradata.
 - `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
-- `pem` (Attributes) RSA private key configuration for Snowflake key-pair authentication. (see [below for nested schema](#nestedatt--items--items--pem))
+- `pem` (Attributes) Reference to the stored RSA private key used for Snowflake authentication. Required for both <code>oauth</code> and <code>keypair</code> authentication. (see [below for nested schema](#nestedatt--items--items--pem))
 - `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
 - `role` (String) Snowflake role to use for the session. When set, requests a role-scoped token.
 - `sslmode` (String) HTTPS/TLS connection mode for Teradata. Controls certificate verification behavior.
@@ -93,7 +93,7 @@ Read-Only:
 
 Read-Only:
 
-- `key_name` (String) RSA private key (PEM format) for Snowflake key-pair authentication.
+- `key_name` (String) Name of the stored private key, as listed by <code>/lib/private-keys</code>, to authenticate with.
 
 <a id="nestedatt--items--items--tls"></a>
 <a id="nestedatt--items--tls"></a>

@@ -244,6 +244,7 @@ Optional:
 - `memory` (Integer) Maximum memory (in MB) per Worker Process. Set to <code>0</code> for no limit.
 - `minimum` (Integer) Minimum number of Worker Processes to keep running.
 - `restart_unresponsive_processes` (Boolean) If <code>true</code>, automatically restart Worker Processes that become unresponsive. Otherwise, <code>false</code>.
+- `scheduling_policy` (String) Consult Cribl Support before adjusting this advanced setting. How the API process distributes inbound data-plane connections to Worker Processes: <code>auto</code> lets Cribl choose the policy for the platform, <code>rr</code> round-robins accepted sockets from the API process, and <code>none</code> lets Worker Processes accept directly from the shared listen socket. Applies to Stream Worker Nodes and single-instance deployments only; all other node types always use <code>auto</code>. Takes effect after a restart.
 - `startup_max_conns` (Integer) Maximum number of connections to accept during Worker Process startup before throttling begins.
 - `startup_throttle_timeout` (Integer) Timeout in milliseconds to wait for Worker Processes to reach idle before ending the startup throttle period.
 - `v8_single_thread` (Boolean) If <code>true</code>, run all worker threads in a single V8 isolate. Otherwise, <code>false</code>.

@@ -55,6 +55,7 @@ type PackDestinationModel struct {
 	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
 	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
 	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputElasticServerless        *OutputElasticServerlessModel        `tfsdk:"output_elastic_serverless" json:"OutputElasticServerless,omitempty"`
 	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
 	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
 	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
@@ -101,14 +102,31 @@ type PackDestinationModel struct {
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputBackblazeB2              *OutputBackblazeB2Model              `tfsdk:"output_backblaze_b2" json:"OutputBackblazeB2,omitempty"`
 	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
 	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
 	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputWasabi                   *OutputWasabiModel                   `tfsdk:"output_wasabi" json:"OutputWasabi,omitempty"`
+	OutputSeagateLyveCloudS3       *OutputSeagateLyveCloudS3Model       `tfsdk:"output_seagate_lyve_cloud_s3" json:"OutputSeagateLyveCloudS3,omitempty"`
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAkamaiObjectStorageS3    *OutputAkamaiObjectStorageS3Model    `tfsdk:"output_akamai_object_storage_s3" json:"OutputAkamaiObjectStorageS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputExoscaleSosS3            *OutputExoscaleSosS3Model            `tfsdk:"output_exoscale_sos_s3" json:"OutputExoscaleSosS3,omitempty"`
+	OutputIonosS3ObjectStorage     *OutputIonosS3ObjectStorageModel     `tfsdk:"output_ionos_s3_object_storage" json:"OutputIonosS3ObjectStorage,omitempty"`
+	OutputFastlyObjectStorageS3    *OutputFastlyObjectStorageS3Model    `tfsdk:"output_fastly_object_storage_s3" json:"OutputFastlyObjectStorageS3,omitempty"`
+	OutputImpossibleCloudS3        *OutputImpossibleCloudS3Model        `tfsdk:"output_impossible_cloud_s3" json:"OutputImpossibleCloudS3,omitempty"`
+	OutputDreamobjectsS3           *OutputDreamobjectsS3Model           `tfsdk:"output_dreamobjects_s3" json:"OutputDreamobjectsS3,omitempty"`
+	OutputFilebaseS3               *OutputFilebaseS3Model               `tfsdk:"output_filebase_s3" json:"OutputFilebaseS3,omitempty"`
+	OutputTencentCloudCosS3        *OutputTencentCloudCosS3Model        `tfsdk:"output_tencent_cloud_cos_s3" json:"OutputTencentCloudCosS3,omitempty"`
+	OutputOvhcloudObjectStorageS3  *OutputOvhcloudObjectStorageS3Model  `tfsdk:"output_ovhcloud_object_storage_s3" json:"OutputOvhcloudObjectStorageS3,omitempty"`
+	OutputScalewayObjectStorageS3  *OutputScalewayObjectStorageS3Model  `tfsdk:"output_scaleway_object_storage_s3" json:"OutputScalewayObjectStorageS3,omitempty"`
+	OutputDigitaloceanSpacesS3     *OutputDigitaloceanSpacesS3Model     `tfsdk:"output_digitalocean_spaces_s3" json:"OutputDigitaloceanSpacesS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputOracleCloudS3            *OutputOracleCloudS3Model            `tfsdk:"output_oracle_cloud_s3" json:"OutputOracleCloudS3,omitempty"`
 	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
+	OutputSecuronix                *OutputSecuronixModel                `tfsdk:"output_securonix" json:"OutputSecuronix,omitempty"`
+	OutputFortisiem                *OutputFortisiemModel                `tfsdk:"output_fortisiem" json:"OutputFortisiem,omitempty"`
 }
 
 type PackDestinationResourceModel struct {
@@ -150,6 +168,7 @@ type PackDestinationResourceModel struct {
 	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
 	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
 	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputElasticServerless        *OutputElasticServerlessModel        `tfsdk:"output_elastic_serverless" json:"OutputElasticServerless,omitempty"`
 	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
 	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
 	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
@@ -196,14 +215,31 @@ type PackDestinationResourceModel struct {
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputBackblazeB2              *OutputBackblazeB2Model              `tfsdk:"output_backblaze_b2" json:"OutputBackblazeB2,omitempty"`
 	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
 	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
 	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputWasabi                   *OutputWasabiModel                   `tfsdk:"output_wasabi" json:"OutputWasabi,omitempty"`
+	OutputSeagateLyveCloudS3       *OutputSeagateLyveCloudS3Model       `tfsdk:"output_seagate_lyve_cloud_s3" json:"OutputSeagateLyveCloudS3,omitempty"`
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAkamaiObjectStorageS3    *OutputAkamaiObjectStorageS3Model    `tfsdk:"output_akamai_object_storage_s3" json:"OutputAkamaiObjectStorageS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputExoscaleSosS3            *OutputExoscaleSosS3Model            `tfsdk:"output_exoscale_sos_s3" json:"OutputExoscaleSosS3,omitempty"`
+	OutputIonosS3ObjectStorage     *OutputIonosS3ObjectStorageModel     `tfsdk:"output_ionos_s3_object_storage" json:"OutputIonosS3ObjectStorage,omitempty"`
+	OutputFastlyObjectStorageS3    *OutputFastlyObjectStorageS3Model    `tfsdk:"output_fastly_object_storage_s3" json:"OutputFastlyObjectStorageS3,omitempty"`
+	OutputImpossibleCloudS3        *OutputImpossibleCloudS3Model        `tfsdk:"output_impossible_cloud_s3" json:"OutputImpossibleCloudS3,omitempty"`
+	OutputDreamobjectsS3           *OutputDreamobjectsS3Model           `tfsdk:"output_dreamobjects_s3" json:"OutputDreamobjectsS3,omitempty"`
+	OutputFilebaseS3               *OutputFilebaseS3Model               `tfsdk:"output_filebase_s3" json:"OutputFilebaseS3,omitempty"`
+	OutputTencentCloudCosS3        *OutputTencentCloudCosS3Model        `tfsdk:"output_tencent_cloud_cos_s3" json:"OutputTencentCloudCosS3,omitempty"`
+	OutputOvhcloudObjectStorageS3  *OutputOvhcloudObjectStorageS3Model  `tfsdk:"output_ovhcloud_object_storage_s3" json:"OutputOvhcloudObjectStorageS3,omitempty"`
+	OutputScalewayObjectStorageS3  *OutputScalewayObjectStorageS3Model  `tfsdk:"output_scaleway_object_storage_s3" json:"OutputScalewayObjectStorageS3,omitempty"`
+	OutputDigitaloceanSpacesS3     *OutputDigitaloceanSpacesS3Model     `tfsdk:"output_digitalocean_spaces_s3" json:"OutputDigitaloceanSpacesS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputOracleCloudS3            *OutputOracleCloudS3Model            `tfsdk:"output_oracle_cloud_s3" json:"OutputOracleCloudS3,omitempty"`
 	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
+	OutputSecuronix                *OutputSecuronixModel                `tfsdk:"output_securonix" json:"OutputSecuronix,omitempty"`
+	OutputFortisiem                *OutputFortisiemModel                `tfsdk:"output_fortisiem" json:"OutputFortisiem,omitempty"`
 }
 
 type PackDestinationDataSourceModel struct {
@@ -245,6 +281,7 @@ type PackDestinationDataSourceModel struct {
 	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
 	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
 	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputElasticServerless        *OutputElasticServerlessModel        `tfsdk:"output_elastic_serverless" json:"OutputElasticServerless,omitempty"`
 	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
 	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
 	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
@@ -291,14 +328,31 @@ type PackDestinationDataSourceModel struct {
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputBackblazeB2              *OutputBackblazeB2Model              `tfsdk:"output_backblaze_b2" json:"OutputBackblazeB2,omitempty"`
 	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
 	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
 	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputWasabi                   *OutputWasabiModel                   `tfsdk:"output_wasabi" json:"OutputWasabi,omitempty"`
+	OutputSeagateLyveCloudS3       *OutputSeagateLyveCloudS3Model       `tfsdk:"output_seagate_lyve_cloud_s3" json:"OutputSeagateLyveCloudS3,omitempty"`
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAkamaiObjectStorageS3    *OutputAkamaiObjectStorageS3Model    `tfsdk:"output_akamai_object_storage_s3" json:"OutputAkamaiObjectStorageS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputExoscaleSosS3            *OutputExoscaleSosS3Model            `tfsdk:"output_exoscale_sos_s3" json:"OutputExoscaleSosS3,omitempty"`
+	OutputIonosS3ObjectStorage     *OutputIonosS3ObjectStorageModel     `tfsdk:"output_ionos_s3_object_storage" json:"OutputIonosS3ObjectStorage,omitempty"`
+	OutputFastlyObjectStorageS3    *OutputFastlyObjectStorageS3Model    `tfsdk:"output_fastly_object_storage_s3" json:"OutputFastlyObjectStorageS3,omitempty"`
+	OutputImpossibleCloudS3        *OutputImpossibleCloudS3Model        `tfsdk:"output_impossible_cloud_s3" json:"OutputImpossibleCloudS3,omitempty"`
+	OutputDreamobjectsS3           *OutputDreamobjectsS3Model           `tfsdk:"output_dreamobjects_s3" json:"OutputDreamobjectsS3,omitempty"`
+	OutputFilebaseS3               *OutputFilebaseS3Model               `tfsdk:"output_filebase_s3" json:"OutputFilebaseS3,omitempty"`
+	OutputTencentCloudCosS3        *OutputTencentCloudCosS3Model        `tfsdk:"output_tencent_cloud_cos_s3" json:"OutputTencentCloudCosS3,omitempty"`
+	OutputOvhcloudObjectStorageS3  *OutputOvhcloudObjectStorageS3Model  `tfsdk:"output_ovhcloud_object_storage_s3" json:"OutputOvhcloudObjectStorageS3,omitempty"`
+	OutputScalewayObjectStorageS3  *OutputScalewayObjectStorageS3Model  `tfsdk:"output_scaleway_object_storage_s3" json:"OutputScalewayObjectStorageS3,omitempty"`
+	OutputDigitaloceanSpacesS3     *OutputDigitaloceanSpacesS3Model     `tfsdk:"output_digitalocean_spaces_s3" json:"OutputDigitaloceanSpacesS3,omitempty"`
 	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
+	OutputOracleCloudS3            *OutputOracleCloudS3Model            `tfsdk:"output_oracle_cloud_s3" json:"OutputOracleCloudS3,omitempty"`
 	OutputDatabricksZerobus        *OutputDatabricksZerobusModel        `tfsdk:"output_databricks_zerobus" json:"OutputDatabricksZerobus,omitempty"`
+	OutputSecuronix                *OutputSecuronixModel                `tfsdk:"output_securonix" json:"OutputSecuronix,omitempty"`
+	OutputFortisiem                *OutputFortisiemModel                `tfsdk:"output_fortisiem" json:"OutputFortisiem,omitempty"`
 }
 
 type PackDestinationAPIModel struct {
@@ -878,6 +932,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputElasticServerless != nil {
+		value, err := m.OutputElasticServerless.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputNewrelic != nil {
 		value, err := m.OutputNewrelic.terraformPayload()
 		if err != nil {
@@ -1292,6 +1355,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputBackblazeB2 != nil {
+		value, err := m.OutputBackblazeB2.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputStorjS3 != nil {
 		value, err := m.OutputStorjS3.terraformPayload()
 		if err != nil {
@@ -1319,6 +1391,24 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputWasabi != nil {
+		value, err := m.OutputWasabi.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputSeagateLyveCloudS3 != nil {
+		value, err := m.OutputSeagateLyveCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputCloudianS3 != nil {
 		value, err := m.OutputCloudianS3.terraformPayload()
 		if err != nil {
@@ -1337,8 +1427,107 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputAkamaiObjectStorageS3 != nil {
+		value, err := m.OutputAkamaiObjectStorageS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputAlibabaCloudS3 != nil {
 		value, err := m.OutputAlibabaCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputExoscaleSosS3 != nil {
+		value, err := m.OutputExoscaleSosS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputIonosS3ObjectStorage != nil {
+		value, err := m.OutputIonosS3ObjectStorage.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputFastlyObjectStorageS3 != nil {
+		value, err := m.OutputFastlyObjectStorageS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputImpossibleCloudS3 != nil {
+		value, err := m.OutputImpossibleCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputDreamobjectsS3 != nil {
+		value, err := m.OutputDreamobjectsS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputFilebaseS3 != nil {
+		value, err := m.OutputFilebaseS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputTencentCloudCosS3 != nil {
+		value, err := m.OutputTencentCloudCosS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputOvhcloudObjectStorageS3 != nil {
+		value, err := m.OutputOvhcloudObjectStorageS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputScalewayObjectStorageS3 != nil {
+		value, err := m.OutputScalewayObjectStorageS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputDigitaloceanSpacesS3 != nil {
+		value, err := m.OutputDigitaloceanSpacesS3.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1355,8 +1544,35 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputOracleCloudS3 != nil {
+		value, err := m.OutputOracleCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputDatabricksZerobus != nil {
 		value, err := m.OutputDatabricksZerobus.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputSecuronix != nil {
+		value, err := m.OutputSecuronix.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputFortisiem != nil {
+		value, err := m.OutputFortisiem.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1565,6 +1781,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "elastic_cloud":
 		m.OutputElasticCloud = &OutputElasticCloudModel{}
 		if err := m.OutputElasticCloud.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "elastic_serverless":
+		m.OutputElasticServerless = &OutputElasticServerlessModel{}
+		if err := m.OutputElasticServerless.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "newrelic":
@@ -1797,6 +2018,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputNutanixObjects.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "backblaze_b2":
+		m.OutputBackblazeB2 = &OutputBackblazeB2Model{}
+		if err := m.OutputBackblazeB2.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "storj_s3":
 		m.OutputStorjS3 = &OutputStorjS3Model{}
 		if err := m.OutputStorjS3.unmarshalPayload(raw); err != nil {
@@ -1812,6 +2038,16 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputDellS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "wasabi":
+		m.OutputWasabi = &OutputWasabiModel{}
+		if err := m.OutputWasabi.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "seagate_lyve_cloud_s3":
+		m.OutputSeagateLyveCloudS3 = &OutputSeagateLyveCloudS3Model{}
+		if err := m.OutputSeagateLyveCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "cloudian_s3":
 		m.OutputCloudianS3 = &OutputCloudianS3Model{}
 		if err := m.OutputCloudianS3.unmarshalPayload(raw); err != nil {
@@ -1822,9 +2058,64 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputScalityS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "akamai_object_storage_s3":
+		m.OutputAkamaiObjectStorageS3 = &OutputAkamaiObjectStorageS3Model{}
+		if err := m.OutputAkamaiObjectStorageS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "alibaba_cloud_s3":
 		m.OutputAlibabaCloudS3 = &OutputAlibabaCloudS3Model{}
 		if err := m.OutputAlibabaCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "exoscale_sos_s3":
+		m.OutputExoscaleSosS3 = &OutputExoscaleSosS3Model{}
+		if err := m.OutputExoscaleSosS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "ionos_s3_object_storage":
+		m.OutputIonosS3ObjectStorage = &OutputIonosS3ObjectStorageModel{}
+		if err := m.OutputIonosS3ObjectStorage.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "fastly_object_storage_s3":
+		m.OutputFastlyObjectStorageS3 = &OutputFastlyObjectStorageS3Model{}
+		if err := m.OutputFastlyObjectStorageS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "impossible_cloud_s3":
+		m.OutputImpossibleCloudS3 = &OutputImpossibleCloudS3Model{}
+		if err := m.OutputImpossibleCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "dreamobjects_s3":
+		m.OutputDreamobjectsS3 = &OutputDreamobjectsS3Model{}
+		if err := m.OutputDreamobjectsS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "filebase_s3":
+		m.OutputFilebaseS3 = &OutputFilebaseS3Model{}
+		if err := m.OutputFilebaseS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "tencent_cloud_cos_s3":
+		m.OutputTencentCloudCosS3 = &OutputTencentCloudCosS3Model{}
+		if err := m.OutputTencentCloudCosS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "ovhcloud_object_storage_s3":
+		m.OutputOvhcloudObjectStorageS3 = &OutputOvhcloudObjectStorageS3Model{}
+		if err := m.OutputOvhcloudObjectStorageS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "scaleway_object_storage_s3":
+		m.OutputScalewayObjectStorageS3 = &OutputScalewayObjectStorageS3Model{}
+		if err := m.OutputScalewayObjectStorageS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "digitalocean_spaces_s3":
+		m.OutputDigitaloceanSpacesS3 = &OutputDigitaloceanSpacesS3Model{}
+		if err := m.OutputDigitaloceanSpacesS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "ibm_cloud_s3":
@@ -1832,9 +2123,24 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputIbmCloudS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "oracle_cloud_s3":
+		m.OutputOracleCloudS3 = &OutputOracleCloudS3Model{}
+		if err := m.OutputOracleCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "databricks_zerobus":
 		m.OutputDatabricksZerobus = &OutputDatabricksZerobusModel{}
 		if err := m.OutputDatabricksZerobus.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "securonix":
+		m.OutputSecuronix = &OutputSecuronixModel{}
+		if err := m.OutputSecuronix.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "fortisiem":
+		m.OutputFortisiem = &OutputFortisiemModel{}
+		if err := m.OutputFortisiem.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}
