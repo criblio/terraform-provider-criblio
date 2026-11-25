@@ -2936,6 +2936,90 @@ actions:
               description: Tags associated with the dataset.
               x-terraform-optional-computed: true
 
+  # Search Usage Groups = search limit rules plus user assignments,
+  # /m/{groupId}/search/usage-groups. Search workspaces use `default_search`.
+  - target: "$.paths./m/{groupId}/search/usage-groups.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchUsageGroup
+      x-terraform-generate-data-source-docs: true
+  - target: "$.paths./m/{groupId}/search/usage-groups.get"
+    update:
+      x-terraform-list: SearchUsageGroup
+      x-terraform-list-name: SearchUsageGroups
+  - target: "$.paths./m/{groupId}/search/usage-groups/{id}.get"
+    update:
+      x-terraform-read: SearchUsageGroup
+  - target: "$.paths./m/{groupId}/search/usage-groups/{id}.patch"
+    update:
+      x-terraform-update: SearchUsageGroup
+  - target: "$.paths./m/{groupId}/search/usage-groups/{id}.delete"
+    update:
+      x-terraform-delete: SearchUsageGroup
+  # `usersCount` is derived from `users` by the API.
+  - target: "$.components.schemas.UsageGroup.properties.usersCount"
+    update:
+      x-terraform-computed: true
+  # Membership is configurable, but the API reports `users: {}` for a group with
+  # no members, which the provider normalizes to an empty map. Without
+  # `computed`, importing a memberless group plans `users = {} -> null` against a
+  # configuration that omits `users`, so the plan after import is not clean.
+  - target: "$.components.schemas.UsageGroup.properties.users"
+    update:
+      x-terraform-optional-computed: true
+  # The 4.21.0 spec marks a member's `type` as `const: credential`, which the
+  # generator renders as an optional attribute defaulting to `credential`. The
+  # API omits the field for a human member, so that default would send
+  # `credential` for every user and then mismatch on import, where the API
+  # reports no value. The account type follows from the member ID, which ends
+  # with `@clients` for an API credential, so the provider does not model it.
+  - target: "$.components.schemas.UsageGroup.properties.users.additionalProperties.properties.type"
+    update:
+      x-terraform-ignore: true
+  # `enabled` defaults server-side, and the deployment can store
+  # `coordinatorHeapMemoryLimit` at the group level itself, so both accept a
+  # value or let the API fill one in.
+  - target: "$.components.schemas.UsageGroup.properties.enabled"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.UsageGroup.properties.coordinatorHeapMemoryLimit"
+    update:
+      x-terraform-optional-computed: true
+  # Scheduling limits take either a number or a percentage string
+  # (NumberOrPercent), which only a dynamic attribute can round-trip: a string
+  # attribute would send `"5"` where the API expects `5`, and fail to read back
+  # numeric limits.
+  - target: "$.components.schemas.SchedulingLimitRule.properties.limit"
+    update:
+      x-terraform-custom-type: types.DynamicType{}
+  # `LimitRule.limit` is `type: number` upstream, but the API stores more than
+  # numbers in it: editing a Usage Group in the UI writes
+  # `coordinatorHeapMemoryLimit` with the sentinel string `"default"`, and
+  # rewrites other limits as numeric strings such as `"8"`. A float attribute
+  # fails to decode those with `expected number, got string`, which breaks even
+  # `terraform plan` against such a group, so this is dynamic too.
+  - target: "$.components.schemas.LimitRule.properties.limit"
+    update:
+      x-terraform-custom-type: types.DynamicType{}
+      description: Threshold for the rule. Accepts a number, or a string the API recognizes for this limit type, such as <code>"default"</code> for <code>coordinatorHeapMemoryLimit</code>.
+  # Each limit type has a fixed description and metric that the API fills in and
+  # overwrites on write: sending `description: "One week"` for maxTimerangeWidth
+  # reads back as `How "wide" the timerange could be, in seconds.`. Keeping them
+  # as attributes would make every plan after an import dirty, so leave both out
+  # of the Terraform schema. `type` stays, since the API echoes what is sent.
+  - target: "$.components.schemas.LimitRule.properties.description"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LimitRule.properties.metric"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SchedulingLimitRule.properties.description"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SchedulingLimitRule.properties.metric"
+    update:
+      x-terraform-computed: true
+
   - target: "$.paths./m/{groupId}/search/datasets.post"
     update:
       x-terraform-resource: true

@@ -70,6 +70,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if r.TypeName == "criblio_notification" || r.TypeName == "criblio_search_dashboard" {
 		pruneNotificationTargetConfigs(attrs)
 	}
+	if r.TypeName == "criblio_search_usage_group" {
+		pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
+	}
 	if r.TypeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
 	}
@@ -102,6 +105,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	}
 	if isLookupFileType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		return nil, fmt.Sprintf("%s %v: built-in default lookup (skip export)", r.TypeName, idMap)
+	}
+	if isSearchUsageGroupType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
+		return nil, fmt.Sprintf("%s %v: built-in Usage Group (skip export)", r.TypeName, idMap)
 	}
 	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
@@ -321,6 +327,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if typeName == "criblio_notification" || typeName == "criblio_search_dashboard" {
 		pruneNotificationTargetConfigs(attrs)
 	}
+	if typeName == "criblio_search_usage_group" {
+		pruneSearchUsageGroupAPIOwnedRuleFields(attrs)
+	}
 	if typeName == "criblio_pack_vars" {
 		custom.ApplyPackVarsDefaults(attrs)
 	}
@@ -347,6 +356,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	filterAttrsBySchema(attrs, e.ModelTypeName)
 	if skipResourceWhenLibCribl(attrs) || (typeName == "criblio_guard_rule" && attrs["lib"].Kind == hcl.KindString && attrs["lib"].String == "cribl-custom") {
 		return ErrSkipResourceLibCribl
+	}
+	if isSearchUsageGroupType(typeName) && DefaultResource(typeName, idMap, attrs, includeOverride) {
+		return nil
 	}
 	if excludeDefaults && DefaultResource(typeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++

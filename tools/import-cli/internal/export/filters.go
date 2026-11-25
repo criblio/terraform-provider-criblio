@@ -137,6 +137,15 @@ func isLookupFileType(typeName string) bool {
 	return typeName == "criblio_lookup_file" || typeName == "criblio_pack_lookups"
 }
 
+// isSearchUsageGroupType reports the Search Usage Group resource. Its built-in
+// groups are skipped whether or not --exclude-defaults is set: the API refuses
+// to create or delete them, and the built-in `default` group carries an empty
+// `rules`, which prunes to nothing and renders as HCL missing a required
+// argument.
+func isSearchUsageGroupType(typeName string) bool {
+	return typeName == "criblio_search_usage_group"
+}
+
 func defaultLookupFileByID(typeName string, idMap map[string]string, includeOverride IncludeOverride) bool {
 	if typeName != "criblio_lookup_file" {
 		return false
@@ -183,6 +192,8 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 		return custom.DefaultSearchDatasetIDs[id]
 	case "criblio_search_dataset_provider":
 		return custom.DefaultSearchDatasetProviderIDs[id]
+	case "criblio_search_usage_group":
+		return custom.DefaultSearchUsageGroupIDs[id]
 	case "criblio_cribl_lake_dataset":
 		return custom.DefaultCriblLakeDatasetIDs[id]
 	case "criblio_group":

@@ -24,8 +24,9 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_pack_routes":             {"id", "additional_properties", "items"},     // items is Computed; routes come from items[0], same as criblio_routes
 	"criblio_search_dataset":          {"id", "description", "provider_id", "type"}, // all computed/read-only; config comes from type-specific blocks only
 	"criblio_search_dataset_provider": {"id", "description", "provider_id", "type"},
-	"criblio_search_dataset_ruleset":  {"items"}, // Computed mirror of API; config is `rules` only (matches provider schema).
-	"criblio_search_datatype_ruleset": {"items"}, // Computed mirror of API; config is `rules` only (same as provider schema intent).
+	"criblio_search_dataset_ruleset":  {"items"},       // Computed mirror of API; config is `rules` only (matches provider schema).
+	"criblio_search_datatype_ruleset": {"items"},       // Computed mirror of API; config is `rules` only (same as provider schema intent).
+	"criblio_search_usage_group":      {"users_count"}, // Derived from `users` by the API, so it is Computed only.
 	"criblio_search_engine": {
 		"active_workflow",
 		"datasets",
