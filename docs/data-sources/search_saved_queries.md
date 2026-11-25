@@ -29,6 +29,7 @@ data "criblio_search_saved_queries" "example" {
 Read-Only:
 
 - `app_id` (String) App identifier used to attribute search/platform usage to a driving app.
+- `app_owner` (Attributes) (see [below for nested schema](#nestedatt--items--app_owner))
 - `chart_config` (Attributes) Chart configuration for scheduled or Dashboard-backed runs. (see [below for nested schema](#nestedatt--items--chart_config))
 - `description` (String) Brief description of the saved search.
 - `display_username` (String) Display name for the user who created the saved search.
@@ -46,7 +47,15 @@ Read-Only:
 - `search_job_source` (String) Source context that created the job.
 - `table_config` (Map of String) Table layout configuration.
 - `timezone` (String) IANA timezone for scheduled execution.
-- `user` (String) Identifier for the user who created the saved search. Scheduled runs execute as the specified user.
+- `user` (String) Creator identifier. Member-owned scheduled runs execute as this user; app-owned runs use .
+
+<a id="nestedatt--items--app_owner"></a>
+### Nested Schema for `items.app_owner`
+
+Read-Only:
+
+- `app_id` (String) Identifier of the app that owns the Search resource.
+- `installation_id` (String) Identifier of the app installation that established ownership.
 
 <a id="nestedatt--items--chart_config"></a>
 ### Nested Schema for `items.chart_config`
@@ -73,6 +82,7 @@ Read-Only:
 - `style` (Boolean) If <code>true</code>, apply custom styling to the chart.
 - `suffix` (String) String appended to the displayed value.
 - `type` (String) Default chart type for all series.
+- `visualization` (Attributes) Registry-native visualization configuration. (see [below for nested schema](#nestedatt--items--chart_config--visualization))
 - `x_axis` (Attributes) X-axis configuration. (see [below for nested schema](#nestedatt--items--chart_config--x_axis))
 - `y_axis` (Attributes) Y-axis configuration. (see [below for nested schema](#nestedatt--items--chart_config--y_axis))
 
@@ -179,6 +189,49 @@ Read-Only:
 - `shadow_color` (String) CSS color of the shadow.
 - `shadow_offset_x` (Integer) Horizontal offset of the shadow in pixels.
 - `shadow_offset_y` (Integer) Vertical offset of the shadow in pixels.
+
+<a id="nestedatt--items--chart_config--visualization"></a>
+### Nested Schema for `items.chart_config.visualization`
+
+Read-Only:
+
+- `family` (String) Family of the registered visualization that persisted this configuration.
+- `version` (String) Version of the visualization configuration contract this object was written against.
+- `fields_config` (Attributes) Ordered field metadata the visualization binds and formats. (see [below for nested schema](#nestedatt--items--chart_config--visualization--fields_config))
+- `display_config` (String) Display options the visualization draws with, such as its colors. Configure with jsonencode(...) to preserve nested objects and non-string values.
+- `legend_config` (Attributes) Legend configuration (see [below for nested schema](#nestedatt--items--chart_config--visualization--legend_config))
+- `tooltip_config` (Attributes) Tooltip configuration (see [below for nested schema](#nestedatt--items--chart_config--visualization--tooltip_config))
+
+<a id="nestedatt--items--chart_config--visualization--fields_config"></a>
+### Nested Schema for `items.chart_config.visualization.fields_config`
+
+Read-Only:
+
+- `fields` (Attributes List) Fields (see [below for nested schema](#nestedatt--items--chart_config--visualization--fields_config--fields))
+
+<a id="nestedatt--items--chart_config--visualization--fields_config--fields"></a>
+### Nested Schema for `items.chart_config.visualization.fields_config.fields`
+
+Read-Only:
+
+- `name` (String) Name of the result field this entry configures.
+- `type` (String) Value type the field formatter reads.
+
+<a id="nestedatt--items--chart_config--visualization--legend_config"></a>
+### Nested Schema for `items.chart_config.visualization.legend_config`
+
+Read-Only:
+
+- `hidden` (Boolean) Hide legend
+- `position` (String) Legend position
+
+<a id="nestedatt--items--chart_config--visualization--tooltip_config"></a>
+### Nested Schema for `items.chart_config.visualization.tooltip_config`
+
+Read-Only:
+
+- `hidden` (Boolean) Hide tooltip
+- `additional_fields` (List of String) Result fields shown in the tooltip beyond the ones the visualization binds.
 
 <a id="nestedatt--items--chart_config--x_axis"></a>
 ### Nested Schema for `items.chart_config.x_axis`

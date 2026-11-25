@@ -24,6 +24,14 @@ func TestSanitizeSensitiveExamples(t *testing.T) {
 	}
 }
 
+func TestTrimTrailingWhitespace(t *testing.T) {
+	input := []byte("description: |\n  Description with whitespace. \t\n  \nexample: \"value \"\n")
+	want := "description: |\n  Description with whitespace.\n\nexample: \"value \"\n"
+	if got := string(trimTrailingWhitespace(input)); got != want {
+		t.Fatalf("trimTrailingWhitespace() = %q, want %q", got, want)
+	}
+}
+
 func TestParseVersionsMap(t *testing.T) {
 	html := `<script>var tagMappings,apiTitle,versions={"v4.18.0":"https://example.test/4.18.yml","v4.17.1":"https://example.test/4.17.yml"};window.location.pathname</script>`
 
@@ -33,6 +41,21 @@ func TestParseVersionsMap(t *testing.T) {
 	}
 	if got := versions["v4.18.0"]; got != "https://example.test/4.18.yml" {
 		t.Fatalf("versions[v4.18.0] = %q", got)
+	}
+}
+
+func TestParseV1VersionsMap(t *testing.T) {
+	for _, assignment := range []string{"v1Versions=", "v1Versions = "} {
+		t.Run(assignment, func(t *testing.T) {
+			html := `<script>var v2Versions={"v5.0":"https://example.test/v2.yml"},` + assignment + `{"v4.21.0":"https://example.test/4.21.yml"};document.criblDocs.initApi(v1Versions)</script>`
+			versions, err := parseVersionsMap(html)
+			if err != nil {
+				t.Fatalf("parseVersionsMap() error = %v", err)
+			}
+			if len(versions) != 1 || versions["v4.21.0"] != "https://example.test/4.21.yml" {
+				t.Fatalf("versions = %v, want the v1Versions map", versions)
+			}
+		})
 	}
 }
 

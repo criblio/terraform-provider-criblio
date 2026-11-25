@@ -18,6 +18,7 @@ var _ = jsontypes.NormalizedType{}
 
 type MonitorActiveAlertModel struct {
 	Fingerprint   types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	Health        types.String `tfsdk:"health" json:"health,omitempty"`
 	MonitorID     types.String `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
 	PendingStatus types.String `tfsdk:"pending_status" json:"pending_status,omitempty"`
 	Status        types.String `tfsdk:"status" json:"status,omitempty"`
@@ -25,6 +26,7 @@ type MonitorActiveAlertModel struct {
 
 type MonitorActiveAlertResourceModel struct {
 	Fingerprint   types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	Health        types.String `tfsdk:"health" json:"health,omitempty"`
 	MonitorID     types.String `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
 	PendingStatus types.String `tfsdk:"pending_status" json:"pending_status,omitempty"`
 	Status        types.String `tfsdk:"status" json:"status,omitempty"`
@@ -32,6 +34,7 @@ type MonitorActiveAlertResourceModel struct {
 
 type MonitorActiveAlertDataSourceModel struct {
 	Fingerprint   types.String `tfsdk:"fingerprint" json:"fingerprint,omitempty"`
+	Health        types.String `tfsdk:"health" json:"health,omitempty"`
 	MonitorID     types.String `tfsdk:"monitor_id" json:"monitor_id,omitempty"`
 	PendingStatus types.String `tfsdk:"pending_status" json:"pending_status,omitempty"`
 	Status        types.String `tfsdk:"status" json:"status,omitempty"`
@@ -39,6 +42,7 @@ type MonitorActiveAlertDataSourceModel struct {
 
 type MonitorActiveAlertAPIModel struct {
 	Fingerprint   *string `json:"fingerprint,omitempty"`
+	Health        *string `json:"health,omitempty"`
 	MonitorID     *string `json:"monitor_id,omitempty"`
 	PendingStatus *string `json:"pending_status,omitempty"`
 	Status        *string `json:"status,omitempty"`
@@ -270,6 +274,13 @@ func (m MonitorActiveAlertModel) MarshalJSON() ([]byte, error) {
 		}
 		output["fingerprint"] = value
 	}
+	if !m.Health.IsNull() && !m.Health.IsUnknown() {
+		value, err := MonitorActiveAlertTerraformValueToJSON(m.Health)
+		if err != nil {
+			return nil, fmt.Errorf("convert health to API value: %v", err)
+		}
+		output["health"] = value
+	}
 	if !m.MonitorID.IsNull() && !m.MonitorID.IsUnknown() {
 		value, err := MonitorActiveAlertTerraformValueToJSON(m.MonitorID)
 		if err != nil {
@@ -303,6 +314,11 @@ func (m *MonitorActiveAlertModel) UnmarshalJSON(data []byte) error {
 		m.Fingerprint = types.StringValue(*input.Fingerprint)
 	} else {
 		m.Fingerprint = types.StringNull()
+	}
+	if input.Health != nil {
+		m.Health = types.StringValue(*input.Health)
+	} else {
+		m.Health = types.StringNull()
 	}
 	if input.MonitorID != nil {
 		m.MonitorID = types.StringValue(*input.MonitorID)

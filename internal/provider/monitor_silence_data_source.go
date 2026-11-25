@@ -35,58 +35,49 @@ func (d *MonitorSilenceDataSource) Schema(_ context.Context, _ datasource.Schema
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "MonitorSilence Data Source",
 		Attributes: map[string]schema.Attribute{
-			"alert_instance_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional fingerprint of a specific alert instance to mute. If omitted, all instances for the monitor are muted.`,
-			},
 			"begins_at": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unix timestamp in milliseconds when the alert silence begins.`,
+				Description: `Unix timestamp in milliseconds when the Silence starts muting notifications.`,
 			},
 			"created_at": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unix timestamp in milliseconds when the alert silence was created.`,
+				Description: `Unix timestamp in milliseconds when the Silence was created. Set by the server; a value sent in a request is ignored.`,
 			},
 			"created_by": schema.StringAttribute{
 				Computed:    true,
-				Description: `Username or identifier of who created this alert silence.`,
+				Description: `Username of who created the Silence. Set by the server; a value sent in a request is ignored.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
-				Description: `Optional user-friendly description of the alert silence.`,
+				Description: `Optional description of the Silence.`,
 			},
 			"duration_type": schema.StringAttribute{
 				Computed:    true,
-				Description: `UI state that records which duration picker mode was used. UI-only field for edit mode round-tripping. API consumers should ignore.`,
+				Description: `Records which duration picker mode the Metrics UI used to set the window. Does not change what the Silence mutes; <code>begins_at</code> and <code>expires_at</code> decide that.`,
 			},
 			"duration_unit": schema.StringAttribute{
 				Computed:    true,
-				Description: `UI state that records the unit for a relative duration. UI-only field for edit mode round-tripping. API consumers should ignore.`,
+				Description: `Records the unit for a relative duration in the Metrics UI. Does not change what the Silence mutes.`,
 			},
 			"duration_value": schema.Int64Attribute{
 				Computed:    true,
-				Description: `UI state that records the numeric value for a relative duration, such as <code>2</code> for two hours.`,
+				Description: `Records the number for a relative duration in the Metrics UI, such as <code>2</code> for two hours. Does not change what the Silence mutes.`,
 			},
 			"expires_at": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unix timestamp in milliseconds when the alert silence expires.`,
+				Description: `Unix timestamp in milliseconds when the Silence stops muting notifications.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique identifier for the alert silence.`,
+				Description: `Unique identifier for the Silence.`,
 			},
 			"monitor_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `The <code>id</code> of the alert Monitor that this silence applies to.`,
+				Description: `The <code>id</code> of the Monitor Configuration whose notifications this Silence mutes. All of the Monitor's notifications are muted, for every series.`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Optional display name for the alert silence.`,
-			},
-			"tags": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional tag matchers for selective instance muting. Keys are label names, values are arrays of allowed values. Logic: AND across keys, OR within each key's values. Only instances whose labels satisfy all keys are muted.`,
-				CustomType:  jsontypes.NormalizedType{},
+				Description: `Optional display name for the Silence.`,
 			},
 		},
 	}

@@ -51,7 +51,7 @@ func (r *SearchDatatypeRulesetResource) Schema(_ context.Context, _ resource.Sch
 				Optional:    true,
 				Computed:    true,
 				Default:     stringdefault.StaticString("default"),
-				Description: `Ruleset identifier.`,
+				Description: `Identifier of the fixed slot this ruleset occupies.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),

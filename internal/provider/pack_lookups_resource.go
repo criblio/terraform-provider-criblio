@@ -52,11 +52,25 @@ func (r *PackLookupsResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Computed:    false,
 				Description: `File content.`,
 			},
+			"deploy": schema.SingleNestedAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Deployment`,
+				Attributes: map[string]schema.Attribute{
+					"mode": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Auto deploy promotes the lookup to Workers without a commit and deploy`,
+					},
+				},
+			},
 			"description": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Brief description of the Lookup.`,
+				Description: `Description`,
 			},
 			"group_id": schema.StringAttribute{
 				Required: true,
@@ -70,7 +84,7 @@ func (r *PackLookupsResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `Unique identifier for the Lookup. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").`,
+				Description: `Unique identifier for the lookup file. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
@@ -83,13 +97,13 @@ func (r *PackLookupsResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
+				Description: `Storage mode for the lookup file. Select Store in Memory to load the lookup into memory for fast access. Select Store on Disk to query the lookup from disk using indexes.`,
 			},
 			"modified": schema.Float64Attribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Last modification time of the Lookup file, in milliseconds since the Unix epoch.`,
+				Description: `Last modification time of the lookup file, in milliseconds since the Unix epoch`,
 			},
 			"pack": schema.StringAttribute{
 				Required: true,
@@ -129,13 +143,13 @@ func (r *PackLookupsResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Comma-separated list of tags for categorizing the Lookup.`,
+				Description: `Comma-separated list of tags for categorizing the lookup file`,
 			},
 			"version": schema.StringAttribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Unique string generated for each modification of the Lookup.`,
+				Description: `Unique string generated for each modification of the lookup file`,
 			},
 		},
 	}
@@ -285,6 +299,9 @@ func isPackLookupsImportState(state *PackLookupsModel) bool {
 	if !state.Content.IsNull() && !state.Content.IsUnknown() {
 		return false
 	}
+	if !state.Deploy.IsNull() && !state.Deploy.IsUnknown() {
+		return false
+	}
 	if !state.Description.IsNull() && !state.Description.IsUnknown() {
 		return false
 	}
@@ -303,6 +320,14 @@ func applyPackLookupsAPIToState(api *PackLookupsModel, state *PackLookupsModel, 
 	}
 	if !api.Content.IsNull() && !api.Content.IsUnknown() {
 		state.Content = api.Content
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Deploy.IsNull() || state.Deploy.IsUnknown())) {
+		if !api.Deploy.IsNull() && !api.Deploy.IsUnknown() {
+			state.Deploy = api.Deploy
+		}
+	}
+	if len(state.Deploy.AttributeTypes(context.Background())) == 0 {
+		state.Deploy = types.ObjectNull(PackLookupsDeployAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {

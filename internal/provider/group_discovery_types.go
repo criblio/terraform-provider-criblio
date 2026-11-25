@@ -22,6 +22,7 @@ type GroupDiscoveryModel struct {
 	ConfigVersion           types.String `tfsdk:"config_version" json:"configVersion,omitempty"`
 	DeployingWorkerCount    types.Int64  `tfsdk:"deploying_worker_count" json:"deployingWorkerCount,omitempty"`
 	Description             types.String `tfsdk:"description" json:"description,omitempty"`
+	EphemeralCount          types.Int64  `tfsdk:"ephemeral_count" json:"ephemeralCount,omitempty"`
 	EstimatedIngestRate     types.Int64  `tfsdk:"estimated_ingest_rate" json:"estimatedIngestRate,omitempty"`
 	Git                     types.Object `tfsdk:"git" json:"git,omitempty"`
 	ID                      types.String `tfsdk:"id" json:"id,omitempty"`
@@ -48,6 +49,7 @@ type GroupDiscoveryResourceModel struct {
 	ConfigVersion           types.String   `tfsdk:"config_version" json:"configVersion,omitempty"`
 	DeployingWorkerCount    types.Int64    `tfsdk:"deploying_worker_count" json:"deployingWorkerCount,omitempty"`
 	Description             types.String   `tfsdk:"description" json:"description,omitempty"`
+	EphemeralCount          types.Int64    `tfsdk:"ephemeral_count" json:"ephemeralCount,omitempty"`
 	EstimatedIngestRate     types.Int64    `tfsdk:"estimated_ingest_rate" json:"estimatedIngestRate,omitempty"`
 	Git                     types.Object   `tfsdk:"git" json:"git,omitempty"`
 	ID                      types.String   `tfsdk:"id" json:"id,omitempty"`
@@ -74,6 +76,7 @@ type GroupDiscoveryDataSourceModel struct {
 	ConfigVersion           types.String   `tfsdk:"config_version" json:"configVersion,omitempty"`
 	DeployingWorkerCount    types.Int64    `tfsdk:"deploying_worker_count" json:"deployingWorkerCount,omitempty"`
 	Description             types.String   `tfsdk:"description" json:"description,omitempty"`
+	EphemeralCount          types.Int64    `tfsdk:"ephemeral_count" json:"ephemeralCount,omitempty"`
 	EstimatedIngestRate     types.Int64    `tfsdk:"estimated_ingest_rate" json:"estimatedIngestRate,omitempty"`
 	Git                     types.Object   `tfsdk:"git" json:"git,omitempty"`
 	ID                      types.String   `tfsdk:"id" json:"id,omitempty"`
@@ -100,6 +103,7 @@ type GroupDiscoveryAPIModel struct {
 	ConfigVersion           *string  `json:"configVersion,omitempty"`
 	DeployingWorkerCount    *int64   `json:"deployingWorkerCount,omitempty"`
 	Description             *string  `json:"description,omitempty"`
+	EphemeralCount          *int64   `json:"ephemeralCount,omitempty"`
 	EstimatedIngestRate     *int64   `json:"estimatedIngestRate,omitempty"`
 	Git                     any      `json:"git,omitempty"`
 	ID                      *string  `json:"id,omitempty"`
@@ -483,6 +487,13 @@ func (m GroupDiscoveryModel) MarshalJSON() ([]byte, error) {
 		}
 		output["description"] = value
 	}
+	if !m.EphemeralCount.IsNull() && !m.EphemeralCount.IsUnknown() {
+		value, err := GroupDiscoveryTerraformValueToJSON(m.EphemeralCount)
+		if err != nil {
+			return nil, fmt.Errorf("convert ephemeral_count to API value: %v", err)
+		}
+		output["ephemeralCount"] = value
+	}
 	if !m.EstimatedIngestRate.IsNull() && !m.EstimatedIngestRate.IsUnknown() {
 		value, err := GroupDiscoveryTerraformValueToJSON(m.EstimatedIngestRate)
 		if err != nil {
@@ -645,6 +656,11 @@ func (m *GroupDiscoveryModel) UnmarshalJSON(data []byte) error {
 		m.Description = types.StringValue(*input.Description)
 	} else {
 		m.Description = types.StringNull()
+	}
+	if input.EphemeralCount != nil {
+		m.EphemeralCount = types.Int64Value(*input.EphemeralCount)
+	} else {
+		m.EphemeralCount = types.Int64Null()
 	}
 	if input.EstimatedIngestRate != nil {
 		m.EstimatedIngestRate = types.Int64Value(*input.EstimatedIngestRate)

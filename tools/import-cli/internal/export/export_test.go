@@ -979,6 +979,14 @@ func TestEnsureNotificationTargetSecretPlaceholders(t *testing.T) {
 }
 
 func TestSkipResourceByID(t *testing.T) {
+	t.Run("pack destination exclusions match destination IDs", func(t *testing.T) {
+		for _, groupID := range []string{"default", "custom-group"} {
+			for _, id := range []string{"default", "devnull", "custom-output"} {
+				ids := map[string]string{"group_id": groupID, "pack": "custom-pack", "id": id}
+				assert.Equal(t, id != "custom-output", skipResourceByID("criblio_pack_destination", ids), "%v", ids)
+			}
+		}
+	})
 	t.Run("only skip the system-managed secret across groups and fleets", func(t *testing.T) {
 		for _, groupID := range []string{"default", "criblcon-demo", "default_fleet"} {
 			assert.True(t, skipResourceByID("criblio_secret", map[string]string{"group_id": groupID, "id": "__cribl_to_cribl__"}))

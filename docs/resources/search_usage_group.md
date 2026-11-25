@@ -127,8 +127,8 @@ Read-Only:
 
 Required:
 
-- `email` (String) Email address shown for the member in Usage Group administration.
-- `id` (String) Unique identifier for the user, representing a stable ID from the deployment identity system.
+- `email` (String) Email address shown for the member in Usage Group administration. For an API credential, this reports who created it.
+- `id` (String) Unique identifier for the member, representing a stable ID from the deployment identity system. API credential IDs end with <code>@clients</code>.
 
 ## Import
 

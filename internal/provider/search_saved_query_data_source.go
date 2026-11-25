@@ -39,6 +39,19 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 				Computed:    true,
 				Description: `App identifier used to attribute search/platform usage to a driving app.`,
 			},
+			"app_owner": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"app_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Identifier of the app that owns the Search resource.`,
+					},
+					"installation_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Identifier of the app installation that established ownership.`,
+					},
+				},
+			},
 			"chart_config": schema.SingleNestedAttribute{
 				Computed:    true,
 				Description: `Chart configuration for scheduled or Dashboard-backed runs.`,
@@ -352,6 +365,76 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						Computed:    true,
 						Description: `Default chart type for all series.`,
 					},
+					"visualization": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Registry-native visualization configuration.`,
+						Attributes: map[string]schema.Attribute{
+							"family": schema.StringAttribute{
+								Computed:    true,
+								Description: `Family of the registered visualization that persisted this configuration.`,
+							},
+							"version": schema.StringAttribute{
+								Computed:    true,
+								Description: `Version of the visualization configuration contract this object was written against.`,
+							},
+							"fields_config": schema.SingleNestedAttribute{
+								Computed:    true,
+								Description: `Ordered field metadata the visualization binds and formats.`,
+								Attributes: map[string]schema.Attribute{
+									"fields": schema.ListNestedAttribute{
+										Computed:    true,
+										Description: `Fields`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Computed:    true,
+													Description: `Name of the result field this entry configures.`,
+												},
+												"type": schema.StringAttribute{
+													Computed:    true,
+													Description: `Value type the field formatter reads.`,
+												},
+											},
+										},
+									},
+								},
+							},
+							"display_config": schema.StringAttribute{
+								Computed:    true,
+								Description: `Display options the visualization draws with, such as its colors. Configure with jsonencode(...) to preserve nested objects and non-string values.`,
+								CustomType:  jsontypes.NormalizedType{},
+							},
+							"legend_config": schema.SingleNestedAttribute{
+								Computed:    true,
+								Description: `Legend configuration`,
+								Attributes: map[string]schema.Attribute{
+									"hidden": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Hide legend`,
+									},
+									"position": schema.StringAttribute{
+										Computed:    true,
+										Description: `Legend position`,
+									},
+								},
+							},
+							"tooltip_config": schema.SingleNestedAttribute{
+								Computed:    true,
+								Description: `Tooltip configuration`,
+								Attributes: map[string]schema.Attribute{
+									"hidden": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Hide tooltip`,
+									},
+									"additional_fields": schema.ListAttribute{
+										Computed:    true,
+										Description: `Result fields shown in the tooltip beyond the ones the visualization binds.`,
+										ElementType: types.StringType,
+									},
+								},
+							},
+						},
+					},
 					"x_axis": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `X-axis configuration.`,
@@ -567,7 +650,7 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 			},
 			"user": schema.StringAttribute{
 				Computed:    true,
-				Description: `Identifier for the user who created the saved search. Scheduled runs execute as the specified user.`,
+				Description: `Creator identifier. Member-owned scheduled runs execute as this user; app-owned runs use .`,
 			},
 		},
 	}

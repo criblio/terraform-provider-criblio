@@ -18,6 +18,7 @@ var _ = jsontypes.NormalizedType{}
 
 type LookupFileModel struct {
 	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Deploy      types.Object  `tfsdk:"deploy" json:"deploy,omitempty"`
 	Description types.String  `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
@@ -30,6 +31,7 @@ type LookupFileModel struct {
 
 type LookupFileResourceModel struct {
 	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Deploy      types.Object  `tfsdk:"deploy" json:"deploy,omitempty"`
 	Description types.String  `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
@@ -42,6 +44,7 @@ type LookupFileResourceModel struct {
 
 type LookupFileDataSourceModel struct {
 	Content     types.String  `tfsdk:"content" json:"content,omitempty"`
+	Deploy      types.Object  `tfsdk:"deploy" json:"deploy,omitempty"`
 	Description types.String  `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String  `tfsdk:"id" json:"id,omitempty"`
@@ -54,6 +57,7 @@ type LookupFileDataSourceModel struct {
 
 type LookupFileAPIModel struct {
 	Content     *string  `json:"content,omitempty"`
+	Deploy      any      `json:"deploy,omitempty"`
 	Description *string  `json:"description,omitempty"`
 	GroupID     *string  `json:"groupId,omitempty"`
 	ID          *string  `json:"id,omitempty"`
@@ -62,6 +66,20 @@ type LookupFileAPIModel struct {
 	PendingTask any      `json:"pendingTask,omitempty"`
 	Tags        *string  `json:"tags,omitempty"`
 	Version     *string  `json:"version,omitempty"`
+}
+
+type LookupFileDeployModel struct {
+	Mode types.String `tfsdk:"mode" json:"mode,omitempty"`
+}
+
+type LookupFileDeployAPIModel struct {
+	Mode *string `json:"mode,omitempty"`
+}
+
+func LookupFileDeployAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode": types.StringType,
+	}
 }
 
 type LookupFilePendingTaskModel struct {
@@ -304,6 +322,13 @@ func (m LookupFileModel) MarshalJSON() ([]byte, error) {
 		}
 		output["content"] = value
 	}
+	if !m.Deploy.IsNull() && !m.Deploy.IsUnknown() {
+		value, err := LookupFileTerraformValueToJSON(m.Deploy)
+		if err != nil {
+			return nil, fmt.Errorf("convert deploy to API value: %v", err)
+		}
+		output["deploy"] = value
+	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := LookupFileTerraformValueToJSON(m.Description)
 		if err != nil {
@@ -344,6 +369,15 @@ func (m *LookupFileModel) UnmarshalJSON(data []byte) error {
 		m.Content = types.StringValue(*input.Content)
 	} else {
 		m.Content = types.StringNull()
+	}
+	if input.Deploy != nil {
+		value, err := LookupFileAPIValueToTerraformValue(input.Deploy, types.ObjectType{AttrTypes: LookupFileDeployAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert deploy from API value: %v", err)
+		}
+		m.Deploy = value.(types.Object)
+	} else {
+		m.Deploy = types.ObjectNull(LookupFileDeployAttrTypes())
 	}
 	if input.Description != nil {
 		m.Description = types.StringValue(*input.Description)

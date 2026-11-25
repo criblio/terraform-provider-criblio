@@ -35,6 +35,7 @@ commit history, and tag-to-tag diffs.
 - Added restore codegen overlay for criblio_monitor.
 - Added workspace settings search dataset acl resources.
 - Added data resources for all supported list endpoints.
+- Added a step for go downloads.
 
 ### Changed
 - Split acceptance runs into serial resource tests and read-only data source tests with configurable concurrency (default four). `make acceptance-test` runs both phases simultaneously by default. Removed repeated lifecycle collection reads while retaining initial collection checks and by-ID, update, drift, and import coverage.
@@ -48,8 +49,13 @@ commit history, and tag-to-tag diffs.
 - Made `lookup_allowed_paths`, `lookup_max_size`, `lookup_max_total_size`, and `enable_worker_in_memory` configurable in `criblio_system_limits`. On the Cribl.Cloud Leader and Cribl-managed Worker Groups, the API returns 403 for these attributes unless the caller is a Cribl Operator. After upgrading from v1.25.111–v1.25.113, the first refresh removes these four attributes from state unless they are configured; server values do not change.
 - Running both type of acceptance tests in parallel.
 - Making two runs within acceptance tests.
+- Syncing 4.21.0 upstream spec and regenerated provider.
+- Reducing ci memory on go cache.
+- Changing go max procs.
 
 ### Fixed
+- Marked SentinelOne and Netskope Source API tokens as sensitive in resources and data sources.
+- Preserved nested Saved Query visualization display options as normalized JSON for refresh, import, and updates.
 - Preserved unmanaged Search source authentication during v1 full-replacement updates, retained known global secret IDs across masked responses, and blocked unsafe writes of masked credentials. Matched backend manual/secret selection and added backend-contract regressions.
 - Fixed Search source refresh, import, and collection reads failing on Raw HTTP stored-secret authentication. Added `auth_tokens.token_secret` for Raw HTTP and Splunk HEC, preserving secret references and existing inline token configuration.
 - Aligned Projects and project pipeline collection acceptance tests with the on-prem fixture's missing enterprise license, matching existing resource test skips.
@@ -78,6 +84,9 @@ commit history, and tag-to-tag diffs.
 - Fixed test.
 - Fixed tests.
 - Fixed tests and adding concurrency for data resources.
+- Fixed static check version.
+- Fixed monitor validation test.
+- Fixed import cli timeout and ctx cancel.
 
 ## [1.25.55] - 2026-08-19
 

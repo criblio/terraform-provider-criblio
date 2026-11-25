@@ -1,6 +1,7 @@
-.PHONY: * acceptance-test acceptance-test-resources acceptance-test-data-sources
+.PHONY: * acceptance-test acceptance-test-compile acceptance-test-resources acceptance-test-data-sources
 
 DATA_SOURCE_TEST_PARALLELISM ?= 4
+ACCEPTANCE_TEST_TIMEOUT ?= 90m
 
 OS=$(shell uname | tr "[:upper:]" "[:lower:]")
 ARCH=$(shell uname -m | sed 's/aarch64/arm64/' | sed 's/x86_64/amd64/')
@@ -11,14 +12,18 @@ e2e-test:
 	@#run our wrapper script targeting our new plugin
 	./tests/e2e/scripts/e2e.sh 
 
-acceptance-test:
+# Compile the shared package first, then run both suites concurrently.
+acceptance-test: acceptance-test-compile
 	$(MAKE) -j2 acceptance-test-resources acceptance-test-data-sources
 
+acceptance-test-compile:
+	GOMAXPROCS=2 GOGC=50 go test -c -o /dev/null ./tests/acceptance
+
 acceptance-test-resources:
-	go test -v -count=1 -timeout 60m ./tests/acceptance -skip 'DataSources$$' -parallel 1
+	go test -v -count=1 -timeout $(ACCEPTANCE_TEST_TIMEOUT) ./tests/acceptance -skip 'DataSources$$' -parallel 1
 
 acceptance-test-data-sources:
-	go test -v -count=1 -timeout 60m ./tests/acceptance -run 'DataSources$$' -parallel $(DATA_SOURCE_TEST_PARALLELISM)
+	go test -v -count=1 -timeout $(ACCEPTANCE_TEST_TIMEOUT) ./tests/acceptance -run 'DataSources$$' -parallel $(DATA_SOURCE_TEST_PARALLELISM)
 
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup

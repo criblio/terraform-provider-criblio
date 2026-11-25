@@ -7,6 +7,10 @@ concurrency:
   group: tfprovider
   cancel-in-progress: false
 
+# Bound concurrent package builds without throttling test/provider execution.
+env:
+  GOFLAGS: -p=1
+
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -57,10 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
 
       - name: Run Go Fmt Checks
         run: | 
@@ -76,7 +81,8 @@ jobs:
 
   acceptance_test_cloud:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # The 90-minute suites start after setup and compilation; allow cleanup time too.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -84,10 +90,15 @@ jobs:
         with:
           terraform_version: "1.1.7"
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run Acceptance Tests [Cloud]
         env:
@@ -105,7 +116,8 @@ jobs:
 
   acceptance_test_onprem:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # The 90-minute suites start after setup and compilation; allow cleanup time too.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -113,10 +125,15 @@ jobs:
         with:
           terraform_version: "1.1.7"
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Start Docker Compose services
         run: docker compose -f tests/docker/docker-compose.yml up -d
@@ -152,10 +169,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run Unit Tests
         run: | 
@@ -166,10 +188,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run Remaining Go Tests
         run: |
@@ -182,17 +209,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run import-cli Unit Tests
         run: make unit-test-import-cli
 
   integration_test_import_cli:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Leave room for setup/builds around the Makefile's 40-minute test timeout.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -203,10 +236,15 @@ jobs:
           # Preserve Terraform exit codes (0=no changes, 1=error, 2=changes). Default wrapper converts non-zero to 1.
           terraform_wrapper: false
 
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
 
       - name: Run import-cli Integration Tests
         env:
@@ -215,20 +253,30 @@ jobs:
           CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
-        run: |
-          make build-import-cli
-          go test -v -tags=integration ./tools/import-cli/integration/...
+        # Use the shared target so CI does not inherit Go's default 10-minute timeout.
+        run: make integration-test-import-cli
 
   staticcheck_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: actions/setup-go@v4.3.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: 'go.mod'
           cache: true
+          cache-dependency-path: go.sum
+      - name: Download Go modules
+        uses: ./.github/actions/download-go-modules
+        timeout-minutes: 11
+
       - uses: dominikh/staticcheck-action@v1.3.1
+        env:
+          # Staticcheck sizes its analysis worker pool from GOMAXPROCS.
+          GOMAXPROCS: 1
+          GOGC: 50
         with:
+          # v0.7.0 supports Go 1.25; newer releases require Go 1.26.
+          version: v0.7.0
           # SA1019: deprecated identifiers (e.g. reflect.PtrTo in generated SDK utils)
           checks: inherit,-ST1000,-SA1019,-SA5008
           install-go: false

@@ -97,6 +97,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if skipResourceWhenLibCribl(attrs) {
 		return nil, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap)
 	}
+	if r.TypeName == "criblio_guard_rule" && attrs["lib"].Kind == hcl.KindString && attrs["lib"].String == "cribl-custom" {
+		return nil, fmt.Sprintf("%s %v: customized Cribl library rule (built-in, skip export)", r.TypeName, idMap)
+	}
 	if isLookupFileType(r.TypeName) && criblDefaultTag(attrs) {
 		return nil, fmt.Sprintf("%s %v: cribl:default tag (built-in, skip export)", r.TypeName, idMap)
 	}
@@ -106,9 +109,6 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if isSearchUsageGroupType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		return nil, fmt.Sprintf("%s %v: built-in Usage Group (skip export)", r.TypeName, idMap)
 	}
-	if skipGuardRuleWithoutRulesets(r.TypeName, attrs) {
-		return nil, fmt.Sprintf("%s %v: Guard Rule belongs to no ruleset (unmanageable, skip export)", r.TypeName, idMap)
-	}
 	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
 		return nil, fmt.Sprintf("%s %v: built-in default (--exclude-defaults)", r.TypeName, idMap)
@@ -117,6 +117,11 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 		if injErr := injectSearchRulesetRulesForExport(r.TypeName, model, attrs, e); injErr != nil {
 			return nil, fmt.Sprintf("%s %v: search ruleset rules: %s", r.TypeName, idMap, sanitizeConvertError(injErr))
 		}
+	}
+	// The API treats absent rulesets as an unattached rule, but Terraform requires
+	// the attribute. Keep that meaning explicit in exported configurations.
+	if r.TypeName == "criblio_guard_rule" && attrs["rulesets"].Kind == hcl.KindNull {
+		attrs["rulesets"] = hcl.Value{Kind: hcl.KindList, List: []hcl.Value{}}
 	}
 	filterAttrsBySchema(attrs, e.ModelTypeName)
 	if r.TypeName == "criblio_pack_destination" && idMap["pack"] != "" {
@@ -343,14 +348,16 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 			return err
 		}
 	}
+	// The API treats absent rulesets as an unattached rule, but Terraform requires
+	// the attribute. Keep that meaning explicit in exported configurations.
+	if typeName == "criblio_guard_rule" && attrs["rulesets"].Kind == hcl.KindNull {
+		attrs["rulesets"] = hcl.Value{Kind: hcl.KindList, List: []hcl.Value{}}
+	}
 	filterAttrsBySchema(attrs, e.ModelTypeName)
-	if skipResourceWhenLibCribl(attrs) {
+	if skipResourceWhenLibCribl(attrs) || (typeName == "criblio_guard_rule" && attrs["lib"].Kind == hcl.KindString && attrs["lib"].String == "cribl-custom") {
 		return ErrSkipResourceLibCribl
 	}
 	if isSearchUsageGroupType(typeName) && DefaultResource(typeName, idMap, attrs, includeOverride) {
-		return nil
-	}
-	if skipGuardRuleWithoutRulesets(typeName, attrs) {
 		return nil
 	}
 	if excludeDefaults && DefaultResource(typeName, idMap, attrs, includeOverride) {

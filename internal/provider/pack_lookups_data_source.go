@@ -39,24 +39,34 @@ func (d *PackLookupsDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 				Computed:    true,
 				Description: `File content.`,
 			},
+			"deploy": schema.SingleNestedAttribute{
+				Computed:    true,
+				Description: `Deployment`,
+				Attributes: map[string]schema.Attribute{
+					"mode": schema.StringAttribute{
+						Computed:    true,
+						Description: `Auto deploy promotes the lookup to Workers without a commit and deploy`,
+					},
+				},
+			},
 			"description": schema.StringAttribute{
 				Computed:    true,
-				Description: `Brief description of the Lookup.`,
+				Description: `Description`,
 			},
 			"group_id": schema.StringAttribute{
 				Required: true,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique identifier for the Lookup. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").`,
+				Description: `Unique identifier for the lookup file. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").`,
 			},
 			"mode": schema.StringAttribute{
 				Computed:    true,
-				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
+				Description: `Storage mode for the lookup file. Select Store in Memory to load the lookup into memory for fast access. Select Store on Disk to query the lookup from disk using indexes.`,
 			},
 			"modified": schema.Float64Attribute{
 				Computed:    true,
-				Description: `Last modification time of the Lookup file, in milliseconds since the Unix epoch.`,
+				Description: `Last modification time of the lookup file, in milliseconds since the Unix epoch`,
 			},
 			"pack": schema.StringAttribute{
 				Required: true,
@@ -81,11 +91,11 @@ func (d *PackLookupsDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 			},
 			"tags": schema.StringAttribute{
 				Computed:    true,
-				Description: `Comma-separated list of tags for categorizing the Lookup.`,
+				Description: `Comma-separated list of tags for categorizing the lookup file`,
 			},
 			"version": schema.StringAttribute{
 				Computed:    true,
-				Description: `Unique string generated for each modification of the Lookup.`,
+				Description: `Unique string generated for each modification of the lookup file`,
 			},
 		},
 	}

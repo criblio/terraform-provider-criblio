@@ -284,11 +284,11 @@ func (d *SearchUsageGroupDataSource) Schema(_ context.Context, _ datasource.Sche
 					Attributes: map[string]schema.Attribute{
 						"email": schema.StringAttribute{
 							Computed:    true,
-							Description: `Email address shown for the member in Usage Group administration.`,
+							Description: `Email address shown for the member in Usage Group administration. For an API credential, this reports who created it.`,
 						},
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `Unique identifier for the user, representing a stable ID from the deployment identity system.`,
+							Description: `Unique identifier for the member, representing a stable ID from the deployment identity system. API credential IDs end with <code>@clients</code>.`,
 						},
 					},
 				},

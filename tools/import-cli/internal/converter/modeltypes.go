@@ -82,7 +82,7 @@ func ResourceModelTypes() map[string]reflect.Type {
 		"GrokResourceModel":                       reflect.TypeOf((*provider.GrokResourceModel)(nil)).Elem(),
 		"GroupResourceModel":                      reflect.TypeOf((*provider.GroupResourceModel)(nil)).Elem(),
 		"GroupSystemSettingsResourceModel":        reflect.TypeOf((*provider.GroupSystemSettingsResourceModel)(nil)).Elem(),
-		"GuardRuleResourceModel":                  reflect.TypeOf((*provider.GuardRuleResourceModel)(nil)).Elem(),
+		"GuardRuleResourceModel":                  reflect.TypeOf((*provider.GuardRuleModel)(nil)).Elem(),
 		"SystemLimitsResourceModel":               reflect.TypeOf((*provider.SystemLimitsModel)(nil)).Elem(),
 		"HmacFunctionResourceModel":               reflect.TypeOf((*provider.HmacFunctionResourceModel)(nil)).Elem(),
 		"KeyResourceModel":                        reflect.TypeOf((*provider.KeyResourceModel)(nil)).Elem(),

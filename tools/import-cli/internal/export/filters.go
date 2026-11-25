@@ -125,14 +125,12 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	if !ok || len(ids) == 0 {
 		return false
 	}
-	// Match ImportIDFormat "id" and group-only maps (e.g. criblio_group uses group_id without "id").
-	if v := idMap["id"]; v != "" && ids[v] {
-		return true
+	// Use the resource ID when present. Only group-only identifiers use group_id;
+	// a worker group named "default" must not exclude every pack destination.
+	if id := idMap["id"]; id != "" {
+		return ids[id]
 	}
-	if v := idMap["group_id"]; v != "" && ids[v] {
-		return true
-	}
-	return false
+	return ids[idMap["group_id"]]
 }
 
 func isLookupFileType(typeName string) bool {
@@ -157,21 +155,6 @@ func defaultLookupFileByID(typeName string, idMap map[string]string, includeOver
 		return false
 	}
 	return custom.DefaultLookupFileIDs[id]
-}
-
-// skipGuardRuleWithoutRulesets reports a Guard Rule that belongs to no ruleset.
-// `rulesets` is required by the provider schema, and the API additionally
-// enforces at least one entry ("At least one ruleset is required"), so such a
-// rule cannot be written back: omitting the attribute fails `terraform plan`,
-// and sending an empty list fails apply with HTTP 400. The API nonetheless
-// serves rules in that state, so they are unmanageable and must not be exported
-// as managed resources, like Cribl-library rules above.
-func skipGuardRuleWithoutRulesets(typeName string, attrs map[string]hcl.Value) bool {
-	if typeName != "criblio_guard_rule" {
-		return false
-	}
-	v, ok := attrs["rulesets"]
-	return !ok || v.IsNull() || (v.Kind == hcl.KindList && len(v.List) == 0)
 }
 
 func skipResourceWhenLibCribl(attrs map[string]hcl.Value) bool {

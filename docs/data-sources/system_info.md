@@ -93,12 +93,13 @@ Read-Only:
 - `edge_groups` (Integer) Maximum number of Edge Fleets.
 - `edge_procs` (Integer) Maximum number of Edge Processes.
 - `external_secret_stores` (Integer) Maximum number of externally backed secret stores.
+- `heavy_duty` (Integer) When disabled, resource optimizations, like not spawning certain services or limiting RAM, are applied.
 - `kms` (Integer) Maximum number of Key Management Service (KMS) providers.
+- `lakehouse` (Integer) Lakehouse limit.
 - `lake_access_groups` (Integer) Maximum number of Cribl Lake access groups.
 - `lake_ddss` (Integer) Cribl Lake Dynamic Data Self Storage (DDSS) limit.
 - `lake_metrics` (Integer) Cribl Lake metrics limit.
 - `lake_storage_locations` (Integer) Maximum number of Cribl Lake Storage Locations.
-- `lakehouse` (Integer) Lakehouse limit.
 - `leader_resiliency` (Integer) Leader resiliency limit.
 - `max_executors_per_search` (Integer) Maximum number of executors per search.
 - `notifications` (Integer) Maximum number of Notifications.
@@ -115,8 +116,8 @@ Read-Only:
 - `search_acceleration` (Integer) Dataset acceleration limit. NOTE: Dataset acceleration is deprecated.
 - `search_groups` (Integer) Maximum number of Cribl Search Groups.
 - `system_email` (Integer) System email limit.
-- `worker_group_boot_throttle` (Integer) Whether the Leader may throttle Worker Group and Fleet APIs that boot a group process when resources are insufficient.
 - `worker_groups` (Integer) Maximum number of Worker Groups.
+- `worker_group_boot_throttle` (Integer) Whether the Leader may throttle Worker Group and Fleet APIs that boot a group process when resources are insufficient.
 - `worker_procs` (Integer) Maximum number of Worker Processes.
 
 <a id="nestedatt--items--limits"></a>

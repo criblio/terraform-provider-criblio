@@ -26,7 +26,7 @@ resource "criblio_search_engine" "my_search_engine" {
 ### Required
 
 - `id` (String) Unique identifier.
-- `tier_size` (String) Storage and compute [tier size](https://docs.cribl.io/search/engine-setup/#sizes-list) for the lakehouse engine. Configuring sizes <code>3xlarge</code>, <code>4xlarge</code>,<code>5xlarge</code>, and <code>6xlarge</code> requires the <code>cribl_operator</code> role.
+- `tier_size` (String) Storage and compute [tier size](https://docs.cribl.io/search/engine-setup/#sizes-list) for the lakehouse engine. Configuring sizes <code>3xlarge</code> through <code>10xlarge</code> requires the <code>cribl_operator</code> role. <code>2xlarge-plus</code> additionally requires the <code>feature-search-2xlarge-plus</code> feature flag, and is limited to a single engine node.
 
 ### Optional
 

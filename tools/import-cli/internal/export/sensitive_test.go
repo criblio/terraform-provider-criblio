@@ -60,9 +60,6 @@ func TestExporterOmitsCredentialLiterals(t *testing.T) {
 			if strings.Contains(tt.typeName, "pack_") {
 				ids["pack"] = "example-pack"
 			}
-			if tt.typeName == "criblio_pack_destination" {
-				ids["group_id"] = "test-group"
-			}
 			item, skip := convertOneResource(context.Background(), client, discovery.Result{TypeName: tt.typeName}, e, ids, nil, []string{"default"}, false, IncludeOverride{}, &ExportResult{}, &conversionRequest{})
 			if item == nil {
 				t.Fatalf("conversion skipped: %s", skip)

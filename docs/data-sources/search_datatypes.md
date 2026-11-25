@@ -59,6 +59,7 @@ Read-Only:
 Read-Only:
 
 - `name` (String) Name of the additional extraction.
+- `prefix` (String) Optional prefix prepended to all extracted field names. If the value does not end with an underscore, one is appended when the Datatype is saved.
 - `source_field` (String) Field to use as input for the extraction.
 - `contains_header_row` (Boolean) Indicates that the source file contains a header row.
 - `delimiter` (String) Field delimiter that separates columns in delimited text.

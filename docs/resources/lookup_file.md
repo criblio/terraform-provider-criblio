@@ -29,20 +29,28 @@ resource "criblio_lookup_file" "my_lookup_file" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String) Unique identifier for the Lookup. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").
+- `id` (String) Unique identifier for the lookup file. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").
 
 ### Optional
 
 - `content` (String) File content.
-- `description` (String) Brief description of the Lookup.
-- `mode` (String) Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.
-- `tags` (String) Comma-separated list of tags for categorizing the Lookup.
+- `deploy` (Attributes) Deployment (see [below for nested schema](#nestedatt--deploy))
+- `description` (String) Description
+- `mode` (String) Storage mode for the lookup file. Select Store in Memory to load the lookup into memory for fast access. Select Store on Disk to query the lookup from disk using indexes.
+- `tags` (String) Comma-separated list of tags for categorizing the lookup file
 
 ### Read-Only
 
-- `modified` (Number) Last modification time of the Lookup file, in milliseconds since the Unix epoch.
+- `modified` (Number) Last modification time of the lookup file, in milliseconds since the Unix epoch
 - `pending_task` (Attributes) Details of the pending background task for this Lookup, if one is in progress. (see [below for nested schema](#nestedatt--pending_task))
-- `version` (String) Unique string generated for each modification of the Lookup.
+- `version` (String) Unique string generated for each modification of the lookup file
+
+<a id="nestedatt--deploy"></a>
+### Nested Schema for `deploy`
+
+Optional:
+
+- `mode` (String) Auto deploy promotes the lookup to Workers without a commit and deploy
 
 <a id="nestedatt--pending_task"></a>
 ### Nested Schema for `pending_task`

@@ -20,6 +20,7 @@ import (
 )
 
 // Validate the actual HCL used by live tests and examples without API credentials.
+// Run for every deployment: this checks the provider schema without calling Cribl.
 func TestMonitorConfigurations(t *testing.T) {
 	configs := map[string]string{
 		"threshold-create": monitorThreshold(80),

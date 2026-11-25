@@ -47,6 +47,10 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Computed:    true,
 				Description: `Whether the monitor is active and evaluated.`,
 			},
+			"evaluation_interval_sec": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Evaluation cadence in seconds. Integer multiple of 60 between 60 and 3600. Defaults to 60 when omitted.`,
+			},
 			"expr": schema.ListNestedAttribute{
 				Computed:    true,
 				Description: `Query expressions evaluated to produce the monitor's series.`,
@@ -96,6 +100,11 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Computed:    true,
 				Description: `Identifies the external provisioner (e.g. 'terraform') that owns this monitor. When set, the monitor is read-only from the UI and non-SDK REST mutations are rejected with 403.`,
 			},
+			"mute_schedule_ids": schema.ListAttribute{
+				Computed:    true,
+				Description: `IDs of the recurring mute schedules that suppress this monitor's notifications while any of them is active.`,
+				ElementType: types.StringType,
+			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Human-readable name for the monitor.`,
@@ -125,7 +134,7 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 							Attributes: map[string]schema.Attribute{
 								"aggregation": schema.StringAttribute{
 									Computed:    true,
-									Description: `Aggregation operator applied to the metric series.`,
+									Description: `Aggregation function chosen in the query builder, for example sum, avg, rate or quantile. Used by the UI only.`,
 								},
 								"evaluation_window": schema.SingleNestedAttribute{
 									Computed:    true,
@@ -350,7 +359,32 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Attributes: map[string]schema.Attribute{
 					"algorithm": schema.StringAttribute{
 						Computed:    true,
-						Description: `Discriminator value.`,
+						Description: `Detector family (the outlier fit). Currently MAD — median absolute deviation from peers.`,
+					},
+					"cohort_labels": schema.ListAttribute{
+						Computed:    true,
+						Description: `Labels that group series into peer cohorts; empty means one global cohort across all series.`,
+						ElementType: types.StringType,
+					},
+					"evaluation_window_ms": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Window in milliseconds the pooled cohort median/MAD is computed over.`,
+					},
+					"min_coverage": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Percentage (1–100) of expected window points a series needs before it is graded.`,
+					},
+					"mode": schema.StringAttribute{
+						Computed:    true,
+						Description: `How the peer cohort is pooled: per-instant cross-section, or pooled over the window.`,
+					},
+					"pct": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Percentage (1–100) of a series' window points that must breach before it is flagged.`,
+					},
+					"threshold_direction": schema.StringAttribute{
+						Computed:    true,
+						Description: `Which side flags an outlier: above the cohort spread, below it, or either.`,
 					},
 				},
 			},
@@ -385,9 +419,21 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 						Computed:    true,
 						Description: `Time (in seconds) a recovery must persist before the monitor clears.`,
 					},
+					"exec_error_state": schema.StringAttribute{
+						Computed:    true,
+						Description: `What the monitor does when the evaluation itself fails to run: <code>error</code> (default) records the failure against each instance while holding its prior status, <code>alerting</code> treats it as breaching at the highest configured severity, <code>ok</code> treats it as recovered, and <code>keep_last</code> holds the prior status without notifying.`,
+					},
 					"fire_delay": schema.Int64Attribute{
 						Computed:    true,
 						Description: `Time (in seconds) a breach must persist before the monitor fires.`,
+					},
+					"missing_series_evals_to_resolve": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Consecutive missed evaluations a single vanished series must be absent before it resolves to no-data (1 to 100; default 1). Does not apply when the whole rule returns no data.`,
+					},
+					"no_data_state": schema.StringAttribute{
+						Computed:    true,
+						Description: `What the monitor does when its whole rule returns no data: <code>no_data</code> (default) ages the instance into no-data, <code>ok</code> treats it as recovered, <code>alerting</code> treats it as breaching at the highest configured severity, and <code>keep_last</code> holds the prior status.`,
 					},
 				},
 			},
@@ -468,6 +514,20 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 												Computed:    true,
 												Description: `Comparison operator applied to the threshold limit.`,
 											},
+											"recovery": schema.SingleNestedAttribute{
+												Computed:    true,
+												Description: `Optional recovery (hysteresis) bound the series must cross before this severity is released.`,
+												Attributes: map[string]schema.Attribute{
+													"limit": schema.Float64Attribute{
+														Computed:    true,
+														Description: `Value the metric must cross, using <code>operator</code>, before the severity is released.`,
+													},
+													"operator": schema.StringAttribute{
+														Computed:    true,
+														Description: `Comparison operator applied to the recovery limit; must oppose the firing operator.`,
+													},
+												},
+											},
 											"severity": schema.StringAttribute{
 												Computed:    true,
 												Description: `Severity assigned when the threshold's condition is met: <code>critical</code>, <code>warning</code>, or <code>info</code>.`,
@@ -512,6 +572,20 @@ func (d *MonitorDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								"operator": schema.StringAttribute{
 									Computed:    true,
 									Description: `Comparison operator applied to the threshold limit.`,
+								},
+								"recovery": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Optional recovery (hysteresis) bound the series must cross before this severity is released.`,
+									Attributes: map[string]schema.Attribute{
+										"limit": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Value the metric must cross, using <code>operator</code>, before the severity is released.`,
+										},
+										"operator": schema.StringAttribute{
+											Computed:    true,
+											Description: `Comparison operator applied to the recovery limit; must oppose the firing operator.`,
+										},
+									},
 								},
 								"severity": schema.StringAttribute{
 									Computed:    true,
