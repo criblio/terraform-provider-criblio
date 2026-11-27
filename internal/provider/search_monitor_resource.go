@@ -283,6 +283,7 @@ func (r *SearchMonitorResource) Read(ctx context.Context, req resource.ReadReque
 	if apiModel != nil {
 		// Path parameters identify the resource and may be absent from API bodies.
 		apiModel.ID = model.ID
+		applySearchMonitorAPIToState(apiModel, apiModel, false, false)
 		model = *apiModel
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)

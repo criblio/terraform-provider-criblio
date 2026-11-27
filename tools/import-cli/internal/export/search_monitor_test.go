@@ -125,6 +125,7 @@ data "criblio_search_monitors" "all" {}
 		},
 		Steps: []resource.TestStep{
 			{Config: config, Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr("criblio_search_monitor."+custom.Items[0].Name, "is_default", "false"),
 				resource.TestCheckResourceAttr("data.criblio_search_monitor.one", "name", "Detailed"),
 				resource.TestCheckResourceAttr("data.criblio_search_monitors.all", "items.#", "2"),
 				resource.TestCheckResourceAttr("data.criblio_search_monitors.all", "items.1.product", "stream"),

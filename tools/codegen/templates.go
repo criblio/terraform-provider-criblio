@@ -2369,6 +2369,8 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		if len(apiModel.Groups.Elements()) == 0 && len(model.Groups.Elements()) == 0 {
 			apiModel.Groups = model.Groups
 		}
+{{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") (eq .StructName "SearchMonitor") }}
 		apply{{ .StructName }}APIToState(apiModel, apiModel, false, false)
 {{- end }}
 		model = *apiModel

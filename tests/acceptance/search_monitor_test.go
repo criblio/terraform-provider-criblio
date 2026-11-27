@@ -30,7 +30,10 @@ data "criblio_search_monitor" "one" { id = %s.id }
 data "criblio_search_monitors" "all" { depends_on = [%s] }
 output "found" { value = contains(data.criblio_search_monitors.all.items[*].id, data.criblio_search_monitor.one.id) }
 `, address, address), Check: resource.TestCheckOutput("found", "true")},
-			{Config: updated, Check: resource.TestCheckResourceAttr(address, "name", "Updated monitor")},
+			{Config: updated, Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr(address, "name", "Updated monitor"),
+				resource.TestCheckResourceAttr(address, "is_default", "false"),
+			)},
 			{ResourceName: address, ImportState: true, ImportStateId: id, ImportStateVerify: true},
 			{Config: updated, PlanOnly: true},
 		},
