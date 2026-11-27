@@ -54,6 +54,7 @@ var (
 // importMetadataBase is the default metadata per type (from resource SDK usage).
 // Overrides and clearListMethodTypes are applied in ImportMetadata().
 var importMetadataBase = map[string]ResourceMetadata{
+	"criblio_search_monitor":               {ImportIDFormat: "id", RESTListPath: "/m/default_search/alert/monitors", RESTGetPath: "/m/default_search/alert/monitors/{id}"},
 	"criblio_search_dataset_acl":           {ModelTypeName: "SearchDatasetACLResourceModel", ImportIDFormat: "dataset_id", RESTListPath: "/m/default_search/search/datasets", RESTGetPath: "/m/default_search/search/datasets/{dataset_id}/acl"},
 	"criblio_appscope_config":              {SDKService: "AppscopeConfigs", ListMethod: "ListAppscopeLibEntry", GetMethod: "GetAppscopeLibEntryByID", ImportIDFormat: ""},
 	"criblio_certificate":                  {SDKService: "Certificates", ListMethod: "ListCertificate", GetMethod: "GetCertificateByID", ImportIDFormat: ""},

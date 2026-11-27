@@ -100,35 +100,24 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 						ElementType: types.StringType,
 					},
 					"functions": schema.ListNestedAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `List of Functions to pass data through the Pipeline.`,
-						PlanModifiers: []planmodifier.List{
-							custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress),
-						},
+						Required:      false,
+						Optional:      true,
+						Computed:      true,
+						Description:   `List of Functions to pass data through the Pipeline.`,
+						PlanModifiers: pipelineFunctionsPlanModifiers(),
 						NestedObject: schema.NestedAttributeObject{
-							PlanModifiers: []planmodifier.Object{
-								custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress),
-							},
 							Attributes: map[string]schema.Attribute{
 								"filter": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Filter that selects data to be fed through this Function. Default: "true"`,
-									PlanModifiers: []planmodifier.String{
-										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
-									},
 								},
 								"id": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).`,
-									PlanModifiers: []planmodifier.String{
-										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
-									},
 									Validators: []validator.String{
 										stringvalidator.OneOf("aggregate_metrics", "aggregation", "auto_timestamp", "cef", "chain", "clone", "code", "comment", "distinct", "dns_lookup", "drop", "drop_dimensions", "dynamic_sampling", "eval", "event_breaker", "eventstats", "externaldata", "flatten", "foldkeys", "gen_stats", "geoip", "grok", "handlebars", "join", "json_unroll", "lake_export", "limit", "local_search_datatype_parser", "local_search_ruleset_runner", "local_search_schema_mapper", "local_search_time_range_normalizer", "local_search_transformer", "lookup", "mask", "metrics_export", "mv_expand", "mv_pull", "notification_policies", "notifications", "notify", "numerify", "otlp_logs", "otlp_metrics", "otlp_traces", "pack", "pivot", "publish_metrics", "redis", "regex_extract", "regex_filter", "rename", "rollup_metrics", "sampling", "search_engine_export", "send", "sensitive_data_scanner", "serde", "serialize", "sidlookup", "signal_filter", "snmp_trap_serialize", "sort", "store", "suppress", "tee", "trim_timestamp", "union", "unroll", "window", "xml_unroll"),
 										custom_stringvalidators.NotNull(),
@@ -139,35 +128,25 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 									Optional:    true,
 									Computed:    true,
 									Description: `Simple description of this step`,
-									PlanModifiers: []planmodifier.String{
-										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
-									},
 								},
 								"disabled": schema.BoolAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `If true, data will not be pushed through this function`,
-									PlanModifiers: []planmodifier.Bool{
-										custom_boolplanmodifier.SuppressDiff(custom_boolplanmodifier.ExplicitSuppress),
-									},
 								},
 								"final": schema.BoolAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
-									PlanModifiers: []planmodifier.Bool{
-										custom_boolplanmodifier.SuppressDiff(custom_boolplanmodifier.ExplicitSuppress),
-									},
 								},
 								"conf": schema.StringAttribute{
-									Required:      false,
-									Optional:      true,
-									Computed:      true,
-									Description:   `Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.).`,
-									CustomType:    jsontypes.NormalizedType{},
-									PlanModifiers: pipelineConfPlanModifiers(),
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.).`,
+									CustomType:  jsontypes.NormalizedType{},
 									Validators: []validator.String{
 										custom_stringvalidators.NotNull(),
 										custom_validators.IsValidJSON(),
@@ -178,9 +157,6 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 									Optional:    true,
 									Computed:    true,
 									Description: `Group ID`,
-									PlanModifiers: []planmodifier.String{
-										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
-									},
 								},
 							},
 						},
@@ -310,7 +286,13 @@ func (r *PipelineResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPipelineAPIToState(apiModel, &model, true, isPipelineImportState(&model))
+	// Refresh all configuration so drift and removed values are visible.
+	if apiModel != nil {
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.GroupID = model.GroupID
+		apiModel.ID = model.ID
+		model = *apiModel
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

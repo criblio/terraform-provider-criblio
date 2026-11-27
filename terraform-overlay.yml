@@ -329,6 +329,7 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: Pipeline
+      x-terraform-refresh-from-api: true
   - target: "$.paths./m/{groupId}/pipelines.get"
     update:
       x-terraform-list: Pipeline
@@ -347,6 +348,7 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: Routes
+      x-terraform-refresh-from-api: true
       x-terraform-update: Routes
       x-terraform-delete: Routes
       x-terraform-read-after-write: true
@@ -368,6 +370,9 @@ actions:
       default: default
       x-terraform-fixed-value: default
       x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RoutesInput.properties.routes"
+    update:
+      x-terraform-plan-modifier-hook: routeListPlanModifiers
   - target: "$.components.schemas.RoutesInput.properties.comments"
     update:
       x-terraform-emit-empty: true
@@ -380,20 +385,29 @@ actions:
       default: default
       x-terraform-fixed-value: default
       x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Routes.properties.routes"
+    update:
+      x-terraform-plan-modifier-hook: routeListPlanModifiers
   - target: "$.components.schemas.Routes.properties.comments"
     update:
       x-terraform-emit-empty: true
   - target: "$.components.schemas.Routes.properties.groups"
     update:
       x-terraform-emit-empty: true
+  - target: "$.components.schemas.RouteConfInput.properties.groupId"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-default-value: default
   - target: "$.components.schemas.RouteConfInput.properties.id"
     update:
       x-terraform-computed: true
-      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RouteConf.properties.groupId"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-default-value: default
   - target: "$.components.schemas.RouteConf.properties.id"
     update:
       x-terraform-computed: true
-      x-terraform-suppress-diff: explicit
   - target: "$.components.schemas.RouteConfInput.properties.filter"
     update:
       default: "true"
@@ -484,32 +498,27 @@ actions:
           description: 'Filter that selects data to be fed through this Function. Default: "true"'
           type: string
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
         id:
           title: ID
           description: Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).
           type: string
           x-terraform-not-null: true
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
         description:
           title: Description
           description: Simple description of this step
           type: string
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
         disabled:
           title: Disabled
           description: If true, data will not be pushed through this function
           type: boolean
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
         final:
           title: Final
           description: If enabled, stops the results of this Function from being passed to the downstream Functions
           type: boolean
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
         conf:
           type: object
           title: Function-specific configs
@@ -520,14 +529,11 @@ actions:
           x-terraform-not-null: true
           x-terraform-valid-json: true
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
-          x-terraform-plan-modifier-hook: pipelineConfPlanModifiers
         groupId:
           title: Group ID
           description: Group ID
           type: string
           x-terraform-optional-computed: true
-          x-terraform-suppress-diff: explicit
       discriminator:
         propertyName: id
         mapping:
@@ -615,7 +621,7 @@ actions:
   - target: "$.components.schemas.Pipeline.properties.conf.properties.functions"
     update:
       x-terraform-optional-computed: true
-      x-terraform-suppress-diff: explicit
+      x-terraform-plan-modifier-hook: pipelineFunctionsPlanModifiers
   - target: "$.components.schemas.Pipeline.properties.conf.properties.groups"
     update:
       x-terraform-optional-computed: true
@@ -1817,6 +1823,7 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: PackPipeline
+      x-terraform-refresh-from-api: true
       x-terraform-read-after-write: true
       x-terraform-preserve-inputs-after-write: true
   - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.get"
@@ -1835,6 +1842,7 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: PackRoutes
+      x-terraform-refresh-from-api: true
       x-terraform-update: PackRoutes
       x-terraform-delete: PackRoutes
       x-terraform-read-after-write: true
@@ -1936,6 +1944,7 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: ProjectPipeline
+      x-terraform-refresh-from-api: true
   - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines.get"
     update:
       x-terraform-list: ProjectPipeline
@@ -5194,6 +5203,71 @@ actions:
         x-terraform-optional-computed: true
       sourceField:
         x-terraform-optional-computed: true
+
+  # https://docs.cribl.io/insights/about/ limits Insights to Enterprise Cloud workspaces.
+  # System Insights uses the Search group and a separate schema from customer metrics.
+  - target: "$.paths./m/{groupId}/alert/monitors.post"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchMonitor
+      x-terraform-refresh-from-api: true
+      x-terraform-generate-data-source-docs: true
+  - target: "$.paths./m/{groupId}/alert/monitors.get"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-list: SearchMonitor
+      x-terraform-list-name: SearchMonitors
+  - target: "$.paths./m/{groupId}/alert/monitors/{id}.get"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-read: SearchMonitor
+  - target: "$.paths./m/{groupId}/alert/monitors/{id}.patch"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-update: SearchMonitor
+  - target: "$.paths./m/{groupId}/alert/monitors/{id}.delete"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-delete: SearchMonitor
+  - target: "$.components.schemas.MonitorConf.properties.query"
+    replace:
+      type: object
+      description: >-
+        Use jsonencode with a PromQL string or a structured query object.
+        Structured queries use the API keys metricName, labelFilters, timeRange, and operation.
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
+  - target: "$.components.schemas.MonitorConf.properties.params"
+    update:
+      description: Use jsonencode with a map of string, number, or boolean query parameters.
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
+  - target: "$.components.schemas.MonitorConf.properties.sqlOverride"
+    update:
+      description: SQL queries for deployments with the custom monitor SQL override feature enabled.
+  - target: "$.components.schemas.MonitorConf.properties.isDefault"
+    update:
+      x-terraform-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-request-computed: true
+      description: Whether this is a built-in System Insights monitor. Cribl prevents deletion of default monitors.
+  # The published Condition reference resolves to a pipeline Function. The Insights
+  # API actually accepts equality, threshold, and range condition objects.
+  - target: "$.components.schemas.LabelCondition.properties.condition"
+    replace:
+      type: object
+      description: Use jsonencode with the condition type and its value, threshold, or range.
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
+  - target: "$.components.schemas.Rule.properties.includedTags"
+    update:
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
+  - target: "$.components.schemas.Rule.properties.excludedTags"
+    update:
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-object-as-json: true
 
   # MON-762: criblio_monitor -- Aetos alert monitors.
   # Backend route is /products/lakehouse_engine_metrics/monitors (AETOS_PREFIX). Requests and

@@ -107,6 +107,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 		out.DefaultsSkipped++
 		return nil, fmt.Sprintf("%s %v: built-in default (--exclude-defaults)", r.TypeName, idMap)
 	}
+	if r.TypeName == "criblio_search_monitor" {
+		delete(attrs, "is_default")
+	}
 	if r.TypeName == "criblio_search_datatype_ruleset" || r.TypeName == "criblio_search_dataset_ruleset" {
 		if injErr := injectSearchRulesetRulesForExport(r.TypeName, model, attrs, e); injErr != nil {
 			return nil, fmt.Sprintf("%s %v: search ruleset rules: %s", r.TypeName, idMap, sanitizeConvertError(injErr))
@@ -351,6 +354,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if excludeDefaults && DefaultResource(typeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
 		return nil
+	}
+	if typeName == "criblio_search_monitor" {
+		delete(attrs, "is_default")
 	}
 	buildIDMap := importIDMapForType(typeName, idMap)
 	importID, idErr := generator.BuildImportID(e.ImportIDFormat, buildIDMap)

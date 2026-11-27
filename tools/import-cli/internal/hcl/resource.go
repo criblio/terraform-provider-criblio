@@ -46,12 +46,14 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_pack": {"tags"},
 		},
 		SkipPruneEmptyListsFor: map[string][]string{
+			"criblio_search_monitor":            {"rules"},
 			"criblio_workspace_system_settings": {"*"},
 
 			"criblio_pack":             {"tags"},
 			"criblio_search_dashboard": {"elements"},
 		},
 		AlwaysEmitEmptyListsFor: map[string][]string{
+			"criblio_search_monitor":            {"rules", "silences", "notification_policies"},
 			"criblio_workspace_system_settings": {"*"},
 
 			// Limits PATCH replaces the complete configuration; keep explicit empty lists.

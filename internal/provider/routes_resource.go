@@ -134,10 +134,11 @@ func (r *RoutesResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				},
 			},
 			"routes": schema.ListNestedAttribute{
-				Required:    true,
-				Optional:    false,
-				Computed:    false,
-				Description: `Array of Route configurations that define how events are processed and routed.`,
+				Required:      true,
+				Optional:      false,
+				Computed:      false,
+				Description:   `Array of Route configurations that define how events are processed and routed.`,
+				PlanModifiers: routeListPlanModifiers(),
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"auto_parse": schema.BoolAttribute{
@@ -186,7 +187,8 @@ func (r *RoutesResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						"group_id": schema.StringAttribute{
 							Required:    false,
 							Optional:    true,
-							Computed:    false,
+							Computed:    true,
+							Default:     stringdefault.StaticString("default"),
 							Description: `Unique identifier for the Route Group that the Route is associated with.`,
 						},
 						"name": schema.StringAttribute{
@@ -230,9 +232,6 @@ func (r *RoutesResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 							Optional:    false,
 							Computed:    true,
 							Description: `Unique identifier for the Route. If omitted, the server generates a deterministic identifier.`,
-							PlanModifiers: []planmodifier.String{
-								custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
-							},
 						},
 					},
 				},
@@ -300,7 +299,21 @@ func (r *RoutesResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRoutesAPIToState(apiModel, &model, true, isRoutesImportState(&model))
+	// Refresh all configuration so drift and removed values are visible.
+	if apiModel != nil {
+		// Path parameters identify the resource and may be absent from API bodies.
+		apiModel.GroupID = model.GroupID
+		apiModel.ID = model.ID
+		// The update body emits empty comments/groups when omitted in HCL.
+		if len(apiModel.Comments.Elements()) == 0 && len(model.Comments.Elements()) == 0 {
+			apiModel.Comments = model.Comments
+		}
+		if len(apiModel.Groups.Elements()) == 0 && len(model.Groups.Elements()) == 0 {
+			apiModel.Groups = model.Groups
+		}
+		applyRoutesAPIToState(apiModel, apiModel, false, false)
+		model = *apiModel
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

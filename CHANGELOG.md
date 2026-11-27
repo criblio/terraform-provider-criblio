@@ -35,6 +35,8 @@ commit history, and tag-to-tag diffs.
 - Added workspace settings search dataset acl resources.
 - Added data resources for all supported list endpoints.
 - Added a step for go downloads.
+- Added search_monitor resource.
+  Use `criblio_search_monitor` to manage System Insights monitors in an Insights-enabled Enterprise Cribl.Cloud workspace. The `criblio_search_monitor` and `criblio_search_monitors` data sources read a monitor by ID and list monitors, respectively. Existing monitors support Terraform import and CLI export.
 
 ### Changed
 - Split acceptance runs into serial resource tests and read-only data source tests with configurable concurrency (default four). `make acceptance-test` runs both phases simultaneously by default. Removed repeated lifecycle collection reads while retaining initial collection checks and by-ID, update, drift, and import coverage.
@@ -53,6 +55,9 @@ commit history, and tag-to-tag diffs.
 - Changing go max procs.
 
 ### Fixed
+- Fixed `criblio_pack` file installs and upgrades to use the version from the archive's `package.json` when `version` is omitted. An explicit `version` still overrides the archive.
+- Fixed pipeline drift handling for standard, Pack, and project pipelines. Applying after an external reorder restores the configured function order and keeps settings such as `disabled` with the matching function.
+- Fixed route drift handling for standard and Pack routes. When routes change order, Terraform preserves server-assigned IDs for matching routes, including same-name routes that can be distinguished by their configured settings.
 - Marked SentinelOne and Netskope Source API tokens as sensitive in resources and data sources.
 - Preserved nested Saved Query visualization display options as normalized JSON for refresh, import, and updates.
 - Preserved unmanaged Search source authentication during v1 full-replacement updates, retained known global secret IDs across masked responses, and blocked unsafe writes of masked credentials. Matched backend manual/secret selection and added backend-contract regressions.

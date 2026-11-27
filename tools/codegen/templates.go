@@ -2361,6 +2361,18 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 {{- range pathParamFields . }}
 		apiModel.{{ .GoName }} = model.{{ .GoName }}
 {{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+		// The update body emits empty comments/groups when omitted in HCL.
+		if len(apiModel.Comments.Elements()) == 0 && len(model.Comments.Elements()) == 0 {
+			apiModel.Comments = model.Comments
+		}
+		if len(apiModel.Groups.Elements()) == 0 && len(model.Groups.Elements()) == 0 {
+			apiModel.Groups = model.Groups
+		}
+{{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") (eq .StructName "SearchMonitor") }}
+		apply{{ .StructName }}APIToState(apiModel, apiModel, false, false)
+{{- end }}
 		model = *apiModel
 	}
 {{- else }}

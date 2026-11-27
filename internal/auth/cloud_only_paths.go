@@ -5,6 +5,8 @@ package auth
 
 func init() {
 	cloudOnlyPaths = map[string]bool{
+		"/alert/monitors":                                                   true,
+		"/alert/monitors/{id}":                                              true,
 		"/apps":                                                             true,
 		"/apps/preinstall-check":                                            true,
 		"/apps/{id}":                                                        true,
