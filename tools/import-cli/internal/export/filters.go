@@ -179,6 +179,8 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 			return true
 		}
 		return custom.DefaultDestinationIDs[id]
+	case "criblio_search_monitor":
+		return attrs["is_default"].Bool
 	case "criblio_search_dataset":
 		return custom.DefaultSearchDatasetIDs[id]
 	case "criblio_search_dataset_provider":

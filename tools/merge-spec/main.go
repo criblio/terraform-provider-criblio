@@ -631,6 +631,7 @@ func shouldPrefixPath(apiPath string) bool {
 		strings.HasPrefix(apiPath, "/p/") ||
 		strings.HasPrefix(apiPath, "/pipelines") ||
 		strings.HasPrefix(apiPath, "/routes") ||
+		apiPath == "/alert/monitors" || strings.HasPrefix(apiPath, "/alert/monitors/") ||
 		strings.HasPrefix(apiPath, "/search/") ||
 		strings.HasPrefix(apiPath, "/settings/") ||
 		strings.HasPrefix(apiPath, "/notifications") ||

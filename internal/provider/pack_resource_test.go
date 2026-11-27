@@ -14,8 +14,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"github.com/stretchr/testify/require"
 )
 
 func TestPackTagsAllowsPartialConfiguration(t *testing.T) {
@@ -161,6 +163,35 @@ func TestPackPlanDecodeAllowsUnknownItems(t *testing.T) {
 	if got := model.ID.ValueString(); got != "my_search_pack" {
 		t.Fatalf("expected id to decode, got %q", got)
 	}
+}
+
+func TestPackReadRecoversStaleArchiveVersion(t *testing.T) {
+	ctx := t.Context()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == http.MethodGet && req.URL.Path == "/api/v1/m/default/packs/archive" {
+			_, _ = io.WriteString(w, `{"items":[{"id":"archive","version":"1.0.2"}]}`)
+			return
+		}
+		http.NotFound(w, req)
+	}))
+	defer server.Close()
+	pack := &PackResource{client: restclient.New(restclient.Config{BaseURL: server.URL, BearerToken: "test"})}
+	var schema resource.SchemaResponse
+	pack.Schema(ctx, resource.SchemaRequest{}, &schema)
+	prior := tfsdk.State{Schema: schema.Schema}
+	item := packInstallInfo{ID: types.StringValue("archive"), Version: types.StringValue("1.0.1")}
+	require.Empty(t, prior.Set(ctx, PackResourceModel{
+		GroupID: types.StringValue("default"), ID: item.ID, Items: []packInstallInfo{item},
+		Filename: types.StringValue("archive.crbl"), Version: item.Version,
+	}))
+	response := resource.ReadResponse{State: prior}
+	pack.Read(ctx, resource.ReadRequest{State: prior}, &response)
+	require.Empty(t, response.Diagnostics)
+	var got PackResourceModel
+	require.Empty(t, response.State.Get(ctx, &got))
+	require.Equal(t, "1.0.2", got.Version.ValueString())
+	require.Len(t, got.Items, 1)
+	require.Equal(t, "1.0.2", got.Items[0].Version.ValueString())
 }
 
 func TestPreservePackPlanKeepsPlannedItems(t *testing.T) {

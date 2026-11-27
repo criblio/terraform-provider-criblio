@@ -1554,7 +1554,7 @@ func resourceHasTopLevelField(resource parser.ResourceDef, terraformName string)
 func listItemFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	for _, field := range resource.Fields {
-		if field.QueryParam || field.APIName == "organizationId" || field.APIName == "product" {
+		if field.QueryParam || field.APIName == "organizationId" || (field.PathParam && field.APIName == "product") {
 			continue
 		}
 		if field.APIName == "groupId" && resource.StructName != "Key" {
@@ -2056,7 +2056,7 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func curatedExampleUsage(resource parser.ResourceDef) (string, bool) {
-	if resource.StructName == "WorkerGroupUpgrade" {
+	if resource.StructName == "WorkerGroupUpgrade" || resource.StructName == "SearchMonitor" {
 		content, err := readRepoFile(filepath.Join("examples", "resources", resourceType(resource), "resource.tf"))
 		if err != nil {
 			return "", false

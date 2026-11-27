@@ -103,7 +103,7 @@ func (tags *packTagsAPI) UnmarshalJSON(raw []byte) error {
 			}
 		}
 	}
-	values, err := decodePackTagValues(raw)
+	values, err := decodePackJSONObject(raw)
 	if err != nil {
 		return err
 	}
@@ -248,7 +248,7 @@ func readPackSettingsTags(ctx context.Context, client *restclient.Client, groupI
 	if len(settings.Package.Tags) == 0 {
 		return nil, true, nil
 	}
-	values, err := decodePackTagValues(settings.Package.Tags)
+	values, err := decodePackJSONObject(settings.Package.Tags)
 	if err != nil {
 		return nil, false, fmt.Errorf("decode pack settings tags: %w", err)
 	}
@@ -456,7 +456,7 @@ func preservePackTags(ctx context.Context, apiTags, reference types.Dynamic) typ
 
 // PackTagsFromAPIJSON converts API tags to Terraform tags without renaming custom keys.
 func PackTagsFromAPIJSON(raw []byte) (types.Dynamic, error) {
-	values, err := decodePackTagValues(raw)
+	values, err := decodePackJSONObject(raw)
 	if err != nil {
 		return types.Dynamic{}, fmt.Errorf("decode pack tags: %w", err)
 	}
@@ -466,7 +466,7 @@ func PackTagsFromAPIJSON(raw []byte) (types.Dynamic, error) {
 	return packTagsValue(values)
 }
 
-func decodePackTagValues(raw []byte) (map[string]any, error) {
+func decodePackJSONObject(raw []byte) (map[string]any, error) {
 	var values map[string]any
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.UseNumber()

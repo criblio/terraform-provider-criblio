@@ -60,6 +60,7 @@ func AllAttributeNamesFromModel(modelTypeName string) []string {
 // instantiate provider models and invoke RefreshFrom* methods.
 func ResourceModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"SearchMonitorResourceModel":              reflect.TypeOf((*provider.SearchMonitorModel)(nil)).Elem(),
 		"SearchDatasetACLResourceModel":           reflect.TypeOf((*provider.SearchDatasetACLModel)(nil)).Elem(),
 		"WorkspaceSystemSettingsResourceModel":    reflect.TypeOf((*provider.WorkspaceSystemSettingsModel)(nil)).Elem(),
 		"MonitorProfileResourceModel":             reflect.TypeOf((*provider.MonitorProfileModel)(nil)).Elem(),
@@ -133,6 +134,7 @@ func ResourceModelTypes() map[string]reflect.Type {
 // mirror these fields but do not have the generated UnmarshalJSON methods.
 func GeneratedModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"SearchMonitorResourceModel":              reflect.TypeOf((*provider.SearchMonitorModel)(nil)).Elem(),
 		"SearchDatasetACLResourceModel":           reflect.TypeOf((*provider.SearchDatasetACLModel)(nil)).Elem(),
 		"WorkspaceSystemSettingsResourceModel":    reflect.TypeOf((*provider.WorkspaceSystemSettingsModel)(nil)).Elem(),
 		"MonitorProfileResourceModel":             reflect.TypeOf((*provider.MonitorProfileModel)(nil)).Elem(),

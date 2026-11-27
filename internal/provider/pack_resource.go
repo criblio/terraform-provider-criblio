@@ -265,9 +265,41 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
-				Description: `Pack version (from pack metadata). Changes are reflected in state from the API; no replacement.`,
+				Description: `Pack version. When installing or upgrading a file, omit this attribute to use the version in the archive's package.json. Set it to override the installed version.`,
 			},
 		},
+	}
+}
+
+// ModifyPlan lets the uploaded archive supply metadata when a file-backed pack changes.
+func (r *PackResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() || req.State.Raw.IsNull() || req.Plan.Raw.Equal(req.State.Raw) {
+		return
+	}
+	var filename types.String
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, path.Root("filename"), &filename)...)
+	if resp.Diagnostics.HasError() || filename.IsNull() {
+		return
+	}
+
+	var items types.List
+	resp.Diagnostics.Append(req.Plan.GetAttribute(ctx, path.Root("items"), &items)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("items"), types.ListUnknown(items.ElementType(ctx)))...)
+	for _, name := range []string{"version", "author", "description", "display_name", "min_log_stream_version", "source"} {
+		p := path.Root(name)
+		var configured types.String
+		resp.Diagnostics.Append(req.Config.GetAttribute(ctx, p, &configured)...)
+		if configured.IsNull() {
+			resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, p, types.StringUnknown())...)
+		}
+	}
+	var tags types.Dynamic
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, path.Root("tags"), &tags)...)
+	if tags.IsNull() {
+		resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("tags"), types.DynamicUnknown())...)
 	}
 }
 
@@ -342,7 +374,6 @@ type packInstallItemRequest struct {
 	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Source      string   `json:"source"`
-	Version     string   `json:"version,omitempty"`
 	Warnings    []string `json:"warnings,omitempty"`
 	DisplayName string   `json:"displayName,omitempty"`
 }
@@ -398,7 +429,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		}
 	}
 
-	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data, cfg.Tags); err != nil {
+	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data, &cfg); err != nil {
 		resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", err))
 		return
 	}
@@ -445,7 +476,7 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	if !savedDisplay.IsNull() && !savedDisplay.IsUnknown() {
 		data.DisplayName = savedDisplay
 	}
-	if !savedVersion.IsNull() && !savedVersion.IsUnknown() {
+	if data.Filename.IsNull() && !savedVersion.IsNull() && !savedVersion.IsUnknown() {
 		data.Version = savedVersion
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -466,13 +497,22 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	var cfg PackResourceModel
+	var cfg, prior PackResourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &cfg)...)
+	resp.Diagnostics.Append(req.State.Get(ctx, &prior)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	uploadedSource, err := r.uploadPackFileFromModel(ctx, data, false)
+	// The archive can change the computed items, but existing API routes still
+	// need the installed pack ID, which can differ from the configured ID.
+	if !cfg.Filename.IsNull() {
+		data.Items = prior.Items
+		if data.Source.IsUnknown() || data.Source.IsNull() {
+			data.Source = prior.Source
+		}
+	}
+	uploadedSource, err := r.uploadPackFileFromModel(ctx, data, !cfg.Filename.Equal(prior.Filename))
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to upload pack file", err.Error())
 		return
@@ -484,12 +524,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			return
 		}
 	case configuredString(cfg.Source) != "":
-		var stateData PackResourceModel
-		resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		if configuredString(cfg.Source) != configuredString(stateData.Source) {
+		if configuredString(cfg.Source) != configuredString(prior.Source) {
 			if _, err := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), shortNameForPatch(configuredString(cfg.Source)), boolPointerFromValue(data.Disabled)); err != nil {
 				resp.Diagnostics.AddError("failure to invoke API", err.Error())
 				return
@@ -497,7 +532,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		}
 	}
 
-	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data, cfg.Tags); err != nil {
+	if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), data, &cfg); err != nil {
 		resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", err))
 		return
 	}
@@ -672,15 +707,11 @@ func (r *PackResource) installUploadedPack(ctx context.Context, data *PackResour
 	}
 
 	fullPath := fullSourcePath(uploadedSource)
-	version := ""
-	if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
-		version = data.Items[0].Version.ValueString()
-	}
-	_, err := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), fullPath, version, packInstallDisplayName(data))
+	_, err := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), fullPath, packInstallDisplayName(data))
 	return err
 }
 
-func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, packID, sourceFullPath, version, displayName string) (*packAPIModel, error) {
+func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, packID, sourceFullPath, displayName string) (*packAPIModel, error) {
 	if strings.TrimSpace(packID) == "" {
 		return nil, fmt.Errorf("pack id is empty")
 	}
@@ -695,7 +726,6 @@ func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, p
 			ID:          packID,
 			Name:        displayName,
 			Source:      sourceFullPath,
-			Version:     version,
 			Warnings:    []string{},
 			DisplayName: displayName,
 		}},
@@ -751,7 +781,10 @@ func (r *PackResource) patchPackByIDWithSourceForm(ctx context.Context, groupID,
 	return &apiModel, nil
 }
 
-func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID string, data *PackResourceModel, configuredTags types.Dynamic) error {
+func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID string, data *PackResourceModel, cfg *PackResourceModel) error {
+	if configuredString(cfg.Filename) != "" {
+		return r.patchFilePackSettings(ctx, groupID, packID, cfg)
+	}
 	displayName := data.ID.ValueString()
 	if !data.DisplayName.IsNull() && !data.DisplayName.IsUnknown() && data.DisplayName.ValueString() != "" {
 		displayName = data.DisplayName.ValueString()
@@ -772,7 +805,7 @@ func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID st
 			return err
 		}
 	}
-	configured, err := tagsAPIMap(ctx, configuredTags)
+	configured, err := tagsAPIMap(ctx, cfg.Tags)
 	if err != nil {
 		return err
 	}
@@ -792,6 +825,56 @@ func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID st
 		packageObj["minLogStreamVersion"] = data.MinLogStreamVersion.ValueString()
 	}
 	return restclient.PatchNoResponse(ctx, r.client, fmt.Sprintf("/m/%s/p/%s/pack/settings", url.PathEscape(groupID), url.PathEscape(packID)), map[string]any{"package": packageObj})
+}
+
+// The settings endpoint rewrites package.json. Overlay explicit file-pack overrides on
+// the installed settings so unrelated archive fields and pack variables survive the PATCH.
+func (r *PackResource) patchFilePackSettings(ctx context.Context, groupID, packID string, cfg *PackResourceModel) error {
+	overrides := map[string]types.String{
+		"author": cfg.Author, "description": cfg.Description, "displayName": cfg.DisplayName,
+		"minLogStreamVersion": cfg.MinLogStreamVersion, "version": cfg.Version,
+	}
+	metadata := make(map[string]string)
+	for key, value := range overrides {
+		if !value.IsNull() && !value.IsUnknown() {
+			metadata[key] = value.ValueString()
+		}
+	}
+	if len(metadata) == 0 && cfg.Tags.IsNull() {
+		return nil
+	}
+	settingsPath := fmt.Sprintf("/m/%s/p/%s/pack/settings", url.PathEscape(groupID), url.PathEscape(packID))
+	settings, err := restclient.Get[map[string]json.RawMessage](ctx, r.client, settingsPath)
+	if err != nil {
+		return err
+	}
+	if settings == nil {
+		return fmt.Errorf("no settings returned for installed pack %q", packID)
+	}
+	pkg, err := decodePackJSONObject((*settings)["package"])
+	if err != nil {
+		return fmt.Errorf("decode installed pack settings: %w", err)
+	}
+	if pkg == nil {
+		return fmt.Errorf("settings for installed pack %q contain no package", packID)
+	}
+	for key, value := range metadata {
+		pkg[key] = value
+	}
+	if !cfg.Tags.IsNull() {
+		configured, err := tagsAPIMap(ctx, cfg.Tags)
+		if err != nil {
+			return err
+		}
+		tags, _ := pkg["tags"].(map[string]any)
+		pkg["tags"] = mergePackSettingsTags(tags, configured)
+	}
+	encoded, err := json.Marshal(pkg)
+	if err != nil {
+		return err
+	}
+	(*settings)["package"] = encoded
+	return restclient.PatchNoResponse(ctx, r.client, settingsPath, settings)
 }
 
 func packRequestFromModel(ctx context.Context, data *PackResourceModel) (packRequestBody, error) {

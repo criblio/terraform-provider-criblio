@@ -61,7 +61,7 @@ remain lists of strings. Tags are managed through the pack settings endpoint.
 - `source` (String) Pack source path (from pack metadata). Preserved from state when not configured.
 - `spec` (String) body string optional Specify a branch, tag or a semver spec
 - `tags` (Dynamic) Pack tags with arbitrary case-sensitive keys. Built-in `data_type`, `domain`, `streamtags`, and `technology` fields remain string lists. Changes use `pack/settings`; no replacement.
-- `version` (String) Pack version (from pack metadata). Changes are reflected in state from the API; no replacement.
+- `version` (String) Pack version. When installing or upgrading a file, omit this attribute to use the version in the archive's package.json. Set it to override the installed version.
 
 ### Read-Only
 

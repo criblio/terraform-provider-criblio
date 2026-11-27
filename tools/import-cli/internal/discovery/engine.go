@@ -539,6 +539,16 @@ func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e reg
 
 func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, scope map[string]string) ([]map[string]string, error) {
 	path := renderRESTPath(e.RESTListPath, scope)
+	if e.TypeName == "criblio_search_monitor" {
+		items, err := restclient.List[json.RawMessage](ctx, client.REST, path, true)
+		if restclient.IsNotFound(err) {
+			return nil, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+		return identifiersFromRawItems(*items, scope, e)
+	}
 	items, err := getRESTItems(ctx, client, path)
 	if restclient.IsNotFound(err) || isLocalSearchWorkersUnavailable(path, err) {
 		return nil, nil

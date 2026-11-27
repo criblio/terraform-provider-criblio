@@ -9,13 +9,18 @@ description: |-
 
 | UI configuration | Terraform resource | REST collection |
 | --- | --- | --- |
-| Monitors | `criblio_monitor` | `/products/lakehouse_engine_metrics/monitors` |
+| System Insights monitors | `criblio_search_monitor` | `/m/default_search/alert/monitors` |
+| Customer-metrics monitors | `criblio_monitor` | `/products/lakehouse_engine_metrics/monitors` |
 | Muting Rules | `criblio_monitor_silence` | `/a/__cribl_metrics/products/lakehouse_engine_metrics/silences` |
 | Notification Targets | `criblio_notification_target` | `/notification-targets` |
 | Notification Templates | `criblio_notification_template` | `/notification-templates?engine=handlebars` |
 | Notification Policies | `criblio_notification_policy` | `/notification-policies` |
 | Shared Configurations | `criblio_monitor_shared_config` | `/products/lakehouse_engine_metrics/shared-configs` |
 | Profiles | `criblio_monitor_profile` | `/products/lakehouse_engine_metrics/config-profiles` |
+
+System Insights monitors require an Insights-enabled Enterprise Cribl.Cloud workspace. Cribl-managed and hybrid Worker Groups are supported. [Cribl Insights availability](https://docs.cribl.io/insights/about/)
+
+Use `data.criblio_search_monitor` to read a System Insights monitor by ID and `data.criblio_search_monitors` to list the Search group’s monitors. Cribl protects built-in System Insights monitors from deletion. SQL overrides require the custom monitor SQL override feature in the target deployment.
 
 Each configuration resource supports import by ID. The four new resource types also have single-object and list data sources. Their documentation is generated from the provider schemas.
 
